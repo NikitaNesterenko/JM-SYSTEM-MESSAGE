@@ -1,6 +1,7 @@
 package jm;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class User {
     private String password;
 
     @Column(name = "avatar", nullable = false)
-    private Long avatar;
+    private Blob avatar;
 
     @ManyToMany(cascade=CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable (name="users_roles", joinColumns=@JoinColumn (name="user_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
@@ -86,11 +87,11 @@ public class User {
         this.password = password;
     }
 
-    public Long getAvatar() {
+    public Blob getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Long avatar) {
+    public void setAvatar(Blob avatar) {
         this.avatar = avatar;
     }
 
