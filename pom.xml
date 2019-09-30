@@ -38,18 +38,6 @@
             <version>2.1.7.RELEASE</version>
         </dependency>
 
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>2.1.7.RELEASE</version>
-        </dependency>-->
-
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.1.7.RELEASE</version>
-        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -58,56 +46,20 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>2.1.7.RELEASE</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <version>9.0.24</version>
-        </dependency>
-
-        <!--<dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-            <version>3.0.4.RELEASE</version>
-        </dependency>-->
-
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-            <version>3.0.11.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <version>2.1.7.RELEASE</version>
-        </dependency>
-
-        <!--<dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.16</version>
-        </dependency>-->
-
-        <!--<dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-dbcp</artifactId>
-            <version>9.0.22</version>
-        </dependency>-->
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>3.4.1</version>
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.9.3</version>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-dbcp</artifactId>
+            <version>9.0.22</version>
         </dependency>
 
     </dependencies>

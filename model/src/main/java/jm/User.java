@@ -1,17 +1,38 @@
 package jm;
 
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinTable(name = "roles")
     private Integer id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "login", nullable = false)
     private String login;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "avatar", nullable = false)
     private Long avatar;
+
+    @ManyToMany(cascade=CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable (name="users_roles", joinColumns=@JoinColumn (name="user_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
     private Set<Role> roles;
 
     public User() {

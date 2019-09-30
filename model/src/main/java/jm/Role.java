@@ -1,10 +1,17 @@
 package jm;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "roles")
 public class Role {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "role", nullable = false)
     private String role;
 
     public Role() {
