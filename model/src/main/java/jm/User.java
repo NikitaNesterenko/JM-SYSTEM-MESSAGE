@@ -28,7 +28,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "avatar", nullable = false)
+    @Column(name = "avatar")
     private Blob avatar;
 
     @ManyToMany(cascade=CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -36,6 +36,14 @@ public class User {
     private Set<Role> roles;
 
     public User() {
+    }
+
+    public User(String name, String lastName, String login, String email, String password) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {

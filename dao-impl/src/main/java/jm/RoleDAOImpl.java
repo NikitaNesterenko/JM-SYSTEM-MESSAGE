@@ -14,6 +14,11 @@ public class RoleDAOImpl implements RoleDAO {
     private EntityManager entityManager;
 
     @Override
+    public void addRole(String role) {
+        entityManager.createNativeQuery("insert into roles (role) values ('" + role + "')").executeUpdate();
+    }
+
+    @Override
     public void addRoleForUser(User user, String role) {
         Role userRole = (Role) entityManager.createQuery("from Role where role = :role").setParameter("role", role).getSingleResult();
         entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();

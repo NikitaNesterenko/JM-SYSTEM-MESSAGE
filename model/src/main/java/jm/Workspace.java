@@ -25,8 +25,8 @@ public class Workspace {
     @Column(name = "owner_id")
     private Integer ownerId;
 
-    @Column(name = "privacy")
-    private boolean privacy;
+    @Column(name = "is_private")
+    private Boolean isPrivate;
 
     @Column(name = "created_date")
     private LocalDate createdDate;
@@ -34,11 +34,11 @@ public class Workspace {
     public Workspace() {
     }
 
-    public Workspace(String name, List<User> users, Integer ownerId, boolean privacy, LocalDate createdDate) {
+    public Workspace(String name, List<User> users, Integer ownerId, Boolean isPrivate, LocalDate createdDate) {
         this.name = name;
         this.users = users;
         this.ownerId = ownerId;
-        this.privacy = privacy;
+        this.isPrivate = isPrivate;
         this.createdDate = createdDate;
     }
 
@@ -74,12 +74,12 @@ public class Workspace {
         this.ownerId = ownerId;
     }
 
-    public boolean isPrivacy() {
-        return privacy;
+    public Boolean isPrivate() {
+        return isPrivate;
     }
 
-    public void setPrivacy(boolean privacy) {
-        this.privacy = privacy;
+    public void setPrivacy(Boolean privacy) {
+        this.isPrivate = privacy;
     }
 
     public LocalDate getCreatedDate() {
@@ -95,7 +95,7 @@ public class Workspace {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Workspace workspace = (Workspace) o;
-        return privacy == workspace.privacy &&
+        return isPrivate == workspace.isPrivate &&
                 id.equals(workspace.id) &&
                 name.equals(workspace.name) &&
                 Objects.equals(users, workspace.users) &&
@@ -105,7 +105,7 @@ public class Workspace {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, users, ownerId, privacy, createdDate);
+        return Objects.hash(id, name, users, ownerId, isPrivate, createdDate);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class Workspace {
                 ", name='" + name + '\'' +
                 ", users=" + users +
                 ", ownerId=" + ownerId +
-                ", privacy=" + privacy +
+                ", privacy=" + isPrivate +
                 ", createdDate=" + createdDate +
                 '}';
     }
