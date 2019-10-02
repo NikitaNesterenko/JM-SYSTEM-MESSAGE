@@ -11,7 +11,6 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinTable(name = "roles")
     private Integer id;
 
     @Column(name = "name", nullable = false)
