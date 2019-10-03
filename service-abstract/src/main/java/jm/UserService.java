@@ -8,9 +8,13 @@ public interface UserService {
 
     void createUser(User user, String role);
 
+    void createUser2(User user);
+
     void deleteUser(User user);
 
     void updateUser(User user, String role);
+
+    void updateUser2(User user);
 
     User getUserById(int id);
 
