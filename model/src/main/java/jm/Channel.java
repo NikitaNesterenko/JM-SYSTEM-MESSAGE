@@ -10,33 +10,35 @@ import java.util.Objects;
 public class Channel {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
-    @Column(name = "owner_id")
-    private Integer ownerId;
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name = "owner_id")
+    private User user;
 
-    @Column(name = "is_private")
+    @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
 
-    @Column(name = "created_date")
+    @Column(name = "created_date", nullable = false)
     private LocalDate createdDate;
 
     public Channel() {
     }
 
-    public Channel(String name, List<User> users, Integer ownerId, Boolean isPrivate, LocalDate createdDate) {
+    public Channel(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
         this.name = name;
         this.users = users;
-        this.ownerId = ownerId;
+        this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
     }
@@ -65,20 +67,20 @@ public class Channel {
         this.users = users;
     }
 
-    public Integer getOwnerId() {
-        return ownerId;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Boolean isPrivate() {
+    public Boolean getPrivate() {
         return isPrivate;
     }
 
-    public void setPrivacy(Boolean privacy) {
-        this.isPrivate = privacy;
+    public void setPrivate(Boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 
     public LocalDate getCreatedDate() {
@@ -94,17 +96,17 @@ public class Channel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Channel channel = (Channel) o;
-        return isPrivate == channel.isPrivate &&
-                id.equals(channel.id) &&
+        return id.equals(channel.id) &&
                 name.equals(channel.name) &&
                 Objects.equals(users, channel.users) &&
-                ownerId.equals(channel.ownerId) &&
-                Objects.equals(createdDate, channel.createdDate);
+                user.equals(channel.user) &&
+                isPrivate.equals(channel.isPrivate) &&
+                createdDate.equals(channel.createdDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, users, ownerId, isPrivate, createdDate);
+        return Objects.hash(id, name, users, user, isPrivate, createdDate);
     }
 
     @Override
@@ -113,8 +115,8 @@ public class Channel {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", users=" + users +
-                ", ownerId=" + ownerId +
-                ", privacy=" + isPrivate +
+                ", user=" + user +
+                ", isPrivate=" + isPrivate +
                 ", createdDate=" + createdDate +
                 '}';
     }

@@ -42,9 +42,9 @@ public class TestDataInitializer {
             }
         }
 
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, 1 + (int) (Math.random() * 4), new Random().nextBoolean(), LocalDate.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, 6 + (int) (Math.random() * 4), new Random().nextBoolean(), LocalDate.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, 11 + (int) (Math.random() * 4), new Random().nextBoolean(), LocalDate.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
     }
 
     private void createUserIfNotExists(UserService userService, User user, String role) {

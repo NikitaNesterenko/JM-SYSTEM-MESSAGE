@@ -50,4 +50,13 @@ public class ChannelDAOImpl implements ChannelDAO {
             return null;
         }
     }
+
+    @Override
+    public List<Channel> getChannelsByOwner(User user) {
+        try {
+            return entityManager.createQuery("from Channel where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

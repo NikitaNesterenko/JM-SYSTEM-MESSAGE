@@ -15,4 +15,6 @@ public interface WorkspaceDAO {
     Workspace getChannelById(int id);
 
     Workspace getChannelByName(String name);
+
+    List<Workspace> getWorkspacesByOwner(User user);
 }
