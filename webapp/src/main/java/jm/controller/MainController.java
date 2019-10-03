@@ -30,13 +30,13 @@ public class MainController {
 
     @GetMapping(value = "/")
     public String indexPage() {
-        TestDataInitializer test = new TestDataInitializer();
-        test.checkDataInitialisation(roleDAO, channelDAO, userService);
         return "homePage";
     }
 
     @GetMapping(value = "/test")
     public String somePage() {
+        TestDataInitializer test = new TestDataInitializer();
+        test.checkDataInitialisation(roleDAO, channelDAO, userService);
         return "testPage";
     }
 

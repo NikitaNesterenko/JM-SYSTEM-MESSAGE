@@ -3,6 +3,7 @@ package jm;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -42,6 +43,10 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByLogin(String login) {
-        return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login).getSingleResult();
+        try {
+            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

@@ -14,6 +14,7 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
     private EntityManager entityManager;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Workspace> gelAllChannels() {
         return entityManager.createQuery("from Workspace").getResultList();
     }

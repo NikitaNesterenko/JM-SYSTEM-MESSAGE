@@ -3,6 +3,7 @@ package jm;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -16,6 +17,15 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public void addRole(String role) {
         entityManager.createNativeQuery("insert into roles (role) values ('" + role + "')").executeUpdate();
+    }
+
+    @Override
+    public Role getRole(String role) {
+        try {
+            return (Role) entityManager.createQuery("from Role where role  = :role").setParameter("role", role).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

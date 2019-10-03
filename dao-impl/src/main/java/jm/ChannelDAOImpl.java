@@ -3,6 +3,7 @@ package jm;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -15,6 +16,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     private EntityManager entityManager;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Channel> gelAllChannels() {
         return entityManager.createQuery("from Channel").getResultList();
     }
@@ -26,7 +28,7 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public void deleteChannel(Channel channel) {
-        entityManager.remove(entityManager.contains(channel)? channel : entityManager.merge(channel));
+        entityManager.remove(entityManager.contains(channel) ? channel : entityManager.merge(channel));
     }
 
     @Override
@@ -42,8 +44,10 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public Channel getChannelByName(String name) {
-        return (Channel) entityManager.createQuery("from Channel where name  = :name")
-                .setParameter("name", name)
-                .getSingleResult();
+        try {
+            return (Channel) entityManager.createQuery("from Channel where name  = :name").setParameter("name", name).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
