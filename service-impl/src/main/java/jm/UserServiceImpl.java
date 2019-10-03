@@ -14,12 +14,12 @@ public class UserServiceImpl implements UserService {
     private RoleDAO roleDAO;
 
     @Autowired
-    public UserDAO setUserDAO(UserDAO userDAO){
+    public UserDAO setUserDAO(UserDAO userDAO) {
         return this.userDAO = userDAO;
     }
 
     @Autowired
-    public RoleDAO setRoleDAO(RoleDAO roleDAO){
+    public RoleDAO setRoleDAO(RoleDAO roleDAO) {
         return this.roleDAO = roleDAO;
     }
 
@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void createUser2(User user) {
+        userDAO.createUser(user);
+    }
+
+    @Override
     public void deleteUser(User user) {
         userDAO.deleteUser(user);
     }
@@ -43,6 +48,11 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user, String role) {
         userDAO.updateUser(user);
         roleDAO.updateUserRole(user, role);
+    }
+
+    @Override
+    public void updateUser2(User user) {
+        userDAO.updateUser(user);
     }
 
     @Override
