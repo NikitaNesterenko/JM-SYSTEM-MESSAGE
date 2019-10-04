@@ -22,7 +22,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void createUser(User user) {
-
         entityManager.persist(user);
     }
 
@@ -39,7 +38,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(int id) {
-
         return entityManager.find(User.class, id);
     }
 
