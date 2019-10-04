@@ -34,11 +34,7 @@ public class UserServiceImpl implements UserService {
         roleDAO.addRoleForUser(user, role);
     }
 
-    @Override
-    public void createUser2(User user) {
-        userDAO.createUser(user);
-    }
-
+ 
     @Override
     public void deleteUser(User user) {
         userDAO.deleteUser(user);
@@ -48,11 +44,6 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user, String role) {
         userDAO.updateUser(user);
         roleDAO.updateUserRole(user, role);
-    }
-
-    @Override
-    public void updateUser2(User user) {
-        userDAO.updateUser(user);
     }
 
     @Override
