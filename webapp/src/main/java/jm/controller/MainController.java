@@ -40,4 +40,9 @@ public class MainController {
         return "testPage";
     }
 
+    @GetMapping(value = "/workspace")
+    public String workspacePage() {
+        return "workspacePage";
+    }
+
 }
