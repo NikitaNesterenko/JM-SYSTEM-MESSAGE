@@ -10,7 +10,7 @@ public interface UserService {
 
     void createUser2(User user);
 
-    boolean deleteUser(User user);
+    void deleteUser(User user);
 
     void updateUser(User user, String role);
 

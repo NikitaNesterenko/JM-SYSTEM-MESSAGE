@@ -25,10 +25,9 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/userCreate", method = RequestMethod.POST)
-    public @ResponseBody
-    ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity createUser(@RequestBody User user) {
         userService.createUser2(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
     @RequestMapping(value = "/userGet/{id}", method = RequestMethod.GET)
@@ -37,15 +36,15 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/userUpdate", method = RequestMethod.PUT)
-    public @ResponseBody
-    ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity updateUser(@RequestBody User user) {
         userService.updateUser2(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
     @RequestMapping(value = "/userDelete", method = RequestMethod.DELETE)
-    public ResponseEntity<Boolean> updateDelete(@RequestBody User user) {
-        return new ResponseEntity<>(userService.deleteUser(user), HttpStatus.OK);
+    public ResponseEntity deleteUser(@RequestBody User user) {
+        userService.deleteUser(user);
+        return ResponseEntity.ok(true);
     }
 
 }
