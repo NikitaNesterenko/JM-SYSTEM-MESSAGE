@@ -23,7 +23,7 @@ public class Channel {
     private List<User> users;
 
     @OneToOne(targetEntity = User.class)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id_c")
     private User user;
 
     @Column(name = "is_private", nullable = false)

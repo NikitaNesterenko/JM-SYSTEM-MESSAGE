@@ -4,17 +4,17 @@ import java.util.List;
 
 public interface WorkspaceDAO {
 
-    List<Workspace> gelAllChannels();
+    List<Workspace> gelAllWorkspaces();
 
-    void createChannel(Workspace workspace);
+    void createWorkspace(Workspace workspace);
 
-    void deleteChannel(Workspace workspace);
+    void deleteWorkspace(Workspace workspace);
 
-    void updateChannel(Workspace workspace);
+    void updateWorkspace(Workspace workspace);
 
-    Workspace getChannelById(int id);
+    Workspace getWorkspaceById(int id);
 
-    Workspace getChannelByName(String name);
+    Workspace getWorkspaceByName(String name);
 
     List<Workspace> getWorkspacesByOwner(User user);
 }
