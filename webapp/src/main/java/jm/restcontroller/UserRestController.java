@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class UserRestController {
@@ -18,14 +20,15 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/userList", method = RequestMethod.GET)
-    public ResponseEntity<Object> getUsers() {
+    public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/userCreate", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
+    public @ResponseBody
+    ResponseEntity<User> createUser(@RequestBody User user) {
         userService.createUser2(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/userGet/{id}", method = RequestMethod.GET)
@@ -34,15 +37,15 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/userUpdate", method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateUser(@RequestBody User user) {
+    public @ResponseBody
+    ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser2(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/userDelete", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> updateDelete(@RequestBody User user) {
-        userService.deleteUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> updateDelete(@RequestBody User user) {
+        return new ResponseEntity<>(userService.deleteUser(user), HttpStatus.OK);
     }
 
 }
