@@ -3,30 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <title>Workspace Page</title>
-    <link href="/css/workspacePage.css" rel="stylesheet"/>
+    <!--<link href="/static/css/workspacePage.css" rel="stylesheet"/>-->
 </head>
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .workspace-container {
+        display: flex;
+        align-items: flex-stretch;
+        flex-direction: row;
+        min-height: 100vh;
+    }
+
+    .workspace-container div {
+        padding: 10px;
+        border: 1px solid silver;
+    }
+
+    .workspace-box {
+        background: #602f6b;
+        color: white;
+        flex: .75;
+    }
+
+    .channel-box {
+        background: #602f6b;
+        color: white;
+        flex: .75;
+    }
+
+    .channel-link {
+        color: white;
+    }
+
+    .chat-box {
+        display: flex;
+        align-items: flex-stretch;
+        flex-direction: column;
+        background: white;
+        color: black;
+        flex: 2;
+    }
+
+    .info-box {
+        background: white;
+        color: black;
+        flex: 1;
+    }
+
+    .user-box {
+        background: white;
+        color: black;
+        flex: .75;
+    }
+
+    .message-box {
+        background: white;
+        color: black;
+        flex: 15;
+    }
+
+    .input-box {
+        background: white;
+        color: black;
+        flex: 1;
+    }
+
+    .input-inner-box {
+        background: white;
+        color: black;
+        flex: 1;
+        width: 100vh;
+    }
+</style>
 
 <body>
 
 <div class="workspace-container">
     <div class="workspace-box">
         <h3>Workspace Box</h3>
+        <p>-</p>
+        <h3>Channels</h3>
         <div class="channel-box">
-            <h3>Channels</h3>
-            <p>-</p>
             <p><a href="" class="channel-link">some-channel</a>
         </div>
     </div>
     <div class="chat-box">
         <div class="message-box">
             <h3>Message Box</h3>
-            <div class="text-box">
-                some-message
-            </div>
         </div>
         <div class="input-box">
             <h3>Input Box</h3>
-            <p>-</p>
             <label>
                 <input type="text" class="input-inner-box" placeholder=" input text here">
             </label>
@@ -34,9 +105,9 @@
     </div>
     <div class="info-box">
         <h3>Info Box</h3>
+        <p>-</p>
+        <h3>Users</h3>
         <div class="user-box">
-            <h3>Users</h3>
-            <p>-</p>
             <h6>some-login-1</h6>
             <h6>some-login-2</h6>
             <h6>some-login-3</h6>
