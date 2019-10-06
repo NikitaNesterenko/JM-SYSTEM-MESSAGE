@@ -12,21 +12,19 @@
 
 .workspace-container div {
     padding: 10px;
-    border: 1px solid silver;
+    /*border: 1px solid silver;*/
 }
 
 .workspace-box {
     background: #602f6b;
     color: white;
     flex: .75;
-    border-radius: 10px;
 }
 
 .channel-box {
     background: #602f6b;
     color: white;
     flex: .75;
-    border-radius: 10px;
 }
 
 .channel-link {
@@ -34,52 +32,48 @@
 }
 
 .chat-box {
+    display: flex;
+    align-items: flex-stretch;
+    flex-direction: column;
     background: white;
     color: black;
     flex: 2;
-    border-radius: 10px;
 }
 
 .info-box {
     background: white;
     color: black;
     flex: 1;
-    border-radius: 10px;
+    border: 1px solid silver;
 }
 
 .user-box {
     background: white;
     color: black;
     flex: .75;
-    border-radius: 10px;
 }
 
 .message-box {
     background: white;
     color: black;
-    flex: 2;
-    border-radius: 10px;
-    min-height: 82.5vh;
-}
-
-.text-box {
-    background: white;
-    color: black;
-    flex: 1;
-    border-radius: 10px;
+    flex: 15;
+    border: 1px solid silver;
 }
 
 .input-box {
     background: white;
     color: black;
     flex: 1;
-    border-radius: 10px;
+    border: 1px solid silver;
 }
 
 .input-inner-box {
     background: white;
     color: black;
     flex: 1;
-    border-radius: 5px;
-    width: 100vh;
+}
+
+.add-channel-button {
+    background: #602f6b;
+    color: white;
 }

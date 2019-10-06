@@ -1,91 +1,46 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Workspace Page</title>
-    <!--<link href="/static/css/workspacePage.css" rel="stylesheet"/>-->
+    <script th:src="@{/js/workspacePage.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
 </head>
-
-<style>
-    * {
-        padding: 0;
-        margin: 0;
-    }
-
-    .workspace-container {
-        display: flex;
-        align-items: flex-stretch;
-        flex-direction: row;
-        min-height: 100vh;
-    }
-
-    .workspace-container div {
-        padding: 10px;
-        border: 1px solid silver;
-    }
-
-    .workspace-box {
-        background: #602f6b;
-        color: white;
-        flex: .75;
-    }
-
-    .channel-box {
-        background: #602f6b;
-        color: white;
-        flex: .75;
-    }
-
-    .channel-link {
-        color: white;
-    }
-
-    .chat-box {
-        display: flex;
-        align-items: flex-stretch;
-        flex-direction: column;
-        background: white;
-        color: black;
-        flex: 2;
-    }
-
-    .info-box {
-        background: white;
-        color: black;
-        flex: 1;
-    }
-
-    .user-box {
-        background: white;
-        color: black;
-        flex: .75;
-    }
-
-    .message-box {
-        background: white;
-        color: black;
-        flex: 15;
-    }
-
-    .input-box {
-        background: white;
-        color: black;
-        flex: 1;
-    }
-
-    .input-inner-box {
-        background: white;
-        color: black;
-        flex: 1;
-        width: 100vh;
-    }
-</style>
 
 <body>
 
 <div class="workspace-container">
     <div class="workspace-box">
         <h3>Workspace Box</h3>
+        <p>-</p>
+        <p><button id="addChannelBtn" class="add-channel-button" onclick="myFunction()"> + Add new channel </button></p>
+        <div id="addChannelModal" class="modal">
+
+            <div class="modal-content">
+                <form th:action="@{/workspace/create}" method="post">
+                    <div class="modal-header">
+                        <span class="addChannelClose">&times;</span>
+                        <h2>Create channel</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p> <b> Name </b> </p>
+                        <p> <input type="text" name="name" id="name" class="add-channel-input"> </p>
+                        <p> <b> Users </b> </p>
+                        <p> <input type="text" name="users" id="users" class="add-channel-input"> </p>
+                        <p> <b> Owner </b> </p>
+                        <p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>
+                        <p> <b> Private </b> </p>
+                        <p> <input type="text" name="isPrivate" id="isPrivate" class="add-channel-input"> </p>
+                    </div>
+                    <div class="modal-footer">
+                        <p> <button type="submit" class="submitCreateChannel"> Add new channel </button> </p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
         <p>-</p>
         <h3>Channels</h3>
         <div class="channel-box">
