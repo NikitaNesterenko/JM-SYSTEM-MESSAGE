@@ -1,5 +1,7 @@
 package jm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,6 +13,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class WorkspaceDAOImpl implements WorkspaceDAO {
+    private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -27,7 +31,7 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public void deleteChannel(Workspace workspace) {
-        entityManager.remove(entityManager.contains(workspace)? workspace : entityManager.merge(workspace));
+        entityManager.remove(entityManager.contains(workspace) ? workspace : entityManager.merge(workspace));
     }
 
     @Override

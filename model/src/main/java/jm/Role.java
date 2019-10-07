@@ -1,11 +1,15 @@
 package jm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
 public class Role {
+    private static final Logger logger = LoggerFactory.getLogger(Role.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
