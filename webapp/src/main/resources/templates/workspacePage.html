@@ -37,11 +37,14 @@
         <h3>Info Box</h3>
         <p>-</p>
         <h3>Users</h3>
-        <div class="user-box">
-            <h6>some-login-1</h6>
-            <h6>some-login-2</h6>
-            <h6>some-login-3</h6>
-        </div>
+
+                <select id="usersList" name="usersList" multiple="multiple">
+                    <option value=""> --</option>
+                    <option th:each="user : ${listUser}"
+                            th:value="${user.getLogin()}"
+                            th:utext="${user.getLogin()}"/>
+                </select>
+
     </div>
 </div>
 

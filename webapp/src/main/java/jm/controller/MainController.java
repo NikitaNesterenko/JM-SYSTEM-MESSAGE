@@ -70,7 +70,9 @@ public class MainController {
     }
 
     @GetMapping(value = "/workspace")
-    public String workspacePage() {
-        return "workspacePage";
+    public ModelAndView workspacePage() {
+        ModelAndView modelView = new ModelAndView("/workspacePage.html");
+        modelView.addObject("listUser", userService.getAllUsers());
+        return modelView;
     }
 }
