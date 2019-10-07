@@ -28,14 +28,14 @@ public class UserServiceImpl implements UserService {
         return userDAO.getAllUsers();
     }
 
-    @Override
-    public void createUser(User user, String role) {
+
+    public void createInitUser(User user, String role) {
         userDAO.createUser(user);
         roleDAO.addRoleForUser(user, role);
     }
 
     @Override
-    public void createUser2(User user) {
+    public void createUser(User user) {
         userDAO.createUser(user);
     }
 
@@ -44,14 +44,15 @@ public class UserServiceImpl implements UserService {
         userDAO.deleteUser(user);
     }
 
+    /*
+        @Override
+        public void updateUser(User user, String role) {
+            userDAO.updateUser(user);
+            roleDAO.updateUserRole(user, role);
+        }
+    */
     @Override
-    public void updateUser(User user, String role) {
-        userDAO.updateUser(user);
-        roleDAO.updateUserRole(user, role);
-    }
-
-    @Override
-    public void updateUser2(User user) {
+    public void updateUser(User user) {
         userDAO.updateUser(user);
     }
 

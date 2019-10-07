@@ -26,7 +26,7 @@ public class UserRestController {
 
     @RequestMapping(value = "/userCreate", method = RequestMethod.POST)
     public ResponseEntity createUser(@RequestBody User user) {
-        userService.createUser2(user);
+        userService.createUser(user);
         return ResponseEntity.ok(true);
     }
 
@@ -37,7 +37,7 @@ public class UserRestController {
 
     @RequestMapping(value = "/userUpdate", method = RequestMethod.PUT)
     public ResponseEntity updateUser(@RequestBody User user) {
-        userService.updateUser2(user);
+        userService.updateUser(user);
         return ResponseEntity.ok(true);
     }
 
