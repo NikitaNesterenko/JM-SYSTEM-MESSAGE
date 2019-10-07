@@ -20,7 +20,7 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Channel> gelAllChannels() {
+    public List<Channel> getAllChannels() {
         return entityManager.createQuery("from Channel").getResultList();
     }
 
