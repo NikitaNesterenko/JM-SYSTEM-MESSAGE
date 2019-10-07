@@ -1,5 +1,5 @@
 /* The Modal (background) */
-.modal {
+.add-channel-modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -14,13 +14,13 @@
 }
 
 /* Modal Content */
-.modal-content {
+.add-channel-modal-content {
     position: relative;
     background-color: white;
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 80%;
+    width: 25%;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
@@ -45,7 +45,7 @@
 
 /* The Close Button */
 .addChannelClose {
-    color: white;
+    color: black;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -53,28 +53,28 @@
 
 .addChannelClose:hover,
 .addChannelClose:focus {
-    color: #000;
+    color: black;
     text-decoration: none;
     cursor: pointer;
 }
 
-.modal-header {
+.add-channel-modal-header {
     padding: 2px 16px;
-    background-color: #602f6b;
-    color: white;
+    background-color: white;
+    color: black;
 }
 
-.modal-body {
+.add-channel-modal-body {
     padding: 2px 16px;
     color: black
 }
 
-.modal-footer {
+.add-channel-modal-footer {
     padding: 2px 16px;
-    background-color: #602f6b;
+    background-color: white;
 }
 
 .submitCreateChannel {
-    background: #602f6b;
-    color: white;
+    background: white;
+    color: black;
 }

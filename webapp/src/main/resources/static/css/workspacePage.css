@@ -18,13 +18,13 @@
 .workspace-box {
     background: #602f6b;
     color: white;
-    flex: .75;
+    flex: 2;
 }
 
 .channel-box {
     background: #602f6b;
     color: white;
-    flex: .75;
+    flex: 1;
 }
 
 .channel-link {
@@ -37,20 +37,20 @@
     flex-direction: column;
     background: white;
     color: black;
-    flex: 2;
+    flex: 7;
 }
 
 .info-box {
     background: white;
     color: black;
-    flex: 1;
+    flex: 4;
     border: 1px solid silver;
 }
 
 .user-box {
     background: white;
     color: black;
-    flex: .75;
+    flex: 1;
 }
 
 .message-box {
@@ -74,6 +74,13 @@
 }
 
 .add-channel-button {
-    background: #602f6b;
+    padding: 5px;
+    background-color: #602f6b;
     color: white;
+    border: 2px solid #602f6b;
+    outline: none;
+}
+
+.add-channel-button:hover {
+    background: #4c1951;
 }

@@ -5,12 +5,10 @@ import jm.test.TestDataInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.rmi.NoSuchObjectException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +41,9 @@ public class MainController {
     }
 
     @PostMapping(value = "/workspace/create")
-    public ModelAndView addUser(@RequestParam("name") String name,
-                                @RequestParam("users") String users, @RequestParam("owner") String owner, @RequestParam("isPrivate") String isPrivate) {
+    public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("users") String users,
+                                @RequestParam("owner") String owner, @RequestParam(value = "isPrivate", required = false) boolean isPrivate) {
         ModelAndView modelAndView = new ModelAndView();
-
         String[] userArray = users.split(" ");
         List<User> userList = new ArrayList<>();
         for(String userLogin : userArray) {
@@ -59,11 +56,7 @@ public class MainController {
             modelAndView.setViewName("redirect:/workspace");
             return modelAndView;
         }
-        boolean b = false;
-        if(isPrivate.equals("true")) {
-            b = true;
-        }
-        Channel channel = new Channel(name, userList, userService.getUserByLogin(owner), b, LocalDate.now());
+        Channel channel = new Channel(name, userList, userService.getUserByLogin(owner), isPrivate, LocalDate.now());
         modelAndView.setViewName("redirect:/workspace");
         channelDAO.createChannel(channel);
         return modelAndView;
@@ -80,5 +73,4 @@ public class MainController {
     public String workspacePage() {
         return "workspacePage";
     }
-
 }
