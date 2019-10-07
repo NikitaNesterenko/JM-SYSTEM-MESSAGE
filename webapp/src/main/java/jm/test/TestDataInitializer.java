@@ -1,6 +1,9 @@
 package jm.test;
 
 import jm.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,6 +13,7 @@ import java.util.Random;
 
 @Component
 public class TestDataInitializer {
+    private static final Logger logger = LoggerFactory.getLogger(TestDataInitializer.class);
 
     public void checkDataInitialisation(RoleDAO roleDAO, ChannelDAO channelDAO, UserService userService) {
         String ownerRole = "ROLE_OWNER";
@@ -50,7 +54,7 @@ public class TestDataInitializer {
     private void createUserIfNotExists(UserService userService, User user, String role) {
         if (userService.getUserByLogin(user.getLogin()) == null)
             userService.createInitUser(user, role);
-    }
+   }
 
     private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
         if (channelDAO.getChannelByName(channel.getName()) == null)

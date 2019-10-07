@@ -1,5 +1,7 @@
 package jm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,6 +13,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class UserDAOImpl implements UserDAO {
+    private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 

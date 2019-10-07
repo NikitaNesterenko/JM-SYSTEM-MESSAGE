@@ -1,5 +1,7 @@
 package jm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,8 @@ import java.util.List;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private UserDAO userDAO;
     private RoleDAO roleDAO;
@@ -39,6 +43,7 @@ public class UserServiceImpl implements UserService {
         userDAO.createUser(user);
     }
 
+
     @Override
     public void deleteUser(User user) {
         userDAO.deleteUser(user);
@@ -54,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         userDAO.updateUser(user);
-    }
+	}
 
     @Override
     public User getUserById(int id) {

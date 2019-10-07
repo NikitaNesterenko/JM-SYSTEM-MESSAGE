@@ -1,5 +1,7 @@
 package jm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,6 +13,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class ChannelDAOImpl implements ChannelDAO {
+    private static final Logger logger = LoggerFactory.getLogger(ChannelDAOImpl.class);
 
     @PersistenceContext
     private EntityManager entityManager;

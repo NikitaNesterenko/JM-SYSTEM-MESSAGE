@@ -1,0 +1,21 @@
+2019-10-07 10:37:33,181 DEBUG jm.JMSystemMessageApplication [main] An application has been started!!!
+2019-10-07 10:37:33,712 INFO jm.JMSystemMessageApplication [main] Starting JMSystemMessageApplication on CRULT001049 with PID 28364 (C:\JAVA\PROJECT\JM-SYSTEM-MESSAGE\webapp\target\classes started by S3461968 in C:\JAVA\PROJECT\JM-SYSTEM-MESSAGE)
+2019-10-07 10:37:33,713 DEBUG jm.JMSystemMessageApplication [main] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-07 10:37:33,714 INFO jm.JMSystemMessageApplication [main] No active profile set, falling back to default profiles: default
+2019-10-07 10:37:38,361 INFO jm.JMSystemMessageApplication [main] Started JMSystemMessageApplication in 5.082 seconds (JVM running for 6.471)
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,111 DEBUG jm.User [http-nio-8080-exec-1] User constructor is invoked!!!
+2019-10-07 10:37:50,259 DEBUG jm.controller.MainController [http-nio-8080-exec-1] test_db has been initialized!!!
