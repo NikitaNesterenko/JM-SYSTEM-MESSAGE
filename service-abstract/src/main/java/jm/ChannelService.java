@@ -2,9 +2,8 @@ package jm;
 
 import java.util.List;
 
-public interface ChannelDAO {
-
-    List<Channel> getAllChannels();
+public interface ChannelService {
+    List<Channel> gelAllChannels();
 
     void createChannel(Channel channel);
 
@@ -17,4 +16,5 @@ public interface ChannelDAO {
     Channel getChannelByName(String name);
 
     List<Channel> getChannelsByOwner(User user);
+
 }
