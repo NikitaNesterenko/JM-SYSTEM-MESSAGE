@@ -2,3 +2,4 @@
 *.zip
 target
 *.iml
+logs

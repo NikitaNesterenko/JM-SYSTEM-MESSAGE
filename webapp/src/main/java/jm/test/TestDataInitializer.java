@@ -4,16 +4,34 @@ import jm.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 
-@Component
 public class TestDataInitializer {
     private static final Logger logger = LoggerFactory.getLogger(TestDataInitializer.class);
 
-    public void checkDataInitialisation(RoleDAO roleDAO, ChannelDAO channelDAO, UserService userService) {
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleDAO roleDAO;
+    @Autowired
+    private ChannelDAO channelDAO;
+
+
+    public TestDataInitializer() {
+
+    }
+
+    @PostConstruct
+    private void init() {
+        dataInit(roleDAO, channelDAO, userService);
+    }
+
+    private void dataInit(RoleDAO roleDAO, ChannelDAO channelDAO, UserService userService) {
         String ownerRole = "ROLE_OWNER";
         String userRole = "ROLE_USER";
         if (roleDAO.getRole(ownerRole) == null)
@@ -57,7 +75,7 @@ public class TestDataInitializer {
     private void createUserIfNotExists(UserService userService, User user) {
         if (userService.getUserByLogin(user.getLogin()) == null)
             userService.createUser(user);
-   }
+    }
 
     private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
         if (channelDAO.getChannelByName(channel.getName()) == null)

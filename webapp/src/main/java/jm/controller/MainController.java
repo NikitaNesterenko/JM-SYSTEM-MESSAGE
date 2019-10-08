@@ -12,35 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
-    private UserService userService;
-    private RoleDAO roleDAO;
-    private ChannelDAO channelDAO;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
-
-    @Autowired
-    public void setChannelDAO(ChannelDAO channelDAO) {
-        this.channelDAO = channelDAO;
-    }
-
     @GetMapping(value = "/")
     public String indexPage() {
         return "homePage";
-    }
-
-    @GetMapping(value = "/test")
-    public String somePage() {
-        TestDataInitializer test = new TestDataInitializer();
-        test.checkDataInitialisation(roleDAO, channelDAO, userService);
-        return "testPage";
     }
 
 }
