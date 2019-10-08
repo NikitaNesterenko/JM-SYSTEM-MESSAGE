@@ -1,0 +1,86 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.workspace-container {
+    display: flex;
+    align-items: flex-stretch;
+    flex-direction: row;
+    min-height: 100vh;
+}
+
+.workspace-container div {
+    padding: 10px;
+    /*border: 1px solid silver;*/
+}
+
+.workspace-box {
+    background: #602f6b;
+    color: white;
+    flex: 2;
+}
+
+.channel-box {
+    background: #602f6b;
+    color: white;
+    flex: 1;
+}
+
+.channel-link {
+    color: white;
+}
+
+.chat-box {
+    display: flex;
+    align-items: flex-stretch;
+    flex-direction: column;
+    background: white;
+    color: black;
+    flex: 7;
+}
+
+.info-box {
+    background: white;
+    color: black;
+    flex: 4;
+    border: 1px solid silver;
+}
+
+.user-box {
+    background: white;
+    color: black;
+    flex: 1;
+}
+
+.message-box {
+    background: white;
+    color: black;
+    flex: 15;
+    border: 1px solid silver;
+}
+
+.input-box {
+    background: white;
+    color: black;
+    flex: 1;
+    border: 1px solid silver;
+}
+
+.input-inner-box {
+    background: white;
+    color: black;
+    flex: 1;
+}
+
+.add-channel-button {
+    padding: 5px;
+    background-color: #602f6b;
+    color: white;
+    border: 2px solid #602f6b;
+    outline: none;
+}
+
+.add-channel-button:hover {
+    background: #4c1951;
+}
