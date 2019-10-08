@@ -21,7 +21,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getAllChannels() {
         try {
-            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels;", Channel.class);
+            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels", Channel.class);
         } catch (NoResultException e) {
             return null;
         }
@@ -46,7 +46,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public Channel getChannelById(int id) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where id=?;", Channel.class)
+            return (Channel) entityManager.createNativeQuery("select * from channels where id=?", Channel.class)
                     .setParameter(1, id)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -57,7 +57,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public Channel getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where name=?;", Channel.class)
+            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
                     .setParameter(1, name)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -68,7 +68,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getChannelsByOwner(User user) {
         try {
-            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?;", Channel.class)
+            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
                     .setParameter(1, user.getId());
         } catch (NoResultException e) {
             return null;
