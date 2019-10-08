@@ -21,7 +21,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getAllChannels() {
         try {
-            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels", Channel.class);
+            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels", Channel.class).getResultList();
         } catch (NoResultException e) {
             return null;
         }
