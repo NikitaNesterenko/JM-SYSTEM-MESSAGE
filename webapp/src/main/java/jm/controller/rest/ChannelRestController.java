@@ -27,7 +27,6 @@ public class ChannelRestController {
 
     @PostMapping
     public ResponseEntity addUser(@RequestBody Channel channel) {
-        channel.setId(null);
         try {
             channelService.createChannel(channel);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
