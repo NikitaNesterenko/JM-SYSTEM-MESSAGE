@@ -1,4 +1,4 @@
-package jm;
+package jm.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "channels")
-public class Channel {
-    private static final Logger logger = LoggerFactory.getLogger(Channel.class);
+@Table(name = "workspaces")
+public class Workspace {
+    private static final Logger logger = LoggerFactory.getLogger(Workspace.class);
 
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
@@ -36,10 +36,10 @@ public class Channel {
     @Column(name = "created_date", nullable = false)
     private LocalDate createdDate;
 
-    public Channel() {
+    public Workspace() {
     }
 
-    public Channel(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
+    public Workspace(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
         this.name = name;
         this.users = users;
         this.user = user;
@@ -99,13 +99,13 @@ public class Channel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Channel channel = (Channel) o;
-        return id.equals(channel.id) &&
-                name.equals(channel.name) &&
-                Objects.equals(users, channel.users) &&
-                user.equals(channel.user) &&
-                isPrivate.equals(channel.isPrivate) &&
-                createdDate.equals(channel.createdDate);
+        Workspace workspace = (Workspace) o;
+        return id.equals(workspace.id) &&
+                name.equals(workspace.name) &&
+                Objects.equals(users, workspace.users) &&
+                user.equals(workspace.user) &&
+                isPrivate.equals(workspace.isPrivate) &&
+                createdDate.equals(workspace.createdDate);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class Channel {
 
     @Override
     public String toString() {
-        return "Channel{" +
+        return "Workspace{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", users=" + users +

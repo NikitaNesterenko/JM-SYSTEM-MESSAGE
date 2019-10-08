@@ -1,13 +1,16 @@
-package jm.test;
+package jm.config.inititalizer;
 
 import jm.*;
 
+import jm.api.dao.ChannelDAO;
+import jm.api.dao.RoleDAO;
+import jm.model.Channel;
+import jm.model.Role;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -26,12 +29,12 @@ public class TestDataInitializer {
 
     }
 
-    @PostConstruct
+
     private void init() {
-        dataInit(roleDAO, channelDAO, userService);
+        dataInit();
     }
 
-    private void dataInit(RoleDAO roleDAO, ChannelDAO channelDAO, UserService userService) {
+    private void dataInit() {
         String ownerRole = "ROLE_OWNER";
         String userRole = "ROLE_USER";
         if (roleDAO.getRole(ownerRole) == null)

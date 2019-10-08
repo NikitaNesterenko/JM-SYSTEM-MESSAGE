@@ -1,5 +1,8 @@
-package jm;
+package jm.dao;
 
+import jm.api.dao.RoleDAO;
+import jm.model.Role;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -30,17 +33,4 @@ public class RoleDAOImpl implements RoleDAO {
             return null;
         }
     }
-
-    @Override
-    public void addRoleForUser(User user, String role) {
-        Role userRole = (Role) entityManager.createQuery("from Role where role = :role").setParameter("role", role).getSingleResult();
-        entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();
-    }
-
-    @Override
-    public void updateUserRole(User user, String role) {
-        Role userRole = (Role) entityManager.createQuery("from Role where role = :role").setParameter("role", role).getSingleResult();
-        entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();
-    }
-
 }

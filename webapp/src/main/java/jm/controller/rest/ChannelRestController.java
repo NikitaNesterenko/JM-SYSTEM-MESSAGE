@@ -1,6 +1,6 @@
 package jm.controller.rest;
 
-import jm.Channel;
+import jm.model.Channel;
 import jm.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

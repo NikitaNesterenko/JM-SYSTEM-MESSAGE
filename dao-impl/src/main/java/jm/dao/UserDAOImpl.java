@@ -1,5 +1,7 @@
-package jm;
+package jm.dao;
 
+import jm.api.dao.UserDAO;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

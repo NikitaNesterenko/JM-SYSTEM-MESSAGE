@@ -1,7 +1,7 @@
-package jm.restcontroller;
+package jm.controller.rest;
 
 
-import jm.User;
+import jm.model.User;
 import jm.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

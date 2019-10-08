@@ -1,5 +1,8 @@
 package jm;
 
+import jm.model.Channel;
+import jm.model.User;
+
 import java.util.List;
 
 public interface ChannelService {
