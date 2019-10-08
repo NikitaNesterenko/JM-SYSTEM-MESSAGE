@@ -19,9 +19,12 @@ public class ChannelDAOImpl implements ChannelDAO {
     private EntityManager entityManager;
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<Channel> getAllChannels() {
-        return entityManager.createQuery("from Channel").getResultList();
+        try {
+            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels;", Channel.class);
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -42,13 +45,21 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public Channel getChannelById(int id) {
-        return entityManager.find(Channel.class, id);
+        try {
+            return (Channel) entityManager.createNativeQuery("select * from channels where id=?;", Channel.class)
+                    .setParameter(1, id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public Channel getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createQuery("from Channel where name  = :name").setParameter("name", name).getSingleResult();
+            return (Channel) entityManager.createNativeQuery("select * from channels where name=?;", Channel.class)
+                    .setParameter(1, name)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -57,7 +68,8 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getChannelsByOwner(User user) {
         try {
-            return entityManager.createQuery("from Channel where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
+            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?;", Channel.class)
+                    .setParameter(1, user.getId());
         } catch (NoResultException e) {
             return null;
         }
