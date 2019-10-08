@@ -1,7 +1,8 @@
 package jm.controller;
 
 import jm.*;
-import jm.test.TestDataInitializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,19 +16,14 @@ import java.util.List;
 
 @Controller
 public class MainController {
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
     private UserService userService;
-    private RoleDAO roleDAO;
     private ChannelDAO channelDAO;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
     }
 
     @Autowired
@@ -41,32 +37,17 @@ public class MainController {
     }
 
     @PostMapping(value = "/workspace/create")
-    public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("users") String users,
+    public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("usersList") String[] usersList,
                                 @RequestParam("owner") String owner, @RequestParam(value = "isPrivate", required = false) boolean isPrivate) {
         ModelAndView modelAndView = new ModelAndView();
-        String[] userArray = users.split(" ");
         List<User> userList = new ArrayList<>();
-        for(String userLogin : userArray) {
-            if(userService.getUserByLogin(userLogin) != null) {
-                userList.add(userService.getUserByLogin(userLogin));
-            }
-        }
-        if(userService.getUserByLogin(owner) == null) {
-            System.out.println("Такого юзера не существует");
-            modelAndView.setViewName("redirect:/workspace");
-            return modelAndView;
+        for(String userLogin : usersList) {
+            userList.add(userService.getUserByLogin(userLogin));
         }
         Channel channel = new Channel(name, userList, userService.getUserByLogin(owner), isPrivate, LocalDate.now());
         modelAndView.setViewName("redirect:/workspace");
         channelDAO.createChannel(channel);
         return modelAndView;
-    }
-
-    @GetMapping(value = "/test")
-    public String somePage() {
-        TestDataInitializer test = new TestDataInitializer();
-        test.checkDataInitialisation(roleDAO, channelDAO, userService);
-        return "testPage";
     }
 
     @GetMapping(value = "/workspace")

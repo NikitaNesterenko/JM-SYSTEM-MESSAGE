@@ -15,7 +15,7 @@
     <div class="workspace-box">
         <h3>Workspace Box</h3>
         <p>-</p>
-        <p><button id="addChannelBtn" class="add-channel-button" onclick="addChannelFunction()">+ Add new channel</button></p>
+        <p><button id="addChannelButton" class="add-channel-button">+ Add new channel</button></p>
         <p>-</p>
         <h3>Channels</h3>
         <div class="channel-box">
@@ -37,14 +37,6 @@
         <h3>Info Box</h3>
         <p>-</p>
         <h3>Users</h3>
-
-                <select id="usersList" name="usersList" multiple="multiple">
-                    <option value=""> --</option>
-                    <option th:each="user : ${listUser}"
-                            th:value="${user.getLogin()}"
-                            th:utext="${user.getLogin()}"/>
-                </select>
-
     </div>
 </div>
 
@@ -59,9 +51,21 @@
                 <p> <b> Name </b> </p>
                 <p> <input type="text" name="name" id="name" class="add-channel-input"> </p>
                 <p> <b> Users </b> </p>
-                <p> <input type="text" name="users" id="users" class="add-channel-input"> </p>
+                <!--<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>-->
+                <select id="usersList" name="usersList" multiple="multiple">
+                    <option value=""> --</option>
+                    <option th:each="user : ${listUser}"
+                            th:value="${user.getLogin()}"
+                            th:utext="${user.getLogin()}"/>
+                </select>
                 <p> <b> Owner </b> </p>
-                <p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>
+                <!--<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>-->
+                <select id="owner" name="owner">
+                    <option value=""> --</option>
+                    <option th:each="user : ${listUser}"
+                            th:value="${user.getLogin()}"
+                            th:utext="${user.getLogin()}"/>
+                </select>
                 <p> <b> Private </b> </p>
                 <p> <input type="checkbox" name="isPrivate" id="isPrivate" class="add-channel-input"><br> </p>
             </div>

@@ -1,6 +1,8 @@
 package jm.test;
 
 import jm.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,6 +12,7 @@ import java.util.Random;
 
 @Component
 public class TestDataInitializer {
+    private static final Logger logger = LoggerFactory.getLogger(TestDataInitializer.class);
 
     public void checkDataInitialisation(RoleDAO roleDAO, ChannelDAO channelDAO, UserService userService) {
         String ownerRole = "ROLE_OWNER";
@@ -22,7 +25,7 @@ public class TestDataInitializer {
         User[] usersArray = new User[15];
 
         for (int i = 0; i < 15; i++) {
-            usersArray[i] = new User("name-" + i, "last-name-" + i, "login-" + i, "mymail" + i + "@testmail.com", "pass-" + i);
+            usersArray[i] = new User("name-" + (i + 1), "last-name-" + (i + 1), "login-" + (i + 1), "mymail" + (i + 1) + "@testmail.com", "pass-" + (i + 1));
         }
 
         List<User> userList1 = new ArrayList<>();
