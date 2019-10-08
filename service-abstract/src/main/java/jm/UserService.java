@@ -6,11 +6,11 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    void createUser(User user, String role);
+    void createUser(User user);
 
     void deleteUser(User user);
 
-    void updateUser(User user, String role);
+    void updateUser(User user);
 
     User getUserById(int id);
 
