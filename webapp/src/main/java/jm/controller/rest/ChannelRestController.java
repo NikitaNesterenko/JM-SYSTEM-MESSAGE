@@ -21,12 +21,12 @@ public class ChannelRestController {
 
 
     @GetMapping("{id}")
-    public ResponseEntity<Channel> getUser(@PathVariable Integer id) {
+    public ResponseEntity<Channel> getChannelById(@PathVariable Integer id) {
         return ResponseEntity.ok(channelService.getChannelById(id));
     }
 
     @PostMapping
-    public ResponseEntity addUser(@RequestBody Channel channel) {
+    public ResponseEntity createChannel(@RequestBody Channel channel) {
         try {
             channelService.createChannel(channel);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
@@ -37,7 +37,7 @@ public class ChannelRestController {
     }
 
     @PutMapping
-    public ResponseEntity updateUser(@RequestBody Channel channel) {
+    public ResponseEntity updateChannel(@RequestBody Channel channel) {
         try {
             channelService.updateChannel(channel);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
@@ -48,7 +48,7 @@ public class ChannelRestController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteUser(@RequestBody Channel channel) {
+    public ResponseEntity deleteChannel(@RequestBody Channel channel) {
         channelService.deleteChannel(channel);
 
         return ResponseEntity.ok().build();
