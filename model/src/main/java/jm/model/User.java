@@ -1,7 +1,5 @@
 package jm.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -11,7 +9,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
-    private static final Logger logger = LoggerFactory.getLogger(User.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
