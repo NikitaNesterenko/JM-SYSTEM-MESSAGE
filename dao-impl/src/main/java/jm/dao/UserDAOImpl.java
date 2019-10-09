@@ -1,6 +1,5 @@
 package jm.dao;
 
-import jm.api.dao.AbstractDao;
 import jm.api.dao.UserDAO;
 import jm.model.User;
 import org.slf4j.Logger;

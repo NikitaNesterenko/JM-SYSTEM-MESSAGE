@@ -2,7 +2,6 @@ package jm.config.inititalizer;
 
 import jm.*;
 
-import jm.api.dao.AbstractDao;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.RoleDAO;
 import jm.model.Channel;

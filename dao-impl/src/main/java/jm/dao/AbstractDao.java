@@ -1,27 +1,27 @@
-package jm.api.dao;
+package jm.dao;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.Serializable;
 import java.util.List;
 
 @Transactional
-public abstract class AbstractDao<T> implements IGenericDao<T> {
-    private Class<T> clazz;
+public abstract class AbstractDao<T> {
 
     @PersistenceContext
     private EntityManager em;
 
-    public void setClazz(Class<T> clazzToSet) {
-        this.clazz = clazzToSet;
+    private Class persistentClass;
+
+    @SuppressWarnings("unchecked")
+    public AbstractDao() {
+        persistentClass = (Class) ((java.lang.reflect.ParameterizedType)
+                this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     public List getAllEntities() {
-        return em.createQuery("from " + clazz.getName()).getResultList();
+        return em.createQuery("from " + persistentClass.getName()).getResultList();
     }
 
     public void persistEntity(T t) {
@@ -29,7 +29,7 @@ public abstract class AbstractDao<T> implements IGenericDao<T> {
     }
 
     public T findEntityById(int id) {
-        return (T) em.find(clazz, id);
+        return (T) em.find(persistentClass, id);
     }
 
     public T mergeEntity(T t) {
@@ -43,4 +43,5 @@ public abstract class AbstractDao<T> implements IGenericDao<T> {
     public void deleteEntityById(int id) {
         em.remove(findEntityById(id));
     }
+
 }
