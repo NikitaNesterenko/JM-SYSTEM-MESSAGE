@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @RestController
 @RequestMapping("channel")
@@ -52,5 +53,10 @@ public class ChannelRestController {
         channelService.deleteChannel(channel);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Channel>> getAllChannels(){
+        return ResponseEntity.ok(channelService.gelAllChannels());
     }
 }
