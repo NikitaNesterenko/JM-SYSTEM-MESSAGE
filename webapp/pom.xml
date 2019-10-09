@@ -12,6 +12,11 @@
     <artifactId>webapp</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.28</slf4j.version>
+    </properties>
+
     <dependencies>
 
         <dependency>
@@ -29,18 +34,18 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.3</version>
+            <version>${logback.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.28</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>${logback.version}</version>
         </dependency>
 
 
