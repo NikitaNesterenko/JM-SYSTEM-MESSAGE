@@ -1,8 +1,11 @@
 package jm.controller.rest;
 
 
+import jm.api.dao.AbstractDao;
+import jm.api.dao.IGenericDao;
 import jm.model.User;
 import jm.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,14 @@ import java.util.List;
 @RestController
 public class UserRestController {
 
+    IGenericDao<User> dao;
+
+    @Autowired
+    public void setUserAbstractDao(IGenericDao<User> daoToSet) {
+        dao = daoToSet;
+        dao.setClazz(User.class);
+    }
+
     private UserService userService;
 
     UserRestController(UserService userService) {
@@ -21,7 +32,9 @@ public class UserRestController {
 
     @RequestMapping(value = "/userList", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        //userService.getAllUsers()
+        //userAbstractDao.getAllEntities()
+        return new ResponseEntity<>(userAbstractDao.getAllEntities(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/userCreate", method = RequestMethod.POST)

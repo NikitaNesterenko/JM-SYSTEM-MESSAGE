@@ -1,5 +1,6 @@
 package jm.dao;
 
+import jm.api.dao.AbstractDao;
 import jm.api.dao.UserDAO;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl  implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @PersistenceContext
