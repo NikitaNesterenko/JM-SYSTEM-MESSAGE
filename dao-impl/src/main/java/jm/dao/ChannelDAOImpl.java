@@ -46,7 +46,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     }
 
     @Override
-    public Channel getChannelById(int id) {
+    public Channel getChannelById(Long id) {
         return entityManager.find(Channel.class, id);
     }
 
