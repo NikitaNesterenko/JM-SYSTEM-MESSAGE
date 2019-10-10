@@ -21,7 +21,7 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Workspace> gelAllChannels() {
-        return entityManager.createQuery("from Workspace").getResultList();
+        return entityManager.createNativeQuery("SELECT * FROM Workspace").getResultList();
     }
 
     @Override
@@ -31,7 +31,10 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public void deleteChannel(Workspace workspace) {
-        entityManager.remove(entityManager.contains(workspace) ? workspace : entityManager.merge(workspace));
+        Workspace searchedWorkspace = entityManager.find(Workspace.class, workspace.getId());
+        if (searchedWorkspace != null) {
+            entityManager.remove(searchedWorkspace);
+        }
     }
 
     @Override
@@ -47,15 +50,13 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public Workspace getChannelByName(String name) {
-        return (Workspace) entityManager.createQuery("from Workspace where name  = :name")
-                .setParameter("name", name)
-                .getSingleResult();
+        return (Workspace) entityManager.createNativeQuery("select * from Workspace  where name='" + name + "'").getSingleResult();
     }
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
         try {
-            return entityManager.createQuery("from Workspace where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
+            return entityManager.createNativeQuery("select * from Workspace where owner_id='" + user.getId() + "'").getResultList();
         } catch (NoResultException e) {
             return null;
         }

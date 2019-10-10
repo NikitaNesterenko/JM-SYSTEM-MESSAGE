@@ -23,23 +23,23 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public Role getRole(String role) {
+    public Role getRole(String roleName) {
         try {
-            return (Role) entityManager.createQuery("from Role where role  = :role").setParameter("role", role).getSingleResult();
+            return (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
     }
 
     @Override
-    public void addRoleForUser(User user, String role) {
-        Role userRole = (Role) entityManager.createQuery("from Role where role = :role").setParameter("role", role).getSingleResult();
+    public void addRoleForUser(User user, String roleName) {
+        Role userRole = (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
         entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();
     }
 
     @Override
-    public void updateUserRole(User user, String role) {
-        Role userRole = (Role) entityManager.createQuery("from Role where role = :role").setParameter("role", role).getSingleResult();
+    public void updateUserRole(User user, String roleName) {
+        Role userRole = (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
         entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();
     }
 

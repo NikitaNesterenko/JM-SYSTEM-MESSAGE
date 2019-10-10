@@ -21,18 +21,20 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
-        return entityManager.createQuery("from User").getResultList();
+        return entityManager.createNativeQuery("SELECT * FROM User").getResultList();
     }
 
     @Override
     public void createUser(User user) {
-
         entityManager.persist(user);
     }
 
     @Override
     public void deleteUser(User user) {
-        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
+        User searchedUser = entityManager.find(User.class, user.getId());
+        if (searchedUser != null) {
+            entityManager.remove(searchedUser);
+        }
     }
 
     @Override
@@ -43,14 +45,13 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(int id) {
-
         return entityManager.find(User.class, id);
     }
 
     @Override
     public User getUserByLogin(String login) {
         try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login).getSingleResult();
+            return (User) entityManager.createNativeQuery("select * from User where login='" + login + "'").getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
