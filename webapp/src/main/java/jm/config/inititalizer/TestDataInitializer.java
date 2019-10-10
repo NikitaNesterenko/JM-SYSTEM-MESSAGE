@@ -31,7 +31,9 @@ public class TestDataInitializer {
 
 
     private void init() {
+        logger.info("Data init has been started!!!");
         dataInit();
+        logger.info("Data init has been done!!!");
     }
 
     private void dataInit() {
