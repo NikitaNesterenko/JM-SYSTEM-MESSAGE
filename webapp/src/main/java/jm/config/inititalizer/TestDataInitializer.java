@@ -39,14 +39,20 @@ public class TestDataInitializer {
     private void dataInit() {
         String ownerRole = "ROLE_OWNER";
         String userRole = "ROLE_USER";
-        if (roleDAO.getRole(ownerRole) == null)
-            roleDAO.addRole(ownerRole);
-        if (roleDAO.getRole(userRole) == null)
-            roleDAO.addRole(userRole);
+        if (roleDAO.getRoleByRolename(ownerRole) == null) {
+            Role roleOwner = new Role();
+            roleOwner.setRole(ownerRole);
+            roleDAO.persist(roleOwner);
+        }
+        if (roleDAO.getRoleByRolename(userRole) == null){
+            Role roleUser = new Role();
+            roleUser.setRole(userRole);
+            roleDAO.persist(roleUser);
+        }
 
         User[] usersArray = new User[15];
 
-        Role role = roleDAO.getRole(userRole);
+        Role role = roleDAO.getRoleByRolename(userRole);
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
@@ -84,7 +90,7 @@ public class TestDataInitializer {
 
     private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
         if (channelDAO.getChannelByName(channel.getName()) == null)
-            channelDAO.createChannel(channel);
+            channelDAO.persist(channel);
     }
 
 }

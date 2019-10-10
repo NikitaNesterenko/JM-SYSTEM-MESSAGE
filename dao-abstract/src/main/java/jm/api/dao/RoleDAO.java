@@ -2,8 +2,20 @@ package jm.api.dao;
 
 import jm.model.Role;
 
-public interface RoleDAO {
-    void addRole(String role);
+import java.util.List;
 
-    Role getRole(String role);
+public interface RoleDAO {
+
+    List<Role> getAll();
+
+    void persist(Role role);
+
+    void deleteById(Long id);
+
+    Role merge(Role role);
+
+    Role getById(Long id);
+
+    Role getRoleByRolename(String role);
+
 }

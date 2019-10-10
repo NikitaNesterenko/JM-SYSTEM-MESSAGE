@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface ChannelDAO {
 
-    List<Channel> getAllChannels();
+    List<Channel> getAll();
 
-    void createChannel(Channel channel);
+    void persist(Channel channel);
 
-    void deleteChannel(Channel channel);
+    void deleteById(Long id);
 
-    void updateChannel(Channel channel);
+    Channel merge(Channel channel);
 
-    Channel getChannelById(Long id);
+    Channel getById(Long id);
 
     Channel getChannelByName(String name);
 
