@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("channel")
+@RequestMapping("/api/channels")
 public class ChannelRestController {
 
     private ChannelService channelService;
@@ -20,8 +20,8 @@ public class ChannelRestController {
     }
 
 
-    @GetMapping("{id}")
-    public ResponseEntity<Channel> getChannelById(@PathVariable Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Channel> getChannelById(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(channelService.getChannelById(id));
     }
 
