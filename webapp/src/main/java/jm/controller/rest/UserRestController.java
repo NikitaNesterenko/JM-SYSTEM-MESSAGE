@@ -11,6 +11,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/api/users")
 public class UserRestController {
 
     private UserService userService;
@@ -19,29 +20,29 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/userList", method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/userCreate", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity createUser(@RequestBody User user) {
         userService.createUser(user);
         return ResponseEntity.ok(true);
     }
 
-    @RequestMapping(value = "/userGet/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") int id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/userUpdate", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.ok(true);
     }
 
-    @RequestMapping(value = "/userDelete", method = RequestMethod.DELETE)
+    @DeleteMapping
     public ResponseEntity deleteUser(@RequestBody User user) {
         userService.deleteUser(user);
         return ResponseEntity.ok(true);
