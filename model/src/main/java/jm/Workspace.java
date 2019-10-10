@@ -32,6 +32,10 @@ public class Workspace {
     @Column(name = "created_date", nullable = true)
     private LocalDate createdDate;
 
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id_w")
+    private User users;
+
     public Workspace() {
     }
 
@@ -42,6 +46,8 @@ public class Workspace {
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
     }
+
+
 
     public Integer getId() {
         return id;
@@ -67,11 +73,11 @@ public class Workspace {
         this.channels = channels;
     }
 
-    public User getUser() {
+    public User getOwner() {
         return user_workspace;
     }
 
-    public void setUser(User user_workspace) {
+    public void setOwner(User user_workspace) {
         this.user_workspace = user_workspace;
     }
 

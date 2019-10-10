@@ -17,20 +17,25 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
     @Override
     @SuppressWarnings("unchecked")
     public List<Workspace> gelAllWorkspaces() {
-        return entityManager.createQuery("from Workspace").getResultList();
+        try {
+            return (List<Workspace>) entityManager.createNativeQuery("SELECT * from workspaces", Workspace.class).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public void createWorkspace(Workspace workspace) {
         User user;
-        user = workspace.getUser();
-        workspace.setUser(user);
+        user = workspace.getOwner();
+        workspace.setOwner(user);
         entityManager.persist(workspace);
     }
 
     @Override
     public void deleteWorkspace(Workspace workspace) {
-        entityManager.remove(entityManager.contains(workspace) ? workspace : entityManager.merge(workspace));
+//        entityManager.remove(entityManager.contains(workspace) ? workspace : entityManager.merge(workspace));
+        entityManager.remove(workspace);
     }
 
     @Override
@@ -41,22 +46,32 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public Workspace getWorkspaceById(int id) {
-//        Integer intid = id;
-        return entityManager.find(Workspace.class, id);
+        try {
+            return (Workspace) entityManager.createNativeQuery("select * from workspaces where id=?", Workspace.class)
+                    .setParameter(1, id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public Workspace getWorkspaceByName(String name) {
-        return (Workspace) entityManager.createQuery("from Workspace where name  = :name")
-                .setParameter("name", name)
-                .getSingleResult();
+        try {
+            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
+                    .setParameter(1, name)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<Workspace> getWorkspacesByOwner(User user) {
         try {
-            return entityManager.createQuery("from Workspace where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
+            return (List<Workspace>) entityManager.createNativeQuery("select * from workspaces where owner_id=?", Workspace.class)
+                    .setParameter(1, user.getId());
         } catch (NoResultException e) {
             return null;
         }
