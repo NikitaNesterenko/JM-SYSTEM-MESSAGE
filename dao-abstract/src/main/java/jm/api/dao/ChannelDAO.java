@@ -15,7 +15,7 @@ public interface ChannelDAO {
 
     void updateChannel(Channel channel);
 
-    Channel getChannelById(int id);
+    Channel getChannelById(Long id);
 
     Channel getChannelByName(String name);
 

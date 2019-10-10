@@ -47,7 +47,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     }
 
     @Override
-    public Channel getChannelById(int id) {
+    public Channel getChannelById(Long id) {
         try {
             return (Channel) entityManager.createNativeQuery("select * from channels where id=?", Channel.class)
                     .setParameter(1, id)

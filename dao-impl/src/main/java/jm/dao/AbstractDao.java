@@ -28,7 +28,7 @@ public abstract class AbstractDao<T> {
         em.persist(t);
     }
 
-    public T findEntityById(int id) {
+    public T findEntityById(Long id) {
         return (T) em.find(persistentClass, id);
     }
 
@@ -40,7 +40,7 @@ public abstract class AbstractDao<T> {
         em.remove(t);
     }
 
-    public void deleteEntityById(int id) {
+    public void deleteEntityById(Long id) {
         em.remove(findEntityById(id));
     }
 
