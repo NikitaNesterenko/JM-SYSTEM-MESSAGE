@@ -44,7 +44,7 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
     }
 
     @Override
-    public Workspace getChannelById(int id) {
+    public Workspace getChannelById(Long id) {
         return entityManager.find(Workspace.class, id);
     }
 
