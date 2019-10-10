@@ -15,7 +15,7 @@ public interface WorkspaceDAO {
 
     void updateChannel(Workspace workspace);
 
-    Workspace getChannelById(int id);
+    Workspace getChannelById(Long id);
 
     Workspace getChannelByName(String name);
 
