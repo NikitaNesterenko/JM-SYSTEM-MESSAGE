@@ -22,7 +22,7 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public List<Workspace> gelAllChannels() {
-        return entityManager.createNativeQuery("SELECT * FROM Workspace").getResultList();
+        return entityManager.createNativeQuery("SELECT * FROM workspaces", Workspace.class).getResultList();
     }
 
     @Override
@@ -51,13 +51,13 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public Workspace getChannelByName(String name) {
-        return (Workspace) entityManager.createNativeQuery("select * from Workspace  where name='" + name + "'").getSingleResult();
+        return (Workspace) entityManager.createNativeQuery("select * from workspaces where name='" + name + "'", Workspace.class).getSingleResult();
     }
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
         try {
-            return entityManager.createNativeQuery("select * from Workspace where owner_id='" + user.getId() + "'").getResultList();
+            return entityManager.createNativeQuery("select * from workspaces where owner_id='" + user.getId() + "'", Workspace.class).getResultList();
         } catch (NoResultException e) {
             return null;
         }

@@ -21,13 +21,13 @@ public class RoleDAOImpl implements RoleDAO {
 
     @Override
     public void addRole(String role) {
-        entityManager.createNativeQuery("insert into roles (role) values ('" + role + "')").executeUpdate();
+        entityManager.createNativeQuery("insert into roles (role) values ('" + role + "')", Role.class).executeUpdate();
     }
 
     @Override
     public Role getRole(String roleName) {
         try {
-            return (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
+            return (Role) entityManager.createNativeQuery("select * from roles where role='" + roleName + "'", Role.class).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

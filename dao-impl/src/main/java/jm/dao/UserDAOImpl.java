@@ -53,7 +53,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserByLogin(String login) {
         try {
-            return (User) entityManager.createNativeQuery("select * from User where login='" + login + "'").getSingleResult();
+            return (User) entityManager.createNativeQuery("select * from users where login='" + login + "'", User.class).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -61,13 +61,13 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void addRoleForUser(User user, String roleName) {
-        Role userRole = (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
+        Role userRole = (Role) entityManager.createNativeQuery("select * from roles where role='" + roleName + "'", Role.class).getSingleResult();
         entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();
     }
 
     @Override
     public void updateUserRole(User user, String roleName) {
-        Role userRole = (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
+        Role userRole = (Role) entityManager.createNativeQuery("select * from roles where role='" + roleName + "'", Role.class).getSingleResult();
         entityManager.createNativeQuery("insert into users_roles (user_id, role_id) values (" + user.getId() + ", " + userRole.getId() + ")").executeUpdate();
     }
 }

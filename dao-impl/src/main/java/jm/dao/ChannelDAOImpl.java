@@ -23,7 +23,7 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public List<Channel> getAllChannels() {
-        return entityManager.createNativeQuery("SELECT * FROM Channel").getResultList();
+        return entityManager.createNativeQuery("SELECT * FROM Channel", Channel.class).getResultList();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public Channel getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from Channel where name='" + name + "'").getSingleResult();
+            return (Channel) entityManager.createNativeQuery("select * from channels where name='" + name + "'", Channel.class).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -62,7 +62,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getChannelsByOwner(User user) {
         try {
-            return entityManager.createNativeQuery("select * from Role where owner_id='" + user.getId() + "'").getResultList();
+            return entityManager.createNativeQuery("select * from Role where owner_id='" + user.getId() + "'", Channel.class).getResultList();
         } catch (NoResultException e) {
             return null;
         }
