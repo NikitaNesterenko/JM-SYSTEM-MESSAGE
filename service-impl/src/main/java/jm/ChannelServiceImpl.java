@@ -41,7 +41,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Channel getChannelById(int id) {
+    public Channel getChannelById(Long id) {
         return channelDAO.getChannelById(id);
     }
 

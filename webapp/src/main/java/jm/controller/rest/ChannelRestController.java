@@ -21,7 +21,7 @@ public class ChannelRestController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Channel> getChannelById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(channelService.getChannelById(id));
     }
 
