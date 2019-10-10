@@ -6,7 +6,6 @@ import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -22,7 +21,6 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
     private EntityManager entityManager;
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<Workspace> gelAllChannels() {
         return entityManager.createNativeQuery("SELECT * FROM Workspace").getResultList();
     }

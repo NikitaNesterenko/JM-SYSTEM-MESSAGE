@@ -23,11 +23,7 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public List<Channel> getAllChannels() {
-        try {
-            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels", Channel.class).getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return entityManager.createNativeQuery("SELECT * FROM Channel").getResultList();
     }
 
     @Override
@@ -37,7 +33,10 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public void deleteChannel(Channel channel) {
-        entityManager.remove(entityManager.contains(channel) ? channel : entityManager.merge(channel));
+        Channel searchedChannel = entityManager.find(Channel.class, channel.getId());
+        if (searchedChannel != null) {
+            entityManager.remove(searchedChannel);
+        }
     }
 
     @Override
@@ -48,21 +47,13 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public Channel getChannelById(int id) {
-        try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where id=?", Channel.class)
-                    .setParameter(1, id)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return entityManager.find(Channel.class, id);
     }
 
     @Override
     public Channel getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
-                    .setParameter(1, name)
-                    .getSingleResult();
+            return (Channel) entityManager.createNativeQuery("select * from Channel where name='" + name + "'").getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -71,8 +62,7 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getChannelsByOwner(User user) {
         try {
-            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
-                    .setParameter(1, user.getId());
+            return entityManager.createNativeQuery("select * from Role where owner_id='" + user.getId() + "'").getResultList();
         } catch (NoResultException e) {
             return null;
         }
