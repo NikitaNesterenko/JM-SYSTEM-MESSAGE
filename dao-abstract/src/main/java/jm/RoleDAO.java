@@ -6,8 +6,6 @@ public interface RoleDAO {
 
     Role getRole(String role);
 
-    void addRoleForUser(User user, String role);
 
-    void updateUserRole(User user, String role);
 
 }
