@@ -1,7 +1,5 @@
-package jm;
+package jm.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,7 +9,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "workspaces")
 public class Workspace {
-    private static final Logger logger = LoggerFactory.getLogger(Workspace.class);
 
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)

@@ -1,5 +1,7 @@
 package jm;
 
+import jm.api.dao.UserDAO;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,10 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private UserDAO userDAO;
-    private RoleDAO roleDAO;
 
     @Autowired
     public UserDAO setUserDAO(UserDAO userDAO) {
         return this.userDAO = userDAO;
-    }
-
-    @Autowired
-    public RoleDAO setRoleDAO(RoleDAO roleDAO) {
-        return this.roleDAO = roleDAO;
     }
 
     @Override
@@ -33,21 +29,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(User user, String role) {
+    public void createUser(User user) {
         userDAO.createUser(user);
-        roleDAO.addRoleForUser(user, role);
     }
 
- 
+
     @Override
     public void deleteUser(User user) {
         userDAO.deleteUser(user);
     }
 
     @Override
-    public void updateUser(User user, String role) {
+    public void updateUser(User user) {
         userDAO.updateUser(user);
-        roleDAO.updateUserRole(user, role);
     }
 
     @Override

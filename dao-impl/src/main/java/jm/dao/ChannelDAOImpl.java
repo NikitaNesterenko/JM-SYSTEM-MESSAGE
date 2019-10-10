@@ -1,5 +1,8 @@
-package jm;
+package jm.dao;
 
+import jm.api.dao.ChannelDAO;
+import jm.model.Channel;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -19,9 +22,12 @@ public class ChannelDAOImpl implements ChannelDAO {
     private EntityManager entityManager;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<Channel> gelAllChannels() {
-        return entityManager.createNativeQuery("SELECT * FROM Channel").getResultList();
+    public List<Channel> getAllChannels() {
+        try {
+            return (List<Channel>) entityManager.createNativeQuery("SELECT * from channels", Channel.class).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -31,10 +37,7 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public void deleteChannel(Channel channel) {
-        Channel searchedChannel = entityManager.find(Channel.class, channel.getId());
-        if (searchedChannel != null) {
-            entityManager.remove(searchedChannel);
-        }
+        entityManager.remove(entityManager.contains(channel) ? channel : entityManager.merge(channel));
     }
 
     @Override
@@ -45,13 +48,21 @@ public class ChannelDAOImpl implements ChannelDAO {
 
     @Override
     public Channel getChannelById(int id) {
-        return entityManager.find(Channel.class, id);
+        try {
+            return (Channel) entityManager.createNativeQuery("select * from channels where id=?", Channel.class)
+                    .setParameter(1, id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public Channel getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from Channel where name='" + name + "'").getSingleResult();
+            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
+                    .setParameter(1, name)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -60,7 +71,8 @@ public class ChannelDAOImpl implements ChannelDAO {
     @Override
     public List<Channel> getChannelsByOwner(User user) {
         try {
-            return entityManager.createNativeQuery("select * from Role where owner_id='" + user.getId() + "'").getResultList();
+            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
+                    .setParameter(1, user.getId());
         } catch (NoResultException e) {
             return null;
         }

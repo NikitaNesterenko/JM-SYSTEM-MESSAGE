@@ -1,10 +1,13 @@
-package jm;
+package jm.api.dao;
+
+import jm.model.Channel;
+import jm.model.User;
 
 import java.util.List;
 
 public interface ChannelDAO {
 
-    List<Channel> gelAllChannels();
+    List<Channel> getAllChannels();
 
     void createChannel(Channel channel);
 

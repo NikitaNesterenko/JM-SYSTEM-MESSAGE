@@ -1,6 +1,5 @@
-*test*
 .idea
 *.zip
 target
 *.iml
-
+logs

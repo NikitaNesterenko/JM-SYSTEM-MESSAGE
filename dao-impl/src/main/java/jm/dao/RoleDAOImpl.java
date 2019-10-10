@@ -1,5 +1,8 @@
-package jm;
+package jm.dao;
 
+import jm.api.dao.RoleDAO;
+import jm.model.Role;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -23,12 +26,11 @@ public class RoleDAOImpl implements RoleDAO {
     }
 
     @Override
-    public Role getRole(String roleName) {
+    public Role getRole(String role) {
         try {
-            return (Role) entityManager.createNativeQuery("select * from Role where role='" + roleName + "'").getSingleResult();
+            return (Role) entityManager.createQuery("from Role where role  = :role").setParameter("role", role).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
     }
-
 }
