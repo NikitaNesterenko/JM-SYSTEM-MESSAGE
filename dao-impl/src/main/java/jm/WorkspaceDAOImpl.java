@@ -26,15 +26,11 @@ public class WorkspaceDAOImpl implements WorkspaceDAO {
 
     @Override
     public void createWorkspace(Workspace workspace) {
-        User user;
-        user = workspace.getOwner();
-        workspace.setOwner(user);
         entityManager.persist(workspace);
     }
 
     @Override
     public void deleteWorkspace(Workspace workspace) {
-//        entityManager.remove(entityManager.contains(workspace) ? workspace : entityManager.merge(workspace));
         entityManager.remove(workspace);
     }
 

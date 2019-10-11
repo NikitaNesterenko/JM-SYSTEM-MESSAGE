@@ -2,6 +2,7 @@ package jm;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -35,9 +36,6 @@ public class    User {
     @JoinTable (name="users_roles", joinColumns=@JoinColumn (name="user_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "users",fetch = FetchType.EAGER)
-    private Set<Workspace> workspaces;
-
 
     public User() {
     }
@@ -48,14 +46,6 @@ public class    User {
         this.login = login;
         this.email = email;
         this.password = password;
-    }
-
-    public Set<Workspace> getWorkspaces() {
-        return workspaces;
-    }
-
-    public void setWorkspaces(Set<Workspace> workspaces) {
-        this.workspaces = workspaces;
     }
 
     public Integer getId() {
