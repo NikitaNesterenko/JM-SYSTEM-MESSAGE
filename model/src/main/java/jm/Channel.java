@@ -21,7 +21,7 @@ public class Channel {
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> channel_users;
+    private List<User> channel_users;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id_c")
@@ -36,7 +36,7 @@ public class Channel {
     public Channel() {
     }
 
-    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
+    public Channel(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
         this.name = name;
         this.channel_users = users;
         this.user = user;
@@ -60,11 +60,11 @@ public class Channel {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return channel_users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(List<User> users) {
         this.channel_users = users;
     }
 
