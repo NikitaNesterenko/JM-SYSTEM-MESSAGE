@@ -25,28 +25,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+        return userDAO.getAll();
     }
 
     @Override
     public void createUser(User user) {
-        userDAO.createUser(user);
+        userDAO.persist(user);
     }
 
 
     @Override
-    public void deleteUser(User user) {
-        userDAO.deleteUser(user);
+    public void deleteUser(Long id) {
+        userDAO.deleteById(id);
     }
 
     @Override
     public void updateUser(User user) {
-        userDAO.updateUser(user);
+        userDAO.merge(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        return userDAO.getUserById(id);
+        return userDAO.getById(id);
     }
 
     @Override

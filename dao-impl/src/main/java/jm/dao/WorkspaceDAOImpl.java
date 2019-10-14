@@ -6,6 +6,7 @@ import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -14,50 +15,20 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class WorkspaceDAOImpl implements WorkspaceDAO {
+public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements WorkspaceDAO {
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public List<Workspace> gelAllChannels() {
-        return entityManager.createNativeQuery("SELECT * FROM workspaces", Workspace.class).getResultList();
-    }
-
-    @Override
-    public void createChannel(Workspace workspace) {
-        entityManager.persist(workspace);
-    }
-
-    @Override
-    public void deleteChannel(Workspace workspace) {
-        Workspace searchedWorkspace = entityManager.find(Workspace.class, workspace.getId());
-        if (searchedWorkspace != null) {
-            entityManager.remove(searchedWorkspace);
-        }
-    }
-
-    @Override
-    public void updateChannel(Workspace workspace) {
-        entityManager.merge(workspace);
-        entityManager.flush();
-    }
-
-    @Override
-    public Workspace getChannelById(Long id) {
-        return entityManager.find(Workspace.class, id);
-    }
 
     @Override
     public Workspace getChannelByName(String name) {
-        return (Workspace) entityManager.createNativeQuery("select * from workspaces where name='" + name + "'", Workspace.class).getSingleResult();
+        return (Workspace) entityManager.createQuery("from Workspace where name  = :name")
+                .setParameter("name", name)
+                .getSingleResult();
     }
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
         try {
-            return entityManager.createNativeQuery("select * from workspaces where owner_id='" + user.getId() + "'", Workspace.class).getResultList();
+            return entityManager.createQuery("from Workspace where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
         } catch (NoResultException e) {
             return null;
         }

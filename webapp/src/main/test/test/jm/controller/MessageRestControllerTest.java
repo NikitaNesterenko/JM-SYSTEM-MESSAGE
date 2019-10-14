@@ -1,38 +1,33 @@
 package test.jm.controller;
 
-import com.google.gson.Gson;
 import jm.MessageService;
 import jm.controller.rest.MessageRestController;
 import jm.model.Channel;
 import jm.model.Message;
 import jm.model.User;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebAppConfiguration
@@ -102,11 +97,10 @@ public class MessageRestControllerTest {
     @Test
     public void createMessage() throws Exception {
 
-        Gson gson = new Gson();
         String jsonMessage;
 
-        Message message =new Message();
-        jsonMessage =  gson.toJson(message);
+        Message message = new Message();
+        jsonMessage = TestUtils.objectToJson(message);
         mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
@@ -118,7 +112,7 @@ public class MessageRestControllerTest {
         verify(messageService, times(1)).createMessage(any());
 
         message = null;
-        jsonMessage = gson.toJson(message);
+        jsonMessage = TestUtils.objectToJson(message);
         mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
@@ -126,7 +120,7 @@ public class MessageRestControllerTest {
         verify(messageService, times(1)).createMessage(any());
 
         Object notChannelObject = "notChannelObject";
-        jsonMessage = gson.toJson(notChannelObject);
+        jsonMessage = TestUtils.objectToJson(notChannelObject);
         mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
@@ -135,18 +129,66 @@ public class MessageRestControllerTest {
     }
 
     @Test
-    public void updateMessage() {
+    public void updateMessage() throws Exception {
         Message messageUpdated = new Message(new Channel(), new User(), "Hello", LocalDate.now());
         messageUpdated.setId(1L);
-        when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+             Message message = (Message) invocation.getArguments()[0];
+             messageUpdated.setContent(message.getContent());
+                return null;
+            }
+        }).when(messageService).updateMessage(any());
 
-        ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageUpdated);
+        Message messageTest= new Message(new Channel(), new User(), "HelloTest", LocalDate.now());
+        messageTest.setId(1L);
+        when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
+        ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageTest);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        verify(messageService, times(1)).updateMessage(messageUpdated);
+        assertEquals(messageTest.getContent(), messageUpdated.getContent());
+        verify(messageService, times(1)).updateMessage(any());
+
+        String jsonChannel;
+
+        mockMvc.perform(put(url))
+                .andExpect(status().isBadRequest());
+        verify(messageService, times(1)).updateMessage(any());
+
+        Message message = null;
+        jsonChannel = TestUtils.objectToJson(message);
+        mockMvc.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonChannel))
+                .andExpect(status().isBadRequest());
+        verify(messageService, times(1)).updateMessage(any());
+
+
+        Object notChannelObject = "notChannelObject";
+        jsonChannel = TestUtils.objectToJson(notChannelObject);
+        mockMvc.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonChannel))
+                .andExpect(status().isBadRequest());
+        verify(messageService, times(1)).updateMessage(any());
 
     }
 
     @Test
-    public void deleteMessage() {
+    public void deleteMessage() throws Exception {
+        Long testId1 = 1L;
+        mockMvc.perform(delete(url + testId1))
+                .andExpect(status().isOk());
+        verify(messageService, times(1)).deleteMessage(testId1);
+
+        String testId2 = "something_text";
+        mockMvc.perform(delete(url + testId2))
+                .andExpect(status().isBadRequest());
+        verify(messageService, times(1)).deleteMessage(any());
+
+        String testId3 = "something text";
+        mockMvc.perform(delete(url + testId3))
+                .andExpect(status().isBadRequest());
+        verify(messageService, times(1)).deleteMessage(any());
     }
 }

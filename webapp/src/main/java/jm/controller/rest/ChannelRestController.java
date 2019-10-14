@@ -47,9 +47,9 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteChannel(@RequestBody Channel channel) {
-        channelService.deleteChannel(channel);
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteChannel(@PathVariable("id") Long id) {
+        channelService.deleteChannel(id);
 
         return ResponseEntity.ok().build();
     }

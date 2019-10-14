@@ -30,7 +30,7 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
@@ -41,9 +41,9 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteUser(@RequestBody User user) {
-        userService.deleteUser(user);
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
         return ResponseEntity.ok(true);
     }
 

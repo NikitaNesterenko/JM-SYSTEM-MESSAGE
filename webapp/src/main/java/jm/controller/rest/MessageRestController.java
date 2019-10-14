@@ -47,9 +47,9 @@ public class MessageRestController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteMessage(@RequestBody Message message) {
-        messageService.deleteMessage(message);
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteMessage(@PathVariable("id") Long id) {
+        messageService.deleteMessage(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

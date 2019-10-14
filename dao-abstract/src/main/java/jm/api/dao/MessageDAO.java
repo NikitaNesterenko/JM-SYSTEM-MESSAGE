@@ -6,13 +6,17 @@ import java.util.List;
 
 public interface MessageDAO {
 
-    List getAllMessages();
+    List<Message> getAll();
 
-    Message getMessageById(Long id);
+    List<Message> getMessageByContetn(String word);
 
-    void createMessage(Message message);
+    void persist(Message message);
 
-    void deleteMessage(Message message);
+    void deleteById(Long id);
 
-    void updateMessage(Message message);
+    Message merge(Message message);
+
+    Message getById(Long id);
+
+
 }

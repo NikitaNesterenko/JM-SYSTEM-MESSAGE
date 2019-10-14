@@ -6,13 +6,17 @@ import java.util.List;
 
 public interface MessageService {
 
-    List getAllMessages();
+    List<Message> getAllMessages();
+
+    List<Message> getMessagesByContent(String word);
 
     Message getMessageById(Long id);
 
     void createMessage(Message message);
 
-    void deleteMessage(Message message);
+    void deleteMessage(Long id);
 
     void updateMessage(Message message);
+
+
 }

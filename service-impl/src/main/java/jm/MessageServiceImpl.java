@@ -2,6 +2,8 @@ package jm;
 
 import jm.api.dao.MessageDAO;
 import jm.model.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private MessageDAO messageDAO;
 
     @Autowired
@@ -19,28 +23,36 @@ public class MessageServiceImpl implements MessageService {
         this.messageDAO = messageDAO;
     }
 
+
     @Override
-    public List getAllMessages() {
-        return messageDAO.getAllMessages();
+    public List<Message> getAllMessages() {
+        return messageDAO.getAll();
+    }
+
+    @Override
+    public List<Message> getMessagesByContent(String word) {
+        return messageDAO.getMessageByContetn(word);
     }
 
     @Override
     public Message getMessageById(Long id) {
-        return messageDAO.getMessageById(id);
+        return messageDAO.getById(id);
     }
 
     @Override
     public void createMessage(Message message) {
-        messageDAO.createMessage(message);
+        messageDAO.persist(message);
     }
 
     @Override
-    public void deleteMessage(Message message) {
-        messageDAO.deleteMessage(message);
+    public void deleteMessage(Long id) {
+        messageDAO.deleteById(id);
+
     }
 
     @Override
     public void updateMessage(Message message) {
-        messageDAO.updateMessage(message);
+        messageDAO.merge(message);
+
     }
 }
