@@ -33,13 +33,18 @@ public class MessageRestController {
     @PostMapping
     public ResponseEntity createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity updateMessage(@RequestBody Message message) {
-        messageService.updateMessage(message);
-        return new ResponseEntity(HttpStatus.OK);
+        Message existingMessage = messageService.getMessageById(message.getId());
+        if (existingMessage == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } else {
+            messageService.updateMessage(message);
+            return new ResponseEntity(HttpStatus.OK);
+        }
     }
 
     @DeleteMapping

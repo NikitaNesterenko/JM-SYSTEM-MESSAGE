@@ -3,8 +3,10 @@ package jm.config.inititalizer;
 import jm.*;
 
 import jm.api.dao.ChannelDAO;
+import jm.api.dao.MessageDAO;
 import jm.api.dao.RoleDAO;
 import jm.model.Channel;
+import jm.model.Message;
 import jm.model.Role;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -23,6 +25,8 @@ public class TestDataInitializer {
     private RoleDAO roleDAO;
     @Autowired
     private ChannelDAO channelDAO;
+    @Autowired
+    private MessageDAO  messageDAO;
 
 
     public TestDataInitializer() {
@@ -75,6 +79,11 @@ public class TestDataInitializer {
         createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
         createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
         createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getChannelById(1L), userList1.get(1), "Hello message1", LocalDate.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getChannelById(2L), userList2.get(2), "Hello message2", LocalDate.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getChannelById(1L), userList1.get(3), "Hello message3", LocalDate.now()));
+
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
@@ -86,5 +95,11 @@ public class TestDataInitializer {
         if (channelDAO.getChannelByName(channel.getName()) == null)
             channelDAO.createChannel(channel);
     }
+
+    private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
+        messageDAO.createMessage(message);
+    }
+
+
 
 }
