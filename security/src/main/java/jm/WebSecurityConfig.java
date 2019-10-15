@@ -46,40 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
-
-        http.authorizeRequests()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
-
-
-        // The pages does not require login
-        http.authorizeRequests()
-                .antMatchers("/", "/login").not().authenticated()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
-        http.authorizeRequests()
-                .antMatchers("/logout").permitAll();
-
-        http.authorizeRequests()
-                .antMatchers("/restapi/**", "/auth/**")
-                .hasAnyRole("OWNER", "USER")
-                .anyRequest().authenticated();
-
-
-        // Config for Login Form
-        http.authorizeRequests().and().formLogin()//
-                // Submit URL of login page.
-                .loginProcessingUrl("/login") // Submit URL
-                .loginPage("/")//
-                .successHandler(simpleAuthenticationSuccessHandler())
-                .failureUrl("/")//
-                .usernameParameter("username")//
-                .passwordParameter("password")
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .logoutUrl("/logout");
-
 
     }
 

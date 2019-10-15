@@ -15,7 +15,7 @@ public class SimpleUrlAuthenticationSuccessHandler implements AuthenticationSucc
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
 
-        httpServletResponse.sendRedirect("/workspacel");
+        httpServletResponse.sendRedirect("/workspace");
     }
 
 }
