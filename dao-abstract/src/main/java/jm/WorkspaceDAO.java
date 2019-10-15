@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface WorkspaceDAO {
 
-    List<Workspace> gelAllWorkspaces();
+    List<Workspace> getAll();
 
-    void createWorkspace(Workspace workspace);
+    void persist(Workspace workspace);
 
-    void deleteWorkspace(Workspace workspace);
+    void deleteById(Long id);
 
-    void updateWorkspace(Workspace workspace);
+    Workspace merge(Workspace workspace);
 
-    Workspace getWorkspaceById(int id);
+    Workspace getById(Long id);
 
     Workspace getWorkspaceByName(String name);
 

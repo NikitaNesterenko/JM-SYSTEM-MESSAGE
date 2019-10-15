@@ -10,46 +10,9 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class WorkspaceDAOImpl implements WorkspaceDAO {
+public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements WorkspaceDAO {
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Workspace> gelAllWorkspaces() {
-        try {
-            return (List<Workspace>) entityManager.createNativeQuery("SELECT * from workspaces", Workspace.class).getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public void createWorkspace(Workspace workspace) {
-        entityManager.persist(workspace);
-    }
-
-    @Override
-    public void deleteWorkspace(Workspace workspace) {
-        entityManager.remove(workspace);
-    }
-
-    @Override
-    public void updateWorkspace(Workspace workspace) {
-        entityManager.merge(workspace);
-        entityManager.flush();
-    }
-
-    @Override
-    public Workspace getWorkspaceById(int id) {
-        try {
-            return (Workspace) entityManager.createNativeQuery("select * from workspaces where id=?", Workspace.class)
-                    .setParameter(1, id)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
 
     @Override
     public Workspace getWorkspaceByName(String name) {
