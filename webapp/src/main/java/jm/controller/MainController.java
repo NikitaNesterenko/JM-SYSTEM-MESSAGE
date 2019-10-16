@@ -41,4 +41,9 @@ public class MainController {
         return new ModelAndView("admin-page.html");
     }
 
+    @GetMapping(value = "/confirmemail")
+    public String confirmemail() {
+        return "confirm-email";
+    }
+
 }

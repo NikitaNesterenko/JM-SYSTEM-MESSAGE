@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a Workspace</title>
+    <link rel="stylesheet" th:href="@{/css/confirmEmailPage.css}"/>
+</head>
+<body>
+<div class="navbar-container">
+    <ul class="confirm-navbar">
+        <div class="sign-in-navbar-in">
+            <li><a class="active" href="/">JM-MESSAGE-SYSTEM</a></li>
+
+        </div>
+    </ul>
+</div>
+
+<div class="form_container">
+    <form class="email_confirmation_form">
+        <h1 style="margin-bottom: 20px">Check your email!</h1>
+        <p class="desc margin_bottom_200" style="margin-bottom: 32px">We've sent a 6-digit confirmation code to
+            <strong>alls232323@gmail.com</strong>. It will expire shortly, so enter it soon.
+        </p>
+        <div class="confirmation_code_container">
+            <div class="confirmation_code_group display_flex">
+                <div class="split_input_item input_wrapper">
+                    <input type="text" class="inline_input" maxlength="1" value="">
+                </div>
+                <div class="split_input_item input_wrapper">
+                    <input type="text" class="inline_input" maxlength="1" value="">
+                </div>
+                <div class="split_input_item input_wrapper">
+                    <input type="text" class="inline_input" maxlength="1" value="">
+                </div>
+            </div>
+
+            <div class="confirmation_code_span_cell">—</div>
+
+
+            <div class="confirmation_code_group display_flex">
+                <div class="split_input_item input_wrapper">
+                    <input type="text" class="inline_input" maxlength="1" value="">
+                </div>
+                <div class="split_input_item input_wrapper">
+                    <input type="text" class="inline_input" maxlength="1" value="">
+                </div>
+                <div class="split_input_item input_wrapper">
+                    <input type="text" class="inline_input" maxlength="1" value="">
+                </div>
+            </div>
+        </div>
+
+        <p class="c-alert confirmation_code_state_message unchecked">
+            <span class="small_desc">Keep this window open while checking for your code. Remember to tryyour spam folder!</span>
+        </p>
+
+    </form>
+</div>
+</body>
+</html>
