@@ -24,7 +24,7 @@ export const getUser = (id) => {
     return result;
 };
 
-export function createUser(user) {
+export const createUser = (user) => {
     const jsonUser = JSON.stringify(user);
     $.ajax({
         type: 'post',
@@ -32,9 +32,9 @@ export function createUser(user) {
         data: jsonUser,
         contentType: "application/json"
     });
-}
+};
 
-export function updateUser(user) {
+export const updateUser = (user) => {
     const jsonUser = JSON.stringify(user);
     $.ajax({
         type: 'put',
@@ -42,13 +42,13 @@ export function updateUser(user) {
         data: jsonUser,
         contentType: "application/json"
     });
-}
+};
 
-export function deleteUser(id) {
+export const deleteUser = (id) => {
     $.ajax({
         type: 'delete',
         url: "/api/users/" + id
     });
-}
+};
 
 

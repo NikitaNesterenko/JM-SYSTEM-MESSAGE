@@ -12,7 +12,7 @@ export const getChannelById = (id) => {
     return result;
 };
 
-export function createChannel(channel) {
+export const createChannel = (channel) => {
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
         type: 'post',
@@ -20,9 +20,9 @@ export function createChannel(channel) {
         data: jsonChannel,
         contentType: "application/json"
     });
-}
+};
 
-export function updateChannel(channel) {
+export const updateChannel = (channel) => {
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
         type: 'put',
@@ -32,10 +32,10 @@ export function updateChannel(channel) {
     });
 }
 
-export function deleteChannel(id) {
+export const deleteChannel = (id) => {
     $.ajax({
         type: 'delete',
         url: "/api/channels/" + id
     });
-}
+};
 
