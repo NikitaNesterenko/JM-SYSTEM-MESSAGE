@@ -20,4 +20,9 @@ public class MailServiceImpl implements MailService{
         message.setText("You invite link: " + inviteLink);
         emailSender.send(message);
     }
+
+//    public String getMessage() {
+//        Thy
+//    }
+
 }
