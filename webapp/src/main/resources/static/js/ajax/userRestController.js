@@ -44,11 +44,11 @@ export function updateUser(user) {
     });
 }
 
-export const deleteUser = (id) => {
+export function deleteUser(id) {
     $.ajax({
         type: 'delete',
         url: "/api/users/" + id
     });
-};
+}
 
 

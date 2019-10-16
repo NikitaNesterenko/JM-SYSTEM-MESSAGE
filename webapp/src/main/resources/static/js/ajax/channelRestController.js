@@ -32,10 +32,10 @@ export function updateChannel(channel) {
     });
 }
 
-export const deleteChannel = (id) => {
+export function deleteChannel(id) {
     $.ajax({
         type: 'delete',
         url: "/api/channels/" + id
     });
-};
+}
 
