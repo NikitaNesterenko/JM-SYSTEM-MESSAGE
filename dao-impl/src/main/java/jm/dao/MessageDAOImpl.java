@@ -16,7 +16,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     private static final Logger logger = LoggerFactory.getLogger(RoleDAOImpl.class);
 
     @Override
-    public List<Message> getMessageByContetn(String word) {
+    public List<Message> getMessageByContent(String word) {
         try {
             return (List<Message>) entityManager.createNativeQuery("select * from messages where content=?", Message.class)
                     .setParameter(1, word);

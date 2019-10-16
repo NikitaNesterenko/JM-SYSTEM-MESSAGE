@@ -31,7 +31,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> getMessagesByContent(String word) {
-        return messageDAO.getMessageByContetn(word);
+        return messageDAO.getMessageByContent(word);
     }
 
     @Override
