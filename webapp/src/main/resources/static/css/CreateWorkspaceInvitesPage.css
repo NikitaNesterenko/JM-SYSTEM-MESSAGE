@@ -1,0 +1,138 @@
+html {
+    background-color: whitesmoke;
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+
+
+.confirm-navbar{
+    height: 74px !important;
+}
+
+.sign-in-navbar-in{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+}
+
+ul.confirm-navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+ul.confirm-navbar li {float: none;}
+
+ul.confirm-navbar li a {
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.confirm-navbar li a:hover:not(.active) {
+    background-color: silver;
+}
+
+ul.confirm-navbar li a.active {
+    background-color: white;
+}
+
+ul.confirm-navbar li.right {
+    float: right;
+}
+
+@media screen and (max-width: 600px) {
+    ul.confirm-navbar li.right,
+    ul.confirm-navbar li {
+        float: none;
+    }
+}
+
+.form_container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: flex-end;
+    max-width: 50%;
+    height: 678px;
+    min-width: 50%;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.workspace_form {
+    margin-left: 60px;
+    margin-right: 45px;
+    margin-bottom: 30px;
+    max-width: 400px;
+
+}
+
+.form_container h1 {
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 20px;
+    margin-top: 4px;
+    line-height: 1.2143;
+    color: #1d1c1d;
+    letter-spacing: -1px;
+}
+
+.confirm_input {
+    height: 48px;
+    border-radius: 4px;
+    border: 1px solid #868686;
+    transition: border 80ms ease-out,box-shadow 80ms ease-out;
+    box-sizing: border-box;
+    margin: 0 0 20px;
+    padding: 3px 12px 5px;
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.86666667;
+    line-height: normal;
+}
+
+.workspace_button {
+    font-size: 18px;
+    font-weight: 900;
+    height: 44px;
+    min-width: 96px;
+    padding: 0 16px 3px;
+    border: none;
+    border-radius: 4px;
+    transition: all 80ms linear;
+    background: #007a5a;
+    color: #fff;
+    box-shadow: none;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.add_row_invites{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.link_button {
+
+    background: none;
+    border: 0;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    cursor: pointer;
+    color: #1264a3;
+    text-decoration: none;
+    vertical-align: baseline;
+}

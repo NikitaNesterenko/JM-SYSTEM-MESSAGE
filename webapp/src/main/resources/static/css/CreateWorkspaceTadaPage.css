@@ -6,6 +6,7 @@ html {
     margin: 0;
 }
 
+
 .confirm-navbar{
     height: 74px !important;
 }
@@ -53,63 +54,57 @@ ul.confirm-navbar li.right {
 }
 
 .form_container {
+    flex: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-
-.email_confirmation_form {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    padding: 60px;
-    box-shadow: 0 10px 25px #ddd;
-    border-radius: 10px;
-    height: 510px;
-    min-width: 400px;
+    position: relative;
+    justify-content: flex-end;
+    max-width: 50%;
+    height: 678px;
+    min-width: 50%;
     border: 1px solid #ddd;
     background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-size: 355px;
-    margin-top: 32px;
-    margin-bottom: 16px;
 }
 
-.confirmation_code_container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 8px;
+.workspace_form {
+    margin-left: 60px;
+    margin-right: 45px;
+    margin-bottom: 30px;
+    max-width: 400px;
+
 }
 
-.confirmation_code_group {
-    display: flex;
-    flex-direction: row;
-}
-
-.confirmation_code_span_cell {
-    font-weight: 400;
-    font-size: 15px;
-    vertical-align: middle;
-    margin: 8px;
-}
-
-.inline_input {
-    width: 63px;
-    height: 33px;
-    border: 1px solid rgba(29, 28, 29, .5);
+.form_container h1 {
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 20px;
+    margin-top: 4px;
+    line-height: 1.2143;
+    color: #1d1c1d;
+    letter-spacing: -1px;
 }
 
 .small_desc {
-    color: #616061;
-    font-size: 14px;
-    line-height: 1.38463;
-}
-
-.desc {
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.46668;
     color: #1d1c1d;
 }
 
+.workspace_button {
+    font-size: 17px;
+    font-weight: 900;
+    height: 44px;
+    min-width: 96px;
+    padding: 0px 16px 3px;
+    border: none;
+    border-radius: 4px;
+    align-items: center;
+    transition: all 80ms linear;
+    background: #007a5a;
+    color: #fff;
+    box-shadow: none;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 16px;
+
+}
