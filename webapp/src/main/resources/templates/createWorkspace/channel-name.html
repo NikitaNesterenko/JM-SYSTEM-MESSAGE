@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a Workspace</title>
+    <link rel="stylesheet" th:href="@{/css/CreateWorkspaceChannelNamePage.css}"/>
+</head>
+<body>
+<div class="navbar-container">
+    <ul class="confirm-navbar">
+        <div class="sign-in-navbar-in">
+            <li><a class="active" href="/">JM-MESSAGE-SYSTEM</a></li>
+
+        </div>
+    </ul>
+</div>
+
+<div class="form_container">
+    <div class="workspace_form">
+        <h1 id="workspace_name_label" class="large_bottom_margin">What’s a project your team is working on?</h1>
+        <form class="confirm_form" action="/invites">
+            <input type="text" id="signup_team_name" class="confirm_input" placeholder="Ex. Q4 Budget, Website Update..."  value="">
+            <button class="workspace_button" type="submit">Next</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

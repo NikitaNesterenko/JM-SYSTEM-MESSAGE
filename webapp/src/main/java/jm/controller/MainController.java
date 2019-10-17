@@ -43,4 +43,30 @@ public class MainController {
         return new ModelAndView("admin-page.html");
     }
 
+    @GetMapping(value = "/confirmemail")
+    public String confirmemail() {
+        return "createWorkspace/confirm-email";
+    }
+
+    @GetMapping(value = "/teamname")
+    public String teamName() {
+        return "createWorkspace/team-name";
+    }
+
+    @GetMapping(value = "/channelname")
+    public String channelName() {
+        return "createWorkspace/channel-name";
+    }
+
+    @GetMapping(value = "/invites")
+    public String invitesPage() {
+        return "createWorkspace/invites-page";
+    }
+
+    @GetMapping(value = "/tada")
+    public String tadaPage() {
+        return "createWorkspace/tada-page";
+    }
+
+
 }
