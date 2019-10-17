@@ -65,6 +65,7 @@ public class MessageRestControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(responseEntity.getBody().size(),messages.size());
         assertEquals(responseEntity.getBody(),messages);
+        verify(messageService, times(1)).getAllMessages();
 
     }
 
@@ -119,8 +120,8 @@ public class MessageRestControllerTest {
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).createMessage(any());
 
-        Object notChannelObject = "notChannelObject";
-        jsonMessage = TestUtils.objectToJson(notChannelObject);
+        Object notMessageObject = "notMessageObject";
+        jsonMessage = TestUtils.objectToJson(notMessageObject);
         mockMvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
@@ -149,26 +150,26 @@ public class MessageRestControllerTest {
         assertEquals(messageTest.getContent(), messageUpdated.getContent());
         verify(messageService, times(1)).updateMessage(any());
 
-        String jsonChannel;
+        String jsonMessage;
 
         mockMvc.perform(put(url))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).updateMessage(any());
 
         Message message = null;
-        jsonChannel = TestUtils.objectToJson(message);
+        jsonMessage = TestUtils.objectToJson(message);
         mockMvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonChannel))
+                .content(jsonMessage))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).updateMessage(any());
 
 
-        Object notChannelObject = "notChannelObject";
-        jsonChannel = TestUtils.objectToJson(notChannelObject);
+        Object notMessageObject = "nnotMessageObject";
+        jsonMessage = TestUtils.objectToJson(notMessageObject);
         mockMvc.perform(put(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonChannel))
+                .content(jsonMessage))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).updateMessage(any());
 

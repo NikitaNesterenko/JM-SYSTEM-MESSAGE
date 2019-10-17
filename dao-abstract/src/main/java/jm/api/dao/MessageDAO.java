@@ -8,7 +8,7 @@ public interface MessageDAO {
 
     List<Message> getAll();
 
-    List<Message> getMessageByContetn(String word);
+    List<Message> getMessageByContent(String word);
 
     void persist(Message message);
 
