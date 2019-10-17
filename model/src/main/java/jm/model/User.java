@@ -32,10 +32,15 @@ public class User {
     @Column(name = "avatar")
     private Blob avatar;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.REFRESH})
+    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink;
 
+   /*
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles_workspaces", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+*/
     public User() {
     }
 
@@ -102,7 +107,7 @@ public class User {
     public void setAvatar(Blob avatar) {
         this.avatar = avatar;
     }
-
+/*
     public Set<Role> getRoles() {
         return roles;
     }
@@ -110,7 +115,7 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,13 +127,14 @@ public class User {
                 login.equals(user.login) &&
                 email.equals(user.email) &&
                 password.equals(user.password) &&
-                avatar.equals(user.avatar) &&
-                roles.equals(user.roles);
+                avatar.equals(user.avatar); //&&
+              //  roles.equals(user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastName, login, email, password, avatar, roles);
+        return Objects.hash(id, name, lastName, login, email, password, avatar);
+        //, roles);
     }
 
     @Override

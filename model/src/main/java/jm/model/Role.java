@@ -3,6 +3,7 @@ package jm.model;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -14,6 +15,9 @@ public class Role {
 
     @Column(name = "role", nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "role", cascade = {CascadeType.REFRESH})
+    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink;
 
     public Role() {
     }

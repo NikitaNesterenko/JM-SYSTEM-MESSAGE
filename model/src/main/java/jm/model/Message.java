@@ -2,6 +2,7 @@ package jm.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,12 +13,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = Channel.class)
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_channels_messages", joinColumns = @JoinColumn(name = "message_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    private List<Channel> channels;
 
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id")
+    @OneToOne(targetEntity = User.class)
+    @JoinColumn(name = "owner_id")
     private User user;
 
     @Column(name = "content", nullable = false)
@@ -29,8 +31,8 @@ public class Message {
     public Message() {
     }
 
-    public Message(Channel channel, User user, String content, LocalDate dateCreate) {
-        this.channel = channel;
+    public Message(List<Channel> channels, User user, String content, LocalDate dateCreate) {
+        this.channels = channels;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
@@ -44,12 +46,12 @@ public class Message {
         this.id = id;
     }
 
-    public Channel getChannel() {
-        return channel;
+    public List<Channel> getChannels() {
+        return this.channels;
     }
 
-    public void setChannel(Channel channel) {
-        this.channel = channel;
+    public void setChannels(List<Channel> channels) {
+        this.channels = channels;
     }
 
     public User getUser() {
@@ -82,7 +84,7 @@ public class Message {
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
         return Objects.equals(id, message.id) &&
-                Objects.equals(channel, message.channel) &&
+                Objects.equals(channels, message.channels) &&
                 Objects.equals(user, message.user) &&
                 Objects.equals(content, message.content) &&
                 Objects.equals(dateCreate, message.dateCreate);
@@ -90,14 +92,14 @@ public class Message {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, channel, user, content, dateCreate);
+        return Objects.hash(id, channels, user, content, dateCreate);
     }
 
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", channel=" + channel +
+                ", channel=" + channels +
                 ", user=" + user +
                 ", content='" + content + '\'' +
                 ", dateCreate=" + dateCreate +

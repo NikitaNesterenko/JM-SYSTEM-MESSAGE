@@ -18,7 +18,7 @@ public class Channel {
     private String name;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
+    @JoinTable(name = "users_channels_messages", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 

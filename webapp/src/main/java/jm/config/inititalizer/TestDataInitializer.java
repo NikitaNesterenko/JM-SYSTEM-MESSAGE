@@ -7,6 +7,7 @@ import jm.api.dao.RoleDAO;
 import jm.model.Channel;
 import jm.model.Role;
 import jm.model.User;
+import jm.model.WorkspaceUserRoleLink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,23 +51,33 @@ public class TestDataInitializer {
             roleDAO.persist(roleUser);
         }
 
-        User[] usersArray = new User[15];
+        WorkspaceUserRoleLink workspaceUserRoleLink;
+        List<WorkspaceUserRoleLink> workspaceUserRoleLinksArray = new ArrayList<>();
 
         Role role = roleDAO.getRoleByRolename(userRole);
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
+        User user;
         for (int i = 0; i < 15; i++) {
-            usersArray[i] = new User("name-" + i, "last-name-" + i, "login-" + i, "mymail" + i + "@testmail.com", "pass-" + i);
-            usersArray[i].setRoles(roleSet);
-        }
+            user = new User("name-" + i,
+                    "last-name-" + i, "login-" + i, "mymail" + i +
+                    "@testmail.com", "pass-" + i);
+            workspaceUserRoleLink = new WorkspaceUserRoleLink();
+            workspaceUserRoleLink.setUser(user);
+            workspaceUserRoleLink.setRole(role);
 
+            workspaceUserRoleLinksArray.add(workspaceUserRoleLink);
+        }
+/*
         List<User> userList1 = new ArrayList<>();
         List<User> userList2 = new ArrayList<>();
         List<User> userList3 = new ArrayList<>();
-
-        for (int i = 0; i < 15; i++) {
-            createUserIfNotExists(userService, usersArray[i]);
+*/
+   //     for (int i = 0; i < 15; i++) {
+            workspaceUserRoleLinksArray.forEach(w->
+                    createUserIfNotExists(userService, w.getUser()));
+            /*
             if (i < 5) {
                 userList1.add(userService.getUserByLogin(usersArray[i].getLogin()));
             }
@@ -76,11 +87,13 @@ public class TestDataInitializer {
             if (i >= 10) {
                 userList3.add(userService.getUserByLogin(usersArray[i].getLogin()));
             }
-        }
-
+            */
+ //       }
+/*
         createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
         createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
         createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+ */
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
