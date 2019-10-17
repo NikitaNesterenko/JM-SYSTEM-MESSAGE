@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 
 @RestController
-@RequestMapping("/api/channels")
+@RequestMapping(value = "/restapi/channels/**")
 public class ChannelRestController {
 
     private ChannelService channelService;
@@ -20,12 +20,12 @@ public class ChannelRestController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/channel/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(channelService.getChannelById(id));
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity createChannel(@RequestBody Channel channel) {
         try {
             channelService.createChannel(channel);
@@ -36,7 +36,7 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateChannel(@RequestBody Channel channel) {
         try {
             channelService.updateChannel(channel);
@@ -47,7 +47,7 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteChannel(@PathVariable("id") Long id) {
         channelService.deleteChannel(id);
 
