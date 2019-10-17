@@ -1,8 +1,13 @@
 package jm.model;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,12 +36,14 @@ public class Workspace {
     private Boolean isPrivate;
 
     @Column(name = "created_date", nullable = false)
-    private LocalDate createdDate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime createdDate;
 
     public Workspace() {
     }
 
-    public Workspace(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
+    public Workspace(String name, List<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
         this.user = user;
@@ -84,11 +91,11 @@ public class Workspace {
         isPrivate = aPrivate;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
