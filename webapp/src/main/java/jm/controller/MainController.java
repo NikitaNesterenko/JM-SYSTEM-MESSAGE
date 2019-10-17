@@ -41,4 +41,9 @@ public class MainController {
         return new ModelAndView("admin-page.html");
     }
 
+    @GetMapping(value = "/workspace-new")
+    public ModelAndView workspacePageNew() {
+        return new ModelAndView("new-workspace-page.html");
+    }
+
 }
