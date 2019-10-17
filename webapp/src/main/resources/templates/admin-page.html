@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Admin Page</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" th:href="@{/css/adminPage.css}"/>
+</head>
+
+<body>
+
+<div class="navbar-container">
+    <ul class="admin-navbar">
+        <div class="admin-navbar-in">
+            <li><a class="active" href="/-">Workspace Name</a></li>
+            <li class="right"><a class="admin-btn" href="/-">Launch</a></li>
+            <li class="right"><a class="nav-btn" href="/-">Help</a></li>
+            <li class="right"><a class="nav-btn" href="/-">Workspaces</a></li>
+            <li class="right"><a class="nav-btn" href="/-">Plans</a></li>
+        </div>
+    </ul>
+</div>
+
+<div class="admin-box">
+
+    <div class="account-box">
+
+        <div class="acc-info-box">
+
+            <div class="acc-image-box">
+                image
+            </div>
+
+            <div class="sign-in-box">
+                <p>SIGNED IN AS</p>
+                <p><b>USER NAME</b></p>
+            </div>
+
+        </div>
+
+        <div class="acc-acc-box">
+            <h6 class="acc-titles">ACCOUNT</h6>
+
+            <button class="btn-1">Back to JM-MESSAGE-SYSTEM</button>
+            <button class="btn-1">Home</button>
+            <button class="btn-1">Account & profile</button>
+            <button class="btn-1">Configure apps</button>
+            <button class="btn-1">Analytics</button>
+            <button class="btn-1">Customize</button>
+            <button class="btn-1">About this Workspace</button>
+        </div>
+
+        <div class="acc-admin-box">
+            <h6 class="acc-titles">ADMINISTRATION</h6>
+
+            <button class="btn-2">Settings & permissions</button>
+            <button class="btn-2">Manage members</button>
+            <button class="btn-2">User groups</button>
+            <button class="btn-2">Invitations</button>
+            <button class="btn-2">Billing</button>
+            <button class="btn-2">Authentication</button>
+            <button class="btn-2">Support for Transport Layer Security (TLS)</button>
+        </div>
+
+        <div class="acc-other-box">
+            <h6 class="acc-titles">OTHER</h6>
+
+            <button class="btn-3">Tour</button>
+            <button class="btn-3">Download apps</button>
+            <button class="btn-3">Brand guidlines</button>
+            <button class="btn-3">Configure apps</button>
+            <button class="btn-3">Help</button>
+            <button class="btn-3">API</button>
+        </div>
+
+    </div>
+
+    <div class="info-box">
+
+        <div class="user-box">
+
+            <div class="inside-user-box">
+
+                <div class="manage-search-box">
+
+                    <div class="manage-memebers-box">
+                        <b>Manage members</b>
+                    </div>
+
+                    <div class="search-memebers-box">
+
+                        <form class="search-form" action="/-">
+                            <button class="search-button" type="submit">Search</button>
+                            <input class="search-input" type="text" placeholder="Search current members" name="search">
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <div class="invite-filters-box">
+
+                    <div class="invite-button-box">
+                        <button class="invite-button" type="button">Invite People</button>
+                    </div>
+
+                    <div class="filters-box">
+                        <select class="filters-select">
+                            <option>Filters</option>
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="users-box">
+
+            <div class="table-box">
+
+                <table class="user-table bordered">
+                    <tr>
+                        <th>Name</th>
+                        <th>Account type</th>
+                        <th>Billing status</th>
+                        <th>Authentication</th>
+                        <th> </th>
+                    </tr>
+                    <tr>
+                        <td>Test Name1</td>
+                        <td>Full memeber</td>
+                        <td>Inactive</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name2</td>
+                        <td>Full memeber</td>
+                        <td>Active</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name3</td>
+                        <td>Full memeber</td>
+                        <td>Inactive</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name4</td>
+                        <td>Full memeber</td>
+                        <td>Active</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name5</td>
+                        <td>Full memeber</td>
+                        <td>Inactive</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name6</td>
+                        <td>Full memeber</td>
+                        <td>Active</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name7</td>
+                        <td>Full memeber</td>
+                        <td>Inactive</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                    <tr>
+                        <td>Test Name8</td>
+                        <td>Full memeber</td>
+                        <td>Active</td>
+                        <td>Default</td>
+                        <th>...</th>
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

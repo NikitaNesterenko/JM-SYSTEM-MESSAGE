@@ -38,4 +38,9 @@ public class MainController {
         return new ModelAndView("signin-page.html");
     }
 
+    @GetMapping(value = "/admin")
+    public ModelAndView adminPage() {
+        return new ModelAndView("admin-page.html");
+    }
+
 }
