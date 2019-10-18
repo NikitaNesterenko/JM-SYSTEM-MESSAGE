@@ -23,4 +23,14 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             return null;
         }
     }
+
+    @Override
+    public void addRoleForUser(User user, String role) {
+
+    }
+
+    @Override
+    public void updateUserRole(User user, String role) {
+
+    }
 }
