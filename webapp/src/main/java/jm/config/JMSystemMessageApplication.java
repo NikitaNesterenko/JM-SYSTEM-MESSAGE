@@ -1,6 +1,9 @@
 package jm.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jm.config.inititalizer.TestDataInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import javax.annotation.PostConstruct;
 
@@ -19,6 +23,15 @@ import javax.annotation.PostConstruct;
 @ComponentScan("jm")
 public class JMSystemMessageApplication {
     private static final Logger logger = LoggerFactory.getLogger(JMSystemMessageApplication.class);
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        ObjectMapper mapper = new ObjectMapper();
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        mapper.registerModule(javaTimeModule);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        return new MappingJackson2HttpMessageConverter(mapper);
+    }
 
     @Bean(initMethod = "init")
     @PostConstruct
