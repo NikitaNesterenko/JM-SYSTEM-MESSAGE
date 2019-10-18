@@ -32,6 +32,12 @@
         </dependency>
 
         <dependency>
+            <groupId>groupId</groupId>
+            <artifactId>mail-service-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
