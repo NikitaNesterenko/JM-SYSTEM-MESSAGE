@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(value = "/restapi/users/**")
 public class UserRestController {
 
     private UserService userService;
@@ -19,29 +19,29 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/users")
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity createUser(@RequestBody User user) {
         userService.createUser(user);
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.ok(true);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(true);

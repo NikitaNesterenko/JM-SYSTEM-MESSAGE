@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a Workspace</title>
+    <link rel="stylesheet" th:href="@{/css/CreateWorkspaceInvitesPage.css}"/>
+</head>
+<body>
+<div class="navbar-container">
+    <ul class="confirm-navbar">
+        <div class="sign-in-navbar-in">
+            <li><a class="active" href="/">JM-MESSAGE-SYSTEM</a></li>
+
+        </div>
+    </ul>
+</div>
+
+<div class="form_container">
+    <div class="workspace_form">
+        <h1 id="workspace_name_label" class="large_bottom_margin">What’s a project your team is working on?</h1>
+        <form class="confirm_form" action="/tada">
+
+            <input type="text" id="invite1" class="confirm_input" placeholder="name@example.com"  value="">
+            <input type="text" id="invite2" class="confirm_input" placeholder="name@example.com"  value="">
+            <input type="text" id="invite3" class="confirm_input" placeholder="name@example.com"  value="">
+
+            <div class="add_row_invites">
+                <i class="c-icon c-icon--plus-circle" aria-hidden="true"></i>
+                <button class="link_button" type="button">Add another</button>
+            </div>
+            <button class="workspace_button" type="submit">Add Teammates</button>
+
+            <div class="shared_invite_link_container">
+                <button class="link_button" type="button">Get an invite link to share</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
