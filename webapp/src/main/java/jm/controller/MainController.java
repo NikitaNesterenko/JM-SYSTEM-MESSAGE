@@ -43,6 +43,11 @@ public class MainController {
         return new ModelAndView("admin-page.html");
     }
 
+    @GetMapping(value = "/workspace-new")
+    public ModelAndView workspacePageNew() {
+        return new ModelAndView("new-workspace-page.html");
+    }
+
     @GetMapping(value = "/confirmemail")
     public String confirmemail() {
         return "createWorkspace/confirm-email";
@@ -67,6 +72,4 @@ public class MainController {
     public String tadaPage() {
         return "createWorkspace/tada-page";
     }
-
-
 }
