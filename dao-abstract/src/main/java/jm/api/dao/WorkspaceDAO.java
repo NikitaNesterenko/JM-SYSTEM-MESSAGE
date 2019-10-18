@@ -1,4 +1,7 @@
-package jm;
+package jm.api.dao;
+
+import jm.model.User;
+import jm.model.Workspace;
 
 import java.util.List;
 

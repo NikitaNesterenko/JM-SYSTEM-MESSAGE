@@ -1,8 +1,7 @@
-package jm.controller;
+package jm.controller.rest;
 
-import jm.Workspace;
 import jm.WorkspaceService;
-import org.hibernate.jdbc.Work;
+import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,8 @@
 package jm;
 
+import jm.api.dao.WorkspaceDAO;
+import jm.model.User;
+import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

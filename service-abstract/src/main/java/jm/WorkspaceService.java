@@ -1,5 +1,8 @@
 package jm;
 
+import jm.model.User;
+import jm.model.Workspace;
+
 import java.util.List;
 
 public interface WorkspaceService {
