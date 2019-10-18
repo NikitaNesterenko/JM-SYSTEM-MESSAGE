@@ -16,7 +16,6 @@
         <module>service-abstract</module>
         <module>service-impl</module>
         <module>webapp</module>
-        <module>mail-service-impl</module>
     </modules>
 
     <parent>
