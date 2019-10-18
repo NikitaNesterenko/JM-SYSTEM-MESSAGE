@@ -14,3 +14,15 @@ window.addEventListener('load', function() {
         }
     }
 });
+
+$(document).ready(function(){
+    $.ajax({
+        url: '/restapi/channels',
+        type: 'get',
+        success: function(response){
+            $.each(response, function (i, item) {
+                $('#channel-box').append('<p><a href="" class="channel-link">' + item.name + '</a>');
+            })
+        }
+    });
+});
