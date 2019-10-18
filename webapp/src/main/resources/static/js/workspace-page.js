@@ -15,11 +15,14 @@ window.addEventListener('load', function() {
     }
 });
 
-$(document).ready(function () {
-    $.getJSON("http://localhost:8080/channel", function(data) {
-        $.each(data, function(i, item) {
-            console.log(item.name)
-            $('#channel-box').append('<p><a href="" class="channel-link">' + item.name + '</a>');
-        });
+$(document).ready(function(){
+    $.ajax({
+        url: '/restapi/channels',
+        type: 'get',
+        success: function(response){
+            $.each(response, function (i, item) {
+                $('#channel-box').append('<p><a href="" class="channel-link">' + item.name + '</a>');
+            })
+        }
     });
 });
