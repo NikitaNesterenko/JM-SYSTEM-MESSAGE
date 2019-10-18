@@ -13,7 +13,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
         <dependency>
             <groupId>groupId</groupId>
             <artifactId>model</artifactId>

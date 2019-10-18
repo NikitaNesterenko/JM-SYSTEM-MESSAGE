@@ -1,7 +1,6 @@
-package jm.service;
+package jm;
 
 public interface MailService {
-
     public void sendInviteMessage(
             String nameFrom,
             String emailFrom,

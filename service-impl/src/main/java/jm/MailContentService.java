@@ -1,15 +1,15 @@
-package jm.service;
+package jm;
 
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Service
-public class MailContentBuilder {
+public class MailContentService {
 
     private TemplateEngine templateEngine;
 
-    public MailContentBuilder(TemplateEngine templateEngine) {
+    public MailContentService(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 
