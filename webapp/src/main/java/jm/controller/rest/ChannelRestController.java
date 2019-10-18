@@ -10,7 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("channel")
+@RequestMapping(value = "/restapi/channels/**")
 public class ChannelRestController {
 
     private ChannelService channelService;
@@ -21,12 +21,12 @@ public class ChannelRestController {
     }
 
 
-    @GetMapping("{id}")
-    public ResponseEntity<Channel> getChannelById(@PathVariable Integer id) {
+    @GetMapping(value = "/channel/{id}")
+    public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(channelService.getChannelById(id));
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity createChannel(@RequestBody Channel channel) {
         try {
             channelService.createChannel(channel);
@@ -37,7 +37,7 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateChannel(@RequestBody Channel channel) {
         try {
             channelService.updateChannel(channel);
@@ -48,9 +48,9 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteChannel(@RequestBody Channel channel) {
-        channelService.deleteChannel(channel);
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity deleteChannel(@PathVariable("id") Long id) {
+        channelService.deleteChannel(id);
 
         return ResponseEntity.ok().build();
     }

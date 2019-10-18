@@ -1,19 +1,18 @@
 package jm.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role {
-    private static final Logger logger = LoggerFactory.getLogger(Role.class);
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "role", nullable = false)
     private String role;
@@ -21,7 +20,7 @@ public class Role {
     public Role() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -29,8 +28,8 @@ public class Role {
         return role;
     }
 
-    public void setId(Integer roleId) {
-        this.id = roleId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setRole(String role) {
@@ -57,5 +56,10 @@ public class Role {
                 "id=" + id +
                 ", role='" + role + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.role;
     }
 }

@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface WorkspaceDAO {
 
-    List<Workspace> gelAllChannels();
+    List<Workspace> getAll();
 
-    void createChannel(Workspace workspace);
+    void persist(Workspace workspace);
 
-    void deleteChannel(Workspace workspace);
+    void deleteById(Long id);
 
-    void updateChannel(Workspace workspace);
+    Workspace merge(Workspace workspace);
 
-    Workspace getChannelById(int id);
+    Workspace getById(Long id);
 
     Workspace getChannelByName(String name);
 

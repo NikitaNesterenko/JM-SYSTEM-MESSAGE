@@ -10,11 +10,11 @@ public interface ChannelService {
 
     void createChannel(Channel channel);
 
-    void deleteChannel(Channel channel);
+    void deleteChannel(Long id);
 
     void updateChannel(Channel channel);
 
-    Channel getChannelById(int id);
+    Channel getChannelById(Long id);
 
     Channel getChannelByName(String name);
 

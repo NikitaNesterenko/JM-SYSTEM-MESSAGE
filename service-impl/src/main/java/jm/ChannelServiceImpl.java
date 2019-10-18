@@ -22,27 +22,27 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<Channel> gelAllChannels() {
-        return channelDAO.getAllChannels();
+        return channelDAO.getAll();
     }
 
     @Override
     public void createChannel(Channel channel) {
-        channelDAO.createChannel(channel);
+        channelDAO.persist(channel);
     }
 
     @Override
-    public void deleteChannel(Channel channel) {
-        channelDAO.deleteChannel(channel);
+    public void deleteChannel(Long id) {
+        channelDAO.deleteById(id);
     }
 
     @Override
     public void updateChannel(Channel channel) {
-        channelDAO.updateChannel(channel);
+        channelDAO.merge(channel);
     }
 
     @Override
-    public Channel getChannelById(int id) {
-        return channelDAO.getChannelById(id);
+    public Channel getChannelById(Long id) {
+        return channelDAO.getById(id);
     }
 
     @Override

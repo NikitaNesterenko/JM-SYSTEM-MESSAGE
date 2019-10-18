@@ -3,8 +3,10 @@ package jm.config.inititalizer;
 import jm.*;
 
 import jm.api.dao.ChannelDAO;
+import jm.api.dao.MessageDAO;
 import jm.api.dao.RoleDAO;
 import jm.model.Channel;
+import jm.model.Message;
 import jm.model.Role;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -23,6 +25,8 @@ public class TestDataInitializer {
     private RoleDAO roleDAO;
     @Autowired
     private ChannelDAO channelDAO;
+    @Autowired
+    private MessageDAO  messageDAO;
 
 
     public TestDataInitializer() {
@@ -31,20 +35,28 @@ public class TestDataInitializer {
 
 
     private void init() {
+        logger.info("Data init has been started!!!");
         dataInit();
+        logger.info("Data init has been done!!!");
     }
 
     private void dataInit() {
         String ownerRole = "ROLE_OWNER";
         String userRole = "ROLE_USER";
-        if (roleDAO.getRole(ownerRole) == null)
-            roleDAO.addRole(ownerRole);
-        if (roleDAO.getRole(userRole) == null)
-            roleDAO.addRole(userRole);
+        if (roleDAO.getRoleByRolename(ownerRole) == null) {
+            Role roleOwner = new Role();
+            roleOwner.setRole(ownerRole);
+            roleDAO.persist(roleOwner);
+        }
+        if (roleDAO.getRoleByRolename(userRole) == null){
+            Role roleUser = new Role();
+            roleUser.setRole(userRole);
+            roleDAO.persist(roleUser);
+        }
 
         User[] usersArray = new User[15];
 
-        Role role = roleDAO.getRole(userRole);
+        Role role = roleDAO.getRoleByRolename(userRole);
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
@@ -73,6 +85,11 @@ public class TestDataInitializer {
         createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
         createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
         createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(1), "Hello message1", LocalDate.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), userList2.get(2), "Hello message2", LocalDate.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(3), "Hello message3", LocalDate.now()));
+
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
@@ -82,7 +99,13 @@ public class TestDataInitializer {
 
     private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
         if (channelDAO.getChannelByName(channel.getName()) == null)
-            channelDAO.createChannel(channel);
+            channelDAO.persist(channel);
     }
+
+    private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
+        messageDAO.persist(message);
+    }
+
+
 
 }

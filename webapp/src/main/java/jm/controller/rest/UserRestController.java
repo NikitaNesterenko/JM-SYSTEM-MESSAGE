@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
+@RequestMapping(value = "/restapi/users/**")
 public class UserRestController {
 
     private UserService userService;
@@ -19,31 +19,31 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/userList", method = RequestMethod.GET)
+    @GetMapping(value = "/users")
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/userCreate", method = RequestMethod.POST)
+    @PostMapping(value = "/create")
     public ResponseEntity createUser(@RequestBody User user) {
         userService.createUser(user);
         return ResponseEntity.ok(true);
     }
 
-    @RequestMapping(value = "/userGet/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+    @GetMapping("/user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/userUpdate", method = RequestMethod.PUT)
+    @PutMapping(value = "/update")
     public ResponseEntity updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.ok(true);
     }
 
-    @RequestMapping(value = "/userDelete", method = RequestMethod.DELETE)
-    public ResponseEntity deleteUser(@RequestBody User user) {
-        userService.deleteUser(user);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
         return ResponseEntity.ok(true);
     }
 

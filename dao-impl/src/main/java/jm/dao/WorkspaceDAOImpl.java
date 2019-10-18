@@ -15,38 +15,8 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class WorkspaceDAOImpl implements WorkspaceDAO {
+public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements WorkspaceDAO {
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Workspace> gelAllChannels() {
-        return entityManager.createQuery("from Workspace").getResultList();
-    }
-
-    @Override
-    public void createChannel(Workspace workspace) {
-        entityManager.persist(workspace);
-    }
-
-    @Override
-    public void deleteChannel(Workspace workspace) {
-        entityManager.remove(entityManager.contains(workspace) ? workspace : entityManager.merge(workspace));
-    }
-
-    @Override
-    public void updateChannel(Workspace workspace) {
-        entityManager.merge(workspace);
-        entityManager.flush();
-    }
-
-    @Override
-    public Workspace getChannelById(int id) {
-        return entityManager.find(Workspace.class, id);
-    }
 
     @Override
     public Workspace getChannelByName(String name) {
