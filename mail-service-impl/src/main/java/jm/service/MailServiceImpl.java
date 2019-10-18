@@ -40,6 +40,7 @@ public class MailServiceImpl implements MailService{
             logger.info("Sending invitation to " + emailTo + " was successful");
         } catch (MailException e) {
             logger.error("Sending invitation to " + emailTo + " failed");
+            e.printStackTrace();
         }
 
     }
