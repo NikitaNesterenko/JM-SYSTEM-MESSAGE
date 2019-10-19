@@ -36,6 +36,7 @@ public class Channel {
 
     @Column(name = "created_date", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
+
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
 
