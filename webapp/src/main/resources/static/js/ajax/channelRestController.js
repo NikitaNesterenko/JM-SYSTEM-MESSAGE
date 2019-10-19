@@ -1,5 +1,3 @@
-import * as jQuery from '/js/jquery-3.4.1.min.js';
-
 export const getChannelById = (id) => {
     let result = null;
     $.ajax({
@@ -30,12 +28,25 @@ export const updateChannel = (channel) => {
         data: jsonChannel,
         contentType: "application/json"
     });
-}
+};
 
 export const deleteChannel = (id) => {
     $.ajax({
         type: 'delete',
         url: "/api/channels/" + id
     });
+};
+
+export const getAllChannels = () => {
+    let channels = null;
+    $.ajax({
+        url: '/restapi/channels',
+        async: false,
+        type: 'get',
+        success: function (response) {
+            channels = response;
+        }
+    });
+    return channels;
 };
 

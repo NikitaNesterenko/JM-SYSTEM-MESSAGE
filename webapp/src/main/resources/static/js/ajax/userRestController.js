@@ -1,5 +1,3 @@
-import * as jQuery from '/js/jquery-3.4.1.min.js';
-
 export const getUsers = () => {
     let result = null;
     $.ajax({
