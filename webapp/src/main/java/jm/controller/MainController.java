@@ -29,35 +29,35 @@ public class MainController {
 
     @GetMapping(value = "/workspace")
     public ModelAndView workspacePage() {
-        return new ModelAndView("workspace-page.html");
+        return new ModelAndView("workspace-page");
     }
 
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
-        return new ModelAndView("signin-page.html");
+        return new ModelAndView("signin-page");
     }
 
     @GetMapping(value = "/admin")
     public ModelAndView adminPage() {
-        return new ModelAndView("admin-page.html");
+        return new ModelAndView("admin-page");
     }
 
     @GetMapping(value = "/workspace-new")
     public ModelAndView workspacePageNew() {
-        return new ModelAndView("new-workspace-page.html");
+        return new ModelAndView("new-workspace-page");
     }
 
-    @GetMapping(value = "/confirmemail")
+    @GetMapping(value = "/confirm-email")
     public String confirmemail() {
         return "createWorkspace/confirm-email";
     }
 
-    @GetMapping(value = "/teamname")
+    @GetMapping(value = "/team-name")
     public String teamName() {
         return "createWorkspace/team-name";
     }
 
-    @GetMapping(value = "/channelname")
+    @GetMapping(value = "/channel-name")
     public String channelName() {
         return "createWorkspace/channel-name";
     }

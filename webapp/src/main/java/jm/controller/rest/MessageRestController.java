@@ -20,23 +20,23 @@ public class MessageRestController {
         this.messageService = messageService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/messages")
     public ResponseEntity<List<Message>> getMessages() {
         return new ResponseEntity<>(messageService.getAllMessages(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/message/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateMessage(@RequestBody Message message) {
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
@@ -47,7 +47,7 @@ public class MessageRestController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteMessage(@PathVariable("id") Long id) {
         messageService.deleteMessage(id);
         return new ResponseEntity(HttpStatus.OK);

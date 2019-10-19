@@ -34,7 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class MessageRestControllerTest {
 
-    private static final String url = "/api/messages/";
+    private static final String urlGetMessage = "/api/messages/message/";
+    private static final String urlCreateMessage = "/api/messages/create";
+    private static final String urlUpdateMessage = "/api/messages/update";
+    private static final String urlDeleteMessage = "/api/messages/delete/";
 
     @Mock
     MessageService messageService;
@@ -72,17 +75,17 @@ public class MessageRestControllerTest {
     @Test
     public void getMessageById() throws Exception {
         Long testId1 = 1L;
-        mockMvc.perform(get(url + testId1))
+        mockMvc.perform(get(urlGetMessage + testId1))
                 .andExpect(status().isOk());
         verify(messageService, times(1)).getMessageById(testId1);
 
         String testId2 = "something_text";
-        mockMvc.perform(get(url + testId2))
+        mockMvc.perform(get(urlGetMessage + testId2))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).getMessageById(any());
 
         String testId3 = "something text";
-        mockMvc.perform(get(url + testId3))
+        mockMvc.perform(get(urlGetMessage + testId3))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).getMessageById(any());
 
@@ -102,19 +105,19 @@ public class MessageRestControllerTest {
 
         Message message = new Message();
         jsonMessage = TestUtils.objectToJson(message);
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(urlCreateMessage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
                 .andExpect(status().is2xxSuccessful());
         verify(messageService, times(1)).createMessage(any(Message.class));
 
-        mockMvc.perform(post(url))
+        mockMvc.perform(post(urlCreateMessage))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).createMessage(any());
 
         message = null;
         jsonMessage = TestUtils.objectToJson(message);
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(urlCreateMessage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
                 .andExpect(status().isBadRequest());
@@ -122,7 +125,7 @@ public class MessageRestControllerTest {
 
         Object notMessageObject = "notMessageObject";
         jsonMessage = TestUtils.objectToJson(notMessageObject);
-        mockMvc.perform(post(url)
+        mockMvc.perform(post(urlCreateMessage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
                 .andExpect(status().isBadRequest());
@@ -152,13 +155,13 @@ public class MessageRestControllerTest {
 
         String jsonMessage;
 
-        mockMvc.perform(put(url))
+        mockMvc.perform(put(urlUpdateMessage))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).updateMessage(any());
 
         Message message = null;
         jsonMessage = TestUtils.objectToJson(message);
-        mockMvc.perform(put(url)
+        mockMvc.perform(put(urlUpdateMessage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
                 .andExpect(status().isBadRequest());
@@ -167,7 +170,7 @@ public class MessageRestControllerTest {
 
         Object notMessageObject = "nnotMessageObject";
         jsonMessage = TestUtils.objectToJson(notMessageObject);
-        mockMvc.perform(put(url)
+        mockMvc.perform(put(urlUpdateMessage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
                 .andExpect(status().isBadRequest());
@@ -178,17 +181,17 @@ public class MessageRestControllerTest {
     @Test
     public void deleteMessage() throws Exception {
         Long testId1 = 1L;
-        mockMvc.perform(delete(url + testId1))
+        mockMvc.perform(delete(urlDeleteMessage + testId1))
                 .andExpect(status().isOk());
         verify(messageService, times(1)).deleteMessage(testId1);
 
         String testId2 = "something_text";
-        mockMvc.perform(delete(url + testId2))
+        mockMvc.perform(delete(urlDeleteMessage + testId2))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).deleteMessage(any());
 
         String testId3 = "something text";
-        mockMvc.perform(delete(url + testId3))
+        mockMvc.perform(delete(urlDeleteMessage + testId3))
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).deleteMessage(any());
     }
