@@ -1,0 +1,115 @@
+html {
+    background-color: whitesmoke;
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.confirm-navbar{
+    height: 74px !important;
+}
+
+.sign-in-navbar-in{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+}
+
+ul.confirm-navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+ul.confirm-navbar li {float: none;}
+
+ul.confirm-navbar li a {
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.confirm-navbar li a:hover:not(.active) {
+    background-color: silver;
+}
+
+ul.confirm-navbar li a.active {
+    background-color: white;
+}
+
+ul.confirm-navbar li.right {
+    float: right;
+}
+
+@media screen and (max-width: 600px) {
+    ul.confirm-navbar li.right,
+    ul.confirm-navbar li {
+        float: none;
+    }
+}
+
+.form_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.email_confirmation_form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    padding: 60px;
+    box-shadow: 0 10px 25px #ddd;
+    border-radius: 10px;
+    height: 510px;
+    min-width: 400px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 355px;
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.confirmation_code_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.confirmation_code_group {
+    display: flex;
+    flex-direction: row;
+}
+
+.confirmation_code_span_cell {
+    font-weight: 400;
+    font-size: 15px;
+    vertical-align: middle;
+    margin: 8px;
+}
+
+.inline_input {
+    width: 63px;
+    height: 33px;
+    border: 1px solid rgba(29, 28, 29, .5);
+}
+
+.small_desc {
+    color: #616061;
+    font-size: 14px;
+    line-height: 1.38463;
+}
+
+.desc {
+    font-size: 17px;
+    line-height: 1.46668;
+    color: #1d1c1d;
+}
+

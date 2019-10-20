@@ -3,12 +3,20 @@ package jm.config.inititalizer;
 import jm.*;
 
 import jm.api.dao.ChannelDAO;
+import jm.api.dao.MessageDAO;
 import jm.api.dao.RoleDAO;
+<<<<<<< HEAD
 import jm.dao.ChannelDAOImpl;
 import jm.dao.RoleDAOImpl;
 import jm.dao.WorkspaceDAOImpl;
 import jm.dao.WorkspaceUserRoleLinkDAOImpl;
 import jm.model.*;
+=======
+import jm.model.Channel;
+import jm.model.Message;
+import jm.model.Role;
+import jm.model.User;
+>>>>>>> dev
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +32,17 @@ public class TestDataInitializer {
     @Autowired
     private RoleDAOImpl roleDAO;
     @Autowired
+<<<<<<< HEAD
     WorkspaceDAOImpl workspaceDAOImpl;
     @Autowired
     private ChannelDAOImpl channelDAO;
     @Autowired
     private WorkspaceUserRoleLinkDAOImpl workspaceUserRoleLinkDAOImpl;
+=======
+    private ChannelDAO channelDAO;
+    @Autowired
+    private MessageDAO  messageDAO;
+>>>>>>> dev
 
 
     public TestDataInitializer() {
@@ -116,10 +130,22 @@ public class TestDataInitializer {
 
         }
 
+<<<<<<< HEAD
         private void createUserIfNotExists (UserService userService, User user){
             if (userService.getUserByLogin(user.getLogin()) == null)
                 userService.createUser(user);
         }
+=======
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
+
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(1), "Hello message1", LocalDate.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), userList2.get(2), "Hello message2", LocalDate.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(3), "Hello message3", LocalDate.now()));
+
+    }
+>>>>>>> dev
 
         private void createChannelIfNotExists (ChannelDAO channelDAO, Channel channel){
             if (channelDAO.getChannelByName(channel.getName()) == null)
@@ -127,3 +153,14 @@ public class TestDataInitializer {
         }
 
     }
+<<<<<<< HEAD
+=======
+
+    private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
+        messageDAO.persist(message);
+    }
+
+
+
+}
+>>>>>>> dev
