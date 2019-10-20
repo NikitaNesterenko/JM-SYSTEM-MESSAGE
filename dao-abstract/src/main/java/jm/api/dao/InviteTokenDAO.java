@@ -6,6 +6,8 @@ public interface InviteTokenDAO {
 
     void persist(InviteToken inviteToken);
 
+    InviteToken getById(Long id);
+
     void deleteById(Long id);
 
 }

@@ -18,8 +18,12 @@ public class InviteTokenServiceImpl implements InviteTokenService {
     private InviteTokenDAO inviteTokenDAO;
 
     @Autowired
-    public InviteTokenDAO setinviteTokenDAO(InviteTokenDAO inviteTokenDAO) {
+    public InviteTokenDAO setInviteTokenDAO(InviteTokenDAO inviteTokenDAO) {
         return this.inviteTokenDAO = inviteTokenDAO;
+    }
+
+    public InviteToken getById(Long id) {
+        return inviteTokenDAO.getById(id);
     }
 
     @Override

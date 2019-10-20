@@ -25,7 +25,7 @@ public class InviteToken {
     private String hash;
 
     @OneToOne(targetEntity = Workspace.class)
-    @JoinColumn(name = "workspace_id", nullable = false)
+    @JoinColumn(name = "workspace_id"/*, nullable = false*/)
     private Workspace workspace;
 
     public InviteToken() {
@@ -102,7 +102,7 @@ public class InviteToken {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, firstName, lastName, workspace);
+        return Objects.hash(email);
     }
 
     @Override
