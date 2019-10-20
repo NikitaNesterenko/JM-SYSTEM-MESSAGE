@@ -221,8 +221,9 @@ window.create_workspace = function create_workspace() {
     const is_private = document.getElementById(prefix_id + 'private').value;
     const name = document.getElementById(prefix_id + 'name').value;
     const user = getUser(document.getElementById(prefix_id + 'user_id').value);
+    const users = [user];
 
-    const workspace = new Workspace(name, null, user, is_private, localDate);
+    const workspace = new Workspace(name, users, user, is_private, localDate);
     createWorkspace(workspace);
     update_tables_workspaces_page();
 };
