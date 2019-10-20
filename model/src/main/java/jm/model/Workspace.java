@@ -1,11 +1,12 @@
 package jm.model;
 
-
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "workspaces")
@@ -19,23 +20,32 @@ public class Workspace {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "workspace", cascade = {CascadeType.REFRESH})
-    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink;
+    @OneToMany(mappedBy = "workspace", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink = new HashSet<>();
 
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
+
+    public Set<WorkspaceUserRoleLink> getWorkspaceUserRoleLink() {
+        return this.workspaceUserRoleLink;
+    }
+
+    public void setWorkspaceUserRoleLink(Set<WorkspaceUserRoleLink> workspaceUserRoleLink) {
+        this.workspaceUserRoleLink = workspaceUserRoleLink;
+    }
 
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
 
     @Column(name = "created_date", nullable = false)
-    private LocalDate createdDate;
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime createdDate;
 
     public Workspace() {
     }
 
-    public Workspace(String name, User user, Boolean isPrivate, LocalDate createdDate) {
+    public Workspace(String name, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         //this.users = users;
         this.user = user;
@@ -58,15 +68,16 @@ public class Workspace {
     public void setName(String name) {
         this.name = name;
     }
-/*
-    public List<User> getUsers() {
-        return users;
-    }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-*/
+    /*
+        public List<User> getUsers() {
+            return users;
+        }
+
+        public void setUsers(List<User> users) {
+            this.users = users;
+        }
+    */
     public User getUser() {
         return user;
     }
@@ -83,11 +94,11 @@ public class Workspace {
         isPrivate = aPrivate;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -98,7 +109,7 @@ public class Workspace {
         Workspace workspace = (Workspace) o;
         return id.equals(workspace.id) &&
                 name.equals(workspace.name) &&
-             //   Objects.equals(users, workspace.users) &&
+                //   Objects.equals(users, workspace.users) &&
                 user.equals(workspace.user) &&
                 isPrivate.equals(workspace.isPrivate) &&
                 createdDate.equals(workspace.createdDate);
@@ -106,7 +117,7 @@ public class Workspace {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name,user, isPrivate, createdDate);
+        return Objects.hash(id, name, user, isPrivate, createdDate);
     }
 
     @Override
@@ -114,7 +125,7 @@ public class Workspace {
         return "Workspace{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-             //   ", users=" + users +
+                //   ", users=" + users +
                 ", user=" + user +
                 ", isPrivate=" + isPrivate +
                 ", createdDate=" + createdDate +

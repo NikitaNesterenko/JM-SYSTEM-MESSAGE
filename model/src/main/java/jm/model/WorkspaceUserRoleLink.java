@@ -10,15 +10,15 @@ public class WorkspaceUserRoleLink {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "workspace_id")
     private Workspace workspace;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -28,6 +28,8 @@ public class WorkspaceUserRoleLink {
 
     public void setWorkspace(Workspace workspace) {
         this.workspace = workspace;
+        workspace.getWorkspaceUserRoleLink().add(this);
+
     }
 
     public User getUser() {
@@ -36,6 +38,7 @@ public class WorkspaceUserRoleLink {
 
     public void setUser(User user) {
         this.user = user;
+        user.getWorkspaceUserRoleLink().add(this);
     }
 
     public Role getRole() {
@@ -44,6 +47,7 @@ public class WorkspaceUserRoleLink {
 
     public void setRole(Role role) {
         this.role = role;
+        role.getWorkspaceUserRoleLink().add(this);
     }
 
     public WorkspaceUserRoleLink() {

@@ -3,3 +3,6 @@
 target
 *.iml
 logs
+application.properties
+pom.xml
+

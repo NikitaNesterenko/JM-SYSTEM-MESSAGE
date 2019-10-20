@@ -2,6 +2,7 @@ package jm.model;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,8 +17,16 @@ public class Role {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "role", cascade = {CascadeType.REFRESH})
-    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink;
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink = new HashSet<>();
+
+    public Set<WorkspaceUserRoleLink> getWorkspaceUserRoleLink() {
+        return this.workspaceUserRoleLink;
+    }
+
+    public void setWorkspaceUserRoleLink(Set<WorkspaceUserRoleLink> workspaceUserRoleLink) {
+        this.workspaceUserRoleLink = workspaceUserRoleLink;
+    }
 
     public Role() {
     }
@@ -35,7 +44,9 @@ public class Role {
     }
 
     public void setRole(String role) {
+
         this.role = role;
+
     }
 
     @Override

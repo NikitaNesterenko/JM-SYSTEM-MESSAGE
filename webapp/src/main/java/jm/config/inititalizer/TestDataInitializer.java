@@ -4,15 +4,16 @@ import jm.*;
 
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.RoleDAO;
-import jm.model.Channel;
-import jm.model.Role;
-import jm.model.User;
-import jm.model.WorkspaceUserRoleLink;
+import jm.dao.ChannelDAOImpl;
+import jm.dao.RoleDAOImpl;
+import jm.dao.WorkspaceDAOImpl;
+import jm.dao.WorkspaceUserRoleLinkDAOImpl;
+import jm.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class TestDataInitializer {
@@ -21,9 +22,13 @@ public class TestDataInitializer {
     @Autowired
     private UserService userService;
     @Autowired
-    private RoleDAO roleDAO;
+    private RoleDAOImpl roleDAO;
     @Autowired
-    private ChannelDAO channelDAO;
+    WorkspaceDAOImpl workspaceDAOImpl;
+    @Autowired
+    private ChannelDAOImpl channelDAO;
+    @Autowired
+    private WorkspaceUserRoleLinkDAOImpl workspaceUserRoleLinkDAOImpl;
 
 
     public TestDataInitializer() {
@@ -45,39 +50,54 @@ public class TestDataInitializer {
             roleOwner.setRole(ownerRole);
             roleDAO.persist(roleOwner);
         }
-        if (roleDAO.getRoleByRolename(userRole) == null){
+        if (roleDAO.getRoleByRolename(userRole) == null) {
             Role roleUser = new Role();
             roleUser.setRole(userRole);
             roleDAO.persist(roleUser);
         }
 
+        Workspace workspace = new Workspace();
+        workspace.setName("Java Mentoring TEST");
+        workspace.setCreatedDate(LocalDateTime.now());
+        workspace.setPrivate(false);
+
         WorkspaceUserRoleLink workspaceUserRoleLink;
-        List<WorkspaceUserRoleLink> workspaceUserRoleLinksArray = new ArrayList<>();
 
         Role role = roleDAO.getRoleByRolename(userRole);
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(role);
+
 
         User user;
         for (int i = 0; i < 15; i++) {
             user = new User("name-" + i,
                     "last-name-" + i, "login-" + i, "mymail" + i +
                     "@testmail.com", "pass-" + i);
+
+            createUserIfNotExists(userService, user);
+            if (i == 0) {
+                workspace.setUser(user);
+                workspaceDAOImpl.persist(workspace);
+            }
+
             workspaceUserRoleLink = new WorkspaceUserRoleLink();
             workspaceUserRoleLink.setUser(user);
-            workspaceUserRoleLink.setRole(role);
+            workspaceUserRoleLink.setRole(roleDAO.getRoleByRolename("ROLE_USER"));
+            workspaceUserRoleLink.setWorkspace(workspaceDAOImpl.getById(1L));
+            workspaceUserRoleLinkDAOImpl.persist(workspaceUserRoleLink);
+            if (i % 3 == 0) {
+                workspaceUserRoleLink = new WorkspaceUserRoleLink();
+                workspaceUserRoleLink.setUser(user);
+                workspaceUserRoleLink.setRole(roleDAO.getRoleByRolename("ROLE_OWNER"));
+                workspaceUserRoleLink.setWorkspace(workspaceDAOImpl.getById(1L));
+                workspaceUserRoleLinkDAOImpl.persist(workspaceUserRoleLink);
+            }
 
-            workspaceUserRoleLinksArray.add(workspaceUserRoleLink);
         }
-/*
+
         List<User> userList1 = new ArrayList<>();
         List<User> userList2 = new ArrayList<>();
         List<User> userList3 = new ArrayList<>();
-*/
-   //     for (int i = 0; i < 15; i++) {
-            workspaceUserRoleLinksArray.forEach(w->
-                    createUserIfNotExists(userService, w.getUser()));
-            /*
+
+        for (int i = 0; i < 15; i++) {
             if (i < 5) {
                 userList1.add(userService.getUserByLogin(usersArray[i].getLogin()));
             }
@@ -87,23 +107,23 @@ public class TestDataInitializer {
             if (i >= 10) {
                 userList3.add(userService.getUserByLogin(usersArray[i].getLogin()));
             }
-            */
- //       }
-/*
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDate.now()));
- */
-    }
 
-    private void createUserIfNotExists(UserService userService, User user) {
-        if (userService.getUserByLogin(user.getLogin()) == null)
-            userService.createUser(user);
-    }
+                  }
 
-    private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
-        if (channelDAO.getChannelByName(channel.getName()) == null)
-            channelDAO.persist(channel);
-    }
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
 
-}
+        }
+
+        private void createUserIfNotExists (UserService userService, User user){
+            if (userService.getUserByLogin(user.getLogin()) == null)
+                userService.createUser(user);
+        }
+
+        private void createChannelIfNotExists (ChannelDAO channelDAO, Channel channel){
+            if (channelDAO.getChannelByName(channel.getName()) == null)
+                channelDAO.persist(channel);
+        }
+
+    }

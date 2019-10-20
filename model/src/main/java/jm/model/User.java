@@ -3,6 +3,7 @@ package jm.model;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,8 +33,8 @@ public class User {
     @Column(name = "avatar")
     private Blob avatar;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.REFRESH})
-    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Set<WorkspaceUserRoleLink> workspaceUserRoleLink = new HashSet<>();
 
    /*
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -107,15 +108,24 @@ public class User {
     public void setAvatar(Blob avatar) {
         this.avatar = avatar;
     }
-/*
-    public Set<Role> getRoles() {
-        return roles;
+
+    public Set<WorkspaceUserRoleLink> getWorkspaceUserRoleLink() {
+        return this.workspaceUserRoleLink;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setWorkspaceUserRoleLink(Set<WorkspaceUserRoleLink> workspaceUserRoleLink) {
+        this.workspaceUserRoleLink = workspaceUserRoleLink;
     }
-*/
+
+    /*
+        public Set<Role> getRoles() {
+            return roles;
+        }
+
+        public void setRoles(Set<Role> roles) {
+            this.roles = roles;
+        }
+    */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

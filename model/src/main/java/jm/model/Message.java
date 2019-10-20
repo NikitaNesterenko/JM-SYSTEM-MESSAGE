@@ -2,6 +2,7 @@ package jm.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,11 +15,11 @@ public class Message {
     private Long id;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_channels_messages", joinColumns = @JoinColumn(name = "message_id"),
+    @JoinTable(name = "messages_channels", joinColumns = @JoinColumn(name = "message_id"),
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private List<Channel> channels;
 
-    @OneToOne(targetEntity = User.class)
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     private User user;
 
@@ -26,12 +27,13 @@ public class Message {
     private String content;
 
     @Column(name = "date_create", nullable = false)
-    private LocalDate dateCreate;
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime dateCreate;
 
     public Message() {
     }
 
-    public Message(List<Channel> channels, User user, String content, LocalDate dateCreate) {
+    public Message(List<Channel> channels, User user, String content, LocalDateTime dateCreate) {
         this.channels = channels;
         this.user = user;
         this.content = content;
@@ -70,11 +72,11 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDate getDateCreate() {
+    public LocalDateTime getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateCreate(LocalDate dateCreate) {
+    public void setDateCreate(LocalDateTime dateCreate) {
         this.dateCreate = dateCreate;
     }
 

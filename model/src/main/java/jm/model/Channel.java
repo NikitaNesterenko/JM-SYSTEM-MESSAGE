@@ -2,6 +2,7 @@ package jm.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,12 +18,11 @@ public class Channel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_channels_messages", joinColumns = @JoinColumn(name = "channel_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinColumn(name = "workspace_id")
+    private Workspace workspace;
 
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
 
@@ -30,14 +30,16 @@ public class Channel {
     private Boolean isPrivate;
 
     @Column(name = "created_date", nullable = false)
-    private LocalDate createdDate;
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime createdDate;
 
     public Channel() {
     }
 
-    public Channel(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
+    public Channel(String name, Workspace workspace, User user, Boolean isPrivate,
+                   LocalDateTime createdDate) {
         this.name = name;
-        this.users = users;
+        this.workspace = workspace;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
@@ -59,12 +61,12 @@ public class Channel {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public Workspace getWorkspace() {
+        return workspace;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
     }
 
     public User getUser() {
@@ -83,11 +85,11 @@ public class Channel {
         isPrivate = aPrivate;
     }
 
-    public LocalDate getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -98,7 +100,7 @@ public class Channel {
         Channel channel = (Channel) o;
         return id.equals(channel.id) &&
                 name.equals(channel.name) &&
-                Objects.equals(users, channel.users) &&
+                workspace.equals(channel.workspace) &&
                 user.equals(channel.user) &&
                 isPrivate.equals(channel.isPrivate) &&
                 createdDate.equals(channel.createdDate);
@@ -106,7 +108,7 @@ public class Channel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, users, user, isPrivate, createdDate);
+        return Objects.hash(id, name, workspace, user, isPrivate, createdDate);
     }
 
     @Override
@@ -114,7 +116,7 @@ public class Channel {
         return "Channel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", users=" + users +
+                ", workspace=" + workspace +
                 ", user=" + user +
                 ", isPrivate=" + isPrivate +
                 ", createdDate=" + createdDate +
