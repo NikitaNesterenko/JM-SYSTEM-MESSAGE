@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restapi/users/**")
+@RequestMapping(value = "/restapi/users/")
 public class UserRestController {
 
     private UserService userService;
@@ -25,9 +25,9 @@ public class UserRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         userService.createUser(user);
-        return ResponseEntity.ok(true);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
