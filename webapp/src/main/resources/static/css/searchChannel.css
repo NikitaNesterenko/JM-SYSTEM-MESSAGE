@@ -11,7 +11,7 @@
     transform: translate(-50%);
 }
 
-.ul-addresses{
+.ul-channel{
     background: #FFF;
     border: 1px #ccc solid;
     width: 400px;
@@ -26,7 +26,7 @@
     transform: translate(-50%);
 }
 
-.ul-addresses li{
+.ul-channel li{
     list-style: none;
     padding: 5px 10px;
     margin: 0 0 0 -40px;
@@ -36,6 +36,6 @@
     transition:0.3s;
 }
 
-.ul-addresses li:hover{
+.ul-channel li:hover{
     background: #d6d6d6;
 }
