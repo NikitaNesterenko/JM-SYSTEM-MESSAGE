@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Workspace Page</title>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="module" th:src="@{/js/searchChannel.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/searchChannel.css}"/>
+</head>
+
+<body>
+<form id="filter-sidebar" action="#" method="post">
+    <div class="filter-select-wrap">
+        <input id="filter-address" class="filter-select filter-tax" name="location"
+               data-address
+        type="text" placeholder="All Locations"/>
+        <!--               data-address='["location_1","alabama","alaska","anchorage","arizona","arkansas","birmingham","california","chandler","colorado","connecticut","denver","florida","georgia","gilbert","glendale","hartford","hawaii","hollywood","honolulu","huntsville","idaho","illinois","indiana","indianapolis","iowa","kansas","kentucky","little-rock","los-angeles","louisiana","louisville","massachusetts","mesa","michigan","minnesota","mobile","montgomery","moreno-valley","naperville","nebraska","nevada","new-hampshire","new-jersey","new-orleans","new-york","newark","ohio","olathe","orlando","palmdale","paterson","pennsylvania","peoria","philadelphia","pittsburgh","reno","rhode-island","rochester","rochester-new-york","rockford","sacramento"]'-->
+        <ul class="ul-addresses"></ul>
+
+    </div>
+</form>
+</body>
+</html>
