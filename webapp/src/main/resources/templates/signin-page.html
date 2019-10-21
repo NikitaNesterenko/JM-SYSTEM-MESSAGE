@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In Page</title>
+    <link rel="stylesheet" th:href="@{/css/signInPage.css}"/>
+</head>
+<body>
+
+<div class="navbar-container">
+    <ul class="sign-in-navbar">
+        <div class="sign-in-navbar-in">
+            <li><a class="active" href="/">JM-MESSAGE-SYSTEM</a></li>
+            <li class="right"><a class="sign-in-btn" href="/">Sing in</a></li>
+            <li class="right"><a class="nav-btn" href="/">Find your workspace</a></li>
+            <li class="right"><a class="nav-btn" href="/">Create a new workspace</a></li>
+            <li class="right"><a class="nav-btn" href="/">Support</a></li>
+            <li class="right"><a class="nav-btn" href="/">Pricing</a></li>
+            <li class="right"><a class="nav-btn" href="/">Product</a></li>
+        </div>
+    </ul>
+</div>
+
+<div class="sign-in-container">
+    <div class="sign-in-box">
+        <div class="sign-in-text-1">
+            Sign in to your workspace
+        </div>
+        <div class="sign-in-text-2">
+            Enter your workspace’s <b>JS-MESSAGE-SYSTEM URL</b>.
+        </div>
+        <div class="sign-in-input">
+            <input class="your-workspace-url" type="text" placeholder="your-workspace-url"> .jm-message-system.com
+        </div>
+        <div class="sign-in-btn-box">
+            <button class="sign-in-button" type="submit" name="button">Continue →</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

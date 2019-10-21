@@ -1,4 +1,5 @@
-package jm;
+package jm.model;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -17,47 +18,37 @@ public class Workspace {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany()
-    private List<Channel> channels;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users;
 
     @OneToOne(targetEntity = User.class)
-    @JoinColumn(name = "owner_id_w")
-    private User owner;
+    @JoinColumn(name = "owner_id")
+    private User user;
 
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
 
-    @Column(name = "created_date", nullable = true)
+    @Column(name = "created_date", nullable = false)
     private LocalDate createdDate;
-
-    @ManyToMany()
-    private List<User> workspace_users;
 
     public Workspace() {
     }
 
-    public Workspace(String name, List<Channel> channels, User owner, List<User> workspace_users, Boolean isPrivate, LocalDate createdDate) {
+    public Workspace(String name, List<User> users, User user, Boolean isPrivate, LocalDate createdDate) {
         this.name = name;
-        this.channels = channels;
-        this.workspace_users = workspace_users;
-        this.owner = owner;
+        this.users = users;
+        this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
-    }
-
-    public List<User> getUsers() {
-        return workspace_users;
-    }
-
-    public void setUsers(List<User> workspace_users) {
-        this.workspace_users = workspace_users;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -69,20 +60,20 @@ public class Workspace {
         this.name = name;
     }
 
-    public List<Channel> getChannels() {
-        return channels;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setChannels(List<Channel> channels) {
-        this.channels = channels;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
-    public User getOwner() {
-        return owner;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Boolean getPrivate() {
@@ -108,16 +99,15 @@ public class Workspace {
         Workspace workspace = (Workspace) o;
         return id.equals(workspace.id) &&
                 name.equals(workspace.name) &&
-                Objects.equals(channels, workspace.channels) &&
-                Objects.equals(workspace_users, workspace.workspace_users) &&
-                owner.equals(workspace.owner) &&
+                Objects.equals(users, workspace.users) &&
+                user.equals(workspace.user) &&
                 isPrivate.equals(workspace.isPrivate) &&
                 createdDate.equals(workspace.createdDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, channels, workspace_users, owner, isPrivate, createdDate);
+        return Objects.hash(id, name, users, user, isPrivate, createdDate);
     }
 
     @Override
@@ -125,9 +115,8 @@ public class Workspace {
         return "Workspace{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", channels=" + channels +
-                ", users=" + workspace_users +
-                ", owner=" + owner +
+                ", users=" + users +
+                ", user=" + user +
                 ", isPrivate=" + isPrivate +
                 ", createdDate=" + createdDate +
                 '}';

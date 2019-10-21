@@ -1,4 +1,5 @@
-package jm;
+package jm.model;
+
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -12,7 +13,7 @@ public class    User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -32,8 +33,8 @@ public class    User {
     @Column(name = "avatar")
     private Blob avatar;
 
-    @ManyToMany(cascade=CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable (name="users_roles", joinColumns=@JoinColumn (name="user_id"), inverseJoinColumns=@JoinColumn(name="role_id"))
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
 
@@ -48,11 +49,11 @@ public class    User {
         this.password = password;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

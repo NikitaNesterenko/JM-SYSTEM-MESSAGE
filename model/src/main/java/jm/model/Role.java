@@ -1,4 +1,5 @@
-package jm;
+package jm.model;
+
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -9,7 +10,7 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "role", nullable = false)
     private String role;
@@ -17,7 +18,7 @@ public class Role {
     public Role() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -25,8 +26,8 @@ public class Role {
         return role;
     }
 
-    public void setId(Integer roleId) {
-        this.id = roleId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setRole(String role) {

@@ -1,43 +1,44 @@
 package jm.controller;
 
-import jm.*;
-import jm.test.TestDataInitializer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
-
-    private UserService userService;
-    private RoleDAO roleDAO;
-    private ChannelDAO channelDAO;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleDAO(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
-
-    @Autowired
-    public void setChannelDAO(ChannelDAO channelDAO) {
-        this.channelDAO = channelDAO;
-    }
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
     @GetMapping(value = "/")
     public String indexPage() {
-        return "homePage";
+        return "home-page";
     }
 
-    @GetMapping(value = "/test")
-    public String somePage() {
-        TestDataInitializer test = new TestDataInitializer();
-        test.checkDataInitialisation(roleDAO, channelDAO, userService);
-        return "testPage";
+  @PostMapping(value = "/workspace/create")
+    public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("usersList") String[] usersList,
+                                @RequestParam("owner") String owner, @RequestParam(value = "isPrivate", required = false) boolean isPrivate) {
+        ModelAndView modelAndView = new ModelAndView();
+        //TODO
+        modelAndView.setViewName("redirect:/workspace");
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/workspace")
+    public ModelAndView workspacePage() {
+        return new ModelAndView("workspace-page.html");
+    }
+
+    @GetMapping(value = "/signin")
+    public ModelAndView signInPage() {
+        return new ModelAndView("signin-page.html");
+    }
+
+    @GetMapping(value = "/admin")
+    public ModelAndView adminPage() {
+        return new ModelAndView("admin-page.html");
     }
 
 }
