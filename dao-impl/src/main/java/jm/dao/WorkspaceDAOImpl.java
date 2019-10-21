@@ -7,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
 
     @Override
-    public Workspace getChannelByName(String name) {
+    public Workspace getWorkspaceByName(String name) {
         return (Workspace) entityManager.createQuery("from Workspace where name  = :name")
                 .setParameter("name", name)
                 .getSingleResult();
