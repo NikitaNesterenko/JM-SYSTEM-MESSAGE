@@ -3,7 +3,7 @@ export const getChannelById = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/api/channels/" + id
+        url: "/restapi/channels/channel/" + id
     }).done(function (data) {
         result = data;
     });
@@ -14,7 +14,7 @@ export const createChannel = (channel) => {
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
         type: 'post',
-        url: "/api/channels/",
+        url: "/restapi/channels/create",
         data: jsonChannel,
         contentType: "application/json"
     });
@@ -24,7 +24,7 @@ export const updateChannel = (channel) => {
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
         type: 'put',
-        url: "/api/channels/",
+        url: "/restapi/channels/update",
         data: jsonChannel,
         contentType: "application/json"
     });
@@ -33,7 +33,7 @@ export const updateChannel = (channel) => {
 export const deleteChannel = (id) => {
     $.ajax({
         type: 'delete',
-        url: "/api/channels/" + id
+        url: "/restapi/channels/delete/" + id
     });
 };
 
