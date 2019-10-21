@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,4 +42,33 @@ public class MainController {
         return new ModelAndView("admin-page.html");
     }
 
+    @GetMapping(value = "/workspace-new")
+    public ModelAndView workspacePageNew() {
+        return new ModelAndView("new-workspace-page.html");
+    }
+
+    @GetMapping(value = "/confirmemail")
+    public String confirmemail() {
+        return "createWorkspace/confirm-email";
+    }
+
+    @GetMapping(value = "/teamname")
+    public String teamName() {
+        return "createWorkspace/team-name";
+    }
+
+    @GetMapping(value = "/channelname")
+    public String channelName() {
+        return "createWorkspace/channel-name";
+    }
+
+    @GetMapping(value = "/invites")
+    public String invitesPage() {
+        return "createWorkspace/invites-page";
+    }
+
+    @GetMapping(value = "/tada")
+    public String tadaPage() {
+        return "createWorkspace/tada-page";
+    }
 }
