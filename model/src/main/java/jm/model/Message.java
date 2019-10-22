@@ -1,7 +1,13 @@
 package jm.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -24,12 +30,15 @@ public class Message {
     private String content;
 
     @Column(name = "date_create", nullable = false)
-    private LocalDate dateCreate;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    private LocalDateTime dateCreate;
 
     public Message() {
     }
 
-    public Message(Channel channel, User user, String content, LocalDate dateCreate) {
+    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
         this.user = user;
         this.content = content;
@@ -68,11 +77,11 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDate getDateCreate() {
+    public LocalDateTime getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateCreate(LocalDate dateCreate) {
+    public void setDateCreate(LocalDateTime dateCreate) {
         this.dateCreate = dateCreate;
     }
 

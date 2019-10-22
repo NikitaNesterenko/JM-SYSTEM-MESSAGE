@@ -1,6 +1,7 @@
 package jm.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -58,8 +59,10 @@ public class Role implements GrantedAuthority {
                 '}';
     }
 
+    @JsonIgnore
     @Override
     public String getAuthority() {
         return this.role;
     }
+
 }
