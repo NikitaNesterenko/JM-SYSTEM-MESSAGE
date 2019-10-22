@@ -17,7 +17,10 @@ export const createChannel = (channel) => {
         url: "/restapi/channels/create",
         data: jsonChannel,
         contentType: "application/json"
+    }).done(function (data) {
+        result = data;
     });
+    return result;
 };
 
 export const updateChannel = (channel) => {
@@ -25,6 +28,7 @@ export const updateChannel = (channel) => {
     $.ajax({
         type: 'put',
         url: "/restapi/channels/update",
+        async: false,
         data: jsonChannel,
         contentType: "application/json"
     });
@@ -33,6 +37,7 @@ export const updateChannel = (channel) => {
 export const deleteChannel = (id) => {
     $.ajax({
         type: 'delete',
+        async: false,
         url: "/restapi/channels/delete/" + id
     });
 };

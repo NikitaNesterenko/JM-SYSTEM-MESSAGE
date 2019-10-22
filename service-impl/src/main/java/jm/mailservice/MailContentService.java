@@ -1,11 +1,15 @@
-package jm;
+package jm.mailservice;
 
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.io.File;
+
 @Service
 public class MailContentService {
+
+    private final String DIR = "mail" + File.separator;
 
     private TemplateEngine templateEngine;
 
@@ -23,6 +27,6 @@ public class MailContentService {
         context.setVariable("emailFrom", emailFrom);
         context.setVariable("workspace", workspace);
         context.setVariable("inviteLink", inviteLink);
-        return templateEngine.process("mail-template", context);
+        return templateEngine.process(DIR +"invite-template", context);
     }
 }
