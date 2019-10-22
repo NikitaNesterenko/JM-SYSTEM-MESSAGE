@@ -71,4 +71,9 @@ public class MainController {
     public String tadaPage() {
         return "createWorkspace/tada-page";
     }
+
+    @GetMapping(value = "/searchChannel")
+    public String seachChannelPage() {
+        return "search-channel-page";
+    }
 }
