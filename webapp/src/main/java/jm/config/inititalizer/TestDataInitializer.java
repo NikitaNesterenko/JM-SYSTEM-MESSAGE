@@ -2,13 +2,11 @@ package jm.config.inititalizer;
 
 import jm.*;
 
+import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.MessageDAO;
 import jm.api.dao.RoleDAO;
-import jm.model.Channel;
-import jm.model.Message;
-import jm.model.Role;
-import jm.model.User;
+import jm.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,8 @@ public class TestDataInitializer {
     private ChannelDAO channelDAO;
     @Autowired
     private MessageDAO  messageDAO;
+    @Autowired
+    BotDAO botDAO;
 
 
     public TestDataInitializer() {
@@ -69,6 +69,17 @@ public class TestDataInitializer {
         List<User> userList2 = new ArrayList<>();
         List<User> userList3 = new ArrayList<>();
 
+        Workspace workspace = new Workspace();
+        workspace.setId(1L);
+        Workspace workspace2 = new Workspace();
+        workspace2.setId(2L);
+
+        Set<Workspace> workspacesSet = new HashSet<>();
+        workspacesSet.add(workspace);
+        Set<Workspace> workspacesSet2 = new HashSet<>();
+        workspacesSet2.add(workspace2);
+
+
         for (int i = 0; i < 15; i++) {
             createUserIfNotExists(userService, usersArray[i]);
             if (i < 5) {
@@ -90,6 +101,11 @@ public class TestDataInitializer {
         createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), userList2.get(2), "Hello message2", LocalDateTime.now()));
         createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(3), "Hello message3", LocalDateTime.now()));
 
+        createBotIfNotExist(botDAO, new Bot("Bot-1",workspacesSet, LocalDate.now()));
+        createBotIfNotExist(botDAO, new Bot("Bot-2",workspacesSet2, LocalDate.now()));
+
+
+
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
@@ -105,6 +121,8 @@ public class TestDataInitializer {
     private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
         messageDAO.persist(message);
     }
+
+    private void createBotIfNotExist(BotDAO botDAO, Bot bot) {botDAO.persist(bot);}
 
 
 
