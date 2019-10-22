@@ -47,6 +47,11 @@ public class MainController {
         return new ModelAndView("new-workspace-page.html");
     }
 
+    @GetMapping(value = "/admin/workspaces")
+    public ModelAndView workspaces() {
+        return new ModelAndView("workspaces.html");
+    }
+
     @GetMapping(value = "/confirmemail")
     public String confirmemail() {
         return "createWorkspace/confirm-email";
