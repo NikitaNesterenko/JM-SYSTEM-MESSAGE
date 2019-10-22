@@ -3,7 +3,7 @@ export const getChannelById = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/restapi/channels/channel/" + id
+        url: "/restapi/channels/" + id
     }).done(function (data) {
         result = data;
     });

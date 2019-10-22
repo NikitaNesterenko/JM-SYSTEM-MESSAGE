@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 
 public class ChannelRestControllerTest {
-    private static final String urlGetChannelById = "/restapi/channels/channel/";
+    private static final String urlGetChannelById = "/restapi/channels/";
     private static final String urlCreateChannel = "/restapi/channels/create";
     private static final String urlUpdateChannel = "/restapi/channels/update";
     private static final String urlDeleteChannel = "/restapi/channels/delete/";

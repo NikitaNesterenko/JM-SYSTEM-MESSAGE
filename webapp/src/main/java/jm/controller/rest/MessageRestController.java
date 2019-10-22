@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/restapi/messages")
 public class MessageRestController {
 
    private MessageService messageService;
@@ -20,14 +20,14 @@ public class MessageRestController {
         this.messageService = messageService;
     }
 
-    @GetMapping(value = "/messages")
+    @GetMapping
     public ResponseEntity<List<Message>> getMessages() {
         return new ResponseEntity<>(messageService.getAllMessages(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/message/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
-        return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessageById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")

@@ -3,7 +3,7 @@ export const getUsers = () => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/restapi/users/users/"
+        url: "/restapi/users"
     }).done(function (data) {
         result = data;
     });
@@ -15,7 +15,7 @@ export const getUser = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/restapi/users/user/" + id
+        url: "/restapi/users/" + id
     }).done(function (data) {
         result = data;
     });

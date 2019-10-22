@@ -19,7 +19,7 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
@@ -30,7 +30,7 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
