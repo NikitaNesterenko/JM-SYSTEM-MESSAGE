@@ -1,7 +1,5 @@
 package jm;
 
-import jm.model.Role;
-import jm.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 

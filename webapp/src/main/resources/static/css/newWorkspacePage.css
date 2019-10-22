@@ -1,0 +1,182 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    font-variant-ligatures: common-ligatures;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    color: #1d1c1d;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.panel-left {
+    display: flex;
+    min-width: 486px;
+    max-width: 624px;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.logo {
+    height: 90px;
+}
+
+.email-form {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+h1 {
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.email-form-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 12%;
+}
+
+.email-form-confirm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 15% 36% 0 36%;
+}
+
+.logo-image {
+    margin: 1rem;
+}
+
+input[type=text] {
+    font-size: 1.25rem;
+    padding: .75rem;
+    border: 1px solid #ccc;
+    border-radius: .25rem;
+    color: #1d1c1d;
+    max-width: 100%;
+}
+
+input[type=text]:focus {
+    border: 2px solid #39c;
+}
+
+.button-confirm {
+    text-decoration:none; text-align:center;
+    padding:11px 32px;
+    border:solid 1px #005072;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius: 4px;
+    font:18px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#E5FFFF;
+    background:#007a59;
+    -webkit-box-shadow:0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
+    -moz-box-shadow: 0px 0px 2px #bababa,  inset 0px 0px 1px #ffffff;
+    box-shadow:0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
+
+    -webkit-transition: background 0s linear;
+    -moz-transition:  background 0s linear;
+    -o-transition:  background 0s linear;
+    transition:  background 0s linear;
+}
+
+.button-confirm:hover{
+    padding:11px 32px;
+    border:solid 1px #007a59;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius: 4px;
+    font:18px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#E5FFFF;
+    background-color:#007a59;
+    background-image: -moz-linear-gradient(top, #007a59 0%, #007a80 100%);
+    background-image: -webkit-linear-gradient(top, #007a59 0%, #007a80 100%);
+    background-image: -o-linear-gradient(top, #007a59 0%, #007a80 100%);
+    background-image: -ms-linear-gradient(top, #007a59 0% ,#007a80 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007a80', endColorstr='#007a80',GradientType=0 );
+    background-image: linear-gradient(top, #007a59 0% ,#007a80 100%);
+    -webkit-box-shadow:0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
+    -moz-box-shadow: 0px 0px 2px #bababa,  inset 0px 0px 1px #ffffff;
+    box-shadow:0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
+
+}
+
+.button-confirm:active{
+    padding:11px 32px;
+    border:solid 1px #005072;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius: 4px;
+    font:18px Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:#E5FFFF;
+    background:#007a59;
+    -webkit-box-shadow:0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
+    -moz-box-shadow: 0px 0px 2px #bababa,  inset 0px 0px 1px #ffffff;
+    box-shadow:0px 0px 2px #bababa, inset 0px 0 1px #ffffff;
+}
+
+button:hover {
+    background: #007a59;
+}
+
+.panel-right {
+    background: #4a154b;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.find-team {
+    color: #fff;
+    text-align: right;
+    padding: 20px;
+}
+
+
+.find-team-button {
+    font-weight: 700;
+    color: #fff;
+    padding: .5rem 1.25rem;
+    line-height: 3rem;
+    border: 1px solid #fff;
+    text-decoration: none;
+    border-radius: .25rem;
+    -webkit-transition: background .1s ease-out 0s;
+    -moz-transition: background .1s ease-out 0s;
+    transition: background .1s ease-out 0s;
+    margin-left: .5rem;
+}
+
+.graphics {
+    display: flex;
+    padding: 0 12%;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.graphics-image {
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 25%;
+}

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
@@ -43,6 +42,11 @@ public class MainController {
         return new ModelAndView("admin-page.html");
     }
 
+    @GetMapping(value = "/workspace-new")
+    public ModelAndView workspacePageNew() {
+        return new ModelAndView("new-workspace-page.html");
+    }
+
     @GetMapping(value = "/confirmemail")
     public String confirmemail() {
         return "createWorkspace/confirm-email";
@@ -67,6 +71,4 @@ public class MainController {
     public String tadaPage() {
         return "createWorkspace/tada-page";
     }
-
-
 }
