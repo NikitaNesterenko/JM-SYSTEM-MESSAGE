@@ -7,13 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/messages")
 public class MessageRestController {
 
-   private MessageService messageService;
+    private MessageService messageService;
 
     @Autowired
     public void setMessageService(MessageService messageService) {
@@ -23,6 +25,13 @@ public class MessageRestController {
     @GetMapping
     public ResponseEntity<List<Message>> getMessages() {
         return new ResponseEntity<>(messageService.getAllMessages(), HttpStatus.OK);
+    }
+
+    @GetMapping("/channel/{id}")
+    public ResponseEntity<List<Message>> getMessagesByChannelId(@PathVariable("id") Long id) {
+        List<Message> messages = messageService.getMessagesByChannelId(id);
+        messages.sort(Comparator.comparing(Message::getDateCreate));
+        return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
