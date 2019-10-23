@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     private MessageDAO messageDAO;
 
