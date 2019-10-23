@@ -1,8 +1,8 @@
 package jm.controller.rest;
 
 import jm.InviteTokenService;
+import jm.UserService;
 import jm.model.InviteToken;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,27 +10,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/invite/hash/**")
 public class InviteTokenRestController {
 
+    private UserService userService;
     private InviteTokenService inviteTokenService;
 
-    InviteTokenRestController(InviteTokenService inviteTokenService) {
+    InviteTokenRestController(UserService userService, InviteTokenService inviteTokenService) {
         this.inviteTokenService = inviteTokenService;
+        this.userService = userService;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity createInviteToken(@RequestBody InviteToken inviteToken) {
-        inviteTokenService.createInviteToken(inviteToken);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping(value = "/invite_token/{id}")
-    public ResponseEntity<InviteToken> getInviteToken(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(inviteTokenService.getById(id), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteInviteToken(@PathVariable("id") Long id) {
-        inviteTokenService.deleteInviteToken(id);
-        return ResponseEntity.ok().build();
+    @PostMapping
+    public ResponseEntity checkUser (@RequestBody InviteToken inviteToken){
+        if(userService.getUserByEmail(inviteToken.getEmail()) != null) {
+            inviteTokenService.deleteInviteToken(inviteToken.getId());
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
