@@ -8,6 +8,8 @@ public interface MessageDAO {
 
     List<Message> getAll();
 
+    List<Message> getMessagesByChannelId(Long id);
+
     List<Message> getMessageByContent(String word);
 
     void persist(Message message);

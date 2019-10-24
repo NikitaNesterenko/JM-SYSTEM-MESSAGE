@@ -7,6 +7,7 @@
     <script type="module" src="/js/workspaces.js"></script>
     <script type="module">update_workspace_table()</script>
     <script type="module">update_add_new_workspace_table()</script>
+    <script src="/js/helper_functions.js"></script>
 </head>
 <body>
 <table border="5" id="table_update_delete_worspaces">
@@ -18,6 +19,7 @@
         <th>name</th>
         <th>owner (id/name/login)</th>
         <th>users</th>
+        <th>channels</th>
         <th>update</th>
         <th>delete</th>
     </tr>
@@ -49,6 +51,27 @@
     <caption>Add users in workspace</caption>
     <tr>
         <th>user (id/name/login)</th>
+        <th>add</th>
+    </tr>
+</table>
+
+<br/>
+<br/>
+<br/>
+
+<table border="1" id="table_channels_for_worspace">
+    <caption id="caption_table_channels_for_workspace">Channels in workspace</caption>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>action</th>
+    </tr>
+</table>
+
+<table border="1" id="table_add_channel_for_workspace">
+    <caption>Add channels in workspace</caption>
+    <tr>
+        <th>channel (id/name)</th>
         <th>add</th>
     </tr>
 </table>
