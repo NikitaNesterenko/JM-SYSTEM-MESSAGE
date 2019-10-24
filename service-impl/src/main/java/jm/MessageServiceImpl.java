@@ -23,10 +23,14 @@ public class MessageServiceImpl implements MessageService {
         this.messageDAO = messageDAO;
     }
 
-
     @Override
     public List<Message> getAllMessages() {
         return messageDAO.getAll();
+    }
+
+    @Override
+    public List<Message> getMessagesByChannelId(Long id) {
+        return messageDAO.getMessagesByChannelId(id);
     }
 
     @Override
