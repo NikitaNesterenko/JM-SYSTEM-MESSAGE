@@ -70,15 +70,15 @@ public class TestDataInitializer {
         Set<User> userSet2 = new HashSet<>();
         Set<User> userSet3 = new HashSet<>();
 
-        Workspace workspace = new Workspace();
-        workspace.setId(1L);
-        Workspace workspace2 = new Workspace();
-        workspace2.setId(2L);
-
-        Set<Workspace> workspacesSet = new HashSet<>();
-        workspacesSet.add(workspace);
-        Set<Workspace> workspacesSet2 = new HashSet<>();
-        workspacesSet2.add(workspace2);
+//        Workspace workspace = new Workspace();
+//        workspace.setId(1L);
+//        Workspace workspace2 = new Workspace();
+//        workspace2.setId(2L);
+//
+//        Set<Workspace> workspacesSet = new HashSet<>();
+//        workspacesSet.add(workspace);
+//        Set<Workspace> workspacesSet2 = new HashSet<>();
+//        workspacesSet2.add(workspace2);
 
 
         for (int i = 0; i < 15; i++) {
@@ -106,8 +106,8 @@ public class TestDataInitializer {
         createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), list2.get(2), "Hello message2", LocalDateTime.now()));
         createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), list3.get(3), "Hello message3", LocalDateTime.now()));
 
-        createBotIfNotExist(botDAO, new Bot("Bot-1",workspacesSet, LocalDate.now()));
-        createBotIfNotExist(botDAO, new Bot("Bot-2",workspacesSet2, LocalDate.now()));
+//        createBotIfNotExist(botDAO, new Bot("Bot-1",workspacesSet, LocalDate.now()));
+//        createBotIfNotExist(botDAO, new Bot("Bot-2",workspacesSet2, LocalDate.now()));
 
 
 

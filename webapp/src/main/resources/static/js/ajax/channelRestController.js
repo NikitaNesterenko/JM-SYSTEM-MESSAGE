@@ -47,7 +47,7 @@ export const deleteChannel = (id) => {
 export const getAllChannels = () => {
     let channels = null;
     $.ajax({
-        url: '/restapi/channels',
+        url: '/restapi/channels/',
         async: false,
         type: 'get',
         success: function (response) {
