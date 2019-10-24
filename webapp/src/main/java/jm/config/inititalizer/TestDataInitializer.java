@@ -1,7 +1,6 @@
 package jm.config.inititalizer;
 
-import jm.*;
-
+import jm.UserService;
 import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.MessageDAO;
@@ -11,10 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class TestDataInitializer {
+
     private static final Logger logger = LoggerFactory.getLogger(TestDataInitializer.class);
 
     @Autowired
@@ -24,15 +25,12 @@ public class TestDataInitializer {
     @Autowired
     private ChannelDAO channelDAO;
     @Autowired
-    private MessageDAO  messageDAO;
+    private MessageDAO messageDAO;
     @Autowired
-    BotDAO botDAO;
-
+    private BotDAO botDAO;
 
     public TestDataInitializer() {
-
     }
-
 
     private void init() {
         logger.info("Data init has been started!!!");
@@ -41,70 +39,29 @@ public class TestDataInitializer {
     }
 
     private void dataInit() {
-        String ownerRole = "ROLE_OWNER";
-        String userRole = "ROLE_USER";
-        if (roleDAO.getRoleByRolename(ownerRole) == null) {
-            Role roleOwner = new Role();
-            roleOwner.setRole(ownerRole);
-            roleDAO.persist(roleOwner);
-        }
-        if (roleDAO.getRoleByRolename(userRole) == null){
-            Role roleUser = new Role();
-            roleUser.setRole(userRole);
-            roleDAO.persist(roleUser);
-        }
+        Random random = new Random();
 
-        User[] usersArray = new User[15];
+        Role ownerRole = this.createRoleIfNotExists("ROLE_OWNER");
+        Role userRole = this.createRoleIfNotExists("ROLE_USER");
 
-        Role role = roleDAO.getRoleByRolename(userRole);
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(role);
+        // сет для первого списка пользователей
+        List<User> userList_1 = this.createUserList(5, random, userRole);
+        Channel channel_1 = this.createChannel(userList_1, random);
+        Message message_1 = this.createMessage(userList_1, channel_1, random);
 
-        for (int i = 0; i < 15; i++) {
-            usersArray[i] = new User("name-" + i, "last-name-" + i, "login-" + i, "mymail" + i + "@testmail.com", "pass-" + i);
-            usersArray[i].setRoles(roleSet);
-        }
+        // сет для второго списка пользователей
+        List<User> userList_2 = this.createUserList(5, random, userRole);
+        Channel channel_2 = this.createChannel(userList_2, random);
+        Message message_2 = this.createMessage(userList_2, channel_2, random);
 
-        List<User> userList1 = new ArrayList<>();
-        List<User> userList2 = new ArrayList<>();
-        List<User> userList3 = new ArrayList<>();
+        // сет для третьего списка пользователей
+        List<User> userList_3 = this.createUserList(5, random, userRole);
+        Channel channel_3 = this.createChannel(userList_3, random);
+        Message message_3 = this.createMessage(userList_3, channel_3, random);
 
-        Workspace workspace = new Workspace();
-        workspace.setId(1L);
-        Workspace workspace2 = new Workspace();
-        workspace2.setId(2L);
-
-        Set<Workspace> workspacesSet = new HashSet<>();
-        workspacesSet.add(workspace);
-        Set<Workspace> workspacesSet2 = new HashSet<>();
-        workspacesSet2.add(workspace2);
-
-
-        for (int i = 0; i < 15; i++) {
-            createUserIfNotExists(userService, usersArray[i]);
-            if (i < 5) {
-                userList1.add(userService.getUserByLogin(usersArray[i].getLogin()));
-            }
-            if (i >= 5 && i < 10) {
-                userList2.add(userService.getUserByLogin(usersArray[i].getLogin()));
-            }
-            if (i >= 10) {
-                userList3.add(userService.getUserByLogin(usersArray[i].getLogin()));
-            }
-        }
-
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
-
-        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(1), "Hello message1", LocalDateTime.now()));
-        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), userList2.get(2), "Hello message2", LocalDateTime.now()));
-        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(3), "Hello message3", LocalDateTime.now()));
-
-        createBotIfNotExist(botDAO, new Bot("Bot-1",workspacesSet, LocalDate.now()));
-        createBotIfNotExist(botDAO, new Bot("Bot-2",workspacesSet2, LocalDate.now()));
-
-
+        // Создаем два бота
+        Bot bot_1 = this.createBot(this.createWorkspacesSet());
+        Bot bot_2 = this.createBot(this.createWorkspacesSet());
 
     }
 
@@ -113,17 +70,97 @@ public class TestDataInitializer {
             userService.createUser(user);
     }
 
-    private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
-        if (channelDAO.getChannelByName(channel.getName()) == null)
+    private Channel createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
+        if (channelDAO.getChannelByName(channel.getName()) == null) {
             channelDAO.persist(channel);
+            return channel;
+        }
+        return null;
     }
 
-    private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
+    private Message createMessageIfNotExists(MessageDAO messageDAO, Message message) {
         messageDAO.persist(message);
+        return message;
     }
 
-    private void createBotIfNotExist(BotDAO botDAO, Bot bot) {botDAO.persist(bot);}
+    private Bot createBotIfNotExist(BotDAO botDAO, Bot bot) {
+        botDAO.persist(bot);
+        return bot;
+    }
 
+    private Role createRoleIfNotExists(String roleName) {
+        Role role = new Role();
+        if (roleDAO.getRoleByRolename(roleName) == null) {
+            role.setRole(roleName);
+            roleDAO.persist(role);
+        }
+        return role;
+    }
 
+    private User createUser(Random random, Role role) {
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(role);
+        int userRandom = random.nextInt(1000);
+        User user = new User(
+                "name-" + userRandom,
+                "last-name-" + userRandom,
+                "login-" + userRandom,
+                "mymail_" + userRandom + "@testmail.com",
+                "pass-" + userRandom);
+        user.setRoles(roleSet);
+        createUserIfNotExists(userService, user);
+        return user;
+    }
+
+    private List<User> createUserList(int quantity, Random random, Role role) {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < quantity; i++) {
+            userList.add(this.createUser(random, role));
+        }
+        return userList;
+    }
+
+    private Channel createChannel(List<User> userList, Random random) {
+        return createChannelIfNotExists(channelDAO,
+                new Channel(
+                        "test-channel-" + random.nextInt(1000),
+                        userList,
+                        userList.get((int) (Math.random() * userList.size())),
+                        new Random().nextBoolean(),
+                        LocalDateTime.now())
+        );
+    }
+
+    private Message createMessage(List<User> userList, Channel channel, Random random) {
+        return createMessageIfNotExists(
+                messageDAO,
+                new Message(
+                        channel,
+                        userList.get(random.nextInt(userList.size())),
+                        "Hello message_" + random.nextInt(100),
+                        LocalDateTime.now())
+        );
+    }
+
+    private Set<Workspace> createWorkspacesSet() {
+        long randomWorkspaceId = (long) (Math.random() * (10));
+        Set<Workspace> workspaces = new HashSet<>();
+        Workspace workspace = new Workspace();
+        workspace.setId(randomWorkspaceId);
+        workspaces.add(workspace);
+        return workspaces;
+    }
+
+    private Bot createBot(Set<Workspace> workspaces) {
+        Random random = new Random();
+        return createBotIfNotExist(
+                botDAO,
+                new Bot(
+                        "Bot-" + random.nextInt(10),
+                        workspaces,
+                        LocalDate.now()
+                )
+        );
+    }
 
 }
