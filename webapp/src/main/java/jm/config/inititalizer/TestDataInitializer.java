@@ -94,17 +94,17 @@ public class TestDataInitializer {
             }
         }
 
-        User[] setArray1 = (User[]) userSet1.toArray();
-        User[] setArray2 = (User[]) userSet2.toArray();
-        User[] setArray3 = (User[]) userSet3.toArray();
+        List<User> list1 = new ArrayList<>(userSet1);
+        List<User> list2 = new ArrayList<>(userSet1);
+        List<User> list3 = new ArrayList<>(userSet1);
 
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userSet1, setArray1[(1 + (int) (Math.random() * 4))], new Random().nextBoolean(), LocalDateTime.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userSet2, setArray2[(1 + (int) (Math.random() * 4))], new Random().nextBoolean(), LocalDateTime.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userSet3, setArray3[(1 + (int) (Math.random() * 4))], new Random().nextBoolean(), LocalDateTime.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userSet1, list1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userSet2, list2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userSet3, list3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
 
-        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), setArray1[1], "Hello message1", LocalDateTime.now()));
-        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), setArray2[2], "Hello message2", LocalDateTime.now()));
-        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), setArray3[3], "Hello message3", LocalDateTime.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), list1.get(1), "Hello message1", LocalDateTime.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), list2.get(2), "Hello message2", LocalDateTime.now()));
+        createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), list3.get(3), "Hello message3", LocalDateTime.now()));
 
         createBotIfNotExist(botDAO, new Bot("Bot-1",workspacesSet, LocalDate.now()));
         createBotIfNotExist(botDAO, new Bot("Bot-2",workspacesSet2, LocalDate.now()));
@@ -121,6 +121,7 @@ public class TestDataInitializer {
     private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
         if (channelDAO.getChannelByName(channel.getName()) == null)
             channelDAO.persist(channel);
+
     }
 
     private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
