@@ -1,16 +1,18 @@
 package jm;
 
+import java.util.UUID;
+
 public class HashService {
 
     public HashService() {
     }
 
-    public int generateHash(int hashLength) {
-        int hash = 0;
-        for (int i = 0; i < hashLength; i++) {
-            hash = hash * 31 + i;
+    public String generateHash(int length) {
+        StringBuilder randomStr = new StringBuilder(UUID.randomUUID().toString());
+        while(randomStr.length() < length) {
+            randomStr.append(UUID.randomUUID().toString());
         }
-        return hash;
+        return randomStr.toString().replace("-", "").substring(0, length);
     }
 
 }
