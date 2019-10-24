@@ -3,7 +3,7 @@ export const getUsers = () => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/api/users/"
+        url: "/restapi/users/users"
     }).done(function (data) {
         result = data;
     });
@@ -15,7 +15,7 @@ export const getUser = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/api/users/" + id
+        url: "/restapi/users/user/" + id
     }).done(function (data) {
         result = data;
     });
@@ -23,20 +23,26 @@ export const getUser = (id) => {
 };
 
 export const createUser = (user) => {
+    let result = null;
     const jsonUser = JSON.stringify(user);
     $.ajax({
         type: 'post',
-        url: "/api/users/",
+        url: "/restapi/users/create",
+        async: false,
         data: jsonUser,
         contentType: "application/json"
+    }).done(function (data) {
+        result = data;
     });
+    return result;
 };
 
 export const updateUser = (user) => {
     const jsonUser = JSON.stringify(user);
     $.ajax({
         type: 'put',
-        url: "/api/users/",
+        url: "/restapi/users/update",
+        async: false,
         data: jsonUser,
         contentType: "application/json"
     });
@@ -45,7 +51,8 @@ export const updateUser = (user) => {
 export const deleteUser = (id) => {
     $.ajax({
         type: 'delete',
-        url: "/api/users/" + id
+        async: false,
+        url: "/restapi/users/delete/" + id
     });
 };
 

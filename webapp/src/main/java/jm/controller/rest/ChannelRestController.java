@@ -10,7 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restapi/channels/**")
+@RequestMapping(value = "/restapi/channels/")
 public class ChannelRestController {
 
     private ChannelService channelService;

@@ -1,18 +1,21 @@
 package jm.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Blob;
-<<<<<<< HEAD
+
 import java.util.HashSet;
-=======
+
 import java.util.Collection;
->>>>>>> dev
+
 import java.util.Objects;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
@@ -43,12 +46,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<WorkspaceUserRoleLink> workspaceUserRoleLink = new HashSet<>();
 
-   /*
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles_workspaces", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-*/
+    /*
+     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+     @JoinTable(name = "users_roles_workspaces", joinColumns = @JoinColumn(name = "user_id"),
+             inverseJoinColumns = @JoinColumn(name = "role_id"))
+     private Set<Role> roles;
+ */
     public User() {
     }
 
@@ -125,6 +128,7 @@ public class User implements UserDetails {
         this.workspaceUserRoleLink = workspaceUserRoleLink;
     }
 
+
     /*
         public Set<Role> getRoles() {
             return roles;
@@ -134,31 +138,42 @@ public class User implements UserDetails {
             this.roles = roles;
         }
     */
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+
+        Collection roles = new HashSet();
+
+        this.getWorkspaceUserRoleLink().forEach(x -> roles.add(x.getRole()));
+
+        return (Collection<? extends GrantedAuthority>) roles;
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return this.login;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;
@@ -176,7 +191,7 @@ public class User implements UserDetails {
                 email.equals(user.email) &&
                 password.equals(user.password) &&
                 avatar.equals(user.avatar); //&&
-              //  roles.equals(user.roles);
+        //  roles.equals(user.roles);
     }
 
     @Override

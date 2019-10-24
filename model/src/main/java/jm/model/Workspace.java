@@ -3,6 +3,17 @@ package jm.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -39,13 +50,20 @@ public class Workspace {
     private Boolean isPrivate;
 
     @Column(name = "created_date", nullable = false)
-    @Convert(converter = LocalDateTimeAttributeConverter.class)
+
+ //   @Convert(converter = LocalDateTimeAttributeConverter.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+
     private LocalDateTime createdDate;
 
     public Workspace() {
     }
 
+
     public Workspace(String name, User user, Boolean isPrivate, LocalDateTime createdDate) {
+
         this.name = name;
         //this.users = users;
         this.user = user;

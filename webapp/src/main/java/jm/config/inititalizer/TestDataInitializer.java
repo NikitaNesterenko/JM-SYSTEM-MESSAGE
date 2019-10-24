@@ -2,25 +2,24 @@ package jm.config.inititalizer;
 
 import jm.*;
 
+import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.MessageDAO;
-import jm.api.dao.RoleDAO;
-<<<<<<<HEAD
+
 import jm.dao.ChannelDAOImpl;
 import jm.dao.RoleDAOImpl;
 import jm.dao.WorkspaceDAOImpl;
 import jm.dao.WorkspaceUserRoleLinkDAOImpl;
 import jm.model.*;
-=======
 import jm.model.Channel;
 import jm.model.Message;
 import jm.model.Role;
 import jm.model.User;
->>>>>>>dev
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -37,6 +36,11 @@ public class TestDataInitializer {
     private ChannelDAOImpl channelDAO;
     @Autowired
     private WorkspaceUserRoleLinkDAOImpl workspaceUserRoleLinkDAOImpl;
+
+    private MessageDAO messageDAO;
+    @Autowired
+    BotDAO botDAO;
+
 
     public TestDataInitializer() {
 
@@ -68,11 +72,17 @@ public class TestDataInitializer {
         workspace.setCreatedDate(LocalDateTime.now());
         workspace.setPrivate(false);
 
+        Workspace workspace2 = new Workspace();
+        workspace.setName("Java Mentoring TEST2");
+        workspace.setCreatedDate(LocalDateTime.now());
+        workspace.setPrivate(true);
+
         WorkspaceUserRoleLink workspaceUserRoleLink;
 
-        Role role = roleDAO.getRoleByRolename(userRole);
-
-
+        //     Role role = roleDAO.getRoleByRolename(userRole);
+        List<User> userList1 = new ArrayList<>();
+        List<User> userList2 = new ArrayList<>();
+        List<User> userList3 = new ArrayList<>();
         User user;
         for (int i = 0; i < 15; i++) {
             user = new User("name-" + i,
@@ -80,9 +90,22 @@ public class TestDataInitializer {
                     "@testmail.com", "pass-" + i);
 
             createUserIfNotExists(userService, user);
+
+            if (i < 5) {
+                userList1.add(user);
+            } else if (i >= 5 && i < 10) {
+                userList2.add(user);
+            } else if (i >= 10) {
+                userList3.add(user);
+            }
+
+
             if (i == 0) {
                 workspace.setUser(user);
                 workspaceDAOImpl.persist(workspace);
+
+                workspace2.setUser(user);
+                workspaceDAOImpl.persist(workspace2);
             }
 
             workspaceUserRoleLink = new WorkspaceUserRoleLink();
@@ -100,74 +123,39 @@ public class TestDataInitializer {
 
         }
 
-        List<User> userList1 = new ArrayList<>();
-        List<User> userList2 = new ArrayList<>();
-        List<User> userList3 = new ArrayList<>();
+
+/*
+        Workspace workspace = new Workspace();
+        workspace.setId(1L);
+        Workspace workspace2 = new Workspace();
+        workspace2.setId(2L);
+*/
+        Set<Workspace> workspacesSet = new HashSet<>();
+        workspacesSet.add(workspace);
+        Set<Workspace> workspacesSet2 = new HashSet<>();
+        workspacesSet2.add(workspace2);
+
 
         for (int i = 0; i < 15; i++) {
-            if (i < 5) {
-                userList1.add(userService.getUserByLogin(usersArray[i].getLogin()));
-            }
-            if (i >= 5 && i < 10) {
-                userList2.add(userService.getUserByLogin(usersArray[i].getLogin()));
-            }
-            if (i >= 10) {
-                userList3.add(userService.getUserByLogin(usersArray[i].getLogin()));
-            }
+
+            createChannelIfNotExists(channelDAO, new Channel("test-channel-111", workspace, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+            createChannelIfNotExists(channelDAO, new Channel("test-channel-222", workspace, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+            createChannelIfNotExists(channelDAO, new Channel("test-channel-333", workspace, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
+
+            createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(1), "Hello message1", LocalDateTime.now()));
+            createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L), userList2.get(2), "Hello message2", LocalDateTime.now()));
+            createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L), userList1.get(3), "Hello message3", LocalDateTime.now()));
+
+            createBotIfNotExist(botDAO, new Bot("Bot-1", workspacesSet, LocalDate.now()));
+            createBotIfNotExist(botDAO, new Bot("Bot-2", workspacesSet2, LocalDate.now()));
 
         }
-
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
-        createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1 + (int) (Math.random() * 4)), new Random().nextBoolean(), LocalDateTime.now()));
-
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
         if (userService.getUserByLogin(user.getLogin()) == null)
             userService.createUser(user);
     }
-
-
-    createChannelIfNotExists(channelDAO, new Channel("test-channel-111", userList1, userList1.get(1+(int) (Math.random()*4)),
-            new
-
-    Random().
-
-    nextBoolean(),LocalDate.
-
-    now()));
-
-    createChannelIfNotExists(channelDAO, new Channel("test-channel-222", userList2, userList2.get(1+(int) (Math.random()*4)),
-            new
-
-    Random().
-
-    nextBoolean(),LocalDate.
-
-    now()));
-
-    createChannelIfNotExists(channelDAO, new Channel("test-channel-333", userList3, userList3.get(1+(int) (Math.random()*4)),
-            new
-
-    Random().
-
-    nextBoolean(),LocalDate.
-
-    now()));
-
-    createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L),userList1.
-
-    get(1), "Hello message1",LocalDateTime.now()));
-
-    createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(2L),userList2.
-
-    get(2), "Hello message2",LocalDateTime.now()));
-
-    createMessageIfNotExists(messageDAO, new Message(channelDAO.getById(1L),userList1.
-
-    get(3), "Hello message3",LocalDateTime.now()));
-
 
     private void createChannelIfNotExists(ChannelDAO channelDAO, Channel channel) {
         if (channelDAO.getChannelByName(channel.getName()) == null)
@@ -177,6 +165,10 @@ public class TestDataInitializer {
 
     private void createMessageIfNotExists(MessageDAO messageDAO, Message message) {
         messageDAO.persist(message);
+    }
+
+    private void createBotIfNotExist(BotDAO botDAO, Bot bot) {
+        botDAO.persist(bot);
     }
 
 

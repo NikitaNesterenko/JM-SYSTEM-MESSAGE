@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 @Transactional
 public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
-    private static final Logger logger = LoggerFactory.getLogger(RoleDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageDAOImpl.class);
 
     @Override
     public List<Message> getMessageByContent(String word) {
