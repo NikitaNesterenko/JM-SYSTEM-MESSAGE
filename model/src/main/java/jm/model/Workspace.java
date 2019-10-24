@@ -25,9 +25,14 @@ public class Workspace {
     private String name;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
+    @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    private List<Channel> channels;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
@@ -45,9 +50,10 @@ public class Workspace {
     public Workspace() {
     }
 
-    public Workspace(String name, List<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
+    public Workspace(String name, List<User> users, List<Channel> channels, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
+        this.channels = channels;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
@@ -75,6 +81,14 @@ public class Workspace {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
+    public void setChannels(List<Channel> channels) {
+        this.channels = channels;
     }
 
     public User getUser() {
