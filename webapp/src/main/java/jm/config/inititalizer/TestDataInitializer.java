@@ -28,6 +28,10 @@ public class TestDataInitializer {
     private MessageDAO  messageDAO;
     @Autowired
     BotDAO botDAO;
+    @Autowired
+    KafkaClientService kafkaClientService;
+    @Autowired
+    KafkaAdminService kafkaAdminService;
 
 
     public TestDataInitializer() {
@@ -39,6 +43,7 @@ public class TestDataInitializer {
         logger.info("Data init has been started!!!");
         dataInit();
         logger.info("Data init has been done!!!");
+        testKafka();
     }
 
     private void dataInit() {
@@ -107,6 +112,21 @@ public class TestDataInitializer {
 
 
 
+    }
+
+    private void testKafka() {
+        kafkaAdminService.addTopic("testTopic1");
+        kafkaAdminService.addTopic("testTopic2");
+        kafkaClientService.subscribeChannel("testTopic1");
+        kafkaClientService.subscribeChannel("testTopic2");
+        kafkaClientService.sendMessage("testTopic1",
+                new KafkaMessage(1L, 1L, "testMessageContent1-1", LocalDateTime.now()));
+        kafkaClientService.sendMessage("testTopic1",
+                new KafkaMessage(1L, 2L, "testMessageContent1-2", LocalDateTime.now()));
+        kafkaClientService.sendMessage("testTopic2",
+                new KafkaMessage(2L, 1L, "testMessageContent2-1", LocalDateTime.now()));
+        kafkaClientService.sendMessage("testTopic2",
+                new KafkaMessage(2L, 2L, "testMessageContent1-2", LocalDateTime.now()));
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
