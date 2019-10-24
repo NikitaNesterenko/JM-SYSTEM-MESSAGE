@@ -11,7 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restapi/workspaces/")
+@RequestMapping(value = "/rest/api/workspaces/")
 public class WorkspaceRestController {
 
     private WorkspaceService workspaceService;

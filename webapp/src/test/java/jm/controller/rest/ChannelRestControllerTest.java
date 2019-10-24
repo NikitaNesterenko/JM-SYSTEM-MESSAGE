@@ -25,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 
 public class ChannelRestControllerTest {
-    private static final String urlGetChannelById = "/restapi/channels/";
-    private static final String urlCreateChannel = "/restapi/channels/create";
-    private static final String urlUpdateChannel = "/restapi/channels/update";
-    private static final String urlDeleteChannel = "/restapi/channels/delete/";
+    private static final String urlGetChannelById = "/rest/api/channels/";
+    private static final String urlCreateChannel = "/rest/api/channels/create";
+    private static final String urlUpdateChannel = "/rest/api/channels/update";
+    private static final String urlDeleteChannel = "/rest/api/channels/delete/";
 
     @Mock
     private ChannelService channelService;

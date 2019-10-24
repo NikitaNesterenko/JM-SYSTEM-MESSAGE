@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restapi/messages")
+@RequestMapping("/rest/api/messages")
 public class MessageRestController {
 
    private MessageService messageService;
