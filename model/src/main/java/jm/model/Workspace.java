@@ -7,10 +7,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "workspaces")
@@ -27,12 +26,12 @@ public class Workspace {
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    private Set<User> users;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
-    private List<Channel> channels;
+    private Set<Channel> channels;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
@@ -50,7 +49,7 @@ public class Workspace {
     public Workspace() {
     }
 
-    public Workspace(String name, List<User> users, List<Channel> channels, User user, Boolean isPrivate, LocalDateTime createdDate) {
+    public Workspace(String name, Set<User> users, Set<Channel> channels, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
         this.channels = channels;
@@ -75,19 +74,19 @@ public class Workspace {
         this.name = name;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
-    public List<Channel> getChannels() {
+    public Set<Channel> getChannels() {
         return channels;
     }
 
-    public void setChannels(List<Channel> channels) {
+    public void setChannels(Set<Channel> channels) {
         this.channels = channels;
     }
 
