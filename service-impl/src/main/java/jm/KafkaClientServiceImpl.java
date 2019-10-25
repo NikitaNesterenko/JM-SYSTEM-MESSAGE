@@ -7,7 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KafkaClientServiceImpl implements KafkaClientService {
@@ -22,7 +21,7 @@ public class KafkaClientServiceImpl implements KafkaClientService {
 
     @Override
     public void sendMessage(String channelName, KafkaMessage message) {
-        kafkaTemplate.send(channelName ,message);
+        kafkaTemplate.send(channelName, message);
     }
 
     @Override

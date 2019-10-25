@@ -1,7 +1,5 @@
 package jm.model;
 
-import java.time.LocalDateTime;
-
 public class KafkaMessage {
     private Long channelId;
     private Long userId;
@@ -20,7 +18,7 @@ public class KafkaMessage {
     public KafkaMessage() {
     }
 
-    public KafkaMessage(Long channelId, Long userId, String content, LocalDateTime dateCreate) {
+    public KafkaMessage(Long channelId, Long userId, String content) {
         this.channelId = channelId;
         this.userId = userId;
         this.content = content;

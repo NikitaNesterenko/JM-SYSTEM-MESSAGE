@@ -1,7 +1,8 @@
 package jm.config.inititalizer;
 
-import jm.*;
-
+import jm.KafkaAdminService;
+import jm.KafkaClientService;
+import jm.UserService;
 import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.MessageDAO;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class TestDataInitializer {
     @Autowired
     private ChannelDAO channelDAO;
     @Autowired
-    private MessageDAO  messageDAO;
+    private MessageDAO messageDAO;
     @Autowired
     BotDAO botDAO;
     @Autowired
@@ -54,7 +54,7 @@ public class TestDataInitializer {
             roleOwner.setRole(ownerRole);
             roleDAO.persist(roleOwner);
         }
-        if (roleDAO.getRoleByRolename(userRole) == null){
+        if (roleDAO.getRoleByRolename(userRole) == null) {
             Role roleUser = new Role();
             roleUser.setRole(userRole);
             roleDAO.persist(roleUser);
@@ -111,7 +111,6 @@ public class TestDataInitializer {
 //        createBotIfNotExist(botDAO, new Bot("Bot-2",workspacesSet2, LocalDate.now()));
 
 
-
     }
 
     private void testKafka() {
@@ -120,13 +119,13 @@ public class TestDataInitializer {
         kafkaClientService.subscribeChannel("testTopic1");
         kafkaClientService.subscribeChannel("testTopic2");
         kafkaClientService.sendMessage("testTopic1",
-                new KafkaMessage(1L, 1L, "testMessageContent1-1", LocalDateTime.now()));
+                new KafkaMessage(1L, 1L, "testMessageContent1-1"));
         kafkaClientService.sendMessage("testTopic1",
-                new KafkaMessage(1L, 2L, "testMessageContent1-2", LocalDateTime.now()));
+                new KafkaMessage(1L, 2L, "testMessageContent1-2"));
         kafkaClientService.sendMessage("testTopic2",
-                new KafkaMessage(2L, 1L, "testMessageContent2-1", LocalDateTime.now()));
+                new KafkaMessage(2L, 1L, "testMessageContent2-1"));
         kafkaClientService.sendMessage("testTopic2",
-                new KafkaMessage(2L, 2L, "testMessageContent1-2", LocalDateTime.now()));
+                new KafkaMessage(2L, 2L, "testMessageContent1-2"));
     }
 
     private void createUserIfNotExists(UserService userService, User user) {
@@ -143,8 +142,9 @@ public class TestDataInitializer {
         messageDAO.persist(message);
     }
 
-    private void createBotIfNotExist(BotDAO botDAO, Bot bot) {botDAO.persist(bot);}
-
+    private void createBotIfNotExist(BotDAO botDAO, Bot bot) {
+        botDAO.persist(bot);
+    }
 
 
 }
