@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TestDataInitializer {
 
@@ -101,15 +104,15 @@ public class TestDataInitializer {
     private void createChannels() {
         List<User> userList = new ArrayList<>(this.users);
 
-        Channel channel_1 = new Channel("channel_1", userList, userList.get(0), true, LocalDateTime.now());
+        Channel channel_1 = new Channel("channel_1", this.users, userList.get(0), true, LocalDateTime.now());
         channelDAO.persist(channel_1);
         this.channels.add(channel_1);
 
-        Channel channel_2 = new Channel("channel_2", userList, userList.get(1), false, LocalDateTime.now());
+        Channel channel_2 = new Channel("channel_2", this.users, userList.get(1), false, LocalDateTime.now());
         channelDAO.persist(channel_2);
         this.channels.add(channel_2);
 
-        Channel channel_3 = new Channel("channel_3", userList, userList.get(2), true, LocalDateTime.now());
+        Channel channel_3 = new Channel("channel_3", this.users, userList.get(2), true, LocalDateTime.now());
         channelDAO.persist(channel_3);
         this.channels.add(channel_3);
     }
@@ -133,16 +136,15 @@ public class TestDataInitializer {
 
     private void createWorkspaces() {
         List<User> userList = new ArrayList<>(this.users);
-        List<Channel> channels = new ArrayList<>(this.channels);
 
         Workspace workspace_1 = new Workspace(
-                "workspace_1", userList, channels, userList.get(0), false, LocalDateTime.now()
+                "workspace_1", this.users, this.channels, userList.get(0), false, LocalDateTime.now()
         );
         workspaceDAO.persist(workspace_1);
         this.workspaces.add(workspace_1);
 
         Workspace workspace_2 = new Workspace(
-                "workspace_2", userList, channels, userList.get(1), true, LocalDateTime.now()
+                "workspace_2", this.users, this.channels, userList.get(1), true, LocalDateTime.now()
 
         );
         workspaceDAO.persist(workspace_2);
