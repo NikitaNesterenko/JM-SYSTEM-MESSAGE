@@ -26,6 +26,11 @@ public class WorkspaceRestController {
         return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/workspacename/{name}")
+    public ResponseEntity<Workspace> getWorkspaceByName(@PathVariable("name") String name) {
+        return new ResponseEntity<>(workspaceService.getWorkspaceByName(name), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
         try {

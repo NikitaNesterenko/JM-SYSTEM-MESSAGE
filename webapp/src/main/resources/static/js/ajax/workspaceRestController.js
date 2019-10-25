@@ -10,6 +10,18 @@ export const getWorkspaceById = (id) => {
     return result;
 };
 
+export const getWorkspaceByName = (name) => {
+    let result = null;
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: "/restapi/workspaces/workspacename/" + name
+    }).done(function (data) {
+        result = data;
+    });
+    return result;
+};
+
 export const createWorkspace = (workspace) => {
     let result = null;
     const jsonWorkspace = JSON.stringify(workspace);
