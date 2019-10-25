@@ -50,17 +50,13 @@ public class Workspace {
     private Boolean isPrivate;
 
     @Column(name = "created_date", nullable = false)
-
- //   @Convert(converter = LocalDateTimeAttributeConverter.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-
     private LocalDateTime createdDate;
 
     public Workspace() {
     }
-
 
     public Workspace(String name, User user, Boolean isPrivate, LocalDateTime createdDate) {
 
@@ -87,15 +83,6 @@ public class Workspace {
         this.name = name;
     }
 
-    /*
-        public List<User> getUsers() {
-            return users;
-        }
-
-        public void setUsers(List<User> users) {
-            this.users = users;
-        }
-    */
     public User getUser() {
         return user;
     }

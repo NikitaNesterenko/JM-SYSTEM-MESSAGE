@@ -89,6 +89,7 @@ public class TestDataInitializer {
                     "last-name-" + i, "login-" + i, "mymail" + i +
                     "@testmail.com", "pass-" + i);
 
+
             createUserIfNotExists(userService, user);
 
             if (i < 5) {

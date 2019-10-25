@@ -58,6 +58,29 @@
     color: black;
     flex: 15;
     border: 1px solid silver;
+    position: relative;
+
+}
+
+.message_user_container {
+    border: 1px solid silver;
+}
+
+.all-messages {
+    position: absolute;
+    overflow-y: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.timestamp__label {
+    font-size: 12px;
+}
+
+.message__sender {
+    font-weight: 900;
 }
 
 .input-box {
@@ -65,6 +88,12 @@
     color: black;
     flex: 1;
     border: 1px solid silver;
+}
+
+.message-input-field {
+    overflow-y: auto;
+    top: 0;
+    width: 100%;
 }
 
 .input-inner-box {
