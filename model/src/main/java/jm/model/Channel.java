@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "channels")
@@ -25,7 +26,7 @@ public class Channel {
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    private Set<User> users;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
@@ -43,7 +44,7 @@ public class Channel {
     public Channel() {
     }
 
-    public Channel(String name, List<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
+    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
         this.user = user;
@@ -67,11 +68,11 @@ public class Channel {
         this.name = name;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

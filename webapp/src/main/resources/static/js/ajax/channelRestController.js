@@ -11,10 +11,12 @@ export const getChannelById = (id) => {
 };
 
 export const createChannel = (channel) => {
+    let result = null;
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
         type: 'post',
         url: "/rest/api/channels/create",
+        async: false,
         data: jsonChannel,
         contentType: "application/json"
     }).done(function (data) {
