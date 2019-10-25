@@ -9,7 +9,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -25,9 +26,14 @@ public class Workspace {
     private String name;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
+    @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    private Set<User> users;
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    private Set<Channel> channels;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
