@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script type="module" src="/js/workspaces.js"></script>
+    <script type="module">update_workspace_table()</script>
+    <script type="module">update_add_new_workspace_table()</script>
+    <script src="/js/helper_functions.js"></script>
+</head>
+<body>
+<table border="5" id="table_update_delete_worspaces">
+    <caption>Workspaces</caption>
+    <tr>
+        <th>id</th>
+        <th>created_date</th>
+        <th>is_private</th>
+        <th>name</th>
+        <th>owner (id/name/login)</th>
+        <th>users</th>
+        <th>channels</th>
+        <th>update</th>
+        <th>delete</th>
+    </tr>
+</table>
+
+<table border="5" id="table_create_worspaces">
+    <caption>Add new workspace</caption>
+    <tr>
+        <th>id</th>
+        <th>created_date</th>
+        <th>is_private</th>
+        <th>name</th>
+        <th>owner (id/name/login)</th>
+        <th>add</th>
+    </tr>
+</table>
+
+<table border="1" id="table_users_for_worspace">
+    <caption id="caption_table_users_for_workspace">Users in workspace</caption>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>login</th>
+        <th>action</th>
+    </tr>
+</table>
+
+<table border="1" id="table_add_user_for_workspace">
+    <caption>Add users in workspace</caption>
+    <tr>
+        <th>user (id/name/login)</th>
+        <th>add</th>
+    </tr>
+</table>
+
+<br/>
+<br/>
+<br/>
+
+<table border="1" id="table_channels_for_worspace">
+    <caption id="caption_table_channels_for_workspace">Channels in workspace</caption>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>action</th>
+    </tr>
+</table>
+
+<table border="1" id="table_add_channel_for_workspace">
+    <caption>Add channels in workspace</caption>
+    <tr>
+        <th>channel (id/name)</th>
+        <th>add</th>
+    </tr>
+</table>
+
+</body>
+</html>
