@@ -71,6 +71,7 @@ public class TestDataInitializer {
         for (Role role : this.roles) {
             if ("ROLE_USER".equals(role.getAuthority())) {
                 userRole = role;
+
             }
         }
         userRoleSet.add(userRole);
