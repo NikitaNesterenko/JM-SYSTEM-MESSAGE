@@ -46,12 +46,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<WorkspaceUserRoleLink> workspaceUserRoleLink = new HashSet<>();
 
-    /*
-     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-     @JoinTable(name = "users_roles_workspaces", joinColumns = @JoinColumn(name = "user_id"),
-             inverseJoinColumns = @JoinColumn(name = "role_id"))
-     private Set<Role> roles;
- */
     public User() {
     }
 
