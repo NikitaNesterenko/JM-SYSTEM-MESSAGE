@@ -36,7 +36,7 @@ public class TestDataInitializer {
     private ChannelDAOImpl channelDAO;
     @Autowired
     private WorkspaceUserRoleLinkDAOImpl workspaceUserRoleLinkDAOImpl;
-
+    @Autowired
     private MessageDAO messageDAO;
     @Autowired
     BotDAO botDAO;
@@ -73,9 +73,9 @@ public class TestDataInitializer {
         workspace.setPrivate(false);
 
         Workspace workspace2 = new Workspace();
-        workspace.setName("Java Mentoring TEST2");
-        workspace.setCreatedDate(LocalDateTime.now());
-        workspace.setPrivate(true);
+        workspace2.setName("Java Mentoring TEST2");
+        workspace2.setCreatedDate(LocalDateTime.now());
+        workspace2.setPrivate(true);
 
         WorkspaceUserRoleLink workspaceUserRoleLink;
 
@@ -104,6 +104,7 @@ public class TestDataInitializer {
                 workspace.setUser(user);
                 workspaceDAOImpl.persist(workspace);
 
+            } else if (i == 1) {
                 workspace2.setUser(user);
                 workspaceDAOImpl.persist(workspace2);
             }
@@ -111,7 +112,11 @@ public class TestDataInitializer {
             workspaceUserRoleLink = new WorkspaceUserRoleLink();
             workspaceUserRoleLink.setUser(user);
             workspaceUserRoleLink.setRole(roleDAO.getRoleByRolename("ROLE_USER"));
-            workspaceUserRoleLink.setWorkspace(workspaceDAOImpl.getById(1L));
+            if (i == 1) {
+                workspaceUserRoleLink.setWorkspace(workspaceDAOImpl.getById(2L));
+            } else {
+                workspaceUserRoleLink.setWorkspace(workspaceDAOImpl.getById(1L));
+            }
             workspaceUserRoleLinkDAOImpl.persist(workspaceUserRoleLink);
             if (i % 3 == 0) {
                 workspaceUserRoleLink = new WorkspaceUserRoleLink();
@@ -123,13 +128,6 @@ public class TestDataInitializer {
 
         }
 
-
-/*
-        Workspace workspace = new Workspace();
-        workspace.setId(1L);
-        Workspace workspace2 = new Workspace();
-        workspace2.setId(2L);
-*/
         Set<Workspace> workspacesSet = new HashSet<>();
         workspacesSet.add(workspace);
         Set<Workspace> workspacesSet2 = new HashSet<>();
