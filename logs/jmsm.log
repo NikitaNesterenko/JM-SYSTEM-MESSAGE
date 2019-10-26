@@ -408,3 +408,12 @@
 2019-10-24 23:33:47,549 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
 2019-10-24 23:33:47,868 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
 2019-10-24 23:33:48,615 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 7.282 seconds (JVM running for 7.885)
+2019-10-26 12:09:12,681 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 15202 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-26 12:09:12,684 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-26 12:09:12,684 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-26 12:11:45,899 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 15644 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-26 12:11:45,901 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-26 12:11:45,903 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-26 12:12:41,581 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 15881 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-26 12:12:41,584 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-26 12:12:41,585 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
