@@ -28,6 +28,11 @@ public class Channel {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "bot_id"))
+    private Set<Bot> bots;
+
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
     private User user;
@@ -44,10 +49,11 @@ public class Channel {
     public Channel() {
     }
 
-    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
+    public Channel(String name, Set<User> users, Set<Bot> bots, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
         this.user = user;
+        this.bots = bots;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
     }
@@ -74,6 +80,14 @@ public class Channel {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<Bot> getBots() {
+        return bots;
+    }
+
+    public void setBots(Set<Bot> bots) {
+        this.bots = bots;
     }
 
     public User getUser() {
@@ -109,13 +123,14 @@ public class Channel {
                 name.equals(channel.name) &&
                 Objects.equals(users, channel.users) &&
                 user.equals(channel.user) &&
+                bots.equals(channel.bots) &&
                 isPrivate.equals(channel.isPrivate) &&
                 createdDate.equals(channel.createdDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, users, user, isPrivate, createdDate);
+        return Objects.hash(id, name, users, bots, user, isPrivate, createdDate);
     }
 
     @Override
@@ -124,6 +139,7 @@ public class Channel {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", users=" + users +
+                ", bots=" + bots +
                 ", user=" + user +
                 ", isPrivate=" + isPrivate +
                 ", createdDate=" + createdDate +
