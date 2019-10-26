@@ -1,8 +1,9 @@
 package jm;
 
 import jm.api.dao.WorkspaceDAO;
-import jm.model.User;
 import jm.model.Workspace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +12,11 @@ import java.util.List;
 
 @Service
 @Transactional
-public class WorkspaceServiceImpl implements WorkspaceService{
+public class WorkspaceServiceImpl implements WorkspaceService {
+    private static final Logger logger = LoggerFactory.getLogger(WorkspaceServiceImpl.class);
+
     private WorkspaceDAO workspaceDAO;
+
     @Autowired
     public void setWorkspaceDAO(WorkspaceDAO workspaceDAO) {
         this.workspaceDAO = workspaceDAO;
@@ -42,16 +46,4 @@ public class WorkspaceServiceImpl implements WorkspaceService{
     public Workspace getWorkspaceById(Long id) {
         return workspaceDAO.getById(id);
     }
-
-    @Override
-    public Workspace getWorkspaceByName(String name) {
-        return workspaceDAO.getWorkspaceByName(name);
-    }
-
-    @Override
-    public List<Workspace> getWorkspacesByOwner(User user) {
-        return workspaceDAO.getWorkspacesByOwner(user);
-    }
-
-
 }

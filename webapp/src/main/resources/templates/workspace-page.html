@@ -6,6 +6,9 @@
     <title>Workspace Page</title>
     <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="module" th:src="@{/js/workspace-page.js}"></script>
+    <script type="module" th:src="@{/js/input-box.js}" defer></script>
+    <script type="module" th:src="@{/js/message-box.js}" defer></script>
+    <script src="/js/helper_functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
 </head>
@@ -16,21 +19,29 @@
     <div class="workspace-box">
         <h3>Workspace Box</h3>
         <p>-</p>
-        <p><button id="addChannelButton" class="add-channel-button">+ Add new channel</button></p>
+        <p>
+            <button id="addChannelButton" class="add-channel-button">+ Add new channel</button>
+        </p>
         <p>-</p>
         <h3>Channels</h3>
+        <p>-</p>
+        <p><a href="/searchChannel" style="color:#f2f2f2">Search Channel</a>
+        <p>-</p>
         <div id="channel-box" class="channel-box">
         </div>
     </div>
     <div class="chat-box">
-        <div class="message-box">
-            <h3>Message Box</h3>
+        <h3>Message Box</h3>
+        <div class="message-box" id="message-box">
+            <div class="all-messages" id="all-messages">
+
+            </div>
         </div>
         <div class="input-box">
-            <h3>Input Box</h3>
-            <label>
-                <input type="text" class="input-inner-box" placeholder=" input text here">
-            </label>
+            <form id="form_message">
+                <input id="form_message_input" type="text" class="message-input-field" placeholder=" input text here"
+                       autofocus>
+            </form>
         </div>
     </div>
     <div class="info-box">
@@ -48,9 +59,9 @@
                 <h2>Create channel</h2>
             </div>
             <div class="add-channel-modal-body">
-                <p> <b> Name </b> </p>
-                <p> <input type="text" name="name" id="name" class="add-channel-input"> </p>
-                <p> <b> Users </b> </p>
+                <p><b> Name </b></p>
+                <p><input type="text" name="name" id="name" class="add-channel-input"></p>
+                <p><b> Users </b></p>
                 <!--<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>-->
                 <select id="usersList" name="usersList" multiple="multiple">
                     <option value=""> --</option>
@@ -58,7 +69,7 @@
                             th:value="${user.getLogin()}"
                             th:utext="${user.getLogin()}"/>
                 </select>
-                <p> <b> Owner </b> </p>
+                <p><b> Owner </b></p>
                 <!--<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>-->
                 <select id="owner" name="owner">
                     <option value=""> --</option>
@@ -66,16 +77,17 @@
                             th:value="${user.getLogin()}"
                             th:utext="${user.getLogin()}"/>
                 </select>
-                <p> <b> Private </b> </p>
-                <p> <input type="checkbox" name="isPrivate" id="isPrivate" class="add-channel-input"><br> </p>
+                <p><b> Private </b></p>
+                <p><input type="checkbox" name="isPrivate" id="isPrivate" class="add-channel-input"><br></p>
             </div>
             <div class="add-channel-modal-footer">
-                <p> <button type="submit" class="submitCreateChannel"> Add new channel </button> </p>
+                <p>
+                    <button type="submit" class="submitCreateChannel"> Add new channel</button>
+                </p>
             </div>
         </form>
     </div>
 </div>
-
 </body>
 
 </html>

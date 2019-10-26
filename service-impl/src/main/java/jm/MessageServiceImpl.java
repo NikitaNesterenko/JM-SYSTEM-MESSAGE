@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     private MessageDAO messageDAO;
 
@@ -23,10 +23,14 @@ public class MessageServiceImpl implements MessageService {
         this.messageDAO = messageDAO;
     }
 
-
     @Override
     public List<Message> getAllMessages() {
         return messageDAO.getAll();
+    }
+
+    @Override
+    public List<Message> getMessagesByChannelId(Long id) {
+        return messageDAO.getMessagesByChannelId(id);
     }
 
     @Override

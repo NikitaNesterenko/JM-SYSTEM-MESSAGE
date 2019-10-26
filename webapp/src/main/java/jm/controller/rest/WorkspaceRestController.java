@@ -7,10 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/workspace")
+@RequestMapping(value = "/restapi/workspaces/")
 public class WorkspaceRestController {
 
     private WorkspaceService workspaceService;
@@ -20,35 +21,42 @@ public class WorkspaceRestController {
         this.workspaceService = workspaceService;
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Workspace>> allWorkspaces() {
-        List<Workspace> workspaces = null;
-        workspaces = workspaceService.gelAllWorkspaces();
-        return new ResponseEntity<>(workspaces, HttpStatus.OK);
+    @GetMapping(value = "/workspace/{id}")
+    public ResponseEntity<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteWorkspace(@RequestParam("id") Long id) {
+    @PostMapping(value = "/create")
+    public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
+        try {
+            workspaceService.createWorkspace(workspace);
+        } catch (IllegalArgumentException | EntityNotFoundException e) {
+            ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/update")
+    public ResponseEntity updateChannel(@RequestBody Workspace workspace) {
+        try {
+            workspaceService.updateWorkspace(workspace);
+        } catch (IllegalArgumentException | EntityNotFoundException e) {
+            ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity deleteWorkspace(@PathVariable("id") Long id) {
         workspaceService.deleteWorkspace(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<?> createWorkspace(@RequestBody Workspace workspace) {
-        workspaceService.createWorkspace(workspace);
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<Workspace>> getAllWorkspaces() {
+        return new ResponseEntity<>(workspaceService.gelAllWorkspaces(),HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateWorkspace(@RequestBody Workspace workspace) {
-        workspaceService.updateWorkspace(workspace);
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/getById", method = RequestMethod.GET)
-    public ResponseEntity<Workspace> getWorkspaceById(@RequestParam("id") Long id) {
-        Workspace workspace = workspaceService.getWorkspaceById(id);
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
-    }
-
 }

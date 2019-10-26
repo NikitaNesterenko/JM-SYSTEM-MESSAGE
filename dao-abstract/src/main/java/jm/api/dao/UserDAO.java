@@ -18,6 +18,8 @@ public interface UserDAO {
 
     User getUserByLogin(String login);
 
+    User getUserByEmail(String email);
+
     void addRoleForUser(User user, String role);
 
     void updateUserRole(User user, String role);

@@ -1,12 +1,10 @@
 package jm;
 
-import jm.model.User;
 import jm.model.Workspace;
 
 import java.util.List;
 
 public interface WorkspaceService {
-
     List<Workspace> gelAllWorkspaces();
 
     void createWorkspace(Workspace workspace);
@@ -16,9 +14,4 @@ public interface WorkspaceService {
     void updateWorkspace(Workspace workspace);
 
     Workspace getWorkspaceById(Long id);
-
-    Workspace getWorkspaceByName(String name);
-
-    List<Workspace> getWorkspacesByOwner(User user);
-
 }
