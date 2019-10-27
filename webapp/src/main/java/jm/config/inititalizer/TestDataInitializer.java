@@ -44,7 +44,7 @@ public class TestDataInitializer {
             roleOwner.setRole(ownerRole);
             roleDAO.persist(roleOwner);
         }
-        if (roleDAO.getRoleByRolename(userRole) == null){
+        if (roleDAO.getRoleByRolename(userRole) == null) {
             Role roleUser = new Role();
             roleUser.setRole(userRole);
             roleDAO.persist(roleUser);
@@ -55,6 +55,8 @@ public class TestDataInitializer {
         Role role = roleDAO.getRoleByRolename(userRole);
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
+
+        logger.error("Exception to FILE: ", new NoSuchFieldError());
 
         for (int i = 0; i < 15; i++) {
             usersArray[i] = new User("name-" + i, "last-name-" + i, "login-" + i, "mymail" + i + "@testmail.com", "pass-" + i);
