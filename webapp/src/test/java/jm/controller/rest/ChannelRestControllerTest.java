@@ -14,7 +14,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,11 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 
 public class ChannelRestControllerTest {
-    private static final String urlGetChannelById = "/rest/api/channels/";
-    private static final String urlCreateChannel = "/rest/api/channels/create";
-    private static final String urlUpdateChannel = "/rest/api/channels/update";
-    private static final String urlDeleteChannel = "/rest/api/channels/delete/";
-
+    private static final String url = "/restapi/channels/";
     @Mock
     private ChannelService channelService;
 
@@ -46,17 +41,19 @@ public class ChannelRestControllerTest {
     @Test
     public void getChannelById() throws Exception {
         Long testId1 = 1L;
-        mockMvc.perform(get(urlGetChannelById + testId1))
+        final String getUrl = url + "channel/";
+
+        mockMvc.perform(get(getUrl + testId1))
                 .andExpect(status().isOk());
         verify(channelService, times(1)).getChannelById(testId1);
 
         String testId2 = "something_text";
-        mockMvc.perform(get(urlGetChannelById + testId2))
+        mockMvc.perform(get(getUrl + testId2))
                 .andExpect(status().isBadRequest());
         verify(channelService, times(1)).getChannelById(any());
 
         String testId3 = "something text";
-        mockMvc.perform(get(urlGetChannelById + testId3))
+        mockMvc.perform(get(getUrl + testId3))
                 .andExpect(status().isBadRequest());
         verify(channelService, times(1)).getChannelById(any());
 
@@ -68,7 +65,7 @@ public class ChannelRestControllerTest {
         Long testId4 = 2L;
         when(channelService.getChannelById(testId4)).thenReturn(channel);
 
-        MvcResult result = mockMvc.perform(get(urlGetChannelById + testId4))
+        MvcResult result = mockMvc.perform(get(getUrl + testId4))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -82,26 +79,29 @@ public class ChannelRestControllerTest {
 
     @Test
     public void createChannel() throws Exception {
+
+        final String createUrl = url + "create";
+
         Gson gson = new Gson();
         String jsonChannel;
 
         Channel channel = new Channel();
         jsonChannel = gson.toJson(channel);
-        mockMvc.perform(post(urlCreateChannel)
+        mockMvc.perform(post(createUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonChannel))
                 .andExpect(status().isOk());
         verify(channelService, times(1)).createChannel(any());
 
 
-        mockMvc.perform(post(urlCreateChannel))
+        mockMvc.perform(post(createUrl))
                 .andExpect(status().isBadRequest());
         verify(channelService, times(1)).createChannel(any());
 
 
         channel = null;
         jsonChannel = gson.toJson(channel);
-        mockMvc.perform(post(urlCreateChannel)
+        mockMvc.perform(post(createUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonChannel))
                 .andExpect(status().isBadRequest());
@@ -110,7 +110,7 @@ public class ChannelRestControllerTest {
 
         Object notChannelObject = "notChannelObject";
         jsonChannel = gson.toJson(notChannelObject);
-        mockMvc.perform(post(urlCreateChannel)
+        mockMvc.perform(post(createUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonChannel))
                 .andExpect(status().isBadRequest());
@@ -121,26 +121,29 @@ public class ChannelRestControllerTest {
 
     @Test
     public void updateChannel() throws Exception {
+
+        final String updateUrl = url + "update";
+
         Gson gson = new Gson();
         String jsonChannel;
 
         Channel channel = new Channel();
         jsonChannel = gson.toJson(channel);
-        mockMvc.perform(put(urlUpdateChannel)
+        mockMvc.perform(put(updateUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonChannel))
                 .andExpect(status().isOk());
         verify(channelService, times(1)).updateChannel(any());
 
 
-        mockMvc.perform(put(urlUpdateChannel))
+        mockMvc.perform(put(updateUrl))
                 .andExpect(status().isBadRequest());
         verify(channelService, times(1)).updateChannel(any());
 
 
         channel = null;
         jsonChannel = gson.toJson(channel);
-        mockMvc.perform(put(urlUpdateChannel)
+        mockMvc.perform(put(updateUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonChannel))
                 .andExpect(status().isBadRequest());
@@ -149,7 +152,7 @@ public class ChannelRestControllerTest {
 
         Object notChannelObject = "notChannelObject";
         jsonChannel = gson.toJson(notChannelObject);
-        mockMvc.perform(put(urlUpdateChannel)
+        mockMvc.perform(put(updateUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonChannel))
                 .andExpect(status().isBadRequest());
@@ -158,18 +161,21 @@ public class ChannelRestControllerTest {
 
     @Test
     public void deleteChannel() throws Exception {
+
+        final String deleteUrl = url + "delete/";
+
         Long testId1 = 1L;
-        mockMvc.perform(delete(urlDeleteChannel + testId1))
+        mockMvc.perform(delete(deleteUrl + testId1))
                 .andExpect(status().isOk());
         verify(channelService, times(1)).deleteChannel(testId1);
 
         String testId2 = "something_text";
-        mockMvc.perform(delete(urlDeleteChannel + testId2))
+        mockMvc.perform(delete(deleteUrl + testId2))
                 .andExpect(status().isBadRequest());
         verify(channelService, times(1)).deleteChannel(any());
 
         String testId3 = "something text";
-        mockMvc.perform(delete(urlDeleteChannel + testId3))
+        mockMvc.perform(delete(deleteUrl + testId3))
                 .andExpect(status().isBadRequest());
         verify(channelService, times(1)).deleteChannel(any());
 
