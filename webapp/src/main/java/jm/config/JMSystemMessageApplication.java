@@ -27,7 +27,6 @@ import javax.annotation.PostConstruct;
 @ComponentScan("jm")
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
-@EnableWebSecurity
 public class JMSystemMessageApplication {
     private static final Logger logger = LoggerFactory.getLogger(JMSystemMessageApplication.class);
 

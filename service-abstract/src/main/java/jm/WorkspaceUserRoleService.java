@@ -3,7 +3,7 @@ package jm;
 import jm.model.Role;
 import jm.model.Workspace;
 import jm.model.WorkspaceUserRole;
-import org.springframework.security.core.userdetails.User;
+import jm.model.User;
 
 import java.util.Set;
 

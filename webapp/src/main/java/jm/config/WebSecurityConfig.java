@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 
 
 @Configuration
+@EnableWebSecurity
 @ComponentScan(basePackages = {"jm"})
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -55,8 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin()
                 .and()
                     .httpBasic();
-
-
     }
 
 }

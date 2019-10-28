@@ -5,7 +5,7 @@ import jm.api.dao.WorkspaceUserRoleDAO;
 import jm.model.Role;
 import jm.model.Workspace;
 import jm.model.WorkspaceUserRole;
-import org.springframework.security.core.userdetails.User;
+import jm.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
