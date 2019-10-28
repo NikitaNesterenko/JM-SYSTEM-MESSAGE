@@ -5,7 +5,7 @@ import jm.api.dao.WorkspaceUserRoleDAO;
 import jm.model.Role;
 import jm.model.Workspace;
 import jm.model.WorkspaceUserRole;
-import org.springframework.security.core.userdetails.User;
+import jm.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -18,16 +18,44 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @Override
     @SuppressWarnings("unchecked")
     public Set<Role> getRole(Workspace workspace, User user) {
-        List<WorkspaceUserRole> userWorkspacesRoles = entityManager
+        List<WorkspaceUserRole> workspaceUserRoles = entityManager
                 .createQuery("from WorkspaceUserRole where workspace = :workspace and user=:user")
                 .setParameter("workspace", workspace)
                 .setParameter("user", user)
                 .getResultList();
         Set<Role> roles = new HashSet<>();
-        for (WorkspaceUserRole userRole: userWorkspacesRoles) {
-            roles.add(userRole.getRole());
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
+            roles.add(workspaceUserRole.getRole());
         }
         return roles;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Set<User> getUsersByWorkspace(Workspace workspace) {
+        List<WorkspaceUserRole> workspaceUserRoles = entityManager
+                .createQuery("from WorkspaceUserRole where workspace = :workspace")
+                .setParameter("workspace", workspace)
+                .getResultList();
+        Set<User> users = new HashSet<>();
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
+            users.add(workspaceUserRole.getUser());
+        }
+        return users;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Set<Workspace> getWorkspacesByUsers(User user) {
+        List<WorkspaceUserRole> workspaceUserRoles = entityManager
+                .createQuery("from WorkspaceUserRole where user=:user")
+                .setParameter("user", user)
+                .getResultList();
+        Set<Workspace> workspaces = new HashSet<>();
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
+            workspaces.add(workspaceUserRole.getWorkspace());
+        }
+        return workspaces;
     }
 
 }

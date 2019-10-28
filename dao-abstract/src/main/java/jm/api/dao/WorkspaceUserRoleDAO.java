@@ -4,7 +4,7 @@ package jm.api.dao;
 import jm.model.Role;
 import jm.model.Workspace;
 import jm.model.WorkspaceUserRole;
-import org.springframework.security.core.userdetails.User;
+import jm.model.User;
 
 import java.util.List;
 import java.util.Set;
@@ -21,5 +21,9 @@ public interface WorkspaceUserRoleDAO {
     WorkspaceUserRole getById(Long id);
 
     Set<Role> getRole(Workspace workspace, User user);
+
+    Set<User> getUsersByWorkspace(Workspace workspace);
+
+    Set<Workspace> getWorkspacesByUsers(User user);
 
 }
