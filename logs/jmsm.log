@@ -438,3 +438,273 @@
 2019-10-26 12:19:02,942 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
 2019-10-26 12:19:03,284 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
 2019-10-26 12:19:03,722 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.966 seconds (JVM running for 6.529)
+2019-10-28 10:39:41,447 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 5062 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:39:41,450 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:39:41,450 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:39:49,314 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:39:49,793 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:39:50,511 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 10.026 seconds (JVM running for 11.928)
+2019-10-28 10:44:11,352 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 5456 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:44:11,353 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:44:11,354 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:44:16,047 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:44:16,380 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:44:16,818 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.748 seconds (JVM running for 6.27)
+2019-10-28 10:45:35,646 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 5660 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:45:35,648 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:45:35,649 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:45:40,103 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:45:40,422 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:45:41,183 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.827 seconds (JVM running for 6.333)
+2019-10-28 10:49:34,524 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 5993 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:49:34,526 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:49:34,527 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:49:39,506 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:50:49,276 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:50:49,984 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 75.721 seconds (JVM running for 77.188)
+2019-10-28 10:52:38,780 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 6395 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:52:38,782 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:52:38,783 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:52:43,628 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:52:43,967 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:52:44,526 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.034 seconds (JVM running for 6.598)
+2019-10-28 10:55:06,686 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 6583 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:55:06,689 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:55:06,690 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:55:11,457 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:55:23,976 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:55:24,595 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 18.298 seconds (JVM running for 18.999)
+2019-10-28 10:56:56,542 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 6815 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:56:56,544 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:56:56,545 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:57:00,824 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:57:01,142 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:57:01,578 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.318 seconds (JVM running for 5.827)
+2019-10-28 10:58:43,412 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 6996 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 10:58:43,414 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 10:58:43,415 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 10:58:48,227 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 10:58:48,544 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 10:58:49,107 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.976 seconds (JVM running for 6.487)
+2019-10-28 11:01:02,128 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 7199 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:01:02,131 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:01:02,132 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:01:06,383 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:01:06,694 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:01:07,246 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.483 seconds (JVM running for 6.023)
+2019-10-28 11:01:34,658 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 7349 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:01:34,661 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:01:34,662 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:01:39,974 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:01:40,320 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:01:40,947 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.642 seconds (JVM running for 7.309)
+2019-10-28 11:04:23,641 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 7851 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:04:23,643 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:04:23,644 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:04:29,123 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:04:29,470 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:04:30,035 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.678 seconds (JVM running for 7.212)
+2019-10-28 11:08:32,273 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 8128 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:08:32,275 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:08:32,276 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:08:36,721 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:08:37,058 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:08:37,618 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.646 seconds (JVM running for 6.125)
+2019-10-28 11:09:01,798 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 8285 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:09:01,801 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:09:01,807 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:09:06,465 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:09:06,791 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:09:07,424 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.021 seconds (JVM running for 6.743)
+2019-10-28 11:12:45,155 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 8861 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:12:45,157 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:12:45,158 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:12:50,111 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:12:50,445 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:12:51,005 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.141 seconds (JVM running for 6.693)
+2019-10-28 11:15:49,081 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 9131 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:15:49,084 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:15:49,085 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:15:54,315 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:15:54,662 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:15:55,241 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.457 seconds (JVM running for 6.98)
+2019-10-28 11:16:28,670 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 9298 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:16:28,672 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:16:28,673 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:16:33,545 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:16:33,890 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:16:34,516 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.207 seconds (JVM running for 6.842)
+2019-10-28 11:18:31,238 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 9546 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:18:31,241 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:18:31,242 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:18:36,564 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:18:36,883 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:18:37,428 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.5 seconds (JVM running for 7.006)
+2019-10-28 11:19:40,424 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 9735 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:19:40,427 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:19:40,428 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:19:44,969 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:19:45,312 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:19:45,868 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.741 seconds (JVM running for 6.233)
+2019-10-28 11:20:12,966 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 9894 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:20:12,969 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:20:12,970 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:20:18,144 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:20:18,478 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:20:19,106 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.499 seconds (JVM running for 7.185)
+2019-10-28 11:21:58,235 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 10125 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:21:58,238 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:21:58,239 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:22:03,575 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:22:03,915 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:22:04,536 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.644 seconds (JVM running for 7.321)
+2019-10-28 11:23:21,082 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 10340 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:23:21,085 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:23:21,086 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:23:25,513 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:23:25,839 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:23:26,391 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.611 seconds (JVM running for 6.146)
+2019-10-28 11:23:36,587 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 10480 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:23:36,590 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:23:36,592 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:23:41,752 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:23:42,164 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:23:42,791 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.56 seconds (JVM running for 7.214)
+2019-10-28 11:24:13,501 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 10643 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:24:13,503 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:24:13,504 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:24:18,448 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:24:18,782 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:24:19,341 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.116 seconds (JVM running for 6.616)
+2019-10-28 11:24:35,405 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 10789 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:24:35,407 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:24:35,408 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:24:40,188 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:24:40,531 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:24:41,152 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.118 seconds (JVM running for 6.845)
+2019-10-28 11:26:17,554 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 11003 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:26:17,558 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:26:17,559 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:26:22,522 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:26:22,863 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:26:30,079 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 12.859 seconds (JVM running for 13.511)
+2019-10-28 11:27:25,804 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 11318 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:27:25,806 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:27:25,806 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:27:30,603 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:27:30,933 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:27:31,577 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.11 seconds (JVM running for 6.645)
+2019-10-28 11:28:02,508 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 11483 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:28:02,510 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:28:02,511 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:28:07,345 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:28:07,687 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:28:08,320 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.093 seconds (JVM running for 6.664)
+2019-10-28 11:29:25,059 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 11646 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:29:25,062 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:29:25,063 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:29:29,908 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:29:30,234 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:29:30,856 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.08 seconds (JVM running for 6.542)
+2019-10-28 11:30:22,318 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 11813 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:30:22,320 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:30:22,321 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:30:26,863 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:30:27,179 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:30:27,822 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.762 seconds (JVM running for 6.249)
+2019-10-28 11:31:18,123 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 11993 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:31:18,125 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:31:18,126 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:31:23,579 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:31:23,886 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:31:24,513 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.713 seconds (JVM running for 7.219)
+2019-10-28 11:33:47,866 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 12215 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:33:47,867 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:33:47,868 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:33:52,431 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:33:52,761 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:33:53,385 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.805 seconds (JVM running for 6.258)
+2019-10-28 11:35:08,070 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 12393 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:35:08,072 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:35:08,073 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:35:12,779 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:35:13,098 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:35:13,726 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.94 seconds (JVM running for 6.407)
+2019-10-28 11:40:56,132 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 13273 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:40:56,136 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:40:56,137 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:41:01,985 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:41:02,509 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:41:03,452 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 7.848 seconds (JVM running for 8.658)
+2019-10-28 11:44:29,606 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 13941 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:44:29,608 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:44:29,609 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:44:34,466 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:44:34,816 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:44:35,480 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.168 seconds (JVM running for 6.696)
+2019-10-28 11:45:49,303 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 14122 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:45:49,306 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:45:49,307 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:45:53,791 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:45:54,114 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:45:54,741 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.735 seconds (JVM running for 6.277)
+2019-10-28 11:51:05,588 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 14726 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:51:05,590 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:51:05,591 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:51:10,335 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:51:10,669 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:51:11,320 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.023 seconds (JVM running for 6.576)
+2019-10-28 11:51:49,344 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 14941 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:51:49,347 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:51:49,348 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:51:55,018 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:51:55,352 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:52:02,511 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 13.491 seconds (JVM running for 14.152)
+2019-10-28 11:54:09,335 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 15138 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:54:09,337 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:54:09,338 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:54:14,475 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:54:14,812 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:54:15,456 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.419 seconds (JVM running for 6.917)
+2019-10-28 11:56:33,259 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 15925 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:56:33,261 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:56:33,261 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:56:39,245 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:56:39,778 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:56:40,855 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 7.98 seconds (JVM running for 8.59)
+2019-10-28 11:57:39,092 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 16200 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 11:57:39,096 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 11:57:39,097 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 11:57:44,050 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 11:57:44,390 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 11:57:48,288 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 9.51 seconds (JVM running for 10.164)
+2019-10-28 12:01:10,816 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 16909 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 12:01:10,822 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 12:01:10,823 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 12:01:17,563 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 12:01:18,163 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 12:01:44,107 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 34.018 seconds (JVM running for 35.597)
+2019-10-28 12:03:18,841 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 17326 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 12:03:18,844 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 12:03:18,845 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 12:03:23,917 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 12:03:24,234 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 12:03:24,898 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.718 seconds (JVM running for 7.745)
+2019-10-28 12:13:32,180 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 19227 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 12:13:32,182 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 12:13:32,183 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 12:13:36,802 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 12:13:37,138 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 12:13:37,785 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.902 seconds (JVM running for 6.445)
+2019-10-28 12:18:20,709 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 19990 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 12:18:20,711 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 12:18:20,712 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 12:18:25,455 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 12:18:25,806 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 12:18:26,460 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.047 seconds (JVM running for 6.544)
+2019-10-28 12:29:37,706 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 20754 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-28 12:29:37,708 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-28 12:29:37,709 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-28 12:29:42,403 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been started!!!
+2019-10-28 12:29:42,752 INFO jm.config.inititalizer.TestDataInitializer [restartedMain] Data init has been done!!!
+2019-10-28 12:29:43,394 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.979 seconds (JVM running for 6.546)

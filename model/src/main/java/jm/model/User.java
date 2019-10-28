@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {//} implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -116,41 +116,41 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    @JsonIgnore
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
-    }
-
-    @JsonIgnore
-    @Override
-    public String getUsername() {
-        return this.login;
-    }
-
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @JsonIgnore
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @JsonIgnore
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @JsonIgnore
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return this.roles;
+//    }
+//
+//    @JsonIgnore
+//    @Override
+//    public String getUsername() {
+//        return this.login;
+//    }
+//
+//    @JsonIgnore
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @JsonIgnore
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @JsonIgnore
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @JsonIgnore
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 
     @Override
     public boolean equals(Object o) {
