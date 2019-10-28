@@ -13,40 +13,40 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-@Configuration
-@ComponentScan(basePackages = {"jm"})
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserDetailsService userDetailsServiceImpl;
-
-    @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    @SuppressWarnings("deprecation")
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler simpleAuthenticationSuccessHandler() {
-        return new SimpleUrlAuthenticationSuccessHandler();
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/**").permitAll();
-
-    }
-
-}
+//@Configuration
+//@ComponentScan(basePackages = {"jm"})
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
+//public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+//    @Autowired
+//    private UserDetailsService userDetailsServiceImpl;
+//
+//    @Override
+//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+//
+//        auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+//    }
+//
+//    @Bean
+//    @SuppressWarnings("deprecation")
+//    public static NoOpPasswordEncoder passwordEncoder() {
+//        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+//    }
+//
+//    @Bean
+//    public AuthenticationSuccessHandler simpleAuthenticationSuccessHandler() {
+//        return new SimpleUrlAuthenticationSuccessHandler();
+//    }
+//
+//    @Bean
+//    public AccessDeniedHandler accessDeniedHandler() {
+//        return new CustomAccessDeniedHandler();
+//    }
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .antMatchers("/**").permitAll();
+//
+//    }
+//
+//}

@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class SimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-
-        httpServletResponse.sendRedirect("/workspace");
-    }
-
-}
+//public class SimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+//    @Override
+//    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+//
+//        httpServletResponse.sendRedirect("/workspace");
+//    }
+//
+//}
