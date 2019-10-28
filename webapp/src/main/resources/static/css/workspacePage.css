@@ -113,3 +113,12 @@
 .add-channel-button:hover {
     background: #4c1951;
 }
+
+.menu {
+    z-index: 999;
+    border: 1px solid silver;
+    background: white;
+    position: absolute;
+    width: 300px;
+    display: none;
+}
