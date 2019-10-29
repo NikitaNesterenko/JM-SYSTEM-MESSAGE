@@ -26,6 +26,10 @@ public class MainController {
         return modelAndView;
     }
 
+    @GetMapping(value = "/workspace")
+    public ModelAndView workspacePage() {
+        return new ModelAndView("workspace-page.html");
+    }
 
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
