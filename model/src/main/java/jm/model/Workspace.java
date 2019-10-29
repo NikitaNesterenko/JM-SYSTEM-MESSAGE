@@ -52,4 +52,12 @@ public class Workspace {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
+    public Workspace(String name, Set<User> users, Set<Channel> channels, User user, Boolean isPrivate, LocalDateTime createdDate) {
+        this.name = name;
+        this.users = users;
+        this.channels = channels;
+        this.user = user;
+        this.isPrivate = isPrivate;
+        this.createdDate = createdDate;
+    }
 }
