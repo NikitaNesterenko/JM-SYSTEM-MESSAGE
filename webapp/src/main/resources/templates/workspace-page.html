@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <title>Workspace Page</title>
     <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-    <script type="module" th:src="@{/js/workspace-page.js}"></script>
-    <script type="module" th:src="@{/js/input-box.js}" defer></script>
-    <script type="module" th:src="@{/js/message-box.js}" defer></script>
+    <script th:src="@{/js/workspace-page.js}" type="module"></script>
+    <script defer th:src="@{/js/input-box.js}" type="module"></script>
+    <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
+    <script defer th:src="@{/js/message-box.js}" type="module"></script>
     <script src="/js/helper_functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
@@ -20,14 +21,14 @@
         <h3>Workspace Box</h3>
         <p>-</p>
         <p>
-            <button id="addChannelButton" class="add-channel-button">+ Add new channel</button>
+            <button class="add-channel-button" id="addChannelButton">+ Add new channel</button>
         </p>
         <p>-</p>
         <h3>Channels</h3>
         <p>-</p>
         <p><a href="/searchChannel" style="color:#f2f2f2">Search Channel</a>
         <p>-</p>
-        <div id="channel-box" class="channel-box">
+        <div class="channel-box" id="channel-box">
         </div>
     </div>
     <div class="chat-box">
@@ -38,10 +39,21 @@
             </div>
         </div>
         <div class="input-box">
-            <form id="form_message">
-                <input id="form_message_input" type="text" class="message-input-field" placeholder=" input text here"
-                       autofocus>
-            </form>
+            <div class="buttonInside">
+                <form id="form_message">
+                    <input autofocus class="message-input-field" id="form_message_input"
+                           placeholder=" input text here"
+                           type="text"/>
+                </form>
+                <button class="insideInputButton" id="showAssociatedUsers">@</button>
+                <div class="associatedUserList" id="associatedUserList">
+                    <form>
+                        <select id="associatedUserListSelect" multiple name="usersList">
+
+                        </select>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <div class="info-box">
@@ -51,38 +63,38 @@
     </div>
 </div>
 
-<div id="addChannelModal" class="add-channel-modal">
+<div class="add-channel-modal" id="addChannelModal">
     <div class="add-channel-modal-content">
-        <form th:action="@{/workspace/create}" method="post">
+        <form method="post" th:action="@{/workspace/create}">
             <div class="add-channel-modal-header">
                 <span class="addChannelClose">&times;</span>
                 <h2>Create channel</h2>
             </div>
             <div class="add-channel-modal-body">
                 <p><b> Name </b></p>
-                <p><input type="text" name="name" id="name" class="add-channel-input"></p>
+                <p><input class="add-channel-input" id="name" name="name" type="text"></p>
                 <p><b> Users </b></p>
                 <!--<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>-->
-                <select id="usersList" name="usersList" multiple="multiple">
+                <select id="usersList" multiple="multiple" name="usersList">
                     <option value=""> --</option>
                     <option th:each="user : ${listUser}"
-                            th:value="${user.getLogin()}"
-                            th:utext="${user.getLogin()}"/>
+                            th:utext="${user.getLogin()}"
+                            th:value="${user.getLogin()}"/>
                 </select>
                 <p><b> Owner </b></p>
                 <!--<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>-->
                 <select id="owner" name="owner">
                     <option value=""> --</option>
                     <option th:each="user : ${listUser}"
-                            th:value="${user.getLogin()}"
-                            th:utext="${user.getLogin()}"/>
+                            th:utext="${user.getLogin()}"
+                            th:value="${user.getLogin()}"/>
                 </select>
                 <p><b> Private </b></p>
-                <p><input type="checkbox" name="isPrivate" id="isPrivate" class="add-channel-input"><br></p>
+                <p><input class="add-channel-input" id="isPrivate" name="isPrivate" type="checkbox"><br></p>
             </div>
             <div class="add-channel-modal-footer">
                 <p>
-                    <button type="submit" class="submitCreateChannel"> Add new channel</button>
+                    <button class="submitCreateChannel" type="submit"> Add new channel</button>
                 </p>
             </div>
         </form>

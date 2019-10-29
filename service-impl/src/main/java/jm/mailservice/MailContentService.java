@@ -29,4 +29,10 @@ public class MailContentService {
         context.setVariable("inviteLink", inviteLink);
         return templateEngine.process(DIR +"invite-template", context);
     }
+
+    public String buildConfirmationCode (Integer code) {
+        Context context = new Context();
+        context.setVariable("code", code);
+        return templateEngine.process(DIR +"confirm-code-workspace", context);
+    }
 }
