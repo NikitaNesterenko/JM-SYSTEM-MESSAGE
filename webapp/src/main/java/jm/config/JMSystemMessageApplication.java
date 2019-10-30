@@ -35,11 +35,11 @@ public class JMSystemMessageApplication {
         return new MappingJackson2HttpMessageConverter(mapper);
     }
 
-//    @Bean(initMethod = "init")
-//    @PostConstruct
-//    public TestDataInitializer initTestData() {
-//        return new TestDataInitializer();
-//    }
+   @Bean(initMethod = "init")
+   @PostConstruct
+   public TestDataInitializer initTestData() {
+       return new TestDataInitializer();
+   }
 
     public static void main(String[] args) {
         SpringApplication.run(JMSystemMessageApplication.class);
