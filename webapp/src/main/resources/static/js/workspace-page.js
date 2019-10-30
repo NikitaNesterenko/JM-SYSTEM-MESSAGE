@@ -1,5 +1,6 @@
-import {getAllChannels} from "./ajax/channelRestController.js";
+import {ChannelRestPaginationService} from './rest/entities-rest-pagination.js'
 
+const channel_service = new ChannelRestPaginationService();
 
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
@@ -23,8 +24,10 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-    const channels = getAllChannels();
-    $.each(channels, (i, item) => {
-        $('#channel-box').append(`<p><a href="" class="channel-link">${item.name}</a>`);
-    })
+    const channels_promise = channel_service.getAll();
+    channels_promise.then(channels => {         //После того как Чаннелы будут получены, начнется выполнение этого блока
+        $.each(channels, (i, item) => {
+            $('#channel-box').append(`<p><a href="" class="channel-link">${item.name}</a>`);
+        })
+    });
 };
