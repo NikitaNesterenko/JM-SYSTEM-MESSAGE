@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
