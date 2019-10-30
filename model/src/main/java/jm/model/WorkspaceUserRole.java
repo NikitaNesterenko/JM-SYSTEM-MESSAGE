@@ -1,9 +1,11 @@
 package jm.model;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "workspace_user_role")
 public class WorkspaceUserRole implements GrantedAuthority {
@@ -24,47 +26,6 @@ public class WorkspaceUserRole implements GrantedAuthority {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-
-    public WorkspaceUserRole() {
-    }
-
-    public WorkspaceUserRole(Workspace workspace, User user, Role role) {
-        this.workspace = workspace;
-        this.user = user;
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Workspace getWorkspace() {
-        return workspace;
-    }
-
-    public void setWorkspace(Workspace workspace) {
-        this.workspace = workspace;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     @Override
     public String getAuthority() {

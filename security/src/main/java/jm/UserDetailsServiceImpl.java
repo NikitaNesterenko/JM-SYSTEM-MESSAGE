@@ -3,6 +3,8 @@ package jm;
 import jm.model.Role;
 import jm.model.User;
 import jm.model.Workspace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +16,9 @@ import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
+    private final String WITHOUT_WORKSPACE = "REGISTERED";
 
     private UserService userServiceImpl;
     private WorkspaceService workspaceService;
@@ -39,16 +44,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userServiceImpl.getUserByLogin(login);
         org.springframework.security.core.userdetails.User.UserBuilder builder = null;
         if (user != null) {
-            Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
             builder = org.springframework.security.core.userdetails.User.withUsername(login);
             builder.password(user.getPassword());
-            if (workspace != null) {
+            if (workspaceName != null) {
+                Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);
-                System.out.println(authorities);
+                logger.info("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
             } else {
-                builder.authorities("REGISTERED");
-                System.out.println("REGISTERED");
+                builder.authorities(WITHOUT_WORKSPACE);
+                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
             }
         } else {
             throw new UsernameNotFoundException("User not found.");
