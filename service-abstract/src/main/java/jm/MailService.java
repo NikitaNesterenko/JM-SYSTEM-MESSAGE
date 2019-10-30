@@ -1,5 +1,7 @@
 package jm;
 
+import jm.model.CreateWorkspaceToken;
+
 public interface MailService {
     public void sendInviteMessage(
             String nameFrom,
@@ -7,4 +9,6 @@ public interface MailService {
             String emailTo,
             String workspace,
             String inviteLink);
+
+    public CreateWorkspaceToken sendConfirmationCode(String emailTo);
 }
