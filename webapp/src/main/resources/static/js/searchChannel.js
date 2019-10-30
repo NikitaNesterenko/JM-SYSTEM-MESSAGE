@@ -1,7 +1,7 @@
-import {getAllChannels} from "./ajax/channelRestController.js";
 import {findEl} from "./filter-channel.js"
+import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
-
+const user_service = new UserRestPaginationService();
 const filterInput = $('#filter-channel'), filterUl = $('.ul-channel');
 let channelNames = [];
 
@@ -10,10 +10,12 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-    const channels = getAllChannels();
-    $.each(channels, (i, item) => {
-        channelNames.push(`${item.name}`);
-    })
+    const channels_promise = user_service.getAll();
+    channels_promise.then(channels => {         //После того как Чаннелсы будут получены, начнется выполнение этого блока
+        $.each(channels, (i, item) => {
+            channelNames.push(`${item.name}`);
+        })
+    });
 };
 
 
