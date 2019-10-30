@@ -3,6 +3,7 @@ package jm.controller.rest;
 import jm.model.Channel;
 import jm.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +28,14 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createChannel(@RequestBody Channel channel) {
+    public ResponseEntity<Channel> createChannel(@RequestBody Channel channel) {
         try {
             channelService.createChannel(channel);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update")

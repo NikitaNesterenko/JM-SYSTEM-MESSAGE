@@ -2,7 +2,9 @@
 <html class="full-height" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Create a workspace</title>
-    <link rel="stylesheet" th:href="@{css/newWorkspacePage.css}">
+    <link rel="stylesheet" type="text/css" href="css/newWorkspacePage.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script type="module" src="js/createWorkspace/new-wrokspace.js"></script>
     <meta charset="utf-8">
 </head>
 <body class="full-height">
@@ -23,12 +25,12 @@
 
                 <div class="email-form-content">
                     <h1>Create a new workplace</h1>
-                    <label for="signup_email">Your email address</label>
-                    <input type="text" placeholder="you@example.com" id="signup_email"/>
+                    <label for="target-email">Your email address</label>
+                    <input type="text" placeholder="you@example.com" name="signup_email" id="target-email"/>
                 </div>
 
                 <div class="email-form-confirm">
-                    <button class="button-confirm" type="submit">
+                    <button class="button-confirm" type="submit" id="button-email">
                         <span>Next -></span>
                     </button>
                 </div>

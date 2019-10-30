@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="text-align: left;">
+    <div style="max-width:500px;margin:0 auto">
+        <div>
+            <h1 style="font-size:30px;">Confirm your email address</h1>
+        </div>
+        <div style="font-size:17px;">
+            Thank you for signing up for Slack. We’re happy you’re here!
+
+            Enter the following code in the window where you began creating your new Slack workspace:
+        </div>
+        <br>
+        <div style="text-align: center;min-width:380px;min-height: 100px;border-top:16px solid;border-bottom:13px solid;border-right:24px solid;border-left:24px solid;border-color:#2ea664;border-radius:4px;background-color:seashell;color:#000000;font-size:18px;word-break:break-word;text-align:center;font-weight:900;text-decoration:none!important">
+            <h1 th:text="${code}"></h1>
+        </div>
+        <div style="font-size:17px;">
+            This email contains private information for your Slack account — please don’t forward it.
+            Questions about setting up Slack? Email us at feedback@slack.com.
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package test.jm.controller;
+package jm.controller.rest;
 
 import java.util.List;
 

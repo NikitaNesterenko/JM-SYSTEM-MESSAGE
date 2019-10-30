@@ -40,9 +40,9 @@ public class MessageRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createMessage(@RequestBody Message message) {
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")

@@ -42,42 +42,7 @@ public class MainController {
         return new ModelAndView("admin-page");
     }
 
-    @GetMapping(value = "/workspace/new")
-    public ModelAndView workspacePageNew() {
-        return new ModelAndView("new-workspace-page");
-    }
-
-    @GetMapping(value = "/admin/workspaces")
-    public ModelAndView workspaces() {
-        return new ModelAndView("workspaces");
-    }
-
-    @GetMapping(value = "/confirm/email")
-    public String confirmemail() {
-        return "createWorkspace/confirm-email";
-    }
-
-    @GetMapping(value = "/team/name")
-    public String teamName() {
-        return "createWorkspace/team-name";
-    }
-
-    @GetMapping(value = "/channel/name")
-    public String channelName() {
-        return "createWorkspace/channel-name";
-    }
-
-    @GetMapping(value = "/invites")
-    public String invitesPage() {
-        return "createWorkspace/invites-page";
-    }
-
-    @GetMapping(value = "/tada")
-    public String tadaPage() {
-        return "createWorkspace/tada-page";
-    }
-
-    @GetMapping(value = "/search/channel")
+    @GetMapping(value = "/searchChannel")
     public String seachChannelPage() {
         return "search-channel-page";
     }
