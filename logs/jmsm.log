@@ -868,3 +868,11 @@
 2019-10-30 13:54:33,745 INFO jm.config.inititalizer.TestDataSecurityInitializer [restartedMain] Data init has been done!!!
 2019-10-30 13:54:34,507 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 6.225 seconds (JVM running for 6.718)
 2019-10-30 13:55:08,315 INFO jm.UserDetailsServiceImpl [http-nio-8080-exec-10] User login-4 logged in workspace-0 with roles: []
+2019-10-30 20:36:19,312 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting JMSystemMessageApplication on wormogig-VivoBook-15-ASUS-Laptop-X542UF with PID 31887 (/home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE/webapp/target/classes started by wormogig in /home/wormogig/IdeaProjects/Java_Mentor/Project/JM-SYSTEM-MESSAGE)
+2019-10-30 20:36:19,314 DEBUG org.springframework.boot.StartupInfoLogger [restartedMain] Running with Spring Boot v2.1.7.RELEASE, Spring v5.1.9.RELEASE
+2019-10-30 20:36:19,315 INFO org.springframework.boot.SpringApplication [restartedMain] No active profile set, falling back to default profiles: default
+2019-10-30 20:36:24,088 INFO jm.config.inititalizer.TestDataSecurityInitializer [restartedMain] Data init has been started!!!
+2019-10-30 20:36:24,232 INFO jm.config.inititalizer.TestDataSecurityInitializer [restartedMain] Data init has been done!!!
+2019-10-30 20:36:24,960 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started JMSystemMessageApplication in 5.924 seconds (JVM running for 6.483)
+2019-10-30 20:36:50,504 INFO jm.UserDetailsServiceImpl [http-nio-8080-exec-10] User login-0 logged in workspace-0 with roles: [Role(id=2, role=ROLE_OWNER), Role(id=1, role=ROLE_USER)]
+2019-10-30 20:37:17,520 INFO jm.UserDetailsServiceImpl [http-nio-8080-exec-7] User login-0 logged in workspace-1 with roles: [Role(id=1, role=ROLE_USER)]
