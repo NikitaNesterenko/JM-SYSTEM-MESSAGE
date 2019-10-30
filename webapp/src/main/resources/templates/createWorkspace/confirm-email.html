@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Create a Workspace</title>
-    <link rel="stylesheet" th:href="@{/css/confirmEmailPage.css}"/>
+    <link rel="stylesheet" type="text/css" href="css/confirmEmailPage.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script type="module" src="js/createWorkspace/confirm-email.js"></script>
 </head>
 <body>
 <div class="navbar-container">
@@ -15,47 +17,27 @@
     </ul>
 </div>
 
-<div class="form_container">
+<div class="form_container" id="test">
     <form class="email_confirmation_form">
         <h1 style="margin-bottom: 20px">Check your email!</h1>
         <p class="desc margin_bottom_200" style="margin-bottom: 32px">We've sent a 6-digit confirmation code to
-            <strong>alls232323@gmail.com</strong>. It will expire shortly, so enter it soon.
-        </p>
+            <strong>example@mail.com</strong>. It will expire shortly, so enter it soon.</p>
         <div class="confirmation_code_container">
             <div class="confirmation_code_group display_flex">
                 <div class="split_input_item input_wrapper">
-                    <input type="text" class="inline_input" maxlength="1" value="">
-                </div>
-                <div class="split_input_item input_wrapper">
-                    <input type="text" class="inline_input" maxlength="1" value="">
-                </div>
-                <div class="split_input_item input_wrapper">
-                    <input type="text" class="inline_input" maxlength="1" value="">
-                </div>
-            </div>
 
-            <div class="confirmation_code_span_cell">—</div>
+                    <input type="text" class="inline_input" maxlength="1">
+                    <input type="text" class="inline_input" maxlength="1">
+                    <input type="text" class="inline_input" maxlength="1">
+                    <input type="text" class="inline_input" maxlength="1">
+                    <input type="text" class="inline_input" maxlength="1">
+                    <input type="text" class="inline_input" maxlength="1">
 
-
-            <div class="confirmation_code_group display_flex">
-                <div class="split_input_item input_wrapper">
-                    <input type="text" class="inline_input" maxlength="1" value="">
-                </div>
-                <div class="split_input_item input_wrapper">
-                    <input type="text" class="inline_input" maxlength="1" value="">
-                </div>
-                <div class="split_input_item input_wrapper">
-                    <input type="text" class="inline_input" maxlength="1" value="">
                 </div>
             </div>
         </div>
-
         <p class="c-alert confirmation_code_state_message unchecked">
-            <span class="small_desc">Keep this window open while checking for your code. Remember to try your spam folder!</span>
-        </p>
-
-        <p><a href="/team-name">to team page(this link should not exist)</a>
-
+            <span class="small_desc">Keep this window open while checking for your code. Remember to try your spam folder!</span></p>
     </form>
 </div>
 </body>

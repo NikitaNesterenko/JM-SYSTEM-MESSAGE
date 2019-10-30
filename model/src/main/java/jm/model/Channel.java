@@ -48,11 +48,4 @@ public class Channel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
-    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
-        this.name = name;
-        this.users = users;
-        this.user = user;
-        this.isPrivate = isPrivate;
-        this.createdDate = createdDate;
-    }
 }

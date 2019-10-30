@@ -87,21 +87,4 @@ public class User implements UserDetails {
         return true;
     }
 
-    public User(String name, String lastName, String login, String email, String password) {
-        this.name = name;
-        this.lastName = lastName;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(String name, String lastName, String login, String email, String password, Blob avatar, Set<Role> roles) {
-        this.name = name;
-        this.lastName = lastName;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-        this.avatar = avatar;
-        this.roles = roles;
-    }
 }
