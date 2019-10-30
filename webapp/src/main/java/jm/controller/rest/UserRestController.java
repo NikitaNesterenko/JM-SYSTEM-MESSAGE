@@ -47,4 +47,9 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
+    @GetMapping(value = "/channel/{id}")
+    public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
+        return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
+    }
+
 }

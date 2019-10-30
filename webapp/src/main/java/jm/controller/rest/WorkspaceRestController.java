@@ -11,7 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/rest/api/workspaces/")
+@RequestMapping(value = "/rest/api/workspaces")
 public class WorkspaceRestController {
 
     private WorkspaceService workspaceService;
@@ -21,7 +21,7 @@ public class WorkspaceRestController {
         this.workspaceService = workspaceService;
     }
 
-    @GetMapping(value = "/workspace/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
     }

@@ -20,4 +20,5 @@ public interface ChannelDAO {
     Channel getChannelByName(String name);
 
     List<Channel> getChannelsByOwner(User user);
+
 }

@@ -3,7 +3,7 @@ export const getWorkspaceById = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/rest/api/workspaces/workspace/" + id
+        url: "/rest/api/workspaces/" + id
     }).done(function (data) {
         result = data;
     });

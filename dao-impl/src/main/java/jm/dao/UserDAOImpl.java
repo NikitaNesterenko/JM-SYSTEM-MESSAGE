@@ -7,7 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -41,5 +44,22 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public void updateUserRole(User user, String role) {
 
+    }
+
+    @Override
+    public List<User> getAllUsersInThisChannel(Long id) {
+        try {
+            TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
+                    .setParameter(1, id);
+            List<User> userList = query.getResultList();
+            for (User user : userList) {
+                System.out.println(user);
+            }
+
+            return userList;
+
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

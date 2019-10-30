@@ -152,19 +152,19 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        List<Workspace> workspaceList = new ArrayList<>(this.workspaces);
-
-        Set<Workspace> workspaceSet_1 = new HashSet<>();
-        workspaceSet_1.add(workspaceList.get(0));
-        Bot bot_1 = new Bot("Bot_1", workspaceSet_1, LocalDate.now());
-        botDAO.persist(bot_1);
-        this.bots.add(bot_1);
-
-        Set<Workspace> workspaceSet_2 = new HashSet<>();
-        workspaceSet_2.add(workspaceList.get(1));
-        Bot bot_2 = new Bot("Bot_2", workspaceSet_2, LocalDate.now());
-        botDAO.persist(bot_2);
-        this.bots.add(bot_2);
+//        List<Workspace> workspaceList = new ArrayList<>(this.workspaces);
+//
+//        Set<Workspace> workspaceSet_1 = new HashSet<>();
+//        workspaceSet_1.add(workspaceList.get(0));
+//        Bot bot_1 = new Bot("Bot_1", workspaceSet_1, LocalDate.now());
+//        botDAO.persist(bot_1);
+//        this.bots.add(bot_1);
+//
+//        Set<Workspace> workspaceSet_2 = new HashSet<>();
+//        workspaceSet_2.add(workspaceList.get(1));
+//        Bot bot_2 = new Bot("Bot_2", workspaceSet_2, LocalDate.now());
+//        botDAO.persist(bot_2);
+//        this.bots.add(bot_2);
     }
 
 }
