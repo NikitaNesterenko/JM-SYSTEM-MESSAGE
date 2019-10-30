@@ -12,6 +12,9 @@
     <script src="/js/helper_functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/button.css}"/>
+    <script src="/js/displayDiv.js"></script>
+
 </head>
 
 <body>
@@ -33,6 +36,7 @@
     </div>
     <div class="chat-box">
         <h3>Message Box</h3>
+        <div class = "button" onclick='showDiv("info-box")'>Member List</div>
         <div class="message-box" id="message-box">
             <div class="all-messages" id="all-messages">
 
@@ -56,10 +60,16 @@
             </div>
         </div>
     </div>
-    <div class="info-box">
+    <div id="info-box" class="info-box" style="display:none;">
         <h3>Info Box</h3>
         <p>-</p>
-        <p><h3><a href="/searchUsers" >Users</a></h3>
+        <h3>Users</h3>
+        <p>-</p>
+        <p>
+        <h3><a href="/searchUsers">Search User</a></h3>
+        <p>-</p>
+        <div class="user-box" id="user-box">
+        </div>
     </div>
 </div>
 

@@ -10,10 +10,9 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
+    //TODO  channel захардкорен
     const channels = getAllUsersInThisChannel(1);
-    alert(getAllUsersInThisChannel(1));
     $.each(channels, (i, item) => {
-        alert(`${item.name}`)
         channelNames.push(`${item.name}`);
     })
 };

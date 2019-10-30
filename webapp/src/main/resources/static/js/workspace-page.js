@@ -1,4 +1,5 @@
 import {getAllChannels} from "./ajax/channelRestController.js";
+import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 
 window.addEventListener('load', function () {
@@ -20,11 +21,19 @@ window.addEventListener('load', function () {
 
 $(document).ready(() => {
     showAllChannels();
+    showAllUsers();
 });
 
 const showAllChannels = () => {
     const channels = getAllChannels();
     $.each(channels, (i, item) => {
         $('#channel-box').append(`<p><a href="" class="channel-link">${item.name}</a>`);
+    })
+};
+
+const showAllUsers = () => {
+    let channels = getAllUsersInThisChannel(1);
+    $.each(channels, (i, item) => {
+        $('#user-box').append(`<p><a href="" class="user-link">${item.name}</a>`);
     })
 };
