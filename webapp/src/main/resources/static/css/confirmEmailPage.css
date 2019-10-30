@@ -96,7 +96,7 @@ ul.confirm-navbar li.right {
 }
 
 .inline_input {
-    width: 63px;
+    width: 55px;
     height: 33px;
     border: 1px solid rgba(29, 28, 29, .5);
 }
@@ -111,5 +111,23 @@ ul.confirm-navbar li.right {
     font-size: 17px;
     line-height: 1.46668;
     color: #1d1c1d;
+}
+
+.workspace_button {
+    font-size: 18px;
+    font-weight: 900;
+    height: 44px;
+    min-width: 50px;
+    padding: 0 16px 3px;
+    border: none;
+    border-radius: 4px;
+    transition: all 80ms linear;
+    background: #007a5a;
+    color: #fff;
+    box-shadow: none;
+    width: 40%;
+    max-width: 40%;
+    margin-left: 115px;
+    margin-top: 15px;
 }
 
