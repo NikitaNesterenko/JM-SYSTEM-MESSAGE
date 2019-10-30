@@ -39,10 +39,5 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
-        this.channel = channel;
-        this.user = user;
-        this.content = content;
-        this.dateCreate = dateCreate;
-    }
+
 }

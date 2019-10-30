@@ -11,7 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restapi/workspaces/")
+@RequestMapping(value = "/rest/api/workspaces")
 public class WorkspaceRestController {
 
     private WorkspaceService workspaceService;
@@ -21,20 +21,20 @@ public class WorkspaceRestController {
         this.workspaceService = workspaceService;
     }
 
-    @GetMapping(value = "/workspace/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
+    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(workspace, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update")
