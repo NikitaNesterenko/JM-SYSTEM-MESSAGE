@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Create a Workspace</title>
-    <link rel="stylesheet" th:href="@{/css/CreateWorkspaceTadaPage.css}"/>
+    <link rel="stylesheet" type="text/css" href="css/CreateWorkspaceTadaPage.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script type="module" src="/js/createWorkspace/tada-page.js"></script>
 </head>
 <body>
 <div class="navbar-container">
@@ -16,12 +18,12 @@
 
 <div class="form_container">
     <div class="workspace_form">
-        <h1 id="workspace_name_label" class="large_bottom_margin">Tada! Meet your team’s first channel: #Channel name</h1>
+        <h1 id="workspace_name_label" class="large_bottom_margin"></h1>
         <p class="c-alert confirmation_code_state_message unchecked">
             <span class="small_desc">A channel brings together every part of your project – the people,
                 conversations, ideas, updates, and files – so your team can move forward and get more done.</span>
         </p>
-        <form class="confirm_form" action="/workspace">
+        <form class="confirm_form">
             <button class="workspace_button" type="submit">See Your Channel in JM Messanger</button>
         </form>
     </div>

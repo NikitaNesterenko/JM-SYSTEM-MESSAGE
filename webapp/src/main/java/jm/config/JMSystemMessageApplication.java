@@ -4,7 +4,6 @@ package jm.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jm.config.inititalizer.TestDataInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -18,8 +17,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.annotation.PostConstruct;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @EnableJpaRepositories(value = {"jm.dao", "jm.api.dao"})
@@ -39,11 +36,11 @@ public class JMSystemMessageApplication {
         return new MappingJackson2HttpMessageConverter(mapper);
     }
 
-    @Bean(initMethod = "init")
-    @PostConstruct
-    public TestDataInitializer initTestData() {
-        return new TestDataInitializer();
-    }
+//    @Bean(initMethod = "init")
+//    @PostConstruct
+//    public TestDataInitializer initTestData() {
+//        return new TestDataInitializer();
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(JMSystemMessageApplication.class);
