@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import jm.model.Channel;
 import jm.ChannelService;
+import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,4 +60,5 @@ public class ChannelRestController {
     public ResponseEntity<List<Channel>> getAllChannels(){
         return ResponseEntity.ok(channelService.gelAllChannels());
     }
+
 }

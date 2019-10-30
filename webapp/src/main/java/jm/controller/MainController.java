@@ -45,4 +45,9 @@ public class MainController {
     public String seachChannelPage() {
         return "search-channel-page";
     }
+
+    @GetMapping(value = "/searchUsers")
+    public String seachUsersPage() {
+        return "search-users-page";
+    }
 }

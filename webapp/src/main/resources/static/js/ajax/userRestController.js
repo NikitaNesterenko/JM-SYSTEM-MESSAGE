@@ -10,6 +10,18 @@ export const getUsers = () => {
     return result;
 };
 
+export const getAllUsersInThisChannel = (id) => {
+    let result = null;
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: "/restapi/users/channel/" + id
+    }).done(function (data) {
+        result = data;
+    });
+    return result;
+};
+
 export const getUser = (id) => {
     let result = null;
     $.ajax({
