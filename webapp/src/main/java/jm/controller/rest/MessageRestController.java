@@ -60,7 +60,7 @@ public class MessageRestController {
     public ResponseEntity createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
     @PutMapping
