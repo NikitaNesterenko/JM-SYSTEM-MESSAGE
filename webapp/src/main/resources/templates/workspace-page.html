@@ -8,10 +8,16 @@
     <script th:src="@{/js/workspace-page.js}" type="module"></script>
     <script defer th:src="@{/js/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
-    <script defer th:src="@{/js/message-box.js}" type="module"></script>
+    <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script src="/js/helper_functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
+            integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
+            integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
+
+    <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 </head>
 
 <body>
@@ -33,11 +39,25 @@
     </div>
     <div class="chat-box">
         <h3>Message Box</h3>
-        <div class="message-box" id="message-box">
-            <div class="all-messages" id="all-messages">
+<!--        <div class="message-box" id="message-box">-->
+<!--            <div class="all-messages" id="all-messages">-->
 
+<!--            </div>-->
+<!--        </div>-->
+        <div class="message-box" id="message-box">
+            <div class="col-md-12">
+                <table id="conversation" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="messages">
+                    </tbody>
+                </table>
             </div>
         </div>
+
         <div class="input-box">
             <div class="buttonInside">
                 <form id="form_message">
