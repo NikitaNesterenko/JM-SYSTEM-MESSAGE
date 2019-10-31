@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     private final String WITHOUT_WORKSPACE = "REGISTERED";
+
+    @Autowired
+    HttpServletRequest httpServletRequest;
 
     private UserService userServiceImpl;
     private WorkspaceService workspaceService;
@@ -32,6 +37,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String workspaceLogin) throws UsernameNotFoundException {
+        HttpSession httpSession = httpServletRequest.getSession(true);
+        Long workspaceId = (Long) httpSession.getAttribute("workspace");
+/*
         String[] strings = workspaceLogin.split(":");
         String workspaceName = null;
         String login = null;
@@ -41,25 +49,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         } else if (strings.length == 1) {
             login = strings[0];
         }
-        User user = userServiceImpl.getUserByLogin(login);
+*/
+        User user = userServiceImpl.getUserByLogin(workspaceLogin);
         org.springframework.security.core.userdetails.User.UserBuilder builder = null;
         if (user != null) {
-            builder = org.springframework.security.core.userdetails.User.withUsername(login);
+            builder = org.springframework.security.core.userdetails.User.withUsername(workspaceLogin);
             builder.password(user.getPassword());
-            if (workspaceName != null) {
-                Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
+            // if (workspaceName != null) {
+            Workspace workspace = workspaceService.getWorkspaceById(workspaceId);
+            if (workspace != null) {
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);
-                System.out.println("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
+                System.out.println("User " + workspaceLogin + " logged in " + workspace.getName() + " with roles: " + authorities);
 //                logger.info("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
             } else {
                 builder.authorities(WITHOUT_WORKSPACE);
-                System.out.println("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
+                System.out.println("User " + workspaceLogin + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
 //                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
             }
         } else {
             throw new UsernameNotFoundException("User not found.");
         }
         return builder.build();
+
+
     }
 }

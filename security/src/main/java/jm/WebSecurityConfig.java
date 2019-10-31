@@ -2,6 +2,7 @@ package jm;
 
 import jm.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -39,19 +41,66 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new SimpleUrlAuthenticationSuccessHandler();
     }
 
+    @Bean
+    public AuthenticationSuccessHandler jmAuthenticationSuccessHandler() {
+        return new JmAuthenticationSuccessHandler();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().disable();
+
+        http
+                .authorizeRequests()
+                .requestMatchers(PathRequest.toStaticResources()
+                        .atCommonLocations())
+                .permitAll();
+
+        http
+                .authorizeRequests()
+                .antMatchers("/workspace/login").permitAll();
+
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/signin").permitAll();
+
+
+        // Config for Login Form
+
+        http
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                    .formLogin()
+                .formLogin()//
+                // Submit URL of login page.
+                //        .loginProcessingUrl("/perform_login") // Submit URL
+                //        .loginPage("/login")//
+                .usernameParameter("username")//
+                .passwordParameter("password")
+                .successHandler(jmAuthenticationSuccessHandler())
+                //    .failureUrl("/signin")//
                 .and()
-                    .logout()
-                    .permitAll()
+                .logout()
+                .logoutUrl("/perform_logout")
+                .permitAll()
+                .invalidateHttpSession(true)
                 .and()
-                    .httpBasic();
+                .httpBasic();
+
+        /*
+        http
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .httpBasic();
+
+*/
     }
 
 }
