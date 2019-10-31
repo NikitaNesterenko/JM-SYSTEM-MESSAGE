@@ -11,7 +11,7 @@ window.pushMessage = function pushMessage(message) {
     messages_queue_context_user_container.innerHTML = `
                     <div class="message_user_container" id="message_${message.id}_user_${message.user.id}_content">
                         <div id="message_${message.id}_user_${message.user.id}_content_header">
-                            <span class="message__sender">${message.user.name}</span>
+                            <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-toggle="modal">${message.user.name}</a>
                             <a><span class="timestamp__label">${time}</span></a>
                         </div>
                         <span>${message.content}</span>
@@ -34,7 +34,7 @@ window.updateMessages = function updateMessages() {
             messages_queue_context_user_container.innerHTML = `
                     <div class="message_user_container" id="message_${message.id}_user_${message.user.id}_content">
                         <div id="message_${message.id}_user_${message.user.id}_content_header">
-                            <span class="message__sender">${message.user.name}</span>
+                            <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-toggle="modal">${message.user.name}</a>
                             <a><span class="timestamp__label">${time}</span></a>
                         </div>
                         <span>${message.content}</span>
