@@ -125,5 +125,6 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:9.0.22" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:jquery:3.4.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.8" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
   </component>
 </module>
