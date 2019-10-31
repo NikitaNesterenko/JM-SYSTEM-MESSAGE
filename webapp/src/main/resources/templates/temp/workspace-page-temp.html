@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Workspace Temporary Page</title>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/temp/workspace-page-temp.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/css/temp/workspace-page-temp.css}"/>
 </head>
 
@@ -61,7 +63,7 @@
                                 <button class="p-classic_nav__model__title__info__members">
                                     <i class="p-classic_nav__model__title__info__members__icon">👨</i>
                                     &nbsp;
-                                    -<!--                                                             Members Count-->
+                                    -<!--                                                               Members Count-->
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <button class="p-classic_nav__model__title__info__pins">
@@ -153,11 +155,13 @@
                                                 </div>
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
-                                            <div class="p-channel_sidebar__channel">
-                                                <button class="p-channel_sidebar__name_button">
-                                                    <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                    <span class="p-channel_sidebar__name-3">some-channel</span>
-                                                </button>
+                                            <div class="p-channel_sidebar__channels__list" id="id-channel_sidebar__channels__list">
+                                                <!--<div class="p-channel_sidebar__channel">
+                                                    <button class="p-channel_sidebar__name_button">
+                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                                        <span class="p-channel_sidebar__name-3">some-channel</span>
+                                                    </button>
+                                                </div>-->
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
                                             <div class="p-channel_sidebar__add_channel">

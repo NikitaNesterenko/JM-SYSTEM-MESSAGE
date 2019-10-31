@@ -1569,7 +1569,6 @@
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
     box-sizing: inherit;
     height: 26px;
 }
@@ -1583,7 +1582,7 @@
     box-sizing: inherit;
     background: none;
     border: 0;
-    color: inherit;
+    color: rgb(188,171,188);
     font: inherit;
     margin: 0;
     overflow: initial;
@@ -1593,11 +1592,17 @@
     display: block;
     opacity: 1;
     text-align: left;
-    width: 80%;
+    width: 99%;
     transition: color .1s ease-out;
     white-space: nowrap;
     font-weight: 700;
     padding: 0 0 0 20px;
+    outline: none;
+}
+
+.p-channel_sidebar__name_button:focus {
+    color: white;
+    background: royalblue;
 }
 
 .p-channel_sidebar__channel_icon_prefix {
@@ -1629,7 +1634,7 @@
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-size: 15px;
     line-height: 26px;
-    color: rgb(188,171,188);
+    /*color: rgb(188,171,188);*/
     unicode-bidi: -webkit-isolate;
     box-sizing: inherit;
     margin-right: auto;
@@ -1827,7 +1832,7 @@
     flex-shrink: 0;
     color: #2BAC76;
     opacity: 1;
-    padding-bottom: 7px;
+    padding-bottom: 5px;
 }
 
 .p-channel_sidebar__channel_icon_circle:hover {
