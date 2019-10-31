@@ -5,6 +5,7 @@ import jm.ChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restapi/channels/")
+@RequestMapping(value = "/rest/api/channels")
 public class ChannelRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(
@@ -25,7 +26,7 @@ public class ChannelRestController {
     }
 
 
-    @GetMapping(value = "/channel/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
         logger.info("Канал с id: {}",id);
         logger.info(channelService.getChannelById(id).toString());
@@ -33,7 +34,7 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createChannel(@RequestBody Channel channel) {
+    public ResponseEntity<Channel> createChannel(@RequestBody Channel channel) {
         try {
             channelService.createChannel(channel);
             logger.info("Созданный канал: {}",channel);
@@ -42,7 +43,7 @@ public class ChannelRestController {
             ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update")

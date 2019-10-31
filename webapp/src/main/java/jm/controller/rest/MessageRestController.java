@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/rest/api/messages")
 public class MessageRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(
@@ -37,7 +37,7 @@ public class MessageRestController {
         return new ResponseEntity<>(messageService.getAllMessages(), HttpStatus.OK);
     }
 
-    @GetMapping("/channel/{id}")
+    @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<Message>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<Message> messages = messageService.getMessagesByChannelId(id);
         messages.sort(Comparator.comparing(Message::getDateCreate));
@@ -49,21 +49,21 @@ public class MessageRestController {
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
         logger.info("Сообщение с id = {}",id);
         logger.info(messageService.getMessageById(id).toString());
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity createMessage(@RequestBody Message message) {
+    @PostMapping(value = "/create")
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateMessage(@RequestBody Message message) {
         Message existingMessage = messageService.getMessageById(message.getId());
         logger.info("Существующее сообщение: {}",existingMessage);
@@ -77,7 +77,7 @@ public class MessageRestController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteMessage(@PathVariable("id") Long id) {
         messageService.deleteMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
