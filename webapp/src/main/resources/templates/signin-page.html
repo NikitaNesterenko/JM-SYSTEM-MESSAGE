@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Sign In Page</title>
     <link rel="stylesheet" th:href="@{/css/signInPage.css}"/>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="module" th:src="@{/js/signIn.js}"></script>
 </head>
 <body>
 
@@ -31,13 +33,17 @@
             Enter your workspace’s <b>JS-MESSAGE-SYSTEM URL</b>.
         </div>
         <div class="sign-in-input">
-            <input class="your-workspace-url" type="text" placeholder="your-workspace-url"> .jm-message-system.com
+            <input id="workspace" class="your-workspace-url" type="text" placeholder="your-workspace-url"> .jm-message-system.com
         </div>
         <div class="sign-in-btn-box">
-            <button class="sign-in-button" type="submit" name="button">Continue →</button>
+            <button id="sign" class="sign-in-button" name="button" >Continue →</button>
         </div>
     </div>
 </div>
 
 </body>
+
 </html>
+
+
+
