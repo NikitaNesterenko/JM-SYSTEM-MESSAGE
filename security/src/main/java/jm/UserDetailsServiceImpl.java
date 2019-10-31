@@ -50,10 +50,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);
-                logger.info("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
+                System.out.println("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
+//                logger.info("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
             } else {
                 builder.authorities(WITHOUT_WORKSPACE);
-                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
+                System.out.println("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
+//                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
             }
         } else {
             throw new UsernameNotFoundException("User not found.");
