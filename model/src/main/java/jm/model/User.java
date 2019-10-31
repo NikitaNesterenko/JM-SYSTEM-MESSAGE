@@ -106,8 +106,9 @@ public class User {
 //    @OneToMany
 //    private Set<Invitation> invitations;
 
-    @Basic
-    @Column(name = "is_online", nullable = false)
+    // should be optional = false
+//    @Basic(optional = false)
+    @Column(name = "is_online")
     private Integer online;
 
     // TODO платежный статус - Enum(active, inactive)
