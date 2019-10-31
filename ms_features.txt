@@ -1,0 +1,102 @@
+User:
+	- member Id
+	- status (list)
+	- full name
+	- display name
+	- title (what I do?)
+	- phone number
+	- profile photo
+	- time zone
+	- roles
+	- group / groups
+	- user files
+	- starred messages
+	- direct messages
+	- channels / shared channels
+	- workspaces
+	- invitations
+	- online / offline
+	
+	- user plan
+	- / account type == ROLE
+	- billing status (active, inactive)
+	- authentication (2FA - two-factor, SSO, default(email&password))
+	- preferences
+	- / fields dependent on plans
+	
+	
+User plan:
+	- standard
+	- plus
+	- enterprise
+	
+User group:
+	- Name
+	- Handle
+	- Purpose
+	- Icon
+	- members
+	
+Preferences:
+	- notifications
+	- language & Region (language, timezone, keybord layout)
+	- messages (theme, names, additonal options, emoji)
+	- media & links (+ bring emails into Slack)
+	- themes
+	- sidebar settings (appearence, other options)
+	- mark as read (when I view a channel, when I mark everything as read, shortcuts)
+	- accessibility (animation, keybord)
+	- advanced (input options, search options, other options)
+	
+Notifications:
+	- all messages
+	- direct messages, mentions, keywords
+	- nothing
+		- Notify me about replies to threads I'm following
+		- Use different settings for my mobile devices
+
+	
+	- my keywords
+	- do not disturb
+	- sound and appearence
+	- when I'm not active on desktop(mobile or email notifications)
+	
+Account:
+	- settings:
+		- password
+		- 2 factor auth
+		- email address
+		- timezone
+		- language
+		- username
+		- (+ sign out all other sessions0
+	- notifications:
+		- mobile push notifications
+		- email preferences
+	- profile:
+	- access logs 
+	
+Roles:
+	admin:
+		- workspace primary owner, 
+		- workspace owner, 
+		- workspace admin
+	members:
+		- full member, 
+		- guest, 
+		- invited members
+	
+Workspace:
+	- custom emoji
+	- slackbot
+	- loading messages (Custom Messages from channel)
+	- workspace icon
+	- statuses (user can pick one)
+	- channel prefixes (#help, #team ...)
+	- settings & permissions:
+		- settings
+		- permissions
+		- authentication
+		- attachments
+		
+Billing:
