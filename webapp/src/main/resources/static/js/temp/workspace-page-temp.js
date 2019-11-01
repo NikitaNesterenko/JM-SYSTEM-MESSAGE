@@ -1,6 +1,5 @@
 import {getAllChannels} from "./ajax/channelRestControllerTemp.js";
 
-
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
     const btn = document.getElementById("addChannelButton");

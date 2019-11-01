@@ -6,7 +6,13 @@
     <title>Workspace Temporary Page</title>
     <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script th:src="@{/js/temp/workspace-page-temp.js}" type="module"></script>
+    <script defer th:src="@{/js/temp/input-box.js}" type="module"></script>
+    <script defer th:src="@{/js/temp/input-box-at.js}" type="module"></script>
+    <script defer th:src="@{/js/temp/message-box.js}" type="module"></script>
+    <script src="/js/helper_functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/temp/workspace-page-temp.css}"/>
+    <link rel="stylesheet" th:href="@{/css/temp/workspace-page-old.css}"/>
+    <link rel="stylesheet" th:href="@{/css/temp/workspace-add-channel-modal-temp.css}"/>
 </head>
 
 <body class="supports_custom_scrollbar">
@@ -149,20 +155,16 @@
                                                     <button class="p-channel_sidebar__channels__button">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                                id="addChannelButton">✚
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
-                                            <div class="p-channel_sidebar__channels__list" id="id-channel_sidebar__channels__list">
-                                                <!--<div class="p-channel_sidebar__channel">
-                                                    <button class="p-channel_sidebar__name_button">
-                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3">some-channel</span>
-                                                    </button>
-                                                </div>-->
-                                            </div>
+                                            <!--channels list-->
+                                            <div class="p-channel_sidebar__channels__list"
+                                                 id="id-channel_sidebar__channels__list"></div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
                                             <div class="p-channel_sidebar__add_channel">
                                                 <div class="p-channel_sidebar__close_container">
@@ -228,13 +230,44 @@
                     </nav>
                 </div>
             </div>
+
             <div class="p-workspace__primary_view">
                 <div class="p-workspace__primary_view_contents">
                     <div class="p-file_drag_drop__container">
                         <div class="p-workspace__primary_view_body">
-                            <div class="BODY_CLASS">
-                                <!--To do body div-->
+
+                            <div class="c-virtual_list__scroll_container">
+                                <div class="c-virtual_list__item">
+                                    <div class="c-message--light">
+                                        <div class="c-message__gutter--feature_sonic_inputs">
+                                            <button class="c-message__avatar__button">
+                                                <img class="c-avatar__image">
+                                            </button>
+                                        </div>
+
+                                        <!--MESSAGE CONTENT-->
+                                        <div class="c-message__content--feature_sonic_inputs">
+                                            <div class="c-message__content_header">
+                                                <span class="c-message__sender">
+                                                    <a class="c-message__sender_link">
+                                                        Some user
+                                                    </a>
+                                                </span>
+                                                <a class="c-timestamp--static">
+                                                    <span class="c-timestamp__label">
+                                                        11:04 PM
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <span class="c-message__body">
+                                                some message
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                         <footer class="p-workspace__primary_view_footer">
                             <div class="p-message_pane_input">
@@ -246,11 +279,18 @@
                                             <div class="ql-composer"></div>
                                             <div class="ql-buttons">
                                                 <button class="c-texty_input__button--emoji">
-                                                    <i class="c-icon--smile-o">😃</i>
+                                                    <i class="c-icon--smile-o">😊</i>
                                                 </button>
-                                                <button class="c-texty_input__button">
+                                                <button class="c-texty_input__button" id="showAssociatedUsers">
                                                     <i class="c-icon--mentions">@</i>
                                                 </button>
+                                                <div class="associatedUserList" id="associatedUserList">
+                                                    <form>
+                                                        <select class="associatedUserListSelect"
+                                                                id="associatedUserListSelect" multiple
+                                                                name="usersList"></select>
+                                                    </form>
+                                                </div>
                                             </div>
                                             <div class="ql-placeholder">
                                                 <div class="c-texty_input__placeholder">
@@ -273,9 +313,33 @@
                                 </div>
                             </div>
                         </footer>
+
                     </div>
                 </div>
             </div>
+
+            <!--<div class="chat-box">
+                <h3>Message Box</h3>
+                <div class="message-box" id="message-box">
+                    <div class="all-messages" id="all-messages">
+
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="buttonInside">
+                        <form id="form_message">
+                            <input autofocus class="message-input-field" id="form_message_input" placeholder=" input text here" type="text"/>
+                        </form>
+                        <button class="insideInputButton" id="showAssociatedUsers">@</button>
+                        <div class="associatedUserList" id="associatedUserList">
+                            <form>
+                                <select id="associatedUserListSelect" multiple name="usersList"></select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
             <div class="p-workspace__secondary_view">
                 <div class="p-workspace__secondary_view_contents">
                     <div class="p-flexpane__channel_details">
@@ -290,8 +354,6 @@
                             </div>
                         </div>
                         <div class="p-flexpane__body">
-                            <!--To do p-flexpane__body-->
-
                             <div class="p-flexpane__inside_body">
                                 <div class="p-flexpane__inside_body-scrollbar--hidden">
                                     <div class="p-flexpane__inside_body-scrollbar__hider">
@@ -305,84 +367,120 @@
                                                     <i class="p-channel_details_section__caret_icon">►</i>
                                                 </button>
                                             </div>
-
-                                            <!--TO DO-->
-
-                                            <!--<div class="p-channel_details_section p-channel_details__highlights_section">
-                                                <button class="c-button-unstyled p-channel_details_section__header"
-                                                        type="button" aria-expanded="false"><span
-                                                        class="p-channel_details_section__title"><i
-                                                        class="c-icon p-channel_details_section__icon c-icon&#45;&#45;sparkles c-icon&#45;&#45;inline"
-                                                        type="sparkles" aria-hidden="true"></i><span
-                                                        class="p-channel_details_section__title-content">Highlights</span></span><i
-                                                        class="c-icon p-channel_details_section__caret_icon c-icon&#45;&#45;caret-right c-icon&#45;&#45;inline"
-                                                        type="caret-right" aria-hidden="true"></i></button>
+                                            <div class="p-channel_details__highlights_section">
+                                                <button class="p-channel_details_section__header">
+                                                    <span class="p-channel_details_section__title">
+                                                        <i class="p-channel_details_section__icon p-channel_details_section__highlights__icon">✨</i>
+                                                        <span class="p-channel_details_section__title-content">
+                                                            Highlights
+                                                        </span>
+                                                    </span>
+                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                </button>
                                             </div>
-                                            <div class="p-channel_details_section p-channel_details__pinned_items_section">
-                                                <button class="c-button-unstyled p-channel_details_section__header"
-                                                        type="button" aria-expanded="false"><span
-                                                        class="p-channel_details_section__title"><i
-                                                        class="c-icon p-channel_details_section__icon c-icon&#45;&#45;thumb-tack c-icon&#45;&#45;inline"
-                                                        type="thumb-tack" aria-hidden="true"></i><span
-                                                        class="p-channel_details_section__title-content">1 Pinned Item</span></span><i
-                                                        class="c-icon p-channel_details_section__caret_icon c-icon&#45;&#45;caret-right c-icon&#45;&#45;inline"
-                                                        type="caret-right" aria-hidden="true"></i></button>
+                                            <div class="p-channel_details__pinned_items_section">
+                                                <button class="p-channel_details_section__header">
+                                                    <span class="p-channel_details_section__title">
+                                                        <i class="p-channel_details_section__icon p-channel_details_section__pinned_items__icon">📌</i>
+                                                        <span class="p-channel_details_section__title-content">
+                                                            - Pinned Item
+                                                        </span>
+                                                    </span>
+                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                </button>
                                             </div>
-                                            <div class="p-channel_details_section p-channel_details__members_list_section">
-                                                <button class="c-button-unstyled p-channel_details_section__header"
-                                                        type="button" aria-expanded="false"><span
-                                                        class="p-channel_details_section__title"><i
-                                                        class="c-icon p-channel_details_section__icon c-icon&#45;&#45;user c-icon&#45;&#45;inline"
-                                                        type="user" aria-hidden="true"></i><span
-                                                        class="p-channel_details_section__title-content">204 Members</span></span><i
-                                                        class="c-icon p-channel_details_section__caret_icon c-icon&#45;&#45;caret-right c-icon&#45;&#45;inline"
-                                                        type="caret-right" aria-hidden="true"></i></button>
+                                            <div class="p-channel_details__members_list_section">
+                                                <button class="p-channel_details_section__header">
+                                                    <span class="p-channel_details_section__title">
+                                                        <i class="p-channel_details_section__icon p-channel_details_section__members_list__icon">👨</i>
+                                                        <span class="p-channel_details_section__title-content">
+                                                            - Members
+                                                        </span>
+                                                    </span>
+                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                </button>
                                             </div>
-                                            <div class="p-channel_details_section p-channel_details__apps_section">
-                                                <button class="c-button-unstyled p-channel_details_section__header"
-                                                        type="button" aria-expanded="false"><span
-                                                        class="p-channel_details_section__title"><i
-                                                        class="c-icon p-channel_details_section__icon c-icon&#45;&#45;gn-menu c-icon&#45;&#45;inline"
-                                                        type="gn-menu" aria-hidden="true"></i><span
-                                                        class="p-channel_details_section__title-content">Apps</span></span><i
-                                                        class="c-icon p-channel_details_section__caret_icon c-icon&#45;&#45;caret-right c-icon&#45;&#45;inline"
-                                                        type="caret-right" aria-hidden="true"></i></button>
+                                            <div class="p-channel_details__apps_section">
+                                                <button class="p-channel_details_section__header">
+                                                    <span class="p-channel_details_section__title">
+                                                        <i class="p-channel_details_section__icon p-channel_details_section__apps__icon">💻</i>
+                                                        <span class="p-channel_details_section__title-content">
+                                                            Apps
+                                                        </span>
+                                                    </span>
+                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                </button>
                                             </div>
-                                            <div class="p-channel_details_section p-channel_details__shared_files_section">
-                                                <button class="c-button-unstyled p-channel_details_section__header"
-                                                        type="button" aria-expanded="false"><span
-                                                        class="p-channel_details_section__title"><i
-                                                        class="c-icon p-channel_details_section__icon c-icon&#45;&#45;all-files c-icon&#45;&#45;inline"
-                                                        type="all-files" aria-hidden="true"></i><span
-                                                        class="p-channel_details_section__title-content">Shared Files</span></span><i
-                                                        class="c-icon p-channel_details_section__caret_icon c-icon&#45;&#45;caret-right c-icon&#45;&#45;inline"
-                                                        type="caret-right" aria-hidden="true"></i></button>
+                                            <div class="p-channel_details__shared_files_section">
+                                                <button class="p-channel_details_section__header">
+                                                    <span class="p-channel_details_section__title">
+                                                        <i class="p-channel_details_section__icon p-channel_details_section__shared_files__icon">⌨</i>
+                                                        <span class="p-channel_details_section__title-content">
+                                                            Shared Files
+                                                        </span>
+                                                    </span>
+                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                </button>
                                             </div>
-                                            <div class="p-channel_details_section p-channel_details__notification_prefs_section">
-                                                <button class="c-button-unstyled p-channel_details_section__header"
-                                                        type="button" aria-expanded="false"><span
-                                                        class="p-channel_details_section__title"><i
-                                                        class="c-icon p-channel_details_section__icon c-icon&#45;&#45;bell-o c-icon&#45;&#45;inline"
-                                                        type="bell-o" aria-hidden="true"></i><span
-                                                        class="p-channel_details_section__title-content">Notification Preferences</span></span><i
-                                                        class="c-icon p-channel_details_section__caret_icon c-icon&#45;&#45;caret-right c-icon&#45;&#45;inline"
-                                                        type="caret-right" aria-hidden="true"></i></button>
-                                            </div>-->
+                                            <div class="p-channel_details__notification_prefs_section">
+                                                <button class="p-channel_details_section__header">
+                                                    <span class="p-channel_details_section__title">
+                                                        <i class="p-channel_details_section__icon p-channel_details_section__notification_prefs__icon">🔔</i>
+                                                        <span class="p-channel_details_section__title-content">
+                                                            Notification Preferences
+                                                        </span>
+                                                    </span>
+                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div role="presentation" class="c-scrollbar__track">
-                                        <div role="presentation" class="c-scrollbar__bar" tabindex="-1"
-                                             style="height: 636px; transform: translateY(0px);"></div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!--End of p-flexpane__body-->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!--add channel modal-->
+<div class="add-channel-modal" id="addChannelModal">
+    <div class="add-channel-modal-content">
+        <form method="post" th:action="@{/workspace/create}">
+            <div class="add-channel-modal-header">
+                <span class="addChannelClose">&times;</span>
+                <h2>Create channel</h2>
+            </div>
+            <div class="add-channel-modal-body">
+                <p><b> Name </b></p>
+                <p><input class="add-channel-input" id="name" name="name" type="text"></p>
+                <p><b> Users </b></p>
+                <!--<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>-->
+                <select id="usersList" multiple="multiple" name="usersList">
+                    <option value=""> --</option>
+                    <option th:each="user : ${listUser}"
+                            th:utext="${user.getLogin()}"
+                            th:value="${user.getLogin()}"/>
+                </select>
+                <p><b> Owner </b></p>
+                <!--<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>-->
+                <select id="owner" name="owner">
+                    <option value=""> --</option>
+                    <option th:each="user : ${listUser}"
+                            th:utext="${user.getLogin()}"
+                            th:value="${user.getLogin()}"/>
+                </select>
+                <p><b> Private </b></p>
+                <p><input class="add-channel-input" id="isPrivate" name="isPrivate" type="checkbox"><br></p>
+            </div>
+            <div class="add-channel-modal-footer">
+                <p>
+                    <button class="submitCreateChannel" type="submit"> Add new channel</button>
+                </p>
+            </div>
+        </form>
     </div>
 </div>
 
