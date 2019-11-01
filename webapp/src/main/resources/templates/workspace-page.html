@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Workspace Page</title>
+    <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
     <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script th:src="@{/js/workspace-page.js}" type="module"></script>
+    <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
     <script defer th:src="@{/js/message-box.js}" type="module"></script>
@@ -15,6 +17,105 @@
 </head>
 
 <body>
+
+<!-- Small modal -->
+<!-- захардкожена в хлам! нужно расхардкодить :) -->
+<div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <img src="../image/img.JPG" class="img-fluid rounded-top" alt="...">
+            <div class="container">
+                <button type="button" class="btn btn-link">Sasha Grey</button>
+            </div>
+            <div class="container">
+                status
+                <button type="button" class="btn btn-link">Set a status</button>
+            </div>
+            <div class="container-fluid">
+                <div class="row justify-content">
+                    <div class="col-6 py-2">
+                        <button type="button" class="btn btn-light btn-block btn-sm">Message</button>
+                    </div>
+                    <div class="col-6 py-2">
+                        <!--button type="button" class="btn btn-success btn-block btn-sm">Edit Profile</button-->
+
+                        <a href="#modal_2" type="button" class="btn btn-success btn-block btn-sm">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Second modal window-->
+<!-- захардкожена в хлам! нужно расхардкодить :) -->
+<div class="modal fade bd-example-modal-lg" id="modal_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit your profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-8">
+                            <form>
+                                <div class="form-group">
+                                    <label for="full-name">Full name</label>
+                                    <input type="text" class="form-control" id="full-name" placeholder="Full name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="display-name">Display name</label>
+                                    <input type="text" class="form-control" id="display-name" placeholder="Display name">
+                                    <small id="display-name-help" class="form-text text-muted">This could be your first name, or a nickname — however you’d like people to refer to you in Slack.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="what-i-do">What i do</label>
+                                    <input type="text" class="form-control" id="what-i-do" placeholder="What i do">
+                                    <small id="what-i-do-help" class="form-text text-muted">Let people know what you do at Java Mentoring.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone-number">Phone number</label>
+                                    <input type="text" class="form-control" id="phone-number" placeholder="(123) 555-5555">
+                                    <small id="phone-number-help" class="form-text text-muted">Enter a phone number.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time-zone">Time zone</label>
+                                    <select class="form-control">
+                                        <option>Time zone</option>
+                                    </select>
+                                    <small id="time-zone-help" class="form-text text-muted">Your current time zone. Used to send summary and notification emails, for times in your activity feeds, and for reminders.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="skype">Skype</label>
+                                    <input type="text" class="form-control" id="skype" placeholder="Skype">
+                                    <small id="skype-help" class="form-text text-muted">This will be displayed on your profile.</small>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-4">
+                            Profile photo
+                            <img src="../image/img.JPG" class="img-fluid rounded" alt="...">
+                            <div class="pt-2">
+                                <button type="button" class="btn btn-light btn-block">Upload an Image</button>
+                            </div>
+                            <div class="pt-2">
+                                <button type="button" class="btn btn-link btn-block">Remove photo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="workspace-container">
     <div class="workspace-box">
