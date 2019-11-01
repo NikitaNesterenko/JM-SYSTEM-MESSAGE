@@ -59,12 +59,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
-        List<ChannelDTO> channelDTOS = channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
-//        List<ChannelDTO> channelDTOS = new ArrayList<>();
-//        for (Channel channel: channels) {
-//            channelDTOS.add(new ChannelDTO(channel));
-//        }
-        return channelDTOS;
+        return channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
     }
 }
 
