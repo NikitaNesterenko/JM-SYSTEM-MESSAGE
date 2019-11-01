@@ -1,6 +1,6 @@
 package jm;
 
-import jm.DTO.ChannelDTO;
+import jm.model.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
 import jm.model.User;
@@ -59,11 +59,11 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
-        List<Channel> channels = channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
-        List<ChannelDTO> channelDTOS = new ArrayList<>();
-        for (Channel channel: channels) {
-            channelDTOS.add(new ChannelDTO(channel));
-        }
+        List<ChannelDTO> channelDTOS = channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
+//        List<ChannelDTO> channelDTOS = new ArrayList<>();
+//        for (Channel channel: channels) {
+//            channelDTOS.add(new ChannelDTO(channel));
+//        }
         return channelDTOS;
     }
 }

@@ -1,6 +1,6 @@
 package jm;
 
-import jm.DTO.ChannelDTO;
+import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.model.User;
 

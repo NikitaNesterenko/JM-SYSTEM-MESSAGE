@@ -1,6 +1,6 @@
 package jm.controller.rest;
 
-import jm.DTO.ChannelDTO;
+import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;

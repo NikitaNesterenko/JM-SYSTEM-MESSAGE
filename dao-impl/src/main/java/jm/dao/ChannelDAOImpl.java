@@ -2,6 +2,7 @@ package jm.dao;
 
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
+import jm.model.ChannelDTO;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +40,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<Channel> getChannelByWorkspaceAndUser(String workspaceName, String login) {
-        String query = "SELECT ch.id, ch.created_date, ch.is_private, ch.name, ch.owner_id, ch.workspace_id " +
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
+        String query = "SELECT ch.id, ch.name " +
                 "FROM channels_users chu " +
                 "INNER JOIN channels ch ON chu.channel_id = ch.id " +
                 "INNER JOIN workspaces ws ON ch.workspace_id = ws.id " +
@@ -48,7 +49,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 "WHERE (ws.name = :workspace AND ((u.login = :login AND ch.is_private = true) OR ch.is_private = false)) " +
                 "GROUP BY ch.id";
 
-        return entityManager.createNativeQuery(query, Channel.class)
+        return entityManager.createNativeQuery(query, ChannelDTO.class)
                 .setParameter("workspace", workspaceName)
                 .setParameter("login", login)
                 .getResultList();
