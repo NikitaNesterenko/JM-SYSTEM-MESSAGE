@@ -1,6 +1,5 @@
 package jm;
 
-import jm.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +10,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
@@ -37,13 +37,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationSuccessHandler simpleAuthenticationSuccessHandler() {
-        return new SimpleUrlAuthenticationSuccessHandler();
+    public AuthenticationSuccessHandler jmAuthenticationSuccessHandler() {
+        return new JmAuthenticationSuccessHandler();
     }
 
     @Bean
-    public AuthenticationSuccessHandler jmAuthenticationSuccessHandler() {
-        return new JmAuthenticationSuccessHandler();
+    public AuthenticationFailureHandler jmAuthenticationFailureHandler() {
+        return new JmAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new JmAccessDeniedHandler();
     }
 
     @Override
@@ -51,35 +56,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable();
 
+        //For static context - js, css
         http
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources()
                         .atCommonLocations())
                 .permitAll();
 
+        // Anyone not authenticated. Avoid double signin
         http
                 .authorizeRequests()
-                .antMatchers("/workspace/login").permitAll();
+                .antMatchers("/", "/signin").not().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
-        http
-                .authorizeRequests()
-                .antMatchers("/", "/signin").permitAll();
+        // For OWNER only.
+        http.authorizeRequests()
+                .antMatchers("/admin/**").hasRole("OWNER")
+                .anyRequest().authenticated();
 
+        // For USER and OWNER
+        http.authorizeRequests()
+                .antMatchers("/user/**", "/rest/**")
+                .hasAnyRole("OWNER", "USER")
+                .anyRequest().authenticated();
 
         // Config for Login Form
-
         http
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()//
                 // Submit URL of login page.
-                //        .loginProcessingUrl("/perform_login") // Submit URL
+                //        .loginProcessingUrl("/login") // Submit URL
                 //        .loginPage("/login")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 .successHandler(jmAuthenticationSuccessHandler())
-                //    .failureUrl("/signin")//
+                .failureHandler(jmAuthenticationFailureHandler())
                 .and()
                 .logout()
                 .logoutUrl("/perform_logout")

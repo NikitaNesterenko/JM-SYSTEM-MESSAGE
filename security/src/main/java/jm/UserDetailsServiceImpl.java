@@ -38,7 +38,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String workspaceLogin) throws UsernameNotFoundException {
         HttpSession httpSession = httpServletRequest.getSession(true);
-        Long workspaceId = (Long) httpSession.getAttribute("workspace");
+        String workspaceName = (String) httpSession.getAttribute("workspaceName");
+        if(workspaceName==null) workspaceName="workspace-0";
 /*
         String[] strings = workspaceLogin.split(":");
         String workspaceName = null;
@@ -56,7 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             builder = org.springframework.security.core.userdetails.User.withUsername(workspaceLogin);
             builder.password(user.getPassword());
             // if (workspaceName != null) {
-            Workspace workspace = workspaceService.getWorkspaceById(workspaceId);
+            Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
             if (workspace != null) {
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);

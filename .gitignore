@@ -4,6 +4,6 @@ target
 *.iml
 logs
 application.properties
-*.xml
+pom.xml
 
 

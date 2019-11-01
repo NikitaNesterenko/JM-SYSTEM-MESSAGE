@@ -1,7 +1,9 @@
 package jm.controller;
 
+import jm.WorkspaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,20 +17,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class MainController {
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    @Autowired
+    WorkspaceService workspaceService;
 
     @GetMapping(value = "/")
     public String indexPage() {
         return "home-page";
-    }
-
-    @PostMapping(value = "/workspace/login")
-    public ModelAndView workspaceLogin(HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
-        //TODO
-        modelAndView.setViewName("redirect:/workspace");
-        HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("workspace", new Long(3));
-        return modelAndView;
     }
 
     @PostMapping(value = "/workspace/create")

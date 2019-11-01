@@ -15,6 +15,15 @@ public class JmAuthenticationSuccessHandler implements AuthenticationSuccessHand
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         HttpSession session = httpServletRequest.getSession(true);
         Object o = session.getAttribute("workspace");
-        httpServletResponse.sendRedirect("/admin");
+        authentication.getAuthorities().forEach(auth -> {
+            if (auth.getAuthority().equals("ROLE_OWNER")) {
+                try {
+                    httpServletResponse.sendRedirect("/admin");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        if (httpServletResponse.getStatus() != 302) httpServletResponse.sendRedirect("/user");
     }
 }
