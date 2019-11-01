@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import jm.DTO.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class ChannelRestController {
     }
 
     @GetMapping(params = {"workspace", "login"})
-    public ResponseEntity<List<Channel>> getChannelsByWorkspaceAndUser(
+    public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
             @RequestParam("workspace") String workspaceName,
             @RequestParam("login") String login
     ){

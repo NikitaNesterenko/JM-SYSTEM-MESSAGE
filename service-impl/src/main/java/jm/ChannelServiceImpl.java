@@ -1,5 +1,6 @@
 package jm;
 
+import jm.DTO.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
 import jm.model.User;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,8 +58,13 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Channel> getChannelByWorkspaceAndUser(String workspaceName, String login) {
-        return channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
+        List<Channel> channels = channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
+        List<ChannelDTO> channelDTOS = new ArrayList<>();
+        for (Channel channel: channels) {
+            channelDTOS.add(new ChannelDTO(channel));
+        }
+        return channelDTOS;
     }
 }
 
