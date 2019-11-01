@@ -20,4 +20,6 @@ public interface ChannelService {
 
     List<Channel> getChannelsByOwner(User user);
 
+    List<Channel> getChannelByWorkspaceAndUser(String workspaceName, String login);
+
 }

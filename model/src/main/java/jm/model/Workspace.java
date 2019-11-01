@@ -33,10 +33,10 @@ public class Workspace {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
-            inverseJoinColumns = @JoinColumn(name = "channel_id"))
-    private Set<Channel> channels;
+//    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+//    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
+//            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+//    private Set<Channel> channels;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
@@ -54,7 +54,7 @@ public class Workspace {
     public Workspace(String name, Set<User> users, Set<Channel> channels, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
-        this.channels = channels;
+//        this.channels = channels;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
