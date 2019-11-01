@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,17 +29,17 @@ public class MainController {
 
     @GetMapping(value = "/workspace")
     public ModelAndView workspacePage() {
-        return new ModelAndView("workspace-page.html");
+        return new ModelAndView("workspace-page");
     }
 
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
-        return new ModelAndView("signin-page.html");
+        return new ModelAndView("signin-page");
     }
 
     @GetMapping(value = "/admin")
     public ModelAndView adminPage() {
-        return new ModelAndView("admin-page.html");
+        return new ModelAndView("admin-page");
     }
 
     @GetMapping(value = "/searchChannel")
