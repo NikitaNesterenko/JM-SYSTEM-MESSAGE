@@ -1,7 +1,7 @@
 package jm;
 
-import jm.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
@@ -35,23 +37,84 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationSuccessHandler simpleAuthenticationSuccessHandler() {
-        return new SimpleUrlAuthenticationSuccessHandler();
+    public AuthenticationSuccessHandler jmAuthenticationSuccessHandler() {
+        return new JmAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler jmAuthenticationFailureHandler() {
+        return new JmAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new JmAccessDeniedHandler();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().disable();
+
+        //For static context - js, css
+        http
+                .authorizeRequests()
+                .requestMatchers(PathRequest.toStaticResources()
+                        .atCommonLocations())
+                .permitAll();
+
+        // Anyone not authenticated. Avoid double signin
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/signin").not().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+
+        // For OWNER only.
+        http.authorizeRequests()
+                .antMatchers("/admin/**").hasRole("OWNER")
+                .anyRequest().authenticated();
+
+        // For USER and OWNER
+        http.authorizeRequests()
+                .antMatchers("/user/**", "/rest/**")
+                .hasAnyRole("OWNER", "USER")
+                .anyRequest().authenticated();
+
+        // Config for Login Form
+        http
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                    .formLogin()
+                .formLogin()//
+                // Submit URL of login page.
+                //        .loginProcessingUrl("/login") // Submit URL
+                //        .loginPage("/login")//
+                .usernameParameter("username")//
+                .passwordParameter("password")
+                .successHandler(jmAuthenticationSuccessHandler())
+                .failureHandler(jmAuthenticationFailureHandler())
                 .and()
-                    .logout()
-                    .permitAll()
+                .logout()
+                .logoutUrl("/perform_logout")
+                .permitAll()
+                .invalidateHttpSession(true)
                 .and()
-                    .httpBasic();
+                .httpBasic();
+
+        /*
+        http
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .httpBasic();
+
+*/
     }
 
 }
