@@ -1,6 +1,5 @@
 import {getAllChannels} from "./ajax/channelRestController.js";
 
-
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
     const btn = document.getElementById("addChannelButton");
@@ -25,6 +24,11 @@ $(document).ready(() => {
 const showAllChannels = () => {
     const channels = getAllChannels();
     $.each(channels, (i, item) => {
-        $('#channel-box').append(`<p><a href="" class="channel-link">${item.name}</a>`);
+        $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
+                                                    <button class="p-channel_sidebar__name_button">
+                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                                        <span class="p-channel_sidebar__name-3">${item.name}</span>
+                                                    </button>
+                                                  </div>`);
     })
 };
