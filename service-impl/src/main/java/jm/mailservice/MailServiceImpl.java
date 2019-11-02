@@ -1,6 +1,7 @@
 package jm.mailservice;
 
 import jm.MailService;
+import jm.model.CreateWorkspaceToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
@@ -43,5 +44,26 @@ public class MailServiceImpl implements MailService {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
+        int code  = (int) (Math.random() * 999999);
+        String content = mailContentService.buildConfirmationCode(code);
+        MimeMessagePreparator messagePreparator = mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setTo(emailTo);
+            messageHelper.setSubject("Confirmation code");
+            messageHelper.setText(content, true);
+        };
+        try {
+            emailSender.send(messagePreparator);
+            logger.info("Sending confirmation code to " + emailTo + " was successful");
+        } catch (MailException e) {
+            logger.error("Sending confirmation code to " + emailTo + " failed");
+            e.printStackTrace();
+        }
+
+        return new CreateWorkspaceToken(code);
     }
 }

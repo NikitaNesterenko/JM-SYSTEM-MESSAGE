@@ -54,5 +54,6 @@ public class ChannelServiceImpl implements ChannelService {
     public List<Channel> getChannelsByOwner(User user) {
         return channelDAO.getChannelsByOwner(user);
     }
+
 }
 

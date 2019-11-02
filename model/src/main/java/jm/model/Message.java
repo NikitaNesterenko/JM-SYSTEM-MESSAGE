@@ -3,12 +3,17 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "messages")
 public class Message {
@@ -34,81 +39,5 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
-    public Message() {
-    }
 
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
-        this.channel = channel;
-        this.user = user;
-        this.content = content;
-        this.dateCreate = dateCreate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public LocalDateTime getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(LocalDateTime dateCreate) {
-        this.dateCreate = dateCreate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message message = (Message) o;
-        return Objects.equals(id, message.id) &&
-                Objects.equals(channel, message.channel) &&
-                Objects.equals(user, message.user) &&
-                Objects.equals(content, message.content) &&
-                Objects.equals(dateCreate, message.dateCreate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, channel, user, content, dateCreate);
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", channel=" + channel +
-                ", user=" + user +
-                ", content='" + content + '\'' +
-                ", dateCreate=" + dateCreate +
-                '}';
-    }
 }

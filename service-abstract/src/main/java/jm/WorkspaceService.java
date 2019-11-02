@@ -14,4 +14,7 @@ public interface WorkspaceService {
     void updateWorkspace(Workspace workspace);
 
     Workspace getWorkspaceById(Long id);
+
+    Workspace getWorkspaceByName(String name);
+
 }
