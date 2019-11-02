@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/restapi/users/")
+@RequestMapping(value = "/rest/api/users")
 public class UserRestController {
 
     private UserService userService;
@@ -19,18 +19,18 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/users")
+    @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity createUser(@RequestBody User user) {
         userService.createUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
@@ -45,6 +45,11 @@ public class UserRestController {
     public ResponseEntity deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping(value = "/channel/{id}")
+    public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
+        return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
     }
 
 }

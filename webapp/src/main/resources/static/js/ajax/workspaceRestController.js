@@ -3,7 +3,7 @@ export const getWorkspaceById = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/restapi/workspaces/workspace/" + id
+        url: "/rest/api/workspaces/" + id
     }).done(function (data) {
         result = data;
     });
@@ -15,7 +15,7 @@ export const createWorkspace = (workspace) => {
     const jsonWorkspace = JSON.stringify(workspace);
     $.ajax({
         type: 'post',
-        url: "/restapi/workspaces/create",
+        url: "/rest/api/workspaces/create",
         async: false,
         data: jsonWorkspace,
         contentType: "application/json"
@@ -29,7 +29,7 @@ export const updateWorkspace = (workspace) => {
     const jsonWorkspace = JSON.stringify(workspace);
     $.ajax({
         type: 'put',
-        url: "/restapi/workspaces/update",
+        url: "/rest/api/workspaces/update",
         async: false,
         data: jsonWorkspace,
         contentType: "application/json"
@@ -39,7 +39,7 @@ export const updateWorkspace = (workspace) => {
 export const deleteWorkspace = (id) => {
     $.ajax({
         type: 'delete',
-        url: "/restapi/workspaces/delete/" + id,
+        url: "/rest/api/workspaces/delete/" + id,
         async: false
     });
 };
@@ -47,7 +47,7 @@ export const deleteWorkspace = (id) => {
 export const getAllWorkspaces = () => {
     let workspaces = null;
     $.ajax({
-        url: '/restapi/workspaces/',
+        url: '/rest/api/workspaces/',
         async: false,
         type: 'get',
         success: function (response) {

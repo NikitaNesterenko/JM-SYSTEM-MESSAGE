@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bot")
+@RequestMapping("/rest/api/bot")
 public class BotRestController {
 
     BotService botService;
@@ -28,13 +28,13 @@ public class BotRestController {
         return new ResponseEntity<Bot>(botService.getBotById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity createBot(@RequestBody Bot bot) {
         botService.createBot(bot);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateBot(@RequestBody Bot bot) {
         Bot existingBot = botService.getBotById(bot.getId());
         if (existingBot == null) {
@@ -45,7 +45,7 @@ public class BotRestController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteBot(@PathVariable("id") Long id) {
        botService.deleteBot(id);
         return new ResponseEntity(HttpStatus.OK);
