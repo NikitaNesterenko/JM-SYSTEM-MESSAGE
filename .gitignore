@@ -3,4 +3,6 @@
 target
 *.iml
 logs
+application.properties
+
 
