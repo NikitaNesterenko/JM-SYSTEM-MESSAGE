@@ -156,6 +156,20 @@
     padding: 2px;
 }
 
+
+/* .add-channel-button:hover {
+    background: #4c1951;
+}
+
+.menu {
+    z-index: 999;
+    border: 1px solid silver;
+    background: white;
+    position: absolute;
+    width: 300px;
+    display: none;
+} */
+
 .associatedUserList {
     position: absolute;
     left: 5%;
@@ -186,3 +200,4 @@
 }
 
 /*end of button inside input field*/
+
