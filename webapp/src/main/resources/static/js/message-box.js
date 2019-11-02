@@ -43,11 +43,11 @@ window.updateMessages = function updateMessages() {
 
     const messages_promise = message_service.getAllMessagesByChannelId(channel_id);
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
-    messages.forEach(function (message, i) {
-        let messages_queue_context_user_container = document.createElement('div');
-        messages_queue_context_user_container.className = "c-virtual_list__item";
-        const time = message.dateCreate.split(' ')[1];
-        messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+        messages.forEach(function (message, i) {
+            let messages_queue_context_user_container = document.createElement('div');
+            messages_queue_context_user_container.className = "c-virtual_list__item";
+            const time = message.dateCreate.split(' ')[1];
+            messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -71,7 +71,8 @@ window.updateMessages = function updateMessages() {
                                                             </span>
                                                         </div>
                                                     </div>`;
-        message_box.append(messages_queue_context_user_container);
+            message_box.append(messages_queue_context_user_container);
+        });
     });
 };
 
