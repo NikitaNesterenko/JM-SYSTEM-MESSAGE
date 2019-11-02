@@ -6,9 +6,9 @@
     <title>Workspace Temporary Page</title>
     <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script th:src="@{/js/temp/workspace-page-temp.js}" type="module"></script>
-    <script defer th:src="@{/js/temp/input-box.js}" type="module"></script>
-    <script defer th:src="@{/js/temp/input-box-at.js}" type="module"></script>
-    <script defer th:src="@{/js/temp/message-box.js}" type="module"></script>
+    <script defer th:src="@{/js/temp/input-box-temp.js}" type="module"></script>
+    <script defer th:src="@{/js/temp/input-box-at-temp.js}" type="module"></script>
+    <script defer th:src="@{/js/temp/message-box-temp.js}" type="module"></script>
     <script src="/js/helper_functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/temp/workspace-page-temp.css}"/>
     <link rel="stylesheet" th:href="@{/css/temp/workspace-page-old.css}"/>
@@ -230,115 +230,144 @@
                     </nav>
                 </div>
             </div>
-
             <div class="p-workspace__primary_view">
                 <div class="p-workspace__primary_view_contents">
-                    <div class="p-file_drag_drop__container">
-                        <div class="p-workspace__primary_view_body">
+                    <div class="p-workspace__primary_view_body">
+                        <div class="p-message_pane--classic-nav" id="all-messages">
 
-                            <div class="c-virtual_list__scroll_container">
-                                <div class="c-virtual_list__item">
-                                    <div class="c-message--light">
-                                        <div class="c-message__gutter--feature_sonic_inputs">
-                                            <button class="c-message__avatar__button">
-                                                <img class="c-avatar__image">
-                                            </button>
-                                        </div>
+                            <!--MESSAGE CONTENT EXAMPLE
+                            <div class="p-message_pane&#45;&#45;classic-nav__app">
+                                <div class="c-virtual_list__container">
+                                    <div class="c-virtual_list__item">
 
-                                        <!--MESSAGE CONTENT-->
-                                        <div class="c-message__content--feature_sonic_inputs">
-                                            <div class="c-message__content_header">
-                                                <span class="c-message__sender">
-                                                    <a class="c-message__sender_link">
-                                                        Some user
-                                                    </a>
-                                                </span>
-                                                <a class="c-timestamp--static">
-                                                    <span class="c-timestamp__label">
-                                                        11:04 PM
-                                                    </span>
-                                                </a>
+                                        <div class="c-message&#45;&#45;light">
+                                            <div class="c-message__gutter&#45;&#45;feature_sonic_inputs">
+                                                <button class="c-message__avatar__button">
+                                                    <img class="c-avatar__image">
+                                                </button>
                                             </div>
-                                            <span class="c-message__body">
-                                                some message
-                                            </span>
+                                            <div class="c-message__content&#45;&#45;feature_sonic_inputs">
+                                                <div class="c-message__content_header">
+                                                    <span class="c-message__sender">
+                                                        <button class="c-message__sender_link">
+                                                            Some user
+                                                        </button>
+                                                    </span>
+                                                    <a class="c-timestamp&#45;&#45;static">
+                                                        <span class="c-timestamp__label">
+                                                            11:04 PM
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <span class="c-message__body">
+                                                    some message
+                                                </span>
+                                            </div>
                                         </div>
 
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
+                            <div class="resize-triggers">
+                                <div class="expand-trigger">
+                                    <div style="width: 1056px; height: 747px;"></div>
+                                </div>
+                                <div class="contract-trigger"></div>
+                            </div>
                         </div>
-                        <footer class="p-workspace__primary_view_footer">
-                            <div class="p-message_pane_input">
-                                <div class="p-message_pane_input_inner">
-                                    <div class="p-workspace__input">
-                                        <div class="p-message_input_field">
-                                            <div class="ql-editor"></div>
-                                            <div class="ql-clipboard"></div>
-                                            <div class="ql-composer"></div>
-                                            <div class="ql-buttons">
-                                                <button class="c-texty_input__button--emoji">
-                                                    <i class="c-icon--smile-o">😊</i>
-                                                </button>
-                                                <button class="c-texty_input__button" id="showAssociatedUsers">
-                                                    <i class="c-icon--mentions">@</i>
-                                                </button>
+                    </div>
+
+
+
+                    <footer class="p-workspace__primary_view_footer">
+                        <div class="p-message_pane_input">
+                            <div class="p-message_pane_input_inner">
+                                <div class="p-workspace__input">
+
+                                    <div class="p-message_input_field">
+                                        <!--<div class="ql-editor"></div>-->
+                                        <!--<div class="ql-clipboard"></div>-->
+                                        <!--<div class="ql-composer"></div>-->
+
+                                        <!--BUTTONS START-->
+                                        <div class="ql-buttons">
+                                            <button class="c-texty_input__button--emoji">
+                                                <i class="c-icon--smile-o">😊</i>
+                                            </button>
+                                            <button class="c-texty_input__button" id="showAssociatedUsers">
+                                                <i class="c-icon--mentions">@</i>
+                                            </button>
+                                            <div class="associatedUserList" id="associatedUserList">
+                                                <form>
+                                                    <select class="associatedUserListSelect"
+                                                            id="associatedUserListSelect" multiple
+                                                            name="usersList"></select>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!--BUTTONS END-->
+
+                                        <!--<div class="ql-placeholder">
+                                            <div class="c-texty_input__placeholder">
+                                                Message #p_some-channel
+                                            </div>
+                                        </div>-->
+
+                                        <!--<div class="input-box">-->
+                                            <div class="ql-editor">
+                                                <form id="form_message">
+                                                    <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>
+                                                </form>
+                                                <!--<button class="insideInputButton" id="showAssociatedUsers">@</button>
                                                 <div class="associatedUserList" id="associatedUserList">
                                                     <form>
-                                                        <select class="associatedUserListSelect"
-                                                                id="associatedUserListSelect" multiple
-                                                                name="usersList"></select>
+                                                        <select id="associatedUserListSelect" multiple name="usersList"></select>
                                                     </form>
-                                                </div>
+                                                </div>-->
                                             </div>
-                                            <div class="ql-placeholder">
-                                                <div class="c-texty_input__placeholder">
-                                                    Message #p_some-channel
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button class="p-message_input_file_button">
-                                            <i class="c-icon--paperclip">📎</i>
-                                        </button>
-                                        <input type="file" class="p-hidden_file_input" multiple="" aria-hidden="true"
-                                               data-qa="file_upload" tabindex="-1">
+                                        <!--</div>-->
+
                                     </div>
-                                    <div class="p-notification_bar">
-                                        <div class="p-notification_bar__section--left"></div>
-                                        <div class="p-notification_bar__section--right">
-                                            <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>
-                                        </div>
+
+                                    <button class="p-message_input_file_button">
+                                        <i class="c-icon--paperclip">📎</i>
+                                    </button>
+
+                                </div>
+
+                                <div class="p-notification_bar">
+                                    <div class="p-notification_bar__section--left"></div>
+                                    <div class="p-notification_bar__section--right">
+                                        <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>
                                     </div>
                                 </div>
+
                             </div>
-                        </footer>
+                        </div>
+                    </footer>
 
-                    </div>
-                </div>
-            </div>
-
-            <!--<div class="chat-box">
-                <h3>Message Box</h3>
-                <div class="message-box" id="message-box">
-                    <div class="all-messages" id="all-messages">
-
-                    </div>
-                </div>
-                <div class="input-box">
-                    <div class="buttonInside">
-                        <form id="form_message">
-                            <input autofocus class="message-input-field" id="form_message_input" placeholder=" input text here" type="text"/>
-                        </form>
-                        <button class="insideInputButton" id="showAssociatedUsers">@</button>
-                        <div class="associatedUserList" id="associatedUserList">
-                            <form>
-                                <select id="associatedUserListSelect" multiple name="usersList"></select>
+                    <!--
+                    <div class="input-box">
+                        <div class="buttonInside">
+                            <form id="form_message">
+                                <input autofocus class="message-input-field" id="form_message_input" placeholder=" input text here" type="text"/>
                             </form>
+                            <button class="insideInputButton" id="showAssociatedUsers">@</button>
+                            <div class="associatedUserList" id="associatedUserList">
+                                <form>
+                                    <select id="associatedUserListSelect" multiple name="usersList"></select>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                    -->
+
+
+
+
                 </div>
-            </div>-->
+            </div>
 
             <div class="p-workspace__secondary_view">
                 <div class="p-workspace__secondary_view_contents">

@@ -1,59 +1,32 @@
-import {getUsers} from "./ajax/userRestControllerTemp.js";
+import {createMessage} from "./ajax/messageRestControllerTemp.js";
+import {getUser} from "./ajax/userRestControllerTemp.js";
+import {getChannelById} from "./ajax/channelRestControllerTemp.js";
 
-export let users = [];
+const user_id = 1;//Захардкоденные переменные
+const channel_id = 1;//Захардкоденные переменные
 
-window.addEventListener('load', function () {
-    const at = document.getElementById('showAssociatedUsers');
-    const modal = document.getElementById('associatedUserList');
+class Message {
+    constructor(channel, user, content, dateCreate) {
+        this.channel = channel;
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
+}
 
-    // populate select
-    showAllUsers();
-    let isActive = false;
+$('#form_message').submit(function () {
+    const message_input_element = document.getElementById("form_message_input");
+    const text_message = message_input_element.value;
+    message_input_element.value = null;
+    const currentDate = convert_date_to_format_Json(new Date());
 
-    at.onclick = function () {
-        if (isActive === false) {
-            isActive = true;
-            modal.style.display = "block";
-        } else {
-            isActive = false;
-            modal.style.display = "none";
-        }
+    const user = getUser(user_id);
+    const channel = getChannelById(channel_id);
 
-        //предотвращаем переход по ссылке href
-        return false;
-    };
-    // on focus lost
-    // at.onblur = function () {
-    //     modal.style.display = "none";
-    // };
+    const message = new Message(channel, user, text_message, currentDate);
+    pushMessage(message);
+    createMessage(message);
+
+    return false;
 });
-
-// populate options in select html
-const showAllUsers = () => {
-    const users = getUsers();
-    $.each(users, (i, item) => {
-        $('#associatedUserListSelect')
-            .append(
-                `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
-            );
-    });
-};
-
-
-$('#associatedUserListSelect').on('change', function () {
-    let str = "";
-    // For multiple choice
-    $("select option:selected").each(function () {
-        users.push($(this).val());
-        let text = $(this).text();
-        if (text !== ' --') {
-            str += "@" + text + " ";
-        }
-    });
-
-    $('#form_message_input').val(str);
-    document.getElementById('associatedUserList').style.display = "none";
-});
-
-
 

@@ -1920,6 +1920,7 @@
     min-height: 0;
     position: relative;
     box-shadow: none;
+    bottom: 15px;
 }
 
 .p-workspace__primary_view_footer {
@@ -2013,7 +2014,7 @@
     cursor: text;
     outline: none;
     text-align: left;
-    white-space: pre-wrap;
+    /*white-space: pre-wrap;*/
     word-wrap: break-word;
     padding: 0;
     font-variant-ligatures: none;
@@ -2767,18 +2768,10 @@
     color: #ac2b5d;
 }
 
-.c-virtual_list__scroll_container {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
-    box-sizing: inherit;
-    position: relative;
-    height: 849px;
+.c-virtual_list__container {
+    display: flex;
+    align-items: flex-stretch;
+    flex-direction: column;
 }
 
 .c-virtual_list__item {
@@ -2791,13 +2784,32 @@
     font-family: Slack-Lato,appleLogo,sans-serif;
     --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
     box-sizing: inherit;
-    position: absolute;
+    flex: 1;
     width: 100%;
     top: 756px;
 }
 
 .c-virtual_list__item:hover {
     background: #e6e6e6;
+}
+
+.c-message__body {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    unicode-bidi: -webkit-isolate;
+    box-sizing: inherit;
+    width: 100%;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    word-wrap: break-word;
+    margin: 8px 0 -4px;
+    text-align: left;
+    line-height: 2.5;
+    display: inline;
 }
 
 .c-message--light {
@@ -2925,12 +2937,22 @@
     user-select: text;
     font-size: 15px;
     line-height: 1;
-    font-weight: 900;
+    font-weight: 800;
     word-break: break-word;
     box-sizing: inherit;
     text-decoration: none;
     display: inline-block;
     color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.c-message__sender_link:hover {
+    text-decoration: underline;
 }
 
 .c-timestamp--static {
@@ -2962,22 +2984,58 @@
     color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
 }
 
-.c-message__body {
+.p-message_pane--classic-nav {
+    font-size: 15px;
+    line-height: 1.46668;
     font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
-    user-select: text;
-    font-size: 15px;
-    unicode-bidi: -webkit-isolate;
     box-sizing: inherit;
-    display: inline-block;
     width: 100%;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    word-wrap: break-word;
-    margin: 8px 0 -4px;
-    text-align: left;
-    line-height: 1.46668;
+    position: absolute;
+    overflow: hidden;
+    height: auto;
+    bottom: 0;
+    padding-left: 0;
 }
 
+.p-message_pane--classic-nav__app {
+    font-size: 15px;
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    box-sizing: inherit;
+}
+
+.ql-editor__input-field {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    cursor: text;
+    text-align: left;
+    white-space: pre-wrap;
+    font-variant-ligatures: none;
+    tab-size: 8;
+    user-select: text;
+    font-size: 15px;
+    line-height: 1.46668;
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+    width: 95%;
+    height: 100%;
+    outline: none;
+    border-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
