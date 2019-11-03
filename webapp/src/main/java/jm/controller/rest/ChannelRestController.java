@@ -3,6 +3,7 @@ package jm.controller.rest;
 import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
+import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +70,6 @@ public class ChannelRestController {
     ){
         return ResponseEntity.ok(channelService.getChannelByWorkspaceAndUser(workspaceName, login));
     }
+
 
 }

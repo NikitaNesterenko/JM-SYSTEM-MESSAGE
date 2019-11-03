@@ -23,4 +23,5 @@ public interface ChannelDAO {
     List<Channel> getChannelsByOwner(User user);
 
     List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login);
+
 }

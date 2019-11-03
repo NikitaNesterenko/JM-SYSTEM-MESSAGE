@@ -25,9 +25,9 @@ public class UserRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity createUser(@RequestBody User user) {
         userService.createUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/{id}")
@@ -45,6 +45,11 @@ public class UserRestController {
     public ResponseEntity deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping(value = "/channel/{id}")
+    public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
+        return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
     }
 
 }
