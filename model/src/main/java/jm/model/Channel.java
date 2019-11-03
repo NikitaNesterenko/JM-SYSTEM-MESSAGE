@@ -49,4 +49,8 @@ public class Channel {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
+
+    @Basic(optional = true)
+    @Column(name = "topic")
+    private String topic;
 }
