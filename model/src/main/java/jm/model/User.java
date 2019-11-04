@@ -52,6 +52,11 @@ public class User {
     @Column(name = "title")
     private String title;
 
+    // a name, that other users can see
+    @Basic(optional = true)
+    @Column(name = "display_name")
+    private String displayName;
+
     @Basic(optional = true)
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -120,6 +125,10 @@ public class User {
 
     // TODO userPreferences (настройки юзера)
 //    private UserPreferences userPreferences;
+
+    @Basic(optional = true)
+    @Column(name = "skype")
+    private String userSkype;
 
 
 }
