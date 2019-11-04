@@ -1,5 +1,6 @@
-package jm.model;
+package jm.model.WorkspaceApp;
 
+import jm.model.WorkspaceApp.WorkspaceApp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,15 @@ public class Bot {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(targetEntity = Workspace.class)
-    @JoinTable(name = "bots_workspace", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "workspace_id"))
-    private Set<Workspace> workspace;
+//    @ManyToMany(targetEntity = Workspace.class)
+//    @JoinTable(name = "bots_workspace", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "workspace_id"))
+//    private Set<Workspace> workspace;
 
     @Column(name = "date_create", nullable = false)
     private LocalDate createdDate;
+
+    @OneToOne(targetEntity = WorkspaceApp.class)
+    @JoinColumn(name = "bot_owner_id")
+    private WorkspaceApp workspaceApp;
 
 }

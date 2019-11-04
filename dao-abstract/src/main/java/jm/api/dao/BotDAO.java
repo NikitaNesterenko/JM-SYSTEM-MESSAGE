@@ -1,6 +1,6 @@
 package jm.api.dao;
 
-import jm.model.Bot;
+import jm.model.WorkspaceApp.Bot;
 
 import java.util.List;
 

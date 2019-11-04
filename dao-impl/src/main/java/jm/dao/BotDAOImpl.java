@@ -1,7 +1,7 @@
 package jm.dao;
 
 import jm.api.dao.BotDAO;
-import jm.model.Bot;
+import jm.model.WorkspaceApp.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

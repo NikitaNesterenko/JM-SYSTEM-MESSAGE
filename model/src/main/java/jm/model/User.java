@@ -3,6 +3,7 @@ package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -83,4 +85,11 @@ public class User implements UserDetails {
         return true;
     }
 
+    public User(String name, String lastName, String login, String email, String password) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+    }
 }

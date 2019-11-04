@@ -1,7 +1,7 @@
 package jm.controller.rest;
 
 import jm.BotService;
-import jm.model.Bot;
+import jm.model.WorkspaceApp.Bot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
