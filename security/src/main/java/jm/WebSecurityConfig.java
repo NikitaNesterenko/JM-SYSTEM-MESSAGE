@@ -102,7 +102,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .and()
                 .httpBasic();
-
         /*
         http
                 .authorizeRequests()
