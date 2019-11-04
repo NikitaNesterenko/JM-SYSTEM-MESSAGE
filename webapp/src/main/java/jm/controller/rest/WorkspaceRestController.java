@@ -27,14 +27,14 @@ public class WorkspaceRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
+    public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/update")

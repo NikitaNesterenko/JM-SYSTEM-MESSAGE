@@ -1,15 +1,11 @@
 package jm.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -17,11 +13,16 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // TODO memberId
+    /* Member Id 9 digits or characters in upper case like UPLTZ7H60 */
+//    @Column(name = "member_id", nullable = false, updatable = false)
+//    private String memberId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -41,49 +42,84 @@ public class User implements UserDetails {
     @Column(name = "avatar_url")
     private String avatarURL;
 
+    // TODO current user status (status icon, status text, status expire)
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "", referencedColumnName = "id")
+//    private Status currentStatus;
+
+    // User title - What I do (occupation)?
+    @Basic(optional = true)
+    @Column(name = "title")
+    private String title;
+
+    @Basic(optional = true)
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+    // TODO timezone - вычисляется или указывается пользователем
+//    @Basic
+//    @Column(name = "timezone", nullable = false)
+//    private String timeZone;
 
-    @JsonIgnore
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
-    }
+    // TODO user groups many-to-many
+//    @ManyToMany(cascade = CascadeType.REFRESH)
+//    @JoinTable(
+//            name = "user_groups",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "group_id")
+//    )
+//    private Set<Group> groups;
 
-    @JsonIgnore
-    @Override
-    public String getUsername() {
-        return this.login;
-    }
+    // TODO set of UserFiles(id, user, url, created)
+//    @OneToMany(mappedBy = "user")
+//    private Set<UserFile> userFiles;
 
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
+    @OneToMany
+    private Set<Message> starredMessages;
 
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    // TODO список пользователей, с которыми у юзера было прямое общение(?)
+    @OneToMany
+    private Set<User> directMessagesToUsers;
 
-    @JsonIgnore
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    // TODO каналы пользователя, исправить маппинг в Channel
+    // юзер может создавать каналы, либо быть участником (member) в чужих каналах
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_channels",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "channel_id")
+//    )
+//    private Set<Channel> userChannels;
 
-    @JsonIgnore
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+
+//    TODO двухсторонняя связь - исправить мапинг в Workspace
+//    @OneToOne
+//    private Workspace workspace;
+
+    // TODO invitations - список приглашений другим пользователям
+//    @OneToMany
+//    private Set<Invitation> invitations;
+
+    // should be optional = false
+//    @Basic(optional = false)
+    @Column(name = "is_online")
+    private Integer online;
+
+    // TODO платежный статус - Enum(active, inactive)
+//    @Enumerated(EnumType.ORDINAL)
+//    private BillingStatus billingStatus;
+
+    // todo authenticationType - Enum(2FA - two-factor, SSO, default(email&password))
+//    @Enumerated(EnumType.ORDINAL)
+//    private AuthenticationType authenticationType;
+
+    // TODO userPreferences (настройки юзера)
+//    private UserPreferences userPreferences;
+
 
 }

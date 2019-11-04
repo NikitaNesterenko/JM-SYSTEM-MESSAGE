@@ -4,6 +4,7 @@ package jm.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jm.config.inititalizer.TestDataSecurityInitializer;
 import jm.config.inititalizer.TestDataInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +39,17 @@ public class JMSystemMessageApplication {
         return new MappingJackson2HttpMessageConverter(mapper);
     }
 
-   @Bean(initMethod = "init")
-   @PostConstruct
-   public TestDataInitializer initTestData() {
-       return new TestDataInitializer();
-   }
+    @Bean(initMethod = "init")
+    @PostConstruct
+    public TestDataInitializer initTestData() {
+        return new TestDataInitializer();
+    }
+
+    @Bean(initMethod = "init")
+    @PostConstruct
+    public TestDataSecurityInitializer initTestSecurityData() {
+        return new TestDataSecurityInitializer();
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(JMSystemMessageApplication.class);
