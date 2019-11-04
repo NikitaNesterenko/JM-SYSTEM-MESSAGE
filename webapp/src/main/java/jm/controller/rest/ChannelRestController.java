@@ -72,7 +72,6 @@ public class ChannelRestController {
         for (Channel channel: channelService.gelAllChannels()) {
             logger.info(channel.toString());
         }
-        logger.info("-----------------------");
         return ResponseEntity.ok(channelService.gelAllChannels());
     }
 }

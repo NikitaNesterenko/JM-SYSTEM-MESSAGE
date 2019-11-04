@@ -72,7 +72,6 @@ public class WorkspaceRestController {
         for (Workspace workspace : workspaceService.gelAllWorkspaces()) {
             logger.info(workspace.toString());
         }
-        logger.info("-----------------------");
         return new ResponseEntity<>(workspaceService.gelAllWorkspaces(), HttpStatus.OK);
     }
 }

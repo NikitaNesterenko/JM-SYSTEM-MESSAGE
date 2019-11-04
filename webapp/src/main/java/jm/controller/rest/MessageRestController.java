@@ -45,7 +45,6 @@ public class MessageRestController {
         for (Message message: messages) {
             logger.info(message.toString());
         }
-        logger.info("-----------------------");
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 

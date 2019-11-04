@@ -60,4 +60,9 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUserByLogin(email);
     }
 
+    @Override
+    public List<User> getAllUsersInThisChannel(Long id) {
+        return userDAO.getAllUsersInThisChannel(id);
+    }
+
 }

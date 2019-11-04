@@ -30,7 +30,6 @@ public class UserRestController {
         for (User user : userService.getAllUsers()) {
             logger.info(user.toString());
         }
-        logger.info("-----------------------");
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
