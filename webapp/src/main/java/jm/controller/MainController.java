@@ -40,6 +40,11 @@ public class MainController {
         return new ModelAndView("workspace-page");
     }
 
+    @GetMapping(value = "/workspace_temp")
+    public ModelAndView workspaceTempPage() {
+        return new ModelAndView("temp/workspace-page-temp.html");
+    }
+
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
         return new ModelAndView("signin-page");
