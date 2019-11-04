@@ -33,8 +33,6 @@
         <jquery.version>3.4.1</jquery.version>
     </properties>
 
-
-
     <dependencies>
 
         <dependency>
@@ -115,9 +113,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.10</version>
         </dependency>
-
-
-
     </dependencies>
 
 </project>
