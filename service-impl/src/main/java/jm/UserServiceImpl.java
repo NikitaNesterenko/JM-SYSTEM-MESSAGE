@@ -1,6 +1,7 @@
 package jm;
 
 import jm.api.dao.UserDAO;
+import jm.dao.UserDAOImpl;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         return userDAO.getUserByLogin(email);
+    }
+
+    @Override
+    public List<User> getAllUsersInThisChannel(Long id) {
+        return userDAO.getAllUsersInThisChannel(id);
     }
 
 }

@@ -114,7 +114,7 @@ public class CreateWorkspaceRestController {
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         workspaceService.createWorkspace(
-                new Workspace(token.getWorkspaceName(), new HashSet<>(), new HashSet<>(), userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now()));
+                new Workspace(token.getWorkspaceName(), new HashSet<>(), userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now()));
         return new ResponseEntity<>(token.getChannelname(),HttpStatus.OK);
     }
 

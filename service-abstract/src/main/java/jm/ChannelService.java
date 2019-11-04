@@ -1,5 +1,6 @@
 package jm;
 
+import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.model.User;
 
@@ -19,5 +20,7 @@ public interface ChannelService {
     Channel getChannelByName(String name);
 
     List<Channel> getChannelsByOwner(User user);
+
+    List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login);
 
 }
