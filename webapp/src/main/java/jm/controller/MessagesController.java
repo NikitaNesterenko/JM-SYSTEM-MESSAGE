@@ -18,8 +18,9 @@ public class MessagesController {
     @MessageMapping("/message")
     @SendTo("/topic/messages")
     public MessageContent messagesСreation(InputMessage message) throws Exception {
-        return new MessageContent("<b>" + HtmlUtils.htmlEscape(message.getUser().getLogin()) + "</b>       " + HtmlUtils.htmlEscape(message.getDateCreate().toString().replace("T", "   ")) +
-                "<br><br><tr><td>" + HtmlUtils.htmlEscape(message.getInputMassage()) + "<br><br></td></tr>");
+        return new MessageContent("<b>" + HtmlUtils.htmlEscape(message.getUser().getLogin()) + "</b>   " + HtmlUtils.htmlEscape(message.getDateCreate().toString().replace("T", "   ")) +
+                "<br><tr><td>" + HtmlUtils.htmlEscape(message.getInputMassage()) + "<br></td></tr>");
+
     }
 
 }
