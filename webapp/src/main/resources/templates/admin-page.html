@@ -4,196 +4,429 @@
 <head>
     <title>Admin Page</title>
     <meta charset="utf-8">
+
     <link rel="stylesheet" th:href="@{/css/adminPage.css}"/>
+
+    <script type="module" th:src="@{/js/adminPage.js}"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- Дополнительные стили (не обязательно) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+          integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+    <!-- Подключаем jQuery (необходим для Bootstrap JavaScript) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
+
 </head>
 
 <body>
 
-<div class="navbar-container">
-    <ul class="admin-navbar">
-        <div class="admin-navbar-in">
-            <li><a class="active" href="/-">Workspace Name</a></li>
-            <li class="right"><a class="admin-btn" href="/-">Launch</a></li>
-            <li class="right"><a class="nav-btn" href="/-">Help</a></li>
-            <li class="right"><a class="nav-btn" href="/workspace">Workspaces</a></li>
-            <li class="right"><a class="nav-btn" href="/-">Plans</a></li>
+<!-- HTML-код модального окна -->
+<div id="modalEditMemberInfo" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Заголовок модального окна -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">About username</h4>
+            </div>
+            <!-- Основное содержимое модального окна -->
+            <div class="modal-body">
+                <form th:action="@{/}" method="post">
+                    <div class="modal-body" style="overflow-y: auto">
+                        <div class="form-group">
+                            <label for="fullName">Login</label>
+                            <input name="fullName" type="text" class="form-control"
+                                   id="fullName"
+                                   th:value="fullName"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="displayName">Name</label>
+                            <input name="displayName" type="text" class="form-control"
+                                   id="displayName"
+                                   th:value="displayName"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="userName">LastName</label>
+                            <input name="userName" type="text" class="form-control"
+                                   id="userName"
+                                   th:value="userName"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input name="email" type="text" class="form-control"
+                                   id="email"
+                                   th:value="email"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-"
+                                    data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </ul>
+    </div>
 </div>
 
-<div class="admin-box">
+<div id="invitesModal" class="invites-modal">
+    <div class="form_container">
+        <div class="workspace_form">
+            <div class="title">
+                <p>
+                    Workspaces with paid plans can also invite guests, like contractors, vendors,
+                    or clients. See pricing plans
+                </p>
+            </div>
+            <h1 id="workspace_name_label" class="large_bottom_margin">Invite people to test-channel</h1>
+            <div class="form_flex">
 
-    <div class="account-box">
+                <form class="confirm-form" action="/tada">
 
+                    <div class="head_form">
+                        <strong>Email Address</strong>
+                        <strong>Name (optional)</strong>
+                    </div>
+
+                    <div class="content-form-1">
+                        <input type="text" id="inviteEmail_1" class="confirm_input" placeholder="name1@example.com"
+                               value="">
+                        <input type="text" id="inviteName_1" class="confirm_input confirm_input_name"
+                               placeholder="name_1" value="">
+                        <button id="btDeleteMember_1" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-2">
+                        <input type="text" id="inviteEmail_2" class="confirm_input" placeholder="name2@example.com"
+                               value="">
+                        <input type="text" id="inviteName_2" class="confirm_input confirm_input_name"
+                               placeholder="name_2" value="">
+                        <button id="btDeleteMember_2" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-3">
+                        <input type="text" id="inviteEmail_3" class="confirm_input" placeholder="name3@example.com"
+                               value="">
+                        <input type="text" id="inviteName_3" class="confirm_input confirm_input_name"
+                               placeholder="name_3" value="">
+                        <button id="btDeleteMember_3" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <span class="add_row_invites">
+                <button class="link_button" type="button">Add another</button>
+                	or
+                <button class="link_button" type="button">and many at once</button>
+            </span>
+                    <div class="p-invite_channel_picker">
+                        <div>
+                            <label for="channel_picker_dropdown_section">
+                                <span class="c-label_text">Default Channels</span>
+                            </label>
+                            <div id="channel_picker_dropdown_section">
+            			<span class="p-invites_channel_picker_note">
+            				<span>New
+            					<strong>members</strong>
+            					will automatically join <strong>#general</strong>,
+            					<strong>#random</strong>, and
+            					<strong>#test</strong>
+            					channels.</span>
+            				<button class="link_button" type="button">Edit/add
+            				</button>
+            			</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-invite_members_form">
+            	<span>
+            		<button class="c-link--button">
+            			<span>
+            				Share invite link
+            			</span>
+            		</button>
+            	</span>
+                        <button class="invitation_button" type="button">Send Invitations</button>
+                    </div>
+                </form>
+            </div>
+            <hr class="hr-footer">
+            <div class="p-footer">
+                <button class="pending_invites_link c-link--button" type="button">
+                    See pending and accepted invites
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button id="invitesModalClose" class="invites-modal-close" type="button">
+        X
+    </button>
+</div>
+
+<div id="adminPage" class="admin-page">
+
+    <div id="panelAdmin" class="account-box">
         <div class="acc-info-box">
-
-            <div class="acc-image-box">
-                image
-            </div>
-
             <div class="sign-in-box">
-                <p>SIGNED IN AS</p>
-                <p><b>USER NAME</b></p>
+                <div class="avatar-wrap">
+                    <img th:src="@{image/avatar.png}"
+                         alt="avatar"/>
+                </div>
+                <div class="sign-in">
+                    <p>SIGNED IN AS</p>
+                    <p><b>USER NAME</b></p>
+                </div>
             </div>
-
         </div>
 
-        <div class="acc-acc-box">
-            <h6 class="acc-titles">ACCOUNT</h6>
-
-            <button class="btn-1">Back to JM-MESSAGE-SYSTEM</button>
-            <button class="btn-1">Home</button>
-            <button class="btn-1">Account & profile</button>
-            <button class="btn-1">Configure apps</button>
-            <button class="btn-1">Analytics</button>
-            <button class="btn-1">Customize</button>
-            <button class="btn-1">About this Workspace</button>
-        </div>
-
-        <div class="acc-admin-box">
-            <h6 class="acc-titles">ADMINISTRATION</h6>
-
-            <button class="btn-2">Settings & permissions</button>
-            <button class="btn-2">Manage members</button>
-            <button class="btn-2">User groups</button>
-            <button class="btn-2">Invitations</button>
-            <button class="btn-2">Billing</button>
-            <button class="btn-2">Authentication</button>
-            <button class="btn-2">Support for Transport Layer Security (TLS)</button>
-        </div>
-
-        <div class="acc-other-box">
-            <h6 class="acc-titles">OTHER</h6>
-
-            <button class="btn-3">Tour</button>
-            <button class="btn-3">Download apps</button>
-            <button class="btn-3">Brand guidlines</button>
-            <button class="btn-3">Configure apps</button>
-            <button class="btn-3">Help</button>
-            <button class="btn-3">API</button>
-        </div>
-
+        <ul class="acc-acc-box primary_nav">
+            <h3 class="acc-titles">ACCOUNT</h3>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-hand-left" aria-hidden="true" style="color: black"></i>
+                    Back to JM-MESSAGE-SYSTEM
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-home" aria-hidden="true"></i>
+                    Home
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+                    Account & profile
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i>
+                    Configure apps
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-stats" aria-hidden="true"></i>
+                    Analytics
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-tasks" aria-hidden="true"></i>
+                    Customize
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i>
+                    About this Workspace
+                </a>
+            </li>
+        </ul>
+        <ul class="acc-admin-box secondary_nav">
+            <h3 class="acc-titles">ADMINISTRATION</h3>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-cog" aria-hidden="true"></i>
+                    Settings & permissions
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-briefcase" aria-hidden="true"></i>
+                    Manage members
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+                    User groups
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                    Invitations
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-book" aria-hidden="true"></i>
+                    Billing
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-lock" aria-hidden="true"></i>
+                    Authentication
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i class="glyphicon glyphicon-bell" aria-hidden="true"></i>
+                    Support for Transport Layer Security (TLS)
+                </a>
+            </li>
+        </ul>
+        <ul class="acc-other-box secondary_nav">
+            <h3 class="acc-titles">OTHER</h3>
+            <li class="btn-3">Tour</li>
+            <li class="btn-3">Download apps</li>
+            <li class="btn-3">Brand guidlines</li>
+            <li class="btn-3">Configure apps</li>
+            <li class="btn-3">Help</li>
+            <li class="btn-3">API</li>
+        </ul>
     </div>
 
-    <div class="info-box">
+    <div class="admin-box">
 
-        <div class="user-box">
+        <div class="info-box">
+            <div class="navbar-container">
+                <div class="main-menu-wrapper">
+                    <a id="mainMenu" class="main-menu">
+                        <img th:src="@{image/menu.png}" class="image-menu"
+                             alt="admin-menu"/>
+                        <span class="header-menu">Menu</span>
+                    </a>
+                    <h3 class="channel-name">
+                        <a>
+                            <i class="glyphicon glyphicon-home" aria-hidden="true"></i>
+                            Channel-NAME
+                        </a>
+                    </h3>
+                </div>
+                <div class="admin-navbar-in">
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i class="glyphicon glyphicon-plane" aria-hidden="true"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Plans</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i class="glyphicon glyphicon-th-large" aria-hidden="true"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Workspaces</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Help</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Launch</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="user-box">
 
-            <div class="inside-user-box">
+                <div class="inside-user-box">
 
-                <div class="manage-search-box">
-
-                    <div class="manage-memebers-box">
-                        <b>Manage members</b>
+                    <div class="p-admin-table-info">
+                <span>
+                    Looking to use Slack with people outside your organization?
+                    Give external teams or individuals restricted access to your workspace.
+                    <a class="c-link" target="_blank" href="">Learn more</a>
+                </span>
                     </div>
 
-                    <div class="search-memebers-box">
+                    <div class="manage-search-box">
 
-                        <form class="search-form" action="/-">
-                            <button class="search-button" type="submit">Search</button>
-                            <input class="search-input" type="text" placeholder="Search current members" name="search">
-                        </form>
+                        <div class="manage-members-box">
+                            Manage members
+                        </div>
+
+                        <div class="invite-button-box">
+                            <div class="invite-button-box-wrap">
+                                <div id="addInvites" class="invite-button">
+                                    <span class="label-invite-btn">Invite People</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="manage-filter-box">
+
+                        <div class="search-members-box">
+
+                            <div class="search-form">
+                                <i class="glyphicon glyphicon-search icon-search" aria-hidden="true"></i>
+                                <!--                        <button class="search-button" type="submit">Search</button>-->
+                                <input id="searchValue" class="search-input" type="text"
+                                       placeholder="Search current members" name="search">
+                            </div>
+
+                        </div>
+
+                        <div class="invite-filters-box">
+
+                            <div class="filters-box">
+                                <div id="showFilters" class="filters-select" type="button">
+                                    <div class="filters-select-text">
+                                        <span class="label-filters-btn">Filters</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="scroll-table">
+                    <div class="members-table">
+                        <div class="members-table-row-wrapper">
+                            <div class="row-group-header-wrapper">
+                                <div class="row-group-header-column-name">
+                                    <span>Login</span>
+                                </div>
+                                <div class="row-group-header-column-name">
+                                    <span>Name</span>
+                                </div>
+                                <div class="row-group-header-column-name">
+                                    <span>LastName</span>
+                                </div>
+                                <div class="row-group-header-column-name">
+                                    <span>Email</span>
+                                </div>
+                                <div class="row-group-header-column-name">
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div id="rowGroupContentRow" class="row-group-content-wrapper">
+                            </div>
+                        </div>
 
                     </div>
 
                 </div>
 
-                <div class="invite-filters-box">
-
-                    <div class="invite-button-box">
-                        <button class="invite-button" type="button">Invite People</button>
-                    </div>
-
-                    <div class="filters-box">
-                        <select class="filters-select">
-                            <option>Filters</option>
-                        </select>
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
-
-        <div class="users-box">
-
-            <div class="table-box">
-
-                <table class="user-table bordered">
-                    <tr>
-                        <th>Name</th>
-                        <th>Account type</th>
-                        <th>Billing status</th>
-                        <th>Authentication</th>
-                        <th> </th>
-                    </tr>
-                    <tr>
-                        <td>Test Name1</td>
-                        <td>Full memeber</td>
-                        <td>Inactive</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name2</td>
-                        <td>Full memeber</td>
-                        <td>Active</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name3</td>
-                        <td>Full memeber</td>
-                        <td>Inactive</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name4</td>
-                        <td>Full memeber</td>
-                        <td>Active</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name5</td>
-                        <td>Full memeber</td>
-                        <td>Inactive</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name6</td>
-                        <td>Full memeber</td>
-                        <td>Active</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name7</td>
-                        <td>Full memeber</td>
-                        <td>Inactive</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                    <tr>
-                        <td>Test Name8</td>
-                        <td>Full memeber</td>
-                        <td>Active</td>
-                        <td>Default</td>
-                        <th>...</th>
-                    </tr>
-                </table>
-
-            </div>
-
-        </div>
-
     </div>
-
 </div>
-
 </body>
 
 </html>
