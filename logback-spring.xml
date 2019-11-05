@@ -38,7 +38,7 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <logger name="jm" level="ERROR" additivity="false">
+    <logger name="jm" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>

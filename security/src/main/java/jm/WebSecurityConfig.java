@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 
 @Configuration
@@ -45,17 +46,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationFailureHandler jmAuthenticationFailureHandler() {
         return new JmAuthenticationFailureHandler();
     }
-
+/*
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new JmAccessDeniedHandler();
     }
-
+*/
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+/*
         http
                 .csrf().disable();
+*/
+
+        http
+                .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
         //For static context - js, css
         http
@@ -68,8 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/signin").not().authenticated()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                ;
+     //           .and()
+      //          .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         // For OWNER only.
         http.authorizeRequests()

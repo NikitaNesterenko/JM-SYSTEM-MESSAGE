@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -26,11 +28,16 @@ public class MainController {
         return "home-page";
     }
 
-   /*
-    @GetMapping(value = "/workspace_temp")
-    public ModelAndView workspaceTempPage() {
-        return new ModelAndView("temp/workspace-page-temp.html");
-*/
+    /*
+     @GetMapping(value = "/workspace_temp")
+     public ModelAndView workspaceTempPage() {
+         return new ModelAndView("temp/workspace-page-temp.html");
+ */
+    @GetMapping(value = "/csrf")
+    public ModelAndView csrfTest() {
+        return new ModelAndView("logout.html");
+    }
+
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
         return new ModelAndView("signin-page");
