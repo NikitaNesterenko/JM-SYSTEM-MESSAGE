@@ -256,7 +256,7 @@
                                                     <button class="p-channel_sidebar__channels__button">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                        <button class="p-channel_sidebar__section_heading_plus" data-toggle="modal" data-target="#addChannelModal"
                                                                 id="addChannelButton">✚
                                                         </button>
                                                     </div>
@@ -532,42 +532,70 @@
     </div>
 </div>
 
-<!--add channel modal-->
-<div class="add-channel-modal" id="addChannelModal">
-    <div class="add-channel-modal-content">
-        <form method="post" th:action="@{/workspace/create}">
-            <div class="add-channel-modal-header">
-                <span class="addChannelClose">&times;</span>
-                <h2>Create channel</h2>
+<!--&lt;!&ndash;add channel modal&ndash;&gt;-->
+<!--<div class="add-channel-modal" id="addChannelModal">-->
+<!--    <div class="add-channel-modal-content">-->
+<!--        <form method="post" th:action="@{/workspace/create}">-->
+<!--            <div class="add-channel-modal-header">-->
+<!--                <span class="addChannelClose">&times;</span>-->
+<!--                <h2>Create channel</h2>-->
+<!--            </div>-->
+<!--            <div class="add-channel-modal-body">-->
+<!--                <p><b> Name </b></p>-->
+<!--                <p><input class="add-channel-input" id="name" name="name" type="text"></p>-->
+<!--                <p><b> Users </b></p>-->
+<!--                &lt;!&ndash;<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>&ndash;&gt;-->
+<!--                <select id="usersList" multiple="multiple" name="usersList">-->
+<!--                    <option value=""> &#45;&#45;</option>-->
+<!--                    <option th:each="user : ${listUser}"-->
+<!--                            th:utext="${user.getLogin()}"-->
+<!--                            th:value="${user.getLogin()}"/>-->
+<!--                </select>-->
+<!--                <p><b> Owner </b></p>-->
+<!--                &lt;!&ndash;<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>&ndash;&gt;-->
+<!--                <select id="owner" name="owner">-->
+<!--                    <option value=""> &#45;&#45;</option>-->
+<!--                    <option th:each="user : ${listUser}"-->
+<!--                            th:utext="${user.getLogin()}"-->
+<!--                            th:value="${user.getLogin()}"/>-->
+<!--                </select>-->
+<!--                <p><b> Private </b></p>-->
+<!--                <p><input class="add-channel-input" id="isPrivate" name="isPrivate" type="checkbox"><br></p>-->
+<!--            </div>-->
+<!--            <div class="add-channel-modal-footer">-->
+<!--                <p>-->
+<!--                    <button class="submitCreateChannel" type="submit"> Add new channel</button>-->
+<!--                </p>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавление канала</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="add-channel-modal-body">
-                <p><b> Name </b></p>
-                <p><input class="add-channel-input" id="name" name="name" type="text"></p>
-                <p><b> Users </b></p>
-                <!--<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>-->
-                <select id="usersList" multiple="multiple" name="usersList">
-                    <option value=""> --</option>
-                    <option th:each="user : ${listUser}"
-                            th:utext="${user.getLogin()}"
-                            th:value="${user.getLogin()}"/>
-                </select>
-                <p><b> Owner </b></p>
-                <!--<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>-->
-                <select id="owner" name="owner">
-                    <option value=""> --</option>
-                    <option th:each="user : ${listUser}"
-                            th:utext="${user.getLogin()}"
-                            th:value="${user.getLogin()}"/>
-                </select>
-                <p><b> Private </b></p>
-                <p><input class="add-channel-input" id="isPrivate" name="isPrivate" type="checkbox"><br></p>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputChannelName">Название канала</label>
+                        <input type="email" class="form-control" id="exampleInputChannelName" placeholder="Введите название канала">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Сделать канал приватным?</label>
+                    </div>
+                </form>
             </div>
-            <div class="add-channel-modal-footer">
-                <p>
-                    <button class="submitCreateChannel" type="submit"> Add new channel</button>
-                </p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Создать канал</button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
