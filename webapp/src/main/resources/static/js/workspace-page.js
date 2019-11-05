@@ -26,7 +26,7 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-    // const channels = getAllChannels();
+
     const channels = channel_service.getAll();
     $.each(channels, (i, item) => {
         $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">

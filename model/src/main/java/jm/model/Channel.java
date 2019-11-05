@@ -36,6 +36,9 @@ public class Channel {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "workspace_id", nullable = false)
+    private Workspace workspace;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")

@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
 import jm.model.User;
@@ -61,5 +62,14 @@ public class ChannelRestController {
     public ResponseEntity<List<Channel>> getAllChannels(){
         return ResponseEntity.ok(channelService.gelAllChannels());
     }
+
+    @GetMapping(params = {"workspace", "login"})
+    public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
+            @RequestParam("workspace") String workspaceName,
+            @RequestParam("login") String login
+    ){
+        return ResponseEntity.ok(channelService.getChannelByWorkspaceAndUser(workspaceName, login));
+    }
+
 
 }
