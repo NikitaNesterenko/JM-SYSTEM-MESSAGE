@@ -3,14 +3,22 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "channels")
 public class Channel {
@@ -28,12 +36,11 @@ public class Channel {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
-            inverseJoinColumns = @JoinColumn(name = "bot_id"))
-    private Set<Bot> bots;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "workspace_id", nullable = false)
+    private Workspace workspace;
 
-    @OneToOne(targetEntity = User.class)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
 
@@ -45,104 +52,4 @@ public class Channel {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
-
-    public Channel() {
-    }
-
-    public Channel(String name, Set<User> users, Set<Bot> bots, User user, Boolean isPrivate, LocalDateTime createdDate) {
-        this.name = name;
-        this.users = users;
-        this.user = user;
-        this.bots = bots;
-        this.isPrivate = isPrivate;
-        this.createdDate = createdDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Set<Bot> getBots() {
-        return bots;
-    }
-
-    public void setBots(Set<Bot> bots) {
-        this.bots = bots;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Boolean getPrivate() {
-        return isPrivate;
-    }
-
-    public void setPrivate(Boolean aPrivate) {
-        isPrivate = aPrivate;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Channel channel = (Channel) o;
-        return id.equals(channel.id) &&
-                name.equals(channel.name) &&
-                Objects.equals(users, channel.users) &&
-                user.equals(channel.user) &&
-                bots.equals(channel.bots) &&
-                isPrivate.equals(channel.isPrivate) &&
-                createdDate.equals(channel.createdDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, users, bots, user, isPrivate, createdDate);
-    }
-
-    @Override
-    public String toString() {
-        return "Channel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", users=" + users +
-                ", bots=" + bots +
-                ", user=" + user +
-                ", isPrivate=" + isPrivate +
-                ", createdDate=" + createdDate +
-                '}';
-    }
 }

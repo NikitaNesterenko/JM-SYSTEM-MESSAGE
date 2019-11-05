@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Workspace Page</title>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="module" th:src="@{/js/searchUsers.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/searchChannel.css}"/>
+</head>
+
+<body>
+<form id="filter-sidebar" action="#" method="post">
+    <div class="filter-select-wrap">
+        <input id="filter-channel" class="filter-select filter-tax" name="location"
+        type="text" placeholder="All Locations"/>
+        <ul class="ul-channel"></ul>
+
+    </div>
+</form>
+</body>
+</html>

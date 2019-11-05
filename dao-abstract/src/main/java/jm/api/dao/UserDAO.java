@@ -24,4 +24,6 @@ public interface UserDAO {
 
     void updateUserRole(User user, String role);
 
+    List<User> getAllUsersInThisChannel(Long id);
+
 }
