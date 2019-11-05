@@ -1,7 +1,6 @@
-// import {ChannelRestPaginationService} from './rest/entities-rest-pagination.js'
-import {getAllChannels} from "./ajax/channelRestController.js";
+import {ChannelRestPaginationService} from './rest/entities-rest-pagination.js'
 
-// const channel_service = new ChannelRestPaginationService();
+const channel_service = new ChannelRestPaginationService();
 
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
@@ -26,8 +25,9 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-    // const channels = channel_service.getAll();
-    const channels = getAllChannels();
+
+    const channels = channel_service.getAll();
+
     $.each(channels, (i, item) => {
         $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
                                                     <button class="p-channel_sidebar__name_button">
