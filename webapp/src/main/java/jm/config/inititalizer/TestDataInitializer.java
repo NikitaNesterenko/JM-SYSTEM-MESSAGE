@@ -50,9 +50,9 @@ public class TestDataInitializer {
     private void dataInit() {
         createRoles();
         createUsers();
+        createWorkspaces();
         createChannels();
         createMessages();
-        createWorkspaces();
         createBots();
     }
 
@@ -116,6 +116,11 @@ public class TestDataInitializer {
 
     private void createChannels() {
         List<User> userList = new ArrayList<>(this.users);
+        List<Workspace> workspaceList = new ArrayList<>(workspaces);
+
+        Set<User> userSet = new HashSet<>();
+        userSet.add(userList.get(0));
+        userSet.add(userList.get(1));
 
         Channel channel_1 = new Channel();
         channel_1.setName("channel_1");
@@ -123,26 +128,29 @@ public class TestDataInitializer {
         channel_1.setUser(userList.get(0));
         channel_1.setIsPrivate(true);
         channel_1.setCreatedDate(LocalDateTime.now());
+        channel_1.setWorkspace(workspaceList.get(0));
 
         channelDAO.persist(channel_1);
         this.channels.add(channel_1);
 
         Channel channel_2 = new Channel();
         channel_2.setName("channel_2");
-        channel_2.setUsers(this.users);
+        channel_2.setUsers(userSet);
         channel_2.setUser(userList.get(1));
         channel_2.setIsPrivate(false);
         channel_2.setCreatedDate(LocalDateTime.now());
+        channel_2.setWorkspace(workspaceList.get(0));
 
         channelDAO.persist(channel_2);
         this.channels.add(channel_2);
 
         Channel channel_3 = new Channel();
         channel_3.setName("channel_3");
-        channel_3.setUsers(this.users);
+        channel_3.setUsers(userSet);
         channel_3.setUser(userList.get(2));
         channel_3.setIsPrivate(true);
         channel_3.setCreatedDate(LocalDateTime.now());
+        channel_3.setWorkspace(workspaceList.get(1));
 
         channelDAO.persist(channel_3);
         this.channels.add(channel_3);
@@ -186,7 +194,6 @@ public class TestDataInitializer {
         Workspace workspace_1 = new Workspace();
         workspace_1.setName("workspace_1");
         workspace_1.setUsers(this.users);
-        workspace_1.setChannels(this.channels);
         workspace_1.setUser(userList.get(0));
         workspace_1.setIsPrivate(false);
         workspace_1.setCreatedDate(LocalDateTime.now());
@@ -198,7 +205,6 @@ public class TestDataInitializer {
 //        "workspace_2", this.users, this.channels, userList.get(1), true, LocalDateTime.now()
         workspace_2.setName("workspace_2");
         workspace_2.setUsers(this.users);
-        workspace_2.setChannels(this.channels);
         workspace_2.setUser(userList.get(1));
         workspace_2.setIsPrivate(true);
         workspace_2.setCreatedDate(LocalDateTime.now());
