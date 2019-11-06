@@ -1,4 +1,4 @@
-import {findEl} from "./filter-channel.js"
+import {findEl} from "./functions/filter-channel.js"
 import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 

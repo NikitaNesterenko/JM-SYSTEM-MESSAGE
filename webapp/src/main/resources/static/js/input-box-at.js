@@ -1,5 +1,7 @@
 export let users = [];
 import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
+import {showAllUsers} from './functions/inputBoxAt/showAllUsers.js'
+
 
 const user_service = new UserRestPaginationService();
 
@@ -30,17 +32,6 @@ window.addEventListener('load', function () {
 });
 
 // populate options in select html
-const showAllUsers = () => {
-    const users_promise = user_service.getAll();
-    users_promise.then(users => {           //После того как Юзеры будут получены, начнется выполнение этого блока
-        $.each(users, (i, item) => {
-            $('#associatedUserListSelect')
-                .append(
-                    `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
-                );
-        });
-    });
-};
 
 
 $('#associatedUserListSelect').on('change', function () {
