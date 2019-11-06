@@ -46,12 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationFailureHandler jmAuthenticationFailureHandler() {
         return new JmAuthenticationFailureHandler();
     }
-/*
+
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return new JmAccessDeniedHandler();
     }
-*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 /*
@@ -74,9 +74,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/signin").not().authenticated()
-                ;
-     //           .and()
-      //          .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+     //           ;
+                .and()
+               .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+        ;
 
         // For OWNER only.
         http.authorizeRequests()
