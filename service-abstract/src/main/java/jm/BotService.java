@@ -1,6 +1,7 @@
 package jm;
 
-import jm.model.WorkspaceApp.Bot;
+import jm.model.Bot;
+import jm.model.Workspace;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface BotService {
     void updateBot(Bot bot);
 
     Bot getBotById(Long id);
+
+    Bot GetBotByWorkspaceId(Workspace workspace);
 
 }

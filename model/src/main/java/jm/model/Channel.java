@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -35,6 +32,11 @@ public class Channel {
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "bot_id"))
+    private Set<Bot> bots;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workspace_id", nullable = false)
