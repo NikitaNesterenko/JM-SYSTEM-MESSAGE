@@ -24,6 +24,6 @@ public class JmAuthenticationSuccessHandler implements AuthenticationSuccessHand
                 }
             }
         });
-        if (httpServletResponse.getStatus() != 302) httpServletResponse.sendRedirect("/user");
+        if (httpServletResponse.getStatus() != 302) httpServletResponse.sendRedirect("/workspace");
     }
 }

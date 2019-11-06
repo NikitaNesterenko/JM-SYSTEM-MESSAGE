@@ -53,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .csrf().disable();
 
@@ -72,21 +73,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // For OWNER only.
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasRole("OWNER")
+                .antMatchers("/admin").hasRole("OWNER")
                 .anyRequest().authenticated();
 
         // For USER and OWNER
         http.authorizeRequests()
-                .antMatchers("/user/**", "/rest/**")
+                .antMatchers("/rest/**", "/workspace/**", "/createWorkspace/**",
+                        "/api/create/**", "/images/**", "/invite/hash/**", "/email/**")
                 .hasAnyRole("OWNER", "USER")
                 .anyRequest().authenticated();
 
         // Config for Login Form
         http
                 .authorizeRequests()
-                .anyRequest().authenticated()
                 .and()
-                .formLogin()//
+                .formLogin()
                 // Submit URL of login page.
                 //        .loginProcessingUrl("/login") // Submit URL
                 //        .loginPage("/login")//
@@ -96,12 +97,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(jmAuthenticationFailureHandler())
                 .and()
                 .logout()
-                .logoutUrl("/perform_logout")
-                .permitAll()
                 .invalidateHttpSession(true)
-                .and()
-                .httpBasic();
-
+                .logoutUrl("/perform_logout")
+        ;
         /*
         http
                 .authorizeRequests()
