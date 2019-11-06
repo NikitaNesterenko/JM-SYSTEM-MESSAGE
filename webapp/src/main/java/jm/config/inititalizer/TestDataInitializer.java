@@ -3,11 +3,11 @@ package jm.config.inititalizer;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
-import jm.model.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -214,8 +214,25 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(1L), LocalDateTime.now());
-        botDAO.persist(bot);
+        List<Workspace> workspaceList = new ArrayList<>(this.workspaces);
+
+        Set<Workspace> workspaceSet_1 = new HashSet<>();
+        workspaceSet_1.add(workspaceList.get(0));
+        Bot bot_1 = new Bot();
+        bot_1.setName("Bot_1");
+        bot_1.setWorkspace(workspaceSet_1);
+        bot_1.setCreatedDate(LocalDate.now());
+        botDAO.persist(bot_1);
+        this.bots.add(bot_1);
+
+        Set<Workspace> workspaceSet_2 = new HashSet<>();
+        workspaceSet_2.add(workspaceList.get(1));
+        Bot bot_2 = new Bot();
+        bot_2.setName("Bot_2");
+        bot_2.setWorkspace(workspaceSet_2);
+        bot_2.setCreatedDate(LocalDate.now());
+        botDAO.persist(bot_2);
+        this.bots.add(bot_2);
     }
 
 }

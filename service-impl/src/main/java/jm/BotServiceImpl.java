@@ -2,7 +2,6 @@ package jm;
 
 import jm.api.dao.BotDAO;
 import jm.model.Bot;
-import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +36,4 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Bot getBotById(Long id) { return botDAO.getById(id); }
-
-    @Override
-    public Bot GetBotByWorkspaceId(Workspace workspace) {
-       return botDAO.getBotByWorkspaceId(workspace);
-    }
 }

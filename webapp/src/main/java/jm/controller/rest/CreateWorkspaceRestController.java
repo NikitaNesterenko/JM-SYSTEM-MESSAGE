@@ -62,7 +62,12 @@ public class CreateWorkspaceRestController {
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
         User user = userService.getUserByEmail(emailTo);
         if(user == null) {
-            user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
+            user = new User();
+           user.setLogin(emailTo);
+           user.setEmail(emailTo);
+           user.setLastName(emailTo);
+           user.setName(emailTo);
+           user.setPassword(emailTo);
            userService.createUser(user);
         }
         return new ResponseEntity(HttpStatus.OK);
@@ -91,7 +96,10 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         token.setChannelname(channelName);
         request.getSession().setAttribute("token", token);
-        Channel channel = new Channel(channelName, new HashSet<User>(), userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now());
+        Channel channel = new Channel();
+        channel.setName(channelName);
+        channel.setIsPrivate(false);
+        channel.setCreatedDate(LocalDateTime.now());
         channelService.createChannel(channel);
         return new ResponseEntity(HttpStatus.OK);
     }
