@@ -1,5 +1,6 @@
-import {sendInvites} from "../ajax/createWorkspaceRestController.js";
+import {CreateWorkspacePaginationService} from './rest/entities-rest-pagination.js'
 
+const  sendInvites_service = new CreateWorkspacePaginationService();
 $(document).ready(function() {
     $("#button-email").click(function(){
         let arrayInputs = $('input').map(function () {
@@ -11,9 +12,12 @@ $(document).ready(function() {
                 result.push(arrayInputs[i])
             }
         }
-        sendInvites(result);
-        window.location.href = "/tada";
-        return false;
+        // sendInvites(result);
+        const service = sendInvites_service.sendInvites(result);
+        service.then(result => { //После того как ответ будет получен, начнется выполнение этого блока
+            window.location.href = "/tada";
+            return false;
+        });
     });
 });
 
