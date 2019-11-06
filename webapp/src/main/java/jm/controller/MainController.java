@@ -33,11 +33,6 @@ public class MainController {
      public ModelAndView workspaceTempPage() {
          return new ModelAndView("temp/workspace-page-temp.html");
  */
-    @GetMapping(value = "/csrf")
-    public ModelAndView csrfTest() {
-        return new ModelAndView("logout.html");
-    }
-
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
         return new ModelAndView("signin-page");
