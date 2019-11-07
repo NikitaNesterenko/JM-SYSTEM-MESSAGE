@@ -1,8 +1,7 @@
-import {getAllChannels} from "./ajax/channelRestController.js";
-import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
-import {ChannelRestPaginationService} from './rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, BotRestPaginationService} from './rest/entities-rest-pagination.js'
 
 const channel_service = new ChannelRestPaginationService();
+const bot_service = new BotRestPaginationService();
 
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
@@ -25,15 +24,40 @@ $(document).ready(() => {
     showAllChannels();
     showAllUsers();
     profileCard();
+    showBot();
 });
 
 const showAllChannels = () => {
-    const channels_promise = channel_service.getAll();
-    channels_promise.then(channels => {         //После того как Чаннелы будут получены, начнется выполнение этого блока
-        $.each(channels, (i, item) => {
-            $('#channel-box').append(`<p><a href="" class="channel-link">${item.name}</a>`);
+    const channels = channel_service.getAll();
+    $.each(channels, (i, item) => {
+        $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
+                                                    <button class="p-channel_sidebar__name_button">
+                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                                        <span class="p-channel_sidebar__name-3">${item.name}</span>
+                                                    </button>
+                                                  </div>`);
+    })
+};
+
+const showBot = () => {
+    bot_service.getBotByWorkspaceId(1)
+        .then((response) => {
+            if (response !== undefined) {
+                $('#bot_representation').append(` <div class="p-channel_sidebar__direct-messages__container">
+                                                <div class="p-channel_sidebar__close_container">
+                                                    <button class="p-channel_sidebar__name_button">
+                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                                        <span class="p-channel_sidebar__name-3">
+                                                            <span>` + response['nickName'] + `</span>
+                                                        </span>
+                                                    </button>
+                                                    <button class="p-channel_sidebar__close">
+                                                        <i class="p-channel_sidebar__close__icon">✖</i>
+                                                    </button>
+                                                </div>
+                                            </div>`);
+            }
         })
-    });
 };
 
 const showAllUsers = () => {

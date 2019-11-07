@@ -38,13 +38,13 @@ public class JMSystemMessageApplication {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         return new MappingJackson2HttpMessageConverter(mapper);
     }
-/*
-   @Bean(initMethod = "init")
-   @PostConstruct
-   public TestDataInitializer initTestData() {
-      return new TestDataInitializer();
-   }
-*/
+
+    @Bean(initMethod = "init")
+    @PostConstruct
+    public TestDataInitializer initTestData() {
+        return new TestDataInitializer();
+    }
+
     @Bean(initMethod = "init")
     @PostConstruct
     public TestDataSecurityInitializer initTestSecurityData() {

@@ -1,6 +1,7 @@
+
 import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPaginationService} from './rest/entities-rest-pagination.js'
 
-const user_id = 1;//Захардкоденные переменные
+const user_id = 2;//Захардкоденные переменные
 const channel_id = 1;//Захардкоденные переменные
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
@@ -33,4 +34,5 @@ $('#form_message').submit(function () {
     });
     return false;
 });
+
 
