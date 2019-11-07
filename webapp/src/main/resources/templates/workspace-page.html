@@ -12,6 +12,9 @@
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
 
     <script defer th:src="@{/js/message-box.js}" type="module"></script>
+
+    <script defer th:src="@{/js/channel_topic.js}" type="module"></script>
+
     <script defer th:src="@{/js/user_view_edit.js}" type="module"></script>
 
     <script defer th:src="@{/js/messages.js}" type="module"></script>
@@ -231,12 +234,13 @@
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <div class="p-classic_nav__model__title__info__item">
-                                    ✎
-                                    &nbsp;
-                                    <div class="p-classic_nav__model__title__info__topic__text">
-                                        <span class="p-classic_nav__model__title__info__topic__content">Topic content</span>
+<!--                                    <div id="topic_edit_block" class="p-classic_nav__model__title__info__topic__text">-->
+<!--                                        <span id="topic_edit_button" class="p-classic_nav__model__title__info__topic__content">✎</span>-->
+<!--                                    </div>-->
+                                    <div id="topic_string_block" class="p-classic_nav__model__title__info__topic__text">
+                                        <span id="topic_string" class="p-classic_nav__model__title__info__topic__content">Topic content</span>
+                                        <button id="topic_button" style="display: none;" class="p-classic_nav__model__title__info__topic__edit">Edit</button>
                                     </div>
-                                    <button class="p-classic_nav__model__title__info__topic__edit">Edit</button>
                                 </div>
                                 <!--<span class="p-classic_nav__model__title__info__sep">|</span>-->
                             </div>
