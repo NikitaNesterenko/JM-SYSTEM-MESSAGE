@@ -140,6 +140,10 @@ $('#modal_1_set_title_btn').on('click', function (e) {
     $('#modal_2').modal('show');
 });
 
+$('#modal_1_edit_profile_btn').on('click', function (e) {
+    $('#modal_2').modal('show');
+});
+
 // file upload func
 // https://www.aspsnippets.com/Articles/Open-Fileupload-Upload-File-on-Button-Click-using-JavaScript-and-jQuery.aspx
 export const file_upload = $(function () {
