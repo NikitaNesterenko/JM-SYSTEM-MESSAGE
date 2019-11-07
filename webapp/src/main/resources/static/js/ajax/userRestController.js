@@ -60,6 +60,20 @@ export const updateUser = (user) => {
     });
 };
 
+export const getAllUsersInThisChannel = (id) => {
+    let result ;
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: "/rest/api/users/channel/" + id
+    }).done(function (data) {
+        result = data;
+    });
+    return result;
+
+};
+
+
 export const deleteUser = (id) => {
     $.ajax({
         type: 'delete',
