@@ -18,6 +18,7 @@
     <script defer th:src="@{/js/user_view_edit.js}" type="module"></script>
 
     <script defer th:src="@{/js/messages.js}" type="module"></script>
+    <script defer th:src="@{/js/menu.js}" type="module"></script>
 
     <script src="/js/helper_functions.js"></script>
 
@@ -462,7 +463,8 @@
                         <div class="p-message_pane_input">
                             <div class="p-message_pane_input_inner">
                                 <div class="p-workspace__input">
-
+                                    <div class="menu" id="menu">
+                                    </div>
                                     <div class="p-message_input_field">
                                         <div class="ql-buttons">
                                             <button class="c-texty_input__button--emoji">
