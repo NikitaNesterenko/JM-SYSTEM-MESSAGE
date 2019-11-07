@@ -186,3 +186,19 @@
 }
 
 /*end of button inside input field*/
+
+/* "/" menu */
+.menu {
+    z-index: 999;
+    border: 1px solid silver;
+    position: absolute;
+    left: 5%;
+    /*margin-left: 0px;*/
+    bottom: 25%;
+    margin-bottom: 30px;
+    padding: 0;
+    background: white;
+    width: 300px;
+    display: none;
+}
+/* end of "/" menu */
