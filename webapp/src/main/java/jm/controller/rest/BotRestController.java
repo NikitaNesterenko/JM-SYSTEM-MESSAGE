@@ -1,69 +1,62 @@
 package jm.controller.rest;
 
 import jm.BotService;
+import jm.WorkspaceService;
 import jm.model.Bot;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/bot")
+@RequestMapping("/rest/api/bot")
 public class BotRestController {
-    private static final Logger logger = LoggerFactory.getLogger(
-            BotRestController.class);
-    BotService botService;
+
+    private BotService botService;
+    private WorkspaceService workspaceService;
 
     @Autowired
-    public void setBotService(BotService botService) {
-        this.botService = botService;
-    }
+    public void setBotService(BotService botService) { this.botService = botService; }
 
-    @GetMapping
-    public ResponseEntity<List<Bot>> getBots() {
-        logger.info("Список ботов : ");
-        for (Bot bot: botService.gelAllBots()) {
-            logger.info(bot.toString());
+    @Autowired
+    public void setWorkspaceService(WorkspaceService workspaceService) { this.workspaceService = workspaceService; }
+
+    @GetMapping("/workspace/{id}")
+    public ResponseEntity<Bot> getBotByWorksapce(@PathVariable("id") Long id) {
+        Workspace workspace = workspaceService.getWorkspaceById(id);
+        Bot bot = botService.GetBotByWorkspaceId(workspace);
+        if(bot == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(botService.gelAllBots(), HttpStatus.OK);
+        return new ResponseEntity<Bot>(bot, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Bot> getBotById(@PathVariable("id") Long id) {
-        logger.info("Получен бот с id = {}",id);
-        logger.info(botService.getBotById(id).toString());
         return new ResponseEntity<Bot>(botService.getBotById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity createBot(@RequestBody Bot bot) {
         botService.createBot(bot);
-        logger.info("Созданный бот: {}",bot);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(value = "/update")
     public ResponseEntity updateBot(@RequestBody Bot bot) {
         Bot existingBot = botService.getBotById(bot.getId());
-        logger.info("Существующий бот: {}",existingBot);
         if (existingBot == null) {
-            logger.warn("Бот не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
-            botService.updateBot(bot);
-            logger.info("Обновленный бот: {}", bot);
+           botService.updateBot(bot);
             return new ResponseEntity(HttpStatus.OK);
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteBot(@PathVariable("id") Long id) {
-        botService.deleteBot(id);
-        logger.info("id удаленного бота: {}", id);
+       botService.deleteBot(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
