@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -122,4 +124,11 @@ public class User {
 //    private UserPreferences userPreferences;
 
 
+    public User(String name, String lastName, String login, String email, String password) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+    }
 }

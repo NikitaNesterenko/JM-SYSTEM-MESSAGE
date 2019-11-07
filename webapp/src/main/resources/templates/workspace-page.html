@@ -10,11 +10,23 @@
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
-    <script defer th:src="@{/js/message-box.js}" type="module"></script>
+<!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
+    <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script src="/js/helper_functions.js"></script>
+
+<!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/button.css}"/>
+    <script src="/js/displayDiv.js"></script> -->
+
     <link rel="stylesheet" th:href="@{/css/workspace-page.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspace-page-old.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspace-add-channel-modal.css}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
+            integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
+            integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
+
 </head>
 
 <body class="supports_custom_scrollbar">
@@ -117,6 +129,28 @@
         </div>
     </div>
 </div>
+
+
+<!-- <div class="workspace-container">
+    <div class="workspace-box">
+        <h3>Workspace Box</h3>
+        <p>-</p>
+        <p>
+            <button class="add-channel-button" id="addChannelButton">+ Add new channel</button>
+        </p>
+        <p>-</p>
+        <h3>Channels</h3>
+        <p>-</p>
+        <p><a href="/search/channel" style="color:#f2f2f2">Search Channel</a>
+        <p>-</p>
+        <div class="channel-box" id="channel-box">
+        </div>
+    </div>
+    <div class="chat-box">
+        <h3>Message Box</h3>
+        <div class = "button" onclick='showDiv("info-box")'>Member List</div>
+        <div class="message-box" id="message-box">
+            <div class="all-messages" id="all-messages"> -->
 
 <div class="p-client_container">
     <div class="p-client">
@@ -308,6 +342,30 @@
                                                 <div class="p-channel_sidebar__close_container">
                                                     <button class="p-channel_sidebar__invite_people__button">
                                                         <span class="p-channel_sidebar__name-2">✚ Invite people</span>
+                                                    </button>
+                                                    <button class="p-channel_sidebar__close">
+                                                        <i class="p-channel_sidebar__close__icon">✖</i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="p-channel_sidebar__list__presentation-2"></div>
+                                            <div class="p-channel_sidebar__app">
+                                                <div class="p-channel_sidebar__section_heading">
+                                                    <button class="p-channel_sidebar__section_heading_label__button">
+                                                        App
+                                                    </button>
+                                                    <div class="p-channel_sidebar__section_heading_right">
+                                                        <button class="p-channel_sidebar__section_heading_plus">✚
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bot-representation" id="bot_representation"></div>
+                                            <div class="p-channel_sidebar__list__presentation-4"></div>
+                                            <div class="p-channel_sidebar__add_app">
+                                                <div class="p-channel_sidebar__close_container">
+                                                    <button class="p-channel_sidebar__add_app__button">
+                                                        <span class="p-channel_sidebar__name-2">Add apps</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
                                                         <i class="p-channel_sidebar__close__icon">✖</i>
@@ -530,6 +588,19 @@
             </div>
         </div>
     </div>
+  
+<!--     <div id="info-box" class="info-box" style="display:none;">
+        <h3>Info Box</h3>
+        <p>-</p>
+        <h3>Users</h3>
+        <p>-</p>
+        <p>
+        <h3><a href="/searchUsers">Search User</a></h3>
+        <p>-</p>
+        <div class="user-box" id="user-box">
+        </div>
+    </div> -->
+
 </div>
 
 <!--add channel modal-->
