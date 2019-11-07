@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,11 +50,13 @@ public class User {
 //    private Status currentStatus;
 
     // User title - What I do (occupation)?
-    @Basic(optional = true)
     @Column(name = "title")
     private String title;
 
-    @Basic(optional = true)
+    // a name, that other users can see
+    @Column(name = "display_name")
+    private String displayName;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -61,9 +65,8 @@ public class User {
     private Set<Role> roles;
 
     // TODO timezone - вычисляется или указывается пользователем
-//    @Basic
-//    @Column(name = "timezone", nullable = false)
-//    private String timeZone;
+    @Column(name = "timezone")
+    private String timeZone;
 
     // TODO user groups many-to-many
 //    @ManyToMany(cascade = CascadeType.REFRESH)
@@ -121,5 +124,15 @@ public class User {
     // TODO userPreferences (настройки юзера)
 //    private UserPreferences userPreferences;
 
+    @Column(name = "skype")
+    private String userSkype;
 
+
+    public User(String name, String lastName, String login, String email, String password) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+    }
 }
