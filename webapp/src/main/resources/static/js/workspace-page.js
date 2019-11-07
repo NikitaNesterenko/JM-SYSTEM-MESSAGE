@@ -22,6 +22,7 @@ window.addEventListener('load', function () {
 
 $(document).ready(() => {
     showAllChannels();
+    showAllUsers();
     profileCard();
     showBot();
 });
@@ -57,6 +58,13 @@ const showBot = () => {
                                             </div>`);
             }
         })
+};
+
+const showAllUsers = () => {
+    let channels = getAllUsersInThisChannel(1);
+    $.each(channels, (i, item) => {
+        $('#user-box').append(`<p><a href="" class="user-link">${item.name}</a>`);
+    })
 };
 
 const profileCard = () => {
