@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -57,4 +54,15 @@ public class Channel {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
+
+    @Column(name = "topic")
+    private String topic;
+  
+    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
+        this.name = name;
+        this.users = users;
+        this.user = user;
+        this.isPrivate = isPrivate;
+        this.createdDate = createdDate;
+    }
 }
