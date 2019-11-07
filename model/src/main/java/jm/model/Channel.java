@@ -55,6 +55,9 @@ public class Channel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
+    @Column(name = "topic")
+    private String topic;
+  
     public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
