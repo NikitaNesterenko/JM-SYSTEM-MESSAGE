@@ -68,6 +68,8 @@ window.updateMessages = function updateMessages() {
                                                         </div>
                                                     </div>`;
             message_box.append(messages_queue_context_user_container);
+
+            // notify("Notify form message-box", "Bla-bla-bla");
         });
     });
 };
