@@ -3,43 +3,13 @@ import {MessageRestPaginationService} from './rest/entities-rest-pagination.js'
 const channel_id = 1;//Захардкоденные переменные
 const message_service = new MessageRestPaginationService();
 
-window.pushMessage = function pushMessage(message) {
-    const message_box = document.getElementById("all-messages");
-    const message_box_wrapper = document.getElementById("all-message-wrapper");
-    let messages_queue_context_user_container = document.createElement('div');
-    messages_queue_context_user_container.className = "c-virtual_list__item";
-    const time = message.dateCreate.split(' ')[1];
-    messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
-                                                            <div class="c-message__gutter--feature_sonic_inputs">
-                                                                <button class="c-message__avatar__button">
-                                                                    <img class="c-avatar__image">
-                                                                </button>                                                                
-                                                            </div>
-                                                        <div class="c-message__content--feature_sonic_inputs">
-                                                            <div class="c-message__content_header" id="message_${message.id}_user_${message.user.id}_content_header">
-                                                                <span class="c-message__sender">
-                                                                    <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.name}</a>
-                                                                </span>
-                                                                <a class="c-timestamp--static">
-                                                                    <span class="c-timestamp__label">
-                                                                        ${time}
-                                                                    </span>                                                                    
-                                                                    <span class="c-timestamp__label">
-                                                                        ${message.dateCreate}
-                                                                    </span>
-                                                                </a>
-                                                            </div>
-                                                            <span class="c-message__body">
-                                                                ${message.content}
-                                                            </span>
-                                                        </div>
-                                                    </div>`;
-    message_box.append(messages_queue_context_user_container);
+$(document).ready(function () {
+        showMessageForPeriod();
+});
 
-    message_box_wrapper.scrollTo(0, 500);
-};
+// window.showMessageForPeriod =
+    function showMessageForPeriod() {
 
-window.updateMessages = function updateMessages() {
     const message_box = document.getElementById("all-messages");
     const message_box_wrapper = document.getElementById("all-message-wrapper");
 
@@ -56,13 +26,13 @@ window.updateMessages = function updateMessages() {
     const today = new Date();
 
     const day = today.getDate();
-// const dayEnd = today.getDate();
+    // const dayEnd = today.getDate();
 
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
 
-// alert('today - ' + today);
-// alert(dayStart + ' - ' + dayEnd);
+    // alert('today - ' + today);
+    // alert(dayStart + ' - ' + dayEnd);
 
     const stringDateStart = [year - 1, month, day].join("-");
     const stringDateEnd = [year, month, day + 1].join("-");
@@ -72,7 +42,9 @@ window.updateMessages = function updateMessages() {
     const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, stringDateStart, stringDateEnd);
 
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
+
         messages.forEach(function (message, i) {
+
             let messages_queue_context_user_container = document.createElement('div');
             messages_queue_context_user_container.className = "c-virtual_list__item";
 
@@ -98,7 +70,7 @@ window.updateMessages = function updateMessages() {
             }
 
             messages_queue_context_user_container.innerHTML =
-                `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                                                    `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
 
                                                             <div class="c-message__gutter--feature_sonic_inputs">
                                                                 <button class="c-message__avatar__button">
@@ -108,7 +80,9 @@ window.updateMessages = function updateMessages() {
                                                             <div class="c-message__content--feature_sonic_inputs">
                                                                 <div class="c-message__content_header" id="message_${message.id}_user_${message.user.id}_content_header">
                                                                     <span class="c-message__sender">
-                                                                        <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.name}</a>
+                                                                        <button class="c-message__sender_link">
+                                                                            ${message.user.name}
+                                                                        </button>
                                                                     </span>
                                                                     <a class="c-timestamp--static">
                                                                         <span class="c-timestamp__label">
@@ -130,5 +104,3 @@ window.updateMessages = function updateMessages() {
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);
     });
 };
-
-updateMessages();
