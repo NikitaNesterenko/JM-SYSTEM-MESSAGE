@@ -24,7 +24,7 @@ export class BotRestPaginationService extends  RestPaginationService{
         super('/rest/api/bot');
     }
     getBotByWorkspaceId = async (id) => {
-        const response = await fetch('/rest/api/bot/workspace/' + id)
+        const response = await fetch('/rest/api/bot/workspace/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
