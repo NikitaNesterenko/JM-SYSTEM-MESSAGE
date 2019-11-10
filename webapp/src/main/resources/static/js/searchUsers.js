@@ -1,21 +1,22 @@
 import {findEl} from "./filter-channel.js"
-import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
+import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
 
 const filterInput = $('#filter-channel'), filterUl = $('.ul-channel');
-let channelNames = [];
+const user_service = new UserRestPaginationService();
+let userNames = [];
 
 $(document).ready(() => {
-    showAllChannels();
+    showAllUsersOnThisChannel();
 });
 
-const showAllChannels = () => {
-    const channels = getAllUsersInThisChannel(1);
-    alert(getAllUsersInThisChannel(1));
-    $.each(channels, (i, item) => {
-        alert(`${item.name}`)
-        channelNames.push(`${item.name}`);
-    })
+const showAllUsersOnThisChannel = () => {
+    const users_promise = user_service.getAllUsersInThisChannel();
+    users_promise.then(users => {         //После того как Юзеры будут получены, начнется выполнение этого блока
+        $.each(users, (i, item) => {
+            userNames.push(`${item.name}`);
+        })
+    });
 };
 
 
@@ -24,7 +25,7 @@ filterInput.on('input propertychange', function () {
 
     if ($(this).val() !== '') {
         filterUl.fadeIn(100);
-        findEl(filterUl, channelNames, $(this).val());
+        findEl(filterUl, userNames, $(this).val());
     } else {
         filterUl.fadeOut(100);
     }

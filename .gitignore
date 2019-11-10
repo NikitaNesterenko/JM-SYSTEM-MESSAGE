@@ -3,5 +3,6 @@
 target
 *.iml
 logs
+*.7z
 
 
