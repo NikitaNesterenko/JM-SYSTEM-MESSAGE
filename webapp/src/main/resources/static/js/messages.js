@@ -10,7 +10,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages', function (message) {
-            showMessage(JSON.parse(message.body).content);
+            let resutl  = JSON.parse(message.body)
+            showMessage(resutl);
         });
     });
 }
@@ -22,7 +23,7 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName(message) {
+window.sendName = function sendName(message) {
     stompClient.send("/app/message", {}, JSON.stringify({
         'inputMassage': message.content,
         'dateCreate': message.dateCreate,
@@ -34,18 +35,33 @@ function showMessage(message) {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
-    messages_queue_context_user_container.innerHTML = `${message}`
-//     messages_queue_context_user_container.innerHTML = `<div class="c-message__gutter--feature_sonic_inputs">
-//                                                             <button class="c-message__avatar__button">
-//                                                                 <img class="c-avatar__image">
-//                                                             </button>
-//                                                         </div>
-// <span class="c-message__body">
-//                                                                 ${message}
-//                                                             </span>`;
+    const time = message.dateCreate.split(' ')[1];
+    messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                                                            <div class="c-message__gutter--feature_sonic_inputs">
+                                                                <button class="c-message__avatar__button">
+                                                                    <img class="c-avatar__image">
+                                                                </button>                                                                
+                                                            </div>
+                                                        <div class="c-message__content--feature_sonic_inputs">
+                                                            <div class="c-message__content_header" id="message_${message.id}_user_${message.user.id}_content_header">
+                                                                <span class="c-message__sender">
+                                                                    <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.name}</a>
+                                                                </span>
+                                                                <a class="c-timestamp--static">
+                                                                    <span class="c-timestamp__label">
+                                                                        ${time}
+                                                                    </span>
+                                                                </a>
+                                                            </div>
+                                                            <span class="c-message__body">
+                                                                ${message.inputMassage}
+                                                            </span>
+                                                        </div>
+                                                    </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box.scrollTo(0, message_box.scrollHeight);
 }
+connect();
 
 window.updateMessages = function updateMessages() {
     const message_box = document.getElementById("all-messages");
@@ -67,9 +83,7 @@ window.updateMessages = function updateMessages() {
                                                         <div class="c-message__content--feature_sonic_inputs">
                                                             <div class="c-message__content_header" id="message_${message.id}_user_${message.user.id}_content_header">
                                                                 <span class="c-message__sender">
-                                                                    <button class="c-message__sender_link">
-                                                                        ${message.user.name}
-                                                                    </button>
+                                                                    <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.name}</a>
                                                                 </span>
                                                                 <a class="c-timestamp--static">
                                                                     <span class="c-timestamp__label">
@@ -87,9 +101,4 @@ window.updateMessages = function updateMessages() {
     });
 };
 
-connect();
 updateMessages();
-window.pushMessage = function pushMessage(message) {
-    updateMessages();
-    sendName(message);
-}
