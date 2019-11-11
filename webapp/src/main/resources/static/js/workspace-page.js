@@ -1,4 +1,5 @@
 import {ChannelRestPaginationService, BotRestPaginationService} from './rest/entities-rest-pagination.js'
+import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
@@ -42,7 +43,7 @@ const showAllChannels = () => {
 };
 
 const showBot = () => {
-    bot_service.getBotByWorkspaceId(1)
+    bot_service.getBotByWorkspaceId(2) //Захардкоденные переменные
         .then((response) => {
             if (response !== undefined) {
                 $('#bot_representation').append(` <div class="p-channel_sidebar__direct-messages__container">
@@ -63,7 +64,7 @@ const showBot = () => {
 };
 
 const showAllUsers = () => {
-    let channels = getAllUsersInThisChannel(1);
+    let channels = getAllUsersInThisChannel(2);
     $.each(channels, (i, item) => {
         $('#user-box').append(`<p><a href="" class="user-link">${item.name}</a>`);
     })
