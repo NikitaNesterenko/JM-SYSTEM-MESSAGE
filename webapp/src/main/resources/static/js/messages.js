@@ -120,7 +120,7 @@ window.updateMessages = function updateMessages() {
                                                         <div class="c-message__content--feature_sonic_inputs">
                                                             <div class="c-message__content_header" id="message_${message.id}_user_${message.bot.id}_content_header">
                                                                 <span class="c-message__sender">
-                                                                    <a href="#modal_1" class="message__sender" id="user_${message.bot.id}" data-user_id="${message.bot.id}" data-toggle="modal">${message.bot.nickName}</a>
+                                                                    <a href="#modal_1" class="message__sender" id="user_${message.bot.id}" data-bot_id="${message.bot.id}" data-toggle="modal">${message.bot.nickName}</a>
                                                                 </span>
                                                                 <a class="c-timestamp--static">
                                                                     <span class="c-timestamp__label">
@@ -155,7 +155,7 @@ function showBotMessage(message) {
                                                         <div class="c-message__content--feature_sonic_inputs">
                                                             <div class="c-message__content_header" id="message_${message.id}_user_${message.bot.id}_content_header">
                                                                 <span class="c-message__sender">
-                                                                    <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.bot.id}" data-toggle="modal">${message.bot.name}</a>
+                                                                    <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-bot_id="${message.bot.id}" data-toggle="modal">${message.bot.name}</a>
                                                                 </span>
                                                                 <a class="c-timestamp--static">
                                                                     <span class="c-timestamp__label">
