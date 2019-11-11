@@ -31,7 +31,7 @@ export class BotRestPaginationService extends  RestPaginationService{
 }
 export class ChannelRestPaginationService extends  RestPaginationService{
     constructor(){
-        super('/rest/api/channels');
+        super('http://localhost:8080/rest/api/channels');
     }
 }
 export class WorkspaceRestPaginationService extends  RestPaginationService{
