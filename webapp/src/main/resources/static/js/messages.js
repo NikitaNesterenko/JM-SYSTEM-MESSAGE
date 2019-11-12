@@ -11,6 +11,7 @@ function connect() {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages', function (message) {
             showMessage(JSON.parse(message.body).content);
+            notifyParseMessage(JSON.parse(message.body).content);
         });
     });
 }

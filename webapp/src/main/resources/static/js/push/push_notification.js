@@ -10,10 +10,19 @@ const notify = (title, message) => {
     sound.play();
 }
 
-function testNote() {
-    notify("Message from MessageService", "My test message for you")
+// Парсер для сообщения типа "<b>login_2</b>   2019-11-11   14:10<br><tr><td>ads<br></td></tr>"
+function notifyParseMessage(message) {
+    const messageStr = message.toString();
+    const messageFrom = messageStr.substring(3, messageStr.indexOf("</b>", 4));
+    const messageContent = messageStr.substring(messageStr.indexOf("<td>",0) + 4, messageStr.indexOf("</td>",0) - 4);
+    if (messageContent.includes("@",0)) {
+        const indexToStart = messageContent.indexOf("@");
+        let indexToEnd = messageContent.indexOf(" ",indexToStart);
+        if (indexToEnd == -1) {
+            indexToEnd = messageContent.length;
+        }
+        const messageTo = messageContent.substring(indexToStart, indexToEnd);
+        notify("Message to " + messageTo, messageFrom + ": " + messageContent);
+    }
 }
 
-function testNote2() {
-    notify("Message in Channel1", "Santa: Happy New Year!")
-}
