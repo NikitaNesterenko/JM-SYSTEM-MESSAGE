@@ -43,7 +43,8 @@ export const onShowModal1 = $('#modal_1').on('show.bs.modal', function (e) {
         if (user_image == null || user_image === "") {
             $('#modal_1_user_img').attr("src", "../image/blank_user.png");
         } else {
-            $('#modal_1_user_img').attr("src", user_image);
+            // $('#modal_1_user_img').attr("src", user_image);
+            $('#modal_1_user_img').attr("src", "../avatars/" + user.avatarURL);
         }
 
     });
@@ -109,7 +110,8 @@ export const onShowModal2 = $('#modal_2').on('show.bs.modal', function (focus) {
         if (user_image == null || user_image === "") {
             $('#modal_2_user_img').attr("src", "../image/blank_user.png");
         } else {
-            $('#modal_2_user_img').attr("src", user_image);
+            // $('#modal_2_user_img').attr("src", user_image);
+            $('#modal_2_user_img').attr("src", "../avatars/" + user.avatarURL);
         }
 
     });
