@@ -11,7 +11,7 @@ window.pushMessage = function pushMessage(message) {
     messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                             <div class="c-message__gutter--feature_sonic_inputs">
                                                                 <button class="c-message__avatar__button">
-                                                                    <img class="c-avatar__image">
+                                                                    <img src="../avatars/${message.user.avatarURL}" class="c-avatar__image">
                                                                 </button>                                                                
                                                             </div>
                                                         <div class="c-message__content--feature_sonic_inputs">
@@ -48,7 +48,7 @@ window.updateMessages = function updateMessages() {
             messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
-                                                                <img class="c-avatar__image">
+                                                                <img src="../avatars/${message.user.avatarURL}" class="c-avatar__image">
                                                             </button>
                                                         </div>
                                                         <div class="c-message__content--feature_sonic_inputs">
