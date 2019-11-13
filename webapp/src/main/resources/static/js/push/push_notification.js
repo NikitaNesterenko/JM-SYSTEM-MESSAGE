@@ -1,12 +1,12 @@
 const sound = new Audio("/audio/push.mp3");
 const pic = "/image/img.JPG";
 
-const notify = (title, message) => {
+function notify (title, message){
     Push.create(title, {
         body: message,
         timeout: 10000,
         icon: pic
-    })
+    });
     sound.play();
 }
 
