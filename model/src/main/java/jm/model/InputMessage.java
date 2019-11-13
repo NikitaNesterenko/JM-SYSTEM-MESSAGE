@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 
+
 public class InputMessage {
     //TODO
     private String inputMassage;
@@ -17,14 +18,16 @@ public class InputMessage {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
     private User user;
+    private Bot bot;
 
     public InputMessage() {
     }
 
-    public InputMessage(String inputMassage, LocalDateTime dateCreate, User user) {
+    public InputMessage(String inputMassage, LocalDateTime dateCreate, User user, Bot bot) {
         this.inputMassage = inputMassage;
         this.dateCreate = dateCreate;
         this.user = user;
+        this.bot = bot;
     }
 
     public String getInputMassage() {
@@ -49,6 +52,14 @@ public class InputMessage {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Bot getBot() {
+        return bot;
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
     }
 
     @Override
