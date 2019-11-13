@@ -34,6 +34,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<Message> getMessagesByConversationId(Long id) {
+        return messageDAO.getMessagesByConversationId(id);
+    }
+
+    @Override
     public List<Message> getMessagesByContent(String word) {
         return messageDAO.getMessageByContent(word);
     }

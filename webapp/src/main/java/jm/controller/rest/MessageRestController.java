@@ -34,6 +34,13 @@ public class MessageRestController {
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/conversation/{id}")
+    public ResponseEntity<List<Message>> getMessagesByConversationId(@PathVariable("id") Long id) {
+        List<Message> messages = messageService.getMessagesByConversationId(id);
+        messages.sort(Comparator.comparing(Message::getDateCreate));
+        return new ResponseEntity<>(messages, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);

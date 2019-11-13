@@ -56,9 +56,9 @@ public class MessageRestControllerTest {
     @Test
     public void getMessages() {
         List<Message> messages = new ArrayList<>();
-        Message message = new Message(2L, new Channel(), new User(), "Hello", LocalDateTime.now());
+        Message message = new Message(2L, new Channel(), null, new User(), "Hello", LocalDateTime.now());
         message.setId(1L);
-        Message message1 = new Message(3L, new Channel(), new User(), "Hello7", LocalDateTime.now());
+        Message message1 = new Message(3L, new Channel(), null, new User(), "Hello7", LocalDateTime.now());
         message1.setId(2L);
         messages.add(message);
         messages.add(message1);
@@ -89,7 +89,7 @@ public class MessageRestControllerTest {
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).getMessageById(any());
 
-        Message message = new Message(3L,new Channel(), new User(), "Hello", LocalDateTime.now());
+        Message message = new Message(3L,new Channel(), null, new User(), "Hello", LocalDateTime.now());
         message.setId(2L);
         when(messageService.getMessageById(message.getId())).thenReturn(message);
         ResponseEntity<Message> responseEntity = messageRestController.getMessageById(2L);
@@ -134,7 +134,7 @@ public class MessageRestControllerTest {
 
     @Test
     public void updateMessage() throws Exception {
-        Message messageUpdated = new Message(23L, new Channel(), new User(), "Hello", LocalDateTime.now());
+        Message messageUpdated = new Message(23L, new Channel(), null, new User(), "Hello", LocalDateTime.now());
         messageUpdated.setId(1L);
         doAnswer(new Answer<Object>() {
             @Override
@@ -145,7 +145,7 @@ public class MessageRestControllerTest {
             }
         }).when(messageService).updateMessage(any());
 
-        Message messageTest= new Message(11L, new Channel(), new User(), "HelloTest", LocalDateTime.now());
+        Message messageTest= new Message(11L, new Channel(), null, new User(), "HelloTest", LocalDateTime.now());
         messageTest.setId(1L);
         when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
         ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageTest);

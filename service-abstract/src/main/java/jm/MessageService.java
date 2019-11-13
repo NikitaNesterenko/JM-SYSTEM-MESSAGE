@@ -10,6 +10,8 @@ public interface MessageService {
 
     List<Message> getMessagesByChannelId(Long id);
 
+    List<Message> getMessagesByConversationId(Long id);
+
     List<Message> getMessagesByContent(String word);
 
     Message getMessageById(Long id);

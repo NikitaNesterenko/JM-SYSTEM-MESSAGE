@@ -25,6 +25,8 @@ public class TestDataInitializer {
     @Autowired
     private ChannelDAO channelDAO;
     @Autowired
+    private ConversationDAO conversationDAO;
+    @Autowired
     private MessageDAO messageDAO;
     @Autowired
     private WorkspaceDAO workspaceDAO;
@@ -34,6 +36,7 @@ public class TestDataInitializer {
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
+    private Set<Conversation> conversations = new HashSet<>();
     private Set<Message> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
@@ -122,6 +125,11 @@ public class TestDataInitializer {
         userSet.add(userList.get(0));
         userSet.add(userList.get(1));
 
+        User user_1 = userService.getUserById(1L);
+        User user_2 = userService.getUserById(2L);
+        User user_3 = userService.getUserById(3L);
+        Workspace workspace = workspaceDAO.getById(1L);
+
         Channel channel_1 = new Channel();
         channel_1.setName("channel_1");
         channel_1.setUsers(this.users);
@@ -154,11 +162,53 @@ public class TestDataInitializer {
 
         channelDAO.persist(channel_3);
         this.channels.add(channel_3);
+
+        Conversation conversation_1 = new Conversation();
+        conversation_1.setOpeningUser(user_1);
+        conversation_1.setAssociatedUser(user_2);
+        conversation_1.setShowForOpener(true);
+        conversation_1.setShowForAssociated(true);
+        conversation_1.setWorkspace(workspace);
+
+        conversationDAO.persist(conversation_1);
+        this.conversations.add(conversation_1);
+
+        //this conversation must not created because already exists
+        Conversation conversation_2 = new Conversation();
+        conversation_2.setOpeningUser(user_2);
+        conversation_2.setAssociatedUser(user_1);
+        conversation_2.setShowForOpener(true);
+        conversation_2.setShowForAssociated(false);
+        conversation_2.setWorkspace(workspace);
+
+        conversationDAO.persist(conversation_2);
+        this.conversations.add(conversation_2);
+
+        Conversation conversation_3 = new Conversation();
+        conversation_3.setOpeningUser(user_1);
+        conversation_3.setAssociatedUser(user_3);
+        conversation_3.setShowForOpener(true);
+        conversation_3.setShowForAssociated(false);
+        conversation_3.setWorkspace(workspace);
+
+        conversationDAO.persist(conversation_3);
+        this.conversations.add(conversation_3);
+
+        Conversation conversation_4 = new Conversation();
+        conversation_4.setOpeningUser(user_2);
+        conversation_4.setAssociatedUser(user_3);
+        conversation_4.setShowForOpener(true);
+        conversation_4.setShowForAssociated(false);
+        conversation_4.setWorkspace(workspace);
+
+        conversationDAO.persist(conversation_4);
+        this.conversations.add(conversation_4);
     }
 
     private void createMessages() {
         List<User> userList = new ArrayList<>(this.users);
         List<Channel> channels = new ArrayList<>(this.channels);
+        List<Conversation> conversations = new ArrayList<>(this.conversations);
 
         Message message_1 = new Message();
         message_1.setChannel(channels.get(0));
@@ -186,6 +236,51 @@ public class TestDataInitializer {
 
         messageDAO.persist(message_3);
         this.messages.add(message_3);
+
+        //messages for conversations
+        User user_1 = userService.getUserById(1L);
+        User user_2 = userService.getUserById(2L);
+        User user_3 = userService.getUserById(3L);
+
+        Conversation conversation_1 = conversationDAO.getById(1L);
+        Conversation conversation_2 = conversationDAO.getById(2L);
+        Conversation conversation_3 = conversationDAO.getById(3L);
+
+        Message message_1_2 = new Message();
+        message_1_2.setConversation(conversation_1);
+        message_1_2.setUser(user_1);
+        message_1_2.setContent("Message form user with id=1 to user with id=2");
+        message_1_2.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_1_2);
+        this.messages.add(message_1_2);
+
+        Message message_2_1 = new Message();
+        message_2_1.setConversation(conversation_1);
+        message_2_1.setUser(user_2);
+        message_2_1.setContent("Message form user with id=2 to user with id=1");
+        message_2_1.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_2_1);
+        this.messages.add(message_2_1);
+
+        Message message_1_3 = new Message();
+        message_1_3.setConversation(conversation_2);
+        message_1_3.setUser(user_1);
+        message_1_3.setContent("Message form user with id=1 to user with id=3");
+        message_1_3.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_1_3);
+        this.messages.add(message_1_3);
+
+        Message message_2_3 = new Message();
+        message_2_3.setConversation(conversation_3);
+        message_2_3.setUser(user_2);
+        message_2_3.setContent("Message form user with id=2 to user with id=3");
+        message_2_3.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_2_3);
+        this.messages.add(message_2_3);
     }
 
     private void createWorkspaces() {

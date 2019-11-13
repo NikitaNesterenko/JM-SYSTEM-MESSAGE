@@ -36,4 +36,13 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
             return null;
         }
     }
+
+    public List<Message> getMessagesByConversationId(Long id) {
+        try {
+            return (List<Message>) entityManager.createNativeQuery("select * from messages where conversation_id=?", Message.class)
+                    .setParameter(1, id).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

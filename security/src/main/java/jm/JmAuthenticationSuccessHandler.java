@@ -18,7 +18,7 @@ public class JmAuthenticationSuccessHandler implements AuthenticationSuccessHand
         authentication.getAuthorities().forEach(auth -> {
             if (auth.getAuthority().equals("ROLE_OWNER")) {
                 try {
-                    httpServletResponse.sendRedirect("/admin");
+                    httpServletResponse.sendRedirect("/workspace");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

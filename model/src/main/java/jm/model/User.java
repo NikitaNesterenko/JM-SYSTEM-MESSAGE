@@ -84,8 +84,8 @@ public class User {
     private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
-    @OneToMany
-    private Set<User> directMessagesToUsers;
+    //@OneToMany
+    //private Set<User> directMessagesToUsers;
 
     // TODO каналы пользователя, исправить маппинг в Channel
     // юзер может создавать каналы, либо быть участником (member) в чужих каналах

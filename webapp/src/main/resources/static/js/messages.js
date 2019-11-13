@@ -47,7 +47,7 @@ function showMessage(message) {
     message_box.scrollTo(0, message_box.scrollHeight);
 }
 
-window.updateMessages = function updateMessages() {
+/*window.updateMessages = function updateMessages() {
     const message_box = document.getElementById("all-messages");
     message_box.innerHTML = "";
 
@@ -85,10 +85,10 @@ window.updateMessages = function updateMessages() {
             message_box.append(messages_queue_context_user_container);
         });
     });
-};
+};*/
 
 connect();
-updateMessages();
+//updateMessages();
 window.pushMessage = function pushMessage(message) {
     updateMessages();
     sendName(message);

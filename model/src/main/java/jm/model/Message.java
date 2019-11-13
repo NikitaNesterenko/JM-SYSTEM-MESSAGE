@@ -26,6 +26,10 @@ public class Message {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
+    @ManyToOne(targetEntity = Conversation.class)
+    @JoinColumn(name = "conversation_id")
+    private Conversation conversation;
+
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
@@ -39,8 +43,9 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
+    public Message(Channel channel, Conversation conversation, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
+        this.conversation = conversation;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
