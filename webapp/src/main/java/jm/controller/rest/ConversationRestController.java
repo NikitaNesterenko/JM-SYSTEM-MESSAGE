@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import jm.ConversationService;
 import jm.model.Conversation;
+import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,11 @@ public class ConversationRestController {
     @GetMapping
     public ResponseEntity<List<Conversation>> getAllConversations(){
         return ResponseEntity.ok(conversationService.gelAllConversations());
+    }
+
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(conversationService.getConversationsByUserId(id));
     }
 
 }

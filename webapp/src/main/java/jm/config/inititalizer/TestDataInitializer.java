@@ -188,7 +188,7 @@ public class TestDataInitializer {
         conversation_3.setOpeningUser(user_1);
         conversation_3.setAssociatedUser(user_3);
         conversation_3.setShowForOpener(true);
-        conversation_3.setShowForAssociated(false);
+        conversation_3.setShowForAssociated(true);
         conversation_3.setWorkspace(workspace);
 
         conversationDAO.persist(conversation_3);
@@ -198,7 +198,7 @@ public class TestDataInitializer {
         conversation_4.setOpeningUser(user_2);
         conversation_4.setAssociatedUser(user_3);
         conversation_4.setShowForOpener(true);
-        conversation_4.setShowForAssociated(false);
+        conversation_4.setShowForAssociated(true);
         conversation_4.setWorkspace(workspace);
 
         conversationDAO.persist(conversation_4);
@@ -281,6 +281,24 @@ public class TestDataInitializer {
 
         messageDAO.persist(message_2_3);
         this.messages.add(message_2_3);
+
+        Message message_3_1 = new Message();
+        message_3_1.setConversation(conversation_2);
+        message_3_1.setUser(user_3);
+        message_3_1.setContent("Message form user with id=3 to user with id=1");
+        message_3_1.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_3_1);
+        this.messages.add(message_3_1);
+
+        Message message_3_2 = new Message();
+        message_3_2.setConversation(conversation_3);
+        message_3_2.setUser(user_3);
+        message_3_2.setContent("Message form user with id=3 to user with id=2");
+        message_3_2.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_3_2);
+        this.messages.add(message_3_2);
     }
 
     private void createWorkspaces() {

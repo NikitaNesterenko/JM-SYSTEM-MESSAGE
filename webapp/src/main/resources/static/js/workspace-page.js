@@ -1,4 +1,4 @@
-import {ChannelRestPaginationService, BotRestPaginationService} from './rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, BotRestPaginationService, ConversationRestPaginationService} from './rest/entities-rest-pagination.js'
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -32,6 +33,16 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
             } catch (NoResultException e2) {
                 return null;
             }
+        }
+    }
+
+    @Override
+    public List<Conversation> getConversationsByUserId(Long userId) {
+        try {
+            return (List<Conversation>) entityManager.createNativeQuery("select * from conversations where opener_id=? or associated_id=?", Conversation.class)
+                    .setParameter(1, userId).setParameter(2, userId).getResultList();
+        } catch (NoResultException e1) {
+            return null;
         }
     }
 }

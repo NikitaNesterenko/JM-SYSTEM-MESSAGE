@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -48,5 +49,10 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public Conversation getConversationByUsers(User opener, User associated) {
         return conversationDAO.getConversationByUsers(opener, associated);
+    }
+
+    @Override
+    public List<Conversation> getConversationsByUserId(Long userId) {
+        return conversationDAO.getConversationsByUserId(userId);
     }
 }
