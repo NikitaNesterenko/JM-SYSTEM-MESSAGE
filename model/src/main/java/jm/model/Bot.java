@@ -29,8 +29,8 @@ public class Bot {
     @Column(name = "nickName")
     private String nickName;
 
-    @OneToOne(targetEntity = Workspace.class)
-    @JoinColumn(name = "workspace_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
     @Column(name = "date_create", nullable = false)

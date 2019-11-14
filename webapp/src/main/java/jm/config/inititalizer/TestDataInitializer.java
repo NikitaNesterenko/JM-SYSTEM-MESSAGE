@@ -51,9 +51,9 @@ public class TestDataInitializer {
         createRoles();
         createUsers();
         createWorkspaces();
+        createBots();
         createChannels();
         createMessages();
-        createBots();
     }
 
     private void createRoles() {
@@ -125,6 +125,7 @@ public class TestDataInitializer {
         Channel channel_1 = new Channel();
         channel_1.setName("channel_1");
         channel_1.setUsers(this.users);
+        channel_1.setBots(this.bots);
         channel_1.setUser(userList.get(0));
         channel_1.setIsPrivate(true);
         channel_1.setCreatedDate(LocalDateTime.now());
@@ -159,6 +160,7 @@ public class TestDataInitializer {
     private void createMessages() {
         List<User> userList = new ArrayList<>(this.users);
         List<Channel> channels = new ArrayList<>(this.channels);
+        List<Bot> bots = new ArrayList<>(this.bots);
 
         Message message_1 = new Message();
         message_1.setChannel(channels.get(0));
@@ -186,6 +188,17 @@ public class TestDataInitializer {
 
         messageDAO.persist(message_3);
         this.messages.add(message_3);
+
+        Message message_4 = new Message();
+        message_4.setChannel(channels.get(1));
+        message_4.setBot(bots.get(0));
+        message_4.setContent("Hello from BOT!");
+        message_4.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_4);
+        this.messages.add(message_4);
+
+
     }
 
     private void createWorkspaces() {
@@ -214,7 +227,8 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(1L), LocalDateTime.now());
+        Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
+        this.bots.add(bot);
         botDAO.persist(bot);
     }
 
