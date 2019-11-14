@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Admin Page</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" th:href="@{/css/adminPage.css}"/>
+
+    <script th:src="@{/js/adminPage.js}" type="module"></script>
+    <script th:src="@{/js/admin_analytic.js}" type="module"></script>
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" rel="stylesheet">
+
+    <!-- Дополнительные стили (не обязательно) -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+          integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" rel="stylesheet">
+
+    <!-- Подключаем jQuery (необходим для Bootstrap JavaScript) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script crossorigin="anonymous"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+<!-- HTML-код модального окна -->
+<div class="modal fade" id="modalEditMemberInfo">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Заголовок модального окна -->
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                <h4 class="modal-title">About username</h4>
+            </div>
+            <!-- Основное содержимое модального окна -->
+            <div class="modal-body">
+                <form method="post" th:action="@{/}">
+                    <div class="modal-body" style="overflow-y: auto">
+                        <div class="form-group">
+                            <label for="fullName">Login</label>
+                            <input class="form-control" id="fullName" name="fullName"
+                                   th:value="fullName"
+                                   type="text"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="displayName">Name</label>
+                            <input class="form-control" id="displayName" name="displayName"
+                                   th:value="displayName"
+                                   type="text"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="userName">LastName</label>
+                            <input class="form-control" id="userName" name="userName"
+                                   th:value="userName"
+                                   type="text"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input class="form-control" id="email" name="email"
+                                   th:value="email"
+                                   type="text"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-" data-dismiss="modal"
+                                    type="button">
+                                Cancel
+                            </button>
+                            <button class="btn btn-primary" type="submit">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="invites-modal" id="invitesModal">
+    <div class="form_container">
+        <div class="workspace_form">
+            <div class="title">
+                <p>
+                    Workspaces with paid plans can also invite guests, like contractors, vendors,
+                    or clients. See pricing plans
+                </p>
+            </div>
+            <h1 class="large_bottom_margin" id="workspace_name_label">Invite people to test-channel</h1>
+            <div class="form_flex">
+
+                <form action="/tada" class="confirm-form">
+
+                    <div class="head_form">
+                        <strong>Email Address</strong>
+                        <strong>Name (optional)</strong>
+                    </div>
+
+                    <div class="content-form-1">
+                        <input class="confirm_input" id="inviteEmail_1" placeholder="name1@example.com" type="text"
+                               value="">
+                        <input class="confirm_input confirm_input_name" id="inviteName_1" placeholder="name_1"
+                               type="text" value="">
+                        <button class="button_delete_member" id="btDeleteMember_1" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-2">
+                        <input class="confirm_input" id="inviteEmail_2" placeholder="name2@example.com" type="text"
+                               value="">
+                        <input class="confirm_input confirm_input_name" id="inviteName_2" placeholder="name_2"
+                               type="text" value="">
+                        <button class="button_delete_member" id="btDeleteMember_2" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-3">
+                        <input class="confirm_input" id="inviteEmail_3" placeholder="name3@example.com" type="text"
+                               value="">
+                        <input class="confirm_input confirm_input_name" id="inviteName_3" placeholder="name_3"
+                               type="text" value="">
+                        <button class="button_delete_member" id="btDeleteMember_3" type="button">X</button>
+                    </div>
+
+                    <span class="add_row_invites">
+                <button class="link_button" type="button">Add another</button>
+                	or
+                <button class="link_button" type="button">and many at once</button>
+            </span>
+                    <div class="p-invite_channel_picker">
+                        <div>
+                            <label for="channel_picker_dropdown_section">
+                                <span class="c-label_text">Default Channels</span>
+                            </label>
+                            <div id="channel_picker_dropdown_section">
+            			<span class="p-invites_channel_picker_note">
+            				<span>New
+            					<strong>members</strong>
+            					will automatically join <strong>#general</strong>,
+            					<strong>#random</strong>, and
+            					<strong>#test</strong>
+            					channels.</span>
+            				<button class="link_button" type="button">Edit/add
+            				</button>
+            			</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-invite_members_form">
+            	<span>
+            		<button class="c-link--button">
+            			<span>
+            				Share invite link
+            			</span>
+            		</button>
+            	</span>
+                        <button class="invitation_button" type="button">Send Invitations</button>
+                    </div>
+                </form>
+            </div>
+            <hr class="hr-footer">
+            <div class="p-footer">
+                <button class="pending_invites_link c-link--button" type="button">
+                    See pending and accepted invites
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button class="invites-modal-close" id="invitesModalClose" type="button">
+        X
+    </button>
+</div>
+
+<div class="admin-page" id="adminPage">
+
+    <div class="account-box" id="panelAdmin">
+        <div class="acc-info-box">
+            <div class="sign-in-box">
+                <div class="avatar-wrap">
+                    <img alt="avatar"
+                         th:src="@{/image/avatar.png}"/>
+                </div>
+                <div class="sign-in">
+                    <p>SIGNED IN AS</p>
+                    <p><b>USER NAME</b></p>
+                </div>
+            </div>
+        </div>
+
+        <ul class="acc-acc-box primary_nav">
+            <h3 class="acc-titles">ACCOUNT</h3>
+            <li class="btn-1">
+                <a href="/admin"><i aria-hidden="true" class="glyphicon glyphicon-hand-left" style="color: black"></i>
+                    Back to JM-MESSAGE-SYSTEM
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-home"></i>
+                    Home
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-user"></i>
+                    Account & profile
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-wrench"></i>
+                    Configure apps
+                </a>
+            </li>
+            <li class="btn-1">
+                <a href="/admin/analytics"><i aria-hidden="true" class="glyphicon glyphicon-stats"></i>
+                    Analytics
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-tasks"></i>
+                    Customize
+                </a>
+            </li>
+            <li class="btn-1">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-exclamation-sign"></i>
+                    About this Workspace
+                </a>
+            </li>
+        </ul>
+        <ul class="acc-admin-box secondary_nav">
+            <h3 class="acc-titles">ADMINISTRATION</h3>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-cog"></i>
+                    Settings & permissions
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-briefcase"></i>
+                    Manage members
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-list-alt"></i>
+                    User groups
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-plus"></i>
+                    Invitations
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-book"></i>
+                    Billing
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-lock"></i>
+                    Authentication
+                </a>
+            </li>
+            <li class="btn-2">
+                <a><i aria-hidden="true" class="glyphicon glyphicon-bell"></i>
+                    Support for Transport Layer Security (TLS)
+                </a>
+            </li>
+        </ul>
+        <ul class="acc-other-box secondary_nav">
+            <h3 class="acc-titles">OTHER</h3>
+            <li class="btn-3">Tour</li>
+            <li class="btn-3">Download apps</li>
+            <li class="btn-3">Brand guidlines</li>
+            <li class="btn-3">Configure apps</li>
+            <li class="btn-3">Help</li>
+            <li class="btn-3">API</li>
+        </ul>
+    </div>
+
+    <div class="admin-box">
+
+        <div class="info-box">
+            <div class="navbar-container">
+                <div class="main-menu-wrapper">
+                    <a class="main-menu" id="mainMenu">
+                        <img alt="admin-menu" class="image-menu"
+                             th:src="@{/image/menu.png}"/>
+                        <span class="header-menu">Menu</span>
+                    </a>
+                    <h3 class="channel-name">
+                        <a>
+                            <i aria-hidden="true" class="glyphicon glyphicon-home"></i>
+                            Channel-NAME
+                        </a>
+                    </h3>
+                </div>
+                <div class="admin-navbar-in">
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i aria-hidden="true" class="glyphicon glyphicon-plane"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Plans</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i aria-hidden="true" class="glyphicon glyphicon-th-large"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Workspaces</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i aria-hidden="true" class="glyphicon glyphicon-question-sign"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Help</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="menu-element">
+                        <a>
+                            <div class="menu-element-img">
+                                <i aria-hidden="true" class="glyphicon glyphicon-asterisk"></i>
+                            </div>
+                            <div class="menu-element-text">
+                                <span>Launch</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Start of analytics container -->
+            <div class="container analytic-box">
+
+                <h2>Analytics</h2>
+                <ul class="nav nav-tabs" id="analytic-tab">
+                    <li class="active"><a data-toggle="tab" href="#analytic_overview">Overview</a></li>
+                    <li><a data-toggle="tab" href="#analytic_channels">Channels</a></li>
+                    <li><a data-toggle="tab" href="#analytic_members">Members</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="analytic_overview">
+                        <!--                        Overview-->
+                        <h3>Overview</h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <table>
+                                    <tr>
+                                        <td id="analytic_overview_total" width="70%">Updated:</td>
+                                        <td width="15%">
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                                        type="button">
+                                                    Period
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">Last 30 days</a></li>
+                                                    <li><a href="#">All time</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td width="15%">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                Export
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                <div class="" id="analytic_all_time_usage">
+                                    <p class="h4">All time usage</p>
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <div id="analytic_ov_msg_sent_counter_block">
+                                                    <h5><strong>Messages Sent</strong></h5>
+                                                    <div id="analytic_ov_msg_counter">
+                                                        <h2>0</h2>
+                                                    </div>
+                                                    <span>out of 10,000 messages</span>
+                                                    <div id="analytic_ov_msg_counter_progress">progress bar</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div id="analytic_ov_file_usage_block">
+                                                    <h5><strong>File Storage Used</strong></h5>
+                                                    <div id="analytic_ov_file_usage_counter">
+                                                        <h2>0 bytes</h2>
+                                                    </div>
+                                                    <span>out of 5 Gb of <a href="#">file storage</a></span>
+                                                    <div id="analytic_ov_file_storage_counter_progress">progress bar</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div id="analytic_ov_apps_block">
+                                                    <h5><strong>Apps and Integrations Installed</strong></h5>
+                                                    <div id="analytic_ov_apps_counter">
+                                                        <h2>0</h2>
+                                                    </div>
+                                                    <span>out of 10 <a href="#">apps and integrations</a></span>
+                                                    <div id="analytic_ov_apps_counter_progress">progress bar</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <hr>
+                                </div>
+                                <div class="" id="analytic_active_members">
+                                    <p class="h4">Active members</p>
+                                    <p>
+                                        See how many people are active — meaning they viewed at least one public channel.
+                                    </p>
+                                    <hr>
+                                </div>
+                                <div class="" id="analytic_public_private">
+                                    <p class="h4 mx-5">Public and private</p>
+                                    <p>
+                                        Understand where your members have conversations, and where messages are most
+                                        commonly read. Most messages will have multiple readers.
+                                    </p>
+                                    <hr>
+                                </div>
+                                <div class="" id="analytic_messages_files">
+                                    <p class="h4 mx-5">Messages and files</p>
+                                    <p>
+                                        Learn how information is shared in your workspace.
+                                    </p>
+                                </div>
+                                <div>
+                                    <hr>
+                                    <p>
+                                        A quick note about analytics
+
+                                        Some people post a lot of little messages. Others try to get it all in one.
+                                        This data is best used for understanding your whole team’s use of Slack, not evaluating an individual’s performance.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="analytic_channels">
+                        <!--                        Channels-->
+                        <h3>Channels</h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <table>
+                                    <tr>
+                                        <td id="analytic_channels_total" width="60%">
+                                            Channels:
+                                        </td>
+                                        <td width="10%">
+                                            Updated:
+                                        </td>
+                                        <td width="10%">
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary
+                                                    dropdown-toggle analytic-channel-btn" data-toggle="dropdown" type="button">
+                                                    Period
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a id="analytic-channels-last30" href="#">Last 30 days</a></li>
+                                                    <li><a id="analytic-channels-all" href="#">All time</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td width="10%">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                Edit columns
+                                            </button>
+                                        </td>
+                                        <td width="10%">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                Export
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover" id="analytic_channels_table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Created</th>
+                                        <th scope="col">Last active</th>
+                                        <th scope="col">Total membership</th>
+                                        <th scope="col">Messages posted</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="analytic_members">
+                        <!--                        Members-->
+                        <h3>Members</h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <table>
+                                    <tr>
+                                        <td id="analytic_members_total" width="60%">
+                                            Members:
+                                        </td>
+                                        <td width="10%">
+                                            Updated:
+                                        </td>
+                                        <td width="10%">
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary dropdown-toggle analytic-members-btn" data-toggle="dropdown"
+                                                        type="button">
+                                                    Period
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a id="analytic-members-last30" href="#">Last 30 days</a></li>
+                                                    <li><a id="analytic-members-all" href="#">All time</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td width="10%">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                Edit columns
+                                            </button>
+                                        </td>
+                                        <td width="10%">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                Export
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover" id="analytic_members_table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">User ID</th>
+                                        <th scope="col">Username</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Account created</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of analytics container -->
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

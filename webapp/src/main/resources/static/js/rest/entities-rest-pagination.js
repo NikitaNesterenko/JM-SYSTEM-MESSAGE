@@ -11,7 +11,8 @@ export class MessageRestPaginationService extends  RestPaginationService{
         super('/rest/api/messages');
     }
     getAllMessagesByChannelId = async (id) => {
-        const response = await fetch('/rest/api/messages/channel/' + id);
+        // const response = await fetch('/rest/api/messages/channel/' + id);
+        const response = await fetch(`/rest/api/messages/channel/${id}`);
         return response.json();
     };
 }
@@ -33,5 +34,15 @@ export class ChannelRestPaginationService extends  RestPaginationService{
 export class WorkspaceRestPaginationService extends  RestPaginationService{
     constructor(){
         super('/rest/api/workspaces');
-    }
+    };
+
+    getAllChannelsForWorkspace = async (id, last_month) => {
+        const response = await fetch(`/rest/api/workspace/analytic/${id}/channels/${last_month}`);
+        return response.json();
+    };
+
+    getAllUsersForWorkspace = async (id, last_month) => {
+        const response = await fetch(`/rest/api/workspace/analytic/${id}/users/${last_month}`);
+        return response.json();
+    };
 }

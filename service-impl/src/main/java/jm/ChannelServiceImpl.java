@@ -1,14 +1,14 @@
 package jm;
 
-import jm.model.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
+import jm.model.ChannelDTO;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,6 +29,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public void createChannel(Channel channel) {
+        channel.setLastUpdateDate(LocalDateTime.now());
         channelDAO.persist(channel);
     }
 
@@ -39,6 +40,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public void updateChannel(Channel channel) {
+        channel.setLastUpdateDate(LocalDateTime.now());
         channelDAO.merge(channel);
     }
 

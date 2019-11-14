@@ -24,4 +24,8 @@ public interface ChannelDAO {
 
     List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login);
 
+    List<Channel> getChannelByWorkspace(Long workspaceId);
+
+    List<Channel> getChannelByWorkspaceForLastMonth(Long workspaceId);
+
 }

@@ -1,11 +1,16 @@
 package jm.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -124,6 +129,12 @@ public class User {
 
     @Column(name = "skype")
     private String userSkype;
+
+    @Column(name = "created_date", nullable = false)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    private LocalDateTime createdDate;
 
 
     public User(String name, String lastName, String login, String email, String password) {

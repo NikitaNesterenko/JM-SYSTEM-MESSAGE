@@ -20,4 +20,6 @@ public interface WorkspaceDAO {
     Workspace getWorkspaceByName(String name);
 
     List<Workspace> getWorkspacesByOwner(User user);
+
+    List<User> getAllUsersForWorkspace(Long id);
 }

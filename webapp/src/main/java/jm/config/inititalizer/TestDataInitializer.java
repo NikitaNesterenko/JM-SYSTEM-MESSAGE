@@ -1,5 +1,6 @@
 package jm.config.inititalizer;
 
+import jm.ChannelService;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
@@ -23,7 +24,7 @@ public class TestDataInitializer {
     @Autowired
     private RoleDAO roleDAO;
     @Autowired
-    private ChannelDAO channelDAO;
+    private ChannelService channelService;
     @Autowired
     private MessageDAO messageDAO;
     @Autowired
@@ -86,6 +87,7 @@ public class TestDataInitializer {
         user_1.setLogin("login_1");
         user_1.setEmail("mymail_1@testmail.com");
         user_1.setPassword("pass_1");
+//        user_1.setCreatedDate(LocalDateTime.now());
         user_1.setRoles(userRoleSet);
 
         userService.createUser(user_1);
@@ -97,6 +99,7 @@ public class TestDataInitializer {
         user_2.setLogin("login_2");
         user_2.setEmail("mymail_2@testmail.com");
         user_2.setPassword("pass_2");
+//        user_2.setCreatedDate(LocalDateTime.now());
         user_2.setRoles(userRoleSet);
 
         userService.createUser(user_2);
@@ -108,6 +111,7 @@ public class TestDataInitializer {
         user_3.setLogin("login_3");
         user_3.setEmail("mymail_3@testmail.com");
         user_3.setPassword("pass_3");
+//        user_3.setCreatedDate(LocalDateTime.now());
         user_3.setRoles(userRoleSet);
 
         userService.createUser(user_3);
@@ -130,7 +134,7 @@ public class TestDataInitializer {
         channel_1.setCreatedDate(LocalDateTime.now());
         channel_1.setWorkspace(workspaceList.get(0));
 
-        channelDAO.persist(channel_1);
+        channelService.createChannel(channel_1);
         this.channels.add(channel_1);
 
         Channel channel_2 = new Channel();
@@ -141,7 +145,7 @@ public class TestDataInitializer {
         channel_2.setCreatedDate(LocalDateTime.now());
         channel_2.setWorkspace(workspaceList.get(0));
 
-        channelDAO.persist(channel_2);
+        channelService.createChannel(channel_2);
         this.channels.add(channel_2);
 
         Channel channel_3 = new Channel();
@@ -152,7 +156,7 @@ public class TestDataInitializer {
         channel_3.setCreatedDate(LocalDateTime.now());
         channel_3.setWorkspace(workspaceList.get(1));
 
-        channelDAO.persist(channel_3);
+        channelService.createChannel(channel_3);
         this.channels.add(channel_3);
     }
 

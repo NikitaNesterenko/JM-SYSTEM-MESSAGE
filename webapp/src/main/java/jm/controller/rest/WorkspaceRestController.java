@@ -59,4 +59,5 @@ public class WorkspaceRestController {
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
         return new ResponseEntity<>(workspaceService.gelAllWorkspaces(),HttpStatus.OK);
     }
+
 }

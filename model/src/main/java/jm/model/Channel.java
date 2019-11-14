@@ -55,8 +55,17 @@ public class Channel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
+    @Column(name = "update_date", nullable = false)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    private LocalDateTime lastUpdateDate;
+
     @Column(name = "topic")
     private String topic;
+
+//    @OneToMany(mappedBy = "channel", cascade = CascadeType.REFRESH, orphanRemoval = true)
+//    private Set<Message> messages;
   
     public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
