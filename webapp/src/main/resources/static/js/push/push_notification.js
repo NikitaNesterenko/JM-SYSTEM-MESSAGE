@@ -10,11 +10,11 @@ function notify (title, message){
     sound.play();
 }
 
-// Парсер для сообщения типа "<b>login_2</b>   2019-11-11   14:10<br><tr><td>ads<br></td></tr>"
+// Парсер для сообщения типа "{inputMassage: "@asdas", dateCreate: "14.11.2019 18:07", user: {…}, bot: null}"
+// user {id: 2, name: "name_2", lastName: "last-name_2", login: "login_2", email: "mymail_2@testmail.com", …}
 function notifyParseMessage(message) {
-    const messageStr = message.toString();
-    const messageFrom = messageStr.substring(3, messageStr.indexOf("</b>", 4));
-    const messageContent = messageStr.substring(messageStr.indexOf("<td>",0) + 4, messageStr.indexOf("</td>",0) - 4);
+    const messageFrom = message.user;
+    const messageContent = message.inputMassage;
     if (messageContent.includes("@",0)) {
         const indexToStart = messageContent.indexOf("@");
         let indexToEnd = messageContent.indexOf(" ",indexToStart);
@@ -22,7 +22,7 @@ function notifyParseMessage(message) {
             indexToEnd = messageContent.length;
         }
         const messageTo = messageContent.substring(indexToStart, indexToEnd);
-        notify("Message to " + messageTo, messageFrom + ": " + messageContent);
+        notify("Message to " + messageTo, messageFrom.name + ": " + messageContent);
     }
 }
 

@@ -15,7 +15,7 @@ export const getAllUsersInThisChannel = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/restapi/users/channel/" + id
+        url: "/rest/api/users/channel/" + id
     }).done(function (data) {
         result = data;
     });
@@ -59,20 +59,6 @@ export const updateUser = (user) => {
         contentType: "application/json"
     });
 };
-
-export const getAllUsersInThisChannel = (id) => {
-    let result ;
-    $.ajax({
-        type: 'get',
-        async: false,
-        url: "/rest/api/users/channel/" + id
-    }).done(function (data) {
-        result = data;
-    });
-    return result;
-
-};
-
 
 export const deleteUser = (id) => {
     $.ajax({
