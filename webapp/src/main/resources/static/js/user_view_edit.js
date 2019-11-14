@@ -136,6 +136,26 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
             // todo need to update workspace to implement user data changes
         });
     });
+
+
+    const input = document.getElementById('FileUpload1');
+    const uploadFile = (file) => {
+
+        // add file to FormData object
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // send `POST` request
+        fetch('/rest/api/avatar/' + userId, {
+            method: 'POST',
+            // headers: headers,
+            body: formData
+        })
+            .then(res => res.json())
+            .then(json => console.log(json))
+            .catch(err => console.error(err));
+    }
+    uploadFile(input.files[0]);
 });
 
 $('#modal_1_set_title_btn').on('click', function (e) {
@@ -145,6 +165,7 @@ $('#modal_1_set_title_btn').on('click', function (e) {
 $('#modal_1_edit_profile_btn').on('click', function (e) {
     $('#modal_2').modal('show');
 });
+
 
 // file upload func
 // https://www.aspsnippets.com/Articles/Open-Fileupload-Upload-File-on-Button-Click-using-JavaScript-and-jQuery.aspx
