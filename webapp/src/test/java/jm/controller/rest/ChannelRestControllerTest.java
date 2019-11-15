@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 
 public class ChannelRestControllerTest {
-    private static final String url = "/restapi/channels/";
+    private static final String url = "/rest/api/channels/";
     @Mock
     private ChannelService channelService;
 
@@ -41,7 +41,7 @@ public class ChannelRestControllerTest {
     @Test
     public void getChannelById() throws Exception {
         Long testId1 = 1L;
-        final String getUrl = url + "channel/";
+        final String getUrl = url;
 
         mockMvc.perform(get(getUrl + testId1))
                 .andExpect(status().isOk());

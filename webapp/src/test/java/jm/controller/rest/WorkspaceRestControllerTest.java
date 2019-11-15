@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class WorkspaceRestControllerTest {
 
-    private static final String URL = "/restapi/workspaces/";
+    private static final String URL = "/rest/api/workspaces/";
 
     @Mock
     private WorkspaceService workspaceService;
@@ -43,7 +43,7 @@ public class WorkspaceRestControllerTest {
     @Test
     public void getWorkspaceById() throws Exception {
         Long testId_1 = 1L;
-        final String getURL = URL + "workspace/{id}";
+        final String getURL = URL + "{id}";
 
         mockMvc
                 .perform(get(getURL, testId_1))
