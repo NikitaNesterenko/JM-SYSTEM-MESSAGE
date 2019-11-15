@@ -1,8 +1,4 @@
-import {MessageRestPaginationService} from './rest/entities-rest-pagination.js'
-
 let stompClient = null;
-const channel_id = 1;//Захардкоденные переменные
-const message_service = new MessageRestPaginationService();
 
 /*function connect() {
     let socket = new SockJS('/websocket');

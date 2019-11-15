@@ -1,8 +1,8 @@
 import {MessageRestPaginationService, ChannelRestPaginationService, ConversationRestPaginationService, UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
-let channel_id = 1;//Захардкоденные переменные
-let conversation_id = null;//Захардкоденные переменные
-let user_id = 1; //Захардкоденные переменные
+let channel_id = null;
+let conversation_id = null;
+let user_id = 2;
 
 const message_service = new MessageRestPaginationService();
 const conversation_service = new ConversationRestPaginationService();
@@ -210,16 +210,54 @@ window.showAllConversations = function showAllConversations() {
 };
 
 window.pressConversationButton = function pressConversationButton(id) {
-    //document.getElementById("conversation_button_" + id).style.color = "white";
-    //document.getElementById("conversation_button_" + id).style.background = "royalblue";
+    const channels_promise = channel_service.getAllChannels();
+    const conversations_promise = conversation_service.getAllConversationsByUserId(user_id);
+
+    channels_promise.then(channels => {
+        channels.forEach(function (channel, i) {
+            document.getElementById("channel_button_" + channel.id).style.color = "rgb(188,171,188)";
+            document.getElementById("channel_button_" + channel.id).style.background = "none";
+        });
+    });
+
+    conversations_promise.then(conversations => {
+        conversations.forEach(function (conversation, i) {
+            if(id !== conversation.id) {
+                document.getElementById("conversation_button_" + conversation.id).style.color = "rgb(188,171,188)";
+                document.getElementById("conversation_button_" + conversation.id).style.background = "none";
+            }
+        });
+    });
+
+    document.getElementById("conversation_button_" + id).style.color = "white";
+    document.getElementById("conversation_button_" + id).style.background = "royalblue";
     channel_id = null;
     conversation_id = id;
     updateMessages();
 };
 
 window.pressChannelButton = function pressChannelButton(id) {
-    //document.getElementById("channel_button_" + id).style.color = "white";
-    //document.getElementById("channel_button_" + id).style.background = "royalblue";
+    const channels_promise = channel_service.getAllChannels();
+    const conversations_promise = conversation_service.getAllConversationsByUserId(user_id);
+
+    channels_promise.then(channels => {
+        channels.forEach(function (channel, i) {
+            if(id !== channel.id) {
+                document.getElementById("channel_button_" + channel.id).style.color = "rgb(188,171,188)";
+                document.getElementById("channel_button_" + channel.id).style.background = "none";
+            }
+        });
+    });
+
+    conversations_promise.then(conversations => {
+        conversations.forEach(function (conversation, i) {
+            document.getElementById("conversation_button_" + conversation.id).style.color = "rgb(188,171,188)";
+            document.getElementById("conversation_button_" + conversation.id).style.background = "none";
+        });
+    });
+
+    document.getElementById("channel_button_" + id).style.color = "white";
+    document.getElementById("channel_button_" + id).style.background = "royalblue";
     channel_id = id;
     conversation_id = null;
     updateMessages();
