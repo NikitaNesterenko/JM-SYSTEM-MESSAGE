@@ -1,11 +1,15 @@
-
 import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPaginationService} from './rest/entities-rest-pagination.js'
 
-const user_id = 2;//Захардкоденные переменные
-const channel_id = 1;//Захардкоденные переменные
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
+sessionStorage.setItem("channelName", 1);
+
+$(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
+    const channel_id = parseInt($(this).val());
+    pressChannelButton(channel_id);
+    sessionStorage.setItem("channelName",channel_id);
+});
 
 class Message {
     constructor(channel, user, content, dateCreate) {
@@ -17,8 +21,8 @@ class Message {
 }
 
 $('#form_message').submit(function () {
-    const user_promise = user_service.getById(user_id);
-    const channel_promise = channel_service.getById(channel_id);
+    const user_promise = user_service.getLoggedUser()
+    const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
     Promise.all([user_promise, channel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
         const user = value[0];
         const channel = value[1];
@@ -35,5 +39,6 @@ $('#form_message').submit(function () {
     });
     return false;
 });
+
 
 

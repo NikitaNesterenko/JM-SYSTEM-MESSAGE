@@ -1,8 +1,11 @@
-import {ChannelRestPaginationService, BotRestPaginationService} from './rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
+const workspace_service = new WorkspaceRestPaginationService();
+
+
 
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
@@ -29,21 +32,28 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-    channel_service.getAll()
+   let workspace_id = workspace_service.getChoosedWorkspace();
+    Promise.all([workspace_id]).then( value => {
+    channel_service.getChannelsByWorkspaceId(value[0].id)
         .then((respons) => {
             $.each(respons, (i, item) => {
              $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
-                                                    <button class="p-channel_sidebar__name_button">
+                                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3">${item.name}</span>
+                                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
                                                     </button>
                                                   </div>`);
             })
+            document.getElementById("channel_button_" + 1).style.color = "white";
+            document.getElementById("channel_button_" + 1).style.background = "royalblue";
          })
+    })
 };
 
 const showBot = () => {
-    bot_service.getBotByWorkspaceId(2) //Захардкоденные переменные
+    let workspace_id = workspace_service.getChoosedWorkspace();
+    Promise.all([workspace_id ]).then( value => {
+    bot_service.getBotByWorkspaceId(value[0].id) //Захардкоденные переменные
         .then((response) => {
             if (response !== undefined) {
                 $('#bot_representation').append(` <div class="p-channel_sidebar__direct-messages__container">
@@ -61,8 +71,10 @@ const showBot = () => {
                                             </div>`);
             }
         })
+    })
 };
 
+// do not work
 const showAllUsers = () => {
     let channels = getAllUsersInThisChannel(2);
     $.each(channels, (i, item) => {
@@ -92,3 +104,7 @@ const profileCard = () => {
         })
     }('#modal_1','#modal_2');
 };
+
+
+
+

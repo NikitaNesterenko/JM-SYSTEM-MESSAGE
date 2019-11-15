@@ -1,8 +1,10 @@
-import {MessageRestPaginationService} from './rest/entities-rest-pagination.js'
+import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 
 let stompClient = null;
-const channel_id = 2;//Захардкоденные переменные
+let channel_id = sessionStorage.getItem("channelName");
 const message_service = new MessageRestPaginationService();
+const channel_service = new ChannelRestPaginationService();
+const workspace_service = new WorkspaceRestPaginationService();
 
 function connect() {
     let socket = new SockJS('/websocket');
@@ -11,7 +13,6 @@ function connect() {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages', function (message) {
             let result  = JSON.parse(message.body);
-            // showMessage(result);
             if(result.user !== null) {
                 showMessage(result);
             } else {
@@ -171,5 +172,24 @@ function showBotMessage(message) {
     message_box.append(messages_queue_context_user_container);
     message_box.scrollTo(0, message_box.scrollHeight);
 }
+
+window.pressChannelButton = function pressChannelButton(id) {
+    workspace_service.getChoosedWorkspace().then( (respons) => {
+    let channel_promise =  channel_service.getChannelsByWorkspaceId(respons.id);
+    channel_promise.then(channels => {
+        channels.forEach(function (channel, i) {
+            if(id !== channel.id) {
+                document.getElementById("channel_button_" + channel.id).style.color = "rgb(188,171,188)";
+                document.getElementById("channel_button_" + channel.id).style.background = "none";
+            }
+        });
+    });
+    });
+    document.getElementById("channel_button_" + id).style.color = "white";
+    document.getElementById("channel_button_" + id).style.background = "royalblue";
+    channel_id = id;
+    updateMessages();
+};
+
 
 
