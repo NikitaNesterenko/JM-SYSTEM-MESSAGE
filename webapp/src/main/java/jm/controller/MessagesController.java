@@ -1,11 +1,12 @@
 package jm.controller;
 
-import jm.Content.MessageContent;
+import com.fasterxml.jackson.databind.ObjectMapper;
+//import jm.Content.MessageContent;
 import jm.model.InputMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
+//import org.springframework.web.util.HtmlUtils;
 
 
 /* В подходе Spring при работе с STOMP сообщениями, STOMP сообщения могут быть перенаправлены к @Controller классам.
@@ -15,12 +16,19 @@ import org.springframework.web.util.HtmlUtils;
 @Controller
 public class MessagesController {
 
-    @MessageMapping("/message")
+    /*@MessageMapping("/message")
     @SendTo("/topic/messages")
     public MessageContent messagesСreation(InputMessage message) throws Exception {
         return new MessageContent("<b>" + HtmlUtils.htmlEscape(message.getUser().getLogin()) + "</b>   " + HtmlUtils.htmlEscape(message.getDateCreate().toString().replace("T", "   ")) +
                 "<br><tr><td>" + HtmlUtils.htmlEscape(message.getInputMassage()) + "<br></td></tr>");
 
+    }*/
+
+    @MessageMapping("/message")
+    @SendTo("/topic/messages")
+    public String messageCreation(InputMessage message) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(message);
     }
 
 }

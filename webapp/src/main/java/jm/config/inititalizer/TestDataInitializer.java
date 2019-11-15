@@ -206,32 +206,32 @@ public class TestDataInitializer {
     }
 
     private void createMessages() {
-        List<User> userList = new ArrayList<>(this.users);
-        List<Channel> channels = new ArrayList<>(this.channels);
-        List<Conversation> conversations = new ArrayList<>(this.conversations);
+        //List<User> userList = new ArrayList<>(this.users);
+        //List<Channel> channels = new ArrayList<>(this.channels);
+        //List<Conversation> conversations = new ArrayList<>(this.conversations);
 
         Message message_1 = new Message();
-        message_1.setChannel(channels.get(0));
-        message_1.setUser(userList.get(0));
-        message_1.setContent("Hello from user_1");
+        message_1.setChannel(channelDAO.getById(1L));
+        message_1.setUser(userService.getUserById(1L));
+        message_1.setContent("Message from id=1 in channel-1");
         message_1.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_1);
         this.messages.add(message_1);
 
         Message message_2 = new Message();
-        message_2.setChannel(channels.get(1));
-        message_2.setUser(userList.get(1));
-        message_2.setContent("Hello from user_2");
+        message_2.setChannel(channelDAO.getById(2L));
+        message_2.setUser(userService.getUserById(2L));
+        message_2.setContent("Message from id=2 in channel-2");
         message_2.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_2);
         this.messages.add(message_2);
 
         Message message_3 = new Message();
-        message_3.setChannel(channels.get(2));
-        message_3.setUser(userList.get(2));
-        message_3.setContent("Hello from user_2");
+        message_3.setChannel(channelDAO.getById(3L));
+        message_3.setUser(userService.getUserById(3L));
+        message_3.setContent("Message from id=3 in channel-3");
         message_3.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_3);

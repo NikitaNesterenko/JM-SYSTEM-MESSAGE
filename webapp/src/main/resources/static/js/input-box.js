@@ -1,16 +1,17 @@
 
 import {UserRestPaginationService, ChannelRestPaginationService, ConversationRestPaginationService, MessageRestPaginationService} from './rest/entities-rest-pagination.js'
 
-const user_id = 2;//Захардкоденные переменные
-const channel_id = 1;//Захардкоденные переменные
+//let user_id = 2;//Захардкоденные переменные
+//let channel_id = 1;//Захардкоденные переменные
 //const conversation_id = null;//Захардкоденные переменные
-const user_service = new UserRestPaginationService();
-const channel_service = new ChannelRestPaginationService();
-const conversation_service = new ConversationRestPaginationService();
-const message_service = new MessageRestPaginationService();
 
-class Message {
-    constructor(channel/*, conversation*/, user, content, dateCreate) {
+//const user_service = new UserRestPaginationService();
+//const channel_service = new ChannelRestPaginationService();
+//const conversation_service = new ConversationRestPaginationService();
+//const message_service = new MessageRestPaginationService();
+
+/*class Message {
+    constructor(channel/!*, conversation*!/, user, content, dateCreate) {
         this.channel = channel;
         //this.conversation = conversation;
         this.user = user;
@@ -23,7 +24,7 @@ $('#form_message').submit(function () {
     const user_promise = user_service.getById(user_id);
     const channel_promise = channel_service.getById(channel_id);
     //const conversation_promise = conversation_service.getById(conversation_id);
-    Promise.all([user_promise, channel_promise/*, conversation_promise*/]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
+    Promise.all([user_promise, channel_promise/!*, conversation_promise*!/]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
         const user = value[0];
         const channel = value[1];
         //const conversation = value[2];
@@ -32,12 +33,12 @@ $('#form_message').submit(function () {
         const text_message = message_input_element.value;
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
-        const message = new Message(channel/*, conversation*/, user, text_message, currentDate);
+        const message = new Message(channel/!*, conversation*!/, user, text_message, currentDate);
 
         pushMessage(message);
         message_service.create(message);
     });
     return false;
-});
+});*/
 
 

@@ -43,7 +43,7 @@ public class MessageRestController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
-        return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessageById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")

@@ -21,13 +21,13 @@ window.addEventListener('load', function () {
 });
 
 $(document).ready(() => {
-    showAllChannels();
+    //showAllChannels();
     showAllUsers();
     profileCard();
     showBot();
 });
 
-const showAllChannels = () => {
+/*const showAllChannels = () => {
 
     const channels = channel_service.getAll();
 
@@ -39,7 +39,7 @@ const showAllChannels = () => {
                                                     </button>
                                                   </div>`);
     })
-};
+};*/
 
 const showBot = () => {
     bot_service.getBotByWorkspaceId(1)

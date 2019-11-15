@@ -33,6 +33,10 @@ export class ChannelRestPaginationService extends  RestPaginationService{
     constructor(){
         super('/rest/api/channels');
     }
+    getAllChannels = async () => {
+        const response = await fetch('/rest/api/channels');
+        return response.json();
+    };
 }
 export class ConversationRestPaginationService extends  RestPaginationService{
     constructor(){

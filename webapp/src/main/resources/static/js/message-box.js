@@ -1,11 +1,44 @@
-import {MessageRestPaginationService, ConversationRestPaginationService, UserRestPaginationService} from './rest/entities-rest-pagination.js'
+import {MessageRestPaginationService, ChannelRestPaginationService, ConversationRestPaginationService, UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
 let channel_id = 1;//Захардкоденные переменные
 let conversation_id = null;//Захардкоденные переменные
 let user_id = 1; //Захардкоденные переменные
+
 const message_service = new MessageRestPaginationService();
 const conversation_service = new ConversationRestPaginationService();
 const user_service = new UserRestPaginationService();
+const channel_service = new ChannelRestPaginationService();
+
+class Message {
+    constructor(channel/*, conversation*/, user, content, dateCreate) {
+        this.channel = channel;
+        //this.conversation = conversation;
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
+}
+
+$('#form_message').submit(function () {
+    const user_promise = user_service.getById(user_id);
+    const channel_promise = channel_service.getById(channel_id);
+    //const conversation_promise = conversation_service.getById(conversation_id);
+    Promise.all([user_promise, channel_promise/*, conversation_promise*/]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
+        const user = value[0];
+        const channel = value[1];
+        //const conversation = value[2];
+
+        const message_input_element = document.getElementById("form_message_input");
+        const text_message = message_input_element.value;
+        message_input_element.value = null;
+        const currentDate = convert_date_to_format_Json(new Date());
+        const message = new Message(channel/*, conversation*/, user, text_message, currentDate);
+
+        pushMessage(message);
+        message_service.create(message);
+    });
+    return false;
+});
 
 /*window.pushMessage = function pushMessage(message) {
     const message_box = document.getElementById("all-messages");
@@ -111,6 +144,26 @@ window.updateMessages = function updateMessages() {
     }
 };
 
+window.showAllChannels = function showAllChannels() {
+    const channels_container = document.getElementById("id-channel_sidebar__channels__list");
+    channels_container.innerHTML = "";
+
+    const channels_promise = channel_service.getAllChannels();
+    channels_promise.then(channels => {
+        channels.forEach(function (channel, i) {
+                let channel_queue_context_container = document.createElement('div');
+                channel_queue_context_container.className = "p-channel_sidebar__channel";
+                channel_queue_context_container.innerHTML = `
+                                                        <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" onclick="pressChannelButton(${channel.id})">
+                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                                        <span class="p-channel_sidebar__name-3">${channel.name}</span>
+                                                    </button>
+                `;
+                channels_container.append(channel_queue_context_container);
+            });
+        });
+};
+
 window.showAllConversations = function showAllConversations() {
     const direct_messages_container = document.getElementById("direct-messages__container_id");
     direct_messages_container.innerHTML = "";
@@ -164,5 +217,14 @@ window.pressConversationButton = function pressConversationButton(id) {
     updateMessages();
 };
 
-updateMessages();
+window.pressChannelButton = function pressChannelButton(id) {
+    //document.getElementById("channel_button_" + id).style.color = "white";
+    //document.getElementById("channel_button_" + id).style.background = "royalblue";
+    channel_id = id;
+    conversation_id = null;
+    updateMessages();
+};
+
+//updateMessages();
+showAllChannels();
 showAllConversations();
