@@ -1,4 +1,5 @@
 import {ChannelRestPaginationService, BotRestPaginationService} from './rest/entities-rest-pagination.js'
+import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
@@ -28,22 +29,21 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-
     channel_service.getAll()
-        .then((response) => {
-            $.each(response, (i, item) => {
-                $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
+        .then((respons) => {
+            $.each(respons, (i, item) => {
+             $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
                                                     <button class="p-channel_sidebar__name_button">
                                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
                                                         <span class="p-channel_sidebar__name-3">${item.name}</span>
                                                     </button>
                                                   </div>`);
             })
-        })
+         })
 };
 
 const showBot = () => {
-    bot_service.getBotByWorkspaceId(1)
+    bot_service.getBotByWorkspaceId(2) //Захардкоденные переменные
         .then((response) => {
             if (response !== undefined) {
                 $('#bot_representation').append(` <div class="p-channel_sidebar__direct-messages__container">
@@ -64,7 +64,7 @@ const showBot = () => {
 };
 
 const showAllUsers = () => {
-    let channels = getAllUsersInThisChannel(1);
+    let channels = getAllUsersInThisChannel(2);
     $.each(channels, (i, item) => {
         $('#user-box').append(`<p><a href="" class="user-link">${item.name}</a>`);
     })

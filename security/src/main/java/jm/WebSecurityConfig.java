@@ -101,20 +101,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .and()
                 .httpBasic();
-//
-//        /*
-//        http
-//                .authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .and()
-//                .logout()
-//                .permitAll()
-//                .and()
-//                .httpBasic();
-//
-//*/
+
+        /*
+        http
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .httpBasic();
+
+*/
     }
 
 }
