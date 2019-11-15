@@ -20,5 +20,5 @@ public interface MessageService {
 
     void updateMessage(Message message);
 
-
+    List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate);
 }
