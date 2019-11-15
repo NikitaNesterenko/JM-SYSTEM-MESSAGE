@@ -1,4 +1,4 @@
-import {getUsers} from "./ajax/userRestController.js";
+import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
 window.addEventListener('load', function () {
 
@@ -16,7 +16,11 @@ window.addEventListener('load', function () {
 
 $(document).ready(function () {
 
-    var users = getUsers();
+    const user_service = new UserRestPaginationService();
+    let users = () => {
+        const users_promise = user_service.getAll();
+        users_promise.then();
+    };
 
     $.each(users, (i, item) => {
         $(`#rowGroupContentRow`)
@@ -78,7 +82,11 @@ $(document).ready(function () {
 //функция поиска совпадений вводимых символов
 $("#searchValue").keyup(function () {
 
-    const users = getUsers();
+    const user_service = new UserRestPaginationService();
+    let users = () => {
+        const users_promise = user_service.getAll();
+        users_promise.then();
+    };
 
     let val = $(this).val();
     let reg = new RegExp(val, "i");

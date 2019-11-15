@@ -1,5 +1,6 @@
-import {sendCode} from "../ajax/createWorkspaceRestController.js";
+import {CreateWorkspacePaginationService} from './rest/entities-rest-pagination.js'
 
+const  createWorkspace_service = new CreateWorkspacePaginationService();
 let result =[];
 $("input").each(function() {
    let $this = $(this);
@@ -17,7 +18,7 @@ $("input").each(function() {
 });
 
 function spill($this, val) {
-    var maxlength = $this.data("maxlength");
+    let maxlength = $this.data("maxlength");
     if ( val.length >= maxlength ) {
         $this.val(val.substring(0, maxlength));
         let next = $this.next("input").focus();
@@ -44,13 +45,19 @@ function send() {
             return this.value;
         }).get();
         arrayInputs = arrayInputs.join("");
-       let result =  sendCode(arrayInputs);
-       if(result === null) {
-           alert("ne tot kod :)")
-       } else {
-           setTimeout(function(){ window.location.href = "/workspacename";}, 1000);
+       // let result =  sendCode(arrayInputs);
 
-       }
+       const result = createWorkspace_service.sendCode(arrayInputs);
+       result.then(value => { //После того как ответ будет получен, начнется выполнение этого блока
+           if (value === null) {
+               alert("ne tot kod :)")
+           } else {
+               setTimeout(function () {
+                   window.location.href = "/workspacename";
+               }, 1000);
+
+           }
+       });
 }
 
 
