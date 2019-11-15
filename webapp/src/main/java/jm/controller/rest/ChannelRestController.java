@@ -1,15 +1,20 @@
 package jm.controller.rest;
 
+import jm.LoggedUserService;
+import jm.UserService;
 import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
+import jm.model.LoggedUser;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,16 +22,30 @@ import java.util.List;
 public class ChannelRestController {
 
     private ChannelService channelService;
+    private LoggedUserService loggedUserService;
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
         this.channelService = channelService;
     }
 
+    @Autowired
+    public void setLoggedUserService(LoggedUserService loggedUserService) {
+        this.loggedUserService = loggedUserService;
+    }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(channelService.getChannelById(id));
+    public ResponseEntity<Channel> getChannelById(
+            @PathVariable("id") Long id, Authentication authentication) {
+
+        Channel channel = channelService.getChannelById(id);
+
+        // analytic
+        LoggedUser loggedUser = loggedUserService.findOrCreateNewLoggedUser(authentication);
+        loggedUser.getChannels().add(channel);
+        loggedUserService.createLoggedUser(loggedUser);
+
+        return ResponseEntity.ok(channel);
     }
 
     @PostMapping(value = "/create")

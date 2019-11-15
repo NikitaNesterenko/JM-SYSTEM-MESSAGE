@@ -1,10 +1,13 @@
 package jm.controller.rest;
 
+import jm.LoggedUserService;
 import jm.MessageService;
+import jm.model.LoggedUser;
 import jm.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -16,10 +19,16 @@ import java.util.List;
 public class MessageRestController {
 
     private MessageService messageService;
+    private LoggedUserService loggedUserService;
 
     @Autowired
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
+    }
+
+    @Autowired
+    public void setLoggedUserService(LoggedUserService loggedUserService) {
+        this.loggedUserService = loggedUserService;
     }
 
     @GetMapping
@@ -40,7 +49,13 @@ public class MessageRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+    public ResponseEntity<Message> createMessage(@RequestBody Message message, Authentication authentication) {
+
+        // analytic
+        LoggedUser loggedUser = loggedUserService.findOrCreateNewLoggedUser(authentication);
+        loggedUser.getMessages().add(message);
+        loggedUserService.createLoggedUser(loggedUser);
+
         messageService.createMessage(message);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
