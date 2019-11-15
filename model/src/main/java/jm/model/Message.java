@@ -30,6 +30,10 @@ public class Message {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(targetEntity = Bot.class)
+    @JoinColumn(name = "bot_id")
+    private Bot bot;
+
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -40,6 +44,21 @@ public class Message {
     private LocalDateTime dateCreate;
 
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
+        this.channel = channel;
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
+
+    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
+        this.channel = channel;
+        this.bot = bot;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
+
+    public Message(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
+        this.id = id;
         this.channel = channel;
         this.user = user;
         this.content = content;

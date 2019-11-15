@@ -14,6 +14,10 @@ export class MessageRestPaginationService extends  RestPaginationService{
         const response = await fetch('/rest/api/messages/channel/' + id);
         return response.json();
     };
+    getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
+        const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
+        return response.json();
+    };
 }
 export class BotRestPaginationService extends  RestPaginationService{
     constructor(){

@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -53,6 +52,11 @@ public class MessageRestController {
         logger.info("Сообщение с id = {}",id);
         logger.info(messageService.getMessageById(id).toString());
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
+    public ResponseEntity<List<Message>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id, startDate, endDate), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
