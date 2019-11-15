@@ -1,4 +1,4 @@
-import {findEl} from "./filter-channel.js"
+import {findEl} from "./functions/filter-channel.js"
 import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
