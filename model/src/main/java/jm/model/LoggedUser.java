@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -32,8 +33,8 @@ public class LoggedUser {
     private LocalDateTime dateTime;
 
     @OneToMany
-    private Set<Channel> channels;
+    private Set<Channel> channels = new HashSet<>();
 
     @OneToMany
-    private Set<Message> messages;
+    private Set<Message> messages = new HashSet<>();
 }

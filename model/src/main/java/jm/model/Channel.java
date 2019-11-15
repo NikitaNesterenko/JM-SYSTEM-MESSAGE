@@ -1,6 +1,7 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
@@ -59,6 +60,7 @@ public class Channel {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @JsonIgnore
     private LocalDateTime lastUpdateDate;
 
     @Column(name = "topic")
