@@ -1,16 +1,25 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService} from "./rest/entities-rest-pagination.js";
+import {UserRestPaginationService, WorkspaceRestPaginationService, BotRestPaginationService} from "./rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const bot_service = new BotRestPaginationService();
 
 export const onShowModal1 = $('#modal_1').on('show.bs.modal', function (e) {
     // console.log($(e.relatedTarget).data('user_id'));
     let userId = $(e.relatedTarget).data('user_id');
-    const user_promise = user_service.getById(userId);
+    let botId = $(e.relatedTarget).data('bot_id');
 
-    $('#modal_1_edit_profile_btn').attr("data-user_id", userId);
+    let result_promise = null;
 
-    Promise.all([user_promise]).then(value => {
+    if (userId !== undefined) {
+        result_promise = user_service.getById(userId);
+        $('#modal_1_edit_profile_btn').attr("data-user_id", userId);
+    } else {
+        result_promise = bot_service.getById(botId);
+        $('#modal_1_edit_profile_btn').attr("data-user_id", botId);
+    }
+
+    Promise.all([result_promise]).then(value => {
         const user = value[0];
 
         // user name

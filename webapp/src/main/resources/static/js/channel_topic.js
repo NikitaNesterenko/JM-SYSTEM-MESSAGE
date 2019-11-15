@@ -2,7 +2,7 @@ import {getChannelTopic, updateChannelTopic} from './ajax/channelTopicRestContro
 
 window.addEventListener('load', function () {
     // id канала где брать??
-    let channelId = 1; // hardcoded id
+    let channelId = 2; // hardcoded id
     let topic = getChannelTopic(channelId);
     let topic_text = topic == "" ? "Enter channel topic here." : topic;
 
