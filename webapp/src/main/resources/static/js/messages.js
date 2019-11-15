@@ -35,14 +35,14 @@ function showMessage(message) {
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
     messages_queue_context_user_container.innerHTML = `${message}`
-//     messages_queue_context_user_container.innerHTML = `<div class="c-message__gutter--feature_sonic_inputs">
-//                                                             <button class="c-message__avatar__button">
-//                                                                 <img class="c-avatar__image">
-//                                                             </button>
-//                                                         </div>
-// <span class="c-message__body">
-//                                                                 ${message}
-//                                                             </span>`;
+    messages_queue_context_user_container.innerHTML = `<div class="c-message__gutter--feature_sonic_inputs">
+                                                            <button class="c-message__avatar__button">
+                                                                <img class="c-avatar__image">
+                                                            </button>
+                                                        </div>
+                                                        <span class="c-message__body">
+                                                            ${message}
+                                                        </span>`;
     message_box.append(messages_queue_context_user_container);
     message_box.scrollTo(0, message_box.scrollHeight);
 }

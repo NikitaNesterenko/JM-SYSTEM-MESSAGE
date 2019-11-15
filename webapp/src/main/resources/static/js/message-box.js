@@ -1,11 +1,13 @@
 import {MessageRestPaginationService, ConversationRestPaginationService, UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
-const channel_id = null;//Захардкоденные переменные
+let channel_id = 1;//Захардкоденные переменные
+let conversation_id = null;//Захардкоденные переменные
+let user_id = 1; //Захардкоденные переменные
 const message_service = new MessageRestPaginationService();
 const conversation_service = new ConversationRestPaginationService();
 const user_service = new UserRestPaginationService();
 
-window.pushMessage = function pushMessage(message) {
+/*window.pushMessage = function pushMessage(message) {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -34,7 +36,7 @@ window.pushMessage = function pushMessage(message) {
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box.scrollTo(0, message_box.scrollHeight);
-};
+};*/
 
 window.updateMessages = function updateMessages() {
     const message_box = document.getElementById("all-messages");
@@ -109,12 +111,6 @@ window.updateMessages = function updateMessages() {
     }
 };
 
-const conversation_id = 3;//Захардкоденные переменные
-const user_id = 1; //Захардкоденные переменные
-const user_name_id_1 = 'name_1';
-const user_name_id_2 = 'name_2';
-const user_name_id_3 = 'name_3';
-
 window.showAllConversations = function showAllConversations() {
     const direct_messages_container = document.getElementById("direct-messages__container_id");
     direct_messages_container.innerHTML = "";
@@ -122,39 +118,50 @@ window.showAllConversations = function showAllConversations() {
     const conversation_promise = conversation_service.getAllConversationsByUserId(user_id);
     conversation_promise.then(conversations => {
         conversations.forEach(function (conversation, i) {
-            let conversation_queue_context_container = null;
-            if(user_name_id_1 === conversation.openingUser.name) {
-                conversation_queue_context_container = document.createElement('div');
-                conversation_queue_context_container.className = "p-channel_sidebar__close_container";
-                conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button">
-                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
-                                                        <span class="p-channel_sidebar__name-3">
-                                                            <span>${conversation.associatedUser.name}</span>
-                                                        </span>
-                                                    </button>
-                                                    <button class="p-channel_sidebar__close">
-                                                        <i class="p-channel_sidebar__close__icon">✖</i>
-                                                    </button>
-            `;
-            } else {
-                conversation_queue_context_container = document.createElement('div');
-                conversation_queue_context_container.className = "p-channel_sidebar__close_container";
-                conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button">
-                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
-                                                        <span class="p-channel_sidebar__name-3">
-                                                            <span>${conversation.openingUser.name}</span>
-                                                        </span>
-                                                    </button>
-                                                    <button class="p-channel_sidebar__close">
-                                                        <i class="p-channel_sidebar__close__icon">✖</i>
-                                                    </button>
-            `;
-            }
-            direct_messages_container.append(conversation_queue_context_container);
+            const user_promise = user_service.getById(user_id);
+            Promise.all([user_promise]).then(value => {const user = value[0];
+                let conversation_queue_context_container = null;
+                if(user.name === conversation.openingUser.name) {
+                    conversation_queue_context_container = document.createElement('div');
+                    conversation_queue_context_container.className = "p-channel_sidebar__close_container";
+                    conversation_queue_context_container.innerHTML = `
+                                                        <button class="p-channel_sidebar__name_button" id="conversation_button_${conversation.id}" onclick="pressConversationButton(${conversation.id})">
+                                                            <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                                            <span class="p-channel_sidebar__name-3">
+                                                                <span>${conversation.openingUser.name} to ${conversation.associatedUser.name}</span>
+                                                            </span>
+                                                        </button>
+                                                        <button class="p-channel_sidebar__close">
+                                                            <i class="p-channel_sidebar__close__icon">✖</i>
+                                                        </button>
+                `;
+                } else {
+                    conversation_queue_context_container = document.createElement('div');
+                    conversation_queue_context_container.className = "p-channel_sidebar__close_container";
+                    conversation_queue_context_container.innerHTML = `
+                                                        <button class="p-channel_sidebar__name_button" id="conversation_button_${conversation.id}" onclick="pressConversationButton(${conversation.id})">
+                                                            <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                                            <span class="p-channel_sidebar__name-3">
+                                                                <span>${conversation.associatedUser.name} to ${conversation.openingUser.name}</span>
+                                                            </span>
+                                                        </button>
+                                                        <button class="p-channel_sidebar__close">
+                                                            <i class="p-channel_sidebar__close__icon">✖</i>
+                                                        </button>
+                `;
+                }
+                direct_messages_container.append(conversation_queue_context_container);
+            });
         });
     });
+};
+
+window.pressConversationButton = function pressConversationButton(id) {
+    //document.getElementById("conversation_button_" + id).style.color = "white";
+    //document.getElementById("conversation_button_" + id).style.background = "royalblue";
+    channel_id = null;
+    conversation_id = id;
+    updateMessages();
 };
 
 updateMessages();

@@ -249,7 +249,7 @@ public class TestDataInitializer {
         Message message_1_2 = new Message();
         message_1_2.setConversation(conversation_1);
         message_1_2.setUser(user_1);
-        message_1_2.setContent("Message form user with id=1 to user with id=2");
+        message_1_2.setContent("Message form " + user_1.getName() + " to " + user_2.getName());
         message_1_2.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_1_2);
@@ -258,7 +258,7 @@ public class TestDataInitializer {
         Message message_2_1 = new Message();
         message_2_1.setConversation(conversation_1);
         message_2_1.setUser(user_2);
-        message_2_1.setContent("Message form user with id=2 to user with id=1");
+        message_2_1.setContent("Message form " + user_2.getName() + " to " + user_1.getName());
         message_2_1.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_2_1);
@@ -267,7 +267,7 @@ public class TestDataInitializer {
         Message message_1_3 = new Message();
         message_1_3.setConversation(conversation_2);
         message_1_3.setUser(user_1);
-        message_1_3.setContent("Message form user with id=1 to user with id=3");
+        message_1_3.setContent("Message form " + user_1.getName() + " to " + user_3.getName());
         message_1_3.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_1_3);
@@ -276,7 +276,7 @@ public class TestDataInitializer {
         Message message_2_3 = new Message();
         message_2_3.setConversation(conversation_3);
         message_2_3.setUser(user_2);
-        message_2_3.setContent("Message form user with id=2 to user with id=3");
+        message_2_3.setContent("Message form " + user_2.getName() + " to " + user_3.getName());
         message_2_3.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_2_3);
@@ -285,7 +285,7 @@ public class TestDataInitializer {
         Message message_3_1 = new Message();
         message_3_1.setConversation(conversation_2);
         message_3_1.setUser(user_3);
-        message_3_1.setContent("Message form user with id=3 to user with id=1");
+        message_3_1.setContent("Message form " + user_3.getName() + " to " + user_1.getName());
         message_3_1.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_3_1);
@@ -294,7 +294,7 @@ public class TestDataInitializer {
         Message message_3_2 = new Message();
         message_3_2.setConversation(conversation_3);
         message_3_2.setUser(user_3);
-        message_3_2.setContent("Message form user with id=3 to user with id=2");
+        message_3_2.setContent("Message form " + user_3.getName() + " to " + user_2.getName());
         message_3_2.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_3_2);
