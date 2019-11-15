@@ -78,9 +78,7 @@ public class ChannelRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Channel>> getAllChannels(){
-        return ResponseEntity.ok(channelService.gelAllChannels());
-    }
+    public ResponseEntity<List<Channel>> getAllChannels(){ return new ResponseEntity<>(channelService.gelAllChannels(), HttpStatus.OK);}
 
     @GetMapping(params = {"workspace", "login"})
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
