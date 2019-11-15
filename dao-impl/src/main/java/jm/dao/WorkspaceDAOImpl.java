@@ -32,7 +32,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
         try {
-            return entityManager.createQuery("from Workspace where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
+            return entityManager.createQuery("from workspace where owner_id = owner_id").setParameter("owner_id", user.getId()).getResultList();
         } catch (NoResultException e) {
             return null;
         }
