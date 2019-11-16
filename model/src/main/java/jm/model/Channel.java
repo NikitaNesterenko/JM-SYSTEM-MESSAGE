@@ -60,7 +60,6 @@ public class Channel {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-    @JsonIgnore
     private LocalDateTime lastUpdateDate;
 
     @Column(name = "topic")

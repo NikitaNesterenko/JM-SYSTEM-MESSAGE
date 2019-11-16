@@ -1,8 +1,7 @@
 import {
-    ChannelRestPaginationService,
-    WorkspaceRestPaginationService,
     MessageRestPaginationService,
-    UserRestPaginationService
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from "./rest/entities-rest-pagination.js";
 
 
@@ -14,10 +13,10 @@ const message_service = new MessageRestPaginationService();
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
-const workspace_id = 2; // hardcoded
+const workspace_id = 4; // hardcoded
 const allowed_messages_qtty = 10000;
 
-/* Channels */
+/* ----- CHANNELS ----- */
 function onGetChannelAndMessagesCount(channel, messages) {
     return $('#analytic_channels_table').find('tbody').append(`<tr>
                 <th scope="row">&#35;${channel.name}</th>
@@ -63,7 +62,7 @@ $('#analytic-channels-all').on('click', function (e) {
 
 });
 
-/* members */
+/* ----- MEMBERS ----- */
 function onGetUserAndUserImage(user, image) {
     return $('#analytic_members_table').find('tbody').append(`<tr>
                 <th scope="row">
@@ -115,8 +114,8 @@ $('#analytic-members-all').on('click', function (e) {
 
 });
 
-/* Overview */
-
+/* ----- OVERVIEW ----- */
+// messages sent
 let getAllMsgCount = async (id) => {
     const response = await fetch(`/rest/api/workspace/analytic/${id}/messages-count`);
     return response.json();
@@ -127,3 +126,90 @@ getAllMsgCount(workspace_id).then((count) => {
     let msg_percent_of_allowed = count / allowed_messages_qtty * 100;
     $('#analytic_ov_msg_counter_progress').text(`${msg_percent_of_allowed}%`);
 });
+
+// active members
+let getActiveMembers = async (id, last_month) => {
+    const response = await fetch(`/rest/api/workspace/analytic/${id}/visits/${last_month}`);
+    return response.json();
+};
+
+getActiveMembers(workspace_id, false).then((activities) => {
+    $.each(activities, (i, activity) => {
+        $('#analytic_active_members').find('tbody').append(
+            `<tr>
+                <th scope="row">${activity.date}</th>
+                <td>${activity.visits}</td>
+                <td>${activity.visitsWithPosts}</td>
+            </tr>`
+        );
+    });
+});
+
+// channel activity
+let getChannelActivity = async (id, last_month) => {
+    const response = await fetch(`/rest/api/workspace/analytic/${id}/channel-activity/${last_month}`);
+    return response.json();
+};
+
+getChannelActivity(workspace_id, false).then((activities) => {
+    let total_in_pub = 0;
+    let total_in_prvt = 0;
+    let total_in_dm = 0;
+
+    let total_in_pub_msgs = 0;
+    let total_in_prvt_msgs = 0;
+    let total_in_dm_msgs = 0;
+
+    $.each(activities, (i, activity) => {
+        // channels
+        let pub_ch = activity.publicChannels;
+        total_in_pub += pub_ch;
+
+        let prvt_ch = activity.privateChannels;
+        total_in_prvt += prvt_ch;
+
+        let dm_ch = activity.directMessages;
+        total_in_dm += dm_ch;
+
+        $('#analytic_pub_private_channels_table').find('tbody').append(
+            `<tr>
+                <th scope="row">${activity.date}</th>
+                <td>${pub_ch}</td>
+                <td>${prvt_ch}</td>
+                <td>${dm_ch}</td>
+            </tr>`
+        );
+        // sent msgs
+        let pub_ch_msgs = activity.messagesInPublicChannels;
+        total_in_pub_msgs += pub_ch_msgs;
+
+        let prvt_ch_msgs = activity.messagesInPrivateChannels;
+        total_in_prvt_msgs += prvt_ch_msgs;
+
+        let dm_ch_msgs = activity.messagesInDirectMessages;
+        total_in_dm_msgs += dm_ch_msgs;
+
+        $('#analytic_pub_private_messages_table').find('tbody').append(
+            `<tr>
+                <th scope="row">${activity.date}</th>
+                <td>${pub_ch_msgs}</td>
+                <td>${prvt_ch_msgs}</td>
+                <td>${dm_ch_msgs}</td>
+            </tr>`
+        );
+    });
+
+    let total_ch = total_in_pub + total_in_prvt + total_in_dm;
+    $('#analytic_public_private__views_in_pub_percents').text(total_in_pub / total_ch * 100 + " %");
+    $('#analytic_public_private__views_in_priv_percents').text(total_in_prvt / total_ch * 100 + " %");
+    $('#analytic_public_private__views_in_dm_percents').text(total_in_dm / total_ch * 100 + " %");
+
+    let total_msgs = total_in_pub_msgs + total_in_prvt_msgs + total_in_dm_msgs;
+    $('#analytic_public_private__msgs_sent_in_pub_percents').text(total_in_pub_msgs / total_msgs * 100 + " %");
+    $('#analytic_public_private__msgs_sent_in_priv_percents').text(total_in_prvt_msgs / total_msgs * 100 + " %");
+    $('#analytic_public_private__msgs_sent_in_dm_percents').text(total_in_dm_msgs / total_msgs * 100 + " %");
+
+
+
+});
+

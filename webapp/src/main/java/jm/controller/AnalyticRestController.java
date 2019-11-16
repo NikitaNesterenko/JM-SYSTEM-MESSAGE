@@ -1,6 +1,9 @@
 package jm.controller;
 
 import jm.AnalyticService;
+import jm.LoggedUserService;
+import jm.analytic.ChannelActivity;
+import jm.analytic.MemberActivity;
 import jm.model.Channel;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,16 @@ import java.util.List;
 public class AnalyticRestController {
 
     private AnalyticService analyticService;
+    private LoggedUserService loggedUserService;
 
     @Autowired
     public void setAnalyticService(AnalyticService analyticService) {
         this.analyticService = analyticService;
+    }
+
+    @Autowired
+    public void setLoggedUserService(LoggedUserService loggedUserService) {
+        this.loggedUserService = loggedUserService;
     }
 
     @GetMapping("/{id}/messages-count")
@@ -44,6 +53,31 @@ public class AnalyticRestController {
                 lastMonth
                         ? analyticService.getUsersForWorkspaceByIdForLastMonth(id)
                         : analyticService.getUsersForWorkspaceById(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/visits/{lastMonth}")
+    public ResponseEntity<List<MemberActivity>> getAllVisitsByWorkspaceId(
+            @PathVariable Long id,
+            @PathVariable Boolean lastMonth) {
+        return new ResponseEntity<>(
+                lastMonth
+                        ? loggedUserService.getAllMemberActivityForWorkspaceForLastMonth(id)
+                        : loggedUserService.getAllMemberActivityForWorkspace(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/channel-activity/{lastMonth}")
+    public ResponseEntity<List<ChannelActivity>> getChannelActivitiesByWorkspaceId(
+            @PathVariable Long id,
+            @PathVariable Boolean lastMonth
+    ) {
+        return new ResponseEntity<>(
+                lastMonth
+                        ? loggedUserService.getAllChannelsActivityForWorkspaceForLastMonth(id)
+                        : loggedUserService.getAllChannelsActivityForWorkspace(id),
                 HttpStatus.OK
         );
     }
