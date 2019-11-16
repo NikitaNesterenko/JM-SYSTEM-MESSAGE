@@ -21,7 +21,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Workspace getWorkspaceByName(String name) {
         try {
-            return (Workspace) entityManager.createNativeQuery("select * from Workspaces where name=?", Workspace.class)
+            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
                     .getSingleResult();
         } catch (NoResultException e) {
