@@ -21,6 +21,9 @@
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
 
+    <script th:src="@{/js/push/push.js}"></script>
+    <script th:src="@{/js/push/push_notification.js}"></script>
+
     <script src="/js/helper_functions.js"></script>
 
 <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
@@ -459,7 +462,6 @@
                             </div>
                         </div>
                     </div>
-
 <!--                    <footer class="p-workspace__primary_view_footer">-->
 <!--                        <div class="p-message_pane_input">-->
 <!--                            <div class="p-message_pane_input_inner">-->
@@ -626,13 +628,13 @@
                                         <button class="c-texty_input__button" id="showAssociatedUsers">
                                             <i class="c-icon--mentions">@</i>
                                         </button>
-                                        <div class="associatedUserList" id="associatedUserList">
-                                            <form>
-                                                <select class="associatedUserListSelect"
-                                                        id="associatedUserListSelect" multiple
-                                                        name="usersList"></select>
-                                            </form>
-                                        </div>
+                                    </div>
+                                    <div class="associatedUserList" id="associatedUserList">
+                                        <form>
+                                            <select class="associatedUserListSelect"
+                                                    id="associatedUserListSelect" multiple
+                                                    name="usersList"></select>
+                                        </form>
                                     </div>
                                     <div class="ql-editor">
                                         <form id="form_message">

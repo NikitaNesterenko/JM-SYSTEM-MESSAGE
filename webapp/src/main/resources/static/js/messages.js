@@ -14,6 +14,7 @@ function connect() {
             // showMessage(result);
             if(result.user !== null) {
                 showMessage(result);
+                notifyParseMessage(result);
             } else {
                 showBotMessage(result)
             }
