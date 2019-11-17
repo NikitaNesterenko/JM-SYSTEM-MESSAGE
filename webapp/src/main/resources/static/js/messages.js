@@ -1,7 +1,6 @@
 import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 
 let stompClient = null;
-let channel_id = sessionStorage.getItem("channelName");
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -193,7 +192,7 @@ window.updateMessages = function updateMessages() {
     });
 };
 
-updateMessages();
+// updateMessages();
 
 function showBotMessage(message) {
     const message_box = document.getElementById("all-messages");

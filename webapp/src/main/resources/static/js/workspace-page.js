@@ -5,6 +5,17 @@ const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
+const showDefaultChannel = () => {
+    let workspace_id = workspace_service.getChoosedWorkspace();
+    Promise.all([workspace_id]).then( value => {
+        channel_service.getChannelsByWorkspaceId(value[0].id)
+            .then((respons) => {
+                sessionStorage.setItem("channelName", respons[0].id)
+                window.channel_id = respons[0].id;
+                updateMessages();
+                })
+            })
+};
 
 
 window.addEventListener('load', function () {
@@ -29,13 +40,22 @@ $(document).ready(() => {
     showAllUsers();
     profileCard();
     showBot();
+    showDefaultChannel();
 });
+
+$(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
+    const channel_id = parseInt($(this).val());
+    pressChannelButton(channel_id);
+    sessionStorage.setItem("channelName",channel_id);
+});
+
 
 const showAllChannels = () => {
    let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then( value => {
     channel_service.getChannelsByWorkspaceId(value[0].id)
         .then((respons) => {
+
             $.each(respons, (i, item) => {
              $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
                                                     <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
@@ -44,8 +64,9 @@ const showAllChannels = () => {
                                                     </button>
                                                   </div>`);
             })
-            document.getElementById("channel_button_" + 1).style.color = "white";
-            document.getElementById("channel_button_" + 1).style.background = "royalblue";
+            //Default channel
+            document.getElementById("channel_button_" + respons[0].id).style.color = "white";
+            document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
          })
     })
 };
