@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class MessageRestControllerTest {
 
-    private static final String urlGetMessage = "/rest/api/messages";
+    private static final String urlGetMessage = "/rest/api/messages/";
     private static final String urlCreateMessage = "/rest/api/messages/create";
     private static final String urlUpdateMessage = "/rest/api/messages/update";
     private static final String urlDeleteMessage = "/rest/api/messages/delete/";

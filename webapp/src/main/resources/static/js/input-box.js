@@ -3,13 +3,6 @@ import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPagi
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
-sessionStorage.setItem("channelName", 1);
-
-$(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
-    const channel_id = parseInt($(this).val());
-    pressChannelButton(channel_id);
-    sessionStorage.setItem("channelName",channel_id);
-});
 
 class Message {
     constructor(channel, user, content, dateCreate) {
@@ -39,6 +32,5 @@ $('#form_message').submit(function () {
     });
     return false;
 });
-
 
 

@@ -15,10 +15,10 @@ function connect() {
             let result  = JSON.parse(message.body);
             if(result.user !== null) {
                 showMessage(result);
+                notifyParseMessage(result);
             } else {
                 showBotMessage(result)
             }
-
         });
     });
 }
@@ -37,12 +37,15 @@ window.sendName = function sendName(message) {
         'user': message.user,
         'bot': message.bot
     }));
-}
+};
 
 function showMessage(message) {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
+
+    const message_box_wrapper = document.getElementById("all-message-wrapper");
+
     const time = message.dateCreate.split(' ')[1];
     messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                             <div class="c-message__gutter--feature_sonic_inputs">
@@ -67,23 +70,69 @@ function showMessage(message) {
                                                         </div>
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
-    message_box.scrollTo(0, message_box.scrollHeight);
+    message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 }
+
 connect();
 
 window.updateMessages = function updateMessages() {
     const message_box = document.getElementById("all-messages");
     message_box.innerHTML = "";
+    const message_box_wrapper = document.getElementById("all-message-wrapper");
 
+    let current_year;
+    let current_month;
+    let current_day;
 
-    const messages_promise = message_service.getAllMessagesByChannelId(channel_id);
+    let last_year_show;
+    let last_month_show;
+    let last_day_show;
+
+    const today = new Date();
+
+    const day = today.getDate();
+
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+
+    const stringDateStart = [year - 1, month, day].join("-");
+    const stringDateEnd = [year, month, day + 1].join("-");
+
+    const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, stringDateStart, stringDateEnd);
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
         messages.forEach(function (message, i) {
 
             if(message.user !== null) {
             let messages_queue_context_user_container = document.createElement('div');
             messages_queue_context_user_container.className = "c-virtual_list__item";
+
+            let messages_queue_context_user_container_date = document.createElement('span');
+            messages_queue_context_user_container_date.className = "c-virtual_list__item__date";
+
             const time = message.dateCreate.split(' ')[1];
+            const date = message.dateCreate.split(' ')[0];
+
+            // Берем дату без времени
+            let parts_date = message.dateCreate.split(' ')[0];
+            // Получаем год - месяц - число
+            parts_date = parts_date.split('.');
+
+            current_year = parts_date[2];
+            current_month = parts_date[1];
+            current_day = parts_date[0];
+
+            if (current_day != last_day_show) {
+                last_day_show = current_day;
+                if (current_day == today.getDate()) {
+                    messages_queue_context_user_container_date.innerHTML = `Today`;
+                } else if (current_day == today.getDate() - 1) {
+                    messages_queue_context_user_container_date.innerHTML = `Yesterday`;
+                } else {
+                    messages_queue_context_user_container_date.innerHTML = `${date}`;
+                }
+                message_box.append(messages_queue_context_user_container_date);
+            }
+
             messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
@@ -99,6 +148,9 @@ window.updateMessages = function updateMessages() {
                                                                     <span class="c-timestamp__label">
                                                                         ${time}
                                                                     </span>
+                                                                    <span class="c-timestamp__label">
+                                                                        ${message.dateCreate}
+                                                                    </span>                                                                     
                                                                 </a>
                                                             </div>
                                                             <span class="c-message__body">
@@ -137,6 +189,7 @@ window.updateMessages = function updateMessages() {
                 message_box.append(messages_queue_context_user_container);
             }
         });
+        message_box_wrapper.scrollTo(0, message_box.scrollHeight);
     });
 };
 
