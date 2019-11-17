@@ -3,6 +3,7 @@ package jm;
 import jm.analytic.ChannelActivity;
 import jm.analytic.LoggedUser;
 import jm.analytic.MemberActivity;
+import jm.analytic.MessageActivity;
 import jm.api.dao.LoggedUserDAO;
 import jm.api.dao.UserDAO;
 import jm.model.Channel;
@@ -101,6 +102,16 @@ public class LoggedUserServiceImpl implements LoggedUserService {
     }
 
     @Override
+    public List<MessageActivity> getAllMessageActivityForWorkspace(Long workspaceId) {
+        return new ArrayList<>(this.getMessageActivityMap(workspaceId, false).values());
+    }
+
+    @Override
+    public List<MessageActivity> getAllMessageActivityForWorkspaceForLastMonth(Long workspaceId) {
+        return new ArrayList<>(this.getMessageActivityMap(workspaceId, true).values());
+    }
+
+    @Override
     public LoggedUser findOrCreateNewLoggedUser(Authentication authentication) {
         String login = authentication.getName();
         LoggedUser loggedUser = this.getLoggedUserByName(login);
@@ -179,6 +190,34 @@ public class LoggedUserServiceImpl implements LoggedUserService {
                 }
             }
             activityMap.put(loggedUserDate, channelActivity);
+        }
+
+        return activityMap;
+    }
+
+    private Map<LocalDate, MessageActivity> getMessageActivityMap(Long workspaceId, boolean lastMonth) {
+        List<LoggedUser> loggedUsers = null;
+        if (lastMonth) {
+            loggedUsers = this.getAllLoggedUsersForWorkspaceForLastMonth(workspaceId);
+        } else {
+            loggedUsers = this.getAllLoggedUsersForWorkspace(workspaceId);
+        }
+
+        Map<LocalDate, MessageActivity> activityMap = new HashMap<>();
+        for(LoggedUser loggedUser : loggedUsers) {
+            MessageActivity messageActivity;
+            LocalDate loggedUserDate = loggedUser.getDateTime().toLocalDate();
+            if (activityMap.containsKey(loggedUserDate)) {
+                messageActivity = activityMap.get(loggedUserDate);
+            } else {
+                messageActivity = new MessageActivity();
+                messageActivity.setDate(loggedUserDate);
+            }
+
+            for (Message message : loggedUser.getMessages()) {
+                messageActivity.setMessages(messageActivity.getMessages() + 1);
+            }
+            activityMap.put(loggedUserDate, messageActivity);
         }
 
         return activityMap;

@@ -4,6 +4,7 @@ import jm.AnalyticService;
 import jm.LoggedUserService;
 import jm.analytic.ChannelActivity;
 import jm.analytic.MemberActivity;
+import jm.analytic.MessageActivity;
 import jm.model.Channel;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,19 @@ public class AnalyticRestController {
                 lastMonth
                         ? loggedUserService.getAllChannelsActivityForWorkspaceForLastMonth(id)
                         : loggedUserService.getAllChannelsActivityForWorkspace(id),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/message-activity/{lastMonth}")
+    public ResponseEntity<List<MessageActivity>> getMessageActivitiesByWorkspaceId(
+            @PathVariable Long id,
+            @PathVariable Boolean lastMonth
+    ) {
+        return new ResponseEntity<>(
+                lastMonth
+                        ? loggedUserService.getAllMessageActivityForWorkspaceForLastMonth(id)
+                        : loggedUserService.getAllMessageActivityForWorkspace(id),
                 HttpStatus.OK
         );
     }

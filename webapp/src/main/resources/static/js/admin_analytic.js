@@ -208,8 +208,22 @@ getChannelActivity(workspace_id, false).then((activities) => {
     $('#analytic_public_private__msgs_sent_in_pub_percents').text(total_in_pub_msgs / total_msgs * 100 + " %");
     $('#analytic_public_private__msgs_sent_in_priv_percents').text(total_in_prvt_msgs / total_msgs * 100 + " %");
     $('#analytic_public_private__msgs_sent_in_dm_percents').text(total_in_dm_msgs / total_msgs * 100 + " %");
+});
 
+// message activity
+const getMessageActivity = async (id, last_month) => {
+    const response = await fetch(`/rest/api/workspace/analytic/${id}/message-activity/${last_month}`);
+    return response.json();
+};
 
-
+getMessageActivity(workspace_id, false).then((activities) => {
+    $.each(activities, (i, activity) => {
+        $('#analytic__messages_sent_table').find('tbody').append(
+            `<tr>
+                <th scope="row">${activity.date}</th>
+                <td>${activity.messages}</td>
+            </tr>`
+        );
+    });
 });
 

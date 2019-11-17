@@ -3,6 +3,7 @@ package jm;
 import jm.analytic.ChannelActivity;
 import jm.analytic.LoggedUser;
 import jm.analytic.MemberActivity;
+import jm.analytic.MessageActivity;
 import jm.model.User;
 import org.springframework.security.core.Authentication;
 
@@ -25,4 +26,7 @@ public interface LoggedUserService {
 
     List<ChannelActivity> getAllChannelsActivityForWorkspace(Long workspaceId);
     List<ChannelActivity> getAllChannelsActivityForWorkspaceForLastMonth(Long workspaceId);
+
+    List<MessageActivity> getAllMessageActivityForWorkspace(Long workspaceId);
+    List<MessageActivity> getAllMessageActivityForWorkspaceForLastMonth(Long workspaceId);
 }
