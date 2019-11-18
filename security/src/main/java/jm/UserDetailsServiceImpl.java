@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String workspaceLogin) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String workspaceEmail) throws UsernameNotFoundException {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String workspaceName = (String) httpSession.getAttribute("workspaceName");
         if(workspaceName==null) workspaceName="workspace-0";
@@ -50,21 +50,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             login = strings[0];
         }
 */
-        User user = userServiceImpl.getUserByLogin(workspaceLogin);
+        User user = userServiceImpl.getUserByEmail(workspaceEmail);
         org.springframework.security.core.userdetails.User.UserBuilder builder = null;
         if (user != null) {
-            builder = org.springframework.security.core.userdetails.User.withUsername(workspaceLogin);
+            builder = org.springframework.security.core.userdetails.User.withUsername(workspaceEmail);
             builder.password(user.getPassword());
             // if (workspaceName != null) {
             Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
             if (workspace != null) {
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);
-                System.out.println("User " + workspaceLogin + " logged in " + workspace.getName() + " with roles: " + authorities);
+                System.out.println("User " + workspaceEmail + " logged in " + workspace.getName() + " with roles: " + authorities);
 //                logger.info("User " + login + " logged in " + workspaceName + " with roles: " + authorities);
             } else {
                 builder.authorities(WITHOUT_WORKSPACE);
-                System.out.println("User " + workspaceLogin + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
+                System.out.println("User " + workspaceEmail + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
 //                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
             }
         } else {

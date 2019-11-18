@@ -83,7 +83,6 @@ public class TestDataInitializer {
 
         user_1.setName("name_1");
         user_1.setLastName("last-name_1");
-        user_1.setLogin("login_1");
         user_1.setEmail("mymail_1@testmail.com");
         user_1.setPassword("pass_1");
         user_1.setRoles(userRoleSet);
@@ -94,7 +93,6 @@ public class TestDataInitializer {
         User user_2 = new User();
         user_2.setName("name_2");
         user_2.setLastName("last-name_2");
-        user_2.setLogin("login_2");
         user_2.setEmail("mymail_2@testmail.com");
         user_2.setPassword("pass_2");
         user_2.setRoles(userRoleSet);
@@ -105,7 +103,6 @@ public class TestDataInitializer {
         User user_3 = new User();
         user_3.setName("name_3");
         user_3.setLastName("last-name_3");
-        user_3.setLogin("login_3");
         user_3.setEmail("mymail_3@testmail.com");
         user_3.setPassword("pass_3");
         user_3.setRoles(userRoleSet);

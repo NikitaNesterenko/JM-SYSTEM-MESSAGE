@@ -62,7 +62,7 @@ public class CreateWorkspaceRestController {
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
         User user = userService.getUserByEmail(emailTo);
         if(user == null) {
-            user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
+            user = new User(emailTo, emailTo, emailTo, emailTo);
            userService.createUser(user);
         }
         return new ResponseEntity(HttpStatus.OK);
@@ -101,7 +101,7 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         for (int i = 0; i < invites.length; i++) {
             mailService.sendInviteMessage(
-                    userService.getUserByEmail(token.getUserEmail()).getLogin(),
+                    userService.getUserByEmail(token.getUserEmail()).getEmail(),
                     token.getUserEmail(),
                     invites[i],
                     token.getWorkspaceName(),

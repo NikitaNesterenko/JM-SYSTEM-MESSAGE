@@ -5,19 +5,6 @@ const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
-const showDefaultChannel = () => {
-    let workspace_id = workspace_service.getChoosedWorkspace();
-    Promise.all([workspace_id]).then( value => {
-        channel_service.getChannelsByWorkspaceId(value[0].id)
-            .then((respons) => {
-                sessionStorage.setItem("channelName", respons[0].id)
-                window.channel_id = respons[0].id;
-                updateMessages();
-                })
-            })
-};
-
-
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
     const btn = document.getElementById("addChannelButton");
@@ -100,6 +87,19 @@ const showAllUsers = () => {
     let channels = getAllUsersInThisChannel(2);
     $.each(channels, (i, item) => {
         $('#user-box').append(`<p><a href="" class="user-link">${item.name}</a>`);
+    })
+};
+
+
+const showDefaultChannel = () => {
+    let workspace_id = workspace_service.getChoosedWorkspace();
+    Promise.all([workspace_id]).then( value => {
+        channel_service.getChannelsByWorkspaceId(value[0].id)
+            .then((respons) => {
+                sessionStorage.setItem("channelName", respons[0].id)
+                window.channel_id = respons[0].id;
+                updateMessages();
+            })
     })
 };
 

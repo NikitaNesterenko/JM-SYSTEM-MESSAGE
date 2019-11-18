@@ -30,8 +30,8 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "login", nullable = false)
-    private String login;
+//    @Column(name = "login", nullable = false)
+//    private String login;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -126,10 +126,9 @@ public class User {
     private String userSkype;
 
 
-    public User(String name, String lastName, String login, String email, String password) {
+    public User(String name, String lastName, String email, String password) {
         this.name = name;
         this.lastName = lastName;
-        this.login = login;
         this.email = email;
         this.password = password;
     }
