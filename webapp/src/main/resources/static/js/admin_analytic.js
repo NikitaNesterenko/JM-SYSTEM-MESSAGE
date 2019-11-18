@@ -13,7 +13,7 @@ const message_service = new MessageRestPaginationService();
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
-const workspace_id = 4; // hardcoded
+const workspace_id = 5; // hardcoded
 const allowed_messages_qtty = 10000;
 
 /* ----- CHANNELS ----- */
@@ -115,25 +115,26 @@ $('#analytic-members-all').on('click', function (e) {
 });
 
 /* ----- OVERVIEW ----- */
+
 // messages sent
-let getAllMsgCount = async (id) => {
-    const response = await fetch(`/rest/api/workspace/analytic/${id}/messages-count`);
+const getAllMsgCount = async (id, last_month) => {
+    const response = await fetch(`/rest/api/workspace/analytic/${id}/messages-count/${last_month}`);
     return response.json();
 };
 
-getAllMsgCount(workspace_id).then((count) => {
+const showMessagesCount = (count) => {
     $('#analytic_ov_msg_counter h2').text(count);
     let msg_percent_of_allowed = count / allowed_messages_qtty * 100;
     $('#analytic_ov_msg_counter_progress').text(`${msg_percent_of_allowed}%`);
-});
+};
 
 // active members
-let getActiveMembers = async (id, last_month) => {
+const getActiveMembers = async (id, last_month) => {
     const response = await fetch(`/rest/api/workspace/analytic/${id}/visits/${last_month}`);
     return response.json();
 };
 
-getActiveMembers(workspace_id, false).then((activities) => {
+const showMembersActivity = (activities) => {
     $.each(activities, (i, activity) => {
         $('#analytic_active_members').find('tbody').append(
             `<tr>
@@ -143,15 +144,15 @@ getActiveMembers(workspace_id, false).then((activities) => {
             </tr>`
         );
     });
-});
+};
 
 // channel activity
-let getChannelActivity = async (id, last_month) => {
+const getChannelActivity = async (id, last_month) => {
     const response = await fetch(`/rest/api/workspace/analytic/${id}/channel-activity/${last_month}`);
     return response.json();
 };
 
-getChannelActivity(workspace_id, false).then((activities) => {
+const showChannelActivity = (activities) => {
     let total_in_pub = 0;
     let total_in_prvt = 0;
     let total_in_dm = 0;
@@ -208,7 +209,7 @@ getChannelActivity(workspace_id, false).then((activities) => {
     $('#analytic_public_private__msgs_sent_in_pub_percents').text(total_in_pub_msgs / total_msgs * 100 + " %");
     $('#analytic_public_private__msgs_sent_in_priv_percents').text(total_in_prvt_msgs / total_msgs * 100 + " %");
     $('#analytic_public_private__msgs_sent_in_dm_percents').text(total_in_dm_msgs / total_msgs * 100 + " %");
-});
+};
 
 // message activity
 const getMessageActivity = async (id, last_month) => {
@@ -216,7 +217,7 @@ const getMessageActivity = async (id, last_month) => {
     return response.json();
 };
 
-getMessageActivity(workspace_id, false).then((activities) => {
+const showMessageActivity = (activities) => {
     $.each(activities, (i, activity) => {
         $('#analytic__messages_sent_table').find('tbody').append(
             `<tr>
@@ -225,5 +226,44 @@ getMessageActivity(workspace_id, false).then((activities) => {
             </tr>`
         );
     });
+};
+
+// overview display
+const showOverviewForAllTime = () => {
+    getAllMsgCount(workspace_id, false).then((count) => showMessagesCount(count));
+    getActiveMembers(workspace_id, false).then((activities) => showMembersActivity(activities));
+    getChannelActivity(workspace_id, false).then((activities) => showChannelActivity(activities));
+    getMessageActivity(workspace_id, false).then((activities) => showMessageActivity(activities));
+};
+
+const showOverviewForLast30days = () => {
+    getAllMsgCount(workspace_id, true).then((count) => showMessagesCount(count));
+    getActiveMembers(workspace_id, true).then((activities) => showMembersActivity(activities));
+    getChannelActivity(workspace_id, true).then((activities) => showChannelActivity(activities));
+    getMessageActivity(workspace_id, true).then((activities) => showMessageActivity(activities));
+};
+
+$('.nav-tabs a[href="#analytic_overview"]').on('show.bs.tab', showOverviewForAllTime());
+
+// show data for last 30 days
+$('#analytic-overview-last30').on('click', function (e) {
+    $('#analytic_active_members').find('tbody').empty();
+    $('#analytic_pub_private_channels_table').find('tbody').empty();
+    $('#analytic_pub_private_messages_table').find('tbody').empty();
+    $('#analytic__messages_sent_table').find('tbody').empty();
+    showOverviewForLast30days();
+    $('.analytic-overview-btn').text($(e.target).text());
+
 });
+// show data for all time
+$('#analytic-overview-all').on('click', function (e) {
+    $('#analytic_active_members').find('tbody').empty();
+    $('#analytic_pub_private_channels_table').find('tbody').empty();
+    $('#analytic_pub_private_messages_table').find('tbody').empty();
+    $('#analytic__messages_sent_table').find('tbody').empty();
+    showOverviewForAllTime();
+    $('.analytic-overview-btn').text($(e.target).text());
+
+});
+
 

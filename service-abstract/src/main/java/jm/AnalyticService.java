@@ -9,6 +9,8 @@ public interface AnalyticService {
 
     Integer getMessagesCountForWorkspace(Long workspaceId);
 
+    Integer getMessagesCountForWorkspaceForLastMonth(Long workspaceId);
+
     List<Channel> getAllChannelsForWorkspace(Long workspaceId, Boolean lastMonth);
 
     List<User> getUsersForWorkspaceByIdForLastMonth(Long workspaceId);

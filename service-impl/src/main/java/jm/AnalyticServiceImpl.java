@@ -4,6 +4,7 @@ import jm.api.dao.ChannelDAO;
 import jm.api.dao.MessageDAO;
 import jm.api.dao.WorkspaceDAO;
 import jm.model.Channel;
+import jm.model.Message;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,24 @@ public class AnalyticServiceImpl implements AnalyticService {
         List<Channel> channels = channelDAO.getChannelByWorkspace(workspaceId);
         for (Channel c: channels) {
             counter += messageDAO.getMessagesByChannelId(c.getId()).size();
+        }
+
+        return counter;
+    }
+
+    @Override
+    public Integer getMessagesCountForWorkspaceForLastMonth(Long workspaceId) {
+        int counter = 0;
+        List<Channel> channels = channelDAO.getChannelByWorkspace(workspaceId);
+        for (Channel c: channels) {
+            for (Message m : messageDAO.getMessagesByChannelId(c.getId())) {
+                if (m.getDateCreate().isAfter(
+                        LocalDateTime.now().minus(
+                                30, ChronoUnit.DAYS)
+                )) {
+                    counter ++;
+                }
+            }
         }
 
         return counter;

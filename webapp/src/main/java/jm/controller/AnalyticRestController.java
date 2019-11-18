@@ -34,9 +34,15 @@ public class AnalyticRestController {
         this.loggedUserService = loggedUserService;
     }
 
-    @GetMapping("/{id}/messages-count")
-    public ResponseEntity<Integer> getMessagesCountForWorkspace(@PathVariable Long id) {
-        return ResponseEntity.ok(analyticService.getMessagesCountForWorkspace(id));
+    @GetMapping("/{id}/messages-count/{period}")
+    public ResponseEntity<Integer> getMessagesCountForWorkspace(
+            @PathVariable Long id,
+            @PathVariable("period") Boolean lastMonth) {
+        return ResponseEntity.ok(
+                lastMonth
+                        ? analyticService.getMessagesCountForWorkspaceForLastMonth(id)
+                        : analyticService.getMessagesCountForWorkspace(id)
+        );
     }
 
     @GetMapping("/{id}/channels/{period}")

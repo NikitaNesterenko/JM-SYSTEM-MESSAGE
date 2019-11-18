@@ -39,7 +39,7 @@ public class LoggedUserDAOImpl extends AbstractDao<LoggedUser> implements Logged
     @Override
     public List<LoggedUser> getAllForWorkspaceForLastMonth(Long workspaceId) {
         try {
-            return entityManager.createQuery("select lu from LoggedUser lu inner join lu.channels ch where lu.dateTime = :date_time and ch.workspace.id = :ws_id", LoggedUser.class)
+            return entityManager.createQuery("select lu from LoggedUser lu inner join lu.channels ch where lu.dateTime >= :date_time and ch.workspace.id = :ws_id", LoggedUser.class)
                     .setParameter("date_time", LocalDateTime.now().minus(30, ChronoUnit.DAYS))
                     .setParameter("ws_id", workspaceId)
                     .getResultList();
