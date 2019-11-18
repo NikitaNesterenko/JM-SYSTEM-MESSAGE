@@ -5,8 +5,12 @@ import jm.model.User;
 import jm.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -50,6 +54,12 @@ public class UserRestController {
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
         return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
+    }
+
+    @GetMapping(value = "/loggedUser")
+    public ResponseEntity<User> getLoggedUserId(Principal principal){
+        User user  = userService.getUserByLogin(principal.getName());
+        return ResponseEntity.ok(user);
     }
 
 }

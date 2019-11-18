@@ -166,9 +166,8 @@ public class TestDataInitializer {
         userSet.add(userList.get(1));
 
         Channel channel_1 = new Channel();
-        channel_1.setName("channel_1");
+        channel_1.setName("general");
         channel_1.setUsers(this.users);
-        channel_1.setBots(this.bots);
         channel_1.setUser(userList.get(0));
         channel_1.setIsPrivate(true);
         channel_1.setCreatedDate(LocalDateTime.now());
@@ -178,9 +177,9 @@ public class TestDataInitializer {
         this.channels.add(channel_1);
 
         Channel channel_2 = new Channel();
-        channel_2.setName("channel_2");
+        channel_2.setName("random");
         channel_2.setUsers(userSet);
-        channel_2.setUser(userList.get(1));
+        channel_2.setUser(userList.get(0));
         channel_2.setIsPrivate(false);
         channel_2.setCreatedDate(LocalDateTime.now());
         channel_2.setWorkspace(workspaceList.get(0));
@@ -198,6 +197,8 @@ public class TestDataInitializer {
 
         channelDAO.persist(channel_3);
         this.channels.add(channel_3);
+
+
     }
 
     private void createMessages() {
