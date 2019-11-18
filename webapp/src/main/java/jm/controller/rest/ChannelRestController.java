@@ -69,5 +69,14 @@ public class ChannelRestController {
         return ResponseEntity.ok(channelService.getChannelByWorkspaceAndUser(workspaceName, login));
     }
 
+    @GetMapping("/workspace/{id}")
+    public ResponseEntity<List<Channel>> getChannelsByWorkspaceId(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(channelService.getChannelsByWorkspaceId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Channel> getChannelByName(@PathVariable("name") String name) {
+        return new ResponseEntity<>(channelService.getChannelByName(name), HttpStatus.OK);
+    }
 
 }
