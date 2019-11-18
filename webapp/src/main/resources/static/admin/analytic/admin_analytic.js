@@ -2,7 +2,7 @@ import {
     MessageRestPaginationService,
     UserRestPaginationService,
     WorkspaceRestPaginationService
-} from "./rest/entities-rest-pagination.js";
+} from "../../js/rest/entities-rest-pagination.js";
 
 
 /* На данный момент реализована функциональность без привязки к workspace.id */

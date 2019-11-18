@@ -6,9 +6,10 @@
     <meta charset="utf-8">
 
     <link rel="stylesheet" th:href="@{/css/adminPage.css}"/>
+    <link rel="stylesheet" th:href="@{/admin/analytic/analytic.css}"/>
 
     <script th:src="@{/js/adminPage.js}" type="module"></script>
-    <script th:src="@{/js/admin_analytic.js}" type="module"></script>
+    <script th:src="@{/admin/analytic/admin_analytic.js}" type="module"></script>
 
     <!-- Bootstrap CSS -->
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -354,30 +355,30 @@
                         <!--                        Overview-->
                         <h3>Overview</h3>
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <table>
-                                    <tr>
-                                        <td id="analytic_overview_total" width="70%">Updated:</td>
-                                        <td width="15%">
-                                            <div class="dropdown">
-                                                <button class="btn btn-primary dropdown-toggle analytic-overview-btn" data-toggle="dropdown"
-                                                        type="button">
-                                                    Period
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a id="analytic-overview-last30" href="#">Last 30 days</a></li>
-                                                    <li><a id="analytic-overview-all" href="#">All time</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td width="15%">
-                                            <button class="btn btn-outline-secondary" type="button">
-                                                Export
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <div class="panel-heading analytic-tab-table-header">
+                                <div class="analytic-tab-table-header__info-block">&nbsp;</div>
+                                <div>
+                                    <div class="analytic-tab-table-header__btns" id="analytic_overview_total">
+                                        <span>Updated:</span>
+                                        <span></span>
+                                    </div>
+                                    <div class="dropdown analytic-tab-table-header__btns">
+                                        <button class="btn btn-primary dropdown-toggle analytic-overview-btn" data-toggle="dropdown"
+                                                type="button">
+                                            Period
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a id="analytic-overview-last30" href="#">Last 30 days</a></li>
+                                            <li><a id="analytic-overview-all" href="#">All time</a></li>
+                                        </ul>
+                                    </div>
+                                    <div  class="analytic-tab-table-header__btns">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            Export
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="panel-body">
                                 <div class="" id="analytic_all_time_usage">
