@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Repository
@@ -55,6 +57,28 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 .getResultList();
     }
 
+    @Override
+    public List<Channel> getChannelByWorkspace(Long workspaceId) {
+        try {
+            return entityManager.createQuery("from Channel c where c.workspace.id = :ws_id", Channel.class)
+                    .setParameter("ws_id", workspaceId)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Channel> getChannelByWorkspaceForLastMonth(Long workspaceId) {
+        try {
+            return entityManager.createQuery("from Channel c where c.workspace.id = :ws_id and c.createdDate > :ch_created", Channel.class)
+                    .setParameter("ws_id", workspaceId)
+                    .setParameter("ch_created", LocalDateTime.now().minus(30, ChronoUnit.DAYS))
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
         try {

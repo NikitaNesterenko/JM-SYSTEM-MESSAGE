@@ -1,0 +1,12 @@
+.analytic-tab-table-header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: right;
+}
+
+.analytic-tab-table-header__btns {
+    display: inline;
+    padding: 0 10px;
+}
+
+

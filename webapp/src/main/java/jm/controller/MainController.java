@@ -59,6 +59,11 @@ public class MainController {
         return new ModelAndView("admin-page");
     }
 
+    @GetMapping(value = "/admin/analytics")
+    public ModelAndView adminAnalyticsPage() {
+        return new ModelAndView("admin-page-analytics");
+    }
+
     @GetMapping(value = "/searchChannel")
     public String seachChannelPage() {
         return "search-channel-page";

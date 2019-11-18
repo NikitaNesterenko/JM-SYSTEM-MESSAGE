@@ -4,8 +4,8 @@ package jm.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-//import jm.config.inititalizer.TestDataSecurityInitializer;
 import jm.config.inititalizer.TestDataInitializer;
+import jm.config.inititalizer.TestDataSecurityInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -23,7 +23,7 @@ import javax.annotation.PostConstruct;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @EnableJpaRepositories(value = {"jm.dao", "jm.api.dao"})
-@EntityScan("jm.model")
+@EntityScan(value = {"jm.model", "jm.analytic"})
 @ComponentScan("jm")
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
@@ -45,11 +45,13 @@ public class JMSystemMessageApplication {
         return new TestDataInitializer();
     }
 
-//    @Bean(initMethod = "init")
-//    @PostConstruct
-//    public TestDataSecurityInitializer initTestSecurityData() {
-//        return new TestDataSecurityInitializer();
-//    }
+
+
+    @Bean(initMethod = "init")
+    @PostConstruct
+    public TestDataSecurityInitializer initTestSecurityData() {
+        return new TestDataSecurityInitializer();
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(JMSystemMessageApplication.class);

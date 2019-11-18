@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,9 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
+        user.setCreatedDate(LocalDateTime.now());
         userDAO.persist(user);
     }
-
 
     @Override
     public void deleteUser(Long id) {
