@@ -47,6 +47,11 @@ public class MessageRestController {
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
+    public ResponseEntity<List<Message>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id, startDate, endDate), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<Message> createMessage(@RequestBody Message message, Authentication authentication) {
 

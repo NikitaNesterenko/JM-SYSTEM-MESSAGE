@@ -28,4 +28,6 @@ public interface ChannelDAO {
 
     List<Channel> getChannelByWorkspaceForLastMonth(Long workspaceId);
 
+    List<Channel> getChannelsByWorkspaceId(Long id);
+
 }

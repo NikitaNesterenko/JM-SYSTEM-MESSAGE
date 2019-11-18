@@ -73,4 +73,7 @@ public class MainController {
     public String seachUsersPage() {
         return "search-users-page";
     }
+
+    @GetMapping("/chooseWorkspace")
+    public String chooseWorkspace() {return "choose-workspace-page";}
 }
