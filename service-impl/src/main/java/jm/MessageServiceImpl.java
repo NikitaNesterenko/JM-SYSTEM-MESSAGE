@@ -59,4 +59,10 @@ public class MessageServiceImpl implements MessageService {
         messageDAO.merge(message);
 
     }
+
+    @Override
+    public List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate) {
+        return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
+    }
+
 }

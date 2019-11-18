@@ -23,4 +23,6 @@ public interface ChannelService {
 
     List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login);
 
+    List<Channel> getChannelsByWorkspaceId(Long id);
+
 }

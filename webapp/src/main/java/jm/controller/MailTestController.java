@@ -18,4 +18,9 @@ public class MailTestController {
         mailService.sendInviteMessage("Алексей", "wormogig@gmail.com","wormogig@mail.ru","TEST-WORKSPACE", "https://localhost:8080/");
         return "home-page";
     }
+
+    @GetMapping("/push")
+    public String testPush() {
+        return "push";
+    }
 }
