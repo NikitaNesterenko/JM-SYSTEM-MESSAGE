@@ -1,6 +1,5 @@
 import {
     MessageRestPaginationService,
-    UserRestPaginationService,
     WorkspaceRestPaginationService
 } from "../../js/rest/entities-rest-pagination.js";
 
@@ -8,12 +7,10 @@ import {
 /* На данный момент реализована функциональность без привязки к workspace.id */
 // todo привязать админку к workspace
 
-// const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
-const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
-const workspace_id = 5; // hardcoded
+const workspace_id = 2; // hardcoded
 const allowed_messages_qtty = 10000;
 
 /* ----- CHANNELS ----- */

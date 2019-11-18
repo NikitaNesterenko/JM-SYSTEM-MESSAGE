@@ -40,15 +40,15 @@ export class ChannelRestPaginationService extends  RestPaginationService {
         super('/rest/api/channels');
     }
     getChannelsByWorkspaceId = async (id) => {
-        const response = await fetch('/rest/api/channels/workspace/' + id)
+        const response = await fetch('/rest/api/channels/workspace/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
-    }
+    };
     getChannelByName = async (name) => {
-        const response = await fetch('/rest/api/channels/name/' + name)
+        const response = await fetch('/rest/api/channels/name/' + name);
         return await response.json()
             .catch(err => console.log(err.status));
-    }
+    };
 }
 export class WorkspaceRestPaginationService extends  RestPaginationService{
     constructor(){
@@ -64,7 +64,7 @@ export class WorkspaceRestPaginationService extends  RestPaginationService{
         const response = await fetch(`/rest/api/workspace/analytic/${id}/users/${last_month}`);
         return response.json();
     };
-    }
+
     getWorkspaceByName = async (name) => {
         const response = await fetch('/rest/api/workspaces/name/' + name);
         if (!response.ok) {
@@ -87,6 +87,5 @@ export class WorkspaceRestPaginationService extends  RestPaginationService{
         const response = await fetch('/rest/api/workspaces/choosed');
         return response.json()
     };
-
 
 }
