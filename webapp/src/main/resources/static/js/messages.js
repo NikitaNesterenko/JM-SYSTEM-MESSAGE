@@ -76,6 +76,7 @@ function showMessage(message) {
                                                               <button type="button" class="btn btn-light">&#8285;</button>
                                                             </div>
                                                         </div>
+                                                        
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
