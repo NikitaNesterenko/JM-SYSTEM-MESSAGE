@@ -19,7 +19,12 @@ window.addEventListener('load', function () {
     }
 });
 
+
+
+
+
 $(document).ready(() => {
+    // addChannel();
     showAllChannels();
     profileCard();
 });
@@ -58,3 +63,38 @@ const profileCard = () => {
         })
     }('#modal_1','#modal_2');
 };
+
+// const addChannel = () => {
+    $("#addChannelSubmit").click(
+        function () {
+            const date = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const trueDate = date.toLocaleString("ru", options);
+            const dateWithoutCommas = trueDate.replace(/,/g, "");
+
+            const channelName = document.getElementById('exampleInputChannelName').value;
+            const checkbox = document.getElementById('exampleCheck1');
+            if (checkbox.checked){
+                var checkbox1;
+                checkbox1 = true;
+            }
+            else {
+                checkbox1 = false;
+            }
+
+            const entity = {
+                name: channelName,
+                isPrivate: checkbox1,
+                createdDate: dateWithoutCommas
+            };
+            // const json = JSON.stringify(entity)
+            channel_service.create(entity);
+        }
+    )
+// }
