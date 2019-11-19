@@ -1,5 +1,5 @@
-import {ChannelRestPaginationService, BotRestPaginationService} from './rest/entities-rest-pagination.js'
-import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
+import {ChannelRestPaginationService, BotRestPaginationService} from '../rest/entities-rest-pagination.js'
+import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
