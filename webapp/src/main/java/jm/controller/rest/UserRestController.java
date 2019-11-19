@@ -7,8 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -67,4 +71,19 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
+    @GetMapping(value = "/channel/{id}")
+    public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
+        logger.info("Список пользователей канала с id = {}", id);
+        for (User user : userService.) {
+            logger.info(user.toString(getAllUsersInThisChannel(id)));
+        }
+        return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
+    }
+
+    @GetMapping(value = "/loggedUser")
+    public ResponseEntity<User> getLoggedUserId(Principal principal){
+        User user  = userService.getUserByLogin(principal.getName());
+        logger.info("Залогированный пользователь : {}", user);
+        return ResponseEntity.ok(user);
+    }
 }
