@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import jm.UserService;
 import jm.model.Channel;
 import jm.ChannelService;
 import jm.model.User;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,6 +24,12 @@ public class ChannelRestController {
         this.channelService = channelService;
     }
 
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
@@ -29,7 +37,11 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Channel> createChannel(@RequestBody Channel channel) {
+    public ResponseEntity<Channel> createChannel(Principal principal, @RequestBody Channel channel) {
+        if (principal != null) {
+            User owner = userService.getUserByLogin(principal.getName());
+            channel.setUser(owner);
+        }
         try {
             channelService.createChannel(channel);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
@@ -58,7 +70,7 @@ public class ChannelRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Channel>> getAllChannels(){
+    public ResponseEntity<List<Channel>> getAllChannels() {
         return ResponseEntity.ok(channelService.gelAllChannels());
     }
 
