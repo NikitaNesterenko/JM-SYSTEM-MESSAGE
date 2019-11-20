@@ -1,5 +1,5 @@
-import {findEl} from "./filter-channel.js"
-import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
+import {findEl} from "../filter-channel.js"
+import {UserRestPaginationService} from '../rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 const filterInput = $('#filter-channel'), filterUl = $('.ul-channel');

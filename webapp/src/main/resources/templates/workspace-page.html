@@ -5,26 +5,30 @@
     <meta charset="UTF-8">
     <title>Workspace Page</title>
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
-    <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
-    <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
+    <script src="/js/jquery/jquery-3.4.1.min.js"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
+
+    <!--<script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
-
-<!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
-
     <script defer th:src="@{/js/workspace-page/components/navbar/channel_topic.js}" type="module"></script>
-
     <script defer th:src="@{/js/workspace-page/user_view_edit.js}" type="module"></script>
-
-<!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script defer th:src="@{/js/workspace-page/components/footer/messages.js}" type="module"></script>
-    <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>-->
 
+    <script type="module" src="/js/workspace-page/workspace-page.js"></script>
+    <script type="module" src="/js/workspace-page/components/footer/input-box.js"></script>
+    <script type="module" src="/js/workspace-page/components/footer/input-box-at.js"></script>
+    <script type="module" src="/js/workspace-page/components/footer/messages.js"></script>
+    <script type="module" src="/js/workspace-page/components/navbar/channel_topic.js"></script>
+    <script type="module" src="/js/workspace-page/user_view_edit.js"></script>
+    <script type="module" src="/js/workspace-page/components/footer/messages.js"></script>
+    <script type="module" src="/js/workspace-page/menu.js"></script>
+<!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
+<!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
-
-    <script th:src="@{/js/helper_functions.js}"></script>
+    <script src="/js/helper_functions.js"></script>
 
 <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>

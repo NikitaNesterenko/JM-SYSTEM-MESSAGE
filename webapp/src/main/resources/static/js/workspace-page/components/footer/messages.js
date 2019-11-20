@@ -1,4 +1,4 @@
-import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
+import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService} from '../../../rest/entities-rest-pagination.js'
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();

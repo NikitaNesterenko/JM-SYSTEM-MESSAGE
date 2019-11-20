@@ -1,5 +1,5 @@
 
-import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPaginationService} from './rest/entities-rest-pagination.js'
+import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPaginationService} from '../../../rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();

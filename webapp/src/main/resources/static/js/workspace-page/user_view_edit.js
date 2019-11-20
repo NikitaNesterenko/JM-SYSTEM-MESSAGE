@@ -1,4 +1,4 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService, BotRestPaginationService} from "./rest/entities-rest-pagination.js";
+import {UserRestPaginationService, WorkspaceRestPaginationService, BotRestPaginationService} from "../rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
