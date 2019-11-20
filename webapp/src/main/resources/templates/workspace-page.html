@@ -21,6 +21,9 @@
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
 
+    <script th:src="@{/js/push/push.js}"></script>
+    <script th:src="@{/js/push/push_notification.js}"></script>
+
     <script src="/js/helper_functions.js"></script>
 
 <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
@@ -313,8 +316,8 @@
                                                     <button class="p-channel_sidebar__channels__button">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus"
-                                                                id="addChannelButton" data-toggle="modal" data-target="#addChannelModal">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus" data-toggle="modal" data-target="#addChannelModal"
+                                                                id="addChannelButton">✚
                                                         </button>
                                                     </div>
                                                 </div>
@@ -459,7 +462,6 @@
                             </div>
                         </div>
                     </div>
-
 <!--                    <footer class="p-workspace__primary_view_footer">-->
 <!--                        <div class="p-message_pane_input">-->
 <!--                            <div class="p-message_pane_input_inner">-->
@@ -626,13 +628,13 @@
                                         <button class="c-texty_input__button" id="showAssociatedUsers">
                                             <i class="c-icon--mentions">@</i>
                                         </button>
-                                        <div class="associatedUserList" id="associatedUserList">
-                                            <form>
-                                                <select class="associatedUserListSelect"
-                                                        id="associatedUserListSelect" multiple
-                                                        name="usersList"></select>
-                                            </form>
-                                        </div>
+                                    </div>
+                                    <div class="associatedUserList" id="associatedUserList">
+                                        <form>
+                                            <select class="associatedUserListSelect"
+                                                    id="associatedUserListSelect" multiple
+                                                    name="usersList"></select>
+                                        </form>
                                     </div>
                                     <div class="ql-editor">
                                         <form id="form_message">
@@ -677,7 +679,7 @@
 
 </div>
 
-<!--add channel modal-->
+<!--&lt;!&ndash;add channel modal&ndash;&gt;-->
 <!--<div class="add-channel-modal" id="addChannelModal">-->
 <!--    <div class="add-channel-modal-content">-->
 <!--        <form method="post" th:action="@{/workspace/create}">-->
@@ -720,7 +722,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Создать канал</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавление канала</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -728,18 +730,17 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="channel-name" class="col-form-label">Имя канала</label>
-                        <input type="text" class="form-control" id="channel-name">
+                        <label for="exampleInputChannelName">Название канала</label>
+                        <input type="email" class="form-control" id="exampleInputChannelName" placeholder="Введите название канала">
                     </div>
                     <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox">Сделать приватным
-                        </label>
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Сделать канал приватным?</label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-sm btn-success">Создать канал</button>
+                <button type="button" class="btn btn-success">Создать канал</button>
             </div>
         </div>
     </div>

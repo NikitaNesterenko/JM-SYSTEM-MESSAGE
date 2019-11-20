@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -72,7 +71,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found.");
         }
         return builder.build();
-
-
     }
 }
