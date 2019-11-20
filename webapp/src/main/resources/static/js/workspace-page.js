@@ -64,7 +64,6 @@ const profileCard = () => {
     }('#modal_1','#modal_2');
 };
 
-// const addChannel = () => {
     $("#addChannelSubmit").click(
         function () {
             const date = new Date();
@@ -95,6 +94,5 @@ const profileCard = () => {
             };
             // const json = JSON.stringify(entity)
             channel_service.create(entity);
-        }
-    )
+        });
 // }
