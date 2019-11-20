@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Bootsrap With Flexbox Grid -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap-flex.min.css" rel="stylesheet" >
+  <link rel="stylesheet" href="css/workspace-invitation.css">
+  </head>
+    <body>
+      <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand">JM</a>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a href="#" class="nav-link">Продукты</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">Цены</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">Поддержка</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">Создать workspace</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">Найти workspace</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="btn btn-outline-secondary">Войти</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="container">
+        <div class="row flex-items-xs-center">
+          <div class="col-xs-6">
+            <br>
+            <br>
+            <h1 class="text-center">Join the JM</h1>
+            <br>
+            <form>
+              <div class="form-group">
+                <label for="name">Полное имя:</label>
+                <input type="text" class="form-control" id="name" aria-describedby="namelHelp" placeholder="Введите имя">
+                <small id="namelHelp" class="form-text text-muted">Сообщения будут отправлены от этого имени</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword">Пароль:</label>
+                <input type="password" class="form-control" id="exampleInputPassword"aria-describedby="passwordHelp"
+                placeholder="Введите пароль">
+                <small id="passwordHelp" class="form-text text-muted">Пароль должен быть длиной не менее 6-ти симолов и содержать буквы и числа</small>
+              </div>
+              <div class="form-group">
+                <legend class="col-form-label">Можем ли мы присылать вам новости обновлений и предложения на email?</legend>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                  <label class="form-check-label" for="gridRadios1">
+                    Да
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                  <label class="form-check-label" for="gridRadios2">
+                    Нет
+                  </label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success">Создать аккаунт</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <Footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 align="center">Footer</h2>
+          </div>
+        </div>
+      </Footer>
+    </body>
+    </html>

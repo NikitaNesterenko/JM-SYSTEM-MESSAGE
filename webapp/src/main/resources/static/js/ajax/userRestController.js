@@ -15,7 +15,7 @@ export const getAllUsersInThisChannel = (id) => {
     $.ajax({
         type: 'get',
         async: false,
-        url: "/restapi/users/channel/" + id
+        url: "/rest/api/users/channel/" + id
     }).done(function (data) {
         result = data;
     });

@@ -3,11 +3,11 @@ package jm.config.inititalizer;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
+import jm.model.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,10 +50,10 @@ public class TestDataInitializer {
     private void dataInit() {
         createRoles();
         createUsers();
-        createChannels();
-        createMessages();
         createWorkspaces();
         createBots();
+        createChannels();
+        createMessages();
     }
 
     private void createRoles() {
@@ -116,41 +116,52 @@ public class TestDataInitializer {
 
     private void createChannels() {
         List<User> userList = new ArrayList<>(this.users);
+        List<Workspace> workspaceList = new ArrayList<>(workspaces);
+
+        Set<User> userSet = new HashSet<>();
+        userSet.add(userList.get(0));
+        userSet.add(userList.get(1));
 
         Channel channel_1 = new Channel();
-        channel_1.setName("channel_1");
+        channel_1.setName("general");
         channel_1.setUsers(this.users);
         channel_1.setUser(userList.get(0));
         channel_1.setIsPrivate(true);
         channel_1.setCreatedDate(LocalDateTime.now());
+        channel_1.setWorkspace(workspaceList.get(0));
 
         channelDAO.persist(channel_1);
         this.channels.add(channel_1);
 
         Channel channel_2 = new Channel();
-        channel_2.setName("channel_2");
-        channel_2.setUsers(this.users);
-        channel_2.setUser(userList.get(1));
+        channel_2.setName("random");
+        channel_2.setUsers(userSet);
+        channel_2.setUser(userList.get(0));
         channel_2.setIsPrivate(false);
         channel_2.setCreatedDate(LocalDateTime.now());
+        channel_2.setWorkspace(workspaceList.get(0));
 
         channelDAO.persist(channel_2);
         this.channels.add(channel_2);
 
         Channel channel_3 = new Channel();
         channel_3.setName("channel_3");
-        channel_3.setUsers(this.users);
+        channel_3.setUsers(userSet);
         channel_3.setUser(userList.get(2));
         channel_3.setIsPrivate(true);
         channel_3.setCreatedDate(LocalDateTime.now());
+        channel_3.setWorkspace(workspaceList.get(1));
 
         channelDAO.persist(channel_3);
         this.channels.add(channel_3);
+
+
     }
 
     private void createMessages() {
         List<User> userList = new ArrayList<>(this.users);
         List<Channel> channels = new ArrayList<>(this.channels);
+        List<Bot> bots = new ArrayList<>(this.bots);
 
         Message message_1 = new Message();
         message_1.setChannel(channels.get(0));
@@ -178,6 +189,17 @@ public class TestDataInitializer {
 
         messageDAO.persist(message_3);
         this.messages.add(message_3);
+
+        Message message_4 = new Message();
+        message_4.setChannel(channels.get(1));
+        message_4.setBot(bots.get(0));
+        message_4.setContent("Hello from BOT!");
+        message_4.setDateCreate(LocalDateTime.now());
+
+        messageDAO.persist(message_4);
+        this.messages.add(message_4);
+
+
     }
 
     private void createWorkspaces() {
@@ -186,7 +208,6 @@ public class TestDataInitializer {
         Workspace workspace_1 = new Workspace();
         workspace_1.setName("workspace_1");
         workspace_1.setUsers(this.users);
-        workspace_1.setChannels(this.channels);
         workspace_1.setUser(userList.get(0));
         workspace_1.setIsPrivate(false);
         workspace_1.setCreatedDate(LocalDateTime.now());
@@ -198,7 +219,6 @@ public class TestDataInitializer {
 //        "workspace_2", this.users, this.channels, userList.get(1), true, LocalDateTime.now()
         workspace_2.setName("workspace_2");
         workspace_2.setUsers(this.users);
-        workspace_2.setChannels(this.channels);
         workspace_2.setUser(userList.get(1));
         workspace_2.setIsPrivate(true);
         workspace_2.setCreatedDate(LocalDateTime.now());
@@ -208,25 +228,9 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        List<Workspace> workspaceList = new ArrayList<>(this.workspaces);
-
-        Set<Workspace> workspaceSet_1 = new HashSet<>();
-        workspaceSet_1.add(workspaceList.get(0));
-        Bot bot_1 = new Bot();
-        bot_1.setName("Bot_1");
-        bot_1.setWorkspace(workspaceSet_1);
-        bot_1.setCreatedDate(LocalDate.now());
-        botDAO.persist(bot_1);
-        this.bots.add(bot_1);
-
-        Set<Workspace> workspaceSet_2 = new HashSet<>();
-        workspaceSet_2.add(workspaceList.get(1));
-        Bot bot_2 = new Bot();
-        bot_2.setName("Bot_2");
-        bot_2.setWorkspace(workspaceSet_2);
-        bot_2.setCreatedDate(LocalDate.now());
-        botDAO.persist(bot_2);
-        this.bots.add(bot_2);
+        Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
+        this.bots.add(bot);
+        botDAO.persist(bot);
     }
 
 }

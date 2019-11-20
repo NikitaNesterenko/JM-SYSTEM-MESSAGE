@@ -53,8 +53,15 @@
     font-family: Slack-Lato,appleLogo,sans-serif;
     box-sizing: inherit;
     display: grid;
-    grid-template-rows: min-content 60px auto;
-    grid-template-areas: "p-workspace__banner p-workspace__banner p-workspace__banner" "p-workspace__top_nav p-workspace__top_nav p-workspace__top_nav" "p-workspace__sidebar p-workspace__primary_view p-workspace__secondary_view";
+    grid-template-rows: min-content auto 65px;
+    /*grid-template-areas: "p-workspace__banner p-workspace__banner p-workspace__banner"*/
+    /*                     "p-workspace__top_nav p-workspace__top_nav p-workspace__top_nav"*/
+    /*                      "p-workspace__sidebar p-workspace__primary_view p-workspace__secondary_view"*/
+    /*                     "p-workspace_footer p-workspace_footer p-workspace_footer";*/
+    grid-template-areas:
+                         "p-workspace__top_nav p-workspace__top_nav p-workspace__top_nav"
+                          "p-workspace__sidebar p-workspace__primary_view p-workspace__secondary_view"
+                         "p-workspace__sidebar p-workspace_footer p-workspace__secondary_view";
     grid-template-columns: 220px auto 492px;
     min-width: 0;
     min-height: 0;
@@ -92,6 +99,9 @@
 }
 
 .p-workspace__primary_view {
+
+    overflow: auto;
+
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
@@ -1645,6 +1655,8 @@
     opacity: 1;
 }
 
+
+
 .p-channel_sidebar__list__presentation-4 {
     line-height: 1.46668;
     font-weight: 400;
@@ -1669,7 +1681,31 @@
     height: 26px;
 }
 
+.p-channel_sidebar__add_app {
+    line-height: 1.46668;
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-size: 15px;
+    color: rgb(188,171,188);
+    box-sizing: inherit;
+    height: 26px;
+}
+
 .p-channel_sidebar__close_container {
+    line-height: 1.46668;
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-size: 15px;
+    color: rgb(188,171,188);
+    box-sizing: inherit;
+    position: relative;
+}
+
+.bot-representation {
     line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
@@ -1686,6 +1722,28 @@
 }
 
 .p-channel_sidebar__add_channel__button {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    font: inherit;
+    margin: 0;
+    overflow: initial;
+    text-align: initial;
+    vertical-align: initial;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 12px 0 15px;
+    width: 100%;
+    border-radius: 0;
+    color: rgb(188,171,188);
+    outline: none;
+}
+
+.p-channel_sidebar__add_app__button {
     -webkit-font-smoothing: antialiased;
     box-sizing: inherit;
     background: none;
@@ -1759,6 +1817,23 @@
 }
 
 .p-channel_sidebar__direct-messages {
+    line-height: 1.46668;
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-size: 15px;
+    color: rgb(188,171,188);
+    box-sizing: inherit;
+    padding: 0 12px 0 15px;
+    margin: 0;
+    width: 100%;
+    height: 26px;
+    display: flex;
+    align-items: center;
+}
+
+.p-channel_sidebar__app{
     line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
@@ -1920,7 +1995,7 @@
     min-height: 0;
     position: relative;
     box-shadow: none;
-    bottom: 15px;
+    /*bottom: 15px;*/
 }
 
 .p-workspace__primary_view_footer {
@@ -2985,6 +3060,8 @@
 }
 
 .p-message_pane--classic-nav {
+    display: flex;
+    flex-direction: column;
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
@@ -2995,7 +3072,7 @@
     --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
     box-sizing: inherit;
     width: 100%;
-    position: absolute;
+    /*position: absolute;*/
     overflow: hidden;
     height: auto;
     bottom: 0;
@@ -3039,3 +3116,85 @@
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+
+
+/*Button inside input field*/
+
+.buttonInside {
+    position: relative;
+    /*margin-bottom: 10px;*/
+}
+
+.insideInputButton {
+    cursor: pointer;
+}
+
+#associatedUserList {
+    display: none;
+
+    font-style: italic;
+    font-size: 0.8em;
+    left: 0;
+}
+
+.message-input-field {
+    height: 40px;
+    /*width:100%;*/
+    padding-left: 10px;
+    /*border-radius: 4px;*/
+    /*border: none;*/
+    /*outline: none;*/
+}
+
+.insideInputButton {
+    position: absolute;
+    /*right: 0;*/
+    /*top: 14px;*/
+    left: 100%;
+    margin-left: -5%;
+    top: 50%;
+    margin-top: -15px;
+    border: none;
+    height: 30px;
+    width: 30px;
+    border-radius: 20%;
+    outline: none;
+    text-align: center;
+    padding: 2px;
+}
+
+.associatedUserList {
+    position: absolute;
+    left: 5%;
+    /*margin-left: 0px;*/
+    bottom: -1%;
+    margin-bottom: 5px;
+    padding: 0;
+    height: 200px;
+    width: 70%;
+    z-index: 1000;
+}
+
+#associatedUserListSelect {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#associatedUserListSelect option {
+    height: 30px;
+    padding-top: 10px;
+}
+
+#associatedUserListSelect option:hover {
+    cursor: pointer;
+    background-color: #0896D3;
+}
+
+/*end of button inside input field*/
+
+.c-virtual_list__item__date {
+    text-align: center;
+}
+
