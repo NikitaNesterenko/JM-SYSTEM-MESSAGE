@@ -1,13 +1,20 @@
 package jm.controller.rest;
 
 import jm.BotService;
+import jm.ChannelService;
+import jm.MessageService;
 import jm.WorkspaceService;
 import jm.model.Bot;
+import jm.model.Channel;
+import jm.model.Message;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/rest/api/bot")
@@ -15,12 +22,24 @@ public class BotRestController {
 
     private BotService botService;
     private WorkspaceService workspaceService;
+    private MessageService messageService;
+    private ChannelService channelService;
 
     @Autowired
     public void setBotService(BotService botService) { this.botService = botService; }
 
     @Autowired
     public void setWorkspaceService(WorkspaceService workspaceService) { this.workspaceService = workspaceService; }
+
+    @Autowired
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    @Autowired
+    public void setChannelService(ChannelService channelService) {
+        this.channelService = channelService;
+    }
 
     @GetMapping("/workspace/{id}")
     public ResponseEntity<Bot> getBotByWorksapce(@PathVariable("id") Long id) {
@@ -59,4 +78,22 @@ public class BotRestController {
        botService.deleteBot(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PostMapping("/{id}/channels/{name}/messages")
+    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
+        Channel channel = channelService.getChannelByName(name);
+        Bot bot = botService.getBotById(id);
+        message.setChannel(channel);
+        message.setBot(bot);
+        message.setDateCreate(LocalDateTime.now());
+        messageService.createMessage(message);
+        return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/channels")
+    public ResponseEntity<Set<Channel>> getChannels(@PathVariable("id") Long id) {
+        Bot bot = botService.getBotById(id);
+        return new ResponseEntity<>(botService.getChannels(bot), HttpStatus.OK);
+    }
+
 }
