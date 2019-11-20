@@ -25,10 +25,10 @@ public class MainController {
     @Autowired
     WorkspaceService workspaceService;
 
-    /*@GetMapping(value = "/")
+    @GetMapping(value = "/")
     public String indexPage() {
         return "home-page";
-    }*/
+    }
 
     @PostMapping(value = "/workspace/create")
     public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("usersList") String[] usersList,
@@ -39,7 +39,7 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/workspace")
     public ModelAndView workspacePage() {
         return new ModelAndView("workspace-page");
     }
