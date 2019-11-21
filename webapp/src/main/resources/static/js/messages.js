@@ -13,8 +13,9 @@ function connect() {
         stompClient.subscribe('/topic/messages', function (message) {
             let result  = JSON.parse(message.body);
             if(result.user !== null) {
-                showMessage(result);
+                // showMessage(result);
                 notifyParseMessage(result);
+                updateMessages();
             } else {
                 showBotMessage(result)
             }
