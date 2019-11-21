@@ -1,0 +1,10 @@
+#message-icons-menu {
+    position: absolute;
+    display: none;
+    margin-left: 70%;
+    top: 10%
+}
+
+#message-icons-menu span {
+    color: red;
+}

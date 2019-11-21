@@ -67,6 +67,16 @@ function showMessage(message) {
                                                                 ${message.inputMassage}
                                                             </span>
                                                         </div>
+                                                        <div id="message-icons-menu">
+                                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                              <button type="button" class="btn btn-light">&#9786;</button>
+                                                              <button type="button" class="btn btn-light">&#128172;</button>
+                                                              <button type="button" class="btn btn-light">&#10140;</button>
+                                                              <button type="button" class="btn btn-light">&#9734;</button>
+                                                              <button type="button" class="btn btn-light">&#8285;</button>
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
@@ -156,6 +166,9 @@ window.updateMessages = function updateMessages() {
                                                                 ${message.content}
                                                             </span>
                                                         </div>
+                                                        <div id="message-icons-menu">
+                                                            <span>Message menu block</span>
+                                                        </div>
                                                     </div>`;
             message_box.append(messages_queue_context_user_container);
 
@@ -183,6 +196,9 @@ window.updateMessages = function updateMessages() {
                                                             <span class="c-message__body">
                                                                 ${message.content}
                                                             </span>
+                                                        </div>
+                                                        <div id="message-icons-menu">
+                                                            <span>Message menu block</span>
                                                         </div>
                                                     </div>`;
                 message_box.append(messages_queue_context_user_container);
@@ -219,6 +235,9 @@ function showBotMessage(message) {
                                                             <span class="c-message__body">
                                                                 ${message.inputMassage}
                                                             </span>
+                                                        </div>
+                                                        <div id="message-icons-menu">
+                                                            <span>Message menu block</span>
                                                         </div>
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
