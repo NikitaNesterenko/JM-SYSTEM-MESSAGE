@@ -20,4 +20,8 @@ public interface WorkspaceService {
 
     List<Workspace> getWorkspacesByOwner(User user);
 
+    List<Workspace> getWorkspacesByUserParticipate(User user);
+
+
+
 }
