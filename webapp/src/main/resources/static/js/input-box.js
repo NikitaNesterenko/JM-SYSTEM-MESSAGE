@@ -6,7 +6,8 @@ const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
 
 class Message {
-    constructor(channel, user, content, dateCreate) {
+    constructor(id, channel, user, content, dateCreate) {
+        this.id = id;
         this.channel = channel;
         this.user = user;
         this.content = content;
@@ -15,7 +16,7 @@ class Message {
 }
 
 $('#form_message').submit(function () {
-    const user_promise = user_service.getLoggedUser()
+    const user_promise = user_service.getLoggedUser();
     const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
     Promise.all([user_promise, channel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
         const user = value[0];
@@ -25,11 +26,11 @@ $('#form_message').submit(function () {
         const text_message = message_input_element.value;
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
-        const message = new Message(channel, user, text_message, currentDate);
+        const message = new Message(null, channel, user, text_message, currentDate);
 
-        sendName(message)
-        message_service.create(message);
-
+        message_service.create(message).then(messageWithId => {
+            sendName(messageWithId);
+        });
     });
     return false;
 });

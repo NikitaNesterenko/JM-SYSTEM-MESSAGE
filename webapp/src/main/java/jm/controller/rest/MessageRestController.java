@@ -50,13 +50,15 @@ public class MessageRestController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity updateMessage(@RequestBody Message message) {
+    public ResponseEntity<Message> updateMessage(@RequestBody Message message) {
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            messageService.updateMessage(message);
-            return new ResponseEntity(HttpStatus.OK);
+            existingMessage.setContent(message.getContent());
+            existingMessage.setDateCreate(message.getDateCreate());
+            messageService.updateMessage(existingMessage);
+            return new ResponseEntity<>(existingMessage, HttpStatus.OK);
         }
     }
 

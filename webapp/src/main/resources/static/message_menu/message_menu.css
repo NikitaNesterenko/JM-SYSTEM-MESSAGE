@@ -1,10 +1,14 @@
-#message-icons-menu {
+.c-message--icons_menu {
     position: absolute;
     display: none;
-    margin-left: 70%;
-    top: 10%
+    margin-left: 75%;
+    top: -10%
 }
 
-#message-icons-menu span {
+.c-message--light:hover .c-message--icons_menu {
+    display: block;
+}
+
+.c-message--icons_menu span {
     color: red;
 }

@@ -1,4 +1,10 @@
-import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
+import {
+    MessageRestPaginationService,
+    ChannelRestPaginationService,
+    WorkspaceRestPaginationService,
+} from './rest/entities-rest-pagination.js'
+
+import {registerOnClick} from "./messagesInlineEdit.js";
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
@@ -11,8 +17,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages', function (message) {
-            let result  = JSON.parse(message.body);
-            if(result.user !== null) {
+            let result = JSON.parse(message.body);
+            if (result.user !== null) {
                 showMessage(result);
                 notifyParseMessage(result);
             } else {
@@ -31,6 +37,7 @@ function disconnect() {
 
 window.sendName = function sendName(message) {
     stompClient.send("/app/message", {}, JSON.stringify({
+        'id': message.id,
         'inputMassage': message.content,
         'dateCreate': message.dateCreate,
         'user': message.user,
@@ -63,23 +70,26 @@ function showMessage(message) {
                                                                     </span>
                                                                 </a>
                                                             </div>
+                                                            <div class="c-message__content--display_edit" id = "message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.inputMassage}
                                                             </span>
+                                                            </div>
                                                         </div>
-                                                        <div id="message-icons-menu">
+                                                        <div class="c-message--icons_menu">
                                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                               <button type="button" class="btn btn-light">&#9786;</button>
                                                               <button type="button" class="btn btn-light">&#128172;</button>
                                                               <button type="button" class="btn btn-light">&#10140;</button>
                                                               <button type="button" class="btn btn-light">&#9734;</button>
-                                                              <button type="button" class="btn btn-light">&#8285;</button>
+                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
                                                             </div>
                                                         </div>
-                                                        
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
+
+    registerOnClick();
 }
 
 connect();
@@ -111,38 +121,38 @@ window.updateMessages = function updateMessages() {
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
         messages.forEach(function (message, i) {
 
-            if(message.user !== null) {
-            let messages_queue_context_user_container = document.createElement('div');
-            messages_queue_context_user_container.className = "c-virtual_list__item";
+            if (message.user !== null) {
+                let messages_queue_context_user_container = document.createElement('div');
+                messages_queue_context_user_container.className = "c-virtual_list__item";
 
-            let messages_queue_context_user_container_date = document.createElement('span');
-            messages_queue_context_user_container_date.className = "c-virtual_list__item__date";
+                let messages_queue_context_user_container_date = document.createElement('span');
+                messages_queue_context_user_container_date.className = "c-virtual_list__item__date";
 
-            const time = message.dateCreate.split(' ')[1];
-            const date = message.dateCreate.split(' ')[0];
+                const time = message.dateCreate.split(' ')[1];
+                const date = message.dateCreate.split(' ')[0];
 
-            // Берем дату без времени
-            let parts_date = message.dateCreate.split(' ')[0];
-            // Получаем год - месяц - число
-            parts_date = parts_date.split('.');
+                // Берем дату без времени
+                let parts_date = message.dateCreate.split(' ')[0];
+                // Получаем год - месяц - число
+                parts_date = parts_date.split('.');
 
-            current_year = parts_date[2];
-            current_month = parts_date[1];
-            current_day = parts_date[0];
+                current_year = parts_date[2];
+                current_month = parts_date[1];
+                current_day = parts_date[0];
 
-            if (current_day != last_day_show) {
-                last_day_show = current_day;
-                if (current_day == today.getDate()) {
-                    messages_queue_context_user_container_date.innerHTML = `Today`;
-                } else if (current_day == today.getDate() - 1) {
-                    messages_queue_context_user_container_date.innerHTML = `Yesterday`;
-                } else {
-                    messages_queue_context_user_container_date.innerHTML = `${date}`;
+                if (current_day != last_day_show) {
+                    last_day_show = current_day;
+                    if (current_day == today.getDate()) {
+                        messages_queue_context_user_container_date.innerHTML = `Today`;
+                    } else if (current_day == today.getDate() - 1) {
+                        messages_queue_context_user_container_date.innerHTML = `Yesterday`;
+                    } else {
+                        messages_queue_context_user_container_date.innerHTML = `${date}`;
+                    }
+                    message_box.append(messages_queue_context_user_container_date);
                 }
-                message_box.append(messages_queue_context_user_container_date);
-            }
 
-            messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -162,15 +172,23 @@ window.updateMessages = function updateMessages() {
                                                                     </span>                                                                     
                                                                 </a>
                                                             </div>
+                                                            <div class="c-message__content--display_edit" id = "message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.content}
                                                             </span>
+                                                            </div>
                                                         </div>
-                                                        <div id="message-icons-menu">
-                                                            <span>Message menu block</span>
+                                                        <div class="c-message--icons_menu">
+                                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                              <button type="button" class="btn btn-light">&#9786;</button>
+                                                              <button type="button" class="btn btn-light">&#128172;</button>
+                                                              <button type="button" class="btn btn-light">&#10140;</button>
+                                                              <button type="button" class="btn btn-light">&#9734;</button>
+                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
+                                                            </div>
                                                         </div>
                                                     </div>`;
-            message_box.append(messages_queue_context_user_container);
+                message_box.append(messages_queue_context_user_container);
 
             } else {
                 let messages_queue_context_user_container = document.createElement('div');
@@ -193,18 +211,28 @@ window.updateMessages = function updateMessages() {
                                                                     </span>
                                                                 </a>
                                                             </div>
+                                                            <div class="c-message__content--display_edit" id = "message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.content}
                                                             </span>
+                                                            </div>
                                                         </div>
-                                                        <div id="message-icons-menu">
-                                                            <span>Message menu block</span>
+                                                        <div class="c-message--icons_menu">
+                                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                              <button type="button" class="btn btn-light">&#9786;</button>
+                                                              <button type="button" class="btn btn-light">&#128172;</button>
+                                                              <button type="button" class="btn btn-light">&#10140;</button>
+                                                              <button type="button" class="btn btn-light">&#9734;</button>
+                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
+                                                            </div>
                                                         </div>
                                                     </div>`;
                 message_box.append(messages_queue_context_user_container);
             }
         });
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);
+
+        registerOnClick();
     });
 };
 
@@ -236,8 +264,14 @@ function showBotMessage(message) {
                                                                 ${message.inputMassage}
                                                             </span>
                                                         </div>
-                                                        <div id="message-icons-menu">
-                                                            <span>Message menu block</span>
+                                                        <div class="c-message--icons_menu">
+                                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                              <button type="button" class="btn btn-light">&#9786;</button>
+                                                              <button type="button" class="btn btn-light">&#128172;</button>
+                                                              <button type="button" class="btn btn-light">&#10140;</button>
+                                                              <button type="button" class="btn btn-light">&#9734;</button>
+                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
+                                                            </div>
                                                         </div>
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
@@ -245,16 +279,16 @@ function showBotMessage(message) {
 }
 
 window.pressChannelButton = function pressChannelButton(id) {
-    workspace_service.getChoosedWorkspace().then( (respons) => {
-    let channel_promise =  channel_service.getChannelsByWorkspaceId(respons.id);
-    channel_promise.then(channels => {
-        channels.forEach(function (channel, i) {
-            if(id !== channel.id) {
-                document.getElementById("channel_button_" + channel.id).style.color = "rgb(188,171,188)";
-                document.getElementById("channel_button_" + channel.id).style.background = "none";
-            }
+    workspace_service.getChoosedWorkspace().then((respons) => {
+        let channel_promise = channel_service.getChannelsByWorkspaceId(respons.id);
+        channel_promise.then(channels => {
+            channels.forEach(function (channel, i) {
+                if (id !== channel.id) {
+                    document.getElementById("channel_button_" + channel.id).style.color = "rgb(188,171,188)";
+                    document.getElementById("channel_button_" + channel.id).style.background = "none";
+                }
+            });
         });
-    });
     });
     document.getElementById("channel_button_" + id).style.color = "white";
     document.getElementById("channel_button_" + id).style.background = "royalblue";
