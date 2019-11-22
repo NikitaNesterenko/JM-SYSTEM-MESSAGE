@@ -20,6 +20,9 @@
 <!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
+    <!-- message menu -->
+    <script defer th:src="@{/message_menu/message-icon-menu.js}"></script>
+    <link rel="stylesheet" th:href="@{/message_menu/message_menu.css}"/>
 
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
@@ -316,8 +319,8 @@
                                                     <button class="p-channel_sidebar__channels__button">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus" data-toggle="modal" data-target="#addChannelModal"
-                                                                id="addChannelButton">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                                id="addChannelButton" data-toggle="modal" data-target="#addChannelModal">✚
                                                         </button>
                                                     </div>
                                                 </div>
