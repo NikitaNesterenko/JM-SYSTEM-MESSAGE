@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class InputMessage {
     //TODO
 
-    private Long id;
+    private Long id;  // id нужно для редактирования сообщений
 
     private String inputMassage;
 

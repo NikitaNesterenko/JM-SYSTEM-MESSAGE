@@ -28,12 +28,11 @@ export class RestPaginationService {
     };
 
     update = async (entity) => {
-        const response = await fetch(`${this.url}/update`, {
+        await fetch(`${this.url}/update`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(entity)
         });
-        return response.json();
     };
 
     deleteById = async (id) => {
