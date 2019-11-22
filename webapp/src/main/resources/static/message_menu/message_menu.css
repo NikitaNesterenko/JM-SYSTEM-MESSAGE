@@ -1,14 +1,11 @@
-.c-message--icons_menu {
+.message-icons-menu-class {
     position: absolute;
     display: none;
-    margin-left: 75%;
-    top: -10%
+    margin-left: 65%;
+    top: -20%;
+    z-index: 1000;
 }
 
-.c-message--light:hover .c-message--icons_menu {
+.c-virtual_list__item:hover .message-icons-menu-class {
     display: block;
-}
-
-.c-message--icons_menu span {
-    color: red;
 }

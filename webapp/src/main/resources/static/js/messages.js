@@ -45,6 +45,19 @@ window.sendName = function sendName(message) {
     }));
 };
 
+// message menu buttons
+const message_menu = (message) => {
+    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
+        `<div class="btn-group" role="group" aria-label="Basic example">` +
+        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
+        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
+        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
+        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
+        `<button type="button" class="btn btn-light c-btn__edit_inline" id="btn__edit_inline__message_id-${message.id}">&#8285;</button>` + // submenu
+        `</div>` +
+        `</div>`;
+};
+
 function showMessage(message) {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
@@ -76,15 +89,7 @@ function showMessage(message) {
                                                             </span>
                                                             </div>
                                                         </div>
-                                                        <div class="c-message--icons_menu">
-                                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                              <button type="button" class="btn btn-light">&#9786;</button>
-                                                              <button type="button" class="btn btn-light">&#128172;</button>
-                                                              <button type="button" class="btn btn-light">&#10140;</button>
-                                                              <button type="button" class="btn btn-light">&#9734;</button>
-                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
-                                                            </div>
-                                                        </div>
+                                                        ${message_menu(message)}                                                        
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
@@ -178,15 +183,7 @@ window.updateMessages = function updateMessages() {
                                                             </span>
                                                             </div>
                                                         </div>
-                                                        <div class="c-message--icons_menu">
-                                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                              <button type="button" class="btn btn-light">&#9786;</button>
-                                                              <button type="button" class="btn btn-light">&#128172;</button>
-                                                              <button type="button" class="btn btn-light">&#10140;</button>
-                                                              <button type="button" class="btn btn-light">&#9734;</button>
-                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
-                                                            </div>
-                                                        </div>
+                                                        ${message_menu(message)}
                                                     </div>`;
                 message_box.append(messages_queue_context_user_container);
 
@@ -217,15 +214,7 @@ window.updateMessages = function updateMessages() {
                                                             </span>
                                                             </div>
                                                         </div>
-                                                        <div class="c-message--icons_menu">
-                                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                              <button type="button" class="btn btn-light">&#9786;</button>
-                                                              <button type="button" class="btn btn-light">&#128172;</button>
-                                                              <button type="button" class="btn btn-light">&#10140;</button>
-                                                              <button type="button" class="btn btn-light">&#9734;</button>
-                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
-                                                            </div>
-                                                        </div>
+                                                        ${message_menu(message)}
                                                     </div>`;
                 message_box.append(messages_queue_context_user_container);
             }
@@ -264,15 +253,7 @@ function showBotMessage(message) {
                                                                 ${message.inputMassage}
                                                             </span>
                                                         </div>
-                                                        <div class="c-message--icons_menu">
-                                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                              <button type="button" class="btn btn-light">&#9786;</button>
-                                                              <button type="button" class="btn btn-light">&#128172;</button>
-                                                              <button type="button" class="btn btn-light">&#10140;</button>
-                                                              <button type="button" class="btn btn-light">&#9734;</button>
-                                                              <button id = "btn__edit_inline__message_id-${message.id}" type="button" class="btn btn-light c-btn__edit_inline">&#8285;</button>
-                                                            </div>
-                                                        </div>
+                                                        ${message_menu(message)}
                                                     </div>`;
     message_box.append(messages_queue_context_user_container);
     message_box.scrollTo(0, message_box.scrollHeight);
