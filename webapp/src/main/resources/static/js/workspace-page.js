@@ -19,10 +19,6 @@ window.addEventListener('load', function () {
     }
 });
 
-
-
-
-
 $(document).ready(() => {
     // addChannel();
     showAllChannels();
@@ -86,13 +82,11 @@ const profileCard = () => {
             else {
                 checkbox1 = false;
             }
-
             const entity = {
                 name: channelName,
                 isPrivate: checkbox1,
                 createdDate: dateWithoutCommas
             };
-            // const json = JSON.stringify(entity)
             channel_service.create(entity);
         });
 // }
