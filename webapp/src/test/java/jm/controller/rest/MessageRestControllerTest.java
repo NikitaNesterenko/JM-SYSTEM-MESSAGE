@@ -20,6 +20,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +149,7 @@ public class MessageRestControllerTest {
         Message messageTest= new Message(11L, new Channel(), new User(), "HelloTest", LocalDateTime.now());
         messageTest.setId(1L);
         when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
-        ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageTest);
+        ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageTest, (Principal) messageTest.getUser());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(messageTest.getContent(), messageUpdated.getContent());
         verify(messageService, times(1)).updateMessage(any());

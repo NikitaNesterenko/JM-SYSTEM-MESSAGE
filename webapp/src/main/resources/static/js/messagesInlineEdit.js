@@ -20,11 +20,17 @@ function extract_id(str, prefix) {
 }
 
 export function setOnClickEdit() {
-    const editButtons = document.getElementsByClassName("c-btn__edit_inline");
-    const len = editButtons.length;
-    for (let i = 0; i < len; i++) {
-        editButtons[i].addEventListener("click", onEditButtonClick);
-    }
+    const loggedUserPromise = user_service.getLoggedUser();
+    loggedUserPromise.then(loggedUser => {
+        const editButtons = document.getElementsByClassName("c-btn__edit_inline");
+        const len = editButtons.length;
+        for (let i = 0; i < len; i++) {
+            let msgUserId = extract_id(editButtons[i].id, "user-id-");
+            if (msgUserId === loggedUser.id) {
+                editButtons[i].addEventListener("click", onEditButtonClick);
+            }
+        }
+    });
 }
 
 function removeOnClickEdit() {
@@ -38,7 +44,7 @@ function removeOnClickEdit() {
 function onEditButtonClick(ev) {
     removeOnClickEdit();
 
-    const msgId = extract_id(ev.currentTarget.id, "_id-");
+    const msgId = extract_id(ev.currentTarget.id, "message-id-");
 
     let parentDiv = document.getElementById("message_id-" + msgId);
 
@@ -47,8 +53,8 @@ function onEditButtonClick(ev) {
     const messageId = parentDiv.id.slice(11);
 
     parentDiv.innerHTML = `<div class="c-message__inline_editor">
-    <form action="" id="editMessageForm_${messageId}">
-        <input class="c-message__inline_editor__input-field" type="text" id="editMessageInput" value="${messageText}"/>
+    <form data-message-id="${messageId}">
+        <input class="c-message__inline_editor__input-field" type="text" value="${messageText}"/>
     </form>
 </div>`;
     parentDiv.addEventListener("submit", onEditSubmit);
@@ -56,10 +62,10 @@ function onEditButtonClick(ev) {
 
 function onEditSubmit(ev) {
     ev.preventDefault();
-    const editMessageFrom = ev.target;
-    const parentDiv = editMessageFrom.parentElement.parentElement;
-    const messageId = editMessageFrom.id.slice(16);
-    const messageText = editMessageFrom[0].value;
+    const editMessageForm = ev.target;
+    const parentDiv = editMessageForm.parentElement.parentElement;
+    const messageId = editMessageForm.getAttribute("data-message-id");
+    const messageText = editMessageForm[0].value;
 
     parentDiv.innerHTML = `<span class="c-message__body">${messageText}</span>`;
 

@@ -47,15 +47,19 @@ window.sendName = function sendName(message) {
 
 // message menu buttons
 const message_menu = (message) => {
-    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
-        `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
-        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
-        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
-        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
-        `<button type="button" class="btn btn-light c-btn__edit_inline" id="btn__edit_inline__message_id-${message.id}">&#8285;</button>` + // submenu
-        `</div>` +
-        `</div>`;
+    return `<div class="message-icons-menu-class">
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-light">&#9786;</button>
+        <button type="button" class="btn btn-light">&#128172;</button>
+        <button type="button" class="btn btn-light">&#10140;</button>
+        <button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">
+            &#9734;
+        </button>
+        <button type="button" class="btn btn-light c-btn__edit_inline"
+                id="btn__edit_inline__message-id-${message.id}__user-id-${message.user.id}">&#8285;
+        </button>
+    </div>
+</div>`;
 };
 
 function showMessage(message) {
