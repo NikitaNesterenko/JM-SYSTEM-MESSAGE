@@ -4,7 +4,7 @@ import {
     WorkspaceRestPaginationService,
 } from './rest/entities-rest-pagination.js'
 
-import {registerOnClick} from "./messagesInlineEdit.js";
+import {setOnClickEdit} from "./messagesInlineEdit.js";
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
@@ -89,7 +89,7 @@ function showMessage(message) {
     message_box.append(messages_queue_context_user_container);
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 
-    registerOnClick();
+    setOnClickEdit();
 }
 
 connect();
@@ -232,7 +232,7 @@ window.updateMessages = function updateMessages() {
         });
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 
-        registerOnClick();
+        setOnClickEdit();
     });
 };
 

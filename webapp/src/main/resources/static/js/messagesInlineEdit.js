@@ -8,56 +8,37 @@ const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const user_service = new UserRestPaginationService();
 
+/**
+ * Helper function.
+ * Parse string like "[?????]<prefix><id>[?????]" to get id.
+ * (In the square brackets are optional characters, in angle brackets - mandatory ones)
+ * Return: id
+ * */
 function extract_id(str, prefix) {
     const p = str.lastIndexOf(prefix) + prefix.length;
     return parseInt(str.slice(p), 10);
 }
 
-export function registerOnClick() {
-    let editButtons = document.getElementsByClassName("c-btn__edit_inline");
-    let sz = editButtons.length;
-    for (let i = 0; i < sz; i++) {
+export function setOnClickEdit() {
+    const editButtons = document.getElementsByClassName("c-btn__edit_inline");
+    const len = editButtons.length;
+    for (let i = 0; i < len; i++) {
         editButtons[i].addEventListener("click", onEditButtonClick);
     }
-    // let displayEditDivs = document.getElementsByClassName("c-message__content--display_edit");
-    // let len = displayEditDivs.length;
-    // for (let i = 0; i < len; i++) {
-    //     displayEditDivs[i].addEventListener("click", onMessageClick);
-    // }
 }
 
-function deregisterOnClick() {
-    let editButtons = document.getElementsByClassName("c-btn__edit_inline");
-    let sz = editButtons.length;
-    for (let i = 0; i < sz; i++) {
+function removeOnClickEdit() {
+    const editButtons = document.getElementsByClassName("c-btn__edit_inline");
+    const len = editButtons.length;
+    for (let i = 0; i < len; i++) {
         editButtons[i].removeEventListener("click", onEditButtonClick);
     }
-    // let displayEditDivs = document.getElementsByClassName("c-message__content--display_edit");
-    // let len = displayEditDivs.length;
-    // for (let i = 0; i < len; i++) {
-    //     displayEditDivs[i].removeEventListener("click", onMessageClick);
-    // }
 }
 
-// function onMessageClick(ev) {
-//     const parentDiv = ev.currentTarget;
-//     deregisterOnClick();
-//     const spanElement = parentDiv.getElementsByClassName("c-message__body")[0];
-//     const messageText = spanElement.innerText;
-//     const messageId = parentDiv.id.slice(11);
-//
-//     parentDiv.innerHTML = `<div class="c-message__inline_editor">
-//     <form action="" id="editMessageForm_${messageId}">
-//         <input class="c-message__inline_editor__input-field" type="text" id="editMessageInput" value="${messageText}"/>
-//     </form>
-// </div>`;
-//     parentDiv.addEventListener("submit", onEditSubmit);
-// }
-
 function onEditButtonClick(ev) {
-    deregisterOnClick();
+    removeOnClickEdit();
 
-    let msgId = extract_id(ev.currentTarget.id, "_id-");
+    const msgId = extract_id(ev.currentTarget.id, "_id-");
 
     let parentDiv = document.getElementById("message_id-" + msgId);
 
@@ -82,7 +63,7 @@ function onEditSubmit(ev) {
 
     parentDiv.innerHTML = `<span class="c-message__body">${messageText}</span>`;
 
-    registerOnClick();
+    setOnClickEdit();
 
     const user_promise = user_service.getLoggedUser();
     const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
