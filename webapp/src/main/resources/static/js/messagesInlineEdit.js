@@ -85,6 +85,8 @@ function onEditSubmit(ev) {
             "content": messageText,
             "dateCreate": currentDate
         };
-        message_service.update(message);
+        message_service.update(message).then(result => {
+            sendName(message);
+        });
     });
 }

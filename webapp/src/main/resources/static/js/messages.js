@@ -19,8 +19,10 @@ function connect() {
         stompClient.subscribe('/topic/messages', function (message) {
             let result = JSON.parse(message.body);
             if (result.user !== null) {
-                showMessage(result);
-                notifyParseMessage(result);
+                if (!updateMessage(result)) {
+                    showMessage(result);
+                    notifyParseMessage(result);
+                }
             } else {
                 showBotMessage(result)
             }
@@ -56,11 +58,25 @@ const message_menu = (message) => {
             &#9734;
         </button>
         <button type="button" class="btn btn-light c-btn__edit_inline"
-                id="btn__edit_inline__message-id-${message.id}__user-id-${message.user.id}">&#8285;
+                id="btn__edit_inline__message-id-${message.id}__user-id-${message.user === null ? '' : message.user.id}">&#8285;
         </button>
     </div>
 </div>`;
 };
+
+function updateMessage(message) {
+    let message_box = document.getElementById("all-messages");
+    let message_bodies = document.getElementsByClassName("c-message__content--display_edit");
+    let len = message_bodies.length;
+    for (let i = 0; i < len; i++) {
+        if (message_bodies[i].getAttribute("data-message-id") == message.id) {
+            message_bodies[i].innerHTML = `<span class="c-message__body">${message.inputMassage}</span>`;
+            return true;
+        }
+    }
+    return false;
+}
+
 
 function showMessage(message) {
     const message_box = document.getElementById("all-messages");
@@ -87,7 +103,7 @@ function showMessage(message) {
                                                                     </span>
                                                                 </a>
                                                             </div>
-                                                            <div class="c-message__content--display_edit" id = "message_id-${message.id}">
+                                                            <div class="c-message__content--display_edit" data-message-id="${message.id}" id="message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.inputMassage}
                                                             </span>
@@ -181,7 +197,7 @@ window.updateMessages = function updateMessages() {
                                                                     </span>                                                                     
                                                                 </a>
                                                             </div>
-                                                            <div class="c-message__content--display_edit" id = "message_id-${message.id}">
+                                                            <div class="c-message__content--display_edit" data-message-id="${message.id}" id = "message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.content}
                                                             </span>
