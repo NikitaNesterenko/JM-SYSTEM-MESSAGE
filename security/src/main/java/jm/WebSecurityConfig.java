@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Anyone not authenticated. Avoid double signin
         http
                 .authorizeRequests()
-                .antMatchers("/", "/signin", "/upload").not().authenticated()
+                .antMatchers("/", "/signin").not().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
@@ -77,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // For USER and OWNER
         http.authorizeRequests()
-                .antMatchers("/user/**", "/rest/**")
+                .antMatchers("/user/**", "/rest/**", "/upload")
                 .hasAnyRole("OWNER", "USER")
                 .anyRequest().authenticated();
 
