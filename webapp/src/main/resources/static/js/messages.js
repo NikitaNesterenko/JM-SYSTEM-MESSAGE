@@ -20,7 +20,9 @@ function connect() {
             let result = JSON.parse(message.body);
             if (result.user !== null) {
                 if (!updateMessage(result)) {
-                    showMessage(result);
+                    if (result.channel.id === channel_id) {
+                        showMessage(result);
+                    }
                     notifyParseMessage(result);
                 }
             } else {
@@ -40,6 +42,7 @@ function disconnect() {
 window.sendName = function sendName(message) {
     stompClient.send("/app/message", {}, JSON.stringify({
         'id': message.id,
+        'channel': message.channel,
         'inputMassage': message.content,
         'dateCreate': message.dateCreate,
         'user': message.user,
@@ -57,20 +60,17 @@ const message_menu = (message) => {
         <button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">
             &#9734;
         </button>
-        <button type="button" class="btn btn-light c-btn__edit_inline"
-                id="btn__edit_inline__message-id-${message.id}__user-id-${message.user === null ? '' : message.user.id}">&#8285;
+        <button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;
         </button>
     </div>
 </div>`;
 };
 
 function updateMessage(message) {
-    let message_box = document.getElementById("all-messages");
-    let message_bodies = document.getElementsByClassName("c-message__content--display_edit");
-    let len = message_bodies.length;
-    for (let i = 0; i < len; i++) {
-        if (message_bodies[i].getAttribute("data-message-id") == message.id) {
-            message_bodies[i].innerHTML = `<span class="c-message__body">${message.inputMassage}</span>`;
+    const messageBodies = document.getElementsByClassName("c-message__content_body");
+    for (const messageBody of messageBodies) {
+        if (messageBody.getAttribute("data-message-id") === message.id.toString()) {
+            messageBody.innerHTML = `<span class="c-message__body">${message.inputMassage}</span>`;
             return true;
         }
     }
@@ -103,7 +103,7 @@ function showMessage(message) {
                                                                     </span>
                                                                 </a>
                                                             </div>
-                                                            <div class="c-message__content--display_edit" data-message-id="${message.id}" id="message_id-${message.id}">
+                                                            <div class="c-message__content_body" data-message-id="${message.id}" id="message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.inputMassage}
                                                             </span>
@@ -197,7 +197,7 @@ window.updateMessages = function updateMessages() {
                                                                     </span>                                                                     
                                                                 </a>
                                                             </div>
-                                                            <div class="c-message__content--display_edit" data-message-id="${message.id}" id = "message_id-${message.id}">
+                                                            <div class="c-message__content_body" data-message-id="${message.id}" id="message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.content}
                                                             </span>
@@ -228,7 +228,7 @@ window.updateMessages = function updateMessages() {
                                                                     </span>
                                                                 </a>
                                                             </div>
-                                                            <div class="c-message__content--display_edit" id = "message_id-${message.id}">
+                                                            <div class="c-message__content_body">
                                                             <span class="c-message__body">
                                                                 ${message.content}
                                                             </span>
@@ -241,7 +241,7 @@ window.updateMessages = function updateMessages() {
         });
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 
-        setOnClickEdit();
+        setOnClickEdit(true);
     });
 };
 
