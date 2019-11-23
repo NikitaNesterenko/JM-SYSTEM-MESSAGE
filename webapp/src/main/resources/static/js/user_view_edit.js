@@ -137,7 +137,7 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
         });
     });
 
-
+    location.reload();
     const input = document.getElementById('FileUpload1');
     const uploadFile = (file) => {
 
@@ -157,6 +157,16 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
     }
     uploadFile(input.files[0]);
 });
+
+export const onUserDeleteAvatar = $('#RemovePhoto').on('click', function (e) {
+
+    let userId = $('#modal_1_edit_profile_btn').data('user_id');
+
+    fetch('/rest/api/avatar/' + userId, {
+        method: 'DELETE'
+    })
+});
+
 
 $('#modal_1_set_title_btn').on('click', function (e) {
     $('#modal_2').modal('show');
