@@ -137,7 +137,8 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
         });
     });
 
-    location.reload();
+    location.reload(); // THE MOST IMPORTANT THING// важный, нет, ОЧЕНЬ ВАЖНЫЙ костыль.
+
     const input = document.getElementById('FileUpload1');
     const uploadFile = (file) => {
 
