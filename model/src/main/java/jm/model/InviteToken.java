@@ -1,15 +1,14 @@
 package jm.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "invite_tokens")
 public class InviteToken {
@@ -17,9 +16,11 @@ public class InviteToken {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "email", nullable = false)
+    @EqualsAndHashCode.Include
     private String email;
 
     @Column(name = "first_name")
@@ -29,6 +30,7 @@ public class InviteToken {
     private String lastName;
 
     @Column(name = "hash", nullable = false)
+    @EqualsAndHashCode.Include
     private String hash;
 
     @OneToOne(targetEntity = Workspace.class)
