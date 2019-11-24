@@ -1,10 +1,23 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService, BotRestPaginationService} from "./rest/entities-rest-pagination.js";
+import {
+    UserRestPaginationService,
+    WorkspaceRestPaginationService,
+    BotRestPaginationService
+} from "./rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const bot_service = new BotRestPaginationService();
 
-export const onShowModal1 = $('#modal_1').on('show.bs.modal', function (e) {
+const modal1 = $('#modal_1');
+
+modal1.on('hide.bs.modal', function () {
+    $(this).find("#modal_1_edit_profile_btn").hide();
+});
+
+export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
+    const editProfileButton = $(this).find("#modal_1_edit_profile_btn");
+    editProfileButton.hide();
+
     // console.log($(e.relatedTarget).data('user_id'));
     let userId = $(e.relatedTarget).data('user_id');
     let botId = $(e.relatedTarget).data('bot_id');
@@ -13,14 +26,22 @@ export const onShowModal1 = $('#modal_1').on('show.bs.modal', function (e) {
 
     if (userId !== undefined) {
         result_promise = user_service.getById(userId);
-        $('#modal_1_edit_profile_btn').attr("data-user_id", userId);
+        editProfileButton.attr("data-user_id", userId);
     } else {
         result_promise = bot_service.getById(botId);
-        $('#modal_1_edit_profile_btn').attr("data-user_id", botId);
+        editProfileButton.attr("data-user_id", botId);
     }
 
-    Promise.all([result_promise]).then(value => {
+    let loggedUser_promise = user_service.getLoggedUser();
+
+    Promise.all([result_promise, loggedUser_promise]).then(value => {
         const user = value[0];
+        const loggedUser = value[1];
+
+        // show profile editing button only for the most logged user
+        if (user.id === loggedUser.id) {
+            editProfileButton.show();
+        }
 
         // user name
         $(this).find('#modal_1_user_profile_button').text(user.name);

@@ -56,11 +56,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void updateMessage(Message message) {
-        Message persistingMessage = messageDAO.getById(message.getId());
-        if (persistingMessage != null) {
-            persistingMessage.setContent(message.getContent());
-            persistingMessage.setDateCreate(message.getDateCreate());
-        }
+        messageDAO.merge(message);
     }
 
     @Override

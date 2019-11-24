@@ -52,16 +52,18 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity updateUser(@RequestBody User user) {
+    public ResponseEntity updateUser(@RequestBody User user, Principal principal) {
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
+        }
+        if (principal.getName().equals(existingUser.getLogin())) {
             userService.updateUser(user);
             logger.info("Обновленный пользователь: {}", user);
             return new ResponseEntity(HttpStatus.OK);
         }
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @DeleteMapping("/delete/{id}")
