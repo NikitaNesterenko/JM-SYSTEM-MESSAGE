@@ -1,6 +1,5 @@
 package jm.model;
 
-
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,9 +7,9 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "users")
 public class User {
@@ -26,12 +25,15 @@ public class User {
 //    private String memberId;
 
     @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @Column(name = "last_name", nullable = false)
+    @EqualsAndHashCode.Include
     private String lastName;
 
     @Column(name = "login", nullable = false)
+    @EqualsAndHashCode.Include
     private String login;
 
     @Column(name = "email", nullable = false)
@@ -82,10 +84,12 @@ public class User {
 
     // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
     @OneToMany
+    @ToString.Exclude
     private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
+    @ToString.Exclude
     private Set<User> directMessagesToUsers;
 
     // TODO каналы пользователя, исправить маппинг в Channel

@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 public class InputMessage {
-    //TODO
 
     private Long id;  // нужно для редактирования сообщений
 
