@@ -1,5 +1,7 @@
 import {ChannelRestPaginationService} from './rest/entities-rest-pagination.js'
+import {WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 
+const workspace_service = new WorkspaceRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 
 window.addEventListener('load', function () {
@@ -82,10 +84,12 @@ const profileCard = () => {
             else {
                 checkbox1 = false;
             }
+            const thisWorkspace = workspace_service.getChoosedWorkspace();
             const entity = {
                 name: channelName,
                 isPrivate: checkbox1,
-                createdDate: dateWithoutCommas
+                createdDate: dateWithoutCommas,
+                workspace: thisWorkspace
             };
             channel_service.create(entity);
         });
