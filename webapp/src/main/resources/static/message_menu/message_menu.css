@@ -1,0 +1,11 @@
+.message-icons-menu-class {
+    position: absolute;
+    display: none;
+    margin-left: 65%;
+    top: -20%;
+    z-index: 1000;
+}
+
+.c-virtual_list__item:hover .message-icons-menu-class {
+    display: block;
+}
