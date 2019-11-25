@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
@@ -16,15 +17,18 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "workspaces")
 public class Workspace {
 
+    @EqualsAndHashCode.Include
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Include
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -33,10 +37,10 @@ public class Workspace {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
-//    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-//    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
-//            inverseJoinColumns = @JoinColumn(name = "channel_id"))
-//    private Set<Channel> channels;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    private Set<Channel> channels;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
@@ -45,6 +49,7 @@ public class Workspace {
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
 
+    @EqualsAndHashCode.Include
     @Column(name = "created_date", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -57,5 +62,13 @@ public class Workspace {
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Workspace{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

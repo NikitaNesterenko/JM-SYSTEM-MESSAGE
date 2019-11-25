@@ -1,9 +1,15 @@
-import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
+import {
+    MessageRestPaginationService,
+    ChannelRestPaginationService,
+    WorkspaceRestPaginationService,
+    UserRestPaginationService,
+} from './rest/entities-rest-pagination.js'
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const user_service = new UserRestPaginationService();
 
 function connect() {
     let socket = new SockJS('/websocket');
@@ -40,17 +46,44 @@ window.sendName = function sendName(message) {
 };
 
 // message menu buttons
+const getUser = async () => {
+    const user = await user_service.getLoggedUser();
+    return [user];
+};
+
+let getMessageStatus = (message) => {
+    getUser(message.id).then(res => {
+        let user = res[0];
+        let starredBy = message["starredByWhom"];
+        if (starredBy.find(usr => usr.id === user.id)) {
+            $(`#msg-icons-menu__starred_msg_${message.id}`).text(`\u2605`);
+            $(`#message_${message.id}_user_${message.user.id}_content`).append(`
+                <span id="message_${message.id}_user_${message.user.id}_starred" class="">
+                &#9733;&nbsp;<a href="">Added to your starred items.</a>
+                </span>
+            `);
+        }
+    });
+};
+
 const message_menu = (message) => {
+    getMessageStatus(message);
     return `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
         `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
         `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
         `<button type="button" class="btn btn-light">&#10140;</button>` + // share
-        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
+        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
         `<button type="button" class="btn btn-light">&#8285;</button>` + // submenu
         `</div>` +
         `</div>`;
 };
+
+export function updateAllMessages() {
+    return updateMessages();
+}
+
+// end of msg menu buttons
 
 function showMessage(message) {
     const message_box = document.getElementById("all-messages");

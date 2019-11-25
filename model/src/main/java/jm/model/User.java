@@ -3,6 +3,7 @@ package jm.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,10 +12,12 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
 public class User {
 
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,9 +36,11 @@ public class User {
     @Column(name = "login", nullable = false)
     private String login;
 
+    @EqualsAndHashCode.Include
     @Column(name = "email", nullable = false)
     private String email;
 
+    @EqualsAndHashCode.Include
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -78,10 +83,6 @@ public class User {
     // TODO set of UserFiles(id, user, url, created)
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
-
-    // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
-    @OneToMany
-    private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
@@ -132,5 +133,13 @@ public class User {
         this.login = login;
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
