@@ -34,6 +34,7 @@ $('#form_message').submit(function () {
             const data = new FormData();
             data.append("file", files[0]);
             filename = storage_service.uploadFile(data);
+            $("#file_selector").val("");
             $('#attached_file').html("");
         }
         Promise.all([filename]).then(files => {

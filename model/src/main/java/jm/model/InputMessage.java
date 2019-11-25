@@ -19,15 +19,17 @@ public class InputMessage {
     private LocalDateTime dateCreate;
     private User user;
     private Bot bot;
+    private String filename;
 
     public InputMessage() {
     }
 
-    public InputMessage(String inputMassage, LocalDateTime dateCreate, User user, Bot bot) {
+    public InputMessage(String inputMassage, LocalDateTime dateCreate, User user, Bot bot, String filename) {
         this.inputMassage = inputMassage;
         this.dateCreate = dateCreate;
         this.user = user;
         this.bot = bot;
+        this.filename = filename;
     }
 
     public String getInputMassage() {
@@ -60,6 +62,14 @@ public class InputMessage {
 
     public void setBot(Bot bot) {
         this.bot = bot;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     @Override
