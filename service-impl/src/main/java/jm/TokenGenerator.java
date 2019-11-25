@@ -35,6 +35,7 @@ public final class TokenGenerator {
         Random random = new Random(System.nanoTime());
         // Collect the categories to use.
         List<String> charCategories = new ArrayList<>(4);
+
         if (useLower) {
             charCategories.add(LOWER);
         }

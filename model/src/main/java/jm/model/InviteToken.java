@@ -35,4 +35,9 @@ public class InviteToken {
     @JoinColumn(name = "workspace_id"/*, nullable = false*/)
     private Workspace workspace;
 
+    public InviteToken(String email, String name) {
+        this.email = email;
+        this.firstName = name;
+    }
+
 }
