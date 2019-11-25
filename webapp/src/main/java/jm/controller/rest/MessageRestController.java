@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class MessageRestController {
     @GetMapping
     public ResponseEntity<List<Message>> getMessages() {
         logger.info("Список сообщений : ");
-        for (Message message : messageService.getAllMessages()) {
+        for (Message message: messageService.getAllMessages()) {
             logger.info(message.toString());
         }
         logger.info("-----------------------");
@@ -41,8 +40,8 @@ public class MessageRestController {
     public ResponseEntity<List<Message>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<Message> messages = messageService.getMessagesByChannelId(id);
         messages.sort(Comparator.comparing(Message::getDateCreate));
-        logger.info("Полученные сообщения из канала с id = {} :", id);
-        for (Message message : messages) {
+        logger.info("Полученные сообщения из канала с id = {} :",id);
+        for (Message message: messages) {
             logger.info(message.toString());
         }
         return new ResponseEntity<>(messages, HttpStatus.OK);
@@ -50,7 +49,7 @@ public class MessageRestController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
-        logger.info("Сообщение с id = {}", id);
+        logger.info("Сообщение с id = {}",id);
         logger.info(messageService.getMessageById(id).toString());
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
     }
@@ -68,20 +67,17 @@ public class MessageRestController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity updateMessage(@RequestBody Message message, Principal principal) {
+    public ResponseEntity updateMessage(@RequestBody Message message) {
         Message existingMessage = messageService.getMessageById(message.getId());
+        logger.info("Существующее сообщение: {}",existingMessage);
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        if (principal.getName().equals(existingMessage.getUser().getLogin())
-                && principal.getName().equals(message.getUser().getLogin())) {
-            logger.info("Существующее сообщение: {}", existingMessage);
+        } else {
             messageService.updateMessage(message);
             logger.info("Обновленное сообщение: {}", message);
             return new ResponseEntity(HttpStatus.OK);
         }
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @DeleteMapping(value = "/delete/{id}")

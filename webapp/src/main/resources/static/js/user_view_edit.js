@@ -39,7 +39,7 @@ export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
         const loggedUser = value[1];
 
         // show profile editing button only for the most logged user
-        if (user.id === loggedUser.id) {
+        if (user.id === loggedUser.id && !user.hasOwnProperty("nickName")) {  // if the user has the 'nickName' property, then this is a bot
             editProfileButton.show();
         }
 
