@@ -104,8 +104,8 @@ public class WorkspaceRestController {
 
     @GetMapping("/byLoggedUser")
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
-        String name = principal.getName();
-        User user = userService.getUserByLogin(name);
+        String email = principal.getName();
+        User user = userService.getUserByEmail(email);
         return new ResponseEntity<>(workspaceService.getWorkspacesByUserParticipate(user), HttpStatus.OK);
     }
 }
