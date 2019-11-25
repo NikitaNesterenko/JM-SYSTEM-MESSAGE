@@ -28,14 +28,23 @@ $(document).ready(() => {
 });
 
 const showAllChannels = () => {
-    const channels = getAllChannels();
-    $.each(channels, (i, item) => {
-        $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
-                                                    <button class="p-channel_sidebar__name_button">
+    let workspace_id = workspace_service.getChoosedWorkspace();
+    Promise.all([workspace_id]).then( value => {
+        channel_service.getChannelsByWorkspaceId(value[0].id)
+            .then((respons) => {
+
+                $.each(respons, (i, item) => {
+                    $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
+                                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3">${item.name}</span>
+                                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
                                                     </button>
                                                   </div>`);
+                })
+                //Default channel
+                document.getElementById("channel_button_" + respons[0].id).style.color = "white";
+                document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
+            })
     })
 };
 
@@ -84,12 +93,10 @@ const profileCard = () => {
             else {
                 checkbox1 = false;
             }
-            const thisWorkspace = workspace_service.getChoosedWorkspace();
             const entity = {
                 name: channelName,
                 isPrivate: checkbox1,
-                createdDate: dateWithoutCommas,
-                workspace: thisWorkspace
+                createdDate: dateWithoutCommas
             };
             channel_service.create(entity);
         });
