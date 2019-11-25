@@ -56,25 +56,31 @@ let getMessageStatus = (message) => {
         let user = res[0];
         let starredBy = message["starredByWhom"];
         if (starredBy.find(usr => usr.id === user.id)) {
-            $(`#msg-icons-menu__starred_msg_${message.id}`).text(`\u2605`);
-            $(`#message_${message.id}_user_${message.user.id}_content`).append(`
-                <span id="message_${message.id}_user_${message.user.id}_starred" class="">
-                &#9733;&nbsp;<a href="">Added to your starred items.</a>
-                </span>
-            `);
+            $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
+            $(`#message_${message.id}_user_${message.user.id}_content`).prepend(
+                `<span id="message_${message.id}_user_${message.user.id}_starred" class="">`
+                + `${star_button_filled}&nbsp;<a href="">Added to your starred items.</a>`
+                + `</span>`);
         }
     });
 };
+
+const emoji_button = '&#9786;';
+const reply_button = '&#128172;';
+const share_button = '&#10140;';
+export const star_button_blank = '\u2606';
+export const star_button_filled = '\u2605';
+const submenu_button = '&#8285;';
 
 const message_menu = (message) => {
     getMessageStatus(message);
     return `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
-        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
-        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
-        `<button type="button" class="btn btn-light">&#8285;</button>` + // submenu
+        `<button type="button" class="btn btn-light">${emoji_button}</button>` + // emoji
+        `<button type="button" class="btn btn-light">${reply_button}</button>` + // reply
+        `<button type="button" class="btn btn-light">${share_button}</button>` + // share
+        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>` + // star
+        `<button type="button" class="btn btn-light">${submenu_button}</button>` + // submenu
         `</div>` +
         `</div>`;
 };

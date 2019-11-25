@@ -3,7 +3,11 @@ import {
     MessageRestPaginationService
 } from "../js/rest/entities-rest-pagination.js";
 
-import {updateAllMessages} from "../js/messages.js";
+import {
+    updateAllMessages,
+    star_button_blank,
+    star_button_filled
+} from "../js/messages.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
@@ -23,7 +27,7 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
             starredBy.splice(starredBy.indexOf(user), 1);
             msg["starredByWhom"] = starredBy;
             message_service.update(msg).then(() => {
-                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(`\u2606`);
+                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
                 $(`#message_${msg_id}_user_${msg.user.id}_starred`).remove();
             });
         } else {
@@ -31,10 +35,9 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
             starredBy.push(user);
             msg["starredByWhom"] = starredBy;
             message_service.update(msg).then(() => {
-                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(`\u2605`);
+                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_filled);
             });
         }
-
         updateAllMessages();
     });
 });
