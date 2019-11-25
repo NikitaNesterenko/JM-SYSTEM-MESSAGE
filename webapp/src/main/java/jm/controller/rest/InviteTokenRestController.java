@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -43,18 +44,31 @@ public class InviteTokenRestController {
         for (InviteToken test : tests) {
             inviteTokenService.createInviteToken(test);
 
-            String link = "http://localhost:8080/invite/hash/client/join/invite/" + test.getHash();
+            String link = "http://localhost:8080/invite/hash/client/join/invites/" + test.getHash();
 
             mailService.sendInviteMessage(test.getFirstName(), test.getEmail(),test.getEmail(),"TEST-WORKSPACE", link);
+
+            System.out.println("Send mail...");
         }
 
         return ResponseEntity.ok(true);
     }
 
     @GetMapping("/client/join/invites/{hash}")
-    public ResponseEntity inviteJoin(@PathVariable String hash) {
+    public ModelAndView inviteJoin(@PathVariable String hash) {
+        InviteToken inviteToken = inviteTokenService.getByHash(hash);
+
+        ModelAndView modelAndView = new ModelAndView();
+
         System.out.println("HASH - " + hash);
-        return ResponseEntity.ok(true);
+
+        if (inviteToken != null) {
+            System.out.println("workspace-page");
+
+            return new ModelAndView("workspace-page");
+        }
+//        return ResponseEntity.ok(true);
+        return new ModelAndView("signin-page");
     }
 
     @PostMapping

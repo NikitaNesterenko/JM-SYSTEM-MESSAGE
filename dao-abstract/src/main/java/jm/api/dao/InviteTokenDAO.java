@@ -8,6 +8,8 @@ public interface InviteTokenDAO {
 
     InviteToken getById(Long id);
 
+    InviteToken getByHash(String hash);
+
     void deleteById(Long id);
 
 }
