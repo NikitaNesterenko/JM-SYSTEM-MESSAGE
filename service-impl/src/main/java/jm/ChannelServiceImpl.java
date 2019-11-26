@@ -65,5 +65,10 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) { return channelDAO.getChannelsByWorkspaceId(id); }
 
+    @Override
+    public  List<Channel> getChannelsByUserId(Long userId) {
+        return channelDAO.getChannelsByUserId(userId);
+    }
+
 }
 

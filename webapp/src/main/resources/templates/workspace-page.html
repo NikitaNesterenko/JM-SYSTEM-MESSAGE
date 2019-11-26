@@ -11,6 +11,7 @@
     <script defer th:src="@{/js/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
 
+
 <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/channel_topic.js}" type="module"></script>
@@ -37,6 +38,10 @@
     <link rel="stylesheet" th:href="@{/css/workspace-page.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspace-page-old.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspace-add-channel-modal.css}"/>
+
+    <script defer th:src="@{/js/workspace-page/components/primary-view/share-message.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/workspace-page/components/primary-view/share-message-modal.css}"/>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
@@ -748,6 +753,9 @@
         </div>
     </div>
 </div>
+
+<!--share message modal div-->
+<div class="share_message_modal_portal" id="share_message_modal_id"></div>
 
 </body>
 

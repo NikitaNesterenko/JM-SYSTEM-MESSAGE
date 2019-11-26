@@ -32,8 +32,17 @@ public class ChannelRestController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
         logger.info("Channel с id = {}", id);
-        logger.info(channelService.getChannelById(id).toString());
+        //logger.info(channelService.getChannelById(id).toString());
         return ResponseEntity.ok(channelService.getChannelById(id));
+    }
+
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Channel>> getChannelsByUserId(@PathVariable("id") Long id) {
+        List<Channel> channels = channelService.getChannelsByUserId(id);
+        for (Channel channel : channels) {
+            System.out.println(channel);
+        }
+        return ResponseEntity.ok(channels);
     }
 
     @PostMapping(value = "/create")
@@ -76,9 +85,9 @@ public class ChannelRestController {
     @GetMapping
     public ResponseEntity<List<Channel>> getAllChannels() {
         logger.info("Список channel: ");
-        for (Channel channel : channelService.gelAllChannels()) {
+        /*for (Channel channel : channelService.gelAllChannels()) {
             logger.info(channel.toString());
-        }
+        }*/
         return ResponseEntity.ok(channelService.gelAllChannels());
     }
 
@@ -88,7 +97,7 @@ public class ChannelRestController {
             @RequestParam("login") String login
     ) {
         logger.info("Получен channel, где имя workspace = {}, логин пользователя = {}", workspaceName, login);
-        logger.info(channelService.getChannelByWorkspaceAndUser(workspaceName, login).toString());
+        //logger.info(channelService.getChannelByWorkspaceAndUser(workspaceName, login).toString());
         return ResponseEntity.ok(channelService.getChannelByWorkspaceAndUser(workspaceName, login));
     }
 

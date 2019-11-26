@@ -31,9 +31,9 @@ public class UserRestController {
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         logger.info("Список пользователей : ");
-        for (User user : userService.getAllUsers()) {
+        /*for (User user : userService.getAllUsers()) {
             logger.info(user.toString());
-        }
+        }*/
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -47,7 +47,7 @@ public class UserRestController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         logger.info("Польщователь с id = {}", id);
-        logger.info(userService.getUserById(id).toString());
+        //logger.info(userService.getUserById(id).toString());
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
@@ -74,9 +74,6 @@ public class UserRestController {
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
         logger.info("Список пользователей канала с id = {}", id);
-        for (User user : userService.) {
-            logger.info(user.toString(getAllUsersInThisChannel(id)));
-        }
         return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
     }
 

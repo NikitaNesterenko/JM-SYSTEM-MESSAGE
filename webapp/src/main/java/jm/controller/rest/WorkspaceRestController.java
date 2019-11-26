@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import jm.UserService;
 import jm.WorkspaceService;
+import jm.WorkspaceUserRoleService;
 import jm.model.User;
 import jm.model.Workspace;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ import java.util.List;
 public class WorkspaceRestController {
 
     private WorkspaceService workspaceService;
+    private WorkspaceUserRoleService workspaceUserRoleService;
     private UserService userService;
 
     @Autowired
@@ -37,10 +39,15 @@ public class WorkspaceRestController {
         this.workspaceService = workspaceService;
     }
 
+    @Autowired
+    public void setWorkspaceUserRoleService(WorkspaceUserRoleService workspaceUserRoleService) {
+        this.workspaceUserRoleService = workspaceUserRoleService;
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
         logger.info("Workspace с id = {}", id);
-        logger.info(workspaceService.getWorkspaceById(id).toString());
+        //logger.info(workspaceService.getWorkspaceById(id).toString());
         return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
     }
 
@@ -80,9 +87,9 @@ public class WorkspaceRestController {
     @GetMapping
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
         logger.info("Список workspaces : ");
-        for (Workspace workspace : workspaceService.gelAllWorkspaces()) {
+        /*for (Workspace workspace : workspaceService.gelAllWorkspaces()) {
             logger.info(workspace.toString());
-        }
+        }*/
         return new ResponseEntity<>(workspaceService.gelAllWorkspaces(), HttpStatus.OK);
     }
 

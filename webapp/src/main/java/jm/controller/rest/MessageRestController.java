@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class MessageRestController {
     @GetMapping
     public ResponseEntity<List<Message>> getMessages() {
         logger.info("Список сообщений : ");
-        for (Message message: messageService.getAllMessages()) {
+        /*for (Message message: messageService.getAllMessages()) {
             logger.info(message.toString());
-        }
+        }*/
         logger.info("-----------------------");
         return new ResponseEntity<>(messageService.getAllMessages(), HttpStatus.OK);
     }
@@ -41,16 +42,16 @@ public class MessageRestController {
         List<Message> messages = messageService.getMessagesByChannelId(id);
         messages.sort(Comparator.comparing(Message::getDateCreate));
         logger.info("Полученные сообщения из канала с id = {} :",id);
-        for (Message message: messages) {
+        /*for (Message message: messages) {
             logger.info(message.toString());
-        }
+        }*/
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
         logger.info("Сообщение с id = {}",id);
-        logger.info(messageService.getMessageById(id).toString());
+        //logger.info(messageService.getMessageById(id).toString());
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
     }
 

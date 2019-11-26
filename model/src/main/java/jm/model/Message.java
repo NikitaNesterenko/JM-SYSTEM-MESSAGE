@@ -40,8 +40,14 @@ public class Message {
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm") /*yyyy-MM-dd HH:mm:ss*/
     private LocalDateTime dateCreate;
+
+    @Column(name = "shared_message_id")
+    private Long sharedMessageId;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
 
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
@@ -63,5 +69,22 @@ public class Message {
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
+    }
+
+    //two constructors for sharing messages
+    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+        this.channel = channel;
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+        this.sharedMessageId = sharedMessageId;
+    }
+
+    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+        this.channel = channel;
+        this.bot = bot;
+        this.content = content;
+        this.dateCreate = dateCreate;
+        this.sharedMessageId = sharedMessageId;
     }
 }
