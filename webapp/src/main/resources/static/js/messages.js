@@ -196,7 +196,9 @@ window.updateMessages = function updateMessages() {
 
                 const attached_file = add_attached_file(message);
 
-            messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                if(message.sharedMessageId === null) {
+                    if(!message.isDeleted) {
+                        messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -224,13 +226,15 @@ window.updateMessages = function updateMessages() {
                                                         </div>
                                                         ${message_menu(message)}
                                                     </div>`;
-                message_box.append(messages_queue_context_user_container);
-
+                        message_box.append(messages_queue_context_user_container);
+                    }
             } else {
-                let messages_queue_context_user_container = document.createElement('div');
-                messages_queue_context_user_container.className = "c-virtual_list__item";
-                const time = message.dateCreate.split(' ')[1];
-                messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.bot.id}_content">
+                if(!message.isDeleted) {
+                    if(message.sharedMessageId === null) {
+                        let messages_queue_context_user_container = document.createElement('div');
+                        messages_queue_context_user_container.className = "c-virtual_list__item";
+                        const time = message.dateCreate.split(' ')[1];
+                        messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.bot.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -255,7 +259,9 @@ window.updateMessages = function updateMessages() {
                                                         </div>
                                                         ${message_menu(message)}
                                                     </div>`;
-                message_box.append(messages_queue_context_user_container);
+                        message_box.append(messages_queue_context_user_container);
+                    }
+                }
             }
         });
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);

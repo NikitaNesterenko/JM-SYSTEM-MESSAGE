@@ -32,6 +32,7 @@ $('#form_message').submit(function () {
         const text_message = message_input_element.value;
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
+        const message = new Message(channel, user, text_message, currentDate);
 
 
         const files = document.getElementById("file_selector").files;
@@ -51,6 +52,8 @@ $('#form_message').submit(function () {
                 sendName(messageWithId);
             });
         });
+        // sendName(message);
+        // message_service.create(message);
     });
     return false;
 });

@@ -13,6 +13,9 @@
 .right-panel-msg-menu {
     padding: 10px 0;
     border-bottom: 1px solid #e2e3e5;
+    /*display: none;*/
+    margin-left: 70%;
+    top: 10%
 }
 
 .starred-messages-empty {
