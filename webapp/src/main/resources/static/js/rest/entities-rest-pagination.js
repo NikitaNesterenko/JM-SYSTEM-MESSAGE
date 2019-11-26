@@ -33,6 +33,10 @@ export class MessageRestPaginationService extends  RestPaginationService{
         const response = await fetch(`/rest/api/messages/${id}/starred`);
         return response.json();
     };
+    getMessageById = async (id) => {
+        const response = await fetch('/rest/api/messages/' + id);
+        return response.json();
+    };
 }
 export class BotRestPaginationService extends  RestPaginationService{
     constructor(){
@@ -63,6 +67,12 @@ export class ChannelRestPaginationService extends  RestPaginationService {
         const response = await fetch('/rest/api/channels/workspace/' + workspace_id + '/user/' + user_id);
         return response.json();
     }
+    };
+    getChannelsByUserId = async (id) => {
+        const response = await fetch('/rest/api/channels/user/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
 }
 export class WorkspaceRestPaginationService extends  RestPaginationService{
     constructor(){
