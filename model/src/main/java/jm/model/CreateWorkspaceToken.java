@@ -1,15 +1,14 @@
 package jm.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "createWorkspaceToken")
 public class CreateWorkspaceToken {
@@ -17,9 +16,11 @@ public class CreateWorkspaceToken {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "workspaceName")
+    @EqualsAndHashCode.Include
     private String workspaceName;
 
     @Column(name = "userEmail")
@@ -29,6 +30,7 @@ public class CreateWorkspaceToken {
     private String channelname;
 
     @Column(name = "code", nullable = false)
+    @EqualsAndHashCode.Include
     private int code;
 
     public CreateWorkspaceToken (int code) {
