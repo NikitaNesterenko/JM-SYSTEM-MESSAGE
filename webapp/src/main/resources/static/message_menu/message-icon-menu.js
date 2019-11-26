@@ -18,8 +18,14 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
     getUserAndMessage(msg_id).then(user_and_msg => {
         let user = user_and_msg[0];
         let msg = user_and_msg[1];
+
+        if (msg.user == null) {
+            return;
+        }
+
         console.log("User id: " + user.id);
         console.log("Msg id: " + msg.id);
+        console.log("Msg content: " + msg.content);
 
         let starredBy = msg["starredByWhom"];
         if (starredBy.find(usr => usr.id === user.id)) {

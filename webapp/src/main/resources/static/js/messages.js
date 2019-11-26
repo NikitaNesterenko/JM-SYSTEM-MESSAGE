@@ -53,6 +53,11 @@ const getUser = async () => {
 
 let getMessageStatus = (message) => {
     getUser(message.id).then(res => {
+
+        if (message.user == null) {
+            return;
+        }
+
         let user = res[0];
         let starredBy = message["starredByWhom"];
         if (starredBy.find(usr => usr.id === user.id)) {
