@@ -3,36 +3,31 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "messages")
 public class Message {
-
-    @EqualsAndHashCode.Include
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
-//    @EqualsAndHashCode.Include
     @ManyToOne(targetEntity = Channel.class)
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-//    @EqualsAndHashCode.Include
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
@@ -42,9 +37,9 @@ public class Message {
     private Bot bot;
 
     @Column(name = "content", nullable = false)
+    @EqualsAndHashCode.Include  // ?
     private String content;
 
-    @EqualsAndHashCode.Include
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -78,15 +73,5 @@ public class Message {
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", channel=" + channel +
-                ", user=" + user +
-                ", content='" + content + '\'' +
-                '}';
     }
 }

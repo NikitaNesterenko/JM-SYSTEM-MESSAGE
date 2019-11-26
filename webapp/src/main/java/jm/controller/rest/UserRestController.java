@@ -74,9 +74,9 @@ public class UserRestController {
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
         logger.info("Список пользователей канала с id = {}", id);
-        for (User user : userService.) {
-            logger.info(user.toString(getAllUsersInThisChannel(id)));
-        }
+//        for (User user : userService.getAllUsersInThisChannel(id)) {
+//            logger.info(user);
+//        }
         return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
     }
 

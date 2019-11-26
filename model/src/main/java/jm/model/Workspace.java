@@ -1,40 +1,38 @@
 package jm.model;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "workspaces")
 public class Workspace {
 
-    @EqualsAndHashCode.Include
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @EqualsAndHashCode.Include
     @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ToString.Exclude
     private Set<User> users;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
@@ -49,7 +47,6 @@ public class Workspace {
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
 
-    @EqualsAndHashCode.Include
     @Column(name = "created_date", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -62,13 +59,5 @@ public class Workspace {
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Workspace{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

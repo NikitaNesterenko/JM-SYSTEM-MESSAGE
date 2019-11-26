@@ -1,25 +1,22 @@
 package jm.model;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "users")
 public class User {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     // TODO memberId
@@ -28,12 +25,15 @@ public class User {
 //    private String memberId;
 
     @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @Column(name = "last_name", nullable = false)
+    @EqualsAndHashCode.Include
     private String lastName;
 
     @Column(name = "login", nullable = false)
+    @EqualsAndHashCode.Include
     private String login;
 
     @EqualsAndHashCode.Include
@@ -86,6 +86,7 @@ public class User {
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
+    @ToString.Exclude
     private Set<User> directMessagesToUsers;
 
     // TODO каналы пользователя, исправить маппинг в Channel
@@ -133,13 +134,5 @@ public class User {
         this.login = login;
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                '}';
     }
 }
