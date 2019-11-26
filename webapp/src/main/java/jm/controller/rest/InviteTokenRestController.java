@@ -64,8 +64,9 @@ public class InviteTokenRestController {
 
         if (inviteToken != null) {
             System.out.println("workspace-page");
-
-            return new ModelAndView("workspace-page");
+            //TODO
+            modelAndView.setViewName("redirect:/workspace");
+            return modelAndView;
         }
 //        return ResponseEntity.ok(true);
         return new ModelAndView("signin-page");
