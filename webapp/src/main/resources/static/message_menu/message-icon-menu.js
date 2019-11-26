@@ -36,9 +36,12 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
             msg["starredByWhom"] = starredBy;
             message_service.update(msg).then(() => {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_filled);
+                $(`#message_${msg_id}_user_${msg.user.id}_content`).prepend(
+                    `<span id="message_${msg_id}_user_${msg.user.id}_starred" class="">`
+                    + `${star_button_filled}&nbsp;<a href="">Added to your starred items.</a>`
+                    + `</span>`);
             });
         }
-        updateAllMessages();
     });
 });
 
