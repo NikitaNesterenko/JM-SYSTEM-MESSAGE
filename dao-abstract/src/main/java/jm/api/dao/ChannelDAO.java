@@ -1,7 +1,7 @@
 package jm.api.dao;
 
 import jm.model.Channel;
-import jm.model.ChannelDTO;
+import jm.dto.ChannelDTO;
 import jm.model.User;
 
 import java.util.List;

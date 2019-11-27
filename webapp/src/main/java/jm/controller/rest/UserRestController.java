@@ -1,6 +1,7 @@
 package jm.controller.rest;
 
 
+import jm.dto.UserDTO;
 import jm.model.User;
 import jm.UserService;
 import org.slf4j.Logger;
@@ -85,5 +86,14 @@ public class UserRestController {
         User user  = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping(value = "/workspace/{id}")
+    public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id){
+        logger.info("Список пользователей Workspace с id = {}", id);
+        for (User user : userService.getAllUsersInThisChannel(id)) {
+            logger.info(user.toString());
+        }
+        return ResponseEntity.ok(userService.getAllUsersInWorkspace(id));
     }
 }

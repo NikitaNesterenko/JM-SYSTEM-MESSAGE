@@ -1,5 +1,6 @@
 package jm.model;
 
+import jm.dto.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +13,21 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "users")
+
+@SqlResultSetMapping(
+        name = "UserDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = UserDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name"),
+                        @ColumnResult(name = "last_name"),
+                        @ColumnResult(name = "avatar_url"),
+                        @ColumnResult(name = "display_name"),
+                }
+        )
+)
+
 public class User {
 
     @Id

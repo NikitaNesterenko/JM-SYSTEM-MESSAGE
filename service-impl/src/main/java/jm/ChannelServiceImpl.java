@@ -1,6 +1,6 @@
 package jm;
 
-import jm.model.ChannelDTO;
+import jm.dto.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
 import jm.model.User;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

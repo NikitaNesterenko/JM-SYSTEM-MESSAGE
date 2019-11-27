@@ -3,6 +3,7 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.dto.ChannelDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -17,6 +18,18 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "channels")
+
+@SqlResultSetMapping(
+        name = "ChannelDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = ChannelDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name")
+                }
+        )
+)
+
 public class Channel {
 
     @Id
