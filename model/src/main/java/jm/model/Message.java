@@ -3,23 +3,24 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "messages")
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(targetEntity = Channel.class)
@@ -35,6 +36,7 @@ public class Message {
     private Bot bot;
 
     @Column(name = "content", nullable = false)
+    @EqualsAndHashCode.Include  // ?
     private String content;
 
     @Column(name = "date_create", nullable = false)
@@ -42,6 +44,9 @@ public class Message {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
+
+    @Column(name = "filename")
+    private String filename;
 
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
