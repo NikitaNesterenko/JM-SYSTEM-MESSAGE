@@ -11,7 +11,7 @@ export class UserRestPaginationService extends  RestPaginationService {
         return response.json()
     }
 }
-export class MessageRestPaginationService extends  RestPaginationService{
+export class MessageRestPaginationService extends  RestPaginationService {
     constructor(){
         super('/rest/api/messages');
     }
@@ -49,7 +49,7 @@ export class ChannelRestPaginationService extends  RestPaginationService {
             .catch(err => console.log(err.status));
     }
 }
-export class WorkspaceRestPaginationService extends  RestPaginationService{
+export class WorkspaceRestPaginationService extends  RestPaginationService {
     constructor(){
         super('/rest/api/workspaces');
     }
@@ -75,6 +75,4 @@ export class WorkspaceRestPaginationService extends  RestPaginationService{
         const response = await fetch('/rest/api/workspaces/choosed');
         return response.json()
     };
-
-
 }

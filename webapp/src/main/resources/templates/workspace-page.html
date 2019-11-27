@@ -24,6 +24,8 @@
     <script defer th:src="@{/message_menu/message-icon-menu.js}"></script>
     <link rel="stylesheet" th:href="@{/message_menu/message_menu.css}"/>
 
+    <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
+
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
@@ -158,6 +160,100 @@
     </div>
 </div>
 
+<!-- Invite modal-->
+
+<div id="invitesModal" class="invites-modal">
+    <div class="form_container">
+        <div class="workspace_form">
+            <div class="title">
+                <p>
+                    Workspaces with paid plans can also invite guests, like contractors, vendors,
+                    or clients. See pricing plans
+                </p>
+            </div>
+            <h1 id="workspace_name_label" class="large_bottom_margin">Invite people to test-channel</h1>
+            <div class="form_flex">
+
+                <form class="confirm-form" action="/tada">
+
+                    <div class="head_form">
+                        <strong>Email Address</strong>
+                        <strong>Name (optional)</strong>
+                    </div>
+
+                    <div class="content-form-1">
+                        <input type="text" id="inviteEmail_1" class="confirm_input" placeholder="name1@example.com"
+                               value="">
+                        <input type="text" id="inviteName_1" class="confirm_input confirm_input_name"
+                               placeholder="name_1" value="">
+                        <button id="btDeleteMember_1" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-2">
+                        <input type="text" id="inviteEmail_2" class="confirm_input" placeholder="name2@example.com"
+                               value="">
+                        <input type="text" id="inviteName_2" class="confirm_input confirm_input_name"
+                               placeholder="name_2" value="">
+                        <button id="btDeleteMember_2" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-3">
+                        <input type="text" id="inviteEmail_3" class="confirm_input" placeholder="name3@example.com"
+                               value="">
+                        <input type="text" id="inviteName_3" class="confirm_input confirm_input_name"
+                               placeholder="name_3" value="">
+                        <button id="btDeleteMember_3" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <span class="add_row_invites">
+                <button class="link_button" type="button">Add another</button>
+                	or
+                <button class="link_button" type="button">and many at once</button>
+            </span>
+                    <div class="p-invite_channel_picker">
+                        <div>
+                            <label for="channel_picker_dropdown_section">
+                                <span class="c-label_text">Default Channels</span>
+                            </label>
+                            <div id="channel_picker_dropdown_section">
+            			<span class="p-invites_channel_picker_note">
+            				<span>New
+            					<strong>members</strong>
+            					will automatically join <strong>#general</strong>,
+            					<strong>#random</strong>, and
+            					<strong>#test</strong>
+            					channels.</span>
+            				<button class="link_button" type="button">Edit/add
+            				</button>
+            			</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-invite_members_form">
+            	<span>
+            		<button class="c-link--button">
+            			<span>
+            				Share invite link
+            			</span>
+            		</button>
+            	</span>
+                        <button id="inviteSend" class="invitation_button" type="button">Send Invitations</button>
+                    </div>
+                </form>
+            </div>
+            <hr class="hr-footer">
+            <div class="p-footer">
+                <button class="pending_invites_link c-link--button" type="button">
+                    See pending and accepted invites
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button id="invitesModalClose" class="invites-modal-close" type="button">
+        X
+    </button>
+</div>
 
 <!-- <div class="workspace-container">
     <div class="workspace-box">
@@ -369,7 +465,7 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__invite_people__button">
+                                                    <button class="p-channel_sidebar__invite_people__button" id="invite-button">
                                                         <span class="p-channel_sidebar__name-2">✚ Invite people</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">

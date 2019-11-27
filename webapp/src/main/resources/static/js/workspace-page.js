@@ -5,6 +5,13 @@ const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
+class Invite {
+    constructor(email, name) {
+        this.email = email;
+        this.name = name;
+    }
+}
+
 const showDefaultChannel = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then( value => {
@@ -41,6 +48,46 @@ $(document).ready(() => {
     profileCard();
     showBot();
     showDefaultChannel();
+
+    $('#invite-button').on('click', function() {
+        $('.invites-modal').show();
+        $('.invites-modal-close').show();
+        $('.p-client_container').hide();
+    });
+
+    $('.invites-modal-close').on('click', function() {
+        $('.invites-modal').hide();
+        $('.invites_modal_close').hide();
+        $('.p-client_container').show();
+    });
+
+    //$('button').on('click', function () {
+    $('.button_delete_member').on('click', function () {
+        // находим Id элемента, на котором нажали
+        let idElement = $(this).attr("id");
+        idElement = "#" + idElement;
+        $('' + idElement + '').parent().hide();
+    });
+
+    $('#inviteSend').on('click', function () {
+        // находим Id элемента, на котором нажали
+        let idElement = $(this).attr("id");
+        idElement = "#" + idElement;
+        // alert(idElement);
+        // const email = $('#inviteEmail_1').val();
+        let email = $('[id ^= "inviteEmail_"]').val();
+        // const name = $('#inviteName_1').val();
+        alert(email);
+        // $.each(email, (i, item) => {
+        //     alert(item);
+        // })
+
+        const invite = new Invite(email, name);
+
+        // alert(email);
+        // sendName(message)
+        // message_service.create(message);
+    })
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
