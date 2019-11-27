@@ -86,4 +86,11 @@ public class MessageRestController {
         logger.info("Удалено сообщение с id = {}", id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @GetMapping("/{id}/starred")
+    public ResponseEntity getStarredMessages(@PathVariable Long id) {
+        List<Message> starredMessages = messageService.getStarredMessagesForUser(id);
+        logger.info("Сообщения, отмеченные пользователем.");
+        return ResponseEntity.ok(starredMessages);
+    }
 }

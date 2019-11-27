@@ -1,13 +1,6 @@
-import {
-    UserRestPaginationService,
-    MessageRestPaginationService
-} from "../js/rest/entities-rest-pagination.js";
-
-import {
-    updateAllMessages,
-    star_button_blank,
-    star_button_filled
-} from "../js/messages.js";
+import {MessageRestPaginationService, UserRestPaginationService} from "../js/rest/entities-rest-pagination.js";
+import {star_button_blank, star_button_filled} from "../js/messages.js";
+import {open_right_panel} from "../right_slide_panel/right_panel.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
@@ -56,3 +49,19 @@ const getUserAndMessage = async (id) => {
     const msg = await message_service.getById(id);
     return [user, msg];
 };
+
+// open right panel
+let populateRightPane = () => {
+    $('.p-flexpane__title_container').text('Starred Items');
+
+    user_service.getLoggedUser()
+        .then((user) => {
+            message_service.getStarredMessagesForUser(user.id)
+                .then((messages) => {
+                    console.log(messages);
+                });
+        });
+    open_right_panel();
+};
+
+$('.p-classic_nav__right__star__button').on('click', populateRightPane);

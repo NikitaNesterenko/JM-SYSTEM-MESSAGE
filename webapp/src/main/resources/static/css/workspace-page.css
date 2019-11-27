@@ -60,8 +60,9 @@
     /*                     "p-workspace_footer p-workspace_footer p-workspace_footer";*/
     grid-template-areas:
                          "p-workspace__top_nav p-workspace__top_nav p-workspace__top_nav"
-                          "p-workspace__sidebar p-workspace__primary_view p-workspace__secondary_view"
-                         "p-workspace__sidebar p-workspace_footer p-workspace__secondary_view";
+                          "p-workspace__sidebar p-workspace__primary_view p-workspace__primary_view"
+                         "p-workspace__sidebar p-workspace_footer p-workspace_footer";
+
     grid-template-columns: 220px auto 492px;
     min-width: 0;
     min-height: 0;
@@ -129,7 +130,7 @@
     font-family: Slack-Lato,appleLogo,sans-serif;
     box-sizing: inherit;
     grid-area: p-workspace__secondary_view;
-    display: grid;
+    display: none;
     grid-template-columns: auto;
     overflow: hidden;
     border-left: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
