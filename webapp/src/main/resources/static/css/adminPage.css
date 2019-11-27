@@ -507,7 +507,7 @@ h3 {
 /*
     Modal window for invites
 */
-
+/*
 .invites-modal-close {
     display: none;
     position: absolute;
@@ -840,7 +840,7 @@ strong {
     color: #616061;
     text-decoration: underline!important;
 }
-
+*/
 .scroll-table {
     flex: 1;
     width: 100%;

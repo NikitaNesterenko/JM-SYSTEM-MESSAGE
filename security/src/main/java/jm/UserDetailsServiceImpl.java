@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String workspaceLogin) throws UsernameNotFoundException {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String workspaceName = (String) httpSession.getAttribute("workspaceName");
-        if(workspaceName==null) workspaceName="workspace-0";
+        if(workspaceName==null) workspaceName="workspace_1";
 /*
         String[] strings = workspaceLogin.split(":");
         String workspaceName = null;
