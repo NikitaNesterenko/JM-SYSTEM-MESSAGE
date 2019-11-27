@@ -39,6 +39,19 @@ window.sendName = function sendName(message) {
     }));
 };
 
+// message menu buttons
+const message_menu = (message) => {
+    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
+        `<div class="btn-group" role="group" aria-label="Basic example">` +
+        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
+        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
+        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
+        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
+        `<button type="button" class="btn btn-light">&#8285;</button>` + // submenu
+        `</div>` +
+        `</div>`;
+};
+
 function showMessage(message) {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');

@@ -3,4 +3,3 @@
     let msg_menu = $(e.target).find('div#message-icons-menu');
     msg_menu.toggle();
 });*/
-

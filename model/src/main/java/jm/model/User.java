@@ -1,23 +1,23 @@
 package jm.model;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     // TODO memberId
@@ -26,12 +26,15 @@ public class User {
 //    private String memberId;
 
     @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @Column(name = "last_name", nullable = false)
+    @EqualsAndHashCode.Include
     private String lastName;
 
     @Column(name = "login", nullable = false)
+    @EqualsAndHashCode.Include
     private String login;
 
     @Column(name = "email", nullable = false)
@@ -82,10 +85,12 @@ public class User {
 
     // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
     @OneToMany
+    @ToString.Exclude
     private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
+    @ToString.Exclude
     private Set<User> directMessagesToUsers;
 
     // TODO каналы пользователя, исправить маппинг в Channel
