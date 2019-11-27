@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 @Entity
 @Table(name = "bots")
 public class Bot {
@@ -23,12 +23,15 @@ public class Bot {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @EqualsAndHashCode.Include
     private String name;
 
     @Column(name = "nickName")
+    @EqualsAndHashCode.Include
     private String nickName;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -52,6 +55,4 @@ public class Bot {
         this.workspace = workspace;
         this.dateCreate = dateCreate;
     }
-
-
 }
