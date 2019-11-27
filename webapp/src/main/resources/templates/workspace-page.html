@@ -494,9 +494,44 @@
 <!--                                        </div>-->
 <!--                                    </div>-->
 
+<!--<<<<<<< HEAD-->
+<!--                    <footer class="p-workspace__primary_view_footer">-->
+<!--                        <div class="p-message_pane_input">-->
+<!--                            <div class="p-message_pane_input_inner">-->
+<!--                                <div class="p-workspace__input">-->
+<!--                                    <div class="menu" id="menu">-->
+<!--                                    </div>-->
+<!--                                    <div class="p-message_input_field">-->
+<!--                                        <div class="ql-buttons">-->
+<!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
+<!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
+<!--                                            </button>-->
+<!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
+<!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
+<!--                                            </button>-->
+<!--                                            <div class="associatedUserList" id="associatedUserList">-->
+<!--                                                <form>-->
+<!--                                                    <select class="associatedUserListSelect"-->
+<!--                                                            id="associatedUserListSelect" multiple-->
+<!--                                                            name="usersList"></select>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="ql-editor">-->
+<!--                                            <form id="form_message">-->
+<!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
+<!--                                            </form>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 <!--                                    <button class="p-message_input_file_button">-->
 <!--                                        <i class="c-icon&#45;&#45;paperclip">📎</i>-->
+<!--                                        <input type="file" style="display:none" id="fileDialog"/>-->
 <!--                                    </button>-->
+<!--=======-->
+<!--&lt;!&ndash;                                    <button class="p-message_input_file_button">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <i class="c-icon&#45;&#45;paperclip">📎</i>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </button>&ndash;&gt;-->
+<!--&gt;>>>>>> dev-->
 
 <!--                                </div>-->
 
@@ -647,11 +682,13 @@
                                     </div>
                                 </div>
 
-                                <button class="p-message_input_file_button">
+                                <button class="p-message_input_file_button" id="attach_file">
                                     <i class="c-icon--paperclip">📎</i>
                                 </button>
 
                             </div>
+                            <span id="attached_file"></span>
+                            <input type="file" id="file_selector" style="display: none" />
 
                             <div class="p-notification_bar">
                                 <div class="p-notification_bar__section--left"></div>
