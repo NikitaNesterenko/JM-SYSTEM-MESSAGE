@@ -102,6 +102,8 @@ $(document).ready(() => {
         // message_service.create(message);
         invite_service.create(invite);
     })
+
+    // $('#user-menu').o
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
