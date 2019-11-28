@@ -35,7 +35,8 @@ window.sendName = function sendName(message) {
         'inputMassage': message.content,
         'dateCreate': message.dateCreate,
         'user': message.user,
-        'bot': message.bot
+        'bot': message.bot,
+        'filename': message.filename
     }));
 };
 
@@ -60,6 +61,8 @@ function showMessage(message) {
     const message_box_wrapper = document.getElementById("all-message-wrapper");
 
     const time = message.dateCreate.split(' ')[1];
+
+    const attached_file = add_attached_file(message);
     messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                             <div class="c-message__gutter--feature_sonic_inputs">
                                                                 <button class="c-message__avatar__button">
@@ -79,7 +82,7 @@ function showMessage(message) {
                                                             </div>
                                                             <span class="c-message__body">
                                                                 ${message.inputMassage}
-                                                            </span>
+                                                            </span> ` + attached_file + `                                                         
                                                         </div>
                                                         <div class="message-icons-menu-class" id="message-icons-menu">
                                                             <div class="btn-group" role="group" aria-label="Basic example">
@@ -91,6 +94,7 @@ function showMessage(message) {
                                                             </div>
                                                         </div>        
                                                     </div>`;
+
     message_box.append(messages_queue_context_user_container);
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 }
@@ -152,9 +156,18 @@ window.updateMessages = function updateMessages() {
                     }
                     message_box.append(messages_queue_context_user_container_date);
                 }
+
                 if(message.sharedMessageId === null) {
                     if(!message.isDeleted) {
                         messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+
+                message_box.append(messages_queue_context_user_container_date);
+            }
+
+            const attached_file = add_attached_file(message);
+
+            messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -176,7 +189,7 @@ window.updateMessages = function updateMessages() {
                                                             </div>
                                                             <span class="c-message__body">
                                                                 ${message.content}
-                                                            </span>
+                                                            </span> ` + attached_file + `
                                                         </div>
                                                         <div class="message-icons-menu-class" id="message-icons-menu">
                                                             <div class="btn-group" role="group" aria-label="Basic example">
@@ -496,3 +509,14 @@ window.pressChannelButton = function pressChannelButton(id) {
 };
 
 connect();
+
+function add_attached_file (message) {
+    if (message.filename !== null) {
+        return `<br>
+                <span>
+                    <a href = "/files/${message.filename}">${message.filename}</a>
+                </span>`;
+    } else {
+        return ``;
+    }
+}

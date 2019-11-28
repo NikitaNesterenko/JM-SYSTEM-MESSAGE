@@ -84,6 +84,15 @@ export class WorkspaceRestPaginationService extends  RestPaginationService{
         const response = await fetch('/rest/api/workspaces/choosed');
         return response.json()
     };
+}
 
+export class StorageService {
 
+    uploadFile = async (file) => {
+        const response = await fetch(`/upload`, {
+            method: 'POST',
+            body: file
+        }).then(response => {return response.text()});
+        return response;
+    }
 }

@@ -1,6 +1,7 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
@@ -17,6 +18,7 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "channels")
+@EqualsAndHashCode(exclude = {"bots"})
 public class Channel {
 
     @Id
@@ -35,6 +37,7 @@ public class Channel {
     @ToString.Exclude
     private Set<User> users;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id"))

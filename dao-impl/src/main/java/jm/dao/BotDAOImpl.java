@@ -2,6 +2,7 @@ package jm.dao;
 
 import jm.api.dao.BotDAO;
 import jm.model.Bot;
+import jm.model.Channel;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -22,6 +24,15 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
                     .setParameter(1, workspace)
                     .getSingleResult();
         } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Set<Channel> getChannels(Bot bot) {
+        try {
+            return bot.getChannels();
+        } catch(NoResultException e) {
             return null;
         }
     }

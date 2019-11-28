@@ -51,6 +51,10 @@ public class Message {
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
+    @Column(name = "filename")
+    private String filename;
+
+
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
         this.user = user;
