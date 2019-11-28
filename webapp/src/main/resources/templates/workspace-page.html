@@ -10,7 +10,7 @@
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
-
+    <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
 <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/channel_topic.js}" type="module"></script>
@@ -728,7 +728,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="post">
                     <div class="form-group">
                         <label for="exampleInputChannelName">Название канала</label>
                         <input type="email" class="form-control" id="exampleInputChannelName" placeholder="Введите название канала">
@@ -740,7 +740,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Создать канал</button>
+                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал</button>
             </div>
         </div>
     </div>
