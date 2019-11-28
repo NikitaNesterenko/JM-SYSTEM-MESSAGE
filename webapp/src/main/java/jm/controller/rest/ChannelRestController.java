@@ -81,14 +81,15 @@ public class ChannelRestController {
         return ResponseEntity.ok(channelService.gelAllChannels());
     }
 
-    @GetMapping(params = {"workspace", "login"})
+    @GetMapping("/workspace/{workspace_id}/user/{user_id}")
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
-            @RequestParam("workspace") String workspaceName,
-            @RequestParam("login") String login
+            @PathVariable("user_id") Long userId,
+            @PathVariable("workspace_id") Long workspaceId
     ) {
-        logger.info("Получен channel, где имя workspace = {}, логин пользователя = {}", workspaceName, login);
-        logger.info(channelService.getChannelByWorkspaceAndUser(workspaceName, login).toString());
-        return ResponseEntity.ok(channelService.getChannelByWorkspaceAndUser(workspaceName, login));
+        List<ChannelDTO> channels = channelService.getChannelByWorkspaceAndUser(workspaceId, userId);
+        logger.info("Получены channels, доступные юзеру с id={} из workspace с id={} ", userId, workspaceId);
+        logger.info(channels.toString());
+        return ResponseEntity.ok(channels);
     }
 
     @GetMapping("/workspace/{id}")

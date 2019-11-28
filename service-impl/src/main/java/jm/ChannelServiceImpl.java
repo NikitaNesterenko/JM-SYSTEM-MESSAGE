@@ -57,8 +57,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
-        return channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
+        return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId);
     }
 
     @Override

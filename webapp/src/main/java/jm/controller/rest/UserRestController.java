@@ -91,9 +91,10 @@ public class UserRestController {
     @GetMapping(value = "/workspace/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id){
         logger.info("Список пользователей Workspace с id = {}", id);
-        for (User user : userService.getAllUsersInThisChannel(id)) {
+        List<UserDTO> users = userService.getAllUsersInWorkspace(id);
+        for (UserDTO user : users) {
             logger.info(user.toString());
         }
-        return ResponseEntity.ok(userService.getAllUsersInWorkspace(id));
+        return ResponseEntity.ok(users);
     }
 }

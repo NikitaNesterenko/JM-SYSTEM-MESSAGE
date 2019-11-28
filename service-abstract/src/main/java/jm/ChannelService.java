@@ -21,7 +21,7 @@ public interface ChannelService {
 
     List<Channel> getChannelsByOwner(User user);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login);
+    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
 
     List<Channel> getChannelsByWorkspaceId(Long id);
 

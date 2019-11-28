@@ -39,18 +39,18 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
         String query = "SELECT ch.id, ch.name " +
                 "FROM channels_users chu " +
                 "INNER JOIN channels ch ON chu.channel_id = ch.id " +
                 "INNER JOIN workspaces ws ON ch.workspace_id = ws.id " +
                 "INNER JOIN users u ON chu.user_id = u.id " +
-                "WHERE (ws.name = :workspace AND ((u.login = :login AND ch.is_private = true) OR ch.is_private = false)) " +
+                "WHERE (ws.id = :workspace_id AND ((u.id = :user_id AND ch.is_private = true) OR ch.is_private = false)) " +
                 "GROUP BY ch.id";
 
         return entityManager.createNativeQuery(query, "ChannelDTOMapping")
-                .setParameter("workspace", workspaceName)
-                .setParameter("login", login)
+                .setParameter("workspace_id", workspaceId)
+                .setParameter("user_id", userId)
                 .getResultList();
     }
 
