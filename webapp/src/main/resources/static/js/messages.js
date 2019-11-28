@@ -64,7 +64,7 @@ let getMessageStatus = (message) => {
             $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
             $(`#message_${message.id}_user_${message.user.id}_content`).prepend(
                 `<span id="message_${message.id}_user_${message.user.id}_starred" class="">`
-                + `${star_button_filled}&nbsp;<a href="">Added to your starred items.</a>`
+                + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
                 + `</span>`);
         }
     });
@@ -253,7 +253,7 @@ window.updateMessages = function updateMessages() {
     });
 };
 
-updateMessages();
+// updateMessages();
 
 function showBotMessage(message) {
     const message_box = document.getElementById("all-messages");

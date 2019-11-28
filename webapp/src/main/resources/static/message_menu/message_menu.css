@@ -27,3 +27,11 @@
 .starred-messages-empty_content p {
     text-align: justify;
 }
+
+#to-starred-messages-link {
+    color: #5a6268;
+    text-decoration: none;
+    font-size: smaller;
+    font-weight: bold;
+    line-height: 10px;
+}

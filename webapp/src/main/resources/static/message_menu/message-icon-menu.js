@@ -30,11 +30,11 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_filled);
                 $(`#message_${msg_id}_user_${msg.user.id}_content`).prepend(
                     `<span id="message_${msg_id}_user_${msg.user.id}_starred" class="">`
-                    + `${star_button_filled}&nbsp;<button type="button" class="btn btn-link" id="link_to_sm">`
-                    + `Added to your starred items.</button>`
+                    + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
                     + `</span>`);
             });
         }
+        populateRightPane();
     });
 });
 
@@ -105,17 +105,25 @@ let populateRightPane = () => {
                     }
                 });
         });
-    open_right_panel();
 };
 
 let is_open = false;
 
-$('.p-classic_nav__right__star__button, #link_to_sm').on('click', () => {
+let toggle_right_menu = () => {
     if (is_open) {
         close_right_panel();
         is_open = false;
     } else {
+        open_right_panel();
         populateRightPane();
         is_open = true;
     }
+};
+
+$('.p-classic_nav__right__star__button').on('click', () => {
+    toggle_right_menu();
+});
+
+$(document).on('click', '#to-starred-messages-link', () => {
+    toggle_right_menu();
 });
