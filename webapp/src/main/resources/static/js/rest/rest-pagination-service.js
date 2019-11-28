@@ -19,7 +19,7 @@ export class RestPaginationService {
     };
 
     create = async (entity) => {
-        const response = await fetch(`${this.url}/create`, {
+        const response = await fetch(`${this.url}/`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(entity)

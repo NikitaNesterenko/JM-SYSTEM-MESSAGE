@@ -1,14 +1,15 @@
-import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService, InviteRestPaginationService} from './rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const invite_service = new InviteRestPaginationService();
 
 class Invite {
-    constructor(email, name) {
+    constructor(email, firstName) {
         this.email = email;
-        this.name = name;
+        this.firstName = firstName;
     }
 }
 
@@ -75,18 +76,31 @@ $(document).ready(() => {
         idElement = "#" + idElement;
         // alert(idElement);
         // const email = $('#inviteEmail_1').val();
-        let email = $('[id ^= "inviteEmail_"]').val();
+
+        let content_invites = $('[class ^= "content-form-"]');
+
+        // alert(content_invites);
+
+        $.each(content_invites, (i, item) => {
+            alert(item);
+        })
+
+        // let emails = $('[id ^= "inviteEmail_"]');
+        // let names = $('[id ^= "inviteName_"]');
+
         // const name = $('#inviteName_1').val();
-        alert(email);
-        // $.each(email, (i, item) => {
-        //     alert(item);
+        // alert(email);
+
+        // $.each(content_invites, (i, item) => {
+        //     alert(item.value + ' - ' + names[i].value);
         // })
 
-        const invite = new Invite(email, name);
+        const invite = new Invite('test@mail.ru', 'test_name');
 
         // alert(email);
         // sendName(message)
         // message_service.create(message);
+        invite_service.create(invite);
     })
 });
 

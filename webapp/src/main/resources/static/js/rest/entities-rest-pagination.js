@@ -76,3 +76,8 @@ export class WorkspaceRestPaginationService extends  RestPaginationService {
         return response.json()
     };
 }
+export class InviteRestPaginationService extends  RestPaginationService {
+    constructor(){
+        super('/rest/api/invites');
+    }
+}

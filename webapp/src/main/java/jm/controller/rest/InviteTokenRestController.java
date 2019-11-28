@@ -33,26 +33,47 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/")
-    public ResponseEntity invites(@RequestBody List<InviteToken> tests) {
+    public ResponseEntity invites(@RequestBody InviteToken test) {
 
-        for (InviteToken test : tests) {
-            test.setHash(tokenGenerator.generate(10));
-        }
+//        for (InviteToken test : tests) {
+//            test.setHash(tokenGenerator.generate(10));
+//        }
 
-        System.out.println(tests);
+        System.out.println(test);
 
-        for (InviteToken test : tests) {
-            inviteTokenService.createInviteToken(test);
-
-            String link = "http://localhost:8080/rest/api/invites/" + test.getHash();
-
-            mailService.sendInviteMessage(test.getFirstName(), test.getEmail(),test.getEmail(),"TEST-WORKSPACE", link);
-
-            System.out.println("Send mail...");
-        }
+//        for (InviteToken test : tests) {
+//            inviteTokenService.createInviteToken(test);
+//
+//            String link = "http://localhost:8080/rest/api/invites/" + test.getHash();
+//
+//            mailService.sendInviteMessage(test.getFirstName(), test.getEmail(),test.getEmail(),"TEST-WORKSPACE", link);
+//
+//            System.out.println("Send mail...");
+//        }
 
         return ResponseEntity.ok(true);
     }
+//    @PostMapping("/")
+//    public ResponseEntity invites(@RequestBody List<InviteToken> tests) {
+//
+//        for (InviteToken test : tests) {
+//            test.setHash(tokenGenerator.generate(10));
+//        }
+//
+//        System.out.println(tests);
+//
+//        for (InviteToken test : tests) {
+//            inviteTokenService.createInviteToken(test);
+//
+//            String link = "http://localhost:8080/rest/api/invites/" + test.getHash();
+//
+//            mailService.sendInviteMessage(test.getFirstName(), test.getEmail(),test.getEmail(),"TEST-WORKSPACE", link);
+//
+//            System.out.println("Send mail...");
+//        }
+//
+//        return ResponseEntity.ok(true);
+//    }
 
     @GetMapping("/{hash}")
     public ModelAndView inviteJoin(@PathVariable String hash) {
