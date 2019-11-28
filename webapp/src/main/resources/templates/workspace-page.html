@@ -33,6 +33,10 @@
     <link rel="stylesheet" th:href="@{/css/messagesInlineEdit.css}"/>
     <script defer th:src="@{/js/messagesInlineEdit.js}" type="module"></script>
 
+    <!-- memberList -->
+    <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
+    <script defer th:src="@{/js/member-list/member-list.js}" type="module"></script>
+
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
@@ -573,15 +577,18 @@
                                                 </button>
                                             </div>
                                             <div class="p-channel_details__members_list_section">
-                                                <button class="p-channel_details_section__header">
+                                                <button class="p-channel_details_section__header" id="memberListBtn">
                                                     <span class="p-channel_details_section__title">
                                                         <i class="p-channel_details_section__icon p-channel_details_section__members_list__icon">👨</i>
                                                         <span class="p-channel_details_section__title-content">
                                                             - Members
                                                         </span>
                                                     </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
+                                                    <i class="p-channel_details_section__caret_icon" id="memberListCaretSymbol">►</i>
                                                 </button>
+                                                <div id="memberListPlaceholder">
+                                                    <!-- Member List will be placed here -->
+                                                </div>
                                             </div>
                                             <div class="p-channel_details__apps_section">
                                                 <button class="p-channel_details_section__header">
