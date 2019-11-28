@@ -2,6 +2,7 @@ package jm;
 
 import jm.api.dao.BotDAO;
 import jm.model.Bot;
+import jm.model.Channel;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -42,4 +44,7 @@ public class BotServiceImpl implements BotService {
     public Bot GetBotByWorkspaceId(Workspace workspace) {
        return botDAO.getBotByWorkspaceId(workspace);
     }
+
+    @Override
+    public Set<Channel> getChannels(Bot bot) { return botDAO.getChannels(bot); }
 }

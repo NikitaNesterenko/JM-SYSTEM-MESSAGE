@@ -20,9 +20,6 @@
 <!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
-    <!-- message menu -->
-    <script defer th:src="@{/message_menu/message-icon-menu.js}"></script>
-    <link rel="stylesheet" th:href="@{/message_menu/message_menu.css}"/>
 
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
@@ -319,8 +316,8 @@
                                                     <button class="p-channel_sidebar__channels__button">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus"
-                                                                id="addChannelButton" data-toggle="modal" data-target="#addChannelModal">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus" data-toggle="modal" data-target="#addChannelModal"
+                                                                id="addChannelButton">✚
                                                         </button>
                                                     </div>
                                                 </div>
@@ -768,7 +765,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="post">
                     <div class="form-group">
                         <label for="exampleInputChannelName">Название канала</label>
                         <input type="email" class="form-control" id="exampleInputChannelName" placeholder="Введите название канала">
@@ -780,7 +777,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Создать канал</button>
+                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал</button>
             </div>
         </div>
     </div>
