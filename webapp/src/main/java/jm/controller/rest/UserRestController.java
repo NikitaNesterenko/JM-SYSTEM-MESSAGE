@@ -77,7 +77,6 @@ public class UserRestController {
         for (User user : userService.getAllUsersInThisChannel(id)) {
             logger.info(user.toString());
         }
-
         return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
     }
 
