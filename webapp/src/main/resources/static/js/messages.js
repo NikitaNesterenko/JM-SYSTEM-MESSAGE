@@ -253,7 +253,7 @@ window.updateMessages = function updateMessages() {
     });
 };
 
-// updateMessages();
+updateMessages();
 
 function showBotMessage(message) {
     const message_box = document.getElementById("all-messages");
