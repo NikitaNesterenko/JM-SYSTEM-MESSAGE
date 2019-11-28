@@ -1,5 +1,5 @@
-.ReactModal__Content ReactModal__Content--after-open popover {
-    display: none;
+.ReactModal__Content {
+    display: inline-table;
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
