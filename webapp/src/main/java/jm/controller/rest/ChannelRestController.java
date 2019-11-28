@@ -94,6 +94,7 @@ public class ChannelRestController {
 
     @GetMapping("/workspace/{id}")
     public ResponseEntity<List<Channel>> getChannelsByWorkspaceId(@PathVariable("id") Long id) {
+        System.out.println("WORKSPACEID - " + id);
         return new ResponseEntity<>(channelService.getChannelsByWorkspaceId(id), HttpStatus.OK);
     }
 
