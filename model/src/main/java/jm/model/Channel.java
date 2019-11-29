@@ -18,7 +18,6 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "channels")
-@EqualsAndHashCode(exclude = {"bots"})
 public class Channel {
 
     @Id
