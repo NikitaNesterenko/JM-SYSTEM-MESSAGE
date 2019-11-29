@@ -1,6 +1,8 @@
 package jm.config.inititalizer;
 
 import jm.UserService;
+import jm.WorkspaceUserRoleService;
+import jm.WorkspaceUserRoleServiceImpl;
 import jm.api.dao.*;
 import jm.model.*;
 import jm.model.Bot;
@@ -30,6 +32,8 @@ public class TestDataInitializer {
     private WorkspaceDAO workspaceDAO;
     @Autowired
     private BotDAO botDAO;
+    @Autowired
+    private WorkspaceUserRoleService workspaceUserRoleService;
 
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
@@ -225,6 +229,17 @@ public class TestDataInitializer {
 
         workspaceDAO.persist(workspace_2);
         this.workspaces.add(workspace_2);
+
+        List<Role> roleList = new ArrayList<>(this.roles);
+        Role role = roleList.get(1);
+        for (User user: users
+             ) {
+            WorkspaceUserRole wurItem = new WorkspaceUserRole();
+            wurItem.setWorkspace(workspace_1);
+            wurItem.setUser(user);
+            wurItem.setRole(role);
+            workspaceUserRoleService.create(wurItem);
+        }
     }
 
     private void createBots() {
@@ -232,5 +247,7 @@ public class TestDataInitializer {
         this.bots.add(bot);
         botDAO.persist(bot);
     }
+
+
 
 }

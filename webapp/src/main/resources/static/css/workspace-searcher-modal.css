@@ -1,0 +1,49 @@
+.searcher-modal {
+    position: absolute;
+    left: 108px!important;
+    right: 108px;
+    top: 12px!important;
+    min-width: 744px;
+    max-width: none;
+    margin: 0px;
+}
+
+.search-input-close {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid grey;
+}
+
+.search-close {
+    margin-right: 28px;
+}
+
+.search-input-box {
+    padding: 0 16px 0 28px;
+    height: 44px;
+    display: flex;
+    alignment: center;
+    flex-grow: 1;
+}
+
+.search-input-box-input {
+    height: 22px;
+    padding: 0 2px 0 12px;
+    width: 100%;
+    alignment: center;
+}
+
+.search-field-li {
+    height: 44px;
+
+}
+
+.search-field-li:hover {
+    background-color: #1264a3;
+}
+
+.search-field-name {
+    font-size: 16px;
+    height: 100%;
+    padding: 12px 30px;
+}
