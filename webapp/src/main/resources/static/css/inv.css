@@ -1,9 +1,8 @@
-.ReactModal__Content {
+.menu-user-workspace {
     display: inline-table;
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato, appleLogo, sans-serif;
@@ -17,314 +16,282 @@
 }
 
 .c-menu {
-    /*--saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);*/
-    /*box-shadow: 0 0 0 1px var(--saf-0),0 4px 12px 0 rgba(0,0,0,.12);*/
-    /*background-color: rgba(var(--sk_foreground_min_solid,248,248,248),1);*/
     border-radius: 6px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    /*-webkit-user-select: none;*/
+    /*-moz-user-select: none;*/
+    /*-ms-user-select: none;*/
+    /*user-select: none;*/
     width: 300px;
     max-width: 360px;
     min-width: 200px;
-    z-index: 1012;
+    /*z-index: 1012;*/
     max-height: calc(100vh - 20px);
     overflow-y: auto;
-    padding: .1px 0;
+    /*padding: .1px 0;*/
 }
 
-.c-menu p-classic_nav__team_menu {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    box-sizing: inherit;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    box-shadow: 0 0 0 1px var(--saf-0), 0 4px 12px 0 rgba(0, 0, 0, .12);
-    /*background-color: rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1);*/
-    border-radius: 6px;
-    user-select: none;
-    max-width: 360px;
-    min-width: 200px;
-    z-index: 1012;
-    max-height: calc(100vh - 20px);
-    overflow-y: auto;
-    padding: .1px 0;
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    width: 300px;
-}
-.c-menu__items_scroller {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    box-sizing: inherit;
-}
-.c-menu__items {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    box-sizing: inherit;
-    margin: 0;
-    padding: 12px 0;
-}
+/*.c-menu p-classic_nav__team_menu {*/
+/*    font-size: 15px;*/
+/*    line-height: 1.46668;*/
+/*    font-weight: 400;*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    box-sizing: inherit;*/
+/*    box-shadow: 0 0 0 1px var(--saf-0), 0 4px 12px 0 rgba(0, 0, 0, .12);*/
+/*    border-radius: 6px;*/
+/*    user-select: none;*/
+/*    max-width: 360px;*/
+/*    min-width: 200px;*/
+/*    z-index: 1012;*/
+/*    max-height: calc(100vh - 20px);*/
+/*    overflow-y: auto;*/
+/*    padding: .1px 0;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    width: 300px;*/
+/*}*/
+/*.c-menu__items_scroller {*/
+/*    font-size: 15px;*/
+/*    line-height: 1.46668;*/
+/*    font-weight: 400;*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    box-sizing: inherit;*/
+/*}*/
+/*.c-menu__items {*/
+/*    font-size: 15px;*/
+/*    line-height: 1.46668;*/
+/*    font-weight: 400;*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    box-sizing: inherit;*/
+/*    margin: 0;*/
+/*    padding: 12px 0;*/
+/*}*/
 
-.p-classic_nav__team_menu__blurb p-classic_nav__team_menu__blurb--user {
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    box-sizing: inherit;
-    display: flex;
-    padding: 8px 24px 12px;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.2;
-    user-select: text;
-}
+/*.p-classic_nav__team_menu__blurb p-classic_nav__team_menu__blurb--user {*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    box-sizing: inherit;*/
+/*    display: flex;*/
+/*    padding: 8px 24px 12px;*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    line-height: 1.2;*/
+/*    user-select: text;*/
+/*}*/
 
-.p-classic_nav__team_menu__blurb__icon c-avatar {
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    user-select: text;
-    box-sizing: inherit;
-    position: relative;
-    display: inline-block;
-    cursor: default;
-    outline: none;
-    margin-right: 12px;
-    flex-shrink: 0;
-    height: 36px;
-    line-height: 36px;
-    width: 36px;
-}
+/*.p-classic_nav__team_menu__blurb__icon c-avatar {*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    user-select: text;*/
+/*    box-sizing: inherit;*/
+/*    position: relative;*/
+/*    display: inline-block;*/
+/*    cursor: default;*/
+/*    outline: none;*/
+/*    margin-right: 12px;*/
+/*    flex-shrink: 0;*/
+/*    height: 36px;*/
+/*    line-height: 36px;*/
+/*    width: 36px;*/
+/*}*/
 
-.c-avatar__image {
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    user-select: text;
-    cursor: default;
-    line-height: 36px;
-    box-sizing: inherit;
-    border-radius: 3px;
-    display: block;
-    height: 100% !important;
-    width: 100% !important;
-}
+/*.c-avatar__image {*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    user-select: text;*/
+/*    cursor: default;*/
+/*    line-height: 36px;*/
+/*    box-sizing: inherit;*/
+/*    border-radius: 3px;*/
+/*    display: block;*/
+/*    height: 100% !important;*/
+/*    width: 100% !important;*/
+/*}*/
 
-.p-classic_nav__team_menu__blurb__right {
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.2;
-    user-select: text;
-    box-sizing: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    flex: 1 1 auto;
-    min-width: 0;
-}
+/*.p-classic_nav__team_menu__blurb__right {*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    line-height: 1.2;*/
+/*    user-select: text;*/
+/*    box-sizing: inherit;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: space-around;*/
+/*    flex: 1 1 auto;*/
+/*    min-width: 0;*/
+/*}*/
 
-.p-classic_nav__team_menu__blurb__name {
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    font-size: 15px;
-    line-height: 1.2;
-    user-select: text;
-    box-sizing: inherit;
-    display: block;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    font-weight: 900;
-}
+/*.p-classic_nav__team_menu__blurb__name {*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    font-size: 15px;*/
+/*    line-height: 1.2;*/
+/*    user-select: text;*/
+/*    box-sizing: inherit;*/
+/*    display: block;*/
+/*    text-overflow: ellipsis;*/
+/*    overflow: hidden;*/
+/*    white-space: nowrap;*/
+/*    font-weight: 900;*/
+/*}*/
 
-.p-classic_nav__team_menu__blurb__sub {
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.2;
-    user-select: text;
-    box-sizing: inherit;
-    display: block;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    /*color: rgba(var(--sk_foreground_max, 29, 28, 29), .7);*/
-}
+/*.p-classic_nav__team_menu__blurb__sub {*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    line-height: 1.2;*/
+/*    user-select: text;*/
+/*    box-sizing: inherit;*/
+/*    display: block;*/
+/*    text-overflow: ellipsis;*/
+/*    overflow: hidden;*/
+/*    white-space: nowrap;*/
+/*}*/
 
-.c-menu_item__li {
-    font-size: 15px;
-    font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    box-sizing: inherit;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    line-height: 28px;
-}
+/*.c-menu_item__li {*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    box-sizing: inherit;*/
+/*    list-style-type: none;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*    line-height: 28px;*/
+/*}*/
 
-.c-menu_item__button, .c-menu_item__button:link, .c-menu_item__button:visited {
-    background: none;
-    border: 0;
-    color: inherit;
-    font: inherit;
-    line-height: normal;
-    overflow: visible;
-    padding: 0;
-    background: transparent;
-    border-radius: 0;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    min-height: 28px;
-    overflow-x: hidden;
-    padding: 0 24px;
-    text-align: left;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-}
+/*.c-menu_item__button, .c-menu_item__button:link, .c-menu_item__button:visited {*/
+/*    background: none;*/
+/*    border: 0;*/
+/*    font: inherit;*/
+/*    line-height: normal;*/
+/*    overflow: visible;*/
+/*    padding: 0;*/
+/*    background: transparent;*/
+/*    border-radius: 0;*/
+/*    cursor: pointer;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    min-height: 28px;*/
+/*    overflow-x: hidden;*/
+/*    padding: 0 24px;*/
+/*    text-align: left;*/
+/*    text-decoration: none;*/
+/*    text-overflow: ellipsis;*/
+/*    white-space: nowrap;*/
+/*    width: 100%;*/
+/*}*/
 
-.c-button-unstyled {
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    list-style-type: none;
-    box-sizing: inherit;
-    margin: 0;
-    vertical-align: initial;
-    border: 0;
-    font: inherit;
-    overflow: visible;
-    background: transparent;
-    border-radius: 0;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    min-height: 28px;
-    overflow-x: hidden;
-    padding: 0 24px;
-    text-align: left;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-    font-size: 15px;
-    line-height: 28px;
-}
+/*.c-button-unstyled {*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    list-style-type: none;*/
+/*    box-sizing: inherit;*/
+/*    margin: 0;*/
+/*    vertical-align: initial;*/
+/*    border: 0;*/
+/*    font: inherit;*/
+/*    overflow: visible;*/
+/*    background: transparent;*/
+/*    border-radius: 0;*/
+/*    cursor: pointer;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    min-height: 28px;*/
+/*    overflow-x: hidden;*/
+/*    padding: 0 24px;*/
+/*    text-align: left;*/
+/*    text-decoration: none;*/
+/*    text-overflow: ellipsis;*/
+/*    white-space: nowrap;*/
+/*    width: 100%;*/
+/*    font-size: 15px;*/
+/*    line-height: 28px;*/
+/*}*/
 
-.c-menu_item__label {
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    list-style-type: none;
-    font: inherit;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    cursor: pointer;
-    text-align: left;
-    white-space: nowrap;
-    font-size: 15px;
-    line-height: 28px;
-    box-sizing: inherit;
-    flex: 1 1 auto;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    position: relative;
-    top: -1px;
-}
+/*.c-menu_item__label {*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    list-style-type: none;*/
+/*    font: inherit;*/
+/*    cursor: pointer;*/
+/*    text-align: left;*/
+/*    white-space: nowrap;*/
+/*    font-size: 15px;*/
+/*    line-height: 28px;*/
+/*    box-sizing: inherit;*/
+/*    flex: 1 1 auto;*/
+/*    text-overflow: ellipsis;*/
+/*    overflow: hidden;*/
+/*    position: relative;*/
+/*    top: -1px;*/
+/*}*/
 
-.c-menu_item__shortcut {
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    list-style-type: none;
-    font: inherit;
-    cursor: pointer;
-    text-align: left;
-    white-space: nowrap;
-    font-size: 15px;
-    line-height: 28px;
-    box-sizing: inherit;
-    /*color: rgba(var(--sk_foreground_max, 29, 28, 29), .7);*/
-}
+/*.c-menu_item__shortcut {*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    list-style-type: none;*/
+/*    font: inherit;*/
+/*    cursor: pointer;*/
+/*    text-align: left;*/
+/*    white-space: nowrap;*/
+/*    font-size: 15px;*/
+/*    line-height: 28px;*/
+/*    box-sizing: inherit;*/
+/*}*/
 
-.c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child {
-    font-size: 15px;
-    font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    box-sizing: inherit;
-    line-height: 24px;
-    list-style-type: none;
-    padding: 8px 0;
-    margin: 0;
-}
+/*.c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child {*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    box-sizing: inherit;*/
+/*    line-height: 24px;*/
+/*    list-style-type: none;*/
+/*    padding: 8px 0;*/
+/*    margin: 0;*/
+/*}*/
 
-.c-menu_separator__separator {
-    font-size: 15px;
-    font-weight: 400;
-    /*color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);*/
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    /*--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);*/
-    user-select: none;
-    font-family: Slack-Lato, appleLogo, sans-serif;
-    line-height: 24px;
-    list-style-type: none;
-    box-sizing: inherit;
-    padding: 0;
-    border: none;
-    clear: both;
-    margin: 0;
-    /*border-top: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);*/
-    border-bottom: 0;
-}
+/*.c-menu_separator__separator {*/
+/*    font-size: 15px;*/
+/*    font-weight: 400;*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    user-select: none;*/
+/*    font-family: Slack-Lato, appleLogo, sans-serif;*/
+/*    line-height: 24px;*/
+/*    list-style-type: none;*/
+/*    box-sizing: inherit;*/
+/*    padding: 0;*/
+/*    border: none;*/
+/*    clear: both;*/
+/*    margin: 0;*/
+/*    border-bottom: 0;*/
+/*}*/
+
+/*.c-menu_item__li:hover {*/
+/*    color: #fff;*/
+/*    background: #4f6eff;*/
+/*}*/
