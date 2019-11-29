@@ -230,6 +230,7 @@ public class TestDataInitializer {
         workspaceDAO.persist(workspace_2);
         this.workspaces.add(workspace_2);
 
+        // Временная добавка связей в связывающую таблицу. Надеюсь в новом датаинициализаторе она не понадобится
         List<Role> roleList = new ArrayList<>(this.roles);
         Role role = roleList.get(1);
         for (User user: users
