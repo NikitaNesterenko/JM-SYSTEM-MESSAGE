@@ -10,6 +10,11 @@
     display: block;
 }
 
+.right-panel-msg-menu {
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e3e5;
+}
+
 .starred-messages-empty {
     text-align: center;
 }

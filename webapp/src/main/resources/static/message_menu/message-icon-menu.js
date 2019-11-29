@@ -57,7 +57,8 @@ let populateRightPane = () => {
                         messages.forEach((message, i) => {
                             const time = message.dateCreate.split(' ')[1];
                             target_el.append(
-                                `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                                `<div class="c-virtual_list__item right-panel-msg-menu">
+                                        <div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -81,9 +82,9 @@ let populateRightPane = () => {
                                                                 ${message.content}
                                                             </span>
                                                         </div>
-                                                        
-                                                    </div>
-                                                    <hr/>`
+                                                        ${starred_message_menu(message)}
+                                        </div>
+                                    </div>`
                             );
                         });
                     } else {
@@ -127,3 +128,14 @@ $('.p-classic_nav__right__star__button').on('click', () => {
 $(document).on('click', '#to-starred-messages-link', () => {
     toggle_right_menu();
 });
+
+// right panel msg menu
+const back_to_msg = '&#8678;';
+const starred_message_menu = (message) => {
+    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
+        `<div class="btn-group" role="group" aria-label="Basic example">` +
+        `<button type="button" class="btn btn-light">${back_to_msg}</button>` + // back
+        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
+        `</div>` +
+        `</div>`;
+};
