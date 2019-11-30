@@ -1,9 +1,9 @@
 package jm.controller.rest;
 
-import jm.UserService;
-import jm.model.ChannelDTO;
-import jm.model.Channel;
 import jm.ChannelService;
+import jm.UserService;
+import jm.model.Channel;
+import jm.model.ChannelDTO;
 import jm.model.User;
 import jm.model.Workspace;
 import org.slf4j.Logger;
@@ -23,7 +23,6 @@ import java.util.List;
 public class ChannelRestController {
 
     private ChannelService channelService;
-    private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             ChannelRestController.class);
@@ -32,6 +31,8 @@ public class ChannelRestController {
     public void setChannelService(ChannelService channelService) {
         this.channelService = channelService;
     }
+
+    private UserService userService;
 
     @Autowired
     public void setUserService(UserService userService) {
