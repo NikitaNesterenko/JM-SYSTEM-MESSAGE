@@ -108,8 +108,10 @@ window.updateMessages = function updateMessages() {
     const year = today.getFullYear();
     const month = today.getMonth() + 1;
 
-    const stringDateStart = [year - 1, month, day].join("-");
-    const stringDateEnd = [year, month, day + 1].join("-");
+    // const stringDateStart = [year - 1, month, day].join("-");
+    // const stringDateEnd = [year, month, day + 1].join("-");
+    const stringDateStart = today;
+    const stringDateEnd = today;
 
     const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, stringDateStart, stringDateEnd);
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
