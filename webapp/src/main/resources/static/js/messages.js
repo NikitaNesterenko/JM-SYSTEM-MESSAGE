@@ -46,24 +46,22 @@ window.sendName = function sendName(message) {
         'inputMassage': message.content,
         'dateCreate': message.dateCreate,
         'user': message.user,
-        'bot': message.bot
+        'bot': message.bot,
+        'filename': message.filename
     }));
 };
 
 // message menu buttons
 const message_menu = (message) => {
-    return `<div class="message-icons-menu-class">
-    <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-light">&#9786;</button>
-        <button type="button" class="btn btn-light">&#128172;</button>
-        <button type="button" class="btn btn-light">&#10140;</button>
-        <button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">
-            &#9734;
-        </button>
-        <button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;
-        </button>
-    </div>
-</div>`;
+    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
+        `<div class="btn-group" role="group" aria-label="Basic example">` +
+        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
+        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
+        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
+        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
+        `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>` + // submenu
+        `</div>` +
+        `</div>`;
 };
 
 function updateMessage(message) {
@@ -86,6 +84,8 @@ function showMessage(message) {
     const message_box_wrapper = document.getElementById("all-message-wrapper");
 
     const time = message.dateCreate.split(' ')[1];
+
+    const attached_file = add_attached_file(message);
     messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                             <div class="c-message__gutter--feature_sonic_inputs">
                                                                 <button class="c-message__avatar__button">
@@ -106,7 +106,7 @@ function showMessage(message) {
                                                             <div class="c-message__content_body" data-message-id="${message.id}" id="message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.inputMassage}
-                                                            </span>
+                                                            </span> ` + attached_file + `
                                                             </div>
                                                         </div>
                                                         ${message_menu(message)}                                                        
@@ -177,7 +177,9 @@ window.updateMessages = function updateMessages() {
                     message_box.append(messages_queue_context_user_container_date);
                 }
 
-                messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                const attached_file = add_attached_file(message);
+
+            messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
@@ -200,7 +202,7 @@ window.updateMessages = function updateMessages() {
                                                             <div class="c-message__content_body" data-message-id="${message.id}" id="message_id-${message.id}">
                                                             <span class="c-message__body">
                                                                 ${message.content}
-                                                            </span>
+                                                            </span> ` + attached_file + `
                                                             </div>
                                                         </div>
                                                         ${message_menu(message)}
@@ -298,4 +300,14 @@ window.pressChannelButton = function pressChannelButton(id) {
 };
 
 
+function add_attached_file (message) {
+    if (message.filename !== null) {
+        return `<br>
+                <span>
+                    <a href = "/files/${message.filename}">${message.filename}</a>
+                </span>`;
+    } else {
+        return ``;
+    }
+}
 

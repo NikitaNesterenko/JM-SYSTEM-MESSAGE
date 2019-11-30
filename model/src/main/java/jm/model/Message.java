@@ -45,6 +45,9 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
+    @Column(name = "filename")
+    private String filename;
+
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
         this.user = user;

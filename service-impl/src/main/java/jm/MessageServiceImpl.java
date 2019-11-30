@@ -64,4 +64,9 @@ public class MessageServiceImpl implements MessageService {
         return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
     }
 
+    @Override
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate) {
+        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate);
+    }
+
 }
