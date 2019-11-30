@@ -18,7 +18,6 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "channels")
-@EqualsAndHashCode(exclude = {"bots"})
 public class Channel {
 
     @Id
@@ -42,6 +41,7 @@ public class Channel {
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id"))
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Bot> bots;
 
     @ManyToOne(fetch = FetchType.EAGER)
