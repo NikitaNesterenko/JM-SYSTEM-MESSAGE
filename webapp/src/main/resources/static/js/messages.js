@@ -69,6 +69,7 @@ function updateMessage(message) {
     for (const messageBody of messageBodies) {
         if (messageBody.getAttribute("data-message-id") === message.id.toString()) {
             messageBody.innerHTML = `<span class="c-message__body">${message.inputMassage}</span>`;
+            messageBody.innerHTML += add_attached_file(message);
             return true;
         }
     }
@@ -303,7 +304,7 @@ window.pressChannelButton = function pressChannelButton(id) {
 function add_attached_file (message) {
     if (message.filename !== null) {
         return `<br>
-                <span>
+                <span class="c-message__attachment">
                     <a href = "/files/${message.filename}">${message.filename}</a>
                 </span>`;
     } else {
