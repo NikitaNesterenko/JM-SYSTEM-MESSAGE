@@ -36,7 +36,7 @@ function onEditButtonClick(ev) {
     const spanElement = parentDiv.getElementsByClassName("c-message__body")[0];
     const messageText = spanElement.innerText;
     const attachment = parentDiv.getElementsByClassName("c-message__attachment")[0];
-    const attachmentName = attachment.innerText;
+    const attachmentName = attachment === undefined ? '' : attachment.innerText;
 
     parentDiv.innerHTML = `<div class="c-message__inline_editor">
     <form data-message-id="${messageId}" data-attachment=${attachmentName}>
