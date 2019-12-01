@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -68,14 +69,14 @@ public class MessageRestController {
     }
 
     @PutMapping(value = "/update")
+    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage(@RequestBody Message message, Principal principal) {
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        if (principal.getName().equals(existingMessage.getUser().getLogin())
-                && principal.getName().equals(message.getUser().getLogin())) {
+        if (principal.getName().equals(existingMessage.getUser().getLogin())) {
             logger.info("Существующее сообщение: {}", existingMessage);
             messageService.updateMessage(message);
             logger.info("Обновленное сообщение: {}", message);

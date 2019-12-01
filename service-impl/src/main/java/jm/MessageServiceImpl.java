@@ -57,6 +57,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void updateMessage(Message message) {
         messageDAO.merge(message);
+
     }
 
     @Override
