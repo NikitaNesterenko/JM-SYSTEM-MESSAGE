@@ -1,6 +1,6 @@
 .menu-user-workspace {
-    display: inline-table;
-    /*display: none;*/
+    /*display: inline-table;*/
+    display: none;
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
@@ -83,6 +83,10 @@
     line-height: 28px;
 }
 
+.c-menu_item__li:hover {
+    background-color: #0c5460;
+}
+
 .c-button-unstyled {
     -webkit-font-smoothing: antialiased;
     user-select: none;
@@ -130,6 +134,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+}
+
+.c-menu_item__button:hover{
+    color: white;
 }
 
 .c-menu_item__label {

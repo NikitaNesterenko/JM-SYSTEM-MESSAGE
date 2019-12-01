@@ -33,13 +33,17 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/")
-    public ResponseEntity invites(@RequestBody InviteToken test) {
+    public ResponseEntity invites(@RequestBody InviteToken tests) {
 
 //        for (InviteToken test : tests) {
 //            test.setHash(tokenGenerator.generate(10));
 //        }
+        System.out.println(tests);
 
-        System.out.println(test);
+//        tests.stream()
+//                .forEach(System.out::println);
+
+//        System.out.println(test);
 
 //        for (InviteToken test : tests) {
 //            inviteTokenService.createInviteToken(test);
@@ -92,7 +96,7 @@ public class InviteTokenRestController {
         return new ModelAndView("signin-page");
     }
 
-    private ResponseEntity checkUser (@RequestBody InviteToken inviteToken){
+    private ResponseEntity checkUser(@RequestBody InviteToken inviteToken){
         if(userService.getUserByEmail(inviteToken.getEmail()) != null) {
             inviteTokenService.deleteInviteToken(inviteToken.getId());
             logger.info("invite token удален");

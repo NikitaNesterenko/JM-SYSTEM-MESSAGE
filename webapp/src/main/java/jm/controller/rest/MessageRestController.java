@@ -50,6 +50,7 @@ public class MessageRestController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Message> getMessageById(@PathVariable("id") Long id) {
+        System.out.println("MESSAGEID - " + id);
         logger.info("Сообщение с id = {}",id);
         logger.info(messageService.getMessageById(id).toString());
         return new ResponseEntity<Message>(messageService.getMessageById(id), HttpStatus.OK);
@@ -57,7 +58,10 @@ public class MessageRestController {
 
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
     public ResponseEntity<List<Message>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
-        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id,  startDate, endDate), HttpStatus.OK);
+        System.out.println("START - " + startDate);
+        System.out.println("END - " + endDate);
+        System.out.println("MMMMMMMMMMMM");
+        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id,  LocalDateTime.now().minusYears(1).toString(), LocalDateTime.now().plusDays(1).toString()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
