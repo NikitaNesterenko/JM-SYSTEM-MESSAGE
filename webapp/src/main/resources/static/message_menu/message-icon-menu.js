@@ -1,6 +1,6 @@
 import {MessageRestPaginationService, UserRestPaginationService} from "../js/rest/entities-rest-pagination.js";
 import {star_button_blank, star_button_filled} from "../js/messages.js";
-import {open_right_panel, close_right_panel} from "../right_slide_panel/right_panel.js";
+import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
@@ -16,6 +16,7 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
         }
 
         let starredBy = msg["starredByWhom"];
+
         if (starredBy.find(usr => usr.id === user.id)) {
             starredBy.splice(starredBy.indexOf(user), 1);
             msg["starredByWhom"] = starredBy;
@@ -30,14 +31,13 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_filled);
                 $(`#message_${msg_id}_user_${msg.user.id}_content`).prepend(
                     `<span id="message_${msg_id}_user_${msg.user.id}_starred" class="">`
-                    + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
+                    + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">`
+                    + `Added to your starred items.</button>`
                     + `</span>`);
             });
         }
 
-        if (is_open) {
-            populateRightPane();
-        }
+        populateRightPane();
     });
 });
 
@@ -50,8 +50,8 @@ const getUserAndMessage = async (id) => {
 // open right panel
 let populateRightPane = () => {
     $('.p-flexpane__title_container').text('Starred Items');
-    const target_el = $('.p-flexpane__inside_body-scrollbar__child');
-    target_el.empty();
+    const target_element = $('.p-flexpane__inside_body-scrollbar__child');
+    target_element.empty();
     user_service.getLoggedUser()
         .then((user) => {
             message_service.getStarredMessagesForUser(user.id)
@@ -59,8 +59,17 @@ let populateRightPane = () => {
                     if (messages.length !== 0) {
                         messages.forEach((message, i) => {
                             const time = message.dateCreate.split(' ')[1];
-                            target_el.append(
-                                `<div class="c-virtual_list__item right-panel-msg-menu">
+                            target_element.append(add_msg_to_right_panel(time, message));
+                        });
+                    } else {
+                        target_element.append(add_empty_content_to_right_panel());
+                    }
+                });
+        });
+};
+
+let add_msg_to_right_panel = (time, message) => {
+    return `<div class="c-virtual_list__item right-panel-msg-menu">
                                         <div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
@@ -87,11 +96,11 @@ let populateRightPane = () => {
                                                         </div>
                                                         ${starred_message_menu(message)}
                                         </div>
-                                    </div>`
-                            );
-                        });
-                    } else {
-                        target_el.append(`<div class="starred-messages-empty">
+                                    </div>`;
+};
+
+let add_empty_content_to_right_panel = () => {
+    return `<div class="starred-messages-empty">
                                                 <div>
                                                     <img class="starred-messages-empty_img" src="image/empty_starred_posts.png">
                                                 </div>
@@ -104,15 +113,11 @@ let populateRightPane = () => {
                                                         save something for later — only you can see your starred items, so use them however you like!
                                                     </p>
                                                 </div>
-                                          </div>`
-                        );
-                    }
-                });
-        });
+                                          </div>`;
 };
 
+// toggle right panel
 let is_open;
-
 $(document).on('load', () => is_open = false);
 
 let toggle_right_menu = () => {
