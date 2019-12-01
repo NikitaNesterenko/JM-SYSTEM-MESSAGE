@@ -34,7 +34,10 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
                     + `</span>`);
             });
         }
-        populateRightPane();
+
+        if (is_open) {
+            populateRightPane();
+        }
     });
 });
 
@@ -108,7 +111,9 @@ let populateRightPane = () => {
         });
 };
 
-let is_open = false;
+let is_open;
+
+$(document).on('load', () => is_open = false);
 
 let toggle_right_menu = () => {
     if (is_open) {
