@@ -5,12 +5,14 @@ import jm.MailService;
 import jm.TokenGenerator;
 import jm.UserService;
 import jm.model.InviteToken;
+import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -33,7 +35,9 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/")
-    public ResponseEntity invites(@RequestBody List<InviteToken> tests) {
+    public ResponseEntity invites(@RequestBody List<InviteToken> tests, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+        System.out.println("ВОРКСПЕЙС - " + workspace);
 
         int charactersInHash = 10;
 
@@ -48,22 +52,23 @@ public class InviteTokenRestController {
                 .forEach(System.out::println);
 
         tests.stream()
-                .forEach(x -> x.setHash(tokenGenerator.generate(charactersInHash)));
+                .forEach(x -> {x.setHash(tokenGenerator.generate(charactersInHash));
+                                x.setWorkspace(workspace);});
 
         tests.stream()
                 .forEach(System.out::println);
 
         System.out.println(tests);
 
-//        for (InviteToken test : tests) {
-//            inviteTokenService.createInviteToken(test);
-//
+        for (InviteToken test : tests) {
+            inviteTokenService.createInviteToken(test);
+
 //            String link = "http://localhost:8080/rest/api/invites/" + test.getHash();
 //
 //            mailService.sendInviteMessage(test.getFirstName(), test.getEmail(),test.getEmail(),"TEST-WORKSPACE", link);
-//
-//            System.out.println("Send mail...");
-//        }
+
+            System.out.println("Send mail...");
+        }
 
         return ResponseEntity.ok(true);
     }

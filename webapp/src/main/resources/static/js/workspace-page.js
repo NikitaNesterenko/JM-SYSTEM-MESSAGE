@@ -1,17 +1,9 @@
-import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService, InviteRestPaginationService} from './rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
-const invite_service = new InviteRestPaginationService();
-
-class Invite {
-    constructor(email, firstName) {
-        this.email = email;
-        this.firstName = firstName;
-    }
-}
 
 const showDefaultChannel = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
@@ -25,19 +17,10 @@ const showDefaultChannel = () => {
             })
 };
 
-
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
     const btn = document.getElementById("addChannelButton");
     const span = document.getElementsByClassName("addChannelClose")[0];
-
-    const menu_header = document.getElementsByClassName("p-classic_nav__team_header__content")[0];
-    const menu_modal = document.getElementsByClassName("menu-user-workspace")[0];
-
-
-    menu_header.onclick = function () {
-        menu_modal.style.display = "inline-table";
-    };
 
     btn.onclick = function () {
         modal.style.display = "block";
@@ -59,73 +42,6 @@ $(document).ready(() => {
     profileCard();
     showBot();
     showDefaultChannel();
-
-    $('#invite-button').on('click', function() {
-        $('.invites-modal').show();
-        $('.invites-modal-close').show();
-        $('.p-client_container').hide();
-    });
-
-    $('.invites-modal-close').on('click', function() {
-        $('.invites-modal').hide();
-        $('.invites_modal_close').hide();
-        $('.p-client_container').show();
-    });
-
-    //$('button').on('click', function () {
-    $('.button_delete_member').on('click', function () {
-        // находим Id элемента, на котором нажали
-        let idElement = $(this).attr("id");
-        idElement = "#" + idElement;
-        $('' + idElement + '').parent().hide();
-    });
-
-    $('#inviteSend').on('click', function () {
-        // находим Id элемента, на котором нажали
-        // let idElement = $(this).attr("id");
-        // idElement = "#" + idElement;
-        // alert(idElement);
-        // const email = $('#inviteEmail_1').val();
-
-        let content_invites = $('[class ^= "content-form-"]');
-
-        // alert(content_invites);
-
-        // $.each(content_invites, (i, item) => {
-        //     alert(item.value);
-        // })
-
-        let emails = $('[id ^= "inviteEmail_"]');
-        let names = $('[id ^= "inviteName_"]');
-
-        // const name = $('#inviteName_1').val();
-        // alert(email);
-
-        let invites = [];
-
-        $.each(content_invites, (i, item) => {
-            invites.push(new Invite(emails[i].value, names[i].value));
-
-            // alert(emails[i].value + ' - ' + names[i].value);
-        })
-
-        const invite = new Invite('test@mail.ru', 'test_name');
-
-        // alert(email);
-        // sendName(message)
-        // message_service.create(message);
-        invite_service.create(invites);
-    });
-
-    const invite_from_menu_user_workspace = document.getElementById("invite-from-menu-user-workspace");
-
-    invite_from_menu_user_workspace.onclick = function () {
-        $('.invites-modal').show();
-        $('.invites-modal-close').show();
-        $('.p-client_container').hide();
-        $('.menu-user-workspace').hide();
-    };
-
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){

@@ -39,5 +39,4 @@ public class InviteToken {
         this.email = email;
         this.firstName = name;
     }
-
 }
