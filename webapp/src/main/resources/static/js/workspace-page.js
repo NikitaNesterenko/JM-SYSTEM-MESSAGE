@@ -32,8 +32,8 @@ window.addEventListener('load', function () {
     const span = document.getElementsByClassName("addChannelClose")[0];
 
     const menu_header = document.getElementsByClassName("p-classic_nav__team_header__content")[0];
-
     const menu_modal = document.getElementsByClassName("menu-user-workspace")[0];
+
 
     menu_header.onclick = function () {
         menu_modal.style.display = "inline-table";
@@ -82,8 +82,8 @@ $(document).ready(() => {
 
     $('#inviteSend').on('click', function () {
         // находим Id элемента, на котором нажали
-        let idElement = $(this).attr("id");
-        idElement = "#" + idElement;
+        // let idElement = $(this).attr("id");
+        // idElement = "#" + idElement;
         // alert(idElement);
         // const email = $('#inviteEmail_1').val();
 
@@ -91,27 +91,41 @@ $(document).ready(() => {
 
         // alert(content_invites);
 
-        $.each(content_invites, (i, item) => {
-            alert(item);
-        })
+        // $.each(content_invites, (i, item) => {
+        //     alert(item.value);
+        // })
 
-        // let emails = $('[id ^= "inviteEmail_"]');
-        // let names = $('[id ^= "inviteName_"]');
+        let emails = $('[id ^= "inviteEmail_"]');
+        let names = $('[id ^= "inviteName_"]');
 
         // const name = $('#inviteName_1').val();
         // alert(email);
 
-        // $.each(content_invites, (i, item) => {
-        //     alert(item.value + ' - ' + names[i].value);
-        // })
+        let invites = [];
+
+        $.each(content_invites, (i, item) => {
+            invites.push(new Invite(emails[i].value, names[i].value));
+
+            // alert(emails[i].value + ' - ' + names[i].value);
+        })
 
         const invite = new Invite('test@mail.ru', 'test_name');
 
         // alert(email);
         // sendName(message)
         // message_service.create(message);
-        invite_service.create(invite);
-    })
+        invite_service.create(invites);
+    });
+
+    const invite_from_menu_user_workspace = document.getElementById("invite-from-menu-user-workspace");
+
+    invite_from_menu_user_workspace.onclick = function () {
+        $('.invites-modal').show();
+        $('.invites-modal-close').show();
+        $('.p-client_container').hide();
+        $('.menu-user-workspace').hide();
+    };
+
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){

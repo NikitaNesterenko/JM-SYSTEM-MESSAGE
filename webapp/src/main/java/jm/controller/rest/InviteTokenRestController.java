@@ -33,17 +33,27 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/")
-    public ResponseEntity invites(@RequestBody InviteToken tests) {
+    public ResponseEntity invites(@RequestBody List<InviteToken> tests) {
+
+        int charactersInHash = 10;
+
+//        tests.setHash(tokenGenerator.generate(10));
 
 //        for (InviteToken test : tests) {
 //            test.setHash(tokenGenerator.generate(10));
 //        }
+//        System.out.println(tests);
+
+        tests.stream()
+                .forEach(System.out::println);
+
+        tests.stream()
+                .forEach(x -> x.setHash(tokenGenerator.generate(charactersInHash)));
+
+        tests.stream()
+                .forEach(System.out::println);
+
         System.out.println(tests);
-
-//        tests.stream()
-//                .forEach(System.out::println);
-
-//        System.out.println(test);
 
 //        for (InviteToken test : tests) {
 //            inviteTokenService.createInviteToken(test);
