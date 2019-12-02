@@ -14,5 +14,6 @@ public class MessagesController {
     public String messageCreation(InputMessage message) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(message);
+        
     }
 }
