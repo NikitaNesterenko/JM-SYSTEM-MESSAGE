@@ -1,9 +1,11 @@
 package jm;
 
 import jm.model.Bot;
+import jm.model.Channel;
 import jm.model.Workspace;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BotService {
 
@@ -19,4 +21,5 @@ public interface BotService {
 
     Bot GetBotByWorkspaceId(Workspace workspace);
 
+    Set<Channel> getChannels(Bot bot);
 }
