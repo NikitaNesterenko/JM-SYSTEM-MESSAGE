@@ -10,4 +10,5 @@ public interface InviteTokenService {
 
     void deleteInviteToken(Long id);
 
+    InviteToken getByHash(String hash);
 }

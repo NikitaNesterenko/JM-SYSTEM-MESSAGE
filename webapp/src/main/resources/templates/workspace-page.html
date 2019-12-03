@@ -21,6 +21,10 @@
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
 
+    <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
+    <script defer th:src="@{/js/invite.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/css/invite.css}"/>
+
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
@@ -159,6 +163,228 @@
     </div>
 </div>
 
+<!-- User menu modal-->
+<div class="menu-user-workspace popover"
+     style="position: absolute; left: 8px; top: 10px; outline: none; transition-duration: 80ms;">
+    <div>
+        <div class="c-menu">
+
+            <div>
+                <div class="c-menu__items_scroll" no-bootstrap="1">
+
+                    <div class="c-menu__items">
+
+                        <div class="p-classic_nav__team_menu__blurb">
+                            <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
+                                  style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
+                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                                                                             alt=""></span>
+                            <div class="p-classic_nav__team_menu__blurb__right">
+                                <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
+                                <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
+                            </div>
+                        </div>
+                        <div class="c-menu_item__li">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Set a status</div>
+                                <div class="c-menu_item__shortcut">Ctrl+Shift+Y</div>
+                            </button>
+                        </div>
+                        <div class="c-menu_item__li">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Profile &amp; account</div>
+                            </button>
+                        </div>
+                        <div class="c-menu_item__li">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Preferences</div>
+                            </button>
+                        </div>
+                        <div class="c-menu_item__li">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Set yourself to <strong>away</strong></div>
+                            </button>
+                        </div>
+                        <div class="c-menu_item__li">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Help &amp; feedback</div>
+                            </button>
+                        </div>
+                        <div aria-hidden="true"
+                             class="c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child">
+                            <hr class="c-menu_separator__separator">
+                        </div>
+                        <div>
+                            <div class="p-classic_nav__team_menu__blurb">
+                                <i class="p-classic_nav__team_menu__blurb__icon" aria-hidden="true"
+                                   style="height: 36px; width: 36px; min-width: 36px; font-size: 20px; line-height: 36px; white-space: nowrap; background-image: url(&quot;https://avatars.slack-edge.com/2019-04-26/608315739666_d6dcde1585520bcb3ef9_88.png&quot;);"></i>
+                                <div class="p-classic_nav__team_menu__blurb__right">
+                                    <div class="p-classic_nav__team_menu__blurb__name">Java Mentoring</div>
+                                    <div class="p-classic_nav__team_menu__blurb__sub">javamentor.slack.com</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="p-classic_nav__team_menu__blurb_plan">
+                            Your
+                            workspace is currently on the free version of Slack.
+                            <button target="_blank" path="pricing?ui_step=61&amp;ui_element=5"
+                                    class="c-link--button bold"
+                                    type="button">See upgrade options
+                            </button>
+                        </p>
+                        <div aria-hidden="true"
+                             class="c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child">
+                            <hr class="c-menu_separator__separator">
+                        </div>
+                        <div id="invite-from-menu-user-workspace" class="c-menu_item__li">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Invite people</div>
+                            </button>
+                        </div>
+                        <div class="c-menu_item__li" data-qa="sign-out-wrapper">
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">Sign out of <strong>Java Mentoring</strong></div>
+                            </button>
+                        </div>
+                        <div aria-hidden="true"
+                             class="c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child">
+                            <hr class="c-menu_separator__separator">
+                        </div>
+                        <div role="presentation" class="c-submenu">
+                            <div class="c-menu_item__li">
+                                <button class="c-button-unstyled c-menu_item__button c-menu_item__button--with_submenu"
+                                        type="button">
+                                    <div class="c-menu_item__label">Switch workspaces</div>
+                                    <i class="glyphicon glyphicon-hand-left c-icon c-menu_item__submenu-indicator c-icon--chevron-right"
+                                       aria-hidden="true">
+                                    </i></button>
+                            </div>
+                        </div>
+                        <div class="c-menu_item__li" data-qa="menu_item_button-wrapper">
+                            <button class="c-button-unstyled c-menu_item__button" type="button"
+                                    id="menu-584f42f2-4610-444e-94e9-a0b49637aa74-15" data-qa="menu_item_button"
+                                    role="menuitem" tabindex="-1">
+                                <div class="c-menu_item__label">Sign in to another workspace</div>
+                            </button>
+                        </div>
+                        <div aria-hidden="true"
+                             class="c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child">
+                            <hr class="c-menu_separator__separator">
+                        </div>
+                        <div class="c-menu_item__li" data-qa="menu_item_button-wrapper"><a target="_blank"
+                                                                                           class="c-link c-button-unstyled c-menu_item__button"
+                                                                                           id="menu-584f42f2-4610-444e-94e9-a0b49637aa74-17"
+                                                                                           data-qa="menu_item_button"
+                                                                                           role="menuitem" tabindex="-1"
+                                                                                           href="https://javamentor.slack.com/ssb/redirect"
+                                                                                           rel="noopener noreferrer">
+                            <div class="c-menu_item__label">Open the Slack App</div>
+                            <div class="c-menu_item__link_icon" data-qa="menu_item_link_icon" role="presentation"><i
+                                    class="c-icon c-menu_item__link-indicator c-icon--external-link c-icon--inherit"
+                                    type="external-link" data-qa="menu_item_link_indicator" role="presentation"
+                                    aria-hidden="true"></i></div>
+                        </a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Invite modal-->
+<div id="invitesModal" class="invites-modal">
+    <div class="form_container">
+        <div class="workspace_form">
+            <div class="title">
+                <p>
+                    Workspaces with paid plans can also invite guests, like contractors, vendors,
+                    or clients. See pricing plans
+                </p>
+            </div>
+            <h1 id="workspace_name_label" class="large_bottom_margin">Invite people to test-channel</h1>
+            <div class="form_flex">
+
+                <form class="confirm-form" action="/tada">
+
+                    <div class="head_form">
+                        <strong>Email Address</strong>
+                        <strong>Name (optional)</strong>
+                    </div>
+
+                    <div class="content-form-1">
+                        <input type="text" id="inviteEmail_0" class="confirm_input" placeholder="name1@example.com"
+                               value="">
+                        <input type="text" id="inviteName_0" class="confirm_input confirm_input_name"
+                               placeholder="name_1" value="">
+                        <button id="btDeleteMember_1" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-2">
+                        <input type="text" id="inviteEmail_1" class="confirm_input" placeholder="name2@example.com"
+                               value="">
+                        <input type="text" id="inviteName_1" class="confirm_input confirm_input_name"
+                               placeholder="name_2" value="">
+                        <button id="btDeleteMember_2" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-3">
+                        <input type="text" id="inviteEmail_2" class="confirm_input" placeholder="name3@example.com"
+                               value="">
+                        <input type="text" id="inviteName_2" class="confirm_input confirm_input_name"
+                               placeholder="name_3" value="">
+                        <button id="btDeleteMember_3" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <span class="add_row_invites">
+                <button class="link_button" type="button">Add another</button>
+                	or
+                <button class="link_button" type="button">and many at once</button>
+            </span>
+                    <div class="p-invite_channel_picker">
+                        <div>
+                            <label for="channel_picker_dropdown_section">
+                                <span class="c-label_text">Default Channels</span>
+                            </label>
+                            <div id="channel_picker_dropdown_section">
+            			<span class="p-invites_channel_picker_note">
+            				<span>New
+            					<strong>members</strong>
+            					will automatically join <strong>#general</strong>,
+            					<strong>#random</strong>, and
+            					<strong>#test</strong>
+            					channels.</span>
+            				<button class="link_button" type="button">Edit/add
+            				</button>
+            			</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-invite_members_form">
+            	<span>
+            		<button class="c-link--button">
+            			<span>
+            				Share invite link
+            			</span>
+            		</button>
+            	</span>
+                        <button id="inviteSend" class="invitation_button" type="button">Send Invitations</button>
+                    </div>
+                </form>
+            </div>
+            <hr class="hr-footer">
+            <div class="p-footer">
+                <button class="pending_invites_link c-link--button" type="button">
+                    See pending and accepted invites
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button id="invitesModalClose" class="invites-modal-close" type="button">
+        X
+    </button>
+</div>
 
 <!-- <div class="workspace-container">
     <div class="workspace-box">
@@ -370,7 +596,7 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__invite_people__button">
+                                                    <button class="p-channel_sidebar__invite_people__button" id="invite-button">
                                                         <span class="p-channel_sidebar__name-2">✚ Invite people</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">

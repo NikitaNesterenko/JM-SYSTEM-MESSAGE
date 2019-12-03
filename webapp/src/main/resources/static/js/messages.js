@@ -105,17 +105,14 @@ window.updateMessages = function updateMessages() {
     let last_month_show;
     let last_day_show;
 
-    const today = new Date();
+    let today = new Date();
 
-    const day = today.getDate();
+    let startDate = new Date();
+    let endDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 4);
 
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
+    const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, startDate, endDate);
 
-    const stringDateStart = [year - 1, month, day].join("-");
-    const stringDateEnd = [year, month, day + 1].join("-");
-
-    const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, stringDateStart, stringDateEnd);
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
         messages.forEach(function (message, i) {
 
