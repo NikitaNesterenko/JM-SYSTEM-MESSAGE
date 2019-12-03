@@ -23,21 +23,28 @@ window.addEventListener('load', function () {
 
 function showSearchResult(channels, users) {
     $('#idSearchContent').html('<ol role="listbox">'
+        + '<div class="search_channels_in_modal" id="search_channel_in_modal_id">'
         + showChannels(channels)
+        + '</div>'
+        + '<div class="search_users_in_modal">'
         + showUsers(users)
+        + '</div>'
         + '</ol>')
 }
 
+
 function showChannels(channels) {
-    return channels.map((channel) => displayItem(channel.name)).join("");
+    return channels.map((channel) => displayItem(channel.id, "channel", channel.name)).join("");
+
 }
 
 function showUsers(users) {
-    return users.map((user) => displayItem(user.name + " " + user.lastName)).join("");
+    return users.map((user) => displayItem(user.id, "user",user.name + " " + user.lastName)).join("");
+
 }
 
-function displayItem(itemName) {
-    return '<li class="search-field-li">'
+function displayItem(id, itemClass, itemName) {
+    return '<li class="search-field-li" data-type="' + itemClass + '" data-id="' + id + '">'
         + '<div class="search-field-name">'
         + itemName
         + '</div>'
@@ -55,4 +62,20 @@ $('#searchInput').bind("change paste keyup", function() {
     });
     showSearchResult(searched_channel, searched_users);
 });
+
+
+$("#idSearchContent").on("click", "li.search-field-li", function(){
+    const id = $(this).data("id");
+    const type = $(this).data("type");
+    if (type=="channel") {
+        pressChannelButton(id);
+        sessionStorage.setItem("channelName", id);
+    } else if (type=="user") {
+        console.log("Открытие личной переписки с User с id=" + id);
+    }
+    $("#modalSearcher").modal("hide");
+});
+
+
+
 
