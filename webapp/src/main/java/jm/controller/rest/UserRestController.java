@@ -82,6 +82,10 @@ public class UserRestController {
             logger.info(user.toString());
         }
         return ResponseEntity.ok(users);
+        for (User user : userService.getAllUsersInThisChannel(id)) {
+            logger.info(user.toString());
+        }
+        return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
     }
 
     @GetMapping(value = "/loggedUser")

@@ -31,4 +31,7 @@ public class InputMessage {
     private User user;
 
     private Bot bot;
+
+    private String filename;
+
 }
