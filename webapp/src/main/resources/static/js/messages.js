@@ -51,7 +51,7 @@ const getUser = async () => {
     return [user];
 };
 
-let getMessageStatus = (message) => {
+const getMessageStatus = (message) => {
     getUser().then(res => {
         if (message.user == null) {
             return;

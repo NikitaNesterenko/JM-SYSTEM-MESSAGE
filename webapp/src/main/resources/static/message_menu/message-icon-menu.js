@@ -1,6 +1,7 @@
 import {MessageRestPaginationService, UserRestPaginationService} from "../js/rest/entities-rest-pagination.js";
 import {star_button_blank, star_button_filled} from "../js/messages.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
+import {updateAllMessages} from "../js/messages.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
@@ -36,8 +37,8 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
                     + `</span>`);
             });
         }
-
         populateRightPane();
+        updateAllMessages();
     });
 });
 
@@ -48,7 +49,7 @@ const getUserAndMessage = async (id) => {
 };
 
 // open right panel
-let populateRightPane = () => {
+let populateRightPane = (user) => {
     $('.p-flexpane__title_container').text('Starred Items');
     const target_element = $('.p-flexpane__inside_body-scrollbar__child');
     target_element.empty();
@@ -66,6 +67,42 @@ let populateRightPane = () => {
                     }
                 });
         });
+};
+
+// toggle right panel
+let is_open;
+$(document).on('load', () => is_open = false);
+
+let toggle_right_menu = () => {
+    if (is_open) {
+        close_right_panel();
+        is_open = false;
+    } else {
+        open_right_panel();
+        // populateRightPane();
+        is_open = true;
+    }
+};
+
+$('.p-classic_nav__right__star__button').on('click', () => {
+    populateRightPane();
+    toggle_right_menu();
+});
+
+$(document).on('click', '#to-starred-messages-link', () => {
+    populateRightPane();
+    toggle_right_menu();
+});
+
+// right panel msg menu
+const back_to_msg = '&#8678;';
+const starred_message_menu = (message) => {
+    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
+        `<div class="btn-group" role="group" aria-label="Basic example">` +
+        `<button type="button" class="btn btn-light">${back_to_msg}</button>` + // back
+        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
+        `</div>` +
+        `</div>`;
 };
 
 let add_msg_to_right_panel = (time, message) => {
@@ -114,38 +151,4 @@ let add_empty_content_to_right_panel = () => {
                                                     </p>
                                                 </div>
                                           </div>`;
-};
-
-// toggle right panel
-let is_open;
-$(document).on('load', () => is_open = false);
-
-let toggle_right_menu = () => {
-    if (is_open) {
-        close_right_panel();
-        is_open = false;
-    } else {
-        open_right_panel();
-        populateRightPane();
-        is_open = true;
-    }
-};
-
-$('.p-classic_nav__right__star__button').on('click', () => {
-    toggle_right_menu();
-});
-
-$(document).on('click', '#to-starred-messages-link', () => {
-    toggle_right_menu();
-});
-
-// right panel msg menu
-const back_to_msg = '&#8678;';
-const starred_message_menu = (message) => {
-    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
-        `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${back_to_msg}</button>` + // back
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
-        `</div>` +
-        `</div>`;
 };
