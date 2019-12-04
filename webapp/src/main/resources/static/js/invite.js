@@ -56,7 +56,9 @@ window.addEventListener('load', function () {
         let invites = [];
 
         $.each(content_invites, (i, item) => {
-            invites.push(new Invite(emails[i].value, names[i].value));
+            if (emails[i].value != '') {
+                invites.push(new Invite(emails[i].value, names[i].value));
+            }
         });
 
         invite_service.create(invites);
