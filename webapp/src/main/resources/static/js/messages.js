@@ -14,7 +14,7 @@ function connect() {
             let result  = JSON.parse(message.body);
             if(result.user !== null) {
                 showMessage(result);
-                notifyParseMessage(result);
+                sendNotification(result);
             } else {
                 showBotMessage(result)
             }
@@ -35,7 +35,8 @@ window.sendName = function sendName(message) {
         'dateCreate': message.dateCreate,
         'user': message.user,
         'bot': message.bot,
-        'filename': message.filename
+        'filename': message.filename,
+        'channel': message.channel
     }));
 };
 

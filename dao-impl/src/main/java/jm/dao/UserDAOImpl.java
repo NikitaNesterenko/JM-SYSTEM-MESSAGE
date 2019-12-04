@@ -37,6 +37,15 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
+    public User getUserByName(String name) {
+        try {
+            return (User) entityManager.createQuery("from User where name  = :name").setParameter("name", name).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public void addRoleForUser(User user, String role) {
 
     }

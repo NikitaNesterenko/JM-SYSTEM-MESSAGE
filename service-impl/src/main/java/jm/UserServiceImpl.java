@@ -65,4 +65,7 @@ public class UserServiceImpl implements UserService {
         return userDAO.getAllUsersInThisChannel(id);
     }
 
+    @Override
+    public User getUserByName(String name) { return userDAO.getUserByName(name); }
+
 }
