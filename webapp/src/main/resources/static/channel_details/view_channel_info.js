@@ -20,7 +20,10 @@ $('.p-classic_nav__model__button__details').on('click', () => {
 });
 
 const get_channel_info_panel = () => {
-    $('.p-flexpane__inside_body-scrollbar__child').append(`<div class="p-flexpane__inside_body__details_section">
+    $('.p-flexpane__title_container').text('About this channel');
+    const target_element = $('.p-flexpane__inside_body-scrollbar__child');
+    target_element.empty();
+    target_element.append(`<div class="p-flexpane__inside_body__details_section">
                                                     <button class="p-channel_details_section__header">
                                                     <span class="p-channel_details_section__title">
                                                         <i class="p-channel_details_section__icon">ⓘ</i>
