@@ -57,11 +57,17 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void updateMessage(Message message) {
         messageDAO.merge(message);
+
     }
 
     @Override
     public List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate) {
         return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
+    }
+
+    @Override
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate) {
+        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate);
     }
 
 }

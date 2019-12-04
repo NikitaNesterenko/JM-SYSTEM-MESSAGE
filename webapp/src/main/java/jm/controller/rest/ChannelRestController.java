@@ -1,9 +1,11 @@
 package jm.controller.rest;
 
+import jm.UserService;
 import jm.model.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
 import jm.model.User;
+import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -19,6 +23,7 @@ import java.util.List;
 public class ChannelRestController {
 
     private ChannelService channelService;
+    private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             ChannelRestController.class);
@@ -28,6 +33,10 @@ public class ChannelRestController {
         this.channelService = channelService;
     }
 
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
@@ -37,7 +46,13 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Channel> createChannel(@RequestBody Channel channel) {
+    public ResponseEntity<Channel> createChannel(Principal principal, @RequestBody Channel channel, HttpServletRequest request) {
+        if (principal != null) {
+            User owner = userService.getUserByLogin(principal.getName());
+            Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+            channel.setUser(owner);
+            channel.setWorkspace(workspace);
+        }
         try {
             channelService.createChannel(channel);
             logger.info("Cозданный channel: {}", channel);

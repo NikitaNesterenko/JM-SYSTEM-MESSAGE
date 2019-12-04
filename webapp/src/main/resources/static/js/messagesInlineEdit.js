@@ -35,9 +35,11 @@ function onEditButtonClick(ev) {
     const parentDiv = document.getElementById("message_id-" + messageId);
     const spanElement = parentDiv.getElementsByClassName("c-message__body")[0];
     const messageText = spanElement.innerText;
+    const attachment = parentDiv.getElementsByClassName("c-message__attachment")[0];
+    const attachmentName = attachment === undefined ? '' : attachment.innerText;
 
     parentDiv.innerHTML = `<div class="c-message__inline_editor">
-    <form data-message-id="${messageId}">
+    <form data-message-id="${messageId}" data-attachment=${attachmentName}>
         <input class="c-message__inline_editor_input" type="text" value="${messageText}"/>
     </form>
 </div>`;
@@ -49,6 +51,7 @@ function onEditSubmit(ev) {
     const editMessageForm = ev.target;
     // const parentDiv = editMessageForm.parentElement.parentElement;
     const messageId = editMessageForm.getAttribute("data-message-id");
+    const messageAttachment = editMessageForm.getAttribute("data-attachment");
     const messageText = editMessageForm[0].value;
 
     // parentDiv.innerHTML = `<span class="c-message__body">${messageText}</span>`;
@@ -66,7 +69,8 @@ function onEditSubmit(ev) {
             "user": user,
             "channel": channel,
             "content": messageText,
-            "dateCreate": currentDate
+            "dateCreate": currentDate,
+            "filename": messageAttachment
         };
         message_service.update(message).then(() => {
             sendName(message);
