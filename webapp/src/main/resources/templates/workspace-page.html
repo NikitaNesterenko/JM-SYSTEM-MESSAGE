@@ -11,13 +11,13 @@
     <script defer th:src="@{/js/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
-<!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
+    <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/channel_topic.js}" type="module"></script>
 
     <script defer th:src="@{/js/user_view_edit.js}" type="module"></script>
 
-<!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
+    <!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
 
@@ -30,10 +30,10 @@
 
     <script src="/js/helper_functions.js"></script>
 
-<!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
-    <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
-    <link rel="stylesheet" th:href="@{/css/button.css}"/>
-    <script src="/js/displayDiv.js"></script> -->
+    <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
+        <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
+        <link rel="stylesheet" th:href="@{/css/button.css}"/>
+        <script src="/js/displayDiv.js"></script> -->
 
     <link rel="stylesheet" th:href="@{/css/workspace-page.css}"/>
     <link rel="stylesheet" th:href="@{/css/workspace-page-old.css}"/>
@@ -48,15 +48,16 @@
 <body class="supports_custom_scrollbar">
 
 <!-- Small modal -->
-<div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <img src="" id="modal_1_user_img" class="img-fluid rounded-top" alt="...">
             <div class="container">
-                <button  id="modal_1_user_profile_button" type="button" class="btn btn-link">Sasha Grey</button>
+                <button id="modal_1_user_profile_button" type="button" class="btn btn-link">Sasha Grey</button>
             </div>
             <div id="modal_1_user_status" class="container">
-<!--                status-->
+                <!--                status-->
                 <button id="modal_1_set_status_btn" type="button" class="btn btn-link">Set a status</button>
             </div>
             <div id="modal_1_user_title" class="container">
@@ -71,7 +72,8 @@
                     <div class="col-6 py-2">
                         <!--button type="button" class="btn btn-success btn-block btn-sm">Edit Profile</button-->
 
-                        <a href="#modal_2" type="button" id="modal_1_edit_profile_btn" class="btn btn-success btn-block btn-sm" data-user_id="">Edit Profile</a>
+                        <a href="#modal_2" type="button" id="modal_1_edit_profile_btn"
+                           class="btn btn-success btn-block btn-sm" data-user_id="">Edit Profile</a>
                     </div>
                 </div>
             </div>
@@ -80,7 +82,8 @@
 </div>
 
 <!-- Second modal window-->
-<div class="modal fade bd-example-modal-lg" id="modal_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modal_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -102,36 +105,48 @@
                                     <label for="last-name">Last name</label>
                                     <input type="text" class="form-control" id="last-name" placeholder="Last name">
                                 </div>
-<!--                                <div class="form-group">-->
-<!--                                    <label for="full-name">Full name</label>-->
-<!--                                    <input type="text" class="form-control" id="full-name" placeholder="Full name">-->
-<!--                                </div>-->
+                                <!--                                <div class="form-group">-->
+                                <!--                                    <label for="full-name">Full name</label>-->
+                                <!--                                    <input type="text" class="form-control" id="full-name" placeholder="Full name">-->
+                                <!--                                </div>-->
                                 <div class="form-group">
                                     <label for="display-name">Display name</label>
-                                    <input type="text" class="form-control" id="display-name" placeholder="Display name">
-                                    <small id="display-name-help" class="form-text text-muted">This could be your first name, or a nickname — however you’d like people to refer to you in Slack.</small>
+                                    <input type="text" class="form-control" id="display-name"
+                                           placeholder="Display name">
+                                    <small id="display-name-help" class="form-text text-muted">This could be your first
+                                        name, or a nickname — however you’d like people to refer to you in Slack.
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="what-i-do">What I do</label>
                                     <input type="text" class="form-control" id="what-i-do" placeholder="What I do">
-                                    <small id="what-i-do-help" class="form-text text-muted">Let people know what you do at Java Mentoring.</small>
+                                    <small id="what-i-do-help" class="form-text text-muted">Let people know what you do
+                                        at Java Mentoring.
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="phone-number">Phone number</label>
-                                    <input type="text" class="form-control" id="phone-number" placeholder="(123) 555-5555">
-                                    <small id="phone-number-help" class="form-text text-muted">Enter a phone number.</small>
+                                    <input type="text" class="form-control" id="phone-number"
+                                           placeholder="(123) 555-5555">
+                                    <small id="phone-number-help" class="form-text text-muted">Enter a phone number.
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="time-zone">Time zone</label>
-                                    <select  id="time-zone" class="form-control">
+                                    <select id="time-zone" class="form-control">
                                         <option>Time zone</option>
                                     </select>
-                                    <small id="time-zone-help" class="form-text text-muted">Your current time zone. Used to send summary and notification emails, for times in your activity feeds, and for reminders.</small>
+                                    <small id="time-zone-help" class="form-text text-muted">Your current time zone. Used
+                                        to send summary and notification emails, for times in your activity feeds, and
+                                        for reminders.
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="skype">Skype</label>
                                     <input type="text" class="form-control" id="skype" placeholder="Skype">
-                                    <small id="skype-help" class="form-text text-muted">This will be displayed on your profile.</small>
+                                    <small id="skype-help" class="form-text text-muted">This will be displayed on your
+                                        profile.
+                                    </small>
                                 </div>
                             </form>
                         </div>
@@ -139,10 +154,11 @@
                             Profile photo
                             <img src="" id="modal_2_user_img" class="img-fluid rounded" alt="...">
                             <div class="pt-2">
-<!--                                <button type="button" class="btn btn-light btn-block">Upload an Image</button>-->
-                                <input type="button" class="btn btn-light btn-block" id="btnFileUpload" value="Upload an Image" />
+                                <!--                                <button type="button" class="btn btn-light btn-block">Upload an Image</button>-->
+                                <input type="button" class="btn btn-light btn-block" id="btnFileUpload"
+                                       value="Upload an Image"/>
                                 <span id="spnFilePath"></span>
-                                <input type="file" id="FileUpload1" style="display: none" />
+                                <input type="file" id="FileUpload1" style="display: none"/>
                             </div>
                             <div class="pt-2">
                                 <button type="button" class="btn btn-link btn-block">Remove photo</button>
@@ -153,7 +169,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
-                <button id="user_edit_submit" type="button" class="btn btn-success" data-user_id="">Save changes</button>
+                <button id="user_edit_submit" type="button" class="btn btn-success" data-user_id="">Save changes
+                </button>
             </div>
         </div>
     </div>
@@ -243,12 +260,15 @@
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <div class="p-classic_nav__model__title__info__item">
-<!--                                    <div id="topic_edit_block" class="p-classic_nav__model__title__info__topic__text">-->
-<!--                                        <span id="topic_edit_button" class="p-classic_nav__model__title__info__topic__content">✎</span>-->
-<!--                                    </div>-->
+                                    <!--                                    <div id="topic_edit_block" class="p-classic_nav__model__title__info__topic__text">-->
+                                    <!--                                        <span id="topic_edit_button" class="p-classic_nav__model__title__info__topic__content">✎</span>-->
+                                    <!--                                    </div>-->
                                     <div id="topic_string_block" class="p-classic_nav__model__title__info__topic__text">
-                                        <span id="topic_string" class="p-classic_nav__model__title__info__topic__content">Topic content</span>
-                                        <button id="topic_button" style="display: none;" class="p-classic_nav__model__title__info__topic__edit">Edit</button>
+                                        <span id="topic_string"
+                                              class="p-classic_nav__model__title__info__topic__content">Topic content</span>
+                                        <button id="topic_button" style="display: none;"
+                                                class="p-classic_nav__model__title__info__topic__edit">Edit
+                                        </button>
                                     </div>
                                 </div>
                                 <!--<span class="p-classic_nav__model__title__info__sep">|</span>-->
@@ -320,7 +340,8 @@
                                                     <button class="p-channel_sidebar__channels__button">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus" data-toggle="modal" data-target="#addChannelModal"
+                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                                data-toggle="modal" data-target="#addChannelModal"
                                                                 id="addChannelButton">✚
                                                         </button>
                                                     </div>
@@ -466,86 +487,86 @@
                             </div>
                         </div>
                     </div>
-<!--                    <footer class="p-workspace__primary_view_footer">-->
-<!--                        <div class="p-message_pane_input">-->
-<!--                            <div class="p-message_pane_input_inner">-->
-<!--                                <div class="p-workspace__input">-->
-<!--                                    <div class="menu" id="menu">-->
-<!--                                    </div>-->
-<!--                                    <div class="p-message_input_field">-->
-<!--                                        <div class="ql-buttons">-->
-<!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
-<!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
-<!--                                            </button>-->
-<!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
-<!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
-<!--                                            </button>-->
-<!--                                            <div class="associatedUserList" id="associatedUserList">-->
-<!--                                                <form>-->
-<!--                                                    <select class="associatedUserListSelect"-->
-<!--                                                            id="associatedUserListSelect" multiple-->
-<!--                                                            name="usersList"></select>-->
-<!--                                                </form>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="ql-editor">-->
-<!--                                            <form id="form_message">-->
-<!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
-<!--                                            </form>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                    <!--                    <footer class="p-workspace__primary_view_footer">-->
+                    <!--                        <div class="p-message_pane_input">-->
+                    <!--                            <div class="p-message_pane_input_inner">-->
+                    <!--                                <div class="p-workspace__input">-->
+                    <!--                                    <div class="menu" id="menu">-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="p-message_input_field">-->
+                    <!--                                        <div class="ql-buttons">-->
+                    <!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
+                    <!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
+                    <!--                                            </button>-->
+                    <!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
+                    <!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
+                    <!--                                            </button>-->
+                    <!--                                            <div class="associatedUserList" id="associatedUserList">-->
+                    <!--                                                <form>-->
+                    <!--                                                    <select class="associatedUserListSelect"-->
+                    <!--                                                            id="associatedUserListSelect" multiple-->
+                    <!--                                                            name="usersList"></select>-->
+                    <!--                                                </form>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+                    <!--                                        <div class="ql-editor">-->
+                    <!--                                            <form id="form_message">-->
+                    <!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
+                    <!--                                            </form>-->
+                    <!--                                        </div>-->
+                    <!--                                    </div>-->
 
-<!--<<<<<<< HEAD-->
-<!--                    <footer class="p-workspace__primary_view_footer">-->
-<!--                        <div class="p-message_pane_input">-->
-<!--                            <div class="p-message_pane_input_inner">-->
-<!--                                <div class="p-workspace__input">-->
-<!--                                    <div class="menu" id="menu">-->
-<!--                                    </div>-->
-<!--                                    <div class="p-message_input_field">-->
-<!--                                        <div class="ql-buttons">-->
-<!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
-<!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
-<!--                                            </button>-->
-<!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
-<!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
-<!--                                            </button>-->
-<!--                                            <div class="associatedUserList" id="associatedUserList">-->
-<!--                                                <form>-->
-<!--                                                    <select class="associatedUserListSelect"-->
-<!--                                                            id="associatedUserListSelect" multiple-->
-<!--                                                            name="usersList"></select>-->
-<!--                                                </form>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="ql-editor">-->
-<!--                                            <form id="form_message">-->
-<!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
-<!--                                            </form>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <button class="p-message_input_file_button">-->
-<!--                                        <i class="c-icon&#45;&#45;paperclip">📎</i>-->
-<!--                                        <input type="file" style="display:none" id="fileDialog"/>-->
-<!--                                    </button>-->
-<!--=======-->
-<!--&lt;!&ndash;                                    <button class="p-message_input_file_button">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <i class="c-icon&#45;&#45;paperclip">📎</i>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </button>&ndash;&gt;-->
-<!--&gt;>>>>>> dev-->
+                    <!--<<<<<<< HEAD-->
+                    <!--                    <footer class="p-workspace__primary_view_footer">-->
+                    <!--                        <div class="p-message_pane_input">-->
+                    <!--                            <div class="p-message_pane_input_inner">-->
+                    <!--                                <div class="p-workspace__input">-->
+                    <!--                                    <div class="menu" id="menu">-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="p-message_input_field">-->
+                    <!--                                        <div class="ql-buttons">-->
+                    <!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
+                    <!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
+                    <!--                                            </button>-->
+                    <!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
+                    <!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
+                    <!--                                            </button>-->
+                    <!--                                            <div class="associatedUserList" id="associatedUserList">-->
+                    <!--                                                <form>-->
+                    <!--                                                    <select class="associatedUserListSelect"-->
+                    <!--                                                            id="associatedUserListSelect" multiple-->
+                    <!--                                                            name="usersList"></select>-->
+                    <!--                                                </form>-->
+                    <!--                                            </div>-->
+                    <!--                                        </div>-->
+                    <!--                                        <div class="ql-editor">-->
+                    <!--                                            <form id="form_message">-->
+                    <!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
+                    <!--                                            </form>-->
+                    <!--                                        </div>-->
+                    <!--                                    </div>-->
+                    <!--                                    <button class="p-message_input_file_button">-->
+                    <!--                                        <i class="c-icon&#45;&#45;paperclip">📎</i>-->
+                    <!--                                        <input type="file" style="display:none" id="fileDialog"/>-->
+                    <!--                                    </button>-->
+                    <!--=======-->
+                    <!--&lt;!&ndash;                                    <button class="p-message_input_file_button">&ndash;&gt;-->
+                    <!--&lt;!&ndash;                                        <i class="c-icon&#45;&#45;paperclip">📎</i>&ndash;&gt;-->
+                    <!--&lt;!&ndash;                                    </button>&ndash;&gt;-->
+                    <!--&gt;>>>>>> dev-->
 
-<!--                                </div>-->
+                    <!--                                </div>-->
 
-<!--                                <div class="p-notification_bar">-->
-<!--                                    <div class="p-notification_bar__section&#45;&#45;left"></div>-->
-<!--                                    <div class="p-notification_bar__section&#45;&#45;right">-->
-<!--                                        <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                    <!--                                <div class="p-notification_bar">-->
+                    <!--                                    <div class="p-notification_bar__section&#45;&#45;left"></div>-->
+                    <!--                                    <div class="p-notification_bar__section&#45;&#45;right">-->
+                    <!--                                        <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
 
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </footer>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </footer>-->
 
                 </div>
             </div>
@@ -689,7 +710,7 @@
 
                             </div>
                             <span id="attached_file"></span>
-                            <input type="file" id="file_selector" style="display: none" />
+                            <input type="file" id="file_selector" style="display: none"/>
 
                             <div class="p-notification_bar">
                                 <div class="p-notification_bar__section--left"></div>
@@ -706,17 +727,17 @@
         </div>
     </div>
 
-<!--     <div id="info-box" class="info-box" style="display:none;">
-        <h3>Info Box</h3>
-        <p>-</p>
-        <h3>Users</h3>
-        <p>-</p>
-        <p>
-        <h3><a href="/searchUsers">Search User</a></h3>
-        <p>-</p>
-        <div class="user-box" id="user-box">
-        </div>
-    </div> -->
+    <!--     <div id="info-box" class="info-box" style="display:none;">
+            <h3>Info Box</h3>
+            <p>-</p>
+            <h3>Users</h3>
+            <p>-</p>
+            <p>
+            <h3><a href="/searchUsers">Search User</a></h3>
+            <p>-</p>
+            <div class="user-box" id="user-box">
+            </div>
+        </div> -->
 
 </div>
 
@@ -759,7 +780,8 @@
 <!--    </div>-->
 <!--</div>-->
 
-<div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -772,7 +794,8 @@
                 <form method="post">
                     <div class="form-group">
                         <label for="exampleInputChannelName">Название канала</label>
-                        <input type="email" class="form-control" id="exampleInputChannelName" placeholder="Введите название канала">
+                        <input type="email" class="form-control" id="exampleInputChannelName"
+                               placeholder="Введите название канала">
                     </div>
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -781,7 +804,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал</button>
+                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал
+                </button>
             </div>
         </div>
     </div>
