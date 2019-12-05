@@ -46,6 +46,9 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
+    @Column(name = "filename")
+    private String filename;
+
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(
             name="starred_message_user",

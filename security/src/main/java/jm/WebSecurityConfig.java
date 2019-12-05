@@ -77,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // For USER and OWNER
         http.authorizeRequests()
-                .antMatchers("/user/**", "/rest/**")
+                .antMatchers("/user/**", "/rest/**", "/upload")
                 .hasAnyRole("OWNER", "USER")
                 .anyRequest().authenticated();
 

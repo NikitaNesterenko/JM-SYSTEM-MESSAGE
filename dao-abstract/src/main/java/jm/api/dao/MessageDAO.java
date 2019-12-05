@@ -14,6 +14,8 @@ public interface MessageDAO {
 
     List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate);
 
+    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate);
+
     void persist(Message message);
 
     void deleteById(Long id);

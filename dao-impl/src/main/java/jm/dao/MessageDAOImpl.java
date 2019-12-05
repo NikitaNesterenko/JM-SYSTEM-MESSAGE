@@ -52,6 +52,22 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     @Override
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate) {
+        try {
+            List<Message> resultList = entityManager.createNativeQuery("SELECT * FROM messages " +
+                                                                "WHERE bot_id = ? AND channel_id = ? AND date_create BETWEEN ? AND ? ORDER BY date_create", Message.class)
+                    .setParameter(1, botId)
+                    .setParameter(2, channelId)
+                    .setParameter(3, startDate)
+                    .setParameter(4, endDate)
+                    .getResultList();
+            return resultList;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public List<Message> getStarredMessagesForUser(Long id) {
         try {
             return entityManager.createQuery(
