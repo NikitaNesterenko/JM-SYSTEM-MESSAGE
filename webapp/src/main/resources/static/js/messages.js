@@ -5,6 +5,8 @@ import {
     UserRestPaginationService,
 } from './rest/entities-rest-pagination.js'
 
+import {getMessageStatus} from "../message_menu/message-icon-menu.js";
+
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
@@ -46,28 +48,6 @@ window.sendName = function sendName(message) {
 };
 
 // message menu buttons
-const getUser = async () => {
-    const user = await user_service.getLoggedUser();
-    return [user];
-};
-
-const getMessageStatus = (message) => {
-    getUser().then(res => {
-        if (message.user == null) {
-            return;
-        }
-
-        let user = res[0];
-        let starredBy = message["starredByWhom"];
-        if (starredBy.find(usr => usr.id === user.id)) {
-            $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
-            $(`#message_${message.id}_user_${message.user.id}_content`).prepend(
-                `<span id="message_${message.id}_user_${message.user.id}_starred" class="">`
-                + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
-                + `</span>`);
-        }
-    });
-};
 
 const emoji_button = '&#9786;';
 const reply_button = '&#128172;';

@@ -29,16 +29,17 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
             starredBy.push(user);
             msg["starredByWhom"] = starredBy;
             message_service.update(msg).then(() => {
-                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_filled);
-                $(`#message_${msg_id}_user_${msg.user.id}_content`).prepend(
-                    `<span id="message_${msg_id}_user_${msg.user.id}_starred" class="">`
-                    + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">`
-                    + `Added to your starred items.</button>`
-                    + `</span>`);
+                add_msg_starred_attr(msg);
             });
         }
-        populateRightPane();
-        updateAllMessages();
+
+        if (is_open) {
+            toggle_right_menu();
+            toggle_right_menu();
+        }
+
+        // populateRightPane();
+        // updateAllMessages();
     });
 });
 
@@ -46,6 +47,21 @@ const getUserAndMessage = async (id) => {
     const user = await user_service.getLoggedUser();
     const msg = await message_service.getById(id);
     return [user, msg];
+};
+
+const getUser = async () => {
+    const user = await user_service.getLoggedUser();
+    return [user];
+};
+
+export const getMessageStatus = (message) => {
+    getUser().then(res => {
+        let user = res[0];
+        let starredBy = message["starredByWhom"];
+        if (starredBy.find(usr => usr.id === user.id)) {
+            add_msg_starred_attr(message);
+        }
+    });
 };
 
 // open right panel
@@ -79,18 +95,16 @@ let toggle_right_menu = () => {
         is_open = false;
     } else {
         open_right_panel();
-        // populateRightPane();
+        populateRightPane();
         is_open = true;
     }
 };
 
 $('.p-classic_nav__right__star__button').on('click', () => {
-    populateRightPane();
     toggle_right_menu();
 });
 
 $(document).on('click', '#to-starred-messages-link', () => {
-    populateRightPane();
     toggle_right_menu();
 });
 
@@ -105,7 +119,7 @@ const starred_message_menu = (message) => {
         `</div>`;
 };
 
-let add_msg_to_right_panel = (time, message) => {
+const add_msg_to_right_panel = (time, message) => {
     return `<div class="c-virtual_list__item right-panel-msg-menu">
                                         <div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
@@ -136,7 +150,7 @@ let add_msg_to_right_panel = (time, message) => {
                                     </div>`;
 };
 
-let add_empty_content_to_right_panel = () => {
+const add_empty_content_to_right_panel = () => {
     return `<div class="starred-messages-empty">
                                                 <div>
                                                     <img class="starred-messages-empty_img" src="image/empty_starred_posts.png">
@@ -151,4 +165,12 @@ let add_empty_content_to_right_panel = () => {
                                                     </p>
                                                 </div>
                                           </div>`;
+};
+
+const add_msg_starred_attr = (message) => {
+    $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
+    $(`#message_${message.id}_user_${message.user.id}_content`).prepend(
+        `<span id="message_${message.id}_user_${message.user.id}_starred" class="">`
+        + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
+        + `</span>`);
 };
