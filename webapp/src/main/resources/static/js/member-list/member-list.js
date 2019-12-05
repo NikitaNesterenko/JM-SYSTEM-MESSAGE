@@ -1,7 +1,7 @@
 import {ChannelRestPaginationService} from '../rest/entities-rest-pagination.js'
 
 const channel_service = new ChannelRestPaginationService();
-let memberListExpanded = false;
+let isMemberListExpanded = false;
 
 $(document).ready(() => {
     const memberListBtn = document.getElementById("memberListBtn");
@@ -10,9 +10,20 @@ $(document).ready(() => {
 
 function memberListBtnClick() {
     const memberListCaretSymbol = document.getElementById('memberListCaretSymbol');
-    if (!memberListExpanded) {
-        memberListExpanded = true;
+    if (!isMemberListExpanded) {
+        isMemberListExpanded = true;
         memberListCaretSymbol.innerText = "▼";
+        refreshMemberList();
+    } else {
+        isMemberListExpanded = false;
+        memberListCaretSymbol.innerText = "►";
+        const memberListPlaceholder = document.getElementById("memberListPlaceholder");
+        memberListPlaceholder.innerHTML = '';
+    }
+}
+
+export function refreshMemberList() {
+    if (isMemberListExpanded) {
         const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
         channel_promise.then(function (channel) {
             const channelUsers = channel.users;
@@ -29,12 +40,8 @@ function memberListBtnClick() {
     </button>
 </li>`
             }
+            memberListPlaceholder.innerHTML = '';
             memberListPlaceholder.append(memberListContent);
         })
-    } else {
-        memberListExpanded = false;
-        memberListCaretSymbol.innerText = "►";
-        const memberListPlaceholder = document.getElementById("memberListPlaceholder");
-        memberListPlaceholder.innerHTML = '';
     }
 }

@@ -1,5 +1,6 @@
 import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
+import {refreshMemberList} from "./member-list/member-list.js";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
@@ -47,6 +48,7 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     const channel_id = parseInt($(this).val());
     pressChannelButton(channel_id);
     sessionStorage.setItem("channelName",channel_id);
+    refreshMemberList();
 });
 
 
