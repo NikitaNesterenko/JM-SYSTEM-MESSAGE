@@ -21,7 +21,13 @@ class Message {
     }
 }
 
-$('#form_message').submit(function () {
+$('#form_message').submit(function (e) {
+    let input_element = document.getElementById("form_message_input");
+    let attach_file = document.getElementById("file_selector");
+    if(input_element.value.length === 0 && attach_file.value === null && (jQuery.trim(input_element.value)).length ===0) {
+        e.preventDefault();
+        return;
+    }
     const user_promise = user_service.getLoggedUser();
     const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
     Promise.all([user_promise, channel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
@@ -68,7 +74,9 @@ export const file_upload_to_message = $(function () {
         } else {
             $('#attached_file').html("");
         }
+        $("#form_message_input").focus();
     });
+
 });
 
 
