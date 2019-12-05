@@ -1,6 +1,6 @@
 package jm.controller.rest;
 
-gitimport jm.dto.UserDTO;
+import jm.dto.UserDTO;
 import jm.UserService;
 import jm.model.User;
 import org.slf4j.Logger;
