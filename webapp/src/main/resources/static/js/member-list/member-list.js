@@ -8,7 +8,7 @@ $(document).ready(() => {
     memberListBtn.addEventListener("click", memberListBtnClick)
 });
 
-function memberListBtnClick(ev) {
+function memberListBtnClick() {
     const memberListCaretSymbol = document.getElementById('memberListCaretSymbol');
     if (!memberListExpanded) {
         memberListExpanded = true;
@@ -16,8 +16,8 @@ function memberListBtnClick(ev) {
         const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
         channel_promise.then(function (channel) {
             const channelUsers = channel.users;
-            console.log("channelUsers:");
-            console.log(channelUsers);
+            // console.log("channelUsers:");
+            // console.log(channelUsers);
             const memberListPlaceholder = document.getElementById("memberListPlaceholder");
             let memberListContent = document.createElement('ul');
             memberListContent.className = 'p-channel_details__members_list';
