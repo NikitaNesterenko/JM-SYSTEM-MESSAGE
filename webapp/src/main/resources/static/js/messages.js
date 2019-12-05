@@ -31,6 +31,7 @@ function connect() {
             } else {
                 showBotMessage(result)
             }
+            updateMessages();
         });
     });
 }

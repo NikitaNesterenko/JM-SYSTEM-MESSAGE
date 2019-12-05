@@ -12,10 +12,6 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
         let user = user_and_msg[0];
         let msg = user_and_msg[1];
 
-        if (msg.user == null) {
-            return;
-        }
-
         let starredBy = msg["starredByWhom"];
 
         if (starredBy.find(usr => usr.id === user.id)) {
@@ -37,9 +33,6 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
             toggle_right_menu();
             toggle_right_menu();
         }
-
-        // populateRightPane();
-        // updateAllMessages();
     });
 });
 
