@@ -33,7 +33,7 @@ public abstract class AbstractMessage {
     private Bot bot;
 
     @Column(name = "content", nullable = false)
-    @EqualsAndHashCode.Include  // ?
+    @EqualsAndHashCode.Include
     private String content;
 
     @Column(name = "date_create", nullable = false)
