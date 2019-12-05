@@ -1,16 +1,13 @@
 package jm.controller.rest;
 
-
-import jm.dto.UserDTO;
-import jm.model.User;
+gitimport jm.dto.UserDTO;
 import jm.UserService;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -55,16 +52,16 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/update")
+    @PreAuthorize("#user.login == authentication.principal.username")
     public ResponseEntity updateUser(@RequestBody User user) {
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
-            userService.updateUser(user);
-            logger.info("Обновленный пользователь: {}", user);
-            return new ResponseEntity(HttpStatus.OK);
         }
+        userService.updateUser(user);
+        logger.info("Обновленный пользователь: {}", user);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -75,7 +72,7 @@ public class UserRestController {
     }
 
     @GetMapping(value = "/channel/{id}")
-    public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id){
+    public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
         List<User> users = userService.getAllUsersInThisChannel(id);
         for (User user : users) {
@@ -85,8 +82,8 @@ public class UserRestController {
     }
 
     @GetMapping(value = "/loggedUser")
-    public ResponseEntity<User> getLoggedUserId(Principal principal){
-        User user  = userService.getUserByLogin(principal.getName());
+    public ResponseEntity<User> getLoggedUserId(Principal principal) {
+        User user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
         return ResponseEntity.ok(user);
     }

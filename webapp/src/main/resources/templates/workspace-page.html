@@ -23,6 +23,15 @@
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
 
+    <!-- emoji -->
+<!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
+    <script th:src="@{/js/emoji/index.min.js}"></script>
+    <script defer th:src="@{/js/emoji/attachEmoji.js}" type="module"></script>
+
+    <!-- edit messages inline -->
+    <link rel="stylesheet" th:href="@{/css/messagesInlineEdit.css}"/>
+    <script defer th:src="@{/js/messagesInlineEdit.js}" type="module"></script>
+
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
@@ -664,7 +673,7 @@
                                 </div>
                                 <div class="p-message_input_field">
                                     <div class="ql-buttons">
-                                        <button class="c-texty_input__button--emoji">
+                                        <button class="c-texty_input__button--emoji" id="inputEmojiButton">
                                             <i class="c-icon--smile-o">😊</i>
                                         </button>
                                         <button class="c-texty_input__button" id="showAssociatedUsers">
