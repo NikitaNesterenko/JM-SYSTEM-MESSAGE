@@ -40,11 +40,11 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
-        String query = "SELECT ch.id, ch.name " +
-                "FROM channels_users chu " +
-                "INNER JOIN channels ch ON chu.channel_id = ch.id " +
-                "INNER JOIN workspaces ws ON ch.workspace_id = ws.id " +
-                "INNER JOIN users u ON chu.user_id = u.id " +
+        String query = "SELECT ch.id, ch.name, ch.is_private " +
+                "FROM channels ch " +
+                "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
+                "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
+                "LEFT JOIN users u ON chu.user_id = u.id " +
                 "WHERE (ws.id = :workspace_id AND ((u.id = :user_id AND ch.is_private = true) OR ch.is_private = false)) " +
                 "GROUP BY ch.id";
 

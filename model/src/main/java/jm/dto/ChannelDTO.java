@@ -13,4 +13,6 @@ public class ChannelDTO {
 
     private String name;
 
+    private Boolean isPrivate;
+
 }

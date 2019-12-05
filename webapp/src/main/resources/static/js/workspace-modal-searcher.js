@@ -1,7 +1,8 @@
-import {ChannelRestPaginationService, UserRestPaginationService} from './rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 
 const channel_service = new ChannelRestPaginationService();
 const user_service = new UserRestPaginationService();
+const workspace_service = new WorkspaceRestPaginationService();
 
 let available_users;
 let available_channels;
@@ -11,13 +12,18 @@ window.addEventListener('load', function () {
     const searcher_btn = document.getElementById("buttonSearcher");
     searcher_btn.onclick = function () {
         searcher_modal.style.display = "block";
-        const load_channels = channel_service.getChannelsByWorkspaceAndUser(1,1);
-        const load_users = user_service.getUsersByWorkspace(1);
-        Promise.all([load_channels, load_users]).then(values => {
-            available_channels = values[0];
-            available_users = values[1];
-            showSearchResult(available_channels, available_users);
+        const work = workspace_service.getChoosedWorkspace();
+        const user = user_service.getLoggedUser();
+        Promise.all([work, user]).then(id_values => {
+            const load_channels = channel_service.getChannelsByWorkspaceAndUser(id_values[0].id, id_values[1].id);
+            const load_users = user_service.getUsersByWorkspace(id_values[0].id);
+            Promise.all([load_channels, load_users]).then(values => {
+                available_channels = values[0];
+                available_users = values[1];
+                showSearchResult(available_channels, available_users);
+            })
         })
+
     };
 });
 
@@ -34,19 +40,36 @@ function showSearchResult(channels, users) {
 
 
 function showChannels(channels) {
-    return channels.map((channel) => displayItem(channel.id, "channel", channel.name)).join("");
-
+    return channels.map((channel) => displayItem(channel.id, "channel", channel.name, channelPic(channel))).join("");
 }
 
 function showUsers(users) {
-    return users.map((user) => displayItem(user.id, "user",user.name + " " + user.lastName)).join("");
-
+    return users.map((user) => displayItem(user.id, "user",user.name + " " + user.lastName, userPic(user))).join("");
 }
 
-function displayItem(id, itemClass, itemName) {
+function channelPic(channel) {
+    let pic = "#";
+    if (channel.isPrivate) {
+        pic = "*";
+    }
+    return '<i class="searcher__channel_icon_prefix">'
+        + pic
+        + '</i>';
+}
+
+function userPic(user) {
+    return '<i class="searcher__channel_icon_prefix">'
+        + '@'
+        + '</i>';
+}
+
+function displayItem(id, itemClass, itemName, pic) {
     return '<li class="search-field-li" data-type="' + itemClass + '" data-id="' + id + '">'
         + '<div class="search-field-name">'
+        + pic
+        + '<span>'
         + itemName
+        + '</span>'
         + '</div>'
         + '</li>';
 }

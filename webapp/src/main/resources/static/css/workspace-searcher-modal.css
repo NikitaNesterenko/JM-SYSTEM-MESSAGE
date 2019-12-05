@@ -47,3 +47,18 @@
     height: 100%;
     padding: 12px 30px;
 }
+
+.searcher__channel_icon_prefix {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    line-height: inherit;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    display: inline-block;
+    vertical-align: middle;
+    width: 30px;
+    flex-shrink: 0;
+}

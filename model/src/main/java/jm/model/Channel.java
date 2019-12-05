@@ -26,7 +26,8 @@ import java.util.Set;
                 targetClass = ChannelDTO.class,
                 columns = {
                         @ColumnResult(name = "id", type = Long.class),
-                        @ColumnResult(name = "name")
+                        @ColumnResult(name = "name"),
+                        @ColumnResult(name = "is_private")
                 }
         )
 )
