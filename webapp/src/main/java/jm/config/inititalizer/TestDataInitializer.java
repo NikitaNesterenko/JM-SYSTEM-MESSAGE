@@ -5,7 +5,7 @@ import jm.WorkspaceUserRoleService;
 import jm.WorkspaceUserRoleServiceImpl;
 import jm.api.dao.*;
 import jm.model.*;
-import jm.model.Bot;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TestDataInitializer {
 
@@ -33,7 +34,8 @@ public class TestDataInitializer {
     @Autowired
     private BotDAO botDAO;
     @Autowired
-    private WorkspaceUserRoleService workspaceUserRoleService;
+    private WorkspaceUserRoleDAO workspaceUserRoleDAO;
+
 
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
@@ -42,7 +44,19 @@ public class TestDataInitializer {
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
 
-    public TestDataInitializer() {
+    @AllArgsConstructor
+    private enum UserData {
+        USER_1("John", "Doe", "login_1", "pass_1", "john.doe@testmail.com"),
+        USER_2("Степан", "Сидоров", "login_2", "pass_2", "sidorov@testmail.com"),
+        USER_3("Петр", "Петров", "login_3", "pass_3", "petrov@testmail.com"),
+        USER_4("foo", "bar", "login_4", "pass_4", "foobar@testmail.com"),
+        USER_5("James", "Smith", "login_5", "pass_5", "smith@testmail.com");
+
+        private final String name;
+        private final String lastName;
+        private final String login;
+        private final String password;
+        private final String email;
     }
 
     private void init() {
@@ -58,6 +72,7 @@ public class TestDataInitializer {
         createBots();
         createChannels();
         createMessages();
+        createLinkRoles();
     }
 
     private void createRoles() {
@@ -73,49 +88,76 @@ public class TestDataInitializer {
     }
 
     private void createUsers() {
-        Set<Role> userRoleSet = new HashSet<>();
-        Role userRole = null;
-        for (Role role : this.roles) {
-            if ("ROLE_USER".equals(role.getAuthority())) {
-                userRole = role;
+        Set<Role> userRoleSet = this.roles.stream()
+                .filter(role -> "ROLE_USER".equals(role.getAuthority())).collect(Collectors.toSet());
 
-            }
-        }
-        userRoleSet.add(userRole);
+        Set<Role> ownerRoleSet = this.roles.stream()
+                .filter(role -> "ROLE_OWNER".equals(role.getAuthority())).collect(Collectors.toSet());
 
         User user_1 = new User();
 
-        user_1.setName("name_1");
-        user_1.setLastName("last-name_1");
-        user_1.setLogin("login_1");
-        user_1.setEmail("mymail_1@testmail.com");
-        user_1.setPassword("pass_1");
-        user_1.setRoles(userRoleSet);
+        user_1.setName(UserData.USER_1.name);
+        user_1.setLastName(UserData.USER_1.lastName);
+        user_1.setLogin(UserData.USER_1.login);
+        user_1.setEmail(UserData.USER_1.email);
+        user_1.setPassword(UserData.USER_1.password);
+        user_1.setDisplayName(UserData.USER_1.name + " " + UserData.USER_1.lastName);
+        user_1.setRoles(ownerRoleSet);
 
         userService.createUser(user_1);
         this.users.add(user_1);
 
         User user_2 = new User();
-        user_2.setName("name_2");
-        user_2.setLastName("last-name_2");
-        user_2.setLogin("login_2");
-        user_2.setEmail("mymail_2@testmail.com");
-        user_2.setPassword("pass_2");
+
+        user_2.setName(UserData.USER_2.name);
+        user_2.setLastName(UserData.USER_2.lastName);
+        user_2.setLogin(UserData.USER_2.login);
+        user_2.setEmail(UserData.USER_2.email);
+        user_2.setPassword(UserData.USER_2.password);
+        user_2.setDisplayName(UserData.USER_2.name + " " + UserData.USER_2.lastName);
         user_2.setRoles(userRoleSet);
 
         userService.createUser(user_2);
         this.users.add(user_2);
 
         User user_3 = new User();
-        user_3.setName("name_3");
-        user_3.setLastName("last-name_3");
-        user_3.setLogin("login_3");
-        user_3.setEmail("mymail_3@testmail.com");
-        user_3.setPassword("pass_3");
+
+        user_3.setName(UserData.USER_3.name);
+        user_3.setLastName(UserData.USER_3.lastName);
+        user_3.setLogin(UserData.USER_3.login);
+        user_3.setEmail(UserData.USER_3.email);
+        user_3.setPassword(UserData.USER_3.password);
+        user_3.setDisplayName(UserData.USER_3.name + " " + UserData.USER_3.lastName);
         user_3.setRoles(userRoleSet);
 
         userService.createUser(user_3);
         this.users.add(user_3);
+
+        User user_4 = new User();
+
+        user_4.setName(UserData.USER_4.name);
+        user_4.setLastName(UserData.USER_4.lastName);
+        user_4.setLogin(UserData.USER_4.login);
+        user_4.setEmail(UserData.USER_4.email);
+        user_4.setPassword(UserData.USER_4.password);
+        user_4.setDisplayName(UserData.USER_4.name + " " + UserData.USER_4.lastName);
+        user_4.setRoles(userRoleSet);
+
+        userService.createUser(user_4);
+        this.users.add(user_4);
+
+        User user_5 = new User();
+
+        user_5.setName(UserData.USER_5.name);
+        user_5.setLastName(UserData.USER_5.lastName);
+        user_5.setLogin(UserData.USER_5.login);
+        user_5.setEmail(UserData.USER_5.email);
+        user_5.setPassword(UserData.USER_5.password);
+        user_5.setDisplayName(UserData.USER_5.name + " " + UserData.USER_5.lastName);
+        user_5.setRoles(userRoleSet);
+
+        userService.createUser(user_5);
+        this.users.add(user_5);
     }
 
     private void createChannels() {
@@ -170,7 +212,7 @@ public class TestDataInitializer {
         Message message_1 = new Message();
         message_1.setChannel(channels.get(0));
         message_1.setUser(userList.get(0));
-        message_1.setContent("Hello from user_1");
+        message_1.setContent("Hello from " + userList.get(0).getDisplayName());
         message_1.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_1);
@@ -179,7 +221,7 @@ public class TestDataInitializer {
         Message message_2 = new Message();
         message_2.setChannel(channels.get(1));
         message_2.setUser(userList.get(1));
-        message_2.setContent("Hello from user_2");
+        message_2.setContent("Hello from " + userList.get(1).getDisplayName());
         message_2.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_2);
@@ -188,7 +230,7 @@ public class TestDataInitializer {
         Message message_3 = new Message();
         message_3.setChannel(channels.get(2));
         message_3.setUser(userList.get(2));
-        message_3.setContent("Hello from user_2");
+        message_3.setContent("Hello from " + userList.get(2).getDisplayName());
         message_3.setDateCreate(LocalDateTime.now());
 
         messageDAO.persist(message_3);
@@ -203,16 +245,22 @@ public class TestDataInitializer {
         messageDAO.persist(message_4);
         this.messages.add(message_4);
 
-
     }
 
     private void createWorkspaces() {
-        List<User> userList = new ArrayList<>(this.users);
+        User user_1 = this.users.stream()
+                .filter(user -> UserData.USER_1.name.equals(user.getName()))
+                .findFirst()
+                .orElse(this.users.iterator().next());
+        User user_2 = this.users.stream()
+                .filter(user -> UserData.USER_2.name.equals(user.getName()))
+                .findFirst()
+                .orElse(this.users.iterator().next());
 
         Workspace workspace_1 = new Workspace();
-        workspace_1.setName("workspace_1");
+        workspace_1.setName("workspace-0");
         workspace_1.setUsers(this.users);
-        workspace_1.setUser(userList.get(0));
+        workspace_1.setUser(user_1);
         workspace_1.setIsPrivate(false);
         workspace_1.setCreatedDate(LocalDateTime.now());
 
@@ -220,27 +268,24 @@ public class TestDataInitializer {
         this.workspaces.add(workspace_1);
 
         Workspace workspace_2 = new Workspace();
-//        "workspace_2", this.users, this.channels, userList.get(1), true, LocalDateTime.now()
-        workspace_2.setName("workspace_2");
+        workspace_2.setName("workspace-1");
         workspace_2.setUsers(this.users);
-        workspace_2.setUser(userList.get(1));
+        workspace_2.setUser(user_2);
         workspace_2.setIsPrivate(true);
         workspace_2.setCreatedDate(LocalDateTime.now());
 
         workspaceDAO.persist(workspace_2);
         this.workspaces.add(workspace_2);
 
-        // Временная добавка связей в связывающую таблицу. Надеюсь в новом датаинициализаторе она не понадобится
-        List<Role> roleList = new ArrayList<>(this.roles);
-        Role role = roleList.get(1);
-        for (User user: users
-             ) {
-            WorkspaceUserRole wurItem = new WorkspaceUserRole();
-            wurItem.setWorkspace(workspace_1);
-            wurItem.setUser(user);
-            wurItem.setRole(role);
-            workspaceUserRoleService.create(wurItem);
-        }
+        Workspace workspace_3 = new Workspace();
+        workspace_3.setName("workspace-2");
+        workspace_3.setUsers(this.users);
+        workspace_3.setUser(user_1);
+        workspace_3.setIsPrivate(false);
+        workspace_3.setCreatedDate(LocalDateTime.now());
+
+        workspaceDAO.persist(workspace_3);
+        this.workspaces.add(workspace_3);
     }
 
     private void createBots() {
@@ -249,6 +294,36 @@ public class TestDataInitializer {
         botDAO.persist(bot);
     }
 
+    private void createLinkRoles() {
+        Role userRole = null;
+        for (Role role : this.roles) {
+            if ("ROLE_USER".equals(role.getAuthority())) {
+                userRole = role;
+            }
+        }
+        Role ownerRole = null;
+        for (Role role : this.roles) {
+            if ("ROLE_OWNER".equals(role.getAuthority())) {
+                ownerRole = role;
+            }
+        }
 
+        for (User user : this.users) {
+            for (Workspace workspace : this.workspaces) {
+                if (user.getId().equals(workspace.getId())) {
+                    createWorkspaceUserRole(workspace, user, ownerRole);
+                } else {
+                    createWorkspaceUserRole(workspace, user, userRole);
+                }
+            }
+        }
+    }
 
+    private void createWorkspaceUserRole(Workspace workspace, User user, Role role) {
+        WorkspaceUserRole workspaceUserRole = new WorkspaceUserRole();
+        workspaceUserRole.setWorkspace(workspace);
+        workspaceUserRole.setUser(user);
+        workspaceUserRole.setRole(role);
+        workspaceUserRoleDAO.persist(workspaceUserRole);
+    }
 }
