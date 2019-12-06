@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -62,12 +64,17 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate) {
-        return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
+        LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-d"));
+        LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-d"));
+
+        return messageDAO.getMessagesByChannelIdForPeriod(id, start.atStartOfDay(), end.atStartOfDay());
     }
 
     @Override
     public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate) {
-        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate);
+        LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-d"));
+        LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-d"));
+        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, start.atStartOfDay(), end.atStartOfDay());
     }
 
 }

@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.model.Message;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MessageDAO {
@@ -12,9 +13,9 @@ public interface MessageDAO {
 
     List<Message> getMessageByContent(String word);
 
-    List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate);
+    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate);
+    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
 
     void persist(Message message);
 

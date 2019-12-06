@@ -1,6 +1,5 @@
-package jm.model.refactoring;
+package jm.model;
 
-import jm.model.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,12 +11,12 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString
 @Entity
-@Table(name = "direct_messages")
-public class DirectMessage extends AbstractMessage {
+@Table(name = "_direct_messages")
+public class _DirectMessage extends _BasicMessage {
 
     @ManyToMany
-    @JoinTable(name = "recipient_users",
-            joinColumns = @JoinColumn(name = "message_id", referencedColumnName = "id"),
+    @JoinTable(name = "_direct_messages_recipient_users",
+            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
     private Set<User> recipientUsers;
 }

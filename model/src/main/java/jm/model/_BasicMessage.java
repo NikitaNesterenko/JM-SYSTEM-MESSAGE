@@ -1,10 +1,8 @@
-package jm.model.refactoring;
+package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jm.model.Bot;
-import jm.model.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -16,31 +14,34 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
-@MappedSuperclass
-public abstract class AbstractMessage {
+@Entity
+@Table(name = "_basic_messages")
+@Inheritance(strategy = InheritanceType.JOINED)
+//@MappedSuperclass
+public class _BasicMessage {
     @Id
     @Column(name = "id", nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @EqualsAndHashCode.Include
-    private Long id;
+    protected Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    protected User user;
 
     @ManyToOne
     @JoinColumn(name = "bot_id")
-    private Bot bot;
+    protected Bot bot;
 
     @Column(name = "content", nullable = false)
     @EqualsAndHashCode.Include
-    private String content;
+    protected String content;
 
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-    private LocalDateTime dateCreate;
+    protected LocalDateTime dateCreate;
 
     @Column(name = "filename")
     private String filename;

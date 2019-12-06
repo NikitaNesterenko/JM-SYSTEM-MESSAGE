@@ -1,10 +1,8 @@
-package jm.model.refactoring;
+package jm.model;
 
-import jm.model.Channel;
 import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -14,9 +12,8 @@ import javax.persistence.Table;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString
 @Entity
-@Table(name = "channel_messages")
-public class ChannelMessage extends AbstractMessage {
+@Table(name = "_thread_channel_messages")
+public class _ThreadChannelMessage extends _BasicMessage {
     @ManyToOne
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
+    private Message parentChannelMessage;
 }

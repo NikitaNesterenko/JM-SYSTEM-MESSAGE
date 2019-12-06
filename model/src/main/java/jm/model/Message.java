@@ -1,52 +1,24 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString
-@Entity
+@Entity(name = "messages")
 @Table(name = "messages")
-public class Message {
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Long id;
-
-    @ManyToOne(targetEntity = Channel.class)
+public class Message extends _BasicMessage {
+    @ManyToOne
     @JoinColumn(name = "channel_id")
     private Channel channel;
-
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(targetEntity = Bot.class)
-    @JoinColumn(name = "bot_id")
-    private Bot bot;
-
-    @Column(name = "content", nullable = false)
-    @EqualsAndHashCode.Include  // ?
-    private String content;
-
-    @Column(name = "date_create", nullable = false)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-    private LocalDateTime dateCreate;
-
-    @Column(name = "filename")
-    private String filename;
 
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
