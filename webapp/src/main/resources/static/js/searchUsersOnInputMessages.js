@@ -1,6 +1,7 @@
 import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 // import {users} from "./input-box-at";
 
+
 const user_service = new UserRestPaginationService();
 const modal = document.getElementById('associatedUserList');
 
@@ -58,4 +59,16 @@ $('#associatedUserListSelect').on('change', function () {
 
     $('#form_message_input').val(str);
     document.getElementById('associatedUserList').style.display = "none";
+});
+
+// document.onmouseup(function (e) {
+//     if (!modal.is(e.target)){
+//         modal.style.display = "none";
+//     }
+// });
+document.addEventListener("mouseup", function (e){
+    let block = $('associatedUserList');
+    if (!block.is(e.target)){
+        modal.style.display = "none";
+    }
 });
