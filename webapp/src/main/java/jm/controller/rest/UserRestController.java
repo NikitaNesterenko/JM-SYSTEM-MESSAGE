@@ -78,8 +78,8 @@ public class UserRestController {
     }
 
     @GetMapping(value = "/loggedUser")
-    public ResponseEntity<User> getLoggedUserId(Principal principal) {
-        User user = userService.getUserByLogin(principal.getName());
+    public ResponseEntity<User> getLoggedUserId(Principal principal){
+        User user  = userService.getUserByEmail(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
         return ResponseEntity.ok(user);
     }

@@ -54,4 +54,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) { return workspaceDAO.getWorkspacesByOwner(user);}
 
+    @Override
+    public List<Workspace> getWorkspacesByUserParticipate(User user) {
+        return workspaceDAO.getWorkspacesByUserParticipate(user);
+    }
+
 }

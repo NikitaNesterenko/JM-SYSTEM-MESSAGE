@@ -90,7 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Submit URL of login page.
                 //        .loginProcessingUrl("/login") // Submit URL
                 //        .loginPage("/login")//
-                .usernameParameter("username")//
+                .usernameParameter("email")//
                 .passwordParameter("password")
                 .successHandler(jmAuthenticationSuccessHandler())
                 .failureHandler(jmAuthenticationFailureHandler())

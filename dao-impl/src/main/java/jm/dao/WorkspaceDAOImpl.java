@@ -37,4 +37,16 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
             return null;
         }
     }
+
+    @Override
+    public List<Workspace> getWorkspacesByUserParticipate(User user) {
+        try {
+            return (List<Workspace>) entityManager.createNativeQuery
+                    ("SELECT w.* FROM (workspaces w JOIN workspaces_users wu  ON w.id = wu.workspace_id) JOIN users u ON u.id = wu.user_id WHERE u.id = ?", Workspace.class)
+                    .setParameter(1, user.getId())
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }
