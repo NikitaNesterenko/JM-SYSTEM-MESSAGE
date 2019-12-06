@@ -1,11 +1,15 @@
 package jm.model;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
+@NoArgsConstructor
 @Entity
 @Table(name = "workspace_user_role")
 public class WorkspaceUserRole implements GrantedAuthority {
@@ -13,6 +17,7 @@ public class WorkspaceUserRole implements GrantedAuthority {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

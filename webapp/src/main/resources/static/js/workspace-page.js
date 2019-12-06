@@ -5,6 +5,19 @@ const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
+const showDefaultChannel = () => {
+    let workspace_id = workspace_service.getChoosedWorkspace();
+    Promise.all([workspace_id]).then( value => {
+        channel_service.getChannelsByWorkspaceId(value[0].id)
+            .then((respons) => {
+                sessionStorage.setItem("channelName", respons[0].id)
+                window.channel_id = respons[0].id;
+                updateMessages();
+            })
+    })
+};
+
+
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
     const btn = document.getElementById("addChannelButton");
@@ -38,33 +51,33 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
 
 
 const showAllChannels = () => {
-   let workspace_id = workspace_service.getChoosedWorkspace();
+    let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then( value => {
-    channel_service.getChannelsByWorkspaceId(value[0].id)
-        .then((respons) => {
+        channel_service.getChannelsByWorkspaceId(value[0].id)
+            .then((respons) => {
 
-            $.each(respons, (i, item) => {
-             $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
+                $.each(respons, (i, item) => {
+                    $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
                                                     <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
                                                         <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
                                                     </button>
                                                   </div>`);
+                })
+                //Default channel
+                document.getElementById("channel_button_" + respons[0].id).style.color = "white";
+                document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
             })
-            //Default channel
-            document.getElementById("channel_button_" + respons[0].id).style.color = "white";
-            document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
-         })
     })
 };
 
 const showBot = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id ]).then( value => {
-    bot_service.getBotByWorkspaceId(value[0].id) //Захардкоденные переменные
-        .then((response) => {
-            if (response !== undefined) {
-                $('#bot_representation').append(` <div class="p-channel_sidebar__direct-messages__container">
+        bot_service.getBotByWorkspaceId(value[0].id) //Захардкоденные переменные
+            .then((response) => {
+                if (response !== undefined) {
+                    $('#bot_representation').append(` <div class="p-channel_sidebar__direct-messages__container">
                                                 <div class="p-channel_sidebar__close_container">
                                                     <button class="p-channel_sidebar__name_button">
                                                         <i class="p-channel_sidebar__channel_icon_circle">●</i>
@@ -77,8 +90,8 @@ const showBot = () => {
                                                     </button>
                                                 </div>
                                             </div>`);
-            }
-        })
+                }
+            })
     })
 };
 
@@ -87,19 +100,6 @@ const showAllUsers = () => {
     let channels = getAllUsersInThisChannel(2);
     $.each(channels, (i, item) => {
         $('#user-box').append(`<p><a href="" class="user-link">${item.name}</a>`);
-    })
-};
-
-
-const showDefaultChannel = () => {
-    let workspace_id = workspace_service.getChoosedWorkspace();
-    Promise.all([workspace_id]).then( value => {
-        channel_service.getChannelsByWorkspaceId(value[0].id)
-            .then((respons) => {
-                sessionStorage.setItem("channelName", respons[0].id)
-                window.channel_id = respons[0].id;
-                updateMessages();
-            })
     })
 };
 
@@ -126,6 +126,32 @@ const profileCard = () => {
     }('#modal_1','#modal_2');
 };
 
+$("#addChannelSubmit").click(
+    function () {
+        const date = new Date();
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        const trueDate = date.toLocaleString("ru", options);
+        const dateWithoutCommas = trueDate.replace(/,/g, "");
 
-
-
+        const channelName = document.getElementById('exampleInputChannelName').value;
+        const checkbox = document.getElementById('exampleCheck1');
+        if (checkbox.checked){
+            var checkbox1;
+            checkbox1 = true;
+        }
+        else {
+            checkbox1 = false;
+        }
+        const entity = {
+            name: channelName,
+            isPrivate: checkbox1,
+            createdDate: dateWithoutCommas
+        };
+        channel_service.create(entity);
+    });

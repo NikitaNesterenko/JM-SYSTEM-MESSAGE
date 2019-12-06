@@ -4,8 +4,6 @@ import jm.UserService;
 import jm.WorkspaceService;
 import jm.model.User;
 import jm.model.Workspace;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,9 +27,6 @@ public class WorkspaceRestController {
     @Autowired
     public void setUserService(UserService userService) { this.userService = userService; }
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            WorkspaceRestController.class);
-
     @Autowired
     public void setWorkspaceService(WorkspaceService workspaceService) {
         this.workspaceService = workspaceService;
@@ -39,51 +34,41 @@ public class WorkspaceRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
-        logger.info("Workspace с id = {}", id);
-        logger.info(workspaceService.getWorkspaceById(id).toString());
         return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
+    public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
-            logger.info("Созданный workspace : {}", workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            logger.warn("Не удалось создать workspace");
             ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity updateWorkspace(@RequestBody Workspace workspace) {
-        Workspace existingWorkspace = workspaceService.getWorkspaceById(workspace.getId());
-        if (existingWorkspace == null) {
-            logger.warn("Workspace не найден");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
+    public ResponseEntity updateChannel(@RequestBody Workspace workspace) {
+        try {
             workspaceService.updateWorkspace(workspace);
-            logger.info("Обновленный workspace: {}", workspace);
-            return new ResponseEntity(HttpStatus.OK);
+        } catch (IllegalArgumentException | EntityNotFoundException e) {
+            ResponseEntity.badRequest().build();
         }
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteWorkspace(@PathVariable("id") Long id) {
         workspaceService.deleteWorkspace(id);
-        logger.info("Удален workspace с id = {}", id);
+
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
-        logger.info("Список workspaces : ");
-        for (Workspace workspace : workspaceService.gelAllWorkspaces()) {
-            logger.info(workspace.toString());
-        }
-        return new ResponseEntity<>(workspaceService.gelAllWorkspaces(), HttpStatus.OK);
+        return new ResponseEntity<>(workspaceService.gelAllWorkspaces(),HttpStatus.OK);
     }
 
     @GetMapping("/choosed")
