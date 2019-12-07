@@ -10,4 +10,5 @@ public interface InviteTokenDAO {
 
     void deleteById(Long id);
 
+    InviteToken getByHash(String hash);
 }

@@ -52,9 +52,11 @@ public class User {
     @EqualsAndHashCode.Include
     private String login;
 
+    @EqualsAndHashCode.Include
     @Column(name = "email", nullable = false)
     private String email;
 
+    @EqualsAndHashCode.Include
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -97,11 +99,6 @@ public class User {
     // TODO set of UserFiles(id, user, url, created)
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
-
-    // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
-    @OneToMany
-    @ToString.Exclude
-    private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany

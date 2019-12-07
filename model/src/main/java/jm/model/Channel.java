@@ -64,7 +64,7 @@ public class Channel {
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
 

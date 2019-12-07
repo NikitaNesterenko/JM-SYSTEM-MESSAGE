@@ -46,11 +46,11 @@ public class TestDataInitializer {
 
     @AllArgsConstructor
     private enum UserData {
-        USER_1("John", "Doe", "login_1", "pass_1", "john.doe@testmail.com"),
-        USER_2("Степан", "Сидоров", "login_2", "pass_2", "sidorov@testmail.com"),
-        USER_3("Петр", "Петров", "login_3", "pass_3", "petrov@testmail.com"),
-        USER_4("foo", "bar", "login_4", "pass_4", "foobar@testmail.com"),
-        USER_5("James", "Smith", "login_5", "pass_5", "smith@testmail.com");
+        JOHN("John", "Doe", "login_1", "pass_1", "john.doe@testmail.com"),
+        STEPAN("Степан", "Сидоров", "login_2", "pass_2", "sidorov@testmail.com"),
+        PETR("Петр", "Петров", "login_3", "pass_3", "petrov@testmail.com"),
+        FOO("foo", "bar", "login_4", "pass_4", "foobar@testmail.com"),
+        JAMES("James", "Smith", "login_5", "pass_5", "smith@testmail.com");
 
         private final String name;
         private final String lastName;
@@ -94,70 +94,70 @@ public class TestDataInitializer {
         Set<Role> ownerRoleSet = this.roles.stream()
                 .filter(role -> "ROLE_OWNER".equals(role.getAuthority())).collect(Collectors.toSet());
 
-        User user_1 = new User();
+        User userJohn = new User();
 
-        user_1.setName(UserData.USER_1.name);
-        user_1.setLastName(UserData.USER_1.lastName);
-        user_1.setLogin(UserData.USER_1.login);
-        user_1.setEmail(UserData.USER_1.email);
-        user_1.setPassword(UserData.USER_1.password);
-        user_1.setDisplayName(UserData.USER_1.name + " " + UserData.USER_1.lastName);
-        user_1.setRoles(ownerRoleSet);
+        userJohn.setName(UserData.JOHN.name);
+        userJohn.setLastName(UserData.JOHN.lastName);
+        userJohn.setLogin(UserData.JOHN.login);
+        userJohn.setEmail(UserData.JOHN.email);
+        userJohn.setPassword(UserData.JOHN.password);
+        userJohn.setDisplayName(UserData.JOHN.name + " " + UserData.JOHN.lastName);
+        userJohn.setRoles(ownerRoleSet);
 
-        userService.createUser(user_1);
-        this.users.add(user_1);
+        userService.createUser(userJohn);
+        this.users.add(userJohn);
 
-        User user_2 = new User();
+        User userStepan = new User();
 
-        user_2.setName(UserData.USER_2.name);
-        user_2.setLastName(UserData.USER_2.lastName);
-        user_2.setLogin(UserData.USER_2.login);
-        user_2.setEmail(UserData.USER_2.email);
-        user_2.setPassword(UserData.USER_2.password);
-        user_2.setDisplayName(UserData.USER_2.name + " " + UserData.USER_2.lastName);
-        user_2.setRoles(userRoleSet);
+        userStepan.setName(UserData.STEPAN.name);
+        userStepan.setLastName(UserData.STEPAN.lastName);
+        userStepan.setLogin(UserData.STEPAN.login);
+        userStepan.setEmail(UserData.STEPAN.email);
+        userStepan.setPassword(UserData.STEPAN.password);
+        userStepan.setDisplayName(UserData.STEPAN.name + " " + UserData.STEPAN.lastName);
+        userStepan.setRoles(userRoleSet);
 
-        userService.createUser(user_2);
-        this.users.add(user_2);
+        userService.createUser(userStepan);
+        this.users.add(userStepan);
 
-        User user_3 = new User();
+        User userPetr = new User();
 
-        user_3.setName(UserData.USER_3.name);
-        user_3.setLastName(UserData.USER_3.lastName);
-        user_3.setLogin(UserData.USER_3.login);
-        user_3.setEmail(UserData.USER_3.email);
-        user_3.setPassword(UserData.USER_3.password);
-        user_3.setDisplayName(UserData.USER_3.name + " " + UserData.USER_3.lastName);
-        user_3.setRoles(userRoleSet);
+        userPetr.setName(UserData.PETR.name);
+        userPetr.setLastName(UserData.PETR.lastName);
+        userPetr.setLogin(UserData.PETR.login);
+        userPetr.setEmail(UserData.PETR.email);
+        userPetr.setPassword(UserData.PETR.password);
+        userPetr.setDisplayName(UserData.PETR.name + " " + UserData.PETR.lastName);
+        userPetr.setRoles(userRoleSet);
 
-        userService.createUser(user_3);
-        this.users.add(user_3);
+        userService.createUser(userPetr);
+        this.users.add(userPetr);
 
-        User user_4 = new User();
+        User userFoo = new User();
 
-        user_4.setName(UserData.USER_4.name);
-        user_4.setLastName(UserData.USER_4.lastName);
-        user_4.setLogin(UserData.USER_4.login);
-        user_4.setEmail(UserData.USER_4.email);
-        user_4.setPassword(UserData.USER_4.password);
-        user_4.setDisplayName(UserData.USER_4.name + " " + UserData.USER_4.lastName);
-        user_4.setRoles(userRoleSet);
+        userFoo.setName(UserData.FOO.name);
+        userFoo.setLastName(UserData.FOO.lastName);
+        userFoo.setLogin(UserData.FOO.login);
+        userFoo.setEmail(UserData.FOO.email);
+        userFoo.setPassword(UserData.FOO.password);
+        userFoo.setDisplayName(UserData.FOO.name + " " + UserData.FOO.lastName);
+        userFoo.setRoles(userRoleSet);
 
-        userService.createUser(user_4);
-        this.users.add(user_4);
+        userService.createUser(userFoo);
+        this.users.add(userFoo);
 
-        User user_5 = new User();
+        User userJames = new User();
 
-        user_5.setName(UserData.USER_5.name);
-        user_5.setLastName(UserData.USER_5.lastName);
-        user_5.setLogin(UserData.USER_5.login);
-        user_5.setEmail(UserData.USER_5.email);
-        user_5.setPassword(UserData.USER_5.password);
-        user_5.setDisplayName(UserData.USER_5.name + " " + UserData.USER_5.lastName);
-        user_5.setRoles(userRoleSet);
+        userJames.setName(UserData.JAMES.name);
+        userJames.setLastName(UserData.JAMES.lastName);
+        userJames.setLogin(UserData.JAMES.login);
+        userJames.setEmail(UserData.JAMES.email);
+        userJames.setPassword(UserData.JAMES.password);
+        userJames.setDisplayName(UserData.JAMES.name + " " + UserData.JAMES.lastName);
+        userJames.setRoles(userRoleSet);
 
-        userService.createUser(user_5);
-        this.users.add(user_5);
+        userService.createUser(userJames);
+        this.users.add(userJames);
     }
 
     private void createChannels() {
@@ -168,38 +168,38 @@ public class TestDataInitializer {
         userSet.add(userList.get(0));
         userSet.add(userList.get(1));
 
-        Channel channel_1 = new Channel();
-        channel_1.setName("general");
-        channel_1.setUsers(this.users);
-        channel_1.setUser(userList.get(0));
-        channel_1.setIsPrivate(true);
-        channel_1.setCreatedDate(LocalDateTime.now());
-        channel_1.setWorkspace(workspaceList.get(0));
+        Channel channelGeneral = new Channel();
+        channelGeneral.setName("general");
+        channelGeneral.setUsers(this.users);
+        channelGeneral.setUser(userList.get(0));
+        channelGeneral.setIsPrivate(true);
+        channelGeneral.setCreatedDate(LocalDateTime.now());
+        channelGeneral.setWorkspace(workspaceList.get(0));
 
-        channelDAO.persist(channel_1);
-        this.channels.add(channel_1);
+        channelDAO.persist(channelGeneral);
+        this.channels.add(channelGeneral);
 
-        Channel channel_2 = new Channel();
-        channel_2.setName("random");
-        channel_2.setUsers(userSet);
-        channel_2.setUser(userList.get(0));
-        channel_2.setIsPrivate(false);
-        channel_2.setCreatedDate(LocalDateTime.now());
-        channel_2.setWorkspace(workspaceList.get(0));
+        Channel channelRandom = new Channel();
+        channelRandom.setName("random");
+        channelRandom.setUsers(userSet);
+        channelRandom.setUser(userList.get(0));
+        channelRandom.setIsPrivate(false);
+        channelRandom.setCreatedDate(LocalDateTime.now());
+        channelRandom.setWorkspace(workspaceList.get(0));
 
-        channelDAO.persist(channel_2);
-        this.channels.add(channel_2);
+        channelDAO.persist(channelRandom);
+        this.channels.add(channelRandom);
 
-        Channel channel_3 = new Channel();
-        channel_3.setName("channel_3");
-        channel_3.setUsers(userSet);
-        channel_3.setUser(userList.get(2));
-        channel_3.setIsPrivate(true);
-        channel_3.setCreatedDate(LocalDateTime.now());
-        channel_3.setWorkspace(workspaceList.get(1));
+        Channel channel3 = new Channel();
+        channel3.setName("channel_3");
+        channel3.setUsers(userSet);
+        channel3.setUser(userList.get(2));
+        channel3.setIsPrivate(true);
+        channel3.setCreatedDate(LocalDateTime.now());
+        channel3.setWorkspace(workspaceList.get(1));
 
-        channelDAO.persist(channel_3);
-        this.channels.add(channel_3);
+        channelDAO.persist(channel3);
+        this.channels.add(channel3);
 
 
     }
@@ -209,83 +209,83 @@ public class TestDataInitializer {
         List<Channel> channels = new ArrayList<>(this.channels);
         List<Bot> bots = new ArrayList<>(this.bots);
 
-        Message message_1 = new Message();
-        message_1.setChannel(channels.get(0));
-        message_1.setUser(userList.get(0));
-        message_1.setContent("Hello from " + userList.get(0).getDisplayName());
-        message_1.setDateCreate(LocalDateTime.now());
+        Message message1 = new Message();
+        message1.setChannel(channels.get(0));
+        message1.setUser(userList.get(0));
+        message1.setContent("Hello from " + userList.get(0).getDisplayName());
+        message1.setDateCreate(LocalDateTime.now());
 
-        messageDAO.persist(message_1);
-        this.messages.add(message_1);
+        messageDAO.persist(message1);
+        this.messages.add(message1);
 
-        Message message_2 = new Message();
-        message_2.setChannel(channels.get(1));
-        message_2.setUser(userList.get(1));
-        message_2.setContent("Hello from " + userList.get(1).getDisplayName());
-        message_2.setDateCreate(LocalDateTime.now());
+        Message message2 = new Message();
+        message2.setChannel(channels.get(1));
+        message2.setUser(userList.get(1));
+        message2.setContent("Hello from " + userList.get(1).getDisplayName());
+        message2.setDateCreate(LocalDateTime.now());
 
-        messageDAO.persist(message_2);
-        this.messages.add(message_2);
+        messageDAO.persist(message2);
+        this.messages.add(message2);
 
-        Message message_3 = new Message();
-        message_3.setChannel(channels.get(2));
-        message_3.setUser(userList.get(2));
-        message_3.setContent("Hello from " + userList.get(2).getDisplayName());
-        message_3.setDateCreate(LocalDateTime.now());
+        Message message3 = new Message();
+        message3.setChannel(channels.get(2));
+        message3.setUser(userList.get(2));
+        message3.setContent("Hello from " + userList.get(2).getDisplayName());
+        message3.setDateCreate(LocalDateTime.now());
 
-        messageDAO.persist(message_3);
-        this.messages.add(message_3);
+        messageDAO.persist(message3);
+        this.messages.add(message3);
 
-        Message message_4 = new Message();
-        message_4.setChannel(channels.get(1));
-        message_4.setBot(bots.get(0));
-        message_4.setContent("Hello from BOT!");
-        message_4.setDateCreate(LocalDateTime.now());
+        Message message4 = new Message();
+        message4.setChannel(channels.get(1));
+        message4.setBot(bots.get(0));
+        message4.setContent("Hello from BOT!");
+        message4.setDateCreate(LocalDateTime.now());
 
-        messageDAO.persist(message_4);
-        this.messages.add(message_4);
+        messageDAO.persist(message4);
+        this.messages.add(message4);
 
     }
 
     private void createWorkspaces() {
-        User user_1 = this.users.stream()
-                .filter(user -> UserData.USER_1.name.equals(user.getName()))
+        User userJohn = this.users.stream()
+                .filter(user -> UserData.JOHN.name.equals(user.getName()))
                 .findFirst()
                 .orElse(this.users.iterator().next());
-        User user_2 = this.users.stream()
-                .filter(user -> UserData.USER_2.name.equals(user.getName()))
+        User userStepan = this.users.stream()
+                .filter(user -> UserData.STEPAN.name.equals(user.getName()))
                 .findFirst()
                 .orElse(this.users.iterator().next());
 
-        Workspace workspace_1 = new Workspace();
-        workspace_1.setName("workspace-0");
-        workspace_1.setUsers(this.users);
-        workspace_1.setUser(user_1);
-        workspace_1.setIsPrivate(false);
-        workspace_1.setCreatedDate(LocalDateTime.now());
+        Workspace workspace1 = new Workspace();
+        workspace1.setName("workspace-0");
+        workspace1.setUsers(this.users);
+        workspace1.setUser(userJohn);
+        workspace1.setIsPrivate(false);
+        workspace1.setCreatedDate(LocalDateTime.now());
 
-        workspaceDAO.persist(workspace_1);
-        this.workspaces.add(workspace_1);
+        workspaceDAO.persist(workspace1);
+        this.workspaces.add(workspace1);
 
-        Workspace workspace_2 = new Workspace();
-        workspace_2.setName("workspace-1");
-        workspace_2.setUsers(this.users);
-        workspace_2.setUser(user_2);
-        workspace_2.setIsPrivate(true);
-        workspace_2.setCreatedDate(LocalDateTime.now());
+        Workspace workspace2 = new Workspace();
+        workspace2.setName("workspace-1");
+        workspace2.setUsers(this.users);
+        workspace2.setUser(userStepan);
+        workspace2.setIsPrivate(true);
+        workspace2.setCreatedDate(LocalDateTime.now());
 
-        workspaceDAO.persist(workspace_2);
-        this.workspaces.add(workspace_2);
+        workspaceDAO.persist(workspace2);
+        this.workspaces.add(workspace2);
 
-        Workspace workspace_3 = new Workspace();
-        workspace_3.setName("workspace-2");
-        workspace_3.setUsers(this.users);
-        workspace_3.setUser(user_1);
-        workspace_3.setIsPrivate(false);
-        workspace_3.setCreatedDate(LocalDateTime.now());
+        Workspace workspace3 = new Workspace();
+        workspace3.setName("workspace-2");
+        workspace3.setUsers(this.users);
+        workspace3.setUser(userJohn);
+        workspace3.setIsPrivate(false);
+        workspace3.setCreatedDate(LocalDateTime.now());
 
-        workspaceDAO.persist(workspace_3);
-        this.workspaces.add(workspace_3);
+        workspaceDAO.persist(workspace3);
+        this.workspaces.add(workspace3);
     }
 
     private void createBots() {
