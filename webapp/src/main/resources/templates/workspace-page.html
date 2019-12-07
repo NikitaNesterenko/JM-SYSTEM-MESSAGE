@@ -21,6 +21,10 @@
     <script defer th:src="@{/js/messages.js}" type="module"></script>
     <script defer th:src="@{/js/menu.js}" type="module"></script>
 
+    <!-- message menu -->
+    <script defer th:src="@{/message_menu/message-icon-menu.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/message_menu/message_menu.css}"/>
+
     <!-- emoji -->
 <!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
     <script th:src="@{/js/emoji/index.min.js}"></script>
@@ -30,12 +34,16 @@
     <link rel="stylesheet" th:href="@{/css/messagesInlineEdit.css}"/>
     <script defer th:src="@{/js/messagesInlineEdit.js}" type="module"></script>
 
+    <!-- right slide panel -->
+    <script defer th:src="@{/right_slide_panel/right_panel.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/right_slide_panel/right_panel.css}"/>
+
+    <!-- channel info -->
+    <script defer th:src="@{/channel_details/view_channel_info.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/channel_details/view_channel_info.css}"/>
+
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
-
-    <!-- Message menu -->
-    <script defer th:src="@{message_menu/message-icon-menu.js}" type="module"></script>
-    <link rel="stylesheet" th:href="@{message_menu/message_menu.css}"/>
 
     <script src="/js/helper_functions.js"></script>
 
@@ -577,81 +585,7 @@
                                 <div class="p-flexpane__inside_body-scrollbar--hidden">
                                     <div class="p-flexpane__inside_body-scrollbar__hider">
                                         <div class="p-flexpane__inside_body-scrollbar__child">
-                                            <div class="p-flexpane__inside_body__details_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon">ⓘ</i>
-                                                        <span class="p-channel_details_section__title-content">Channel Details</span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
-                                            <div class="p-channel_details__highlights_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon p-channel_details_section__highlights__icon">✨</i>
-                                                        <span class="p-channel_details_section__title-content">
-                                                            Highlights
-                                                        </span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
-                                            <div class="p-channel_details__pinned_items_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon p-channel_details_section__pinned_items__icon">📌</i>
-                                                        <span class="p-channel_details_section__title-content">
-                                                            - Pinned Item
-                                                        </span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
-                                            <div class="p-channel_details__members_list_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon p-channel_details_section__members_list__icon">👨</i>
-                                                        <span class="p-channel_details_section__title-content">
-                                                            - Members
-                                                        </span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
-                                            <div class="p-channel_details__apps_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon p-channel_details_section__apps__icon">💻</i>
-                                                        <span class="p-channel_details_section__title-content">
-                                                            Apps
-                                                        </span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
-                                            <div class="p-channel_details__shared_files_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon p-channel_details_section__shared_files__icon">⌨</i>
-                                                        <span class="p-channel_details_section__title-content">
-                                                            Shared Files
-                                                        </span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
-                                            <div class="p-channel_details__notification_prefs_section">
-                                                <button class="p-channel_details_section__header">
-                                                    <span class="p-channel_details_section__title">
-                                                        <i class="p-channel_details_section__icon p-channel_details_section__notification_prefs__icon">🔔</i>
-                                                        <span class="p-channel_details_section__title-content">
-                                                            Notification Preferences
-                                                        </span>
-                                                    </span>
-                                                    <i class="p-channel_details_section__caret_icon">►</i>
-                                                </button>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

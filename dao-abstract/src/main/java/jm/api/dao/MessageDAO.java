@@ -24,5 +24,6 @@ public interface MessageDAO {
 
     Message getById(Long id);
 
+    List<Message> getStarredMessagesForUser(Long id);
 
 }
