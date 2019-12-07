@@ -24,4 +24,6 @@ public interface MessageService {
     List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
     List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Message> getStarredMessagesForUser(Long id);
 }
