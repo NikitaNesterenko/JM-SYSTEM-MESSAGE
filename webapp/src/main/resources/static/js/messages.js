@@ -29,8 +29,33 @@ function connect() {
                 showBotMessage(result)
             }
         });
+
+        stompClient.subscribe('/topic/channel', function (channel) {
+            let response = JSON.parse(channel.body);
+            add_channel(response);
+        });
     });
 }
+
+/* channel ws UI update */
+let add_channel = (channel) => {
+    $('#id-channel_sidebar__channels__list').append(
+        `<div class="p-channel_sidebar__channel">
+            <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
+                <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                <span class="p-channel_sidebar__name-3" id="channel_name">${channel.name}</span>
+            </button>
+        </div>`
+    );
+};
+
+window.sendChannel = function sendChannel(channel) {
+    stompClient.send('/app/channel', {}, JSON.stringify({
+        'name': channel.name
+    }));
+};
+
+/* end of channel ws UI update */
 
 function disconnect() {
     if (stompClient !== null) {
