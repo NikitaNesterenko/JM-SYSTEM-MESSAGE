@@ -2,14 +2,17 @@ import {
     MessageRestPaginationService,
     ChannelRestPaginationService,
     WorkspaceRestPaginationService,
+    UserRestPaginationService,
 } from './rest/entities-rest-pagination.js'
 
 import {setOnClickEdit} from "./messagesInlineEdit.js";
+import {getMessageStatus} from "../message_menu/message-icon-menu.js";
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const user_service = new UserRestPaginationService();
 
 function connect() {
     let socket = new SockJS('/websocket');
@@ -28,6 +31,7 @@ function connect() {
             } else {
                 showBotMessage(result)
             }
+            updateMessages();
         });
     });
 }
@@ -52,17 +56,32 @@ window.sendName = function sendName(message) {
 };
 
 // message menu buttons
+
+const emoji_button = '&#9786;';
+const reply_button = '&#128172;';
+const share_button = '&#10140;';
+export const star_button_blank = '\u2606';
+export const star_button_filled = '\u2605';
+const submenu_button = '&#8285;';
+
 const message_menu = (message) => {
+    getMessageStatus(message);
     return `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
-        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
-        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
-        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
+        `<button type="button" class="btn btn-light">${emoji_button}</button>` + // emoji
+        `<button type="button" class="btn btn-light">${reply_button}</button>` + // reply
+        `<button type="button" class="btn btn-light">${share_button}</button>` + // share
+        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>` + // star
         `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>` + // submenu
         `</div>` +
         `</div>`;
 };
+
+export function updateAllMessages() {
+    return updateMessages();
+}
+
+// end of msg menu buttons
 
 function updateMessage(message) {
     const messageBodies = document.getElementsByClassName("c-message__content_body");
@@ -133,17 +152,14 @@ window.updateMessages = function updateMessages() {
     let last_month_show;
     let last_day_show;
 
-    const today = new Date();
+    let today = new Date();
 
-    const day = today.getDate();
+    let startDate = new Date();
+    let endDate = new Date();
+    startDate.setMonth(startDate.getMonth() - 4);
 
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
+    const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, startDate, endDate);
 
-    const stringDateStart = [year - 1, month, day].join("-");
-    const stringDateEnd = [year, month, day + 1].join("-");
-
-    const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, stringDateStart, stringDateEnd);
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
         messages.forEach(function (message, i) {
 

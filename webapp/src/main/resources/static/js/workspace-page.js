@@ -1,5 +1,6 @@
 import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
+import {updateAllMessages} from "./messages.js";
 import {refreshMemberList} from "./member-list/member-list.js";
 
 const channel_service = new ChannelRestPaginationService();
@@ -11,11 +12,11 @@ const showDefaultChannel = () => {
     Promise.all([workspace_id]).then( value => {
         channel_service.getChannelsByWorkspaceId(value[0].id)
             .then((respons) => {
-                sessionStorage.setItem("channelName", respons[0].id)
+                sessionStorage.setItem("channelName", respons[0].id);
                 window.channel_id = respons[0].id;
-                updateMessages();
+                updateAllMessages();
+                })
             })
-    })
 };
 
 

@@ -37,4 +37,20 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
             return null;
         }
     }
+
+    @Override
+    public List<Workspace> getWorkspacesByUser(User user) {
+        try {
+            String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
+                    + "from workspaces ws "
+                    + "right join workspace_user_role wur on ws.id = wur.workspace_id "
+                    + "where wur.user_id = :userid "
+                    + "group by ws.id";
+            return entityManager.createNativeQuery(query, Workspace.class)
+                    .setParameter("userid", user.getId())
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

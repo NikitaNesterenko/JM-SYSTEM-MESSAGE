@@ -124,11 +124,11 @@
     cursor: pointer;
 }
 
-#associatedUserList {
-    display: none;
-    font-style: italic;
-    font-size: 0.8em;
-}
+/*#associatedUserList {*/
+/*    display: none;*/
+/*    font-style: italic;*/
+/*    font-size: 0.8em;*/
+/*}*/
 
 .message-input-field {
     height: 40px;
@@ -156,34 +156,34 @@
     padding: 2px;
 }
 
-.associatedUserList {
-    position: absolute;
-    left: 5%;
-    /*margin-left: 0px;*/
-    bottom: -1%;
-    margin-bottom: 5px;
-    padding: 0;
-    height: 200px;
-    width: 70%;
-    z-index: 1000;
-}
+/*.associatedUserList {*/
+/*    position: absolute;*/
+/*    left: 5%;*/
+/*    !*margin-left: 0px;*!*/
+/*    bottom: -1%;*/
+/*    margin-bottom: 5px;*/
+/*    padding: 0;*/
+/*    height: 200px;*/
+/*    width: 70%;*/
+/*    z-index: 1000;*/
+/*}*/
 
-#associatedUserListSelect {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-}
+/*#associatedUserListSelect {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*}*/
 
-#associatedUserListSelect option {
-    height: 30px;
-    padding-top: 10px;
-}
+/*#associatedUserListSelect option {*/
+/*    height: 30px;*/
+/*    padding-top: 10px;*/
+/*}*/
 
-#associatedUserListSelect option:hover {
-    cursor: pointer;
-    background-color: #0896D3;
-}
+/*#associatedUserListSelect option:hover {*/
+/*    cursor: pointer;*/
+/*    background-color: #0896D3;*/
+/*}*/
 
 /*end of button inside input field*/
 

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
@@ -58,7 +59,8 @@ public class MessageRestController {
 
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
     public ResponseEntity<List<Message>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
-        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id, startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3),
+                LocalDateTime.now()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
@@ -90,5 +92,12 @@ public class MessageRestController {
         messageService.deleteMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/starred")
+    public ResponseEntity<List<Message>> getStarredMessages(@PathVariable Long id) {
+        List<Message> starredMessages = messageService.getStarredMessagesForUser(id);
+        logger.info("Сообщения, отмеченные пользователем.");
+        return ResponseEntity.ok(starredMessages);
     }
 }
