@@ -10,22 +10,22 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
     getUserAndMessage(msg_id).then(user_and_msg => {
         let user = user_and_msg[0];
-        let msg = user_and_msg[1];
+        let message = user_and_msg[1];
 
-        let starredBy = msg["starredByWhom"];
+        let starredBy = user["starredMessages"];
 
-        if (starredBy.find(usr => usr.id === user.id)) {
-            starredBy.splice(starredBy.indexOf(user), 1);
-            msg["starredByWhom"] = starredBy;
-            message_service.update(msg).then(() => {
+        if (starredBy.find(msg => msg === message.id)) {
+            starredBy.splice(starredBy.indexOf(message), 1);
+           user["starredMessages"] = starredBy;
+            user_service.update(user).then(() => {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
-                $(`#message_${msg_id}_user_${msg.user.id}_starred`).remove();
+                $(`#message_${msg_id}_user_${message.user.id}_starred`).remove();
             });
         } else {
-            starredBy.push(user);
-            msg["starredByWhom"] = starredBy;
-            message_service.update(msg).then(() => {
-                add_msg_starred_attr(msg);
+            starredBy.push(message);
+            user["starredMessages"] = starredBy;
+            user_service.update(user).then(() => {
+                add_msg_starred_attr(message);
             });
         }
 
@@ -50,8 +50,8 @@ const getUser = async () => {
 export const getMessageStatus = (message) => {
     getUser().then(res => {
         let user = res[0];
-        let starredBy = message["starredByWhom"];
-        if (starredBy.find(usr => usr.id === user.id)) {
+        let starredBy = user["starredMessages"];
+        if (starredBy.find(msg => msg === message.id)) {
             add_msg_starred_attr(message);
         }
     });

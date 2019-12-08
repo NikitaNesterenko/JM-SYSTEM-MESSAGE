@@ -1,5 +1,10 @@
 package jm.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jm.model.CustomSerializer.CustomUserSerializer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -84,6 +89,16 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
 
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JsonSerialize(using = CustomUserSerializer.class)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JoinTable(
+            name="users_starred_messages",
+            joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="starred_messages_id", referencedColumnName="id"))
+    private Set<Message> starredMessages;
+
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
     @ToString.Exclude
@@ -135,4 +150,13 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+//    public User(String name, String lastName, String login, String email, String password, Set<Message> starredByWhom) {
+//        this.name = name;
+//        this.lastName = lastName;
+//        this.login = login;
+//        this.email = email;
+//        this.password = password;
+//        this.starredByWhom = starredByWhom;
+//    }
 }

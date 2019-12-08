@@ -1,6 +1,8 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
@@ -14,9 +16,10 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@ToString()
 @Entity
 @Table(name = "messages")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
@@ -30,6 +33,8 @@ public class Message {
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private User user;
 
     @ManyToOne(targetEntity = Bot.class)
@@ -48,13 +53,6 @@ public class Message {
 
     @Column(name = "filename")
     private String filename;
-
-    @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(
-            name="starred_message_user",
-            joinColumns=@JoinColumn(name="msg_id", referencedColumnName="id"),
-            inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
-    private Set<User> starredByWhom;
 
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
@@ -76,5 +74,9 @@ public class Message {
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
+    }
+
+    public Message(Long id) {
+        this.id = id;
     }
 }

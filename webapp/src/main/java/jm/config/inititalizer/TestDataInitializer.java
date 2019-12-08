@@ -38,6 +38,7 @@ public class TestDataInitializer {
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
 
+
     public TestDataInitializer() {
     }
 
@@ -198,8 +199,6 @@ public class TestDataInitializer {
 
         messageDAO.persist(message_4);
         this.messages.add(message_4);
-
-
     }
 
     private void createWorkspaces() {
