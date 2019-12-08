@@ -4,9 +4,16 @@ const channel_service = new ChannelRestPaginationService();
 let isMemberListExpanded = false;
 
 $(document).ready(() => {
-    const memberListBtn = document.getElementById("memberListBtn");
-    memberListBtn.addEventListener("click", memberListBtnClick)
+    attachMemberListBtnClickHandler();
 });
+
+export function attachMemberListBtnClickHandler() {
+    const memberListBtn = document.getElementById("memberListBtn");
+    if (memberListBtn !== null) {
+        memberListBtn.addEventListener("click", memberListBtnClick);
+        isMemberListExpanded = false;
+    }
+}
 
 function memberListBtnClick() {
     const memberListCaretSymbol = document.getElementById('memberListCaretSymbol');
