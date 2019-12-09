@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -47,6 +48,13 @@ public class Message {
 
     @Column(name = "filename")
     private String filename;
+
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name="starred_message_user",
+            joinColumns=@JoinColumn(name="msg_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
+    private Set<User> starredByWhom;
 
     public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;

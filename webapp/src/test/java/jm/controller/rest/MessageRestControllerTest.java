@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -20,6 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,7 +136,15 @@ public class MessageRestControllerTest {
 
     @Test
     public void updateMessage() throws Exception {
-        Message messageUpdated = new Message(23L, new Channel(), new User(), "Hello", LocalDateTime.now());
+        final String login = "login_1";
+
+        final Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn(login);
+
+        final User user = new User();
+        user.setLogin(login);
+
+        Message messageUpdated = new Message(23L, new Channel(), user, "Hello", LocalDateTime.now());
         messageUpdated.setId(1L);
         doAnswer(new Answer<Object>() {
             @Override
@@ -145,10 +155,10 @@ public class MessageRestControllerTest {
             }
         }).when(messageService).updateMessage(any());
 
-        Message messageTest= new Message(11L, new Channel(), new User(), "HelloTest", LocalDateTime.now());
+        Message messageTest= new Message(11L, new Channel(), user, "HelloTest", LocalDateTime.now());
         messageTest.setId(1L);
         when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
-        ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageTest);
+        ResponseEntity responseEntity = messageRestController.updateMessage(messageTest, mockPrincipal);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(messageTest.getContent(), messageUpdated.getContent());
         verify(messageService, times(1)).updateMessage(any());
