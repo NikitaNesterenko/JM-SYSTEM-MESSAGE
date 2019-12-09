@@ -25,6 +25,6 @@ public interface MessageDAO {
 
     ChannelMessage getById(Long id);
 
-    List<Message> getStarredMessagesForUser(Long id);
+    List<ChannelMessage> getStarredMessagesForUser(Long id);
 
 }

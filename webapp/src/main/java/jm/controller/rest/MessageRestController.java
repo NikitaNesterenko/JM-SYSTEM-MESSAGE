@@ -95,8 +95,8 @@ public class MessageRestController {
     }
 
     @GetMapping("/{id}/starred")
-    public ResponseEntity<List<Message>> getStarredMessages(@PathVariable Long id) {
-        List<Message> starredMessages = messageService.getStarredMessagesForUser(id);
+    public ResponseEntity<List<ChannelMessage>> getStarredMessages(@PathVariable Long id) {
+        List<ChannelMessage> starredMessages = messageService.getStarredMessagesForUser(id);
         logger.info("Сообщения, отмеченные пользователем.");
         return ResponseEntity.ok(starredMessages);
     }

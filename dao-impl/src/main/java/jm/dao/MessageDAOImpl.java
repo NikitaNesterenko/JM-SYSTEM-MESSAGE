@@ -68,11 +68,11 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
     }
 
     @Override
-    public List<Message> getStarredMessagesForUser(Long id) {
+    public List<ChannelMessage> getStarredMessagesForUser(Long id) {
         try {
             return entityManager.createQuery(
                     "select m from Message m join m.starredByWhom as sm where sm.id = :id",
-                    Message.class
+                    ChannelMessage.class
             )
                     .setParameter("id", id)
                     .getResultList();

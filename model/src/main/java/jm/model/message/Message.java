@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 //@MappedSuperclass
 public class Message {
     @Id
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.TABLE)
     @EqualsAndHashCode.Include
     protected Long id;
@@ -47,5 +48,12 @@ public class Message {
 
     @Column(name = "filename")
     private String filename;
+
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "starred_message_user",
+            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> starredByWhom;
 
 }
