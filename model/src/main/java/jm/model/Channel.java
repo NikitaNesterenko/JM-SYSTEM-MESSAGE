@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.dto.ChannelDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -18,6 +19,19 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "channels")
+
+@SqlResultSetMapping(
+        name = "ChannelDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = ChannelDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name"),
+                        @ColumnResult(name = "is_private")
+                }
+        )
+)
+
 public class Channel {
 
     @Id
@@ -50,7 +64,7 @@ public class Channel {
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
 

@@ -2,6 +2,7 @@ package jm;
 
 import jm.model.message.ChannelMessage;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MessageService {
@@ -20,7 +21,9 @@ public interface MessageService {
 
     void updateMessage(ChannelMessage message);
 
-    List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate);
+    List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate);
+    List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
+
+    List<Message> getStarredMessagesForUser(Long id);
 }
