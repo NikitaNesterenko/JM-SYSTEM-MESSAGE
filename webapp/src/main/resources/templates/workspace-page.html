@@ -10,6 +10,7 @@
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
@@ -535,11 +536,12 @@
                             <button class="p-classic_nav__model__button__details">
                                 <i class="p-classic_nav__model__button__details__icon">ⓘ</i>
                             </button>
-                            <button class="p-classic_nav__model__button__settings">
+                            <button class="p-classic_nav__model__button__settings" id="settingsMenuButton">
                                 <i class="p-classic_nav__model__button__settings__icon">⚙</i>
                             </button>
                         </div>
                     </div>
+
                     <div class="p-classic_nav__right_header">
                         <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal" data-target="#modalSearcher">
                             <i class="p-classic_nav__right__search__icon">🔍</i>
@@ -738,6 +740,11 @@
                                     <div style="width: 1056px; height: 747px;"></div>
                                 </div>
                                 <div class="contract-trigger"></div>
+                            </div>
+                        </div>
+                        <div class="settingsList" id="settingsList">
+                            <div>
+                                <button type="button" aria-label="Jump to date..."></button>
                             </div>
                         </div>
                     </div>
@@ -1014,6 +1021,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 

@@ -3225,6 +3225,24 @@
     background-color: #1d9bd1;
 }
 
+#settingsList{
+    display: none;
+    font-style: italic;
+    border-radius: 5px;
+    font-size: 0.8em;
+    left: 60%;
+    top: 0%;
+}
+
+.settingsList{
+    position: absolute;
+    height: 250px;
+    width: 200px;
+    left: 1000px;
+    border-style: solid;
+    border-width: thin;
+    border-color: #cccccc;
+}
 /*end of button inside input field*/
 
 .c-virtual_list__item__date {
