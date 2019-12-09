@@ -24,24 +24,17 @@ public class ChannelMessage extends Message {
     private Channel channel;
 
     public ChannelMessage(Channel channel, User user, String content, LocalDateTime dateCreate) {
+        super(user, content, dateCreate);
         this.channel = channel;
-        this.user = user;
-        this.content = content;
-        this.dateCreate = dateCreate;
     }
 
     public ChannelMessage(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
+        super(bot, content, dateCreate);
         this.channel = channel;
-        this.bot = bot;
-        this.content = content;
-        this.dateCreate = dateCreate;
     }
 
     public ChannelMessage(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
-        this.id = id;
+        super(id, user, content, dateCreate);
         this.channel = channel;
-        this.user = user;
-        this.content = content;
-        this.dateCreate = dateCreate;
     }
 }

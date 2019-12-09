@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,30 +23,55 @@ import java.time.LocalDateTime;
 //@MappedSuperclass
 public class Message {
     @Id
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.TABLE)
     @EqualsAndHashCode.Include
-    protected Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    protected User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "bot_id")
-    protected Bot bot;
+    private Bot bot;
 
     @Column(name = "content", nullable = false)
     @EqualsAndHashCode.Include
-    protected String content;
+    private String content;
 
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-    protected LocalDateTime dateCreate;
+    private LocalDateTime dateCreate;
 
     @Column(name = "filename")
     private String filename;
 
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "starred_message_user",
+            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> starredByWhom;
+
+    public Message(User user, String content, LocalDateTime dateCreate) {
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
+
+    public Message(Bot bot, String content, LocalDateTime dateCreate) {
+        this.bot = bot;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
+
+    public Message(Long id, User user, String content, LocalDateTime dateCreate) {
+        this.id = id;
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+    }
 }
