@@ -1,7 +1,7 @@
-import {MessageRestPaginationService, UserRestPaginationService} from "../js/rest/entities-rest-pagination.js";
-import {star_button_blank, star_button_filled} from "../js/workspace-page/components/footer/messages.js";
+import {MessageRestPaginationService, UserRestPaginationService} from "../rest/entities-rest-pagination.js";
+import {star_button_blank, star_button_filled} from "../workspace-page/components/footer/messages.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
-import {updateAllMessages} from "../js/workspace-page/components/footer/messages.js";
+import {updateAllMessages} from "../workspace-page/components/footer/messages.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
@@ -146,7 +146,7 @@ const add_msg_to_right_panel = (time, message) => {
 const add_empty_content_to_right_panel = () => {
     return `<div class="starred-messages-empty">
                                                 <div>
-                                                    <img class="starred-messages-empty_img" src="image/empty_starred_posts.png">
+                                                    <img class="starred-messages-empty_img" src="../../image/empty_starred_posts.png">
                                                 </div>
                                                 <div class="starred-messages-empty_content">
                                                     <h5>
