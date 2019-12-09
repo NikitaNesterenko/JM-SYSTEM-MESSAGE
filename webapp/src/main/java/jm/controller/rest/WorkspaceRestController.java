@@ -91,6 +91,6 @@ public class WorkspaceRestController {
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
         String name = principal.getName();
         User user = userService.getUserByLogin(name);
-        return new ResponseEntity<>(workspaceService.getWorkspacesByOwner(user), HttpStatus.OK);
+        return new ResponseEntity<>(workspaceService.getWorkspacesByUser(user), HttpStatus.OK);
     }
 }

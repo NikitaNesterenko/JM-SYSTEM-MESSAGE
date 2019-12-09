@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -38,7 +39,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     @Override
-    public List<Message> getMessagesByChannelIdForPeriod(Long id, String startDate, String endDate) {
+    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             List<Message> resultList = entityManager.createNativeQuery("select * from messages where channel_id = ? and date_create between ? and ? order by date_create", Message.class)
                     .setParameter(1, id)
@@ -52,7 +53,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, String startDate, String endDate) {
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
         try {
             List<Message> resultList = entityManager.createNativeQuery("SELECT * FROM messages " +
                                                                 "WHERE bot_id = ? AND channel_id = ? AND date_create BETWEEN ? AND ? ORDER BY date_create", Message.class)

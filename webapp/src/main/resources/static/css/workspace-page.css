@@ -3132,8 +3132,9 @@
 
 #associatedUserList {
     display: none;
-
+    /*background: #a71d2a;*/
     font-style: italic;
+    border-radius: 5px;
     font-size: 0.8em;
     left: 0;
 }
@@ -3166,22 +3167,53 @@
 
 .associatedUserList {
     position: absolute;
-    left: 5%;
+    background-color: #fefefe;
+    /*left: 50%;*/
     /*margin-left: 0px;*/
-    bottom: -1%;
-    margin-bottom: 5px;
+    bottom: 20%;
+    margin-left: 10px;
+    margin-bottom: 30px;
     padding: 0;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
     height: 200px;
-    width: 70%;
+    width: 300px;
     z-index: 1000;
 }
 
 #associatedUserListSelect {
-    margin: 0;
+    position: absolute;
+    /*border-radius: 13px;*/
+    background-color: #fefefe;
+    margin: 5px;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 97%;
+    height: 95%;
+    border: none;
 }
+
+/*css style*/
+
+#associatedUserListSelect::-webkit-scrollbar-track {
+    border-radius: 13px;
+    background-color: #cccccc;
+}
+
+#associatedUserListSelect::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-color: #A9A9A9;
+}
+
+#associatedUserListSelect::-webkit-scrollbar{
+    background-color:#FFFFFF;
+    border-radius: 10px;
+    width: 8px;
+    /*height: 100px;*/
+    margin-top: 50px;
+}
+/**/
 
 #associatedUserListSelect option {
     height: 30px;
@@ -3190,7 +3222,7 @@
 
 #associatedUserListSelect option:hover {
     cursor: pointer;
-    background-color: #0896D3;
+    background-color: #1d9bd1;
 }
 
 /*end of button inside input field*/

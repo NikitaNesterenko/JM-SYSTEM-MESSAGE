@@ -92,3 +92,9 @@ export class StorageService {
         return response;
     }
 }
+
+export class InviteRestPaginationService extends  RestPaginationService {
+    constructor(){
+        super('/rest/api/invites');
+    }
+}

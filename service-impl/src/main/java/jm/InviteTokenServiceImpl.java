@@ -35,4 +35,9 @@ public class InviteTokenServiceImpl implements InviteTokenService {
     public void deleteInviteToken(Long id) {
         inviteTokenDAO.deleteById(id);
     }
+
+    @Override
+    public InviteToken getByHash(String hash) {
+        return inviteTokenDAO.getByHash(hash);
+    }
 }
