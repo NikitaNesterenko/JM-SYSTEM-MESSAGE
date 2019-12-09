@@ -1,0 +1,41 @@
+.filter-select {
+    background: #FFF;
+    border: 1px #ccc solid;
+    width: 400px;
+    border-radius: 4px;
+    height:20px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%);
+}
+
+.ul-channel{
+    background: #FFF;
+    border: 1px #ccc solid;
+    width: 400px;
+    border-radius: 4px;
+    max-height:600px;
+    overflow-y:scroll;
+    display:none;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%);
+}
+
+.ul-channel li{
+    list-style: none;
+    padding: 5px 10px;
+    margin: 0 0 0 -40px;
+    color: #0896D3;
+    border-bottom: 1px #ccc solid;
+    cursor: pointer;
+    transition:0.3s;
+}
+
+.ul-channel li:hover{
+    background: #d6d6d6;
+}

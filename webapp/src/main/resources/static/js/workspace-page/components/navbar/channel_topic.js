@@ -1,4 +1,4 @@
-import {getChannelTopic, updateChannelTopic} from './ajax/channelTopicRestController.js';
+import {getChannelTopic, updateChannelTopic} from '../../../ajax/channelTopicRestController.js';
 
 window.addEventListener('load', function () {
     // id канала где брать??

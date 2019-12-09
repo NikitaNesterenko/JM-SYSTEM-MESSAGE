@@ -1,5 +1,5 @@
 export let users = [];
-import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
+import {UserRestPaginationService} from '../../../rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 

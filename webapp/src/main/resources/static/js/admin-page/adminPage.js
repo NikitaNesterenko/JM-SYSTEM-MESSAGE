@@ -1,4 +1,4 @@
-import {getUsers} from "./ajax/userRestController.js";
+import {getUsers} from "../ajax/userRestController.js";
 
 window.addEventListener('load', function () {
 

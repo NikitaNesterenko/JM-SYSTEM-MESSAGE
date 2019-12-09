@@ -2,6 +2,7 @@ package jm;
 
 import jm.api.dao.UserDAO;
 import jm.dao.UserDAOImpl;
+import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,5 +68,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByName(String name) { return userDAO.getUserByName(name); }
+
+    @Override
+    public List<UserDTO> getAllUsersInWorkspace(Long id) {
+        return userDAO.getUsersInWorkspace(id);
+    }
 
 }

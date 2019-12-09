@@ -1,6 +1,7 @@
 package jm.dao;
 
 import jm.api.dao.UserDAO;
+import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,5 +71,19 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public List<UserDTO> getUsersInWorkspace(Long id) {
+        String query = "SELECT u.id, u.name, u.last_name, u.avatar_url, u.display_name " +
+                "FROM workspace_user_role wur " +
+                "INNER JOIN users u ON wur.user_id = u.id " +
+                "INNER JOIN workspaces ws ON wur.workspace_id = ws.id " +
+                "WHERE (ws.id = :workspace) " +
+                "GROUP BY u.id";
+
+        return entityManager.createNativeQuery(query, "UserDTOMapping")
+                .setParameter("workspace", id)
+                .getResultList();
     }
 }
