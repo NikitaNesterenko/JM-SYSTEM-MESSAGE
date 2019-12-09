@@ -1,12 +1,7 @@
-import {
-    MessageRestPaginationService,
-    ChannelRestPaginationService,
-    WorkspaceRestPaginationService,
-    UserRestPaginationService,
-} from './rest/entities-rest-pagination.js'
+import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService, UserRestPaginationService} from '../../../rest/entities-rest-pagination.js'
+import {setOnClickEdit} from "../../../messagesInlineEdit.js";
+import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
 
-import {setOnClickEdit} from "./messagesInlineEdit.js";
-import {getMessageStatus} from "../message_menu/message-icon-menu.js";
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();

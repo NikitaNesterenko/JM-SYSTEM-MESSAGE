@@ -5,30 +5,32 @@
     <meta charset="UTF-8">
     <title>Workspace Page</title>
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
-    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-    <script th:src="@{/js/workspace-page.js}" type="module"></script>
+    <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
-    <script defer th:src="@{/js/input-box.js}" type="module"></script>
-    <script defer th:src="@{/js/input-box-at.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
-    <script defer th:src="@{/js/channel_topic.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/components/navbar/channel_topic.js}" type="module"></script>
 
-    <script defer th:src="@{/js/user_view_edit.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/user_view_edit.js}" type="module"></script>
 
-    <script defer th:src="@{/js/workspace-modal-searcher.js}" type="module"></script>
 
-    <script defer th:src="@{/js/messages.js}" type="module"></script>
-    <script defer th:src="@{/js/menu.js}" type="module"></script>
+    <!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
+    <script defer th:src="@{/js/workspace-page/components/footer/messages.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>
+
+    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}" type="module"></script>
 
     <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
     <script defer th:src="@{/js/invite.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/css/invite.css}"/>
 
     <!-- message menu -->
-    <script defer th:src="@{/message_menu/message-icon-menu.js}" type="module"></script>
-    <link rel="stylesheet" th:href="@{/message_menu/message_menu.css}"/>
+    <script defer th:src="@{/js/message_menu/message-icon-menu.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/message_menu/message_menu.css}"/>
 
     <!-- emoji -->
 <!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
@@ -40,12 +42,12 @@
     <script defer th:src="@{/js/messagesInlineEdit.js}" type="module"></script>
 
     <!-- right slide panel -->
-    <script defer th:src="@{/right_slide_panel/right_panel.js}" type="module"></script>
-    <link rel="stylesheet" th:href="@{/right_slide_panel/right_panel.css}"/>
+    <script defer th:src="@{/js/right_slide_panel/right_panel.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/right_slide_panel/right_panel.css}"/>
 
     <!-- channel info -->
-    <script defer th:src="@{/channel_details/view_channel_info.js}" type="module"></script>
-    <link rel="stylesheet" th:href="@{/channel_details/view_channel_info.css}"/>
+    <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
 
     <!-- memberList -->
     <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
@@ -61,10 +63,13 @@
         <link rel="stylesheet" th:href="@{/css/button.css}"/>
         <script src="/js/displayDiv.js"></script> -->
 
-    <link rel="stylesheet" th:href="@{/css/workspace-page.css}"/>
-    <link rel="stylesheet" th:href="@{/css/workspace-page-old.css}"/>
-    <link rel="stylesheet" th:href="@{/css/workspace-add-channel-modal.css}"/>
-    <link rel="stylesheet" th:href="@{/css/workspace-searcher-modal.css}"/>
+
+    <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page.css}"/>
+    <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page-old.css}"/>
+    <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-add-channel-modal.css}"/>
+
+    <link rel="stylesheet" th:href="@{/js/workspace-page/components/modal-searcher/workspace-searcher-modal.css}"/>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
