@@ -1,5 +1,9 @@
-
-import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPaginationService, StorageService} from './rest/entities-rest-pagination.js'
+import {
+    UserRestPaginationService,
+    ChannelRestPaginationService,
+    MessageRestPaginationService
+    , StorageService
+} from './rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
@@ -7,7 +11,8 @@ const message_service = new MessageRestPaginationService();
 const storage_service = new StorageService();
 
 class Message {
-    constructor(channel, user, content, dateCreate, filename) {
+    constructor(id, channel, user, content, dateCreate, filename) {
+        this.id = id;  // id нужно для редактирования сообщений
         this.channel = channel;
         this.user = user;
         this.content = content;
@@ -17,7 +22,7 @@ class Message {
 }
 
 $('#form_message').submit(function () {
-    const user_promise = user_service.getLoggedUser()
+    const user_promise = user_service.getLoggedUser();
     const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
     Promise.all([user_promise, channel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
         const user = value[0];
@@ -27,6 +32,7 @@ $('#form_message').submit(function () {
         const text_message = message_input_element.value;
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
+
 
         const files = document.getElementById("file_selector").files;
         let filename = null;
@@ -38,9 +44,12 @@ $('#form_message').submit(function () {
             $('#attached_file').html("");
         }
         Promise.all([filename]).then(files => {
-            const message = new Message(channel, user, text_message, currentDate, files[0]);
-            sendName(message);
-            message_service.create(message);
+            const message = new Message(null, channel, user, text_message, currentDate, files[0]);
+            message_service.create(message).then(messageWithId => {
+                // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
+                // которое вставляется в HTML (см. messages.js).
+                sendName(messageWithId);
+            });
         });
     });
     return false;

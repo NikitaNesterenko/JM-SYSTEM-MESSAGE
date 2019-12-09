@@ -23,6 +23,11 @@ export class MessageRestPaginationService extends  RestPaginationService{
         const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
         return response.json();
     };
+
+    getStarredMessagesForUser = async (id) => {
+        const response = await fetch(`/rest/api/messages/${id}/starred`);
+        return response.json();
+    };
 }
 export class BotRestPaginationService extends  RestPaginationService{
     constructor(){
@@ -85,6 +90,12 @@ export class StorageService {
             body: file
         }).then(response => {return response.text()});
         return response;
+    }
+}
+
+export class InviteRestPaginationService extends  RestPaginationService {
+    constructor(){
+        super('/rest/api/invites');
     }
 }
 
