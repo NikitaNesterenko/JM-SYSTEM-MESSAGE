@@ -3,6 +3,7 @@ package jm.config.inititalizer;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
+import jm.model.message.ChannelMessage;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class TestDataInitializer {
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
-    private Set<Message> messages = new HashSet<>();
+    private Set<ChannelMessage> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
 
@@ -206,7 +207,7 @@ public class TestDataInitializer {
         List<Channel> channels = new ArrayList<>(this.channels);
         List<Bot> bots = new ArrayList<>(this.bots);
 
-        Message message_1 = new Message();
+        ChannelMessage message_1 = new ChannelMessage();
         message_1.setChannel(channels.get(0));
         message_1.setUser(userList.get(0));
         message_1.setContent("Hello from " + userList.get(0).getDisplayName());
@@ -215,7 +216,7 @@ public class TestDataInitializer {
         messageDAO.persist(message_1);
         this.messages.add(message_1);
 
-        Message message_2 = new Message();
+        ChannelMessage message_2 = new ChannelMessage();
         message_2.setChannel(channels.get(1));
         message_2.setUser(userList.get(1));
         message_2.setContent("Hello from " + userList.get(1).getDisplayName());
@@ -224,7 +225,7 @@ public class TestDataInitializer {
         messageDAO.persist(message_2);
         this.messages.add(message_2);
 
-        Message message_3 = new Message();
+        ChannelMessage message_3 = new ChannelMessage();
         message_3.setChannel(channels.get(2));
         message_3.setUser(userList.get(2));
         message_3.setContent("Hello from " + userList.get(2).getDisplayName());
@@ -233,7 +234,7 @@ public class TestDataInitializer {
         messageDAO.persist(message_3);
         this.messages.add(message_3);
 
-        Message message_4 = new Message();
+        ChannelMessage message_4 = new ChannelMessage();
         message_4.setChannel(channels.get(1));
         message_4.setBot(bots.get(0));
         message_4.setContent("Hello from BOT!");

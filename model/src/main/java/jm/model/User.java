@@ -1,5 +1,6 @@
 package jm.model;
 
+import jm.model.message.ChannelMessage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -85,7 +86,7 @@ public class User {
     // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
     @OneToMany
     @ToString.Exclude
-    private Set<Message> starredMessages;
+    private Set<ChannelMessage> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany

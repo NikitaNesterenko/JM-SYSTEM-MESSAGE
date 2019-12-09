@@ -1,4 +1,4 @@
-package jm.model;
+package jm.model.message;
 
 import lombok.*;
 
@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString
 @Entity
-@Table(name = "_thread_channel_messages")
-public class _ThreadChannelMessage extends _BasicMessage {
+@Table(name = "thread_channel_messages")
+public class ThreadChannelMessage extends Message {
     @ManyToOne
-    private Message parentChannelMessage;
+    private ChannelMessage parentChannelMessage;
 }

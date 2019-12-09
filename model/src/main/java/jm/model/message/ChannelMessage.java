@@ -1,5 +1,8 @@
-package jm.model;
+package jm.model.message;
 
+import jm.model.Bot;
+import jm.model.Channel;
+import jm.model.User;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -13,28 +16,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString
-@Entity(name = "messages")
-@Table(name = "messages")
-public class Message extends _BasicMessage {
+@Entity
+@Table(name = "channel_messages")
+public class ChannelMessage extends Message {
     @ManyToOne
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
+    public ChannelMessage(Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
+    public ChannelMessage(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
         this.channel = channel;
         this.bot = bot;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
+    public ChannelMessage(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.id = id;
         this.channel = channel;
         this.user = user;

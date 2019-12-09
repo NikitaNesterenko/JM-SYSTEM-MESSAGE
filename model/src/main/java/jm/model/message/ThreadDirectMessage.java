@@ -1,4 +1,4 @@
-package jm.model;
+package jm.model.message;
 
 import lombok.*;
 
@@ -10,8 +10,8 @@ import javax.persistence.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString
 @Entity
-@Table(name = "_thread_direct_messages")
-public class _ThreadDirectMessage extends _BasicMessage {
+@Table(name = "thread_direct_messages")
+public class ThreadDirectMessage extends Message {
     @ManyToOne
-    private _DirectMessage parentDirectMessage;
+    private DirectMessage parentDirectMessage;
 }

@@ -1,8 +1,10 @@
-package jm.model;
+package jm.model.message;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.model.Bot;
+import jm.model.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -15,10 +17,10 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-@Table(name = "_basic_messages")
+@Table(name = "messages")
 @Inheritance(strategy = InheritanceType.JOINED)
 //@MappedSuperclass
-public class _BasicMessage {
+public class Message {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.TABLE)

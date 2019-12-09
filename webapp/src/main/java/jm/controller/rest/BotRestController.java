@@ -6,7 +6,7 @@ import jm.MessageService;
 import jm.WorkspaceService;
 import jm.model.Bot;
 import jm.model.Channel;
-import jm.model.Message;
+import jm.model.message.ChannelMessage;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +102,7 @@ public class BotRestController {
     }
 
     @PostMapping("/{id}/channels/{name}/messages")
-    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
+    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody ChannelMessage message) {
         Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
         message.setChannel(channel);
@@ -119,7 +119,7 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/hour")
-    public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<ChannelMessage>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         String endDate = LocalDateTime.now().toString();
@@ -128,7 +128,7 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
-    public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<ChannelMessage>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         String endDate = LocalDateTime.now().toString();
@@ -137,7 +137,7 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
-    public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<ChannelMessage>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         String endDate = LocalDateTime.now().toString();
@@ -146,7 +146,7 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
-    public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<ChannelMessage>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         String endDate = LocalDateTime.now().toString();
