@@ -71,9 +71,6 @@
 
     <link rel="stylesheet" th:href="@{/js/workspace-page/components/modal-searcher/workspace-searcher-modal.css}"/>
 
-    <script defer th:src="@{/js/workspace-page/components/primary-view/share-message.js}" type="module"></script>
-    <link rel="stylesheet" th:href="@{/js/workspace-page/components/primary-view/share-message-modal.css}"/>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
@@ -226,9 +223,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                         src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                         srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                         alt=""></span>
+                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                                                                             alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -544,6 +541,7 @@
                             </button>
                         </div>
                     </div>
+
                     <div class="p-classic_nav__right_header">
                         <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal"
                                 data-target="#modalSearcher">
@@ -572,7 +570,7 @@
                 <div class="p-workspace__channel_sidebar">
                     <nav class="p-channel_sidebar">
                         <div class="p-channel_sidebar__navigation_bar">
-                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal" data-target="#modalSearcher">
+                            <button class="p-channel_sidebar__jumper">
                                 <div class="p-channel_sidebar__jumper_left">
                                     <i class="p-channel_sidebar__jumper_icon">🔎</i>
                                     Jump to...
@@ -743,6 +741,11 @@
                                     <div style="width: 1056px; height: 747px;"></div>
                                 </div>
                                 <div class="contract-trigger"></div>
+                            </div>
+                        </div>
+                        <div class="settingsList" id="settingsList">
+                            <div>
+                                <button type="button" aria-label="Jump to date..."></button>
                             </div>
                         </div>
                     </div>
@@ -1090,8 +1093,6 @@
     </div>
 </div>
 
-<!--share message modal div-->
-<div class="share_message_modal_portal" id="share_message_modal_id"></div>
 
 </body>
 
