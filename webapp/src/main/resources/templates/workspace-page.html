@@ -17,9 +17,14 @@
 
     <script defer th:src="@{/js/workspace-page/user_view_edit.js}" type="module"></script>
 
+
     <!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script defer th:src="@{/js/workspace-page/components/footer/messages.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>
+
+    <script defer th:src="@{/js/workspace-modal-searcher.js}" type="module"></script>
+
+
 
     <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
     <script defer th:src="@{/js/invite.js}" type="module"></script>
@@ -46,6 +51,10 @@
     <script defer th:src="@{/channel_details/view_channel_info.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/channel_details/view_channel_info.css}"/>
 
+    <!-- memberList -->
+    <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
+    <script defer th:src="@{/js/member-list/member-list.js}" type="module"></script>
+
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
@@ -56,9 +65,13 @@
         <link rel="stylesheet" th:href="@{/css/button.css}"/>
         <script src="/js/displayDiv.js"></script> -->
 
+
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page.css}"/>
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page-old.css}"/>
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-add-channel-modal.css}"/>
+
+    <link rel="stylesheet" th:href="@{/css/workspace-searcher-modal.css}"/>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
@@ -530,7 +543,7 @@
                         </div>
                     </div>
                     <div class="p-classic_nav__right_header">
-                        <button class="p-classic_nav__right__search">
+                        <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal" data-target="#modalSearcher">
                             <i class="p-classic_nav__right__search__icon">🔍</i>
                             <span class="p-classic_nav__right__search__placeholder">Search</span>
                         </button>
@@ -980,6 +993,32 @@
     </div>
 </div>
 
+<!--Модальное окно для поиска каналов и пользователей-->
+<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog searcher-modal" role="presentation">
+        <div class="modal-content">
+
+            <div class="search-input-close">
+                <div class="search-input-box">
+                    <i class="p-classic_nav__right__search__icon">🔍</i>
+                    <div class="search-input-box-input">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search for messages, replies, or even insightful asides" style="border: 0px">
+                    </div>
+
+                </div>
+                <button type="button" class="close search-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="idSearchContent">
+                Что-то пошло не так
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>
+
+

@@ -1,6 +1,8 @@
 package jm.config.inititalizer;
 
 import jm.UserService;
+import jm.WorkspaceUserRoleService;
+import jm.WorkspaceUserRoleServiceImpl;
 import jm.api.dao.*;
 import jm.model.*;
 import lombok.AllArgsConstructor;
@@ -33,6 +35,7 @@ public class TestDataInitializer {
     private BotDAO botDAO;
     @Autowired
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
+
 
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
