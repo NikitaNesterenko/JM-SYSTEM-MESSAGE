@@ -108,3 +108,36 @@ export class InviteRestPaginationService extends  RestPaginationService {
         super('/rest/api/invites');
     }
 }
+
+export class SendNotification {
+
+    sendPersonal = async (name, pushNotify) => {
+        await fetch('/rest/api/notification/send/' + name, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pushNotify)
+        }).then(function (response) {
+            return response;
+        })
+    };
+
+    sendToChannelMembers = async (id, pushNotify) => {
+        await fetch('/rest/api/notification/channel/' + id, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pushNotify)
+        }).then(function (response) {
+            return response;
+        })
+    };
+
+    register = async (currentToken) => {
+        fetch('/rest/api/notification/register', { method: 'post', body: currentToken });
+    };
+}

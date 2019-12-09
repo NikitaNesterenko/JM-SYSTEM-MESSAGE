@@ -20,8 +20,8 @@ function connect() {
                 if (!updateMessage(result)) {
                     if (result.channel.id === channel_id) {
                         showMessage(result);
+                        sendNotification(result);
                     }
-                    notifyParseMessage(result);
                 }
             } else {
                 showBotMessage(result)
@@ -46,7 +46,7 @@ window.sendName = function sendName(message) {
         'dateCreate': message.dateCreate,
         'user': message.user,
         'bot': message.bot,
-        'filename': message.filename
+        'filename': message.filename,
     }));
 };
 

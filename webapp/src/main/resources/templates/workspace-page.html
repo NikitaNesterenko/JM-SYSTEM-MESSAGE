@@ -53,8 +53,11 @@
     <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
     <script defer th:src="@{/js/member-list/member-list.js}" type="module"></script>
 
-    <script th:src="@{/js/push/push.js}"></script>
-    <script th:src="@{/js/push/push_notification.js}"></script>
+    <script th:src="@{/js/push/notificationSettings.js}" type="module"></script>
+    <script th:src="@{/js/push/push_notification.js}" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase-messaging.js"></script>
+
 
     <script src="/js/helper_functions.js"></script>
 

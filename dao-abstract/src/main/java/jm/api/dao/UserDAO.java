@@ -27,5 +27,8 @@ public interface UserDAO {
 
     List<User> getAllUsersInThisChannel(Long id);
 
+    User getUserByName(String name);
+
     List<UserDTO> getUsersInWorkspace(Long id);
+
 }
