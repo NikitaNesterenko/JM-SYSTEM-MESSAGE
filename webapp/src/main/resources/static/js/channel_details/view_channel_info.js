@@ -1,4 +1,5 @@
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
+import {attachMemberListBtnClickHandler} from "/js/member-list/member-list.js";
 
 // toggle right panel
 let is_open;
@@ -12,6 +13,7 @@ let toggle_right_menu = () => {
         open_right_panel();
         get_channel_info_panel();
         is_open = true;
+        attachMemberListBtnClickHandler();
     }
 };
 
@@ -55,15 +57,18 @@ const get_channel_info_panel = () => {
                                                     </button>
                                                 </div>
                                                 <div class="p-channel_details__members_list_section">
-                                                    <button class="p-channel_details_section__header">
+                                                    <button class="p-channel_details_section__header" id="memberListBtn">
                                                     <span class="p-channel_details_section__title">
                                                         <i class="p-channel_details_section__icon p-channel_details_section__members_list__icon">👨</i>
                                                         <span class="p-channel_details_section__title-content">
                                                             - Members
                                                         </span>
                                                     </span>
-                                                        <i class="p-channel_details_section__caret_icon">►</i>
+                                                        <i class="p-channel_details_section__caret_icon" id="memberListCaretSymbol">►</i>
                                                     </button>
+                                                    <div id="memberListPlaceholder">
+                                                    <!-- Member List will be placed here -->
+                                                    </div>
                                                 </div>
                                                 <div class="p-channel_details__apps_section">
                                                     <button class="p-channel_details_section__header">

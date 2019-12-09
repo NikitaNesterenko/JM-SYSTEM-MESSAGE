@@ -1,4 +1,4 @@
-import {WorkspaceRestPaginationService} from './rest/entities-rest-pagination.js'
+import {WorkspaceRestPaginationService} from '../rest/entities-rest-pagination.js'
 
 const workspace_service = new WorkspaceRestPaginationService();
 $(function() {

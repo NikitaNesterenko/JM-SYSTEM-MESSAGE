@@ -1,5 +1,5 @@
-import {findEl} from "./filter-channel.js"
-import {getAllUsersInThisChannel} from "./ajax/userRestController.js";
+import {findEl} from "../filter-channel.js"
+import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 
 
 const filterInput = $('#filter-channel'), filterUl = $('.ul-channel');

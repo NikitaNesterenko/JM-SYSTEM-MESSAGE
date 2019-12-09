@@ -3,7 +3,7 @@ import {
     ChannelRestPaginationService,
     MessageRestPaginationService
     , StorageService
-} from './rest/entities-rest-pagination.js'
+} from '../../../rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();

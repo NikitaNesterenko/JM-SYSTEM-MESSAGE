@@ -1,4 +1,4 @@
-import {WorkspaceRestPaginationService,UserRestPaginationService,ChannelRestPaginationService} from './rest/entities-rest-pagination.js'
+import {WorkspaceRestPaginationService,UserRestPaginationService,ChannelRestPaginationService} from '../rest/entities-rest-pagination.js'
 
 class Workspace {
     constructor(name, users, user, is_private, createdDate) {
