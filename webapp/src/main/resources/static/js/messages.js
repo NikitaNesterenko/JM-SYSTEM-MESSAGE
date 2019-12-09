@@ -20,17 +20,13 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages', function (message) {
-            let result  = JSON.parse(message.body);
-            if(result.user !== null) {
-                showMessage(result);
-                sendNotification(result);
             let result = JSON.parse(message.body);
             if (result.user !== null) {
                 if (!updateMessage(result)) {
                     if (result.channel.id === channel_id) {
                         showMessage(result);
+                        sendNotification(result);
                     }
-                    notifyParseMessage(result);
                 }
             } else {
                 showBotMessage(result)
@@ -56,7 +52,6 @@ window.sendName = function sendName(message) {
         'user': message.user,
         'bot': message.bot,
         'filename': message.filename,
-        'channel': message.channel
     }));
 };
 
