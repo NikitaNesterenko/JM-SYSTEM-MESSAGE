@@ -23,7 +23,8 @@
     <script defer th:src="@{/js/workspace-page/components/footer/messages.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>
 
-    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}"
+            type="module"></script>
 
     <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
     <script defer th:src="@{/js/invite.js}" type="module"></script>
@@ -34,7 +35,7 @@
     <link rel="stylesheet" th:href="@{/js/message_menu/message_menu.css}"/>
 
     <!-- emoji -->
-<!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
     <script th:src="@{/js/emoji/index.min.js}"></script>
     <script defer th:src="@{/js/emoji/attachEmoji.js}" type="module"></script>
 
@@ -543,7 +544,8 @@
                     </div>
 
                     <div class="p-classic_nav__right_header">
-                        <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal" data-target="#modalSearcher">
+                        <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal"
+                                data-target="#modalSearcher">
                             <i class="p-classic_nav__right__search__icon">🔍</i>
                             <span class="p-classic_nav__right__search__placeholder">Search</span>
                         </button>
@@ -647,7 +649,8 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__invite_people__button" id="invite-button">
+                                                    <button class="p-channel_sidebar__invite_people__button"
+                                                            id="invite-button">
                                                         <span class="p-channel_sidebar__name-2">✚ Invite people</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
@@ -742,11 +745,11 @@
                                 <div class="contract-trigger"></div>
                             </div>
                         </div>
-                        <div class="settingsList" id="settingsList">
-                            <div>
-                                <button type="button" aria-label="Jump to date..."></button>
-                            </div>
-                        </div>
+                        <!--                        <div class="settingsList" id="settingsList">-->
+                        <!--                            <div>-->
+                        <!--                                <button type="button" aria-label="Jump to date..."></button>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                     </div>
                     <!--                    <footer class="p-workspace__primary_view_footer">-->
                     <!--                        <div class="p-message_pane_input">-->
@@ -925,7 +928,6 @@
             <div class="user-box" id="user-box">
             </div>
         </div> -->
-
 </div>
 
 <!--&lt;!&ndash;add channel modal&ndash;&gt;-->
@@ -966,7 +968,11 @@
 <!--        </form>-->
 <!--    </div>-->
 <!--</div>-->
-
+<div class="settingsList" id="settingsList">
+    <div>
+        <button type="button">Jump to date...</button>
+    </div>
+</div>
 <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -999,7 +1005,8 @@
 </div>
 
 <!--Модальное окно для поиска каналов и пользователей-->
-<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
     <div class="modal-dialog searcher-modal" role="presentation">
         <div class="modal-content">
 
@@ -1007,7 +1014,9 @@
                 <div class="search-input-box">
                     <i class="p-classic_nav__right__search__icon">🔍</i>
                     <div class="search-input-box-input">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search for messages, replies, or even insightful asides" style="border: 0px">
+                        <input type="text" id="searchInput" class="form-control"
+                               placeholder="Search for messages, replies, or even insightful asides"
+                               style="border: 0px">
                     </div>
 
                 </div>
