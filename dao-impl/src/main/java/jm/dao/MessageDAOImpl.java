@@ -81,4 +81,16 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
             return null;
         }
     }
+
+    @Override
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) {
+        try {
+            List<Message> resultList = entityManager.createNativeQuery("select id, content, date_create, filename, bot_id, channel_id, channels_users.user_id  from messages inner join channels_users using (channel_id) where channels_users.user_id = ? and content like '%@channel%'", Message.class)
+                    .setParameter(1, userId)
+                    .getResultList();
+            return resultList;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }
