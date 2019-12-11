@@ -745,11 +745,6 @@
                                 <div class="contract-trigger"></div>
                             </div>
                         </div>
-                        <!--                        <div class="settingsList" id="settingsList">-->
-                        <!--                            <div>-->
-                        <!--                                <button type="button" aria-label="Jump to date..."></button>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
                     </div>
                     <!--                    <footer class="p-workspace__primary_view_footer">-->
                     <!--                        <div class="p-message_pane_input">-->
@@ -970,9 +965,47 @@
 <!--</div>-->
 <div class="settingsList" id="settingsList">
     <div>
-        <button type="button">Jump to date...</button>
+        <div class="settingsDiv">
+            <button class="settingsButton1" type="button"><span class="settingsText">Jump to date...</span></button>
+            <button class="settingsButton" type="button"><span class="settingsText">Add people to channel</span>
+            </button>
+            <button class="settingsButton" type="button"><span class="settingsText">View channel details</span></button>
+            <button class="settingsButton" type="button"><span class="settingsText">Copy channel name</span></button>
+            <button class="settingsButton" type="button"><span class="settingsText">Manage posting permissions</span>
+            </button>
+            <button class="settingsButton2" type="button" data-toggle="modal" data-target="#additionalOptionsModal" id="additionalOptionsButton"><span class="settingsText">Additional options</span></button>
+        </div>
+        <div class="settingsDiv">
+            <button class="settingsButton3" type="button"><span class="settingsText">Notification preference</span>
+            </button>
+            <button class="settingsButton4" type="button"><span class="settingsText">Mute channel</span></button>
+        </div>
+        <button class="settingsButton5" type="button"><span class="settingsText">Add app</span></button>
     </div>
 </div>
+
+<div class="additionalOptions" id="additionalOptions">
+    <div align="center" class="additionalOptionsHeader" id="additionalOptionsHeader">
+        <h1 class="additionalOptionsHeaderSpan" id="additionalOptionsHeaderSpan"><span>Additional options for #</span></h1>
+    </div>
+    <button class="additionalOptionsCloseButton"><span aria-hidden="true">&times;</span></button>
+    <br>
+    <br>
+    <div class="col-md-4 justify-content-center mx-auto">
+        <div>
+            <div class="formButton">
+                <button class="additionalOptionsButton" id="exampleLink1"><span><b>Archive this channel</b>
+                <br>If you don’t think it will be used anymore and you want to clean up, archive it. The channel can be unarchived later (but everyone will have been removed).</span>
+                </button>
+            </div>
+            <div>
+                <button class="additionalOptionsButton" id="exampleLink2"><span><b>Set the channel description</b>
+                <br>Channel descriptions are especially useful to new members choosing which conversations to join.</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -997,12 +1030,47 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал
+                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать
+                    канал
                 </button>
             </div>
         </div>
     </div>
 </div>
+
+<!--Модальное окно для дополнительных опций-->
+<!--<div class="modal" id="additionalOptionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"-->
+<!--     aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="additionalModalLongTitle"></h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <form method="post">-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="exampleInputChannelName">Название канала</label>-->
+<!--                        <input type="email" class="form-control" id="exampleInputChannelName"-->
+<!--                               placeholder="Введите название канала">-->
+<!--                    </div>-->
+<!--                    <div class="form-check">-->
+<!--                        <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
+<!--                        <label class="form-check-label" for="exampleCheck1">Сделать канал приватным?</label>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать-->
+<!--                    канал-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 
 <!--Модальное окно для поиска каналов и пользователей-->
 <div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"

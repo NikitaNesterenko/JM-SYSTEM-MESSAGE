@@ -3236,12 +3236,168 @@
 
 .settingsList{
     position: absolute;
-    background-color: #1d9bd1;
-    height: 250px;
-    width: 200px;
+    background-color: #ffffff;
+    height: 231px;
+    width: 210px;
     border-style: solid;
     border-width: thin;
     border-color: #cccccc;
+}
+
+.settingsButton1{
+    margin-top: 5px;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.settingsButton{
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.settingsButton2{
+    margin-bottom: 5px;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.settingsButton3{
+    margin-top: 5px;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.settingsButton4{
+    margin-bottom: 5px;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.settingsDiv{
+    border-bottom:1px solid #cccccc;
+}
+
+.settingsButton5{
+    margin-top: 5px;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.settingsText{
+    padding-left: 5px;
+}
+
+.settingsButton:hover{
+    background-color: #1d9bd1;
+}
+
+.settingsButton1:hover{
+    background-color: #1d9bd1;
+}
+
+.settingsButton2:hover{
+    background-color: #1d9bd1;
+}
+
+.settingsButton3:hover{
+    background-color: #1d9bd1;
+}
+
+.settingsButton4:hover{
+    background-color: #1d9bd1;
+}
+
+.settingsButton5:hover{
+    background-color: #1d9bd1;
+}
+
+#additionalOptions{
+    display: none;
+    font-style: italic;
+    border-radius: 5px;
+    font-size: 0.8em;
+    right: 0%;
+    top: 0%;
+    z-index: 1001;
+}
+
+.additionalOptions{
+    position: absolute;
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+}
+
+.formButton{
+    /*padding-top: 15px;*/
+    /*padding-bottom: 15px;*/
+    border-bottom:1px solid #cccccc;
+    border-top:1px solid #cccccc;
+}
+
+.additionalOptionsButton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-right: 20px;
+    border: none;
+    font-size: 15px;
+    text-align: left;
+    width: 100%;
+    background-color: #ffffff;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.additionalOptionsButton span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.additionalOptionsButton span:after {
+    content: '\2192';
+    font-size: 25px;
+    position: absolute;
+    opacity: 0;
+    top: 18px;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.additionalOptionsHeaderSpan{
+    font-style: italic;
+}
+
+.additionalOptionsButton:hover span {
+    padding-right: 25px;
+}
+
+.additionalOptionsButton:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.additionalOptionsHeader{
+    border-bottom:1px solid #cccccc;
 }
 /*end of button inside input field*/
 
