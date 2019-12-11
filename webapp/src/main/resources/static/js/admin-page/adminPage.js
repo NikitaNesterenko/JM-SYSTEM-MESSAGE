@@ -86,7 +86,7 @@ $("#searchValue").keyup(function () {
 
     $.each(users, (i, item) => {
 
-        if (item.login.match(reg)) {
+        if (item.login.match(reg) || item.name.match(reg) || item.lastName.match(reg) || item.email.match(reg)) {
             foundMembers.push(item);
         }
         showFoundMembers(foundMembers);
