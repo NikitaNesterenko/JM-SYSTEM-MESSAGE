@@ -63,17 +63,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .atCommonLocations())
                 .permitAll();
 
+        // Anyone can access homepage.
+        http
+                .authorizeRequests()
+                .antMatchers("/").permitAll();
+
         // Anyone not authenticated. Avoid double signin
         http
                 .authorizeRequests()
-                .antMatchers("/", "/signin").not().authenticated()
+                .antMatchers("/signin").anonymous()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         // For OWNER only.
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("OWNER")
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         // For USER and OWNER
         http.authorizeRequests()
