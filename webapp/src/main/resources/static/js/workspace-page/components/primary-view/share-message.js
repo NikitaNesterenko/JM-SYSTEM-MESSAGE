@@ -16,7 +16,7 @@ class SharedMessage {
 
 $(document).on('click', '#share_message_submit_button_id', function (e) {
     const msg_id = $(e.target).data('share_msg_id');
-    const msg_channel_id = $(e.target).data('share_msg_channel_id');
+    const msg_channel_id = $(e.target).data('share_msg_channel_id');//share_msg_channel_id
     const choosing_channel_id = $('#share_message_channel_select_id').val();
 
     const user_promise = user_service.getLoggedUser();
@@ -451,7 +451,7 @@ $(document).on('click', '#share-message-id', function (e) {
                                                 
                                                             <div class="c-dialog__footer--has_buttons">
                                                                 <div class="c-dialog__footer_buttons">    
-                                                                    <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}">
+                                                                    <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channel.id}">
                                                                         Share
                                                                     </button>
                                                                 </div>

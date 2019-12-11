@@ -67,7 +67,7 @@ export class ChannelRestPaginationService extends  RestPaginationService {
         const response = await fetch('/rest/api/channels/workspace/' + workspace_id + '/user/' + user_id);
         return response.json();
     }
-    };
+
     getChannelsByUserId = async (id) => {
         const response = await fetch('/rest/api/channels/user/' + id)
         return await response.json()
