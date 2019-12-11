@@ -25,4 +25,6 @@ public interface ChannelService {
 
     List<Channel> getChannelsByWorkspaceId(Long id);
 
+    List<Channel> getChannelsByUserId(Long userId);
+
 }

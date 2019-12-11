@@ -58,14 +58,14 @@ public class BotRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         logger.info("Бот для workspace c id = {}", id);
-        logger.info(bot.toString());
+        //logger.info(bot.toString());
         return new ResponseEntity<Bot>(bot, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Bot> getBotById(@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
-        logger.info(botService.getBotById(id).toString());
+        //logger.info(botService.getBotById(id).toString());
         return new ResponseEntity<Bot>(botService.getBotById(id), HttpStatus.OK);
     }
 
