@@ -222,3 +222,11 @@ export const populateDirectMessages = async () => {
         }
     });
 };
+
+autosize($('textarea'));
+
+$("#form_message_input").keypress(function (e) {
+    if (e.which == 13) {
+        $("#messageButton").click();
+    }
+});
