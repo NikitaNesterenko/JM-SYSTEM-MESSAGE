@@ -60,6 +60,17 @@ const message_menu = (message) => {
         `<button type="button" class="btn btn-light">&#10140;</button>` + // share
         `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
         `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>` + // submenu
+        `<button type="button" class="btn btn-light" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">`+
+        `<span class=class="btn btn-light">&#8230;</span>`+
+        `</button>`+
+        `<div class="dropdown-menu" aria-labelledby="dropdownMenuReference">`+
+            `<a class="dropdown-item" href="#">no implementation</a>`+
+            `<div class="dropdown-divider"></div>`+
+            `<a class="dropdown-item" onclick="copyLinkClick(event)" data-msg-id="${message.id}" data-user-id="${message.user === null ? '' : message.user.id}" href="#">Copy Link</a>`+
+        `<a class="dropdown-item" href="#">no implementation</a>`+
+        `<div class="dropdown-divider"></div>`+
+            `<a class="dropdown-item" href="#">no implementation</a>`+
+        `</div>`+
         `</div>` +
         `</div>`;
 };
@@ -310,5 +321,30 @@ function add_attached_file (message) {
     } else {
         return ``;
     }
+}
+
+window.copyLinkClick = function(e) {
+    let value = $(e.currentTarget).attr('data-msg-id');
+    let toCopy = window.location.origin + window.location.pathname + '?channel_id=' + sessionStorage.getItem("channelName") + '&msg_id=' + value;
+    writeToBuffer(toCopy);
+}
+
+window.writeToBuffer = function(text) {
+    let textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position="fixed";  //avoid scrolling to bottom
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        let successful = document.execCommand('copy');
+        let msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
 }
 

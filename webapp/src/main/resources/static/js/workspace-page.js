@@ -25,9 +25,11 @@ window.addEventListener('load', function () {
     btn.onclick = function () {
         modal.style.display = "block";
     };
-    span.onclick = function () {
-        modal.style.display = "none";
-    };
+    if(span) {
+        span.onclick = function () {
+            modal.style.display = "none";
+        };
+    }
     window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
@@ -155,3 +157,11 @@ $("#addChannelSubmit").click(
         };
         channel_service.create(entity);
     });
+
+autosize($('textarea'));
+
+$("#form_message_input").keypress(function (e) {
+    if (e.which == 13) {
+        $("#messageButton").click();
+    }
+});
