@@ -20,7 +20,8 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     public List<Message> getMessageByContent(String word) {
         try {
             return (List<Message>) entityManager.createNativeQuery("select * from messages where content=?", Message.class)
-                    .setParameter(1, word);
+                    .setParameter(1, word)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
         }
@@ -70,10 +71,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getStarredMessagesForUser(Long id) {
         try {
-            return entityManager.createQuery(
-                    "select m from Message m join m.starredByWhom as sm where sm.id = :id",
-                    Message.class
-            )
+            return entityManager.createQuery("select m from Message m join m.starredByWhom as sm where sm.id = :id", Message.class)
                     .setParameter("id", id)
                     .getResultList();
         } catch (NoResultException e) {
