@@ -1,14 +1,12 @@
 package jm.dao;
 
 import jm.api.dao.MessageDAO;
-import jm.model.Channel;
 import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +20,8 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     public List<Message> getMessageByContent(String word) {
         try {
             return (List<Message>) entityManager.createNativeQuery("select * from messages where content=?", Message.class)
-                    .setParameter(1, word);
+                    .setParameter(1, word)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
         }
@@ -32,7 +31,8 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     public List<Message> getMessagesByChannelId(Long id) {
         try {
             return (List<Message>) entityManager.createNativeQuery("select * from messages where channel_id=?", Message.class)
-                    .setParameter(1, id).getResultList();
+                    .setParameter(1, id)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
         }
@@ -71,10 +71,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getStarredMessagesForUser(Long id) {
         try {
-            return entityManager.createQuery(
-                    "select m from Message m join m.starredByWhom as sm where sm.id = :id",
-                    Message.class
-            )
+            return entityManager.createQuery("select m from Message m join m.starredByWhom as sm where sm.id = :id", Message.class)
                     .setParameter("id", id)
                     .getResultList();
         } catch (NoResultException e) {
