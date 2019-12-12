@@ -56,22 +56,48 @@ public class Message {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> starredByWhom;
 
-    public Message(User user, String content, LocalDateTime dateCreate) {
+    @Column(name = "shared_message_id")
+    private Long sharedMessageId;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
+    public Message(/*Channel channel,*/ User user, String content, LocalDateTime dateCreate) {
+        //this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Bot bot, String content, LocalDateTime dateCreate) {
+    public Message(/*Channel channel,*/ Bot bot, String content, LocalDateTime dateCreate) {
+        //this.channel = channel;
         this.bot = bot;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Long id, User user, String content, LocalDateTime dateCreate) {
+    public Message(Long id, /*Channel channel,*/ User user, String content, LocalDateTime dateCreate) {
         this.id = id;
+        //this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
+
+    //two constructors for sharing messages
+    /*public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+        this.channel = channel;
+        this.user = user;
+        this.content = content;
+        this.dateCreate = dateCreate;
+        this.sharedMessageId = sharedMessageId;
+    }
+
+    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+        this.channel = channel;
+        this.bot = bot;
+        this.content = content;
+        this.dateCreate = dateCreate;
+        this.sharedMessageId = sharedMessageId;
+    }*/
 }
