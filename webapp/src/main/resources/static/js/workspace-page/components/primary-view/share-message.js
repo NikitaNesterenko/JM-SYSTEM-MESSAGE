@@ -14,12 +14,13 @@ class SharedMessage {
     }
 }
 
-// sharring message scope variables
+// sharring message scope variables (почти global)
 let user;
 let channel;
 let message;
 let user_or_bot_name;
 let time;
+let channelsWhereUserIs;
 
 $(document).on('click', '#share-message-id', function (e) {
     let msg_id = $(e.target).data('msg_id');
@@ -58,7 +59,7 @@ const showSharingMessagesDialogBox = () => {
                        </div>
                      <div class="c-dialog__body--scrollbar_with_padding">`;
 
-    let secondPart;
+    let secondPart; // depends on target message privacy channel type
 
     let thirdPart = `<div class="p-share_dialog__section_middle">
                        <div class="p-share_dialog_message_input">
@@ -123,12 +124,29 @@ const showSharingMessagesDialogBox = () => {
                         </div>
                       </div>`;
 
-    let divOpened;
+    let divOpened = `<b><h6>Share with</h6></b>
+                         <select class="share_message_channel_select" id="share_message_channel_select_id"></select>`;
 
     if (channel.isPrivate){
         secondPart = divPrivate;
     } else {
         secondPart = divOpened;
+        const share_message_channel_select = document.getElementById("share_message_channel_select_id");
+        const user_channel_promise = channel_service.getChannelsByUserId(user.id);
+        user_channel_promise.then(channelsForShare => {
+            channelsForShare.forEach(function (targetChannel, i) {
+                let share_message_channel_select_container = document.createElement('option');
+                share_message_channel_select_container.value = targetChannel.id;
+
+                if(targetChannel.isPrivate){
+                    share_message_channel_select_container.innerHTML = `<div>🔒 ${targetChannel.name}</div>`;
+                } else {
+                    share_message_channel_select_container.innerHTML = `<div># ${channel.name}</div>`;
+                }
+
+                share_message_channel_select.append(share_message_channel_select_container);
+            })
+        });
     }
 
     sharing_messages_container.innerHTML = firstPart + secondPart + thirdPart;
@@ -249,6 +267,12 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
     sendName(newMessage);
     message_service.create(newMessage);
 
+    document.getElementById("share_message_modal_id").style.display = "none";
+    const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
+    share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
+});
+
+$(document).on('click', '#share_message_close_id', function () {
     document.getElementById("share_message_modal_id").style.display = "none";
     const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
     share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
@@ -512,11 +536,7 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
 //     });
 // });
 
-$(document).on('click', '#share_message_close_id', function () {
-    document.getElementById("share_message_modal_id").style.display = "none";
-    const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
-    share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
-});
+
 
 // $(document).on('click', '#share-message-id', function (e) {
 //     let msg_id = $(e.target).data('msg_id');
@@ -730,6 +750,3 @@ $(document).on('click', '#share_message_close_id', function () {
 //         document.getElementById("share_message_modal_id").style.display = "flex";
 //     });
 // });
-
-
-
