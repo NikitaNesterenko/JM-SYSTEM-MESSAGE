@@ -1,8 +1,8 @@
 package jm.dao;
 
 import jm.api.dao.ChannelDAO;
-import jm.model.Channel;
 import jm.dto.ChannelDTO;
+import jm.model.Channel;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     public List<Channel> getChannelsByOwner(User user) {
         try {
             return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
-                    .setParameter(1, user.getId()).getResultList();
+                    .setParameter(1, user.getId())
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
         }
