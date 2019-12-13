@@ -249,12 +249,19 @@ const showSharingMessagesDialogBox = () => {
                       </div>`;
 
     let divOpened = `<b><h6>Share with</h6></b>
-                         <select class="share_message_channel_select" id="share_message_channel_select_id"></select>`;
+                         <select class="share_message_channel_select" id="share_message_channel_select_id"></select>
+                     </div>`;
 
     if (channel.isPrivate){
         secondPart = divPrivate;
     } else {
         secondPart = divOpened;
+    }
+
+    sharing_messages_container.innerHTML = firstPart + secondPart + thirdPart;
+    sharing_message_modal_box.append(sharing_messages_container);
+
+    if(!channel.isPrivate){
         const share_message_channel_select = document.getElementById("share_message_channel_select_id");
         const user_channel_promise = channel_service.getChannelsByUserId(user.id);
         user_channel_promise.then(channelsForShare => {
@@ -273,8 +280,7 @@ const showSharingMessagesDialogBox = () => {
         });
     }
 
-    sharing_messages_container.innerHTML = firstPart + secondPart + thirdPart;
-    sharing_message_modal_box.append(sharing_messages_container);
+
     document.getElementById("share_message_modal_id").style.display = "flex";
 };
 
