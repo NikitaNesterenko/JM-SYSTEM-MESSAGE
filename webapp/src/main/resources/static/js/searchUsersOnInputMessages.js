@@ -3,15 +3,17 @@ import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 const user_service = new UserRestPaginationService();
 const modal = document.getElementById('associatedUserList');
 
-$("#form_message_input").on('input', function () {
+$('#form_message_input').on('input', function () {
     let text = document.getElementById('form_message_input').value;
     let sub_user;
-    if (text.length === 1 && text === "@"){
+
+    if (!text.includes(" ") && text.length >= 1 && text.slice(0,1) === "@") {
         modal.style.display = "block";
-    }else if (text.length >=3 && text.slice(0,1) === "@"){
         sub_user = text.slice(1);
+        showAllUsers(sub_user)
+    } else {
+        modal.style.display = "none";
     }
-    showAllUsers(sub_user)
 });
 
 const showAllUsers = (text) => {
