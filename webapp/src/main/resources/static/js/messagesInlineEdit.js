@@ -53,6 +53,7 @@ function onEditSubmit(ev) {
     const messageId = editMessageForm.getAttribute("data-message-id");
     const messageAttachment = editMessageForm.getAttribute("data-attachment");
     const messageText = editMessageForm[0].value;
+    const starredMessagesForUser = message_service.getStarredMessagesForUser(messageId);
 
     // parentDiv.innerHTML = `<span class="c-message__body">${messageText}</span>`;
     activeEdit = false;
@@ -70,7 +71,8 @@ function onEditSubmit(ev) {
             "channel": channel,
             "content": messageText,
             "dateCreate": currentDate,
-            "filename": messageAttachment
+            "filename": messageAttachment,
+            "starredByWhom":starredMessagesForUser
         };
         message_service.update(message).then(() => {
             sendName(message);
