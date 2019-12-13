@@ -38,7 +38,6 @@ $(document).on('click', '#share-message-id', function (e) {
 
         message.user === null ? user_or_bot_name = message.bot.name : user_or_bot_name = message.user.name;
 
-        // showSharingMessagesDialogBox();
         prepareShareModalWindow();
         showShareModalWindow();
     });
@@ -166,122 +165,8 @@ const showShareModalWindow = () => {
     $('#shareMessageModal').modal('show');
 };
 
-const showSharingMessagesDialogBox = () => {
-    const sharing_message_modal_box = document.getElementById("share_message_modal_id");
-    let sharing_messages_container = document.createElement('div');
-    sharing_messages_container.className = "share_message_modal_overlay_after_open";
-    sharing_messages_container.id = "share_message_modal_overlay_after_open_id";
-
-    let firstPart = `<div class="p-share_dialog__modal">
-                       <div class="c-dialog__header">
-                         <h1 class="c-dialog__title_overflow_ellipsis">
-                           Share this message
-                         </h1>
-                         <button class="c-dialog__close" id="share_message_close_id">
-                           <b><h2>×</h2></b>
-                         </button>
-                       </div>
-                     <div class="c-dialog__body--scrollbar_with_padding">`;
-
-    let secondPart; // depends on target message privacy channel type
-
-    let thirdPart = `<div class="p-share_dialog__section_middle">
-                       <div class="p-share_dialog_message_input">
-                         <input type="text" class="p-share_dialog_message_inside_input" placeholder="Add a message, if you’d like." id="share_message_input_id">
-                       </div>
-                     </div>
-                     <div class="p-share_dialog__section_bottom">
-                       <div class="c-share_message_attachment">
-                         <div class="c-share-message_attachment__border">
-                           </div>
-                             <div class="c-share-message_attachment__body">
-                               <div class="c-share-message_attachment__row">
-                                 <span class="c-share-message_presentation">
-                                   <span class="c-share-message_attachment__author--distinct">
-                                     <span class="c-share-message_attachment__part">
-                                       <button class="c-share-message_attachment__author_button">
-                                         <img class="c-share-msg_avatar__image">
-                                       </button>
-                                       <button class="c-share-message_attachment__author_name">
-                                         <span>
-                                           ${user_or_bot_name}
-                                         </span>
-                                       </button>
-                                     </span>
-                                   </span>
-                                 </span>
-                               </div>
-                               <div class="c-share-message_attachment__row">
-                                 <span class="c-share-message_attachment__text">
-                                   <span>
-                                     ${message.content}
-                                   </span>
-                                 </span>
-                               </div>
-                             </div>
-                           </div>
-                         </div>
-                       </div>
-                       <div class="c-dialog__footer--has_buttons">
-                         <div class="c-dialog__footer_buttons">
-                           <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channel.id}">
-                             Share
-                           </button>
-                         </div>
-                       </div>
-                     </div>`;
-
-    let divPrivate = `<div class="p-share_dialog__section_top">
-                        <div class="c-alert--level_warning">
-                          <span class="c-alert__message">
-                            <span class="p-share_dialog__warning_message">
-                              <strong>
-                                This message is from a private channel,
-                              </strong>
-                                so it can only be shared with
-                              <strong>
-                                ${channel.name}
-                              </strong>
-                                .
-                            </span>
-                          </span>
-                        </div>
-                      </div>`;
-
-    let divOpened = `<b><h6>Share with</h6></b>
-                         <select class="share_message_channel_select" id="share_message_channel_select_id"></select>
-                     </div>`;
-
-    if (channel.isPrivate){
-        secondPart = divPrivate;
-    } else {
-        secondPart = divOpened;
-    }
-
-    sharing_messages_container.innerHTML = firstPart + secondPart + thirdPart;
-    sharing_message_modal_box.append(sharing_messages_container);
-
-    if(!channel.isPrivate){
-        const share_message_channel_select = document.getElementById("share_message_channel_select_id");
-        const user_channel_promise = channel_service.getChannelsByUserId(user.id);
-        user_channel_promise.then(channelsForShare => {
-            channelsForShare.forEach(function (targetChannel, i) {
-                let share_message_channel_select_container = document.createElement('option');
-                share_message_channel_select_container.value = targetChannel.id;
-
-                if(targetChannel.isPrivate){
-                    share_message_channel_select_container.innerHTML = `<div>🔒 ${targetChannel.name}</div>`;
-                } else {
-                    share_message_channel_select_container.innerHTML = `<div># ${channel.name}</div>`;
-                }
-
-                share_message_channel_select.append(share_message_channel_select_container);
-            })
-        });
-    }
-
-
-    document.getElementById("share_message_modal_id").style.display = "flex";
+const hideShareModalWindow = () => {
+    $('#shareMessageModal').modal('hide');
 };
 
 $(document).on('click', '#share_message_submit_button_id', function (e) {
@@ -292,6 +177,30 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
 
     let user_or_bot_id;
     message.user === null ? user_or_bot_id = message.bot.id : user_or_bot_id = message.user.id;
+//
+    const choosing_channel_id = $('#exampleFormControlSelect1').val();
+    const choosing_channel_promise = channel_service.getById(choosing_channel_id);
+
+    alert("select" + choosing_channel_id);
+
+     let choosing_channel;
+    // Promise.all([choosing_channel_promise]).then(value => {
+    //     choosing_channel = value[0];
+    // });
+    const user_promise = user_service.getLoggedUser();
+    Promise.all([user_promise, choosing_channel_promise]).then(value => {
+        user = value[0];
+        choosing_channel = value[1];
+    });
+
+
+    // if(channel.isPrivate){
+    //     alert("top" + channel.id);
+    // } else {
+    //     alert("top" + choosing_channel.id);
+    // }
+
+//
 
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -392,21 +301,152 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 
     const currentDate = convert_date_to_format_Json(new Date());
-    const newMessage = new SharedMessage(channel, user, user_message, currentDate, message.id);
+
+
+    // тут доделать
+    let channel_to_send;
+    if (channel.isPrivate){
+        channel_to_send = channel;
+    } else {
+        channel_to_send = choosing_channel;
+    }
+
+    alert("here" + channel_to_send.id);
+
+    const newMessage = new SharedMessage(channel_to_send, user, user_message, currentDate, message.id);
 
     sendName(newMessage);
     message_service.create(newMessage);
 
-    document.getElementById("share_message_modal_id").style.display = "none";
-    const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
-    share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
+    // document.getElementById("share_message_modal_id").style.display = "none";
+    // const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
+    // share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
+    hideShareModalWindow();
 });
 
-$(document).on('click', '#share_message_close_id', function () {
-    document.getElementById("share_message_modal_id").style.display = "none";
-    const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
-    share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
-});
+// const showSharingMessagesDialogBox = () => {
+//     const sharing_message_modal_box = document.getElementById("share_message_modal_id");
+//     let sharing_messages_container = document.createElement('div');
+//     sharing_messages_container.className = "share_message_modal_overlay_after_open";
+//     sharing_messages_container.id = "share_message_modal_overlay_after_open_id";
+//
+//     let firstPart = `<div class="p-share_dialog__modal">
+//                        <div class="c-dialog__header">
+//                          <h1 class="c-dialog__title_overflow_ellipsis">
+//                            Share this message
+//                          </h1>
+//                          <button class="c-dialog__close" id="share_message_close_id">
+//                            <b><h2>×</h2></b>
+//                          </button>
+//                        </div>
+//                      <div class="c-dialog__body--scrollbar_with_padding">`;
+//
+//     let secondPart; // depends on target message privacy channel type
+//
+//     let thirdPart = `<div class="p-share_dialog__section_middle">
+//                        <div class="p-share_dialog_message_input">
+//                          <input type="text" class="p-share_dialog_message_inside_input" placeholder="Add a message, if you’d like." id="share_message_input_id">
+//                        </div>
+//                      </div>
+//                      <div class="p-share_dialog__section_bottom">
+//                        <div class="c-share_message_attachment">
+//                          <div class="c-share-message_attachment__border">
+//                            </div>
+//                              <div class="c-share-message_attachment__body">
+//                                <div class="c-share-message_attachment__row">
+//                                  <span class="c-share-message_presentation">
+//                                    <span class="c-share-message_attachment__author--distinct">
+//                                      <span class="c-share-message_attachment__part">
+//                                        <button class="c-share-message_attachment__author_button">
+//                                          <img class="c-share-msg_avatar__image">
+//                                        </button>
+//                                        <button class="c-share-message_attachment__author_name">
+//                                          <span>
+//                                            ${user_or_bot_name}
+//                                          </span>
+//                                        </button>
+//                                      </span>
+//                                    </span>
+//                                  </span>
+//                                </div>
+//                                <div class="c-share-message_attachment__row">
+//                                  <span class="c-share-message_attachment__text">
+//                                    <span>
+//                                      ${message.content}
+//                                    </span>
+//                                  </span>
+//                                </div>
+//                              </div>
+//                            </div>
+//                          </div>
+//                        </div>
+//                        <div class="c-dialog__footer--has_buttons">
+//                          <div class="c-dialog__footer_buttons">
+//                            <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channel.id}">
+//                              Share
+//                            </button>
+//                          </div>
+//                        </div>
+//                      </div>`;
+//
+//     let divPrivate = `<div class="p-share_dialog__section_top">
+//                         <div class="c-alert--level_warning">
+//                           <span class="c-alert__message">
+//                             <span class="p-share_dialog__warning_message">
+//                               <strong>
+//                                 This message is from a private channel,
+//                               </strong>
+//                                 so it can only be shared with
+//                               <strong>
+//                                 ${channel.name}
+//                               </strong>
+//                                 .
+//                             </span>
+//                           </span>
+//                         </div>
+//                       </div>`;
+//
+//     let divOpened = `<b><h6>Share with</h6></b>
+//                          <select class="share_message_channel_select" id="share_message_channel_select_id"></select>
+//                      </div>`;
+//
+//     if (channel.isPrivate){
+//         secondPart = divPrivate;
+//     } else {
+//         secondPart = divOpened;
+//     }
+//
+//     sharing_messages_container.innerHTML = firstPart + secondPart + thirdPart;
+//     sharing_message_modal_box.append(sharing_messages_container);
+//
+//     if(!channel.isPrivate){
+//         const share_message_channel_select = document.getElementById("share_message_channel_select_id");
+//         const user_channel_promise = channel_service.getChannelsByUserId(user.id);
+//         user_channel_promise.then(channelsForShare => {
+//             channelsForShare.forEach(function (targetChannel, i) {
+//                 let share_message_channel_select_container = document.createElement('option');
+//                 share_message_channel_select_container.value = targetChannel.id;
+//
+//                 if(targetChannel.isPrivate){
+//                     share_message_channel_select_container.innerHTML = `<div>🔒 ${targetChannel.name}</div>`;
+//                 } else {
+//                     share_message_channel_select_container.innerHTML = `<div># ${channel.name}</div>`;
+//                 }
+//
+//                 share_message_channel_select.append(share_message_channel_select_container);
+//             })
+//         });
+//     }
+//
+//
+//     document.getElementById("share_message_modal_id").style.display = "flex";
+// };
+
+// $(document).on('click', '#share_message_close_id', function () {
+//     document.getElementById("share_message_modal_id").style.display = "none";
+//     const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
+//     share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
+// });
 
 // $(document).on('click', '#share_message_submit_button_id', function (e) {
 //     const msg_id = $(e.target).data('share_msg_id');
@@ -665,8 +705,6 @@ $(document).on('click', '#share_message_close_id', function () {
 //         }
 //     });
 // });
-
-
 
 // $(document).on('click', '#share-message-id', function (e) {
 //     let msg_id = $(e.target).data('msg_id');
