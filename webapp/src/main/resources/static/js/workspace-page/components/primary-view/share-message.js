@@ -38,9 +38,133 @@ $(document).on('click', '#share-message-id', function (e) {
 
         message.user === null ? user_or_bot_name = message.bot.name : user_or_bot_name = message.user.name;
 
-        showSharingMessagesDialogBox();
+        // showSharingMessagesDialogBox();
+        prepareShareModalWindow();
+        showShareModalWindow();
     });
 });
+
+const prepareShareModalWindow = () => {
+    const parentDynamicContentBlock = document.getElementById("share-message-modal-body");
+
+    let choiseDynamicContentBlock = document.createElement('div');
+    choiseDynamicContentBlock.className = "col pb-4 dynamic-created";
+
+    let attachmentDynamicContentBlock = document.createElement('div');
+    attachmentDynamicContentBlock.className = "col pb-4 dynamic-created";
+
+    let additionMessageDynamicBlock = document.createElement('div');
+    additionMessageDynamicBlock.className = "col pb-4 dynamic-created";
+
+    let privateChannelChoise = `<span class="p-share_dialog__warning_message">
+                                  <strong>
+                                    This message is from a private channel,
+                                  </strong>
+                                    so it can only be shared with
+                                  <strong>
+                                    🔒 ${channel.name}
+                                  </strong>
+                                    .
+                                </span>`;
+
+    let additionMessage = `<div class="p-share_dialog_message_input">
+                             <input type="text" class="p-share_dialog_message_inside_input"
+                               placeholder="Add a message, if you’d like." id="share_message_input_id">
+                           </div>`;
+
+    let messageAttachment = `<div class="c-share_message_attachment">
+                               <div class="c-share-message_attachment__border">
+                               </div>
+                               <div class="c-share-message_attachment__body">
+                                 <div class="c-share-message_attachment__row">
+                                   <span class="c-share-message_presentation">
+                                     <span class="c-share-message_attachment__author--distinct">
+                                       <span class="c-share-message_attachment__part">
+                                         <button class="c-share-message_attachment__author_button">
+                                           <img class="c-share-msg_avatar__image">
+                                         </button>
+                                         <button class="c-share-message_attachment__author_name">
+                                           <span>
+                                             ${user_or_bot_name}
+                                           </span>
+                                         </button>
+                                       </span>
+                                     </span>
+                                   </span>
+                                 </div>
+                                 <div class="c-share-message_attachment__row">
+                                   <span class="c-share-message_attachment__text">
+                                     <span>
+                                       ${message.content}
+                                     </span>
+                                   </span>
+                                 </div>
+                               </div>
+                             </div>`;
+
+    let selectChannel = `<div class="form-group">
+                           <label for="exampleFormControlSelect1">Share with</label>
+                           <select class="form-control" id="exampleFormControlSelect1">
+                             <option>1</option>
+                             <option>2</option>
+                             <option>3</option>
+                             <option>4</option>
+                             <option>5</option>
+                           </select>
+                         </div>`;
+    if (channel.isPrivate){
+        choiseDynamicContentBlock.innerHTML = privateChannelChoise;
+    } else {
+        const userChannelPromise = channel_service.getChannelsByUserId(user.id);
+        userChannelPromise.then(channelsForShare => {
+
+            let block = `<div class="form-group">
+                               <label for="exampleFormControlSelect1">Share with</label>
+                               <select class="form-control" id="exampleFormControlSelect1">`;
+
+            channelsForShare.forEach(function (targetChannel, i) {
+                if (targetChannel.isPrivate) {
+                    block += `<option value="${targetChannel.id}">
+                                <div>🔒 ${targetChannel.name}</div>
+                              </option>`;
+                } else {
+                    block += `<option value="${targetChannel.id}">
+                                <div># ${targetChannel.name}</div>
+                              </option>`;
+                }
+            });
+
+            block += `</select>
+                      </div>`;
+
+            choiseDynamicContentBlock.innerHTML = block;
+        });
+    }
+
+    attachmentDynamicContentBlock.innerHTML = messageAttachment;
+    additionMessageDynamicBlock.innerHTML = additionMessage;
+
+    parentDynamicContentBlock.append(choiseDynamicContentBlock);
+    parentDynamicContentBlock.append(attachmentDynamicContentBlock);
+    parentDynamicContentBlock.append(additionMessageDynamicBlock);
+
+
+    const submitButton = document.getElementById("share-message-modal-body");
+    submitButton.setAttribute("data-share_msg_id", message.id);
+    submitButton.setAttribute("data-share_msg_channel_id", message.channel.id);
+
+};
+
+// remove all dynamically created content when modal window is hidden.
+$('#shareMessageModal').on('hidden.bs.modal', function (e) {
+    // $('.privacy-trigger').remove();
+    $('.dynamic-created').remove();
+
+})
+
+const showShareModalWindow = () => {
+    $('#shareMessageModal').modal('show');
+};
 
 const showSharingMessagesDialogBox = () => {
     const sharing_message_modal_box = document.getElementById("share_message_modal_id");
