@@ -1,6 +1,7 @@
 package jm.model;
 
 import jm.dto.UserDTO;
+import jm.model.message.ChannelMessage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -100,6 +101,11 @@ public class User {
     // TODO set of UserFiles(id, user, url, created)
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
+
+    // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
+    @OneToMany
+    @ToString.Exclude
+    private Set<ChannelMessage> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
