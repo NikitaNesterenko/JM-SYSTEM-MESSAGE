@@ -125,7 +125,8 @@ const showSharingMessagesDialogBox = () => {
                       </div>`;
 
     let divOpened = `<b><h6>Share with</h6></b>
-                         <select class="share_message_channel_select" id="share_message_channel_select_id"></select>`;
+                         <select class="share_message_channel_select" id="share_message_channel_select_id"></select>
+                     </div>`;
 
     if (channel.isPrivate){
         secondPart = divPrivate;
