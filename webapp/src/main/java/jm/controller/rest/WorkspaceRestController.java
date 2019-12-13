@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import jm.UserService;
 import jm.WorkspaceService;
+import jm.WorkspaceUserRoleService;
 import jm.model.User;
 import jm.model.Workspace;
 import org.apache.kafka.common.protocol.types.Field;
@@ -22,6 +23,7 @@ import java.util.List;
 public class WorkspaceRestController {
 
     private WorkspaceService workspaceService;
+    private WorkspaceUserRoleService workspaceUserRoleService;
     private UserService userService;
 
     @Autowired
@@ -30,6 +32,11 @@ public class WorkspaceRestController {
     @Autowired
     public void setWorkspaceService(WorkspaceService workspaceService) {
         this.workspaceService = workspaceService;
+    }
+
+    @Autowired
+    public void setWorkspaceUserRoleService(WorkspaceUserRoleService workspaceUserRoleService) {
+        this.workspaceUserRoleService = workspaceUserRoleService;
     }
 
     @GetMapping("/{id}")
