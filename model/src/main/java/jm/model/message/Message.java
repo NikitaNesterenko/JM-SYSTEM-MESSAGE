@@ -49,15 +49,15 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(
-            name = "starred_message_user",
-            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<User> starredByWhom;
-
-    @Column(name = "shared_message_id")
-    private Long sharedMessageId;
+//    @ManyToMany(cascade = CascadeType.REFRESH)
+//    @JoinTable(
+//            name = "starred_message_user",
+//            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+//    private Set<User> starredByWhom;
+//
+//    @Column(name = "shared_message_id")
+//    private Long sharedMessageId;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
