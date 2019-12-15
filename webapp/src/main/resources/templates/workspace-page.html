@@ -23,8 +23,7 @@
     <script defer th:src="@{/js/workspace-page/components/footer/messages.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>
 
-    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}"
-            type="module"></script>
+    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}" type="module"></script>
 
     <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
     <script defer th:src="@{/js/invite.js}" type="module"></script>
@@ -35,7 +34,7 @@
     <link rel="stylesheet" th:href="@{/js/message_menu/message_menu.css}"/>
 
     <!-- emoji -->
-    <!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
     <script th:src="@{/js/emoji/index.min.js}"></script>
     <script defer th:src="@{/js/emoji/attachEmoji.js}" type="module"></script>
 
@@ -71,6 +70,9 @@
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-add-channel-modal.css}"/>
 
     <link rel="stylesheet" th:href="@{/js/workspace-page/components/modal-searcher/workspace-searcher-modal.css}"/>
+
+    <script defer th:src="@{/js/workspace-page/components/primary-view/share-message.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/workspace-page/components/primary-view/share-message-modal.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
@@ -542,7 +544,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div class="p-classic_nav__right_header">
                         <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal"
                                 data-target="#modalSearcher">
@@ -649,8 +650,7 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__invite_people__button"
-                                                            id="invite-button">
+                                                    <button class="p-channel_sidebar__invite_people__button" id="invite-button">
                                                         <span class="p-channel_sidebar__name-2">✚ Invite people</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
@@ -923,6 +923,7 @@
             <div class="user-box" id="user-box">
             </div>
         </div> -->
+
 </div>
 
 <!--&lt;!&ndash;add channel modal&ndash;&gt;-->
@@ -1058,51 +1059,15 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать
-                    канал
+                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<!--Модальное окно для дополнительных опций-->
-<!--<div class="modal" id="additionalOptionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"-->
-<!--     aria-hidden="true">-->
-<!--    <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="additionalModalLongTitle"></h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <form method="post">-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="exampleInputChannelName">Название канала</label>-->
-<!--                        <input type="email" class="form-control" id="exampleInputChannelName"-->
-<!--                               placeholder="Введите название канала">-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <input type="checkbox" class="form-check-input" id="exampleCheck1">-->
-<!--                        <label class="form-check-label" for="exampleCheck1">Сделать канал приватным?</label>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать-->
-<!--                    канал-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-
 <!--Модальное окно для поиска каналов и пользователей-->
-<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-     aria-hidden="true">
+<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog searcher-modal" role="presentation">
         <div class="modal-content">
 
@@ -1110,9 +1075,7 @@
                 <div class="search-input-box">
                     <i class="p-classic_nav__right__search__icon">🔍</i>
                     <div class="search-input-box-input">
-                        <input type="text" id="searchInput" class="form-control"
-                               placeholder="Search for messages, replies, or even insightful asides"
-                               style="border: 0px">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search for messages, replies, or even insightful asides" style="border: 0px">
                     </div>
 
                 </div>
@@ -1127,6 +1090,8 @@
     </div>
 </div>
 
+<!--share message modal div-->
+<div class="share_message_modal_portal" id="share_message_modal_id"></div>
 
 </body>
 

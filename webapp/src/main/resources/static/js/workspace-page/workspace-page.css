@@ -2869,6 +2869,14 @@
     background: #e6e6e6;
 }
 
+.message-icons-menu-class {
+    display: none;
+}
+
+.c-virtual_list__item:hover .message-icons-menu-class {
+    display: block;
+}
+
 .c-message__body {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
@@ -3460,5 +3468,343 @@
 
 .c-virtual_list__item__date {
     text-align: center;
+}
+
+.c-message__message_blocks {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 16px;
+    box-sizing: inherit;
+    max-width: none;
+    word-wrap: break-word;
+}
+
+.p-block_kit_renderer {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 16px;
+    box-sizing: inherit;
+    width: 100%;
+    margin-top: 0;
+}
+
+.p-block_kit_renderer__block_wrapper {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 16px;
+    box-sizing: inherit;
+    display: flex;
+}
+
+.p-rich_text_block {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    unicode-bidi: -webkit-isolate;
+    box-sizing: inherit;
+    counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+    width: 100%;
+    /*white-space: pre-wrap;*/
+    user-select: text;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.46668;
+    margin: 8px 0 -4px;
+}
+
+.p-rich_text_section {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    /*white-space: pre-wrap;*/
+    user-select: text;
+    text-align: left;
+    font-size: 15px;
+    line-height: 1.46668;
+    box-sizing: inherit;
+    counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+
+.c-message__attachments {
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 16px;
+    box-sizing: inherit;
+    max-width: 600px;
+    padding-bottom: 1px;
+    margin: 8px 0 -9px;
+}
+
+.c-message_attachment {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 16px;
+    box-sizing: inherit;
+    display: flex;
+    align-items: stretch;
+    position: relative;
+    margin: 0 0 8px 0;
+    max-width: 600px;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+}
+
+.c-message_attachment__border {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 16px;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    box-sizing: inherit;
+    flex-shrink: 0;
+    width: 4px;
+    border-radius: 8px;
+    background-color: rgb(208, 208, 208);
+}
+
+.c-message_attachment__body {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    box-sizing: inherit;
+    flex: 1;
+    padding: 0 12px;
+    word-wrap: break-word;
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.46666667;
+}
+
+.c-message_attachment__row {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-size: 15px;
+    line-height: 1.46666667;
+    box-sizing: inherit;
+}
+
+.c-message_attachment__author {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-size: 15px;
+    line-height: 1.46666667;
+    box-sizing: inherit;
+}
+
+.c-message_attachment__author--distinct {font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 1.46666667;
+    box-sizing: inherit;
+    color: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+}
+
+.c-message_attachment__part {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 15px;
+    line-height: 1.46666667;
+    box-sizing: inherit;
+    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+}
+
+.c-avatar--interactive_button {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    text-align: initial;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    border-radius: 2px;
+    vertical-align: middle;
+    box-sizing: content-box;
+    overflow: hidden;
+    margin: 0 8px 3px 0;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    width: 16px;
+}
+
+.c-message_attachment__author_name {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    cursor: pointer;
+    text-decoration: none;
+    vertical-align: baseline;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-weight: 900;
+}
+
+.c-message_attachment__text {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-size: 15px;
+    line-height: 1.46666667;
+    box-sizing: inherit;
+}
+
+.c-shared_message_content {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-size: 15px;
+    line-height: 1.46666667;
+    unicode-bidi: -webkit-isolate;
+    box-sizing: inherit;
+}
+
+.c-message_attachment__footer {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    box-sizing: inherit;
+    align-items: center;
+    padding-top: 4px;
+    color: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-size: 12px;
+    line-height: 1.25;
+}
+
+.c-link {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 12px;
+    line-height: 1.25;
+    box-sizing: inherit;
+    text-decoration: none;
+    color: inherit;
+}
+
+.c-message_attachment__footer_text {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 12px;
+    line-height: 1.25;
+    box-sizing: inherit;
+    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+}
+
+.c-message_attachment__footer_ts {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 12px;
+    line-height: 1.25;
+    box-sizing: inherit;
+    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+}
+
+.c-message_attachment__par_sk_highlight {
+    font-weight: 400;
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    user-select: text;
+    font-size: 12px;
+    line-height: 1.25;
+    box-sizing: inherit;
+    color: rgba(var(--sk_highlight,18,100,163),1);
 }
 

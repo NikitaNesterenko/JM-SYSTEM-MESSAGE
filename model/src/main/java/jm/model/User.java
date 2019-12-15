@@ -1,9 +1,11 @@
 package jm.model;
 
 import jm.dto.UserDTO;
+import jm.model.message.ChannelMessage;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -100,6 +102,11 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
 
+    // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
+    @OneToMany
+    @ToString.Exclude
+    private Set<ChannelMessage> starredMessages;
+
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
     @ToString.Exclude
@@ -151,4 +158,21 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) &&
+                email.equals(user.email) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password);
+    }
+
+
 }

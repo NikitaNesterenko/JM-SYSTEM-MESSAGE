@@ -46,6 +46,15 @@ public class ChannelRestController {
         return ResponseEntity.ok(channel);
     }
 
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Channel>> getChannelsByUserId(@PathVariable("id") Long id) {
+        List<Channel> channels = channelService.getChannelsByUserId(id);
+        for (Channel channel : channels) {
+            System.out.println(channel);
+        }
+        return ResponseEntity.ok(channels);
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<Channel> createChannel(Principal principal, @RequestBody Channel channel, HttpServletRequest request) {
         if (principal != null) {
