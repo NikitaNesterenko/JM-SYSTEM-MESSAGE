@@ -3435,6 +3435,27 @@
     z-index: 1002;
 }
 
+.archivingChannelsUl{
+    padding-left: 15px;
+}
+
+.archivingText{
+    font-style: normal; /* Курсивное начертание */;
+    font-size: 13pt;
+}
+
+#archivingSubmit{
+    position: absolute;
+    padding: auto;
+    right: 20px;
+}
+
+#archivingCancel{
+    position: absolute;
+    padding: auto;
+    right: 250px;
+}
+
 /*end of button inside input field*/
 
 .c-virtual_list__item__date {
