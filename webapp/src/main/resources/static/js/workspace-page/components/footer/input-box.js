@@ -13,13 +13,14 @@ const storage_service = new StorageService();
 const conversation_service = new ConversationRestPaginationService();
 
 class Message {
-    constructor(id, channel, user, content, dateCreate, filename) {
+    constructor(id, channel, user, content, dateCreate, filename, conversation) {
         this.id = id;  // id нужно для редактирования сообщений
         this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
         this.filename = filename;
+        this.coversation = conversation; // direct message
     }
 }
 
