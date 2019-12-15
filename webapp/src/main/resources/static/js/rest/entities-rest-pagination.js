@@ -10,6 +10,11 @@ export class UserRestPaginationService extends  RestPaginationService {
         const response = await fetch('/rest/api/users/loggedUser');
         return response.json()
     }
+
+    getUsersByWorkspace = async (id) => {
+        const response = await fetch('/rest/api/users/workspace/' + id);
+        return response.json();
+    }
 }
 export class MessageRestPaginationService extends  RestPaginationService{
     constructor(){
@@ -21,6 +26,15 @@ export class MessageRestPaginationService extends  RestPaginationService{
     };
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
         const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
+        return response.json();
+    };
+
+    getStarredMessagesForUser = async (id) => {
+        const response = await fetch(`/rest/api/messages/${id}/starred`);
+        return response.json();
+    };
+    getMessageById = async (id) => {
+        const response = await fetch('/rest/api/messages/' + id);
         return response.json();
     };
 }
@@ -48,6 +62,17 @@ export class ChannelRestPaginationService extends  RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     }
+
+    getChannelsByWorkspaceAndUser = async (workspace_id, user_id) => {
+        const response = await fetch('/rest/api/channels/workspace/' + workspace_id + '/user/' + user_id);
+        return response.json();
+    }
+
+    getChannelsByUserId = async (id) => {
+        const response = await fetch('/rest/api/channels/user/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
 }
 export class WorkspaceRestPaginationService extends  RestPaginationService{
     constructor(){
@@ -85,5 +110,11 @@ export class StorageService {
             body: file
         }).then(response => {return response.text()});
         return response;
+    }
+}
+
+export class InviteRestPaginationService extends  RestPaginationService {
+    constructor(){
+        super('/rest/api/invites');
     }
 }
