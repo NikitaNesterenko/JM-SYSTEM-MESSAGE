@@ -82,8 +82,8 @@ public class UserRestControllerTest {
     /*  This method is impossible to test just now, because method now only give 200 status on success.
      *   But in Mock success test is incorrect, because test class haven`t connect to database.
      *
-     * В настоящее время невозможно проверить данный метод, т.к. он может возвращать только 200 статус.
-     * Но при тестировании с помощью Mock нету соединения с базой данных.
+     *  В настоящее время невозможно проверить данный метод, т.к. он может возвращать только 200 статус.
+     *  Но при тестировании с помощью Mock нету соединения с базой данных.
      */
 
     /*
@@ -108,7 +108,7 @@ public class UserRestControllerTest {
                 .content(userGson))
                 .andExpect(status().is4xxClientError());
 
-        //Method createUser throw exception
+        //Method updateUser throw exception
         //Метод бросает исключения
         //verify(userService, times(1)).updateUser(user);
     }
