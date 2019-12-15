@@ -1,14 +1,16 @@
 import {
     UserRestPaginationService,
     ChannelRestPaginationService,
-    MessageRestPaginationService
-    , StorageService
+    MessageRestPaginationService,
+    StorageService,
+    ConversationRestPaginationService
 } from '../../../rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
 const storage_service = new StorageService();
+const conversation_service = new ConversationRestPaginationService();
 
 class Message {
     constructor(id, channel, user, content, dateCreate, filename) {

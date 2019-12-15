@@ -36,8 +36,8 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public void updateConversation(Conversation conversation) {
-        conversationDAO.merge(conversation);
+    public Conversation updateConversation(Conversation conversation) {
+        return conversationDAO.merge(conversation);
     }
 
     @Override

@@ -37,6 +37,10 @@ export class MessageRestPaginationService extends  RestPaginationService{
         const response = await fetch('/rest/api/messages/' + id);
         return response.json();
     };
+    getAllMessagesByConversationId = async (id) => {
+        const response = await fetch(`/rest/api/messages/conversation/${id}`);
+        return response.json();
+    };
 }
 export class BotRestPaginationService extends  RestPaginationService{
     constructor(){
@@ -118,3 +122,10 @@ export class InviteRestPaginationService extends  RestPaginationService {
         super('/rest/api/invites');
     }
 }
+
+export class ConversationRestPaginationService extends  RestPaginationService{
+    constructor(){
+        super('/rest/api/conversations');
+    }
+}
+

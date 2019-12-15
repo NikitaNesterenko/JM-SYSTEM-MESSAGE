@@ -13,7 +13,7 @@ public interface ConversationService {
 
     void deleteConversation(Long id);
 
-    void updateConversation(Conversation conversation);
+    Conversation updateConversation(Conversation conversation);
 
     Conversation getConversationById(Long id);
 

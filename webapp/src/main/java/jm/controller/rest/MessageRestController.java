@@ -1,7 +1,9 @@
 package jm.controller.rest;
 
+import jm.DirectMessageService;
 import jm.MessageService;
 import jm.model.message.ChannelMessage;
+import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,14 +21,20 @@ import java.util.List;
 @RequestMapping("/rest/api/messages")
 public class MessageRestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            MessageRestController.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(MessageRestController.class);
 
     private MessageService messageService;
+    private DirectMessageService directMessageService;
 
     @Autowired
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
+    }
+
+    @Autowired
+    public void setDirectMessageService(DirectMessageService directMessageService) {
+        this.directMessageService = directMessageService;
     }
 
     @GetMapping
@@ -99,5 +107,12 @@ public class MessageRestController {
         List<ChannelMessage> starredMessages = messageService.getStarredMessagesForUser(id);
         logger.info("Сообщения, отмеченные пользователем.");
         return ResponseEntity.ok(starredMessages);
+    }
+
+    @GetMapping(value = "/conversation/{id}")
+    public ResponseEntity<List<DirectMessage>> getMessagesByConversationId(@PathVariable Long id) {
+        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id);
+        messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
+        return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 }
