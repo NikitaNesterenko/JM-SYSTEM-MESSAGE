@@ -209,7 +209,7 @@ window.updateMessages = function updateMessages() {
                                                                         ${time}
                                                                     </span>
                                                                     <span class="c-timestamp__label">
-                                                                        ${message.dateCreate}
+                                                                        ${date}
                                                                     </span>                                                                     
                                                                 </a>
                                                             </div>
