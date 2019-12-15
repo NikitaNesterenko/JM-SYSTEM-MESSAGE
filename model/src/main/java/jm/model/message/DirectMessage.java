@@ -1,5 +1,6 @@
 package jm.model.message;
 
+import jm.model.Conversation;
 import jm.model.User;
 import lombok.*;
 
@@ -20,4 +21,8 @@ public class DirectMessage extends Message {
             joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
     private Set<User> recipientUsers;
+
+    @ManyToOne(targetEntity = Conversation.class)
+    @JoinColumn(name = "conversation_id")
+    private Conversation conversation;
 }

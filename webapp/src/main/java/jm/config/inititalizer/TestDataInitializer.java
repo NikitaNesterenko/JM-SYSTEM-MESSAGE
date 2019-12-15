@@ -1,11 +1,10 @@
 package jm.config.inititalizer;
 
-import jm.UserService;
-import jm.WorkspaceUserRoleService;
-import jm.WorkspaceUserRoleServiceImpl;
+import jm.*;
 import jm.api.dao.*;
 import jm.model.*;
 import jm.model.message.ChannelMessage;
+import jm.model.message.DirectMessage;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +36,20 @@ public class TestDataInitializer {
     @Autowired
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
 
+    @Autowired
+    private ConversationService conversationService;
+    @Autowired
+    private DirectMessageService directMessageService;
+
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
     private Set<ChannelMessage> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
+
+    private Set<Conversation> conversations = new HashSet<>();
+    private Set<DirectMessage> directMessages = new HashSet<>();
 
     @AllArgsConstructor
     private enum UserData {
@@ -73,6 +80,9 @@ public class TestDataInitializer {
         createChannels();
         createMessages();
         createLinkRoles();
+
+        createDirectMessages();
+        createConversations();
     }
 
     private void createRoles() {
@@ -325,5 +335,57 @@ public class TestDataInitializer {
         workspaceUserRole.setUser(user);
         workspaceUserRole.setRole(role);
         workspaceUserRoleDAO.persist(workspaceUserRole);
+    }
+
+    private void createDirectMessages() {
+        List<User> userList = new ArrayList<>(this.users);
+
+
+    }
+
+    private void createConversations() {
+        List<User> userList = new ArrayList<>(this.users);
+        List<Workspace> workspaceList = new ArrayList<>(this.workspaces);
+
+        Conversation conversation1 = new Conversation();
+        conversation1.setOpeningUser(userList.get(0));
+        conversation1.setAssociatedUser(userList.get(1));
+        conversation1.setShowForOpener(true);
+        conversation1.setShowForAssociated(true);
+        conversation1.setWorkspace(workspaceList.get(0));
+
+        conversationService.createConversation(conversation1);
+        this.conversations.add(conversation1);
+
+        //this conversation must not created because already exists
+        Conversation conversation2 = new Conversation();
+        conversation2.setOpeningUser(userList.get(1));
+        conversation2.setAssociatedUser(userList.get(0));
+        conversation2.setShowForOpener(true);
+        conversation2.setShowForAssociated(false);
+        conversation2.setWorkspace(workspaceList.get(0));
+
+        conversationService.createConversation(conversation2);
+        this.conversations.add(conversation2);
+
+        Conversation conversation3 = new Conversation();
+        conversation3.setOpeningUser(userList.get(0));
+        conversation3.setAssociatedUser(userList.get(2));
+        conversation3.setShowForOpener(true);
+        conversation3.setShowForAssociated(false);
+        conversation3.setWorkspace(workspaceList.get(0));
+
+        conversationService.createConversation(conversation3);
+        this.conversations.add(conversation3);
+
+        Conversation conversation4 = new Conversation();
+        conversation4.setOpeningUser(userList.get(1));
+        conversation4.setAssociatedUser(userList.get(2));
+        conversation4.setShowForOpener(true);
+        conversation4.setShowForAssociated(false);
+        conversation4.setWorkspace(workspaceList.get(0));
+
+        conversationService.createConversation(conversation4);
+        this.conversations.add(conversation4);
     }
 }
