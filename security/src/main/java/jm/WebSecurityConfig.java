@@ -66,12 +66,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Anyone can access homepage.
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll();
+                // для входа через /signin
+                // до того как юзер залогинится, он должен получить доступ к вводу названия воркспейса
+                .antMatchers("/", "/rest/api/workspaces/name/**").permitAll();
 
         // Anyone not authenticated. Avoid double signin
         http
                 .authorizeRequests()
-                .antMatchers("/signin").anonymous()
+                /* TODO: непонятно, почему залогиненному пользователю должно быть запрещено выбрать другой воркспейс.
+                    пока заменил .anonymous() на .permitAll(), если это неправильно - верните обратно :-) */
+                .antMatchers("/signin").permitAll()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
@@ -84,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // For USER and OWNER
         http.authorizeRequests()
-                .antMatchers("/user/**", "/rest/**", "/upload")
+                .antMatchers("/user/**", "/rest/**", "/upload", "/workspace/**")
                 .hasAnyRole("OWNER", "USER")
                 .anyRequest().authenticated();
 
@@ -100,7 +104,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 .successHandler(jmAuthenticationSuccessHandler())
-                .failureHandler(jmAuthenticationFailureHandler())
+//                .failureHandler(jmAuthenticationFailureHandler())
                 .and()
                 .logout()
                 .logoutUrl("/perform_logout")
