@@ -523,7 +523,7 @@ function add_attached_file (message) {
     if (message.filename !== null) {
         return `<br>
                 <span class="c-message__attachment">
-                    <a href = "/files/${message.filename}">${message.filename}</a>
+                    <a target="_blank"  href = "/files/${message.filename}">${message.filename}</a>
                 </span>`;
     } else {
         return ``;
