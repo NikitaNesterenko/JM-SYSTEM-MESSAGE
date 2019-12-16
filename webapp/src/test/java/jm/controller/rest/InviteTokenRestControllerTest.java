@@ -51,7 +51,7 @@ public class InviteTokenRestControllerTest {
         User user = new User();
         user.setEmail(testEmail);
 
-        when(userService.getUserByEmail(testEmail)).thenReturn(user);
+        when(userService.getUserByEmail(testEmail)).thenReturn(java.util.Optional.of(user));
 
         InviteToken token_1 = new InviteToken();
         token_1.setId(1L);

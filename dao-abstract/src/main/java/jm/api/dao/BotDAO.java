@@ -5,6 +5,7 @@ import jm.model.Channel;
 import jm.model.Workspace;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface BotDAO {
@@ -19,7 +20,7 @@ public interface BotDAO {
 
     Bot getById(Long id);
 
-    Bot getBotByWorkspaceId(Workspace workspace);
+    Optional<Bot> getBotByWorkspaceId(Workspace workspace);
 
     Set<Channel> getChannels(Bot bot);
 }
