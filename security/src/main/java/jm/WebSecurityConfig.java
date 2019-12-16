@@ -93,7 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 .successHandler(jmAuthenticationSuccessHandler())
-                .failureHandler(jmAuthenticationFailureHandler())
+//                .failureHandler(jmAuthenticationFailureHandler())
                 .and()
                 .logout()
                 .logoutUrl("/perform_logout")
