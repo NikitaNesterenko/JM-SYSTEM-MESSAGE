@@ -127,5 +127,10 @@ export class ConversationRestPaginationService extends  RestPaginationService{
     constructor(){
         super('/rest/api/conversations');
     }
+
+    getAllConversationsByUserId = async (id) => {
+        const response = await fetch(`/rest/api/conversations/user/${id}`);
+        return response.json();
+    };
 }
 

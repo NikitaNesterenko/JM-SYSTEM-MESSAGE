@@ -24,7 +24,8 @@ function connect() {
             if (result.user !== null) {
                 if (!updateMessage(result)) {
                     if (result.channel.id === channel_id) {
-                        showMessage(result);
+                        // showMessage(result);
+                        updateMessages();
                     }
                     notifyParseMessage(result);
                 }
@@ -162,7 +163,6 @@ window.updateMessages = function updateMessages() {
 
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
         messages.forEach(function (message, i) {
-
                 if (message.user !== null) {
                     let messages_queue_context_user_container = document.createElement('div');
                     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -466,6 +466,7 @@ window.updateMessages = function updateMessages() {
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 
         setOnClickEdit(true);
+
     });
 };
 

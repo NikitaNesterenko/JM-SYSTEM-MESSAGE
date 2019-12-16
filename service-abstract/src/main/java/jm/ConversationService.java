@@ -19,4 +19,6 @@ public interface ConversationService {
 
     Conversation getConversationByUsers(User opener, User associated);
 
+    List<Conversation> getConversationsByUserId(Long userId);
+
 }

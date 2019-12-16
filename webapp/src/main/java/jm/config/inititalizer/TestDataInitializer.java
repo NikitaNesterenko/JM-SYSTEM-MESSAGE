@@ -415,7 +415,7 @@ public class TestDataInitializer {
         conversation3.setOpeningUser(user1);
         conversation3.setAssociatedUser(user3);
         conversation3.setShowForOpener(true);
-        conversation3.setShowForAssociated(false);
+        conversation3.setShowForAssociated(true);
         conversation3.setWorkspace(workspace);
 
         conversationService.createConversation(conversation3);
@@ -425,7 +425,7 @@ public class TestDataInitializer {
         conversation4.setOpeningUser(user2);
         conversation4.setAssociatedUser(user3);
         conversation4.setShowForOpener(true);
-        conversation4.setShowForAssociated(false);
+        conversation4.setShowForAssociated(true);
         conversation4.setWorkspace(workspace);
 
         conversationService.createConversation(conversation4);

@@ -58,4 +58,9 @@ public class ConversationRestController {
         return ResponseEntity.ok(conversationService.gelAllConversations());
     }
 
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
+        return ResponseEntity.ok(conversationService.getConversationsByUserId(id));
+    }
+
 }

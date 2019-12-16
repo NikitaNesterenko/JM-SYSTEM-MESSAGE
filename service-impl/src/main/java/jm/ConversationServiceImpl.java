@@ -49,4 +49,9 @@ public class ConversationServiceImpl implements ConversationService {
     public Conversation getConversationByUsers(User opener, User associated) {
         return conversationDAO.getConversationByUsers(opener, associated);
     }
+
+    @Override
+    public List<Conversation> getConversationsByUserId(Long userId) {
+        return conversationDAO.getConversationsByUserId(userId);
+    }
 }
