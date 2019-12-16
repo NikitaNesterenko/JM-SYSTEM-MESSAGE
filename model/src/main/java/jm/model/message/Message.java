@@ -1,8 +1,10 @@
-package jm.model;
+package jm.model.message;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.model.Bot;
+import jm.model.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -17,27 +19,25 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "messages")
+@Inheritance(strategy = InheritanceType.JOINED)
+//@MappedSuperclass
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne(targetEntity = Channel.class)
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
-
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(targetEntity = Bot.class)
+    @ManyToOne
     @JoinColumn(name = "bot_id")
     private Bot bot;
 
     @Column(name = "content", nullable = false)
-    @EqualsAndHashCode.Include  // ?
+    @EqualsAndHashCode.Include
     private String content;
 
     @Column(name = "date_create", nullable = false)
@@ -49,43 +49,43 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(
-            name="starred_message_user",
-            joinColumns=@JoinColumn(name="msg_id", referencedColumnName="id"),
-            inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id"))
-    private Set<User> starredByWhom;
-
-    @Column(name = "shared_message_id")
-    private Long sharedMessageId;
+//    @ManyToMany(cascade = CascadeType.REFRESH)
+//    @JoinTable(
+//            name = "starred_message_user",
+//            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+//    private Set<User> starredByWhom;
+//
+//    @Column(name = "shared_message_id")
+//    private Long sharedMessageId;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
-        this.channel = channel;
+    public Message(/*Channel channel,*/ User user, String content, LocalDateTime dateCreate) {
+        //this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
-        this.channel = channel;
+    public Message(/*Channel channel,*/ Bot bot, String content, LocalDateTime dateCreate) {
+        //this.channel = channel;
         this.bot = bot;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
+    public Message(Long id, /*Channel channel,*/ User user, String content, LocalDateTime dateCreate) {
         this.id = id;
-        this.channel = channel;
+        //this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
     //two constructors for sharing messages
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+    /*public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
         this.channel = channel;
         this.user = user;
         this.content = content;
@@ -99,5 +99,5 @@ public class Message {
         this.content = content;
         this.dateCreate = dateCreate;
         this.sharedMessageId = sharedMessageId;
-    }
+    }*/
 }
