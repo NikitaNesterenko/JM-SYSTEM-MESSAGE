@@ -29,18 +29,13 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
-        try {
             return (List<Workspace>) entityManager.createNativeQuery("select * from workspaces where owner_id=?", Workspace.class)
                     .setParameter(1, user.getId())
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
     public List<Workspace> getWorkspacesByUser(User user) {
-        try {
             String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
                     + "from workspaces ws "
                     + "right join workspace_user_role wur on ws.id = wur.workspace_id "
@@ -49,8 +44,5 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
             return entityManager.createNativeQuery(query, Workspace.class)
                     .setParameter("userid", user.getId())
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 }

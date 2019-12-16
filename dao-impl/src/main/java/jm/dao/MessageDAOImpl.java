@@ -18,43 +18,30 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
 
     @Override
     public List<ChannelMessage> getMessageByContent(String word) {
-        try {
             return entityManager.createQuery("select m from ChannelMessage m where m.content =:content", ChannelMessage.class)
                     .setParameter("content", word)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
     public List<ChannelMessage> getMessagesByChannelId(Long id) {
-        try {
             return entityManager.createQuery("select m from ChannelMessage m where m.channel.id =:channel_id", ChannelMessage.class)
                     .setParameter("channel_id", id)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
     public List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
-        try {
             return entityManager
                     .createQuery("select m from ChannelMessage m where m.channel.id =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
                     .setParameter("channel_id", id)
                     .setParameter("startDate", startDate)
                     .setParameter("endDate", endDate)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
     public List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
-        try {
             return entityManager
                     .createQuery("select m from ChannelMessage m where m.bot.id = :bot_id and m.channel.id = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
                     .setParameter("bot_id", botId)
@@ -62,22 +49,15 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
                     .setParameter("startDate", startDate)
                     .setParameter("endDate", endDate)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
     public List<ChannelMessage> getStarredMessagesForUser(Long id) {
-        try {
             return entityManager.createQuery(
                     "select m from Message m join m.starredByWhom as sm where sm.id = :id",
                     ChannelMessage.class
             )
                     .setParameter("id", id)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 }
