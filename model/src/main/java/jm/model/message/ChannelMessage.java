@@ -1,7 +1,5 @@
 package jm.model.message;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jm.deserializer.CustomAuthorityDeserializer;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.User;
