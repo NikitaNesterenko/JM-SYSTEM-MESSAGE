@@ -1,6 +1,7 @@
 package jm.controller.rest;
 
 import jm.MessageService;
+import jm.model.User;
 import jm.model.message.ChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/rest/api/messages")
@@ -54,7 +56,7 @@ public class MessageRestController {
     public ResponseEntity<ChannelMessage> getMessageById(@PathVariable("id") Long id) {
         logger.info("Сообщение с id = {}", id);
         logger.info(messageService.getMessageById(id).toString());
-        return new ResponseEntity<ChannelMessage>(messageService.getMessageById(id), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessageById(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
@@ -66,7 +68,7 @@ public class MessageRestController {
     @PostMapping(value = "/create")
     public ResponseEntity<ChannelMessage> createMessage(@RequestBody ChannelMessage message) {
         messageService.createMessage(message);
-        logger.info("Созданное сообщение : {}", message);
+        logger.info("Созданное сообщение : {}", message + "\n" + message.getId());
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
@@ -80,8 +82,10 @@ public class MessageRestController {
         }
         if (principal.getName().equals(existingMessage.getUser().getLogin())) {
             logger.info("Существующее сообщение: {}", existingMessage);
+            System.out.println(existingMessage.getContent() + " update");
             messageService.updateMessage(message);
             logger.info("Обновленное сообщение: {}", message);
+            System.out.println(message.getContent() + " update");
             return new ResponseEntity(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.FORBIDDEN);
@@ -95,9 +99,9 @@ public class MessageRestController {
     }
 
     @GetMapping("/{id}/starred")
-    public ResponseEntity<List<ChannelMessage>> getStarredMessages(@PathVariable Long id) {
-        List<ChannelMessage> starredMessages = messageService.getStarredMessagesForUser(id);
-        logger.info("Сообщения, отмеченные пользователем.");
-        return ResponseEntity.ok(starredMessages);
+    public ResponseEntity<Set<User>> getStarredMessages(@PathVariable Long id) {
+        ChannelMessage messageById = messageService.getMessageById(id);
+        logger.info("Сообщения, отмеченные пользователем: {}",messageById.getStarredByWhom());
+        return ResponseEntity.ok(messageById.getStarredByWhom());
     }
 }

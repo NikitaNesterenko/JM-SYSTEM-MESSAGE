@@ -46,14 +46,14 @@ function onEditButtonClick(ev) {
     parentDiv.addEventListener("submit", onEditSubmit);
 }
 
-function onEditSubmit(ev) {
+async function onEditSubmit(ev) {
     ev.preventDefault();
     const editMessageForm = ev.target;
     // const parentDiv = editMessageForm.parentElement.parentElement;
     const messageId = editMessageForm.getAttribute("data-message-id");
     const messageAttachment = editMessageForm.getAttribute("data-attachment");
     const messageText = editMessageForm[0].value;
-    const starredMessagesForUser = message_service.getStarredMessagesForUser(messageId);
+    const starredMessagesForUser = await message_service.getStarredMessagesForUser(messageId);
 
     // parentDiv.innerHTML = `<span class="c-message__body">${messageText}</span>`;
     activeEdit = false;
@@ -72,7 +72,7 @@ function onEditSubmit(ev) {
             "content": messageText,
             "dateCreate": currentDate,
             "filename": messageAttachment,
-            "starredByWhom":starredMessagesForUser
+            "starredByWhom": starredMessagesForUser
         };
         message_service.update(message).then(() => {
             sendName(message);
