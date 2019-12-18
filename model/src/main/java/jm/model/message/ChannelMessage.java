@@ -26,6 +26,7 @@ public class ChannelMessage extends Message {
             name = "starred_message_user",
             joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+//    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     private Set<User> starredByWhom;
 
     @Column(name = "shared_message_id")
