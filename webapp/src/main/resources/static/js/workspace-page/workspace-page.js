@@ -205,9 +205,9 @@ export const populateDirectMessages = async () => {
                 conversation_queue_context_container = document.createElement('div');
                 conversation_queue_context_container.className = "p-channel_sidebar__close_container";
                 conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button" data-user_id="${conversation.associatedUser.id}">
-                                                        <i class="p-channel_sidebar__channel_icon_circle" data-user_id="${conversation.associatedUser.id}">●</i>
-                                                        <span class="p-channel_sidebar__name-3" data-user_id="${conversation.associatedUser.id}">
+                                                    <button class="p-channel_sidebar__name_button" data-user_id="${conversation.openingUser.id}">
+                                                        <i class="p-channel_sidebar__channel_icon_circle" data-user_id="${conversation.openingUser.id}">●</i>
+                                                        <span class="p-channel_sidebar__name-3" data-user_id="${conversation.openingUser.id}">
                                                             <span data-user_id="${conversation.associatedUser.id}">${conversation.openingUser.name}</span>
                                                         </span>
                                                     </button>

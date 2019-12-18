@@ -8,6 +8,7 @@ import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
 
 
 let stompClient = null;
+
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -43,7 +44,7 @@ function disconnect() {
 }
 
 window.sendName = function sendName(message) {
-    if (message.channel != null) {
+    if (message.channel != null && message.conversation == null) {
         stompClient.send("/app/message", {}, JSON.stringify({
             'id': message.id,
             'channel': message.channel,
@@ -55,7 +56,7 @@ window.sendName = function sendName(message) {
         }));
     }
 
-    if (message.conversation != null) {
+    if (message.conversation != null && message.channel == null) {
         stompClient.send("/app/message", {}, JSON.stringify({
             'id': message.id,
             'inputMassage': message.content,

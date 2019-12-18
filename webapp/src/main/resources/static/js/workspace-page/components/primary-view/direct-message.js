@@ -31,7 +31,6 @@ $('#modal_1_msg_button').on('click', async (e) => {
 
 $(document).on('click', '.p-channel_sidebar__name_button, .p-channel_sidebar__channel_icon_circle, .p-channel_sidebar__name-3, .p-channel_sidebar__name-3 span', async (e) => {
     let userId = $(e.target).data('user_id');
-    console.log('Click on user with id: ' + userId);
     if (userId !== undefined) {
         await dm_main(userId);
     }
