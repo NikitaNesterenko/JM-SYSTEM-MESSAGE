@@ -71,6 +71,9 @@ public class Channel {
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
 
+    @Column(name = "archived")
+    private Boolean archived;
+
     @Column(name = "created_date", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
