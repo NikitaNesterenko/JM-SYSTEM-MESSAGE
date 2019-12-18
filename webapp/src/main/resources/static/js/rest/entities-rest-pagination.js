@@ -74,6 +74,13 @@ export class ChannelRestPaginationService extends RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     };
+
+    archivingChannel = async (id) => {
+        const response = await fetch(`/rest/api/channels/archiving/${id}`,{
+            method: 'POST'
+        });
+        return response.json();
+    }
 }
 export class WorkspaceRestPaginationService extends RestPaginationService{
     constructor(){

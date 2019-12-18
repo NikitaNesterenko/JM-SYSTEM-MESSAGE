@@ -131,4 +131,13 @@ public class ChannelRestController {
         return new ResponseEntity<>(channelService.getChannelByName(name), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/archiving/{id}")
+    public ResponseEntity<Channel> archivingChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(true);
+        channelService.updateChannel(channel);
+        logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channel, HttpStatus.OK);
+    }
+
 }

@@ -58,17 +58,12 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
-        try {
             return (List<Channel>) entityManager.createNativeQuery("select * from channels where workspace_id=?", Channel.class)
                     .setParameter(1, id)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     public  List<Channel> getChannelsByUserId(Long userId) {
-        try {
             List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("select channel_id from channels_users where user_id=?")
                     .setParameter(1, userId)
                     .getResultList();
@@ -81,9 +76,6 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 channels.add(channel);
             }
             return channels;
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
 }

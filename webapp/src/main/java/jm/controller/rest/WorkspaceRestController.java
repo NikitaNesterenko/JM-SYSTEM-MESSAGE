@@ -94,6 +94,11 @@ public class WorkspaceRestController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
+        return choosedWorkspace(name, request);
+    }
+
     @GetMapping("/byLoggedUser")
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
         String name = principal.getName();

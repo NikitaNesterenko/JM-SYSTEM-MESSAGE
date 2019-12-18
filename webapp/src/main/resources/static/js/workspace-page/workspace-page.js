@@ -171,7 +171,9 @@ $("#addChannelSubmit").click(
             isPrivate: checkbox1,
             createdDate: dateWithoutCommas
         };
-        channel_service.create(entity);
+        channel_service.create(entity).then((channel) => {
+            sendChannel(channel);
+        });
     }
 );
 

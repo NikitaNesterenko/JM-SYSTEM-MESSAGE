@@ -60,12 +60,12 @@ public class MainController {
     }
 
     @GetMapping(value = "/searchChannel")
-    public String seachChannelPage() {
+    public String searchChannelPage() {
         return "search-channel-page";
     }
 
     @GetMapping(value = "/searchUsers")
-    public String seachUsersPage() {
+    public String searchUsersPage() {
         return "search-users-page";
     }
 
