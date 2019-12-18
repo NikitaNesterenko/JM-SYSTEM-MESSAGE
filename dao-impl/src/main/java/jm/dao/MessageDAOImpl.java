@@ -1,6 +1,7 @@
 package jm.dao;
 
 import jm.api.dao.MessageDAO;
+import jm.model.message.ChannelMessage;
 import jm.model.Channel;
 import jm.model.Message;
 import org.slf4j.Logger;
@@ -15,66 +16,62 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
+public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements MessageDAO {
     private static final Logger logger = LoggerFactory.getLogger(MessageDAOImpl.class);
 
     @Override
-    public List<Message> getMessageByContent(String word) {
-        try {
-            return (List<Message>) entityManager.createNativeQuery("select * from messages where content=?", Message.class)
-                    .setParameter(1, word);
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Message> getMessagesByChannelId(Long id) {
-        try {
-            return (List<Message>) entityManager.createNativeQuery("select * from messages where channel_id=?", Message.class)
-                    .setParameter(1, id).getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
-        try {
-            List<Message> resultList = entityManager.createNativeQuery("select * from messages where channel_id = ? and date_create between ? and ? order by date_create", Message.class)
-                    .setParameter(1, id)
-                    .setParameter(2, startDate)
-                    .setParameter(3, endDate)
+    public List<ChannelMessage> getMessageByContent(String word) {
+            return entityManager.createQuery("select m from ChannelMessage m where m.content =:content", ChannelMessage.class)
+                    .setParameter("content", word)
                     .getResultList();
-            return resultList;
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
-        try {
-            List<Message> resultList = entityManager.createNativeQuery("SELECT * FROM messages " +
-                                                                "WHERE bot_id = ? AND channel_id = ? AND date_create BETWEEN ? AND ? ORDER BY date_create", Message.class)
-                    .setParameter(1, botId)
-                    .setParameter(2, channelId)
-                    .setParameter(3, startDate)
-                    .setParameter(4, endDate)
+    public List<ChannelMessage> getMessagesByChannelId(Long id) {
+            return entityManager.createQuery("select m from ChannelMessage m where m.channel.id =:channel_id", ChannelMessage.class)
+                    .setParameter("channel_id", id)
                     .getResultList();
-            return resultList;
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override
-    public List<Message> getStarredMessagesForUser(Long id) {
-        try {
-            return (List<Message>) entityManager.createNativeQuery("SELECT * FROM messages WHERE id IN (SELECT starred_messages_id FROM users_starred_messages WHERE user_id = ?);", Message.class)
-                    .setParameter(1, id).getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
+            return entityManager
+                    .createQuery("select m from ChannelMessage m where m.channel.id =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
+                    .setParameter("channel_id", id)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate)
+                    .getResultList();
     }
+
+    @Override
+    public List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
+            return entityManager
+                    .createQuery("select m from ChannelMessage m where m.bot.id = :bot_id and m.channel.id = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
+                    .setParameter("bot_id", botId)
+                    .setParameter("channel_id", channelId)
+                    .setParameter("startDate", startDate)
+                    .setParameter("endDate", endDate)
+                    .getResultList();
+    }
+
+    @Override
+    public List<ChannelMessage> getStarredMessagesForUser(Long id) {
+            return entityManager.createQuery(
+                    "select m from Message m join m.starredByWhom as sm where sm.id = :id",
+                    ChannelMessage.class
+            )
+                    .setParameter("id", id)
+                    .getResultList();
+    }
+
+//    @Override
+//    public List<Message> getStarredMessagesForUser(Long id) {
+//        try {
+//            return (List<Message>) entityManager.createNativeQuery("SELECT * FROM messages WHERE id IN (SELECT starred_messages_id FROM users_starred_messages WHERE user_id = ?);", Message.class)
+//                    .setParameter(1, id).getResultList();
+//        } catch (NoResultException e) {
+//            return null;
+//        }
+//    }
+
 }

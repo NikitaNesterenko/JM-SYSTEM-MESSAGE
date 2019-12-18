@@ -52,7 +52,7 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/update")
-    @PreAuthorize("#user.login == authentication.principal.username")
+    @PreAuthorize("#user.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody User user) {
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
