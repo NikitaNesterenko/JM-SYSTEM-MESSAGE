@@ -63,4 +63,14 @@ public class ConversationRestController {
         return ResponseEntity.ok(conversationService.getConversationsByUserId(id));
     }
 
+    @GetMapping(value = "/users/{firstId}/{secondId}")
+    public ResponseEntity<Conversation> getConversationByRespondents(
+            @PathVariable Long firstId, @PathVariable Long secondId) {
+        return new ResponseEntity<Conversation>(
+                conversationService.getConversationByUsers(firstId, secondId),
+                HttpStatus.OK
+        );
+
+    }
+
 }

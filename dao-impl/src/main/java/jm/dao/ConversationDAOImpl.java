@@ -16,22 +16,22 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     @Override
     public void persist(Conversation conversation) {
         if (
-                getConversationByUsers(conversation.getOpeningUser(), conversation.getAssociatedUser()) == null
-                        || getConversationByUsers(conversation.getAssociatedUser(), conversation.getOpeningUser()) == null
+                getConversationByUsers(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
+                        || getConversationByUsers(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
         ) {
             entityManager.merge(conversation);
         }
     }
 
     @Override
-    public Conversation getConversationByUsers(User opener, User associated) {
+    public Conversation getConversationByUsers(Long firstUserId, Long secondUserId) {
         try {
             return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
-                    .setParameter(1, opener.getId()).setParameter(2, associated.getId()).getSingleResult();
+                    .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult();
         } catch (NoResultException e1) {
             try {
                 return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
-                        .setParameter(1, associated.getId()).setParameter(2, opener.getId()).getSingleResult();
+                        .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult();
             } catch (NoResultException e2) {
                 return null;
             }

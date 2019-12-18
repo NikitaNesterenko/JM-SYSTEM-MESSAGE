@@ -1,7 +1,6 @@
 package jm.api.dao;
 
 import jm.model.message.DirectMessage;
-import jm.model.message.Message;
 
 import java.util.List;
 

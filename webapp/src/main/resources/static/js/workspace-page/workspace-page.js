@@ -22,6 +22,7 @@ const showDefaultChannel = () => {
         channel_service.getChannelsByWorkspaceId(value[0].id)
             .then((respons) => {
                 sessionStorage.setItem("channelName", respons[0].id);
+                sessionStorage.setItem('conversation_id', '0'); // direct msgs
                 window.channel_id = respons[0].id;
                 updateAllMessages();
             })
@@ -63,6 +64,7 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     const channel_id = parseInt($(this).val());
     pressChannelButton(channel_id);
     sessionStorage.setItem("channelName", channel_id);
+    sessionStorage.setItem('conversation_id', '0'); // direct msgs
     refreshMemberList();
 });
 
@@ -173,7 +175,8 @@ $("#addChannelSubmit").click(
     }
 );
 
-const populateDirectMessages = async () => {
+export const populateDirectMessages = async () => {
+
     const principal = await user_service.getLoggedUser();
     const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
     const workspace_id = await workspace_service.getChoosedWorkspace();
@@ -184,14 +187,14 @@ const populateDirectMessages = async () => {
     conversations.forEach(function (conversation, i) {
         let conversation_queue_context_container = null;
         if (conversation.workspace.id === workspace_id.id) {
-            if(conversation.openingUser.name === principal.name) {
+            if(conversation.openingUser.id === principal.id) {
                 conversation_queue_context_container = document.createElement('div');
                 conversation_queue_context_container.className = "p-channel_sidebar__close_container";
                 conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button">
-                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
-                                                        <span class="p-channel_sidebar__name-3">
-                                                            <span>${conversation.associatedUser.name}</span>
+                                                    <button class="p-channel_sidebar__name_button" data-user_id="${conversation.associatedUser.id}">
+                                                        <i class="p-channel_sidebar__channel_icon_circle" data-user_id="${conversation.associatedUser.id}">●</i>
+                                                        <span class="p-channel_sidebar__name-3" data-user_id="${conversation.associatedUser.id}">
+                                                            <span data-user_id="${conversation.associatedUser.id}">${conversation.associatedUser.name}</span>
                                                         </span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
@@ -202,10 +205,10 @@ const populateDirectMessages = async () => {
                 conversation_queue_context_container = document.createElement('div');
                 conversation_queue_context_container.className = "p-channel_sidebar__close_container";
                 conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button">
-                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
-                                                        <span class="p-channel_sidebar__name-3">
-                                                            <span>${conversation.openingUser.name}</span>
+                                                    <button class="p-channel_sidebar__name_button" data-user_id="${conversation.associatedUser.id}">
+                                                        <i class="p-channel_sidebar__channel_icon_circle" data-user_id="${conversation.associatedUser.id}">●</i>
+                                                        <span class="p-channel_sidebar__name-3" data-user_id="${conversation.associatedUser.id}">
+                                                            <span data-user_id="${conversation.associatedUser.id}">${conversation.openingUser.name}</span>
                                                         </span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">

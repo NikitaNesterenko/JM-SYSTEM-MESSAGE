@@ -25,4 +25,11 @@ public class DirectMessage extends Message {
     @ManyToOne(targetEntity = Conversation.class)
     @JoinColumn(name = "conversation_id")
     private Conversation conversation;
+
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "starred_message_user",
+            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> starredByWhom;
 }
