@@ -58,7 +58,7 @@ public class ChannelRestController {
     @PostMapping(value = "/create")
     public ResponseEntity<Channel> createChannel(Principal principal, @RequestBody Channel channel, HttpServletRequest request) {
         if (principal != null) {
-            User owner = userService.getUserByLogin(principal.getName()).get();
+            User owner = userService.getUserByLogin(principal.getName());
             Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
             channel.setUser(owner);
             channel.setWorkspace(workspace);
@@ -70,6 +70,7 @@ public class ChannelRestController {
             logger.warn("Не удалось создать channel");
             ResponseEntity.badRequest().build();
         }
+
         return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
@@ -86,6 +87,7 @@ public class ChannelRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok().build();
     }
 
@@ -109,7 +111,8 @@ public class ChannelRestController {
     @GetMapping("/workspace/{workspace_id}/user/{user_id}")
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
             @PathVariable("user_id") Long userId,
-            @PathVariable("workspace_id") Long workspaceId) {
+            @PathVariable("workspace_id") Long workspaceId
+    ) {
         List<ChannelDTO> channels = channelService.getChannelByWorkspaceAndUser(workspaceId, userId);
         logger.info("Получены channels, доступные юзеру с id={} из workspace с id={} ", userId, workspaceId);
         for (ChannelDTO channel : channels) {
@@ -125,6 +128,7 @@ public class ChannelRestController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Channel> getChannelByName(@PathVariable("name") String name) {
-        return new ResponseEntity<>(channelService.getChannelByName(name).get(), HttpStatus.OK);
+        return new ResponseEntity<>(channelService.getChannelByName(name), HttpStatus.OK);
     }
+
 }
