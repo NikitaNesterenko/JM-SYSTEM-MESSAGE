@@ -1,0 +1,84 @@
+.p-workspace__threaad_footer {
+    display: flex;
+
+}
+
+.p-workspace__primary_view_thread_footer {
+    flex: none;
+    font-size: 15px;
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    box-sizing: inherit;
+}
+
+.p-message_pane_thread_input {
+    font-size: 15px;
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    box-sizing: inherit;
+    display: flex;
+    padding: 0 20px;
+}
+
+.p-message_pane_thread_input_inner {
+    font-size: 15px;
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    box-sizing: inherit;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+}
+
+.p-workspace__thread_input {
+    font-size: 15px;
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    box-sizing: inherit;
+    display: flex;
+    position: relative;
+}
+
+.p-message_thread_input_field {
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+    font-size: 13px;
+    height: 100%;
+    margin: 0;
+    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
+    border: 1px solid var(--saf-0);
+    position: relative;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    background: rgba(var(--sk_primary_background,255,255,255),1);
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgba(var(--sk_foreground_high,29,28,29),.5);
+    min-height: 42px;
+    min-width: 1px;
+    padding-top: 0;
+    padding-bottom: 4px;
+    padding-right: 0;
+    flex: 1;
+    padding-left: 43px;
+    z-index: 200;
+}

@@ -1,10 +1,15 @@
 package jm.model.message;
 
+import jm.model.Bot;
+import jm.model.Channel;
+import jm.model.ThreadChannel;
+import jm.model.User;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,6 +19,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "thread_channel_messages")
 public class ThreadChannelMessage extends Message {
+//    @ManyToOne
+//    private ChannelMessage parentChannelMessage;
+
     @ManyToOne
-    private ChannelMessage parentChannelMessage;
+    private ThreadChannel threadChannel;
+
+    public ThreadChannelMessage(User user, String content, LocalDateTime dateCreate, ThreadChannel threadChannel) {
+        super(user, content, dateCreate);
+        this.threadChannel = threadChannel;
+    }
 }
