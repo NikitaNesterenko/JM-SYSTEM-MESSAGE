@@ -45,6 +45,9 @@ $('#form_message').submit(function () {
         }
         Promise.all([filename]).then(files => {
             const message = new Message(null, channel, user, text_message, currentDate, files[0]);
+            console.log("**********************");
+            console.log(message);
+            console.log(user);
             message_service.create(message).then(messageWithId => {
                 // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
                 // которое вставляется в HTML (см. messages.js).

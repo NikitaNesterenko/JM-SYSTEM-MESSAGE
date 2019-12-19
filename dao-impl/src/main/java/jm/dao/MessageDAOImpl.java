@@ -3,7 +3,6 @@ package jm.dao;
 import jm.api.dao.MessageDAO;
 import jm.model.message.ChannelMessage;
 import jm.model.Channel;
-import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -54,14 +53,24 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
                     .getResultList();
     }
 
+//    @Override
+//    public List<ChannelMessage> getStarredMessagesForUser(Long id) {
+//            return entityManager.createQuery(
+//                    "select m from Message m join m.starredByWhom as sm where sm.id = :id",
+//                    ChannelMessage.class
+//            )
+//                    .setParameter("id", id)
+//                    .getResultList();
+//    }
+
     @Override
     public List<ChannelMessage> getStarredMessagesForUser(Long id) {
-            return entityManager.createQuery(
-                    "select m from Message m join m.starredByWhom as sm where sm.id = :id",
-                    ChannelMessage.class
-            )
-                    .setParameter("id", id)
-                    .getResultList();
+        return entityManager.createQuery(
+                "select sm from User u join u.starredMessages as sm where u.id = :id",
+                ChannelMessage.class
+        )
+                .setParameter("id", id)
+                .getResultList();
     }
 
 //    @Override
