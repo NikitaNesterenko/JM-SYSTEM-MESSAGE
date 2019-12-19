@@ -50,6 +50,9 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     const channel_id = parseInt($(this).val());
     pressChannelButton(channel_id);
     sessionStorage.setItem("channelName",channel_id);
+    var channel_name = document.getElementById("channel_name_" + channel_id).textContent;
+    $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
+
     refreshMemberList();
 });
 
@@ -64,11 +67,12 @@ const showAllChannels = () => {
                     $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
                                                     <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
+                                                        <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
                                                     </button>
                                                   </div>`);
                 })
                 //Default channel
+                $(".p-classic_nav__model__title__info__name").html("").text(respons[0].name);
                 document.getElementById("channel_button_" + respons[0].id).style.color = "white";
                 document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
             })
