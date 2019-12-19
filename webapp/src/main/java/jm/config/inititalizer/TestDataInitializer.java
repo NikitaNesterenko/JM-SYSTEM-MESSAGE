@@ -5,6 +5,7 @@ import jm.WorkspaceUserRoleService;
 import jm.WorkspaceUserRoleServiceImpl;
 import jm.api.dao.*;
 import jm.model.*;
+import jm.model.message.ChannelMessage;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +37,10 @@ public class TestDataInitializer {
     @Autowired
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
 
-
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
-    private Set<Message> messages = new HashSet<>();
+    private Set<ChannelMessage> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
 
@@ -209,7 +209,7 @@ public class TestDataInitializer {
         List<Channel> channels = new ArrayList<>(this.channels);
         List<Bot> bots = new ArrayList<>(this.bots);
 
-        Message message1 = new Message();
+        ChannelMessage message1 = new ChannelMessage();
         message1.setChannel(channels.get(0));
         message1.setUser(userList.get(0));
         message1.setContent("Hello from " + userList.get(0).getDisplayName());
@@ -218,7 +218,7 @@ public class TestDataInitializer {
         messageDAO.persist(message1);
         this.messages.add(message1);
 
-        Message message2 = new Message();
+        ChannelMessage message2 = new ChannelMessage();
         message2.setChannel(channels.get(1));
         message2.setUser(userList.get(1));
         message2.setContent("Hello from " + userList.get(1).getDisplayName());
@@ -227,7 +227,7 @@ public class TestDataInitializer {
         messageDAO.persist(message2);
         this.messages.add(message2);
 
-        Message message3 = new Message();
+        ChannelMessage message3 = new ChannelMessage();
         message3.setChannel(channels.get(2));
         message3.setUser(userList.get(2));
         message3.setContent("Hello from " + userList.get(2).getDisplayName());
@@ -236,7 +236,7 @@ public class TestDataInitializer {
         messageDAO.persist(message3);
         this.messages.add(message3);
 
-        Message message4 = new Message();
+        ChannelMessage message4 = new ChannelMessage();
         message4.setChannel(channels.get(1));
         message4.setBot(bots.get(0));
         message4.setContent("Hello from BOT!");

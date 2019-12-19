@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -56,13 +58,24 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
-        try {
             return (List<Channel>) entityManager.createNativeQuery("select * from channels where workspace_id=?", Channel.class)
                     .setParameter(1, id)
                     .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+    }
+
+    public  List<Channel> getChannelsByUserId(Long userId) {
+            List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("select channel_id from channels_users where user_id=?")
+                    .setParameter(1, userId)
+                    .getResultList();
+            List<BigInteger> channelsIdentityNumbersArrayList = new ArrayList<>(channelsIdentityNumbers);
+            List<Channel> channels = new ArrayList<>();
+            for(BigInteger channelId : channelsIdentityNumbersArrayList) {
+                Long channelLongId = channelId.longValue();
+                Channel channel = getById(channelLongId);
+                System.out.println(channel);
+                channels.add(channel);
+            }
+            return channels;
     }
 
 }
