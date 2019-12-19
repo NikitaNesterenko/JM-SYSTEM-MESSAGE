@@ -1,19 +1,14 @@
 import {
     UserRestPaginationService,
     ChannelRestPaginationService,
-    MessageRestPaginationService,
-    StorageService,
-    ConversationRestPaginationService,
-    DirectMessagesRestController
+    MessageRestPaginationService
+    , StorageService
 } from '../../../rest/entities-rest-pagination.js'
-import {show_dialog} from "../primary-view/direct-message.js";
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
 const storage_service = new StorageService();
-const conversation_service = new ConversationRestPaginationService();
-const direct_message_service = new DirectMessagesRestController();
 
 class Message {
     constructor(id, channel, user, content, dateCreate, filename) {
@@ -26,38 +21,12 @@ class Message {
     }
 }
 
-class DirectMessage {
-    constructor(id, user, content, dateCreate, filename, conversation) {
-        this.id = id;  // id нужно для редактирования сообщений
-        this.user = user;
-        this.content = content;
-        this.dateCreate = dateCreate;
-        this.filename = filename;
-        this.conversation = conversation; // direct message
-    }
-}
-
 $('#form_message').submit(function () {
     const user_promise = user_service.getLoggedUser();
-
-    const channel_name = sessionStorage.getItem("channelName");
-    let channel_promise = null;
-    if (channel_name !== '0') {
-        channel_promise = channel_service.getById(channel_name);
-    }
-
-    const conversation_id = sessionStorage.getItem('conversation_id');
-    let conversation_promise = null;
-    if (conversation_id !== '0') {
-        conversation_promise = conversation_service.getById(conversation_id);
-    }
-
-
-    Promise.all([user_promise, channel_promise, conversation_promise])
-        .then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
+    const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
+    Promise.all([user_promise, channel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
         const user = value[0];
         const channel = value[1];
-        const conversation = value[2];
 
         const message_input_element = document.getElementById("form_message_input");
         const text_message = message_input_element.value;
@@ -75,24 +44,15 @@ $('#form_message').submit(function () {
             $('#attached_file').html("");
         }
         Promise.all([filename]).then(files => {
-            if (channel != null && conversation == null) {
-                const message = new Message(null, channel, user, text_message, currentDate, files[0]);
-                message_service.create(message).then(messageWithId => {
-                    // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-                    // которое вставляется в HTML (см. messages.js).
-                    sendName(messageWithId);
-                });
-            }
-
-            if (channel == null && conversation != null) {
-                const message = new DirectMessage(null, user, text_message, currentDate, files[0], conversation);
-                direct_message_service.create(message).then(messageWithId => {
-                    // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-                    // которое вставляется в HTML (см. messages.js).
-                    sendName(messageWithId);
-                    show_dialog(conversation);
-                });
-            }
+            const message = new Message(null, channel, user, text_message, currentDate, files[0]);
+            console.log("**********************");
+            console.log(message);
+            console.log(user);
+            message_service.create(message).then(messageWithId => {
+                // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
+                // которое вставляется в HTML (см. messages.js).
+                sendName(messageWithId);
+            });
         });
     });
     return false;

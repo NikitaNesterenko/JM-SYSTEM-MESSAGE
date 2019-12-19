@@ -1,13 +1,15 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+//import jm.model.CustomSerializer.CustomUserDeserializer;
 import jm.model.CustomSerializer.CustomUserSerializer;
+import jm.dto.UserDTO;
+import jm.model.message.ChannelMessage;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -17,6 +19,21 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "users")
+
+@SqlResultSetMapping(
+        name = "UserDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = UserDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name"),
+                        @ColumnResult(name = "last_name"),
+                        @ColumnResult(name = "avatar_url"),
+                        @ColumnResult(name = "display_name"),
+                }
+        )
+)
+
 public class User {
 
     @Id
@@ -91,13 +108,14 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JsonSerialize(using = CustomUserSerializer.class)
+//    @JsonDeserialize(using = CustomUserDeserializer.class)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(
-            name="users_starred_messages",
-            joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"),
-            inverseJoinColumns=@JoinColumn(name="starred_messages_id", referencedColumnName="id"))
-    private Set<Message> starredMessages;
+            name = "users_starred_messages",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "starred_messages_id", referencedColumnName = "id"))
+    private Set<ChannelMessage> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
@@ -151,12 +169,24 @@ public class User {
         this.password = password;
     }
 
-//    public User(String name, String lastName, String login, String email, String password, Set<Message> starredByWhom) {
-//        this.name = name;
-//        this.lastName = lastName;
-//        this.login = login;
-//        this.email = email;
-//        this.password = password;
-//        this.starredByWhom = starredByWhom;
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return id.equals(user.id) &&
+                email.equals(user.email) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password);
+    }
+
+
 }
