@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChannelDTO {
+public class WorkspaceDTO {
 
     private Long id;
 
@@ -21,9 +21,7 @@ public class ChannelDTO {
 
     private Set<Long> userIds;
 
-    private Set<Long> botIds;
-
-    private Long workspaceId;
+    private Set<Long> channelIds;
 
     private Long ownerId;
 
@@ -32,7 +30,5 @@ public class ChannelDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
-
-    private String topic;
 
 }
