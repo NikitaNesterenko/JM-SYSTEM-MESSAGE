@@ -46,6 +46,15 @@ public class ChannelRestController {
         return ResponseEntity.ok(channel);
     }
 
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Channel>> getChannelsByUserId(@PathVariable("id") Long id) {
+        List<Channel> channels = channelService.getChannelsByUserId(id);
+        for (Channel channel : channels) {
+            System.out.println(channel);
+        }
+        return ResponseEntity.ok(channels);
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<Channel> createChannel(Principal principal, @RequestBody Channel channel, HttpServletRequest request) {
         if (principal != null) {
@@ -120,6 +129,15 @@ public class ChannelRestController {
     @GetMapping("/name/{name}")
     public ResponseEntity<Channel> getChannelByName(@PathVariable("name") String name) {
         return new ResponseEntity<>(channelService.getChannelByName(name), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/archiving/{id}")
+    public ResponseEntity<Channel> archivingChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(true);
+        channelService.updateChannel(channel);
+        logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
 }

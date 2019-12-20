@@ -10,6 +10,7 @@
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
+    <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
@@ -72,6 +73,9 @@
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-add-channel-modal.css}"/>
 
     <link rel="stylesheet" th:href="@{/js/workspace-page/components/modal-searcher/workspace-searcher-modal.css}"/>
+
+    <script defer th:src="@{/js/workspace-page/components/primary-view/share-message.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/workspace-page/components/primary-view/share-message-modal.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
@@ -538,13 +542,14 @@
                             <button class="p-classic_nav__model__button__details">
                                 <i class="p-classic_nav__model__button__details__icon">ⓘ</i>
                             </button>
-                            <button class="p-classic_nav__model__button__settings">
+                            <button class="p-classic_nav__model__button__settings" id="settingsMenuButton">
                                 <i class="p-classic_nav__model__button__settings__icon">⚙</i>
                             </button>
                         </div>
                     </div>
                     <div class="p-classic_nav__right_header">
-                        <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal" data-target="#modalSearcher">
+                        <button class="p-classic_nav__right__search" id="buttonSearcher" data-toggle="modal"
+                                data-target="#modalSearcher">
                             <i class="p-classic_nav__right__search__icon">🔍</i>
                             <span class="p-classic_nav__right__search__placeholder">Search</span>
                         </button>
@@ -962,6 +967,76 @@
 <!--        </form>-->
 <!--    </div>-->
 <!--</div>-->
+<div class="settingsList" id="settingsList">
+    <div>
+        <div class="settingsDiv">
+            <button class="settingsButton1" type="button"><span class="settingsText">Jump to date...</span></button>
+            <button class="settingsButton" type="button"><span class="settingsText">Add people to channel</span>
+            </button>
+            <button class="settingsButton" type="button"><span class="settingsText">View channel details</span></button>
+            <button class="settingsButton" type="button"><span class="settingsText">Copy channel name</span></button>
+            <button class="settingsButton" type="button"><span class="settingsText">Manage posting permissions</span>
+            </button>
+            <button class="settingsButton2" type="button" data-toggle="modal" data-target="#additionalOptionsModal" id="additionalOptionsButton"><span class="settingsText">Additional options</span></button>
+        </div>
+        <div class="settingsDiv">
+            <button class="settingsButton3" type="button"><span class="settingsText">Notification preference</span>
+            </button>
+            <button class="settingsButton4" type="button"><span class="settingsText">Mute channel</span></button>
+        </div>
+        <button class="settingsButton5" type="button"><span class="settingsText">Add app</span></button>
+    </div>
+</div>
+
+<div class="additionalOptions" id="additionalOptions">
+    <div align="center" class="additionalOptionsHeader" id="additionalOptionsHeader">
+        <h1 class="additionalOptionsHeaderSpan" id="additionalOptionsHeaderSpan">Additional options for #</h1>
+        <button class="additionalOptionsCloseButton"><span aria-hidden="true" id="additionalOptionsCloseButton">&times;</span></button>
+    </div>
+    <br>
+    <br>
+    <div class="col-md-4 justify-content-center mx-auto">
+        <div>
+            <div class="formButton">
+                <button class="additionalOptionsButton" id="exampleLink1"><span><b>Archive this channel</b>
+                <br>If you don’t think it will be used anymore and you want to clean up, archive it. The channel can be unarchived later (but everyone will have been removed).</span>
+                </button>
+            </div>
+            <div>
+                <button class="additionalOptionsButton" id="exampleLink2"><span><b>Set the channel description</b>
+                <br>Channel descriptions are especially useful to new members choosing which conversations to join.</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="archivingChannels" id="archivingChannels">
+    <div align="center" class="additionalOptionsHeader" id="archivingChannelsHeader">
+        <button class="archivingModalLeftButton"><span aria-hidden="true" id="archivingModalLeftButton">&larr;</span></button>
+        <h1 class="additionalOptionsHeaderSpan" id="archivingChannelsHeaderSpan">Archive #</h1>
+        <button class="additionalOptionsCloseButton"><span aria-hidden="true" id="archivingChannelsCloseButton">&times;</span></button>
+    </div>
+    <br>
+    <br>
+    <div class="col-md-4 justify-content-center mx-auto">
+        <form id="archivingForm">
+            <div>
+                <p class="archivingText">Archiving is useful if you don’t think you’ll need this channel any longer. Here’s what will happen when you archive this channel:</p>
+                <ul class="archivingChannelsUl">
+                    <li class="archivingText">No one will be able to send messages to it</li>
+                    <li class="archivingText">Apps installed in this channel will be disabled</li>
+                    <li class="archivingText">A message will be posted that you archived the channel</li>
+                </ul>
+                <p class="archivingText">Messages from archived channels will still show up in search and archives, the same way they do today. You can always un-archive an archived channel later, if you need it again.</p>
+            </div>
+            <br>
+            <div class="form-group row align-items-end">
+                <button type="button" class="btn btn-light archiveButtons" id="archivingCancel">Cancel</button>
+                <button type="submit" class="btn btn-success archiveButtons" id="archivingSubmit">Yes, archive the channel</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -1017,6 +1092,9 @@
         </div>
     </div>
 </div>
+
+<!--share message modal div-->
+<div class="share_message_modal_portal" id="share_message_modal_id"></div>
 
 </body>
 

@@ -29,11 +29,5 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Set<Channel> getChannels(Bot bot) {
-        try {
-            return bot.getChannels();
-        } catch(NoResultException e) {
-            return null;
-        }
-    }
+    public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
 }

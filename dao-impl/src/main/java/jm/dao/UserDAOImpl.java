@@ -47,14 +47,10 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
-    public void addRoleForUser(User user, String role) {
-
-    }
+    public void addRoleForUser(User user, String role) { }
 
     @Override
-    public void updateUserRole(User user, String role) {
-
-    }
+    public void updateUserRole(User user, String role) { }
 
     @Override
     public List<User> getAllUsersInThisChannel(Long id) {
