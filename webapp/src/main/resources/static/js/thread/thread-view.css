@@ -1,6 +1,7 @@
 .p-workspace__threaad_footer {
     display: flex;
-
+    flex-direction: column;
+    padding-right: 30px;
 }
 
 .p-workspace__primary_view_thread_footer {

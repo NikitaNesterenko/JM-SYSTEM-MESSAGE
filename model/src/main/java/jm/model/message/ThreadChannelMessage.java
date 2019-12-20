@@ -19,14 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "thread_channel_messages")
 public class ThreadChannelMessage extends Message {
-//    @ManyToOne
-//    private ChannelMessage parentChannelMessage;
 
     @ManyToOne
     private ThreadChannel threadChannel;
-
-    public ThreadChannelMessage(User user, String content, LocalDateTime dateCreate, ThreadChannel threadChannel) {
-        super(user, content, dateCreate);
-        this.threadChannel = threadChannel;
-    }
 }
