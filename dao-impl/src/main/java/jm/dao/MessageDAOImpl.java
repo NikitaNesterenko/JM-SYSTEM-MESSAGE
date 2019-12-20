@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -64,12 +65,12 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
 //    }
 
     @Override
-    public List<ChannelMessage> getStarredMessagesForUser(Long id) {
+    public List<ChannelMessage> getStarredMessagesForUser(Long userId) {
         return entityManager.createQuery(
-                "select sm from User u join u.starredMessages as sm where u.id = :id",
+                "select sm from User u join u.starredMessages as sm where u.id = :user_id",
                 ChannelMessage.class
         )
-                .setParameter("id", id)
+                .setParameter("user_id", userId)
                 .getResultList();
     }
 
@@ -82,5 +83,14 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
 //            return null;
 //        }
 //    }
+
+    @Override
+    public List<ChannelMessage> getMessagesByIds(Set<Long> ids) {
+        return entityManager.createQuery(
+                "select o from Message o where o.id in :ids", ChannelMessage.class
+        )
+                .setParameter("ids", ids)
+                .getResultList();
+    }
 
 }

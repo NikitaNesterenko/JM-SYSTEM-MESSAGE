@@ -1,10 +1,10 @@
 package jm.api.dao;
 
 import jm.model.message.ChannelMessage;
-import jm.model.message.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface MessageDAO {
 
@@ -26,5 +26,8 @@ public interface MessageDAO {
 
     ChannelMessage getById(Long id);
 
-    List<ChannelMessage> getStarredMessagesForUser(Long id);
+    List<ChannelMessage> getStarredMessagesForUser(Long userId);
+
+    List<ChannelMessage> getMessagesByIds(Set<Long> ids);
+
 }

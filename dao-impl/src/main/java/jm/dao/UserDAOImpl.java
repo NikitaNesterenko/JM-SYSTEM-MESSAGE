@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.UserDAO;
 import jm.dto.UserDTO;
 import jm.model.User;
+import jm.model.message.ChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -67,4 +69,14 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                 .setParameter("workspace", id)
                 .getResultList();
     }
+
+    @Override
+    public List<User> getUsersByIds(Set<Long> ids) {
+        return entityManager.createQuery(
+                "select o from User o where o.id in :ids", User.class
+        )
+                .setParameter("ids", ids)
+                .getResultList();
+    }
+
 }
