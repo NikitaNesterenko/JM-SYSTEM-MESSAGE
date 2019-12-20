@@ -3,16 +3,13 @@ package jm.dao;
 import jm.api.dao.UserDAO;
 import jm.dto.UserDTO;
 import jm.model.User;
-import jm.model.message.ChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.model.Bot;
+import jm.model.Channel;
 import jm.model.User;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -20,7 +21,6 @@ import java.util.Set;
 @Entity
 @Table(name = "messages")
 @Inheritance(strategy = InheritanceType.JOINED)
-//@MappedSuperclass
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
@@ -49,43 +49,63 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
+    // from ChannelMessage
+    @ManyToOne
+    @JoinColumn(name = "channel_id")
+    private Channel channel;
+
+    // from ChannelMessage
+    @Column(name = "shared_message_id")
+    private Long sharedMessageId;
+
 //    @ManyToMany(cascade = CascadeType.REFRESH)
 //    @JoinTable(
 //            name = "starred_message_user",
 //            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 //    private Set<User> starredByWhom;
-//
-//    @Column(name = "shared_message_id")
-//    private Long sharedMessageId;
 
-    @Column(name = "is_deleted")
-    private Boolean isDeleted = false;
+    // from DirectMessage
+    @ManyToMany
+    @JoinTable(name = "messages_recipient_users",
+            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
+    private Set<User> recipientUsers;
 
-    public Message(/*Channel channel,*/ User user, String content, LocalDateTime dateCreate) {
-        //this.channel = channel;
+    // from ThreadChannelMessage and ThreadDirectMessage
+    @ManyToOne
+    private Message parentMessage;
+
+    // ===================================
+    // Construct
+    // ===================================
+    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
+        this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(/*Channel channel,*/ Bot bot, String content, LocalDateTime dateCreate) {
-        //this.channel = channel;
+    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
+        this.channel = channel;
         this.bot = bot;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Long id, /*Channel channel,*/ User user, String content, LocalDateTime dateCreate) {
+    public Message(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
         this.id = id;
-        //this.channel = channel;
+        this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
     //two constructors for sharing messages
-    /*public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
         this.channel = channel;
         this.user = user;
         this.content = content;
@@ -99,5 +119,6 @@ public class Message {
         this.content = content;
         this.dateCreate = dateCreate;
         this.sharedMessageId = sharedMessageId;
-    }*/
+    }
+
 }

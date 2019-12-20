@@ -38,9 +38,7 @@ public class MessageDTO {
     // from DirectMessage
     private Set<Long> recipientUserIds;
 
-    // from ThreadChannelMessage
-    private Long parentChannelMessageId;
+    // from ThreadChannelMessage and ThreadDirectMessage
+    private Long parentMessageId;
 
-    // from ThreadDirectMessage
-    private Long parentDirectMessageId;
 }
