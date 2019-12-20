@@ -3,7 +3,6 @@ package jm.dto;
 import jm.api.dao.BotDAO;
 import jm.api.dao.UserDAO;
 import jm.model.Bot;
-import jm.model.Channel;
 import jm.model.User;
 import jm.model.message.Message;
 

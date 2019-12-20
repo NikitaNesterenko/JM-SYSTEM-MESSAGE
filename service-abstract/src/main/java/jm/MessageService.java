@@ -1,29 +1,29 @@
 package jm;
 
-import jm.model.message.ChannelMessage;
+import jm.model.message.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MessageService {
 
-    List<ChannelMessage> getAllMessages();
+    List<Message> getAllMessages();
 
-    List<ChannelMessage> getMessagesByChannelId(Long id);
+    List<Message> getMessagesByChannelId(Long id);
 
-    List<ChannelMessage> getMessagesByContent(String word);
+    List<Message> getMessagesByContent(String word);
 
-    ChannelMessage getMessageById(Long id);
+    Message getMessageById(Long id);
 
-    void createMessage(ChannelMessage message);
+    void createMessage(Message message);
 
     void deleteMessage(Long id);
 
-    void updateMessage(ChannelMessage message);
+    void updateMessage(Message message);
 
-    List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
+    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<ChannelMessage> getStarredMessagesForUser(Long id);
+    List<Message> getStarredMessagesForUser(Long id);
 }

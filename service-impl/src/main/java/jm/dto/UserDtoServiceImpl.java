@@ -3,7 +3,6 @@ package jm.dto;
 import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
 import jm.model.User;
-import jm.model.message.ChannelMessage;
 import jm.model.message.Message;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +92,7 @@ public class UserDtoServiceImpl implements UserDtoService {
         user.setUserSkype(userDTO.getUserSkype());
 
         Set<Long> starredMessageIds = userDTO.getStarredMessageIds();
-        List<ChannelMessage> starredMessagesList = messageDAO.getMessagesByIds(starredMessageIds);
+        List<Message> starredMessagesList = messageDAO.getMessagesByIds(starredMessageIds);
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
         Set<Long> directMessagesToUserIds = userDTO.getStarredMessageIds();

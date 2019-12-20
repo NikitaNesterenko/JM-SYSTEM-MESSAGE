@@ -1,11 +1,8 @@
 package jm.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 //import jm.model.CustomSerializer.CustomUserDeserializer;
-import jm.model.CustomSerializer.CustomUserSerializer;
 import jm.dto.UserDTO;
-import jm.model.message.ChannelMessage;
+import jm.model.message.Message;
 import lombok.*;
 
 import javax.persistence.*;
@@ -115,7 +112,7 @@ public class User {
             name = "users_starred_messages",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "starred_messages_id", referencedColumnName = "id"))
-    private Set<ChannelMessage> starredMessages;
+    private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
