@@ -107,7 +107,7 @@ public class User {
 //    private Set<UserFile> userFiles;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
-    @JsonSerialize(using = CustomUserSerializer.class)
+//    @JsonSerialize(using = CustomUserSerializer.class)
 //    @JsonDeserialize(using = CustomUserDeserializer.class)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
