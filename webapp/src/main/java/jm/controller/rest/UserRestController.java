@@ -26,9 +26,10 @@ public class UserRestController {
 
     UserRestController(UserService userService, UserDtoService userDtoService) {
         this.userService = userService;
-        this.userDtoService=userDtoService;
+        this.userDtoService = userDtoService;
     }
 
+    // DTO attendant
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
@@ -47,6 +48,7 @@ public class UserRestController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    // DTO attendant
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Польщователь с id = {}", id);
@@ -57,8 +59,9 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/update")
-    @PreAuthorize("#user.login == authentication.principal.username or hasRole('ROLE_OWNER')")
-    public ResponseEntity updateUser(@RequestBody User user) {
+    @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
+    public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
+        User user = userDtoService.toEntity(userDTO);
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");
@@ -76,6 +79,7 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
+    // DTO attendant
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
@@ -87,13 +91,16 @@ public class UserRestController {
         return ResponseEntity.ok(userDTOList);
     }
 
+    // DTO attendant
     @GetMapping(value = "/loggedUser")
-    public ResponseEntity<User> getLoggedUserId(Principal principal) {
+    public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
         User user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
-        return ResponseEntity.ok(user);
+        UserDTO userDTO = userDtoService.toDto(user);
+        return ResponseEntity.ok(userDTO);
     }
 
+    // DTO attendant (?)
     @GetMapping(value = "/workspace/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);

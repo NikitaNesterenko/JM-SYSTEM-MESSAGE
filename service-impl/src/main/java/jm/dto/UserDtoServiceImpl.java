@@ -69,12 +69,20 @@ public class UserDtoServiceImpl implements UserDtoService {
             return null;
         }
 
+        Long id = userDTO.getId();
+
         User user = new User();
 
-        user.setId(userDTO.getId());
+        user.setId(id);
         user.setName(userDTO.getName());
         user.setLastName(userDTO.getLastName());
         user.setLogin(userDTO.getLogin());
+        if (id != null && user.getPassword() == null) {
+            User existingUser = userDAO.getById(id);
+            if (existingUser != null) {
+                user.setPassword(existingUser.getPassword());
+            }
+        }
         user.setEmail(userDTO.getEmail());
         user.setAvatarURL(userDTO.getAvatarURL());
         user.setTitle(userDTO.getTitle());

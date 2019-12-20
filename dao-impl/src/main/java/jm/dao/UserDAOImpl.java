@@ -12,6 +12,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -71,9 +73,11 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public List<User> getUsersByIds(Set<Long> ids) {
-        return entityManager.createQuery(
-                "select o from User o where o.id in :ids", User.class
-        )
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return entityManager
+                .createQuery("select o from User o where o.id in :ids", User.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }

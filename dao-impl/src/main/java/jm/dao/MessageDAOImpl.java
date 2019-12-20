@@ -6,11 +6,14 @@ import jm.model.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import sun.invoke.empty.Empty;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -21,37 +24,37 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
 
     @Override
     public List<ChannelMessage> getMessageByContent(String word) {
-            return entityManager.createQuery("select m from ChannelMessage m where m.content =:content", ChannelMessage.class)
-                    .setParameter("content", word)
-                    .getResultList();
+        return entityManager.createQuery("select m from ChannelMessage m where m.content =:content", ChannelMessage.class)
+                .setParameter("content", word)
+                .getResultList();
     }
 
     @Override
     public List<ChannelMessage> getMessagesByChannelId(Long id) {
-            return entityManager.createQuery("select m from ChannelMessage m where m.channel.id =:channel_id", ChannelMessage.class)
-                    .setParameter("channel_id", id)
-                    .getResultList();
+        return entityManager.createQuery("select m from ChannelMessage m where m.channel.id =:channel_id", ChannelMessage.class)
+                .setParameter("channel_id", id)
+                .getResultList();
     }
 
     @Override
     public List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
-            return entityManager
-                    .createQuery("select m from ChannelMessage m where m.channel.id =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
-                    .setParameter("channel_id", id)
-                    .setParameter("startDate", startDate)
-                    .setParameter("endDate", endDate)
-                    .getResultList();
+        return entityManager
+                .createQuery("select m from ChannelMessage m where m.channel.id =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
+                .setParameter("channel_id", id)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate)
+                .getResultList();
     }
 
     @Override
     public List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
-            return entityManager
-                    .createQuery("select m from ChannelMessage m where m.bot.id = :bot_id and m.channel.id = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
-                    .setParameter("bot_id", botId)
-                    .setParameter("channel_id", channelId)
-                    .setParameter("startDate", startDate)
-                    .setParameter("endDate", endDate)
-                    .getResultList();
+        return entityManager
+                .createQuery("select m from ChannelMessage m where m.bot.id = :bot_id and m.channel.id = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", ChannelMessage.class)
+                .setParameter("bot_id", botId)
+                .setParameter("channel_id", channelId)
+                .setParameter("startDate", startDate)
+                .setParameter("endDate", endDate)
+                .getResultList();
     }
 
 //    @Override
@@ -86,9 +89,11 @@ public class MessageDAOImpl extends AbstractDao<ChannelMessage> implements Messa
 
     @Override
     public List<ChannelMessage> getMessagesByIds(Set<Long> ids) {
-        return entityManager.createQuery(
-                "select o from Message o where o.id in :ids", ChannelMessage.class
-        )
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return entityManager
+                .createQuery("select o from Message o where o.id in :ids", ChannelMessage.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }
