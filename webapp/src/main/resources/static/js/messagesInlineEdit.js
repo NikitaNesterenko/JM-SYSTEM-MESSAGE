@@ -67,12 +67,11 @@ function onEditSubmit(ev) {
         const currentDate = convert_date_to_format_Json(new Date());
         const message = {
             "id": messageId,
-            "user": user,
-            "channel": channel,
+            "userId": user.id,
+            "channelId": channel.id,
             "content": messageText,
             "dateCreate": currentDate,
-            "filename": messageAttachment,
-            "starredByWhom":starredMessagesForUser
+            "filename": messageAttachment
         };
         message_service.update(message).then(() => {
             sendName(message);

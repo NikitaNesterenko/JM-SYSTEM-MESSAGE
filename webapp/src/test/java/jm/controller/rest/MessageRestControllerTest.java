@@ -1,6 +1,7 @@
 package jm.controller.rest;
 
 import jm.MessageService;
+import jm.dto.MessageDTO;
 import jm.model.Channel;
 import jm.model.message.Message;
 import jm.model.User;
@@ -155,7 +156,7 @@ public class MessageRestControllerTest {
             }
         }).when(messageService).updateMessage(any());
 
-        Message messageTest= new Message(11L, new Channel().getId(), user, "HelloTest", LocalDateTime.now());
+        MessageDTO messageTest= new MessageDTO(11L, new Channel().getId(), user.getId(), "HelloTest", LocalDateTime.now());
         messageTest.setId(1L);
         when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
         ResponseEntity responseEntity = messageRestController.updateMessage(messageTest, mockPrincipal);
