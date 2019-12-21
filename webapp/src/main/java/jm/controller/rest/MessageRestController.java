@@ -71,6 +71,7 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
+    // DTO attendant
     @PostMapping(value = "/create")
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
         Message message = messageDtoService.toEntity(messageDto);
@@ -79,9 +80,11 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
 
+    // DTO attendant
     @PutMapping(value = "/update")
-    @PreAuthorize("#message.user.login == authentication.principal.username")
-    public ResponseEntity updateMessage(@RequestBody Message message, Principal principal) {
+//    @PreAuthorize("#message.user.login == authentication.principal.username")
+    public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
+        Message message = messageDtoService.toEntity(messageDto);
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
