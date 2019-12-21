@@ -55,10 +55,7 @@ public class UserDtoServiceImpl implements UserDtoService {
 
     @Override
     public List<UserDTO> toDto(List<User> users) {
-        if (users == null) {
-            return null;
-        }
-        return users.stream().map(this::toDto).collect(Collectors.toList());
+        return users == null ? null : users.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -95,7 +92,7 @@ public class UserDtoServiceImpl implements UserDtoService {
         List<Message> starredMessagesList = messageDAO.getMessagesByIds(starredMessageIds);
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
-        Set<Long> directMessagesToUserIds = userDTO.getStarredMessageIds();
+        Set<Long> directMessagesToUserIds = userDTO.getDirectMessagesToUserIds();
         List<User> directMessagesToUserList = userDAO.getUsersByIds(directMessagesToUserIds);
         user.setDirectMessagesToUsers(new HashSet<>(directMessagesToUserList));
 

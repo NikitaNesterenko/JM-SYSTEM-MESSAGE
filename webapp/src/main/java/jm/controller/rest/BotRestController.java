@@ -105,7 +105,7 @@ public class BotRestController {
     public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
         Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
-        message.setChannel(channel);
+        message.setChannelId(channel.getId());
         message.setBot(bot);
         message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);

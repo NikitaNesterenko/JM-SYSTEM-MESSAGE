@@ -30,7 +30,6 @@ import java.util.Set;
                 }
         )
 )
-
 public class User {
 
     @Id
@@ -44,15 +43,12 @@ public class User {
 //    private String memberId;
 
     @Column(name = "name", nullable = false)
-    @EqualsAndHashCode.Include
     private String name;
 
     @Column(name = "last_name", nullable = false)
-    @EqualsAndHashCode.Include
     private String lastName;
 
     @Column(name = "login", nullable = false)
-    @EqualsAndHashCode.Include
     private String login;
 
     @EqualsAndHashCode.Include
@@ -103,11 +99,10 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
 
-    @ManyToMany(cascade = CascadeType.REFRESH)
 //    @JsonSerialize(using = CustomUserSerializer.class)
 //    @JsonDeserialize(using = CustomUserDeserializer.class)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(
             name = "users_starred_messages",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -166,24 +161,24 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        User user = (User) o;
-        return id.equals(user.id) &&
-                email.equals(user.email) &&
-                password.equals(user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        User user = (User) o;
+//        return id.equals(user.id) &&
+//                email.equals(user.email) &&
+//                password.equals(user.password);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, email, password);
+//    }
 
 
 }

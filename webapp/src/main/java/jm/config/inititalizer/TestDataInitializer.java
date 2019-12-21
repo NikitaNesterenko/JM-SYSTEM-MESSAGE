@@ -1,11 +1,9 @@
 package jm.config.inititalizer;
 
 import jm.UserService;
-import jm.WorkspaceUserRoleService;
-import jm.WorkspaceUserRoleServiceImpl;
 import jm.api.dao.*;
 import jm.model.*;
-import jm.model.message.ChannelMessage;
+import jm.model.message.Message;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +38,7 @@ public class TestDataInitializer {
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
-    private Set<ChannelMessage> messages = new HashSet<>();
+    private Set<Message> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
 
@@ -209,8 +207,8 @@ public class TestDataInitializer {
         List<Channel> channels = new ArrayList<>(this.channels);
         List<Bot> bots = new ArrayList<>(this.bots);
 
-        ChannelMessage message1 = new ChannelMessage();
-        message1.setChannel(channels.get(0));
+        Message message1 = new Message();
+        message1.setChannelId(channels.get(0).getId());
         message1.setUser(userList.get(0));
         message1.setContent("Hello from " + userList.get(0).getDisplayName());
         message1.setDateCreate(LocalDateTime.now());
@@ -218,8 +216,8 @@ public class TestDataInitializer {
         messageDAO.persist(message1);
         this.messages.add(message1);
 
-        ChannelMessage message2 = new ChannelMessage();
-        message2.setChannel(channels.get(1));
+        Message message2 = new Message();
+        message2.setChannelId(channels.get(1).getId());
         message2.setUser(userList.get(1));
         message2.setContent("Hello from " + userList.get(1).getDisplayName());
         message2.setDateCreate(LocalDateTime.now());
@@ -227,8 +225,8 @@ public class TestDataInitializer {
         messageDAO.persist(message2);
         this.messages.add(message2);
 
-        ChannelMessage message3 = new ChannelMessage();
-        message3.setChannel(channels.get(2));
+        Message message3 = new Message();
+        message3.setChannelId(channels.get(2).getId());
         message3.setUser(userList.get(2));
         message3.setContent("Hello from " + userList.get(2).getDisplayName());
         message3.setDateCreate(LocalDateTime.now());
@@ -236,8 +234,8 @@ public class TestDataInitializer {
         messageDAO.persist(message3);
         this.messages.add(message3);
 
-        ChannelMessage message4 = new ChannelMessage();
-        message4.setChannel(channels.get(1));
+        Message message4 = new Message();
+        message4.setChannelId(channels.get(1).getId());
         message4.setBot(bots.get(0));
         message4.setContent("Hello from BOT!");
         message4.setDateCreate(LocalDateTime.now());

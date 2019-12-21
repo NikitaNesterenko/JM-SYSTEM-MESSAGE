@@ -58,6 +58,7 @@ public class UserRestController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    // DTO attendant
     @PutMapping(value = "/update")
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {

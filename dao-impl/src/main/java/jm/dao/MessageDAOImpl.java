@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -26,7 +27,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     @Override
     public List<Message> getMessagesByChannelId(Long id) {
-        return entityManager.createQuery("select m from Message m where m.channel.id =:channel_id", Message.class)
+        return entityManager.createQuery("select m from Message m where m.channelId =:channel_id", Message.class)
                 .setParameter("channel_id", id)
                 .getResultList();
     }
@@ -34,7 +35,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
         return entityManager
-                .createQuery("select m from Message m where m.channel.id =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", Message.class)
+                .createQuery("select m from Message m where m.channelId =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", Message.class)
                 .setParameter("channel_id", id)
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)
@@ -44,7 +45,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
         return entityManager
-                .createQuery("select m from Message m where m.bot.id = :bot_id and m.channel.id = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", Message.class)
+                .createQuery("select m from Message m where m.bot.id = :bot_id and m.channelId = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate order by m.dateCreate", Message.class)
                 .setParameter("bot_id", botId)
                 .setParameter("channel_id", channelId)
                 .setParameter("startDate", startDate)

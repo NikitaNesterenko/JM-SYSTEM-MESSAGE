@@ -53,13 +53,19 @@ public class Message {
     private Boolean isDeleted = false;
 
     // from ChannelMessage
-    @ManyToOne
-    @JoinColumn(name = "channel_id")
-    private Channel channel;
+//    @ManyToOne
+//    @JoinColumn(name = "channel_id")
+    @Column(name = "channel_id")
+    private Long channelId;
 
     // from ChannelMessage
-    @Column(name = "shared_message_id")
-    private Long sharedMessageId;
+    @ManyToOne
+    @JoinColumn(name = "shared_message_id", referencedColumnName = "id")
+    private Message sharedMessage;
+
+//    @Column(name = "shared_message_id")
+//    private Long sharedMessageId;
+
 
 //    @ManyToMany(cascade = CascadeType.REFRESH)
 //    @JoinTable(
@@ -82,43 +88,69 @@ public class Message {
     // ===================================
     // Construct
     // ===================================
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate) {
-        this.channel = channel;
+    public Message(Long channelId, User user, String content, LocalDateTime dateCreate) {
+        this.channelId = channelId;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate) {
-        this.channel = channel;
+    public Message(Long channelId, Bot bot, String content, LocalDateTime dateCreate) {
+        this.channelId = channelId;
         this.bot = bot;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
-    public Message(Long id, Channel channel, User user, String content, LocalDateTime dateCreate) {
+    public Message(Long id, Long channelId, User user, String content, LocalDateTime dateCreate) {
         this.id = id;
-        this.channel = channel;
+        this.channelId = channelId;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
     }
 
     //two constructors for sharing messages
-    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
-        this.channel = channel;
+    public Message(Long channelId, User user, String content, LocalDateTime dateCreate, Message sharedMessage) {
+        this.channelId = channelId;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
-        this.sharedMessageId = sharedMessageId;
+        this.sharedMessage = sharedMessage;
     }
 
-    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate, Long sharedMessageId) {
-        this.channel = channel;
+    public Message(Long channelId, Bot bot, String content, LocalDateTime dateCreate, Message sharedMessage) {
+        this.channelId = channelId;
         this.bot = bot;
         this.content = content;
         this.dateCreate = dateCreate;
-        this.sharedMessageId = sharedMessageId;
+        this.sharedMessage = sharedMessage;
     }
+
+    // Constructor for simplify from DTO conversion
+    public Message(Long id, String content, LocalDateTime dateCreate, String filename, Boolean isDeleted, Long channelId) {
+        this.id = id;
+        this.content = content;
+        this.dateCreate = dateCreate;
+        this.filename = filename;
+        this.isDeleted = isDeleted;
+        this.channelId = channelId;
+    }
+
+    //    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+//        this.channel = channel;
+//        this.user = user;
+//        this.content = content;
+//        this.dateCreate = dateCreate;
+//        this.sharedMessageId = sharedMessageId;
+//    }
+//
+//    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+//        this.channel = channel;
+//        this.bot = bot;
+//        this.content = content;
+//        this.dateCreate = dateCreate;
+//        this.sharedMessageId = sharedMessageId;
+//    }
 
 }
