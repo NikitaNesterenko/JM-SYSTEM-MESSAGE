@@ -102,7 +102,7 @@ export function updateAllMessages() {
 
 // end of msg menu buttons
 
-function updateMessage(message) {
+const updateMessage =(message)=> {
     const messageBodies = document.getElementsByClassName("c-message__content_body");
     for (const messageBody of messageBodies) {
         if (message.id === null) { return true; }
@@ -115,7 +115,7 @@ function updateMessage(message) {
     return false;
 }
 
-function showMessage(message) {
+const showMessage =(message)=> {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -490,7 +490,7 @@ window.updateMessages = function updateMessages() {
 
 // updateMessages();
 
-function showBotMessage(message) {
+const showBotMessage =(message)=> {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -543,7 +543,7 @@ window.pressChannelButton = function pressChannelButton(id) {
 };
 
 
-function add_attached_file (message) {
+const add_attached_file =(message)=> {
     if (message.filename !== null) {
         return `<br>
                 <span class="c-message__attachment">
