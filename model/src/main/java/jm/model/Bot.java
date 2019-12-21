@@ -30,7 +30,7 @@ public class Bot {
     @EqualsAndHashCode.Include
     private String name;
 
-    @Column(name = "nickName")
+    @Column(name = "nick_name")
     @EqualsAndHashCode.Include
     private String nickName;
 

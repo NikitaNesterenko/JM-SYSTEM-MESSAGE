@@ -31,14 +31,28 @@ public class MessageDTO {
 
     private Boolean isDeleted = false;
 
-    // from ChannelMessage
     private Long channelId;
+
     private Long sharedMessageId;
 
-    // from DirectMessage
     private Set<Long> recipientUserIds;
 
-    // from ThreadChannelMessage and ThreadDirectMessage
     private Long parentMessageId;
 
+    // Три поля, которые очень часто используются в JavaScript коде, поэтому их добавление позволит избежать
+    // дополнительных запросов и упростить JavaScript код.
+    // При обратном преобразовании DTO -> entity просто игнорируются.
+    private String userName;
+    private String botNickName;
+    private String channelName;
+
+    // // Constructor for simplify from entity conversion
+    public MessageDTO(Long id, String content, LocalDateTime dateCreate, String filename, Boolean isDeleted, Long channelId) {
+        this.id = id;
+        this.content = content;
+        this.dateCreate = dateCreate;
+        this.filename = filename;
+        this.isDeleted = isDeleted;
+        this.channelId = channelId;
+    }
 }
