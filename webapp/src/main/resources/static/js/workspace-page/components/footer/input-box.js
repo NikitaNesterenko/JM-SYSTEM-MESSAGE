@@ -13,8 +13,8 @@ const storage_service = new StorageService();
 class Message {
     constructor(id, channel, user, content, dateCreate, filename) {
         this.id = id;  // id нужно для редактирования сообщений
-        this.channel = channel;
-        this.user = user;
+        this.channelId = channel;
+        this.userId = user;
         this.content = content;
         this.dateCreate = dateCreate;
         this.filename = filename;
@@ -44,7 +44,7 @@ $('#form_message').submit(function () {
             $('#attached_file').html("");
         }
         Promise.all([filename]).then(files => {
-            const message = new Message(null, channel, user, text_message, currentDate, files[0]);
+            const message = new Message(null, channel.id, user.id, text_message, currentDate, files[0]);
             console.log("**********************");
             console.log(message);
             console.log(user);

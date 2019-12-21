@@ -72,10 +72,11 @@ public class MessageRestController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
+        Message message = messageDtoService.toEntity(messageDto);
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
