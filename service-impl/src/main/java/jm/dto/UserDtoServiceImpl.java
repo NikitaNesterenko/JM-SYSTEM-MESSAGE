@@ -7,11 +7,12 @@ import jm.model.message.Message;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class UserDtoServiceImpl implements UserDtoService {
 
     private final UserDAO userDAO;
@@ -29,20 +30,7 @@ public class UserDtoServiceImpl implements UserDtoService {
             return null;
         }
 
-        UserDTO userDTO = new UserDTO();
-
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setLogin(user.getLogin());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setAvatarURL(user.getAvatarURL());
-        userDTO.setTitle(user.getTitle());
-        userDTO.setDisplayName(user.getDisplayName());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setTimeZone(user.getTimeZone());
-        userDTO.setOnline(user.getOnline());
-        userDTO.setUserSkype(user.getUserSkype());
+        UserDTO userDTO = new UserDTO(user);
 
         Set<Long> starredMessageIds = user.getStarredMessages().stream().map(Message::getId).collect(Collectors.toSet());
         userDTO.setStarredMessageIds(starredMessageIds);
@@ -54,44 +42,29 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
-    public List<UserDTO> toDto(List<User> users) {
-        return users == null ? null : users.stream().map(this::toDto).collect(Collectors.toList());
-    }
-
-    @Override
+    @Transactional
     public User toEntity(UserDTO userDTO) {
 
         if (userDTO == null) {
             return null;
         }
 
+        User user = new User(userDTO);
+
         Long id = userDTO.getId();
-
-        User user = new User();
-
-        user.setId(id);
-        user.setName(userDTO.getName());
-        user.setLastName(userDTO.getLastName());
-        user.setLogin(userDTO.getLogin());
         if (id != null && user.getPassword() == null) {
             User existingUser = userDAO.getById(id);
             if (existingUser != null) {
                 user.setPassword(existingUser.getPassword());
             }
         }
-        user.setEmail(userDTO.getEmail());
-        user.setAvatarURL(userDTO.getAvatarURL());
-        user.setTitle(userDTO.getTitle());
-        user.setDisplayName(userDTO.getDisplayName());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setTimeZone(userDTO.getTimeZone());
-        user.setOnline(userDTO.getOnline());
-        user.setUserSkype(userDTO.getUserSkype());
 
+        // starredMessages
         Set<Long> starredMessageIds = userDTO.getStarredMessageIds();
         List<Message> starredMessagesList = messageDAO.getMessagesByIds(starredMessageIds);
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
+        // directMessagesToUsers
         Set<Long> directMessagesToUserIds = userDTO.getDirectMessagesToUserIds();
         List<User> directMessagesToUserList = userDAO.getUsersByIds(directMessagesToUserIds);
         user.setDirectMessagesToUsers(new HashSet<>(directMessagesToUserList));

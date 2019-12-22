@@ -4,13 +4,14 @@ import jm.BotService;
 import jm.ChannelService;
 import jm.MessageService;
 import jm.WorkspaceService;
+import jm.dto.BotDTO;
+import jm.dto.BotDtoService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.message.Message;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,54 +26,51 @@ import javax.persistence.EntityNotFoundException;
 @RequestMapping("/rest/api/bot")
 public class BotRestController {
 
-    private BotService botService;
-    private WorkspaceService workspaceService;
-    private MessageService messageService;
-    private ChannelService channelService;
+    private final BotService botService;
+    private final WorkspaceService workspaceService;
+    private final MessageService messageService;
+    private final ChannelService channelService;
+    private final BotDtoService botDtoService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             BotRestController.class);
 
-    @Autowired
-    public void setBotService(BotService botService) { this.botService = botService; }
-
-    @Autowired
-    public void setWorkspaceService(WorkspaceService workspaceService) { this.workspaceService = workspaceService; }
-
-    @Autowired
-    public void setMessageService(MessageService messageService) {
+    public BotRestController(BotService botService, WorkspaceService workspaceService, MessageService messageService, ChannelService channelService, BotDtoService botDtoService) {
+        this.botService = botService;
+        this.workspaceService = workspaceService;
         this.messageService = messageService;
-    }
-
-    @Autowired
-    public void setChannelService(ChannelService channelService) {
         this.channelService = channelService;
+        this.botDtoService = botDtoService;
     }
 
+
+    // DTO attendant
     @GetMapping("/workspace/{id}")
-    public ResponseEntity<Bot> getBotByWorksapce(@PathVariable("id") Long id) {
+    public ResponseEntity<BotDTO> getBotByWorkspace(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
         Bot bot = botService.GetBotByWorkspaceId(workspace);
-        if(bot == null) {
+        if (bot == null) {
             logger.warn("Не удалось найти бота для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         logger.info("Бот для workspace c id = {}", id);
         //logger.info(bot.toString());
-        return new ResponseEntity<Bot>(bot, HttpStatus.OK);
+        return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
     }
 
+    // DTO attendant
     @GetMapping("/{id}")
-    public ResponseEntity<Bot> getBotById(@PathVariable("id") Long id) {
+    public ResponseEntity<BotDTO> getBotById(@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
         //logger.info(botService.getBotById(id).toString());
-        return new ResponseEntity<Bot>(botService.getBotById(id), HttpStatus.OK);
+        Bot bot = botService.getBotById(id);
+        return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
     public ResponseEntity createBot(@RequestBody Bot bot) {
         try {
-           botService.createBot(bot);
+            botService.createBot(bot);
             logger.info("Cозданный bot: {}", bot);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             logger.warn("Не удалось создать бота");
@@ -88,16 +86,16 @@ public class BotRestController {
             logger.warn("Бот не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
-           botService.updateBot(bot);
-           logger.info("Обновлнный бот: {}", bot);
+            botService.updateBot(bot);
+            logger.info("Обновлнный бот: {}", bot);
             return new ResponseEntity(HttpStatus.OK);
         }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteBot(@PathVariable("id") Long id) {
-       botService.deleteBot(id);
-       logger.info("Удален бот с id = {}", id);
+        botService.deleteBot(id);
+        logger.info("Удален бот с id = {}", id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -133,7 +131,7 @@ public class BotRestController {
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusDays(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(),startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
@@ -151,6 +149,6 @@ public class BotRestController {
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusMonths(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(),startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
     }
 }

@@ -75,7 +75,8 @@ window.sendName = function sendName(message) {
         'userName': message.userName,
         'botId': message.botId,
         'botNickName': message.botNickName,
-        'filename': message.filename
+        'filename': message.filename,
+        'sharedMessageId': message.sharedMessageId
     }));
 };
 
@@ -187,7 +188,7 @@ window.updateMessages = function updateMessages() {
     messages_promise.then(messages => { //После того как Месседжи будут получены, начнется выполнение этого блока
         messages.forEach(function (message, i) {
 
-                if (message.user !== null) {
+                if (message.userId !== null) {
                     let messages_queue_context_user_container = document.createElement('div');
                     messages_queue_context_user_container.className = "c-virtual_list__item";
 

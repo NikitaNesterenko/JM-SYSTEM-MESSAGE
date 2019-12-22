@@ -3,6 +3,7 @@ package jm.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.model.message.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,14 +47,15 @@ public class MessageDTO {
     private String botNickName;
     private String channelName;
 
-    // Constructor for simplify Entity->DTO conversion
-    public MessageDTO(Long id, String content, LocalDateTime dateCreate, String filename, Boolean isDeleted, Long channelId) {
-        this.id = id;
-        this.content = content;
-        this.dateCreate = dateCreate;
-        this.filename = filename;
-        this.isDeleted = isDeleted;
-        this.channelId = channelId;
+    // Constructor for simplify Message->MessageDTO conversion.
+    // copying simple fields
+    public MessageDTO(Message message) {
+        this.id = message.getId();
+        this.content = message.getContent();
+        this.dateCreate = message.getDateCreate();
+        this.filename = message.getFilename();
+        this.isDeleted = message.getIsDeleted();
+        this.channelId = message.getChannelId();
     }
 
     // For test only

@@ -1,12 +1,10 @@
 package jm.model;
 
-//import jm.model.CustomSerializer.CustomUserDeserializer;
 import jm.dto.UserDTO;
 import jm.model.message.Message;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -99,7 +97,7 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
 
-//    @JsonSerialize(using = CustomUserSerializer.class)
+    //    @JsonSerialize(using = CustomUserSerializer.class)
 //    @JsonDeserialize(using = CustomUserDeserializer.class)
     @ToString.Exclude
     @ManyToMany(cascade = CascadeType.REFRESH)
@@ -161,7 +159,24 @@ public class User {
         this.password = password;
     }
 
-//    @Override
+    // Constructor for simplify UserDTO->User conversion.
+    // copying simple fields
+    public User(UserDTO userDto) {
+        this.id = userDto.getId();
+        this.name = userDto.getName();
+        this.lastName = userDto.getLastName();
+        this.login = userDto.getLogin();
+        this.email = userDto.getEmail();
+        this.avatarURL = userDto.getAvatarURL();
+        this.title = userDto.getTitle();
+        this.displayName = userDto.getDisplayName();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.timeZone = userDto.getTimeZone();
+        this.online = userDto.getOnline();
+        this.userSkype = userDto.getUserSkype();
+    }
+
+    //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) {
 //            return true;
