@@ -1,9 +1,9 @@
 package jm.controller.rest;
 
+import jm.ChannelService;
 import jm.UserService;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
-import jm.ChannelService;
 import jm.model.User;
 import jm.model.Workspace;
 import org.slf4j.Logger;
