@@ -1,5 +1,6 @@
 package jm.dto;
 
+import jm.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,4 +42,20 @@ public class UserDTO {
 
     private String userSkype;
 
+    // Constructor for simplify User->UserDTO conversion.
+    // copying simple fields
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.lastName = user.getLastName();
+        this.login = user.getLogin();
+        this.email = user.getEmail();
+        this.avatarURL = user.getAvatarURL();
+        this.title = user.getTitle();
+        this.displayName = user.getDisplayName();
+        this.phoneNumber = user.getPhoneNumber();
+        this.timeZone = user.getTimeZone();
+        this.online = user.getOnline();
+        this.userSkype = user.getUserSkype();
+    }
 }

@@ -3,6 +3,7 @@ package jm.model.message;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.dto.MessageDTO;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.User;
@@ -110,7 +111,7 @@ public class Message {
         this.dateCreate = dateCreate;
     }
 
-    //two constructors for sharing messages
+    // two constructors for sharing messages
     public Message(Long channelId, User user, String content, LocalDateTime dateCreate, Message sharedMessage) {
         this.channelId = channelId;
         this.user = user;
@@ -127,14 +128,15 @@ public class Message {
         this.sharedMessage = sharedMessage;
     }
 
-    // Constructor for simplify from DTO conversion
-    public Message(Long id, String content, LocalDateTime dateCreate, String filename, Boolean isDeleted, Long channelId) {
-        this.id = id;
-        this.content = content;
-        this.dateCreate = dateCreate;
-        this.filename = filename;
-        this.isDeleted = isDeleted;
-        this.channelId = channelId;
+    // Constructor for simplify MessageDTO->Message conversion.
+    // copying simple fields
+    public Message(MessageDTO messageDto) {
+        this.id = messageDto.getId();
+        this.content = messageDto.getContent();
+        this.dateCreate = messageDto.getDateCreate();
+        this.filename = messageDto.getFilename();
+        this.isDeleted = messageDto.getIsDeleted();
+        this.channelId = messageDto.getChannelId();
     }
 
     //    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {

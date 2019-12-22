@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.dto.BotDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -40,7 +41,7 @@ public class Bot {
 
     @JsonIgnoreProperties
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="channels_bots", joinColumns = @JoinColumn(name="bot_id"), inverseJoinColumns=@JoinColumn(name="channel_id"))
+    @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels;
 
     @Column(name = "date_create", nullable = false)
@@ -54,5 +55,14 @@ public class Bot {
         this.nickName = nickName;
         this.workspace = workspace;
         this.dateCreate = dateCreate;
+    }
+
+    // Constructor for simplify BotDTO->Bot conversion.
+    // copying simple fields
+    public Bot(BotDTO botDto) {
+        this.id = botDto.getId();
+        this.name = botDto.getName();
+        this.nickName = botDto.getNickName();
+        this.dateCreate = botDto.getDateCreate();
     }
 }

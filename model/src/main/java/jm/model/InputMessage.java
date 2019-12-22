@@ -40,4 +40,6 @@ public class InputMessage {
 
     private String filename;
 
+    private Long sharedMessageId;
+
 }

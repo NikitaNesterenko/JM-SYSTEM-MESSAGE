@@ -1,13 +1,17 @@
-import {UserRestPaginationService, ChannelRestPaginationService, MessageRestPaginationService} from '../../../rest/entities-rest-pagination.js'
+import {
+    UserRestPaginationService,
+    ChannelRestPaginationService,
+    MessageRestPaginationService
+} from '../../../rest/entities-rest-pagination.js'
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
 
 class SharedMessage {
-    constructor(channel, user, content, dateCreate, sharedMessageId) {
-        this.channel = channel;
-        this.user = user;
+    constructor(channelId, userId, content, dateCreate, sharedMessageId) {
+        this.channelId = channelId;
+        this.userId = userId;
         this.content = content;
         this.dateCreate = dateCreate;
         this.sharedMessageId = sharedMessageId;
@@ -32,11 +36,11 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
         const message_channel = value[3];
         const choosing_channel = value[4];
 
-        if(channel.isPrivate) {
+        if (channel.isPrivate) {
             const share_message_input_element = document.getElementById("share_message_input_id");
             const user_message = share_message_input_element.value;
 
-            if (shared_message.user !== null) {
+            if (shared_message.userId !== null) {
                 const message_box = document.getElementById("all-messages");
                 let messages_queue_context_user_container = document.createElement('div');
                 messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -51,9 +55,9 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
                                                                         </button>
                                                                     </div>
                                                                     <div class="c-message__content--feature_sonic_inputs">
-                                                                        <div class="c-message__content_header" id="message_${shared_message.id}_user_${shared_message.user.id}_content_header">        
+                                                                        <div class="c-message__content_header" id="message_${shared_message.id}_user_${shared_message.userId}_content_header">        
                                                                             <span class="c-message__sender" >
-                                                                                <a class="c-message__sender_link" href="#modal_1" class="message__sender" id="user_${shared_message.user.id}" data-user_id="${shared_message.user.id}" data-toggle="modal">
+                                                                                <a class="c-message__sender_link" href="#modal_1" class="message__sender" id="user_${shared_message.userId}" data-user_id="${shared_message.userId}" data-toggle="modal">
                                                                                     ${user.name}
                                                                                 </a>
                                                                             </span>
@@ -87,7 +91,7 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
                                                                                                     </button>
                                                                                                     <button class="c-message_attachment__author_name">
                                                                                                         <span>
-                                                                                                            ${shared_message.user.name}
+                                                                                                            ${shared_message.userName}
                                                                                                         </span>
                                                                                                     </button>
                                                                                                 </span>
@@ -191,7 +195,7 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
                                                                                                     </button>
                                                                                                     <button class="c-message_attachment__author_name">
                                                                                                         <span>
-                                                                                                            ${shared_message.bot.name}
+                                                                                                            ${shared_message.botNickName}
                                                                                                         </span>
                                                                                                     </button>
                                                                                                 </span>
@@ -245,25 +249,27 @@ $(document).on('click', '#share_message_submit_button_id', function (e) {
             }
 
             const currentDate = convert_date_to_format_Json(new Date());
-            const message = new SharedMessage(channel, user, user_message, currentDate, shared_message.id);
+            const message = new SharedMessage(channel.id, user.id, user_message, currentDate, shared_message.id);
 
-            sendName(message);
-            message_service.create(message);
+            message_service.create(message).then((created_msg) => {
+                sendName(created_msg);
+            });
 
             document.getElementById("share_message_modal_id").style.display = "none";
             const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
             share_message_modal_overlay_after_open.parentNode.removeChild(share_message_modal_overlay_after_open);
         }
 
-        if(!channel.isPrivate) {
+        if (!channel.isPrivate) {
             const share_message_input_element = document.getElementById("share_message_input_id");
             const user_message = share_message_input_element.value;
 
             const currentDate = convert_date_to_format_Json(new Date());
-            const message = new SharedMessage(choosing_channel, user, user_message, currentDate, shared_message.id);
+            const message = new SharedMessage(choosing_channel.id, user.id, user_message, currentDate, shared_message.id);
 
-            sendName(message);
-            message_service.create(message);
+            message_service.create(message).then((created_msg) => {
+                sendName(created_msg);
+            });
 
             document.getElementById("share_message_modal_id").style.display = "none";
             const share_message_modal_overlay_after_open = document.getElementById("share_message_modal_overlay_after_open_id");
@@ -286,11 +292,10 @@ $(document).on('click', '#share-message-id', function (e) {
 
         let user_or_bot_name = null;
 
-        if (message.user === null) {
-            user_or_bot_name = message.bot.name;
-        }
-        if (message.user !== null) {
-            user_or_bot_name = message.user.name;
+        if (message.userId === null) {
+            user_or_bot_name = message.botNickName;
+        } else {
+            user_or_bot_name = message.userName;
         }
 
         if (channel.isPrivate) {
@@ -375,7 +380,7 @@ $(document).on('click', '#share-message-id', function (e) {
                                                 
                                                             <div class="c-dialog__footer--has_buttons">
                                                                 <div class="c-dialog__footer_buttons">    
-                                                                    <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channel.id}">
+                                                                    <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channelId}">
                                                                         Share
                                                                     </button>
                                                                 </div>
@@ -451,7 +456,7 @@ $(document).on('click', '#share-message-id', function (e) {
                                                 
                                                             <div class="c-dialog__footer--has_buttons">
                                                                 <div class="c-dialog__footer_buttons">    
-                                                                    <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channel.id}">
+                                                                    <button class="c-button--medium_null--primary" id="share_message_submit_button_id" data-share_msg_id="${message.id}" data-share_msg_channel_id="${message.channelId}">
                                                                         Share
                                                                     </button>
                                                                 </div>
@@ -464,20 +469,20 @@ $(document).on('click', '#share-message-id', function (e) {
             const choose_channel_promise = channel_service.getChannelsByUserId(user.id);
 
             choose_channel_promise.then(channels => {
-               channels.forEach(function (channel, i) {
-                   if(channel.isPrivate) {
-                       let share_message_channel_select_container = document.createElement('option');
-                       share_message_channel_select_container.value = channel.id;
-                       share_message_channel_select_container.innerHTML = `<div>🔒 ${channel.name}</div>`;
-                       share_message_channel_select.append(share_message_channel_select_container);
-                   }
-                   if(!channel.isPrivate) {
-                       let share_message_channel_select_container = document.createElement('option');
-                       share_message_channel_select_container.value = channel.id;
-                       share_message_channel_select_container.innerHTML = `<div># ${channel.name}</div>`;
-                       share_message_channel_select.append(share_message_channel_select_container);
-                   }
-               })
+                channels.forEach(function (channel, i) {
+                    if (channel.isPrivate) {
+                        let share_message_channel_select_container = document.createElement('option');
+                        share_message_channel_select_container.value = channel.id;
+                        share_message_channel_select_container.innerHTML = `<div>🔒 ${channel.name}</div>`;
+                        share_message_channel_select.append(share_message_channel_select_container);
+                    }
+                    if (!channel.isPrivate) {
+                        let share_message_channel_select_container = document.createElement('option');
+                        share_message_channel_select_container.value = channel.id;
+                        share_message_channel_select_container.innerHTML = `<div># ${channel.name}</div>`;
+                        share_message_channel_select.append(share_message_channel_select_container);
+                    }
+                })
             });
         }
 
