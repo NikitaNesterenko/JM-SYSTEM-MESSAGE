@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,8 +19,7 @@ import java.util.List;
 @RequestMapping("/rest/api/messages")
 public class MessageRestController {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(MessageRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageRestController.class);
 
     private final MessageService messageService;
     private final MessageDtoService messageDtoService;
@@ -31,7 +29,7 @@ public class MessageRestController {
         this.messageDtoService = messageDtoService;
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping
     public ResponseEntity<List<MessageDTO>> getMessages() {
         logger.info("Список сообщений : ");
@@ -43,7 +41,7 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<Message> messages = messageService.getMessagesByChannelId(id);
@@ -55,23 +53,23 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping(value = "/{id}")
     public ResponseEntity<MessageDTO> getMessageById(@PathVariable("id") Long id) {
-        logger.info("Сообщение с id = {}", id);
-        logger.info(messageService.getMessageById(id).toString());
         Message message = messageService.getMessageById(id);
+        logger.info("Сообщение с id = {}", id);
+        logger.info(message.toString());
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
         List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now());
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @PostMapping(value = "/create")
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
         Message message = messageDtoService.toEntity(messageDto);
@@ -80,7 +78,7 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
 
-    // DTO attendant
+    // DTO compliant
     @PutMapping(value = "/update")
 //    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
@@ -106,10 +104,11 @@ public class MessageRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // DTO compliant
     @GetMapping("/{id}/starred")
-    public ResponseEntity<List<Message>> getStarredMessages(@PathVariable Long id) {
+    public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long id) {
         List<Message> starredMessages = messageService.getStarredMessagesForUser(id);
         logger.info("Сообщения, отмеченные пользователем.");
-        return ResponseEntity.ok(starredMessages);
+        return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
     }
 }

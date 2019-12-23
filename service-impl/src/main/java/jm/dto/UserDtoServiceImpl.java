@@ -30,13 +30,20 @@ public class UserDtoServiceImpl implements UserDtoService {
             return null;
         }
 
+        // creating new UserDTO with simple fields copied from User
         UserDTO userDTO = new UserDTO(user);
 
-        Set<Long> starredMessageIds = user.getStarredMessages().stream().map(Message::getId).collect(Collectors.toSet());
-        userDTO.setStarredMessageIds(starredMessageIds);
+        // setting up 'starredMessageIds'
+        if (user.getStarredMessages() != null) {
+            Set<Long> starredMessageIds = user.getStarredMessages().stream().map(Message::getId).collect(Collectors.toSet());
+            userDTO.setStarredMessageIds(starredMessageIds);
+        }
 
-        Set<Long> directMessagesToUserIds = user.getDirectMessagesToUsers().stream().map(User::getId).collect(Collectors.toSet());
-        userDTO.setDirectMessagesToUserIds(directMessagesToUserIds);
+        // setting up 'directMessagesToUserIds'
+        if (user.getDirectMessagesToUsers() != null) {
+            Set<Long> directMessagesToUserIds = user.getDirectMessagesToUsers().stream().map(User::getId).collect(Collectors.toSet());
+            userDTO.setDirectMessagesToUserIds(directMessagesToUserIds);
+        }
 
         return userDTO;
     }
@@ -49,8 +56,10 @@ public class UserDtoServiceImpl implements UserDtoService {
             return null;
         }
 
+        // creating new User with simple fields copied from UserDTO
         User user = new User(userDTO);
 
+        // setting up 'password'
         Long id = userDTO.getId();
         if (id != null && user.getPassword() == null) {
             User existingUser = userDAO.getById(id);
@@ -59,14 +68,12 @@ public class UserDtoServiceImpl implements UserDtoService {
             }
         }
 
-        // starredMessages
-        Set<Long> starredMessageIds = userDTO.getStarredMessageIds();
-        List<Message> starredMessagesList = messageDAO.getMessagesByIds(starredMessageIds);
+        // setting up 'starredMessages'
+        List<Message> starredMessagesList = messageDAO.getMessagesByIds(userDTO.getStarredMessageIds());
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
-        // directMessagesToUsers
-        Set<Long> directMessagesToUserIds = userDTO.getDirectMessagesToUserIds();
-        List<User> directMessagesToUserList = userDAO.getUsersByIds(directMessagesToUserIds);
+        // setting up 'directMessagesToUsers'
+        List<User> directMessagesToUserList = userDAO.getUsersByIds(userDTO.getDirectMessagesToUserIds());
         user.setDirectMessagesToUsers(new HashSet<>(directMessagesToUserList));
 
         return user;

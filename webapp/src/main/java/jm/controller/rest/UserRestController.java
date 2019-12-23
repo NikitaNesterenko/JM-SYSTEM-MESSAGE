@@ -1,7 +1,7 @@
 package jm.controller.rest;
 
-import jm.dto.UserDTO;
 import jm.UserService;
+import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class UserRestController {
         this.userDtoService = userDtoService;
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
@@ -41,14 +41,16 @@ public class UserRestController {
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
 
+    // DTO compliant
     @PostMapping(value = "/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
+        User user = userDtoService.toEntity(userDto);
         userService.createUser(user);
         logger.info("Созданный пользователь : {}", user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userDtoService.toDto(user), HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Польщователь с id = {}", id);
@@ -58,7 +60,7 @@ public class UserRestController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @PutMapping(value = "/update")
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
@@ -80,7 +82,7 @@ public class UserRestController {
         return ResponseEntity.ok(true);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
@@ -92,7 +94,7 @@ public class UserRestController {
         return ResponseEntity.ok(userDTOList);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping(value = "/loggedUser")
     public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
         User user = userService.getUserByLogin(principal.getName());
@@ -101,14 +103,14 @@ public class UserRestController {
         return ResponseEntity.ok(userDTO);
     }
 
-    // DTO attendant (?)
+    // DTO compliant
     @GetMapping(value = "/workspace/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);
-        List<UserDTO> users = userService.getAllUsersInWorkspace(id);
-        for (UserDTO user : users) {
+        List<UserDTO> userDTOsList = userService.getAllUsersInWorkspace(id);
+        for (UserDTO user : userDTOsList) {
             logger.info(user.toString());
         }
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userDTOsList);
     }
 }

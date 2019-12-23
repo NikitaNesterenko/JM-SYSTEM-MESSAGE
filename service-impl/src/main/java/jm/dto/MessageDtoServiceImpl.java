@@ -90,12 +90,10 @@ public class MessageDtoServiceImpl implements MessageDtoService {
         Message message = new Message(messageDto);
 
         // setting up 'user' or 'bot'
-        Long userId = messageDto.getUserId();
-        Long botId = messageDto.getBotId();
-        if (userId != null) {
-            message.setUser(userDAO.getById(userId));
-        } else if (botId != null) {
-            message.setBot(botDAO.getById(botId));
+        if (messageDto.getUserId() != null) {
+            message.setUser(userDAO.getById(messageDto.getUserId()));
+        } else if (messageDto.getBotId() != null) {
+            message.setBot(botDAO.getById(messageDto.getBotId()));
         }
 
         // setting up 'sharedMessage'

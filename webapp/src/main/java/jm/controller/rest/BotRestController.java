@@ -8,19 +8,18 @@ import jm.dto.BotDTO;
 import jm.dto.BotDtoService;
 import jm.model.Bot;
 import jm.model.Channel;
-import jm.model.message.Message;
 import jm.model.Workspace;
+import jm.model.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/rest/api/bot")
@@ -32,8 +31,7 @@ public class BotRestController {
     private final ChannelService channelService;
     private final BotDtoService botDtoService;
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            BotRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BotRestController.class);
 
     public BotRestController(BotService botService, WorkspaceService workspaceService, MessageService messageService, ChannelService channelService, BotDtoService botDtoService) {
         this.botService = botService;
@@ -43,8 +41,7 @@ public class BotRestController {
         this.botDtoService = botDtoService;
     }
 
-
-    // DTO attendant
+    // DTO compliant
     @GetMapping("/workspace/{id}")
     public ResponseEntity<BotDTO> getBotByWorkspace(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
@@ -58,7 +55,7 @@ public class BotRestController {
         return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
     }
 
-    // DTO attendant
+    // DTO compliant
     @GetMapping("/{id}")
     public ResponseEntity<BotDTO> getBotById(@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
@@ -67,8 +64,10 @@ public class BotRestController {
         return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
     }
 
+    // DTO compliant
     @PostMapping(value = "/create")
-    public ResponseEntity createBot(@RequestBody Bot bot) {
+    public ResponseEntity createBot(@RequestBody BotDTO botDto) {
+        Bot bot = botDtoService.toEntity(botDto);
         try {
             botService.createBot(bot);
             logger.info("Cозданный bot: {}", bot);
@@ -79,8 +78,10 @@ public class BotRestController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
+    // DTO compliant
     @PutMapping(value = "/update")
-    public ResponseEntity updateBot(@RequestBody Bot bot) {
+    public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
+        Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
         if (existingBot == null) {
             logger.warn("Бот не найден");

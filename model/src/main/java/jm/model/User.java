@@ -1,5 +1,6 @@
 package jm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jm.dto.UserDTO;
 import jm.model.message.Message;
 import lombok.*;
@@ -99,6 +100,7 @@ public class User {
 
     //    @JsonSerialize(using = CustomUserSerializer.class)
 //    @JsonDeserialize(using = CustomUserDeserializer.class)
+    @JsonIgnore
     @ToString.Exclude
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(
