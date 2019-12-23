@@ -3,7 +3,7 @@ package jm.controller.rest;
 import jm.MessageService;
 import jm.dto.MessageDTO;
 import jm.model.Channel;
-import jm.model.message.Message;
+import jm.model.Message;
 import jm.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

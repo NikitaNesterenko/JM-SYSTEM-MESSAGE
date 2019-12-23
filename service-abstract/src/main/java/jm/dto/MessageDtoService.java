@@ -1,6 +1,6 @@
 package jm.dto;
 
-import jm.model.message.Message;
+import jm.model.Message;
 
 public interface MessageDtoService extends DtoGenericService<Message, MessageDTO> {
 }

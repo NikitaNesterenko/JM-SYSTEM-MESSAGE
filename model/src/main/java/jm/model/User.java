@@ -2,7 +2,6 @@ package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jm.dto.UserDTO;
-import jm.model.message.Message;
 import lombok.*;
 
 import javax.persistence.*;
