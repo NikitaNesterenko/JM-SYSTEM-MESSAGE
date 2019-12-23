@@ -99,7 +99,8 @@ const message_menu = (message) => {
 
     getMessageStatus(message);
     let divStyle = 'block';
-    //divStyle = showDeleteMenuOnlyToOwner(message);
+    //Не работает получение залогиненного юзера с помощью user_service.getLoggedUser() и   user_service.getLoggedUser().then(loggedUser => {
+    // divStyle = showDeleteMenuOnlyToOwner(message);
 
     return `<div class="message-icons-menu-class" id="message-icons-menu">
                 <div class="btn-group" role="group" aria-label="Basic example">
