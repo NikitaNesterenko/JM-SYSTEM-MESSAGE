@@ -40,9 +40,9 @@ public class MessageDTO {
 
     private Long parentMessageId;
 
-    // Три поля, которые очень часто используются в JavaScript коде, поэтому их добавление позволит избежать
-    // дополнительных запросов и упростить JavaScript код.
-    // При обратном преобразовании DTO -> entity просто игнорируются.
+    // Три дополнительных поля, которые очень часто используются в JavaScript коде,
+    // поэтому их добавление позволит избежать лишних запросов и сильно упростить JavaScript код.
+    // При обратном преобразовании (DTO->entity) просто игнорируются:
     private String userName;
     private String botNickName;
     private String channelName;

@@ -16,17 +16,11 @@ import java.util.Set;
 public class ChannelDTO {
 
     private Long id;
-
     private String name;
-
     private Set<Long> userIds;
-
     private Set<Long> botIds;
-
     private Long workspaceId;
-
     private Long ownerId;
-
     private Boolean isPrivate;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
