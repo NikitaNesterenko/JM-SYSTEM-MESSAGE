@@ -1,11 +1,10 @@
 package jm.config.inititalizer;
 
-import jm.UserService;
-import jm.WorkspaceUserRoleService;
-import jm.WorkspaceUserRoleServiceImpl;
+import jm.*;
 import jm.api.dao.*;
 import jm.model.*;
 import jm.model.message.ChannelMessage;
+import jm.model.message.DirectMessage;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +36,20 @@ public class TestDataInitializer {
     @Autowired
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
 
+    @Autowired
+    private ConversationService conversationService;
+    @Autowired
+    private DirectMessageService directMessageService;
+
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
     private Set<ChannelMessage> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
     private Set<Bot> bots = new HashSet<>();
+
+    private Set<Conversation> conversations = new HashSet<>();
+    private Set<DirectMessage> directMessages = new HashSet<>();
 
     @AllArgsConstructor
     private enum UserData {
@@ -73,6 +80,9 @@ public class TestDataInitializer {
         createChannels();
         createMessages();
         createLinkRoles();
+
+        createConversations();
+        createDirectMessages();
     }
 
     private void createRoles() {
@@ -325,5 +335,100 @@ public class TestDataInitializer {
         workspaceUserRole.setUser(user);
         workspaceUserRole.setRole(role);
         workspaceUserRoleDAO.persist(workspaceUserRole);
+    }
+
+    private void createDirectMessages() {
+        User user1 = this.userService.getUserById(1L);
+        User user2 = this.userService.getUserById(2L);
+        User user3 = this.userService.getUserById(3L);
+        User user4 = this.userService.getUserById(4L);
+        User user5 = this.userService.getUserById(5L);
+
+        Conversation conversation1 = this.conversationService.getConversationById(1L);
+        Conversation conversation2 = this.conversationService.getConversationById(2L);
+        Conversation conversation3 = this.conversationService.getConversationById(3L);
+
+        DirectMessage dm1 = new DirectMessage();
+        dm1.setConversation(conversation1);
+        dm1.setUser(user1);
+        dm1.setContent("Direct message #1");
+        dm1.setDateCreate(LocalDateTime.now());
+        this.directMessageService.saveDirectMessage(dm1);
+        this.directMessages.add(dm1);
+
+        DirectMessage dm2 = new DirectMessage();
+        dm2.setConversation(conversation1);
+        dm2.setUser(user2);
+        dm2.setContent("Direct message #2");
+        dm2.setDateCreate(LocalDateTime.now());
+        this.directMessageService.saveDirectMessage(dm2);
+        this.directMessages.add(dm2);
+
+        DirectMessage dm3 = new DirectMessage();
+        dm3.setConversation(conversation2);
+        dm3.setUser(user1);
+        dm3.setContent("Direct message #3");
+        dm3.setDateCreate(LocalDateTime.now());
+        this.directMessageService.saveDirectMessage(dm3);
+        this.directMessages.add(dm3);
+
+        DirectMessage dm4 = new DirectMessage();
+        dm4.setConversation(conversation3);
+        dm4.setUser(user2);
+        dm4.setContent("Direct message #4");
+        dm4.setDateCreate(LocalDateTime.now());
+        this.directMessageService.saveDirectMessage(dm4);
+        this.directMessages.add(dm4);
+    }
+
+    private void createConversations() {
+        User user1 = this.userService.getUserById(1L);
+        User user2 = this.userService.getUserById(2L);
+        User user3 = this.userService.getUserById(3L);
+        User user4 = this.userService.getUserById(4L);
+        User user5 = this.userService.getUserById(5L);
+
+        Workspace workspace = this.workspaceDAO.getById(1L);
+
+        Conversation conversation1 = new Conversation();
+        conversation1.setOpeningUser(user1);
+        conversation1.setAssociatedUser(user2);
+        conversation1.setShowForOpener(true);
+        conversation1.setShowForAssociated(true);
+        conversation1.setWorkspace(workspace);
+
+        conversationService.createConversation(conversation1);
+        this.conversations.add(conversation1);
+
+        //this conversation must not created because already exists
+        Conversation conversation2 = new Conversation();
+        conversation2.setOpeningUser(user2);
+        conversation2.setAssociatedUser(user1);
+        conversation2.setShowForOpener(true);
+        conversation2.setShowForAssociated(false);
+        conversation2.setWorkspace(workspace);
+
+        conversationService.createConversation(conversation2);
+        this.conversations.add(conversation2);
+
+        Conversation conversation3 = new Conversation();
+        conversation3.setOpeningUser(user1);
+        conversation3.setAssociatedUser(user3);
+        conversation3.setShowForOpener(true);
+        conversation3.setShowForAssociated(true);
+        conversation3.setWorkspace(workspace);
+
+        conversationService.createConversation(conversation3);
+        this.conversations.add(conversation3);
+
+        Conversation conversation4 = new Conversation();
+        conversation4.setOpeningUser(user2);
+        conversation4.setAssociatedUser(user3);
+        conversation4.setShowForOpener(true);
+        conversation4.setShowForAssociated(true);
+        conversation4.setWorkspace(workspace);
+
+        conversationService.createConversation(conversation4);
+        this.conversations.add(conversation4);
     }
 }

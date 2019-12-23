@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,8 +19,8 @@ import java.util.List;
 @RequestMapping("/rest/api/messages")
 public class MessageRestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            MessageRestController.class);
+    private static final Logger logger = LoggerFactory
+            .getLogger(MessageRestController.class);
 
     private MessageService messageService;
 
