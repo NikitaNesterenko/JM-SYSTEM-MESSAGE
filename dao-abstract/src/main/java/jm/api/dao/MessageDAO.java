@@ -1,6 +1,6 @@
 package jm.api.dao;
 
-import jm.model.message.Message;
+import jm.model.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;

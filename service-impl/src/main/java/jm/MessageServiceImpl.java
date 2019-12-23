@@ -1,7 +1,7 @@
 package jm;
 
 import jm.api.dao.MessageDAO;
-import jm.model.message.Message;
+import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

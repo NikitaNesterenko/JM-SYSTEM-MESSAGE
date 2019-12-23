@@ -3,7 +3,7 @@ package jm.config.inititalizer;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
-import jm.model.message.Message;
+import jm.model.Message;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

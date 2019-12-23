@@ -7,7 +7,7 @@ import jm.api.dao.UserDAO;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.User;
-import jm.model.message.Message;
+import jm.model.Message;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

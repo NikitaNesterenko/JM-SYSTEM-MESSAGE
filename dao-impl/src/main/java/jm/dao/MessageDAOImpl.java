@@ -1,12 +1,11 @@
 package jm.dao;
 
 import jm.api.dao.MessageDAO;
-import jm.model.message.Message;
+import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;

@@ -3,7 +3,7 @@ package jm.dto;
 import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
 import jm.model.User;
-import jm.model.message.Message;
+import jm.model.Message;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
