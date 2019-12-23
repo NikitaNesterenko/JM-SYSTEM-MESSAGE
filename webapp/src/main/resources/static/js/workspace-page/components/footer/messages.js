@@ -1,7 +1,11 @@
-import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService, UserRestPaginationService} from '../../../rest/entities-rest-pagination.js'
+import {
+    ChannelRestPaginationService,
+    MessageRestPaginationService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
+} from '../../../rest/entities-rest-pagination.js'
 import {setOnClickEdit} from "../../../messagesInlineEdit.js";
 import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
-
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
@@ -89,18 +93,53 @@ export const star_button_blank = '\u2606';
 export const star_button_filled = '\u2605';
 const submenu_button = '&#8285;';
 
+
+
 const message_menu = (message) => {
+
     getMessageStatus(message);
-    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
-        `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${emoji_button}</button>` + // emoji
-        `<button type="button" class="btn btn-light">${reply_button}</button>` + // reply
-        `<button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>` + // share
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>` + // star
-        `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.userId === null ? '' : message.userId}>&#8285;</button>` + // submenu
-        `</div>` +
-        `</div>`;
+    let divStyle = 'block';
+    //divStyle = showDeleteMenuOnlyToOwner(message);
+
+    return `<div class="message-icons-menu-class" id="message-icons-menu">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-light">${emoji_button}</button> <!--emoji-->
+                    <button type="button" class="btn btn-light">${reply_button}</button> <!--reply-->
+                    <button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>  <!--share-->
+                    <button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button> <!--star-->
+                    <button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.userId === null ? '' : message.userId}>&#8285;</button>   <!--submenu-->               
+                    
+                    <div style="display: ${divStyle}">    
+                        <button class="btn btn-light" type="submit" value="${message.id}" onclick="delete_message(this.value);" type="text/javascript">${submenu_button} Delete</button> <!--delete-->
+                    </div>
+                </div>
+            </div>`;
 };
+
+
+
+
+let showDeleteMenuOnlyToOwner = (message) => {
+    let result = 'none';
+    let user = user_service.getLoggedUser();
+
+    user_service.getLoggedUser().then(loggedUser => {
+
+        if (message.userId === loggedUser.id) {
+            result = 'block';
+        }
+    });
+
+    return result;
+};
+
+
+window.delete_message = function delete_message(id) {//Удаление message
+    message_service.deleteById(id).then(() => {//После того как message будет удален, начнется выполнение этого блока
+        updateAllMessages();
+    });
+};
+
 
 export function updateAllMessages() {
     return updateMessages();
