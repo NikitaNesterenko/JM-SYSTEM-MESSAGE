@@ -48,9 +48,7 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> getChannelByName(String name) {
-        return channelDAO.getChannelByName(name);
-    }
+    public Optional<Channel> getChannelByName(String name) { return channelDAO.getChannelByName(name); }
 
     @Override
     public Optional<List<Channel>> getChannelsByOwner(User user) {

@@ -29,7 +29,7 @@ public class ChannelWSController {
     public String createChannel(ChannelWS channelWS)
             throws JsonProcessingException {
 
-        Channel channel = channelService.getChannelByName(channelWS.getName());
+        Channel channel = channelService.getChannelByName(channelWS.getName()).get();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
