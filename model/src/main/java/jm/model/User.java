@@ -157,6 +157,16 @@ public class User {
         this.login = login;
         this.email = email;
         this.password = password;
+
+    }
+    public User(String name, String lastName, String login, String email, String password,Set<Role> roles) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+
     }
 
     @Override

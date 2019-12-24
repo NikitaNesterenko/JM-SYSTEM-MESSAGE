@@ -4,7 +4,7 @@ $(document).ready(function() {
    $("#button-email").click(function(){
       let email = $('#target-email').val();
       sendEmail(email);
-      window.location.href = "/confirmemail";
+      window.location.href = "/email/confirmemail";
       return false;
    });
 });
