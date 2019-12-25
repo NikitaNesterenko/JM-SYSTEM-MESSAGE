@@ -46,7 +46,7 @@ public class CreateWorkspaceRestController {
 
 
     private Set<User> users = new HashSet<>();
-    private  Role ownerRole = new Role("ROLE_OWNER");
+
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
@@ -113,9 +113,9 @@ public class CreateWorkspaceRestController {
         Workspace workspace1 = new Workspace(workspaceName,users, emailUser,false, LocalDateTime.now());
         workspaceService.createWorkspace(workspace1);
         workspace1 = workspaceService.getWorkspaceByName(workspaceName);
+        Role ownerRole = new Role((long) 2, "ROLE_OWNER");
         WorkspaceUserRole workSpaceUserRole = new WorkspaceUserRole(workspace1, emailUser, ownerRole);
-        workspaceUserRoleDAO.persist(workSpaceUserRole);
-//        workspaceUserRoleService.create(workSpaceUserRole);
+        workspaceUserRoleService.create(workSpaceUserRole);
         request.getSession().setAttribute("token", token);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -125,10 +125,10 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         token.setChannelname(channelName);
         createWorkspaceTokenService.updateCreateWorkspaceToken(token);
+        Workspace workspace = workspaceService.getWorkspaceByName(token.getWorkspaceName());
         request.getSession().setAttribute("token", token);
-        Channel channel = new Channel(channelName, users, userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now());
-        channelDAO.persist(channel);
-//        channelService.createChannel(channel);
+        Channel channel = new Channel(channelName, users, userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now(),workspace);
+        channelService.createChannel(channel);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -149,6 +149,7 @@ public class CreateWorkspaceRestController {
     @PostMapping("/tada")
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+
         return new ResponseEntity<>(token.getChannelname(),HttpStatus.OK);
     }
 
