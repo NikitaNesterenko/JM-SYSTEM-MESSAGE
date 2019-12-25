@@ -27,13 +27,6 @@ public class CreateWorkspaceRestController {
 
     private UserService userService;
 
-    @Autowired
-    private ChannelDAO channelDAO;
-
-    @Autowired
-    WorkspaceUserRoleDAO workspaceUserRoleDAO;
-
-
     private CreateWorkspaceTokenService createWorkspaceTokenService;
 
     private MailService mailService;
@@ -43,7 +36,6 @@ public class CreateWorkspaceRestController {
     private WorkspaceService workspaceService;
 
     private ChannelService channelService;
-
 
     private Set<User> users = new HashSet<>();
 
