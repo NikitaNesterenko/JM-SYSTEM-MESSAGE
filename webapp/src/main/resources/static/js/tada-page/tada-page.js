@@ -6,7 +6,7 @@ textP.text("Tada! Meet your team’s first channel: #" + respons);
 
 
 $(document).ready(function() {
-    $("#tada-button").click(function() {
+    $(".workspace_button").click(function() {
         window.location.href = "/chooseWorkspace";
     });
 });
