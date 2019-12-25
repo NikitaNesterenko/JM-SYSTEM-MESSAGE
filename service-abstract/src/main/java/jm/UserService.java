@@ -17,7 +17,7 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    static User getUserByLogin(String login);
+    User getUserByLogin(String login);
 
     User getUserByEmail(String email);
 
