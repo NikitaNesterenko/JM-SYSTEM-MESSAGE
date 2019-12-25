@@ -68,21 +68,24 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     refreshMemberList();
 });
 
-
 const showAllChannels = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
-    Promise.all([workspace_id]).then(value => {
+    let user_promise = user_service.getLoggedUser();
+    Promise.all([workspace_id, user_promise]).then(value => {
+        let user = value[1];
         channel_service.getChannelsByWorkspaceId(value[0].id)
             .then((respons) => {
-
                 $.each(respons, (i, item) => {
-                    $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
-                                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
-                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
-                                                    </button>
-                                                  </div>`);
-                })
+                    if ((item.isPrivate && user.name === item.user.name) || !item.isPrivate) {
+                        $('#id-channel_sidebar__channels__list')
+                            .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
+                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
+                                    </button>
+                                  </div>`);
+                }
+                });
                 //Default channel
                 document.getElementById("channel_button_" + respons[0].id).style.color = "white";
                 document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
