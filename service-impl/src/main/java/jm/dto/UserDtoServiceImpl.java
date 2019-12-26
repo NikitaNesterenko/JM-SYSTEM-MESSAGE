@@ -39,12 +39,6 @@ public class UserDtoServiceImpl implements UserDtoService {
             userDTO.setStarredMessageIds(starredMessageIds);
         }
 
-        // setting up 'directMessagesToUserIds'
-        if (user.getDirectMessagesToUsers() != null) {
-            Set<Long> directMessagesToUserIds = user.getDirectMessagesToUsers().stream().map(User::getId).collect(Collectors.toSet());
-            userDTO.setDirectMessagesToUserIds(directMessagesToUserIds);
-        }
-
         return userDTO;
     }
 
@@ -72,9 +66,6 @@ public class UserDtoServiceImpl implements UserDtoService {
         List<Message> starredMessagesList = messageDAO.getMessagesByIds(userDTO.getStarredMessageIds());
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
-        // setting up 'directMessagesToUsers'
-        List<User> directMessagesToUserList = userDAO.getUsersByIds(userDTO.getDirectMessagesToUserIds());
-        user.setDirectMessagesToUsers(new HashSet<>(directMessagesToUserList));
 
         return user;
     }
