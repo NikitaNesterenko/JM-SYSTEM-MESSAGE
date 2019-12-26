@@ -8,6 +8,13 @@ import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +31,6 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/create")
 public class CreateWorkspaceRestController {
 
-
     private UserService userService;
 
     private CreateWorkspaceTokenService createWorkspaceTokenService;
@@ -39,6 +45,15 @@ public class CreateWorkspaceRestController {
 
     private Set<User> users = new HashSet<>();
 
+    AuthenticationManager authenticationManager;
+
+   private UserDetailsServiceImpl userDetailsService;
+
+
+    @Autowired
+    public void setUserDetailsService( UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
@@ -141,7 +156,10 @@ public class CreateWorkspaceRestController {
     @PostMapping("/tada")
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
-
+        UserDetails userDetails = userDetailsService.loadUserByUsername(token.getUserEmail());
+        UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        sToken.setDetails(new WebAuthenticationDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(sToken);
         return new ResponseEntity<>(token.getChannelname(),HttpStatus.OK);
     }
 
