@@ -1,13 +1,17 @@
-import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService, UserRestPaginationService} from '../../../rest/entities-rest-pagination.js'
-import {setOnClickEdit} from "../../../messagesInlineEdit.js";
+import {MessageRestPaginationService,
+        ChannelRestPaginationService,
+        WorkspaceRestPaginationService,
+        UserRestPaginationService}
+        from '../../../rest/entities-rest-pagination.js'
+import {setOnClickEdit,
+        setDeleteStatus}
+        from "../../../messagesInlineEdit.js";
 import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
-
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
-const user_service = new UserRestPaginationService();
 
 function connect() {
     let socket = new SockJS('/websocket');
@@ -76,12 +80,12 @@ window.sendName = function sendName(message) {
         'botId': message.botId,
         'botNickName': message.botNickName,
         'filename': message.filename,
-        'sharedMessageId': message.sharedMessageId
+        'sharedMessageId': message.sharedMessageId,
+        'isDeleted' : message.isDeleted
     }));
 };
 
 // message menu buttons
-
 const emoji_button = '&#9786;';
 const reply_button = '&#128172;';
 const share_button = '&#10140;';
@@ -91,15 +95,43 @@ const submenu_button = '&#8285;';
 
 const message_menu = (message) => {
     getMessageStatus(message);
-    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
-        `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${emoji_button}</button>` + // emoji
-        `<button type="button" class="btn btn-light">${reply_button}</button>` + // reply
-        `<button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>` + // share
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>` + // star
-        `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.userId === null ? '' : message.userId}>&#8285;</button>` + // submenu
-        `</div>` +
-        `</div>`;
+
+    let divStyle = 'block';
+
+    return `<div class="message-icons-menu-class" id="message-icons-menu">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <!--emoji-->
+                    <button type="button" class="btn btn-light">${emoji_button}</button>
+                    <!--reply-->
+                    <button type="button" class="btn btn-light">${reply_button}</button> 
+                    <!--share-->
+                    <button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button> 
+                    <!--star-->
+                    <button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button> 
+                    
+                    <!--submenu-->
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton_${message.id}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${submenu_button}
+                    </button>
+                    
+                    
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${message.id}">  
+                        <div id="showOnlyOwner_${message.id}" style="display: ${divStyle}">  
+                            <!--edit-->    
+                            <button type="button" class="btn btn-light btn-block" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.userId === null ? '' : message.userId}>
+                            edit
+                            </button> 
+                        
+                            <!--delete-->
+                            <button type="button" class="btn btn-light btn-block" name="btnDeleteInline" data-msg-id=${message.id} data-user-id=${message.userId === null ? '' : message.userId}> 
+                            Delete
+                            </button> 
+                        </div>
+                        <!--something else-->
+                        <a class="dropdown-item" href="#">Action</a>
+                    </div>
+                </div>
+            </div>`;
 };
 
 export function updateAllMessages() {
@@ -160,6 +192,7 @@ function showMessage(message) {
     message_box_wrapper.scrollTo(0, message_box.scrollHeight);
 
     setOnClickEdit();
+    setDeleteStatus(message);
 }
 
 connect();
@@ -486,6 +519,8 @@ window.updateMessages = function updateMessages() {
                         }
                     }
                 }
+                //Возможно не требуется
+                setDeleteStatus(message);
             }
         );
         message_box_wrapper.scrollTo(0, message_box.scrollHeight);

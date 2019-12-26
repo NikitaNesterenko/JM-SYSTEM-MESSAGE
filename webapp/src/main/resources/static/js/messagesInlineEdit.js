@@ -25,6 +25,18 @@ export function setOnClickEdit(setNonActive) {
     });
 }
 
+export function setDeleteStatus(message) {
+    user_service.getLoggedUser().then(loggedUser => {
+        const deleteButtons = document.getElementsByName("btnDeleteInline");
+        for (const deleteButton of deleteButtons) {
+            const msgUserId = deleteButton.getAttribute("data-user-id");
+            if (Number.parseInt(msgUserId) === loggedUser.id) {
+                deleteButton.addEventListener("click", {handleEvent : onDeleteButtonClick, message: message});
+            }
+        }
+    });
+}
+
 function onEditButtonClick(ev) {
     if (activeEdit) {
         return;
@@ -77,6 +89,23 @@ function onEditSubmit(ev) {
             sendName(message);
         });
     });
+}
+
+function onDeleteButtonClick(event) {
+    const message = this.message;
+    const messageId = event.currentTarget.getAttribute("data-msg-id");
+
+    if (Number.parseInt(messageId) === message.id) {
+        console.log("year");
+        console.log(message.content);
+
+        message.isDeleted = true;
+        console.log(message.isDeleted);
+
+        message_service.update(message).then(() => {
+            sendName(message);
+        });
+    }
 }
 
 /**
