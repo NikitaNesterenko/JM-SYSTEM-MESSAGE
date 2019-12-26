@@ -5,9 +5,9 @@ let textP = $('#workspace_name_label');
 textP.text("Tada! Meet your team’s first channel: #" + respons);
 
 
-$(document).ready(function() {
-    $(".workspace_button").click(function() {
+$("#button-name").click(function() {
         window.location.href = "/chooseWorkspace";
+        return false;
     });
-});
+
 

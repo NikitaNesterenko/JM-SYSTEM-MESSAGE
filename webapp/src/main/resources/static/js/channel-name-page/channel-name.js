@@ -5,7 +5,7 @@ $(document).ready(function() {
     $("#button-name").click(function(){
         let name = $('#signup_channel_name').val();
         takeChannelName(name);
-        window.location.href = "/email/invites"
+        window.location.href = "/email/invites";
         return false;
     });
 });

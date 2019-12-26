@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -86,7 +87,7 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/sendEmail")
-    public ResponseEntity sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) {
+    public ResponseEntity sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) throws NoSuchAlgorithmException {
         CreateWorkspaceToken token = mailService.sendConfirmationCode(emailTo);
         token.setUserEmail(emailTo);
         request.getSession().setAttribute("token", token);
