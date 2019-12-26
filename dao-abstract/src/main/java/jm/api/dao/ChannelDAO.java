@@ -1,10 +1,11 @@
 package jm.api.dao;
 
 import jm.model.Channel;
-import jm.model.ChannelDTO;
+import jm.dto.ChannelDTO;
 import jm.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChannelDAO {
 
@@ -18,10 +19,14 @@ public interface ChannelDAO {
 
     Channel getById(Long id);
 
-    Channel getChannelByName(String name);
+    Optional<Channel> getChannelByName(String name);
 
-    List<Channel> getChannelsByOwner(User user);
+    Optional<List<Channel>> getChannelsByOwner(User user);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login);
+    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+
+    List<Channel> getChannelsByWorkspaceId(Long id);
+
+    List<Channel> getChannelsByUserId(Long userId);
 
 }

@@ -1,0 +1,342 @@
+.invites-modal-close {
+    display: none;
+    position: absolute;
+    top: 48px;
+    right: 48px;
+    width: 64px;
+    height: 64px;
+    color: black;
+    background-color: #fff;
+    border: #ffffff;
+    border-radius: 50%;
+}
+
+.invites-modal-close:focus {
+    outline: none;
+}
+
+.invites-modal-close:hover {
+    background-color: whitesmoke;
+}
+
+.invites-modal {
+    display: none;
+    position: absolute;
+    width: 100%;
+}
+
+.content-form-1 {
+    display: flex;
+    flex-direction: row;
+}
+
+.content-form-2 {
+    display: flex;
+    flex-direction: row;
+}
+
+.content-form-3 {
+    display: flex;
+    flex-direction: row;
+}
+
+.content-form-4 {
+    display: flex;
+    flex-direction: row;
+}
+
+.confirm-navbar{
+    height: 74px !important;
+}
+
+.sign-in-navbar-in{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+}
+
+ul.confirm-navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+ul.confirm-navbar li {
+    float: none;
+}
+
+ul.confirm-navbar li a {
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.confirm-navbar li a:hover:not(.active) {
+    background-color: silver;
+}
+
+ul.confirm-navbar li a.active {
+    background-color: white;
+}
+
+ul.confirm-navbar li.right {
+    float: right;
+}
+
+@media screen and (max-width: 600px) {
+    ul.confirm-navbar li.right,
+    ul.confirm-navbar li {
+        float: none;
+    }
+}
+
+.large_bottom_margin {
+    text-align: center;
+}
+
+.form_container {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 50%;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.workspace_form {
+    margin: 48px 45px 30px 60px;
+    max-width: 640px;
+}
+
+.form_container h1 {
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 20px;
+    margin-top: 4px;
+    line-height: 1.2143;
+    color: #1d1c1d;
+    letter-spacing: -1px;
+}
+
+.main-menu h1 {
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.confirm_input {
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid #868686;
+    transition: border 80ms ease-out,box-shadow 80ms ease-out;
+    box-sizing: border-box;
+    margin: 0 0 20px;
+    padding: 3px 12px 5px;
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.86666667;
+    line-height: normal;
+    flex-grow: 1;
+}
+
+.workspace_button {
+    font-size: 18px;
+    font-weight: 900;
+    height: 44px;
+    min-width: 96px;
+    padding: 0 16px 3px;
+    border: none;
+    border-radius: 4px;
+    transition: all 80ms linear;
+    background: #007a5a;
+    color: #fff;
+    box-shadow: none;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.add_row_invites{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.link_button {
+    background: none;
+    border: 0;
+    font: inherit;
+    margin: 0;
+    margin-left: 4px;
+    margin-right: 4px;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    color: #1264a3;
+    text-decoration: none;
+    vertical-align: baseline;
+}
+
+.confirm-form {
+    width: 100%;
+}
+
+.title {
+    margin-bottom: 40px;
+    text-align: center;
+    border: 1px solid #1d9bd1;
+    padding: 12px 8px;
+    color: #1d1c1d;
+    background: rgba(29,155,209,.06);
+    border-radius: 4px;
+    line-height: 1.46666667;
+}
+
+.form_flex {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    height: 400px;
+}
+.table_invite{
+    width: 100%;
+}
+
+#inviteEmails_{
+    width: 500px;
+    height: 100px;
+    resize: none;
+}
+.head_form {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 4px;
+}
+
+strong {
+    flex-grow: 1;
+}
+
+.confirm_input_name {
+    margin-left: 4px;
+}
+
+.button_delete_member {
+    background-color: white;
+    border: none;
+    height: 36px;
+    width: 56px;
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+.button_delete_member:hover {
+    background-color: inherit;
+}
+
+.button_delete_member:focus {
+    outline: none;
+}
+
+.c_icon {
+    display: inline-block;
+}
+
+.p-invite_members_form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.p-invite_members_form_show_invite_link {
+    flex-grow: 1;
+}
+
+.c-label_text {
+    display: block;
+    padding-bottom: 8px;
+}
+
+.c-link--button {
+    background: none;
+    border: 0;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    cursor: pointer;
+    color: #1264a3;
+    text-decoration: none;
+    vertical-align: baseline;
+}
+
+.p-invite_channel_picker {
+    margin-bottom: 32px;
+    margin-top: 32px;
+}
+
+.channel_picker_dropdown_section {
+    cursor: pointer;
+}
+
+.p-invites_channel_picker_note {
+    color: #616061;
+    font-weight: 400;
+}
+
+.invitation_button {
+    font-size: 18px;
+    font-weight: 900;
+    height: 44px;
+    min-width: 96px;
+    padding: 0 16px 3px;
+
+    transition: all 80ms linear;
+    background: #007a5a;
+    color: #fff;
+    box-shadow: none;
+
+    user-select: none;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    align-items: center;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hr-footer {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 2rem auto;
+    clear: both;
+}
+
+.p-footer {
+    margin-top: 16px;
+    color: #616061;
+}
+
+.pending_invites_link {
+    color: #616061;
+    text-decoration: underline!important;
+}

@@ -40,8 +40,13 @@ public class MainController {
     }
 
     @GetMapping(value = "/workspace")
-    public ModelAndView workspacePage() {
-        return new ModelAndView("workspace-page");
+    public ModelAndView workspacePage(HttpServletRequest request) {
+        if(request.getSession().getAttribute("WorkspaceID") != null) {
+            return new ModelAndView("workspace-page");
+        } else {
+            // при разрыве коннекта с сервером редиректик на выбор Воркспейса
+            return new ModelAndView("redirect:/chooseWorkspace");
+        }
     }
 
     @GetMapping(value = "/workspace_temp")
@@ -60,12 +65,15 @@ public class MainController {
     }
 
     @GetMapping(value = "/searchChannel")
-    public String seachChannelPage() {
+    public String searchChannelPage() {
         return "search-channel-page";
     }
 
     @GetMapping(value = "/searchUsers")
-    public String seachUsersPage() {
+    public String searchUsersPage() {
         return "search-users-page";
     }
+
+    @GetMapping("/chooseWorkspace")
+    public String chooseWorkspace() {return "choose-workspace-page";}
 }

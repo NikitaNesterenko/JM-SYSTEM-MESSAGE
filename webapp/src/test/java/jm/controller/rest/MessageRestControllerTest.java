@@ -2,13 +2,14 @@ package jm.controller.rest;
 
 import jm.MessageService;
 import jm.model.Channel;
-import jm.model.Message;
+import jm.model.message.ChannelMessage;
 import jm.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -20,6 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class MessageRestControllerTest {
 
-    private static final String urlGetMessage = "/rest/api/messages";
+    private static final String urlGetMessage = "/rest/api/messages/";
     private static final String urlCreateMessage = "/rest/api/messages/create";
     private static final String urlUpdateMessage = "/rest/api/messages/update";
     private static final String urlDeleteMessage = "/rest/api/messages/delete/";
@@ -55,16 +57,16 @@ public class MessageRestControllerTest {
 
     @Test
     public void getMessages() {
-        List<Message> messages = new ArrayList<>();
-        Message message = new Message(2L, new Channel(), new User(), "Hello", LocalDateTime.now());
+        List<ChannelMessage> messages = new ArrayList<>();
+        ChannelMessage message = new ChannelMessage(2L, new Channel(), new User(), "Hello", LocalDateTime.now());
         message.setId(1L);
-        Message message1 = new Message(3L, new Channel(), new User(), "Hello7", LocalDateTime.now());
+        ChannelMessage message1 = new ChannelMessage(3L, new Channel(), new User(), "Hello7", LocalDateTime.now());
         message1.setId(2L);
         messages.add(message);
         messages.add(message1);
 
         when(messageService.getAllMessages()).thenReturn(messages);
-        ResponseEntity<List<Message>> responseEntity = messageRestController.getMessages();
+        ResponseEntity<List<ChannelMessage>> responseEntity = messageRestController.getMessages();
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(responseEntity.getBody().size(),messages.size());
         assertEquals(responseEntity.getBody(),messages);
@@ -89,10 +91,10 @@ public class MessageRestControllerTest {
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).getMessageById(any());
 
-        Message message = new Message(3L,new Channel(), new User(), "Hello", LocalDateTime.now());
+        ChannelMessage message = new ChannelMessage(3L,new Channel(), new User(), "Hello", LocalDateTime.now());
         message.setId(2L);
         when(messageService.getMessageById(message.getId())).thenReturn(message);
-        ResponseEntity<Message> responseEntity = messageRestController.getMessageById(2L);
+        ResponseEntity<ChannelMessage> responseEntity = messageRestController.getMessageById(2L);
         verify(messageService, times(1)).getMessageById(2L);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(responseEntity.getBody(), message);
@@ -103,13 +105,13 @@ public class MessageRestControllerTest {
 
         String jsonMessage;
 
-        Message message = new Message();
+        ChannelMessage message = new ChannelMessage();
         jsonMessage = TestUtils.objectToJson(message);
         mockMvc.perform(post(urlCreateMessage)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonMessage))
                 .andExpect(status().is2xxSuccessful());
-        verify(messageService, times(1)).createMessage(any(Message.class));
+        verify(messageService, times(1)).createMessage(any(ChannelMessage.class));
 
         mockMvc.perform(post(urlCreateMessage))
                 .andExpect(status().isBadRequest());
@@ -134,21 +136,29 @@ public class MessageRestControllerTest {
 
     @Test
     public void updateMessage() throws Exception {
-        Message messageUpdated = new Message(23L, new Channel(), new User(), "Hello", LocalDateTime.now());
+        final String login = "login_1";
+
+        final Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn(login);
+
+        final User user = new User();
+        user.setLogin(login);
+
+        ChannelMessage messageUpdated = new ChannelMessage(23L, new Channel(), user, "Hello", LocalDateTime.now());
         messageUpdated.setId(1L);
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-             Message message = (Message) invocation.getArguments()[0];
+             ChannelMessage message = (ChannelMessage) invocation.getArguments()[0];
              messageUpdated.setContent(message.getContent());
                 return null;
             }
         }).when(messageService).updateMessage(any());
 
-        Message messageTest= new Message(11L, new Channel(), new User(), "HelloTest", LocalDateTime.now());
+        ChannelMessage messageTest= new ChannelMessage(11L, new Channel(), user, "HelloTest", LocalDateTime.now());
         messageTest.setId(1L);
         when(messageService.getMessageById(messageUpdated.getId())).thenReturn(messageUpdated);
-        ResponseEntity<Message> responseEntity = messageRestController.updateMessage(messageTest);
+        ResponseEntity responseEntity = messageRestController.updateMessage(messageTest, mockPrincipal);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(messageTest.getContent(), messageUpdated.getContent());
         verify(messageService, times(1)).updateMessage(any());
@@ -159,7 +169,7 @@ public class MessageRestControllerTest {
                 .andExpect(status().isBadRequest());
         verify(messageService, times(1)).updateMessage(any());
 
-        Message message = null;
+        ChannelMessage message = null;
         jsonMessage = TestUtils.objectToJson(message);
         mockMvc.perform(put(urlUpdateMessage)
                 .contentType(MediaType.APPLICATION_JSON)

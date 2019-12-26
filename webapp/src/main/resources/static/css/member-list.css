@@ -1,0 +1,37 @@
+.p-channel_details__member_list__member {
+    font-size: 15px;
+    line-height: 1.46668;
+    font-weight: 400;
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    box-sizing: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
+}
+
+.p-channel_details__member_list__member_button {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    overflow: hidden;
+    text-align: initial;
+    vertical-align: initial;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 9px 0 9px 24px;
+    outline: none;
+}
+
+.p-channel_details__member_list__member:hover {
+    background-color: #e6e6e6;
+}

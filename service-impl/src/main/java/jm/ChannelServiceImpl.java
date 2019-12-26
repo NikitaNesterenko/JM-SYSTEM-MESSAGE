@@ -1,6 +1,6 @@
 package jm;
 
-import jm.model.ChannelDTO;
+import jm.dto.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
 import jm.model.User;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,18 +48,22 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Channel getChannelByName(String name) {
-        return channelDAO.getChannelByName(name);
-    }
+    public Optional<Channel> getChannelByName(String name) { return channelDAO.getChannelByName(name); }
 
     @Override
-    public List<Channel> getChannelsByOwner(User user) {
+    public Optional<List<Channel>> getChannelsByOwner(User user) {
         return channelDAO.getChannelsByOwner(user);
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser(String workspaceName, String login) {
-        return channelDAO.getChannelByWorkspaceAndUser(workspaceName, login);
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) { return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId); }
+
+    @Override
+    public List<Channel> getChannelsByWorkspaceId(Long id) { return channelDAO.getChannelsByWorkspaceId(id); }
+
+    @Override
+    public  List<Channel> getChannelsByUserId(Long userId) {
+        return channelDAO.getChannelsByUserId(userId);
     }
 
 }

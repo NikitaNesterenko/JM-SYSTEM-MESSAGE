@@ -1,0 +1,42 @@
+.message-icons-menu-class {
+    position: absolute;
+    display: none;
+    right: 20px;
+    top: -20%;
+    z-index: 1000;
+}
+
+.c-virtual_list__item:hover .message-icons-menu-class {
+    display: block;
+}
+
+.right-panel-msg-menu {
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e3e5;
+}
+
+.starred-messages-empty {
+    text-align: center;
+}
+
+.starred-messages-empty_img {
+    height: auto;
+    width: 200px;
+    padding: 30px 0;
+}
+
+.starred-messages-empty_content {
+    margin: 20px;
+}
+
+.starred-messages-empty_content p {
+    text-align: justify;
+}
+
+#to-starred-messages-link {
+    color: #5a6268;
+    text-decoration: none;
+    font-size: smaller;
+    font-weight: bold;
+    line-height: 10px;
+}

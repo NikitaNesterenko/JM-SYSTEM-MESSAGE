@@ -1,8 +1,10 @@
 package jm.api.dao;
 
+import jm.dto.UserDTO;
 import jm.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDAO {
 
@@ -16,9 +18,9 @@ public interface UserDAO {
 
     User getById(Long id);
 
-    User getUserByLogin(String login);
+    Optional<User> getUserByLogin(String login);
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     void addRoleForUser(User user, String role);
 
@@ -26,4 +28,5 @@ public interface UserDAO {
 
     List<User> getAllUsersInThisChannel(Long id);
 
+    List<UserDTO> getUsersInWorkspace(Long id);
 }
