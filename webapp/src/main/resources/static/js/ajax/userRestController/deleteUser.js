@@ -1,4 +1,4 @@
-class DeleteUser {
+export class DeleteUser {
 
     constructor(id) {
         this.id=id;

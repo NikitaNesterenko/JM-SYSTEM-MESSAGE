@@ -1,4 +1,4 @@
-class FilterUserList {
+export class FilterUserList {
 
     filterUserList() {
         const regExp = new RegExp(document.getElementById("searchValue").value, "i");

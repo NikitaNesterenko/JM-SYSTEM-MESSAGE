@@ -1,4 +1,4 @@
-class DocumentReady{
+export class DocumentReady{
 
     documentReady(){
         $('.invite-button').on('click', function () {

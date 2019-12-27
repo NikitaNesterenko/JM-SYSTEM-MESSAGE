@@ -1,4 +1,4 @@
-class ShowEditUserModal {
+export class ShowEditUserModal {
 
     constructor(element) {
         this.element=element;

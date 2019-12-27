@@ -1,4 +1,4 @@
-class GetUser {
+export class GetUser {
 
     constructor(id) {
         this.id=id;

@@ -2,14 +2,14 @@ import FilterUserList from "./filterUserList.js";
 import ShowEditUserModal from "./showEditUserModal.js";
 
 
-class ShowFilteredUsers {
+export class ShowFilteredUsers {
 
     showFilteredUsers(){
         const userListContent = document.getElementById("rowGroupContentRow");
         userListContent.innerHTML = "";
 
-         let filterUserList = new FilterUserList();
-        const filteredUsers = filterUserList.filterUserList();
+            let filterUserList = new FilterUserList();
+            const filteredUsers = filterUserList.filterUserList();
 
         for (let i = 0; i < filteredUsers.length; i++) {
             userListContent.innerHTML += `<div class="row-group-content-row">

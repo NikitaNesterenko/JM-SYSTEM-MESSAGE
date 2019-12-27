@@ -1,4 +1,4 @@
-class GetUsers {
+export class GetUsers {
 
     getUsers(){
         let result = null;

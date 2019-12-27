@@ -1,7 +1,7 @@
 import RefreshUserList from "./refreshUserList.js"
 import ShowFilteredUsers from "./showFilteredUsers.js"
 
-class AddEventListener {
+export  class AddEventListener {
 
     addEventListener(){
         const btnMainMenu = document.getElementById("mainMenu");

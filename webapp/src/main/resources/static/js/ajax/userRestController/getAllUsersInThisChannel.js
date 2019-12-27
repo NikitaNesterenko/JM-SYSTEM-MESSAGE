@@ -1,4 +1,4 @@
-class GetAllUsersInThisChannel {
+export class GetAllUsersInThisChannel {
 
     constructor(id) {
         this.id=id;
