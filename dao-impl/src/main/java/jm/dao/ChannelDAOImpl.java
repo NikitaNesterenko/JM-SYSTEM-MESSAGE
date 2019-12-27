@@ -1,18 +1,18 @@
 package jm.dao;
 
 import jm.api.dao.ChannelDAO;
-import jm.model.Channel;
 import jm.dto.ChannelDTO;
+import jm.model.Channel;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional
@@ -20,16 +20,25 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     private static final Logger logger = LoggerFactory.getLogger(ChannelDAOImpl.class);
 
     @Override
-    public Optional<Channel> getChannelByName(String name) {
-        return Optional.ofNullable((Channel) entityManager.createNativeQuery("SELECT * FROM channels WHERE name=?", Channel.class)
+    public Channel getChannelByName(String name) {
+        try {
+            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
                     .setParameter(1, name)
-                    .getSingleResult());
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
-    public Optional<List<Channel>> getChannelsByOwner(User user) {
-            return Optional.ofNullable((List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE owner_id=?", Channel.class)
-                    .setParameter(1, user.getId()).getResultList());
+    public List<Channel> getChannelsByOwner(User user) {
+        try {
+            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
+                    .setParameter(1, user.getId())
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -50,13 +59,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
-            return (List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE workspace_id=?", Channel.class)
+            return (List<Channel>) entityManager.createNativeQuery("select * from channels where workspace_id=?", Channel.class)
                     .setParameter(1, id)
                     .getResultList();
     }
 
     public  List<Channel> getChannelsByUserId(Long userId) {
-            List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("SELECT channel_id FROM channels_users WHERE user_id=?")
+            List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("select channel_id from channels_users where user_id=?")
                     .setParameter(1, userId)
                     .getResultList();
             List<BigInteger> channelsIdentityNumbersArrayList = new ArrayList<>(channelsIdentityNumbers);
@@ -69,4 +78,5 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
             }
             return channels;
     }
+
 }

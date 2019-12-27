@@ -2,7 +2,6 @@ package jm.api.dao;
 
 import jm.model.CreateWorkspaceToken;
 import java.util.List;
-import java.util.Optional;
 
 public interface CreateWorkspaceTokenDAO {
 
@@ -16,8 +15,8 @@ public interface CreateWorkspaceTokenDAO {
 
     CreateWorkspaceToken getById(Long id);
 
-    Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByOwnerEmail(String email);
+    CreateWorkspaceToken getCreateWorkspaceTokenByOwnerEmail(String email);
 
-    Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByCode(int code);
+    CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code);
 
 }

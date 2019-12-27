@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
@@ -51,7 +50,7 @@ public class BotRestController {
     }
 
     @GetMapping("/workspace/{id}")
-    public ResponseEntity<?> getBotByWorksapce(@PathVariable("id") Long id) {
+    public ResponseEntity<Bot> getBotByWorksapce(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
         Bot bot = botService.GetBotByWorkspaceId(workspace);
         if(bot == null) {
@@ -60,7 +59,7 @@ public class BotRestController {
         }
         logger.info("Бот для workspace c id = {}", id);
         //logger.info(bot.toString());
-        return new ResponseEntity<>(bot, HttpStatus.OK);
+        return new ResponseEntity<Bot>(bot, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -103,10 +102,10 @@ public class BotRestController {
     }
 
     @PostMapping("/{id}/channels/{name}/messages")
-    public ResponseEntity<?> createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody ChannelMessage message) {
-        Optional<Channel> channel = channelService.getChannelByName(name);
+    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody ChannelMessage message) {
+        Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
-        message.setChannel(channel.get());
+        message.setChannel(channel);
         message.setBot(bot);
         message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);
@@ -121,30 +120,37 @@ public class BotRestController {
 
     @GetMapping("/{id}/channels/{name}/messages/hour")
     public ResponseEntity<List<ChannelMessage>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusHours(1));
+        Channel channel = channelService.getChannelByName(channelName);
+        Bot bot = botService.getBotById(botId);
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = LocalDateTime.now().minusHours(1);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
     public ResponseEntity<List<ChannelMessage>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusDays(1));
+        Channel channel = channelService.getChannelByName(channelName);
+        Bot bot = botService.getBotById(botId);
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = LocalDateTime.now().minusDays(1);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(),startDate, endDate), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
     public ResponseEntity<List<ChannelMessage>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusWeeks(1));
+        Channel channel = channelService.getChannelByName(channelName);
+        Bot bot = botService.getBotById(botId);
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
     public ResponseEntity<List<ChannelMessage>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusMonths(1));
-    }
-
-    // Вынесли повторяющийся код!
-    private ResponseEntity<List<ChannelMessage>> getListResponseEntity(@PathVariable("id") Long botId, @PathVariable("name") String channelName, LocalDateTime localDateTime) {
-        Optional<Channel> channel = channelService.getChannelByName(channelName);
+        Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = localDateTime;
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.get().getId(),startDate, endDate), HttpStatus.OK);
+        LocalDateTime startDate = LocalDateTime.now().minusMonths(1);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(),startDate, endDate), HttpStatus.OK);
     }
 }

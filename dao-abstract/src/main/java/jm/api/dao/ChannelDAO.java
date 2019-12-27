@@ -5,7 +5,6 @@ import jm.dto.ChannelDTO;
 import jm.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ChannelDAO {
 
@@ -19,9 +18,9 @@ public interface ChannelDAO {
 
     Channel getById(Long id);
 
-    Optional<Channel> getChannelByName(String name);
+    Channel getChannelByName(String name);
 
-    Optional<List<Channel>> getChannelsByOwner(User user);
+    List<Channel> getChannelsByOwner(User user);
 
     List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
 

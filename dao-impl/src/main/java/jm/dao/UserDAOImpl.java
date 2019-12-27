@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional
@@ -18,12 +18,24 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @Override
-    public Optional<User> getUserByLogin(String login) {
-            return Optional.ofNullable((User) entityManager.createQuery("FROM User WHERE login  = :login").setParameter("login", login).getSingleResult()); }
+    public User getUserByLogin(String login) {
+        try {
+            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-            return Optional.ofNullable((User) entityManager.createQuery("FROM User WHERE email  = :email").setParameter("email", email).getSingleResult()); }
+    public User getUserByEmail(String email) {
+        try {
+            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
     @Override
     public void addRoleForUser(User user, String role) { }

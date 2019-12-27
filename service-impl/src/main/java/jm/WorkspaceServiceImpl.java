@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -50,7 +49,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public Optional<Workspace> getWorkspaceByName(String name) { return workspaceDAO.getWorkspaceByName(name); }
+    public Workspace getWorkspaceByName(String name) { return workspaceDAO.getWorkspaceByName(name); }
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) { return workspaceDAO.getWorkspacesByOwner(user);}

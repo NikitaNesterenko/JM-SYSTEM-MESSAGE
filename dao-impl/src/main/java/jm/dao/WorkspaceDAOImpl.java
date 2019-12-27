@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional
@@ -17,26 +17,30 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
 
     @Override
-    public Optional<Workspace> getWorkspaceByName(String name) {
-            return Optional.ofNullable((Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE name=?", Workspace.class)
+    public Workspace getWorkspaceByName(String name) {
+        try {
+            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
-                    .getSingleResult());
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
-            return (List<Workspace>) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE owner_id=?", Workspace.class)
+            return (List<Workspace>) entityManager.createNativeQuery("select * from workspaces where owner_id=?", Workspace.class)
                     .setParameter(1, user.getId())
                     .getResultList();
     }
 
     @Override
     public List<Workspace> getWorkspacesByUser(User user) {
-            String query = "SELECT ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
-                    + "FROM workspaces ws "
-                    + "RIGHT JOIN workspace_user_role wur ON ws.id = wur.workspace_id "
-                    + "WHERE wur.user_id = :userid "
-                    + "GROUP BY ws.id";
+            String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
+                    + "from workspaces ws "
+                    + "right join workspace_user_role wur on ws.id = wur.workspace_id "
+                    + "where wur.user_id = :userid "
+                    + "group by ws.id";
             return entityManager.createNativeQuery(query, Workspace.class)
                     .setParameter("userid", user.getId())
                     .getResultList();

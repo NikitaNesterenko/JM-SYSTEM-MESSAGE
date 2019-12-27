@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,7 +16,9 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
     CreateWorkspaceTokenDAO createWorkspaceTokenDAO;
 
     @Autowired
-    public void setCreateWorkspaceTokenDAO(CreateWorkspaceTokenDAO createWorkspaceTokenDAO) { this.createWorkspaceTokenDAO = createWorkspaceTokenDAO; }
+    public void setCreateWorkspaceTokenDAO(CreateWorkspaceTokenDAO createWorkspaceTokenDAO) {
+        this.createWorkspaceTokenDAO = createWorkspaceTokenDAO;
+    }
 
     @Override
     public List<CreateWorkspaceToken> getAllCreateWorkspaceTokens() {
@@ -25,7 +26,9 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
     }
 
     @Override
-    public void createCreateWorkspaceToken(CreateWorkspaceToken createWorkspaceToken) { createWorkspaceTokenDAO.persist(createWorkspaceToken); }
+    public void createCreateWorkspaceToken(CreateWorkspaceToken createWorkspaceToken) {
+        createWorkspaceTokenDAO.persist(createWorkspaceToken);
+    }
 
     @Override
     public void deleteCreateWorkspaceTokenById(Long id) {
@@ -33,7 +36,9 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
     }
 
     @Override
-    public CreateWorkspaceToken updateCreateWorkspaceToken(CreateWorkspaceToken createWorkspaceToken) { return createWorkspaceTokenDAO.merge(createWorkspaceToken); }
+    public CreateWorkspaceToken updateCreateWorkspaceToken(CreateWorkspaceToken createWorkspaceToken) {
+        return createWorkspaceTokenDAO.merge(createWorkspaceToken);
+    }
 
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenById(Long id) {
@@ -41,8 +46,12 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
     }
 
     @Override
-    public Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByName(String email) { return createWorkspaceTokenDAO.getCreateWorkspaceTokenByOwnerEmail(email); }
+    public CreateWorkspaceToken getCreateWorkspaceTokenByName(String email) {
+        return createWorkspaceTokenDAO.getCreateWorkspaceTokenByOwnerEmail(email);
+    }
 
     @Override
-    public Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByCode(int code) { return createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code); }
+    public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
+       return createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code);
+    }
 }

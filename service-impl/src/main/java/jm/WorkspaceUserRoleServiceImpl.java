@@ -15,7 +15,9 @@ public class WorkspaceUserRoleServiceImpl implements WorkspaceUserRoleService {
 
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
 
-    public WorkspaceUserRoleServiceImpl(WorkspaceUserRoleDAO workspaceUserRoleDAO) { this.workspaceUserRoleDAO = workspaceUserRoleDAO; }
+    public WorkspaceUserRoleServiceImpl(WorkspaceUserRoleDAO workspaceUserRoleDAO) {
+        this.workspaceUserRoleDAO = workspaceUserRoleDAO;
+    }
 
     @Override
     public void create(WorkspaceUserRole workspaceUserRole) {

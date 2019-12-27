@@ -58,7 +58,7 @@ public class ChannelRestController {
     @PostMapping(value = "/create")
     public ResponseEntity<Channel> createChannel(Principal principal, @RequestBody Channel channel, HttpServletRequest request) {
         if (principal != null) {
-            User owner = userService.getUserByLogin(principal.getName()).get();
+            User owner = userService.getUserByLogin(principal.getName());
             Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
             channel.setUser(owner);
             channel.setWorkspace(workspace);
@@ -128,7 +128,16 @@ public class ChannelRestController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Channel> getChannelByName(@PathVariable("name") String name) {
-        return new ResponseEntity<Channel>(channelService.getChannelByName(name).get(), HttpStatus.OK);
+        return new ResponseEntity<>(channelService.getChannelByName(name), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/archiving/{id}")
+    public ResponseEntity<Channel> archivingChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(true);
+        channelService.updateChannel(channel);
+        logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
 }
