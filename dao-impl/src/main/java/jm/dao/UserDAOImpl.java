@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -54,6 +56,18 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             return userList;
     }
 
+//    @Override
+//    public List<User> getAllUsersInThisChannel(Long id) {
+//        return entityManager.createQuery("from User u join Channel ch where ch.user.id = u.id").getResultList();
+//            TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
+//                    .setParameter(1, id);
+//            List<User> userList = query.getResultList();
+//            for (User user : userList) {
+//                System.out.println(user);
+//            }
+//            return userList;
+//    }
+
     @Override
     public List<UserDTO> getUsersInWorkspace(Long id) {
         String query = "SELECT u.id, u.name, u.last_name, u.avatar_url, u.display_name " +
@@ -67,4 +81,16 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                 .setParameter("workspace", id)
                 .getResultList();
     }
+
+    @Override
+    public List<User> getUsersByIds(Set<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return entityManager
+                .createQuery("select o from User o where o.id in :ids", User.class)
+                .setParameter("ids", ids)
+                .getResultList();
+    }
+
 }

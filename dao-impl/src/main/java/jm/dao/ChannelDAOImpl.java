@@ -12,7 +12,9 @@ import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -59,24 +61,35 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
-            return (List<Channel>) entityManager.createNativeQuery("select * from channels where workspace_id=?", Channel.class)
-                    .setParameter(1, id)
-                    .getResultList();
+        return (List<Channel>) entityManager.createNativeQuery("select * from channels where workspace_id=?", Channel.class)
+                .setParameter(1, id)
+                .getResultList();
     }
 
-    public  List<Channel> getChannelsByUserId(Long userId) {
-            List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("select channel_id from channels_users where user_id=?")
-                    .setParameter(1, userId)
-                    .getResultList();
-            List<BigInteger> channelsIdentityNumbersArrayList = new ArrayList<>(channelsIdentityNumbers);
-            List<Channel> channels = new ArrayList<>();
-            for(BigInteger channelId : channelsIdentityNumbersArrayList) {
-                Long channelLongId = channelId.longValue();
-                Channel channel = getById(channelLongId);
-                System.out.println(channel);
-                channels.add(channel);
-            }
-            return channels;
+    public List<Channel> getChannelsByUserId(Long userId) {
+        List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("select channel_id from channels_users where user_id=?")
+                .setParameter(1, userId)
+                .getResultList();
+        List<BigInteger> channelsIdentityNumbersArrayList = new ArrayList<>(channelsIdentityNumbers);
+        List<Channel> channels = new ArrayList<>();
+        for (BigInteger channelId : channelsIdentityNumbersArrayList) {
+            Long channelLongId = channelId.longValue();
+            Channel channel = getById(channelLongId);
+            System.out.println(channel);
+            channels.add(channel);
+        }
+        return channels;
+    }
+
+    @Override
+    public List<Channel> getChannelsByIds(Set<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return entityManager
+                .createQuery("select o from Channel o where o.id in :ids", Channel.class)
+                .setParameter("ids", ids)
+                .getResultList();
     }
 
 }
