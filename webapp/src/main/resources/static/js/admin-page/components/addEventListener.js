@@ -1,4 +1,5 @@
-import RefreshUserList from "./components/refreshUserList.js"
+import RefreshUserList from "./refreshUserList.js"
+import ShowFilteredUsers from "./showFilteredUsers.js"
 
 class AddEventListener {
 
@@ -15,7 +16,9 @@ class AddEventListener {
         };
         let refreshUserList = new RefreshUserList();
         refreshUserList.refreshUserList();
+        let showFilteredUsers = new ShowFilteredUsers();
+
         document.getElementById("user_edit_submit").addEventListener("click", onUserEditSubmit);
-        document.getElementById("searchValue").addEventListener("keyup", showFilteredUsers);
+        document.getElementById("searchValue").addEventListener("keyup", showFilteredUsers.showFilteredUsers);
     }
 }

@@ -1,10 +1,11 @@
 class ShowEditUserModal {
 
     constructor(element) {
+        this.element=element;
     }
 
     showEditUserModal(){
-        const userId = element.getAttribute("data-user_id");
+        const userId = this.element.getAttribute("data-user_id");
         const user = users.find(u => u.id === parseInt(userId));
 
         document.getElementById("input_login").value = user.login;

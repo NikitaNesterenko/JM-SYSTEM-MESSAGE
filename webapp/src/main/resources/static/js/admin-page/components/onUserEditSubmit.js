@@ -1,4 +1,4 @@
-import UserRestController from "/js/ajax/components/userRestController.js";
+import UserRestController from "/js/ajax/userRestController/userRestController.js";
 import RefreshUserList from "./refreshUserList";
 
 class OnUserEditSubmit {
@@ -12,7 +12,7 @@ class OnUserEditSubmit {
             const userId = ev.target.getAttribute("data-user_id");
 
             let userRestController = new UserRestController(userId);
-            userRestController.getUser();
+        let current_user = userRestController.getUser();
             // let current_user = getUser(userId);
 
             const input_login = document.getElementById('input_login');
