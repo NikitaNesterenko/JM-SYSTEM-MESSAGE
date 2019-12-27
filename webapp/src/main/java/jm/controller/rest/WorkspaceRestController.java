@@ -51,6 +51,7 @@ public class WorkspaceRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok().build();
     }
 
@@ -61,12 +62,14 @@ public class WorkspaceRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteWorkspace(@PathVariable("id") Long id) {
         workspaceService.deleteWorkspace(id);
+
         return ResponseEntity.ok().build();
     }
 
@@ -83,7 +86,7 @@ public class WorkspaceRestController {
 
     @GetMapping("/choosed/{name}")
     public ResponseEntity<Boolean> choosedWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
-        Workspace workspace = workspaceService.getWorkspaceByName(name).get();
+        Workspace workspace = workspaceService.getWorkspaceByName(name);
         if (workspace == null) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
@@ -99,7 +102,7 @@ public class WorkspaceRestController {
     @GetMapping("/byLoggedUser")
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
         String name = principal.getName();
-        User user = userService.getUserByLogin(name).get();
+        User user = userService.getUserByLogin(name);
         return new ResponseEntity<>(workspaceService.getWorkspacesByUser(user), HttpStatus.OK);
     }
 }

@@ -71,8 +71,7 @@ export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
         if (user_image == null || user_image === "") {
             $('#modal_1_user_img').attr("src", "../image/blank_user.png");
         } else {
-            // $('#modal_1_user_img').attr("src", user_image);
-            $('#modal_1_user_img').attr("src", "../avatars/" + user.avatarURL);
+            $('#modal_1_user_img').attr("src", user_image);
         }
 
     });
@@ -138,9 +137,9 @@ export const onShowModal2 = $('#modal_2').on('show.bs.modal', function (focus) {
         if (user_image == null || user_image === "") {
             $('#modal_2_user_img').attr("src", "../image/blank_user.png");
         } else {
-            // $('#modal_2_user_img').attr("src", user_image);
-            $('#modal_2_user_img').attr("src", "../avatars/" + user.avatarURL);
+            $('#modal_2_user_img').attr("src", user_image);
         }
+
     });
 });
 
@@ -163,37 +162,7 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
             // todo need to update workspace to implement user data changes
         });
     });
-    location.reload(); // THE MOST IMPORTANT THING// важный, нет, ОЧЕНЬ ВАЖНЫЙ костыль.
-
-    const input = document.getElementById('FileUpload1');
-    const uploadFile = (file) => {
-
-        // add file to FormData object
-        const formData = new FormData();
-        formData.append('file', file);
-
-        // send `POST` request
-        fetch('/rest/api/avatar/' + userId, {
-            method: 'POST',
-            // headers: headers,
-            body: formData
-        })
-            .then(res => res.json())
-            .then(json => console.log(json))
-            .catch(err => console.error(err));
-    };
-    uploadFile(input.files[0]);
 });
-
-export const onUserDeleteAvatar = $('#RemovePhoto').on('click', function (e) {
-
-    let userId = $('#modal_1_edit_profile_btn').data('user_id');
-
-    fetch('/rest/api/avatar/' + userId, {
-        method: 'DELETE'
-    })
-});
-
 
 $('#modal_1_set_title_btn').on('click', function (e) {
     $('#modal_2').modal('show');
@@ -202,7 +171,6 @@ $('#modal_1_set_title_btn').on('click', function (e) {
 $('#modal_1_edit_profile_btn').on('click', function (e) {
     $('#modal_2').modal('show');
 });
-
 
 // file upload func
 // https://www.aspsnippets.com/Articles/Open-Fileupload-Upload-File-on-Button-Click-using-JavaScript-and-jQuery.aspx

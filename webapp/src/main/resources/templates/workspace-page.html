@@ -136,7 +136,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-8 editModalList">
+                        <div class="col-8">
                             <form>
                                 <div class="form-group">
                                     <label for="first-name">First name</label>
@@ -202,7 +202,7 @@
                                 <input type="file" id="FileUpload1" style="display: none"/>
                             </div>
                             <div class="pt-2">
-                                <button type="button" id="RemovePhoto"class="btn btn-link btn-block">Remove photo</button>
+                                <button type="button" class="btn btn-link btn-block">Remove photo</button>
                             </div>
                         </div>
                     </div>
@@ -222,6 +222,7 @@
      style="position: absolute; left: 8px; top: 10px; outline: none; transition-duration: 80ms;">
     <div>
         <div class="c-menu">
+
             <div>
                 <div class="c-menu__items_scroll" no-bootstrap="1">
 
@@ -230,9 +231,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                     src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                     srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                     alt=""></span>
+                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                                                                             alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -347,7 +348,7 @@
 
 <!-- Invite modal-->
 <div id="invitesModal" class="invites-modal">
-    <div class="form_container modal-guts">
+    <div class="form_container">
         <div class="workspace_form">
             <div class="title">
                 <p>
@@ -358,86 +359,72 @@
             <h1 id="workspace_name_label" class="large_bottom_margin">Invite people to test-channel</h1>
             <div class="form_flex">
 
-                <ul class="nav nav-tabs d-none" id="modal_tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                           aria-controls="home" aria-selected="true">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="adding-tab" data-toggle="tab" href="#adding" role="tab"
-                           aria-controls="adding" aria-selected="false">Adding</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <form id="input_form" class="confirm-form" action="/tada">
-                            <span id="table">
-                                <table class="table_invite">
-                                    <tr><td>Email Address</td><td>Name (optional)</td><td></td></tr>
-                                    <tr class="content-form-">
-                                        <td><input type="text" id="inviteEmail_" class="confirm_input" placeholder="name@example.com" value=""></td>
-                                        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name" placeholder="name" value=""></td>
-                                        <td style="visibility: hidden"><span class="btn delete">X</span></td>
-                                    </tr>
-                                    <tr class="table_invite_modal">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-                            </span>
+                <form class="confirm-form" action="/tada">
 
-                            <span class="add_row_invites">
-                                <button class="plus link_button" id="addInviteModal" type="button">&#8853 Add another</button>
-                                    or
-                                <button class="link_button many_at_once" type="button">and many at once</button>
-                            </span>
+                    <div class="head_form">
+                        <strong>Email Address</strong>
+                        <strong>Name (optional)</strong>
+                    </div>
 
-                            <div class="p-invite_channel_picker">
-                                <div>
-                                    <label for="channel_picker_dropdown_section">
-                                        <span class="c-label_text">Default Channels</span>
-                                    </label>
-                                    <div id="channel_picker_dropdown_section">
-                                <span class="p-invites_channel_picker_note">
-                                    <span>New
-                                        <strong>members</strong>
-                                        will automatically join <strong>#general</strong>,
-                                        <strong>#random</strong>, and
-                                        <strong>#test</strong>
-                                        channels.</span>
-                                    <button class="link_button" type="button">Edit/add
-                                    </button>
-                                </span>
-                                    </div>
-                                </div>
+                    <div class="content-form-1">
+                        <input type="text" id="inviteEmail_0" class="confirm_input" placeholder="name1@example.com"
+                               value="">
+                        <input type="text" id="inviteName_0" class="confirm_input confirm_input_name"
+                               placeholder="name_1" value="">
+                        <button id="btDeleteMember_1" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-2">
+                        <input type="text" id="inviteEmail_1" class="confirm_input" placeholder="name2@example.com"
+                               value="">
+                        <input type="text" id="inviteName_1" class="confirm_input confirm_input_name"
+                               placeholder="name_2" value="">
+                        <button id="btDeleteMember_2" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <div class="content-form-3">
+                        <input type="text" id="inviteEmail_2" class="confirm_input" placeholder="name3@example.com"
+                               value="">
+                        <input type="text" id="inviteName_2" class="confirm_input confirm_input_name"
+                               placeholder="name_3" value="">
+                        <button id="btDeleteMember_3" class="button_delete_member" type="button">X</button>
+                    </div>
+
+                    <span class="add_row_invites">
+                <button class="link_button" type="button">Add another</button>
+                	or
+                <button class="link_button" type="button">and many at once</button>
+            </span>
+                    <div class="p-invite_channel_picker">
+                        <div>
+                            <label for="channel_picker_dropdown_section">
+                                <span class="c-label_text">Default Channels</span>
+                            </label>
+                            <div id="channel_picker_dropdown_section">
+            			<span class="p-invites_channel_picker_note">
+            				<span>New
+            					<strong>members</strong>
+            					will automatically join <strong>#general</strong>,
+            					<strong>#random</strong>, and
+            					<strong>#test</strong>
+            					channels.</span>
+            				<button class="link_button" type="button">Edit/add
+            				</button>
+            			</span>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="tab-pane fade" id="adding" role="tabpanel" aria-labelledby="adding-tab">
-                        <form>
-                            <table>
-                                <tr>
-                                    <td>Enter multiple email addresses</td>
-                                </tr>
-                                <tr>
-                                    <td><textarea class="inviteEmails_" id="inviteEmails_"></textarea></td>
-                                </tr>
-                            </table>
-                        </form>
-                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back</button>
+                    <div class="p-invite_members_form">
+            	<span>
+            		<button class="c-link--button">
+            			<span>
+            				Share invite link
+            			</span>
+            		</button>
+            	</span>
+                        <button id="inviteSend" class="invitation_button" type="button">Send Invitations</button>
                     </div>
-                </div>
-            </div>
-            <div class="p-invite_members_form">
-                        <span>
-                            <button class="c-link--button">
-                                <span>
-                                    Share invite link
-                                </span>
-                            </button>
-                        </span>
-                <button id="inviteSend" class="invitation_button" type="button">Send Invitations</button>
+                </form>
             </div>
             <hr class="hr-footer">
             <div class="p-footer">
@@ -447,7 +434,7 @@
             </div>
         </div>
     </div>
-    </div>
+
     <button id="invitesModalClose" class="invites-modal-close" type="button">
         X
     </button>

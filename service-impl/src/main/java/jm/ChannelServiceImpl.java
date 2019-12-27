@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,15 +47,19 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> getChannelByName(String name) { return channelDAO.getChannelByName(name); }
+    public Channel getChannelByName(String name) {
+        return channelDAO.getChannelByName(name);
+    }
 
     @Override
-    public Optional<List<Channel>> getChannelsByOwner(User user) {
+    public List<Channel> getChannelsByOwner(User user) {
         return channelDAO.getChannelsByOwner(user);
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) { return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId); }
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
+        return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId);
+    }
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) { return channelDAO.getChannelsByWorkspaceId(id); }
