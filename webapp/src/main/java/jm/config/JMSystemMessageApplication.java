@@ -39,11 +39,11 @@ public class JMSystemMessageApplication {
         return new MappingJackson2HttpMessageConverter(mapper);
     }
 
-//    @Bean(initMethod = "init")
-//    @PostConstruct
-//    public TestDataInitializer initTestData() {
-//        return new TestDataInitializer();
-//    }
+    @Bean(initMethod = "init")
+    @PostConstruct
+    public TestDataInitializer initTestData() {
+        return new TestDataInitializer();
+    }
 
 //    @Bean(initMethod = "init")
 //    @PostConstruct

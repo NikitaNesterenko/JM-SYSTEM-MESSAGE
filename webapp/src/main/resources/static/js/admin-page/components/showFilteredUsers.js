@@ -27,9 +27,11 @@ class ShowFilteredUsers {
 </div>`;
         }
 
+
         let editButtons = document.getElementsByClassName("btn-user-info");
         for (let eb of editButtons) {
-            eb.addEventListener("click", () => showEditUserModal(eb));
+            var showEditUserModal = new ShowEditUserModal(eb);
+            eb.addEventListener("click", () => showEditUserModal.showEditUserModal());
         }
     }
 }

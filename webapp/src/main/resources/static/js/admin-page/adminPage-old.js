@@ -2,50 +2,45 @@ import {getUsers, getUser, updateUser} from "../ajax/userRestController.js";
 
 let users = [];// all users from the database; updated every time after editing and updating any user
 
-let addEventListener = new AddEventListener();
-window.addEventListener('load', addEventListener.addEventListener() );
 
-let refreshUserList = new RefreshUserList();
-refreshUserList.refreshUserList();
+window.addEventListener('load', function () {
 
-// window.addEventListener('load', function () {
-//
-//     const btnMainMenu = document.getElementById("mainMenu");
-//     const panelAdmin = document.getElementById("panelAdmin");
-//
-//     btnMainMenu.onclick = function () {
-//         if (panelAdmin.style.display !== "none") {
-//             panelAdmin.style.display = "none";
-//         } else {
-//             panelAdmin.style.display = "block";
-//         }
-//     };
-//     refreshUserList();
-//     document.getElementById("user_edit_submit").addEventListener("click", onUserEditSubmit);
-//     document.getElementById("searchValue").addEventListener("keyup", showFilteredUsers);
-// });
+    const btnMainMenu = document.getElementById("mainMenu");
+    const panelAdmin = document.getElementById("panelAdmin");
+
+    btnMainMenu.onclick = function () {
+        if (panelAdmin.style.display !== "none") {
+            panelAdmin.style.display = "none";
+        } else {
+            panelAdmin.style.display = "block";
+        }
+    };
+    refreshUserList();
+    document.getElementById("user_edit_submit").addEventListener("click", onUserEditSubmit);
+    document.getElementById("searchValue").addEventListener("keyup", showFilteredUsers);
+});
 
 
-//
-// const refreshUserList = () => {
-//     let userRestController = new userRestController();
-//     users = userRestController.getUsers()
-//     // users = getUsers();  // get all users from DB
-//     showFilteredUsers();  // display users filtered by input search string
-// };
 
-// function showEditUserModal(element) {
-//     const userId = element.getAttribute("data-user_id");
-//     const user = users.find(u => u.id === parseInt(userId));
-//
-//     document.getElementById("input_login").value = user.login;
-//     document.getElementById("input_name").value = user.name;
-//     document.getElementById("input_lastName").value = user.lastName;
-//     document.getElementById("input_email").value = user.email;
-//     document.getElementById("user_edit_submit").setAttribute("data-user_id", userId);
-//
-//     $("#modalEditMemberInfo").modal('show');
-// }
+const refreshUserList = () => {
+    let userRestController = new userRestController();
+    users = userRestController.getUsers()
+    // users = getUsers();  // get all users from DB
+    showFilteredUsers();  // display users filtered by input search string
+};
+
+function showEditUserModal(element) {
+    const userId = element.getAttribute("data-user_id");
+    const user = users.find(u => u.id === parseInt(userId));
+
+    document.getElementById("input_login").value = user.login;
+    document.getElementById("input_name").value = user.name;
+    document.getElementById("input_lastName").value = user.lastName;
+    document.getElementById("input_email").value = user.email;
+    document.getElementById("user_edit_submit").setAttribute("data-user_id", userId);
+
+    $("#modalEditMemberInfo").modal('show');
+}
 
 $(document).ready(function () {
 
