@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -30,25 +32,11 @@ public class MainController {
         return "home-page";
     }
 
-    @PostMapping(value = "/workspace/create")
-    public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("usersList") String[] usersList,
-                                @RequestParam("owner") String owner, @RequestParam(value = "isPrivate", required = false) boolean isPrivate) {
-        ModelAndView modelAndView = new ModelAndView();
-        //TODO
-        modelAndView.setViewName("redirect:/workspace");
-        return modelAndView;
-    }
-
-    @GetMapping(value = "/workspace")
-    public ModelAndView workspacePage() {
-        return new ModelAndView("workspace-page");
-    }
-
-    @GetMapping(value = "/workspace_temp")
-    public ModelAndView workspaceTempPage() {
-        return new ModelAndView("temp/workspace-page-temp.html");
-    }
-
+    /*
+     @GetMapping(value = "/workspace_temp")
+     public ModelAndView workspaceTempPage() {
+         return new ModelAndView("temp/workspace-page-temp.html");
+ */
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
         return new ModelAndView("signin-page");
