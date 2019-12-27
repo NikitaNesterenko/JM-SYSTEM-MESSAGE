@@ -53,14 +53,14 @@ public class BotRestController {
     @GetMapping("/workspace/{id}")
     public ResponseEntity<?> getBotByWorksapce(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
-        Optional<Bot> bot = botService.GetBotByWorkspaceId(workspace);
+        Bot bot = botService.GetBotByWorkspaceId(workspace);
         if(bot == null) {
             logger.warn("Не удалось найти бота для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         logger.info("Бот для workspace c id = {}", id);
         //logger.info(bot.toString());
-        return new ResponseEntity<Optional<?>>(bot, HttpStatus.OK);
+        return new ResponseEntity<>(bot, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

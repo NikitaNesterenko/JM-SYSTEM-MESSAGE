@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 
 import jm.UserService;
@@ -37,7 +38,7 @@ public class FileStorageService {
     }
 
     public ResponseEntity<?> saveFile(MultipartFile file, long userId){
-        String newAvatarName = StringUtils.cleanPath(file.getOriginalFilename());
+        String newAvatarName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try{
             if(newAvatarName.contains("..")){
                 return new ResponseEntity<>("Invalid path sequence: " + newAvatarName, HttpStatus.BAD_REQUEST);
@@ -53,9 +54,12 @@ public class FileStorageService {
             if(currentAvatarName != null){
                 Path currentAvatarLocation = this.fileStorageLocation.resolve(currentAvatarName);
                 Files.delete(currentAvatarLocation);
+                user.setAvatarURL(null);
+                userService.updateUser(user);
             }
             user.setAvatarURL(newAvatarName);
             userService.updateUser(user);
+            System.out.println(user.getAvatarURL());
             return new ResponseEntity<>("Avatar changed for user with id: " + userId, HttpStatus.CREATED);
         } catch (IOException ex){
             return new ResponseEntity<>("Avatar not changed for user with id: " + userId, HttpStatus.NOT_MODIFIED);

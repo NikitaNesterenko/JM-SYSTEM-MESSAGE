@@ -201,6 +201,13 @@ ul.confirm-navbar li.right {
     line-height: 1.46666667;
 }
 
+.editModalList {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    height: 500px;
+}
+
 .form_flex {
     display: flex;
     flex-direction: row;

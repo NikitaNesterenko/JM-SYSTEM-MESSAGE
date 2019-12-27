@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -41,7 +40,7 @@ public class BotServiceImpl implements BotService {
     public Bot getBotById(Long id) { return botDAO.getById(id); }
 
     @Override
-    public Optional<Bot> GetBotByWorkspaceId(Workspace workspace) {
+    public Bot GetBotByWorkspaceId(Workspace workspace) {
        return botDAO.getBotByWorkspaceId(workspace);
     }
 

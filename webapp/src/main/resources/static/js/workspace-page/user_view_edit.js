@@ -141,7 +141,6 @@ export const onShowModal2 = $('#modal_2').on('show.bs.modal', function (focus) {
             // $('#modal_2_user_img').attr("src", user_image);
             $('#modal_2_user_img').attr("src", "../avatars/" + user.avatarURL);
         }
-
     });
 });
 
@@ -164,7 +163,6 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
             // todo need to update workspace to implement user data changes
         });
     });
-
     location.reload(); // THE MOST IMPORTANT THING// важный, нет, ОЧЕНЬ ВАЖНЫЙ костыль.
 
     const input = document.getElementById('FileUpload1');
@@ -183,7 +181,7 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
             .then(res => res.json())
             .then(json => console.log(json))
             .catch(err => console.error(err));
-    }
+    };
     uploadFile(input.files[0]);
 });
 
