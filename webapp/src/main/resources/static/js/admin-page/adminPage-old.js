@@ -1,7 +1,6 @@
 import {getUsers, getUser, updateUser} from "../ajax/userRestController.js";
 
-let users = [];// all users from the database; updated every time after editing and updating any user
-
+let users = [];  // all users from the database; updated every time after editing and updating any user
 
 window.addEventListener('load', function () {
 
@@ -20,12 +19,8 @@ window.addEventListener('load', function () {
     document.getElementById("searchValue").addEventListener("keyup", showFilteredUsers);
 });
 
-
-
 const refreshUserList = () => {
-    let userRestController = new userRestController();
-    users = userRestController.getUsers()
-    // users = getUsers();  // get all users from DB
+    users = getUsers();  // get all users from DB
     showFilteredUsers();  // display users filtered by input search string
 };
 
@@ -125,7 +120,6 @@ function onUserEditSubmit(ev) {
     ev.preventDefault();
     const userId = ev.target.getAttribute("data-user_id");
 
-
     let current_user = getUser(userId);
 
     const input_login = document.getElementById('input_login');
@@ -144,3 +138,5 @@ function onUserEditSubmit(ev) {
 
     refreshUserList();
 }
+
+

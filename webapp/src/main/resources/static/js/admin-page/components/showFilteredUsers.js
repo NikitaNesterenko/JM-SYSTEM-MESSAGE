@@ -4,11 +4,15 @@ import {ShowEditUserModal} from "./showEditUserModal.js";
 
 export class ShowFilteredUsers {
 
+    constructor(users) {
+        this.users=users;
+    }
+
     showFilteredUsers(){
         const userListContent = document.getElementById("rowGroupContentRow");
         userListContent.innerHTML = "";
 
-            let filterUserList = new FilterUserList();
+            let filterUserList = new FilterUserList(this.users);
             const filteredUsers = filterUserList.filterUserList();
 
         for (let i = 0; i < filteredUsers.length; i++) {
@@ -34,7 +38,7 @@ export class ShowFilteredUsers {
 
         let editButtons = document.getElementsByClassName("btn-user-info");
         for (let eb of editButtons) {
-            var showEditUserModal = new ShowEditUserModal(eb);
+            let showEditUserModal = new ShowEditUserModal(eb, this.users);
             eb.addEventListener("click", () => showEditUserModal.showEditUserModal());
         }
     }
