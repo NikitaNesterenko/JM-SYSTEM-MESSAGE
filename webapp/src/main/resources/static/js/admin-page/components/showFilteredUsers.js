@@ -1,5 +1,5 @@
-import FilterUserList from "./filterUserList.js";
-import ShowEditUserModal from "./showEditUserModal.js";
+import {FilterUserList} from "./filterUserList.js";
+import {ShowEditUserModal} from "./showEditUserModal.js";
 
 
 export class ShowFilteredUsers {

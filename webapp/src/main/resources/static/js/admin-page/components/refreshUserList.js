@@ -1,5 +1,5 @@
-import GetUsers from "/js/ajax/userRestController/getUsers.js";
-import ShowFilteredUsers from "./showFilteredUsers.js";
+import {GetUsers} from "/js/ajax/userRestController/getUsers.js";
+import {ShowFilteredUsers} from "./showFilteredUsers.js";
 
 export class RefreshUserList{
 

@@ -1,5 +1,5 @@
-import RefreshUserList from "./refreshUserList.js"
-import ShowFilteredUsers from "./showFilteredUsers.js"
+import {RefreshUserList} from "./refreshUserList.js"
+import {ShowFilteredUsers} from "./showFilteredUsers.js"
 
 export  class AddEventListener {
 

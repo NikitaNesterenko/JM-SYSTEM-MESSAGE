@@ -1,6 +1,6 @@
-import GetUser from "/js/ajax/userRestController/getUser.js";
-import UpdateUser from "/js/ajax/userRestController/updateUser.js";
-import RefreshUserList from "./refreshUserList";
+import {GetUser} from "/js/ajax/userRestController/getUser.js";
+import {UpdateUser} from "/js/ajax/userRestController/updateUser.js";
+import {RefreshUserList} from "./refreshUserList";
 
 export class OnUserEditSubmit {
 
