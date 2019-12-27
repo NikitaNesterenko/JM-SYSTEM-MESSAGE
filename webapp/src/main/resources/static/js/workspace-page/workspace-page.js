@@ -9,6 +9,7 @@ const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
 const showDefaultChannel = () => {
+
     let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then( value => {
         channel_service.getChannelsByWorkspaceId(value[0].id)
@@ -44,6 +45,8 @@ $(document).ready(() => {
     profileCard();
     showBot();
     showDefaultChannel();
+    // replace();
+    // rereplace();
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
@@ -52,6 +55,27 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     sessionStorage.setItem("channelName",channel_id);
     refreshMemberList();
 });
+
+const replace = () => {
+
+    $('#form_message').mouseover(function () {
+        $('div#form_message_input').replaceWith(`<input class='ql-editor__input-field' 
+                                                        id='form_message_input' 
+                                                        placeholder='Message #p_some-channel' 
+                                                        type='text' />`);
+
+    });
+};
+
+const rereplace = () => {
+    $('input#form_message_input').mouseleave(function (event) {
+        $('input#form_message_input').replaceWith(`<div class="ql-editor ql-blank" 
+                                                       id="form_message_input"
+                                                       data-placeholder="Message #p_some-channel">
+                                                  </div>`);
+
+    });
+};
 
 
 const showAllChannels = () => {
@@ -67,7 +91,7 @@ const showAllChannels = () => {
                                                         <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
                                                     </button>
                                                   </div>`);
-                })
+                });
                 //Default channel
                 document.getElementById("channel_button_" + respons[0].id).style.color = "white";
                 document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";

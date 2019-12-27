@@ -2111,6 +2111,18 @@
     border-right: none;
 }
 
+.c-texty_input .ql-blank:before {
+    display: none;
+}
+
+.ql-editor.ql-blank:before {
+    color: rgba(0,0,0,.6);
+    content: attr(data-placeholder);
+    font-style: italic;
+    pointer-events: none;
+    position: absolute;
+}
+
 .ql-clipboard {
     line-height: 1.46668;
     font-weight: 400;
@@ -3101,6 +3113,7 @@
 }
 
 .ql-editor__input-field {
+
     font-weight: 400;
     color: rgba(var(--sk_primary_foreground,29,28,29),1);
     -webkit-font-smoothing: antialiased;

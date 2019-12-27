@@ -176,6 +176,8 @@ window.updateMessages = function updateMessages() {
 
     let startDate = new Date();
     let endDate = new Date();
+
+    // document.getElementById("form_message").innerHTML("");
     startDate.setMonth(startDate.getMonth() - 4);
 
     const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, startDate, endDate);

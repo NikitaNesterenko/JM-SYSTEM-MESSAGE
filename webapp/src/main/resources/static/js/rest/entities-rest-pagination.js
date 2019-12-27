@@ -1,7 +1,7 @@
 import {RestPaginationService} from "./rest-pagination-service.js";
 
 
-export class UserRestPaginationService extends  RestPaginationService {
+export class UserRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/users');
     }
@@ -9,17 +9,19 @@ export class UserRestPaginationService extends  RestPaginationService {
     getLoggedUser = async () => {
         const response = await fetch('/rest/api/users/loggedUser');
         return response.json()
-    }
+    };
 
     getUsersByWorkspace = async (id) => {
         const response = await fetch('/rest/api/users/workspace/' + id);
         return response.json();
     }
 }
-export class MessageRestPaginationService extends  RestPaginationService{
-    constructor(){
+
+export class MessageRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/messages');
     }
+
     getAllMessagesByChannelId = async (id) => {
         const response = await fetch('/rest/api/messages/channel/' + id);
         return response.json();
@@ -38,25 +40,30 @@ export class MessageRestPaginationService extends  RestPaginationService{
         return response.json();
     };
 }
-export class BotRestPaginationService extends  RestPaginationService{
-    constructor(){
+
+export class BotRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/bot');
     }
+
     getBotByWorkspaceId = async (id) => {
         const response = await fetch('/rest/api/bot/workspace/' + id)
         return await response.json()
             .catch(err => console.log(err.status));
     };
 }
-export class ChannelRestPaginationService extends  RestPaginationService {
+
+export class ChannelRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels');
     }
+
     getChannelsByWorkspaceId = async (id) => {
         const response = await fetch('/rest/api/channels/workspace/' + id)
         return await response.json()
             .catch(err => console.log(err.status));
-    }
+    };
+
     getChannelByName = async (name) => {
         const response = await fetch('/rest/api/channels/name/' + name)
         return await response.json()
@@ -75,16 +82,18 @@ export class ChannelRestPaginationService extends  RestPaginationService {
     };
 
     archivingChannel = async (id) => {
-        const response = await fetch(`/rest/api/channels/archiving/${id}`,{
+        const response = await fetch(`/rest/api/channels/archiving/${id}`, {
             method: 'POST'
         });
         return response.json();
     }
 }
-export class WorkspaceRestPaginationService extends  RestPaginationService{
-    constructor(){
+
+export class WorkspaceRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/workspaces');
     }
+
     getWorkspaceByName = async (name) => {
         const response = await fetch('/rest/api/workspaces/name/' + name);
         if (!response.ok) {
@@ -115,13 +124,15 @@ export class StorageService {
         const response = await fetch(`/upload`, {
             method: 'POST',
             body: file
-        }).then(response => {return response.text()});
+        }).then(response => {
+            return response.text()
+        });
         return response;
     }
 }
 
-export class InviteRestPaginationService extends  RestPaginationService {
-    constructor(){
+export class InviteRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/invites');
     }
 }
