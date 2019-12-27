@@ -28,7 +28,6 @@ public class CreateWorkspaceRestController {
     private WorkspaceService workspaceService;
     private ChannelService channelService;
 
-
     @Autowired
     public void setChannelService(ChannelService channelService) {
         this.channelService = channelService;
@@ -45,9 +44,7 @@ public class CreateWorkspaceRestController {
     }
 
     @Autowired
-    public void setCreateWorkspaceTokenService(CreateWorkspaceTokenService createWorkspaceTokenService) {
-        this.createWorkspaceTokenService = createWorkspaceTokenService;
-    }
+    public void setCreateWorkspaceTokenService(CreateWorkspaceTokenService createWorkspaceTokenService) { this.createWorkspaceTokenService = createWorkspaceTokenService; }
 
     @Autowired
     public void setMailService(MailService mailService) {
@@ -60,7 +57,7 @@ public class CreateWorkspaceRestController {
         token.setUserEmail(emailTo);
         request.getSession().setAttribute("token", token);
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
-        User user = userService.getUserByEmail(emailTo);
+        User user = userService.getUserByEmail(emailTo).get();
         if(user == null) {
             user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
            userService.createUser(user);
@@ -91,7 +88,7 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         token.setChannelname(channelName);
         request.getSession().setAttribute("token", token);
-        Channel channel = new Channel(channelName, new HashSet<User>(), userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now());
+        Channel channel = new Channel(channelName, new HashSet<User>(), userService.getUserByEmail(token.getUserEmail()).get(), false, LocalDateTime.now());
         channelService.createChannel(channel);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -101,7 +98,7 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         for (int i = 0; i < invites.length; i++) {
             mailService.sendInviteMessage(
-                    userService.getUserByEmail(token.getUserEmail()).getLogin(),
+                    userService.getUserByEmail(token.getUserEmail()).get().getLogin(),
                     token.getUserEmail(),
                     invites[i],
                     token.getWorkspaceName(),
@@ -114,7 +111,7 @@ public class CreateWorkspaceRestController {
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         workspaceService.createWorkspace(
-                new Workspace(token.getWorkspaceName(), new HashSet<>(), userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now()));
+                new Workspace(token.getWorkspaceName(), new HashSet<>(), userService.getUserByEmail(token.getUserEmail()).get(), false, LocalDateTime.now()));
         return new ResponseEntity<>(token.getChannelname(),HttpStatus.OK);
     }
 
