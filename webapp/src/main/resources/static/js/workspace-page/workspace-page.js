@@ -3,13 +3,14 @@ import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
 
 import {refreshMemberList} from "../member-list/member-list.js";
+import {UserRestPaginationService} from "../rest/entities-rest-pagination";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const user_service = new UserRestPaginationService();
 
 const showDefaultChannel = () => {
-
     let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then( value => {
         channel_service.getChannelsByWorkspaceId(value[0].id)
@@ -45,8 +46,6 @@ $(document).ready(() => {
     profileCard();
     showBot();
     showDefaultChannel();
-    // replace();
-    // rereplace();
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function(){
@@ -56,41 +55,24 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     refreshMemberList();
 });
 
-const replace = () => {
-
-    $('#form_message').mouseover(function () {
-        $('div#form_message_input').replaceWith(`<input class='ql-editor__input-field' 
-                                                        id='form_message_input' 
-                                                        placeholder='Message #p_some-channel' 
-                                                        type='text' />`);
-
-    });
-};
-
-const rereplace = () => {
-    $('input#form_message_input').mouseleave(function (event) {
-        $('input#form_message_input').replaceWith(`<div class="ql-editor ql-blank" 
-                                                       id="form_message_input"
-                                                       data-placeholder="Message #p_some-channel">
-                                                  </div>`);
-
-    });
-};
-
 
 const showAllChannels = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
-    Promise.all([workspace_id]).then( value => {
+    const user_promise = user_service.getLoggedUser();
+    Promise.all([workspace_id, user_promise]).then( value => {
+        const user = value[1];
         channel_service.getChannelsByWorkspaceId(value[0].id)
             .then((respons) => {
-
                 $.each(respons, (i, item) => {
-                    $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
-                                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
-                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
-                                                    </button>
-                                                  </div>`);
+                    if ((item.isPrivate && user.name == item.user.name) || !item.isPrivate) {
+                        $('#id-channel_sidebar__channels__list')
+                            .append(`<div class="p-channel_sidebar__channel">
+                          <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
+                                <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
+                            </button>
+                          </div>`);
+                    }
                 });
                 //Default channel
                 document.getElementById("channel_button_" + respons[0].id).style.color = "white";
