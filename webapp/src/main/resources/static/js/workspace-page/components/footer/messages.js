@@ -3,7 +3,7 @@ import {setOnClickEdit} from "../../../messagesInlineEdit.js";
 import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
 
 
-let stompClient = null;
+export let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -84,7 +84,7 @@ export const star_button_blank = '\u2606';
 export const star_button_filled = '\u2605';
 const submenu_button = '&#8285;';
 
-const message_menu = (message) => {
+export const message_menu = (message) => {
     getMessageStatus(message);
     return `<div class="message-icons-menu-class" id="message-icons-menu"> 
                 <div class="btn-group" role="group" aria-label="Basic example"> <button type="button" class="btn btn-light">${emoji_button}</button>
@@ -175,8 +175,6 @@ window.updateMessages = function updateMessages() {
 
     let startDate = new Date();
     let endDate = new Date();
-
-    // document.getElementById("form_message").innerHTML("");
     startDate.setMonth(startDate.getMonth() - 4);
 
     const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, startDate, endDate);
@@ -492,7 +490,7 @@ window.updateMessages = function updateMessages() {
 
 // updateMessages();
 
-const showBotMessage =(message)=> {
+function showBotMessage(message) {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -545,7 +543,7 @@ window.pressChannelButton = function pressChannelButton(id) {
 };
 
 
-const add_attached_file =(message)=> {
+function add_attached_file (message) {
     if (message.filename !== null) {
         return `<br>
                 <span class="c-message__attachment">
