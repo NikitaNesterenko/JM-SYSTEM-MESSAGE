@@ -1,4 +1,5 @@
-
+import UserRestController from "/js/ajax/components/userRestController.js";
+import ShowFilteredUsers from "./showFilteredUsers.js";
 
 class RefreshUserList{
 

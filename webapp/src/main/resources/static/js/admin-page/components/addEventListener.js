@@ -1,3 +1,5 @@
+import RefreshUserList from "./components/refreshUserList.js"
+
 class AddEventListener {
 
     addEventListener(){

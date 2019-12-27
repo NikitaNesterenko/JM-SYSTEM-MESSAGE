@@ -1,4 +1,8 @@
+import UserRestController from "/js/ajax/components/userRestController.js";
+import RefreshUserList from "./refreshUserList";
+
 class OnUserEditSubmit {
+
     constructor(ev) {
         this.ev=ev;
     }
@@ -7,7 +11,9 @@ class OnUserEditSubmit {
             ev.preventDefault();
             const userId = ev.target.getAttribute("data-user_id");
 
-            let current_user = getUser(userId);
+            let userRestController = new UserRestController(userId);
+            userRestController.getUser();
+            // let current_user = getUser(userId);
 
             const input_login = document.getElementById('input_login');
             const input_name = document.getElementById('input_name');
@@ -19,8 +25,8 @@ class OnUserEditSubmit {
             current_user.lastName = input_lastName.value;
             current_user.email = input_email.value;
 
-            let userRestController = new UserRestController();
-            userRestController.updateUser(current_user);
+            let userRestController1 = new UserRestController(current_user);
+            userRestController1.updateUser();
 
             $("#modalEditMemberInfo").modal('hide');
 

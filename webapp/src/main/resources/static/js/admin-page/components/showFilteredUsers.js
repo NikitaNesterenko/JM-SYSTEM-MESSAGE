@@ -1,3 +1,7 @@
+import FilterUserList from "./filterUserList.js";
+import ShowEditUserModal from "./showEditUserModal.js";
+
+
 class ShowFilteredUsers {
 
     showFilteredUsers(){
