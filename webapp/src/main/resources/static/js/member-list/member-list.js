@@ -15,7 +15,7 @@ export function attachMemberListBtnClickHandler() {
     }
 }
 
-function memberListBtnClick() {
+const memberListBtnClick =()=> {
     const memberListCaretSymbol = document.getElementById('memberListCaretSymbol');
     if (!isMemberListExpanded) {
         isMemberListExpanded = true;
