@@ -136,3 +136,27 @@ export class InviteRestPaginationService extends RestPaginationService {
         super('/rest/api/invites');
     }
 }
+
+export class ThreadChannelRestPaginationService extends  RestPaginationService{
+    constructor(){
+        super('/rest/api/threads');
+    }
+    getThreadChannelByChannelMessageId = async (id) => {
+        const response = await fetch('/rest/api/threads/' + id);
+        return response.json();
+    };
+    getThreadChannelMessagesByThreadChannelId = async (id) => {
+        const response = await fetch('/rest/api/threads/messages/' + id);
+        return response.json();
+    };
+}
+
+export class ThreadChannelMessageRestPaginationService extends  RestPaginationService{
+    constructor(){
+        super('/rest/api/threads/messages');
+    }
+    getThreadChannelMessagesByThreadChannelId = async (id) => {
+        const response = await fetch('/rest/api/threads/messages/' + id);
+        return response.json();
+    };
+}

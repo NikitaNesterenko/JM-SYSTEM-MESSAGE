@@ -3,7 +3,7 @@ import {setOnClickEdit} from "../../../messagesInlineEdit.js";
 import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
 
 
-let stompClient = null;
+export let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -84,16 +84,17 @@ export const star_button_blank = '\u2606';
 export const star_button_filled = '\u2605';
 const submenu_button = '&#8285;';
 
-const message_menu = (message) => {
+export const message_menu = (message) => {
     getMessageStatus(message);
-    return `<div class="message-icons-menu-class" id="message-icons-menu"> 
-                <div class="btn-group" role="group" aria-label="Basic example"> <button type="button" class="btn btn-light">${emoji_button}</button>
-                    <button type="button" class="btn btn-light">${reply_button}</button>
-                    <button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>
-                    <button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>
-                    <button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>
-                </div>
-            </div>`;
+    return `<div class="message-icons-menu-class" id="message-icons-menu">
+        <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-light">${emoji_button}</button> 
+        <button type="button" class="btn btn-light">${reply_button}</button>
+        <button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>
+        <button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>
+        <button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>
+        </div>
+        </div>`;
 };
 
 export function updateAllMessages() {
@@ -175,8 +176,6 @@ window.updateMessages = function updateMessages() {
 
     let startDate = new Date();
     let endDate = new Date();
-
-    // document.getElementById("form_message").innerHTML("");
     startDate.setMonth(startDate.getMonth() - 4);
 
     const messages_promise = message_service.getMessagesByChannelIdForPeriod(channel_id, startDate, endDate);
@@ -545,7 +544,7 @@ window.pressChannelButton = function pressChannelButton(id) {
 };
 
 
-const add_attached_file =(message)=> {
+function add_attached_file (message) {
     if (message.filename !== null) {
         return `<br>
                 <span class="c-message__attachment">
