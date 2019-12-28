@@ -86,15 +86,14 @@ const submenu_button = '&#8285;';
 
 const message_menu = (message) => {
     getMessageStatus(message);
-    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
-        `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${emoji_button}</button>` + // emoji
-        `<button type="button" class="btn btn-light">${reply_button}</button>` + // reply
-        `<button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>` + // share
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>` + // star
-        `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>` + // submenu
-        `</div>` +
-        `</div>`;
+    return `<div class="message-icons-menu-class" id="message-icons-menu"> 
+                <div class="btn-group" role="group" aria-label="Basic example"> <button type="button" class="btn btn-light">${emoji_button}</button>
+                    <button type="button" class="btn btn-light">${reply_button}</button>
+                    <button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>
+                    <button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>
+                    <button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>
+                </div>
+            </div>`;
 };
 
 export function updateAllMessages() {
@@ -103,7 +102,7 @@ export function updateAllMessages() {
 
 // end of msg menu buttons
 
-function updateMessage(message) {
+const updateMessage =(message)=> {
     const messageBodies = document.getElementsByClassName("c-message__content_body");
     for (const messageBody of messageBodies) {
         if (message.id === null) { return true; }
@@ -116,7 +115,7 @@ function updateMessage(message) {
     return false;
 }
 
-function showMessage(message) {
+const showMessage =(message)=> {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -493,7 +492,7 @@ window.updateMessages = function updateMessages() {
 
 // updateMessages();
 
-function showBotMessage(message) {
+const showBotMessage =(message)=> {
     const message_box = document.getElementById("all-messages");
     let messages_queue_context_user_container = document.createElement('div');
     messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -546,7 +545,7 @@ window.pressChannelButton = function pressChannelButton(id) {
 };
 
 
-function add_attached_file (message) {
+const add_attached_file =(message)=> {
     if (message.filename !== null) {
         return `<br>
                 <span class="c-message__attachment">

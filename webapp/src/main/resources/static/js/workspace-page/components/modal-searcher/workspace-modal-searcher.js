@@ -28,14 +28,10 @@ window.addEventListener('load', function () {
 });
 
 function showSearchResult(channels, users) {
-    $('#idSearchContent').html('<ol role="listbox">'
-        + '<div class="search_channels_in_modal" id="search_channel_in_modal_id">'
-        + showChannels(channels)
-        + '</div>'
-        + '<div class="search_users_in_modal">'
-        + showUsers(users)
-        + '</div>'
-        + '</ol>')
+    $('#idSearchContent').html(`<ol role="listbox">
+            <div class="search_channels_in_modal" id="search_channel_in_modal_id"> ${showChannels(channels)}</div>
+            <div class="search_users_in_modal"> ${showUsers(users)}</div>
+        </ol>`)
 }
 
 
@@ -52,26 +48,19 @@ function channelPic(channel) {
     if (channel.isPrivate) {
         pic = "*";
     }
-    return '<i class="searcher__channel_icon_prefix">'
-        + pic
-        + '</i>';
+    return `<i class="searcher__channel_icon_prefix"> ${pic}</i>`;
 }
 
 function userPic(user) {
-    return '<i class="searcher__channel_icon_prefix">'
-        + '@'
-        + '</i>';
+    return `<i class="searcher__channel_icon_prefix"> @ </i>`;
 }
 
 function displayItem(id, itemClass, itemName, pic) {
-    return '<li class="search-field-li" data-type="' + itemClass + '" data-id="' + id + '">'
-        + '<div class="search-field-name">'
-        + pic
-        + '<span>'
-        + itemName
-        + '</span>'
-        + '</div>'
-        + '</li>';
+    return `<li class="search-field-li" data-type="${itemClass}" data-id="${id}">
+                <div class="search-field-name">${pic}
+                    <span>${itemName}</span>
+                </div>
+            </li>`;
 }
 
 $('#searchInput').bind("change paste keyup", function() {

@@ -24,7 +24,7 @@ const refreshUserList = () => {
     showFilteredUsers();  // display users filtered by input search string
 };
 
-function showEditUserModal(element) {
+const showEditUserModal =(element) => {
     const userId = element.getAttribute("data-user_id");
     const user = users.find(u => u.id === parseInt(userId));
 
@@ -116,7 +116,7 @@ const showFilteredUsers = () => {
     }
 };
 
-function onUserEditSubmit(ev) {
+const onUserEditSubmit = (ev) => {
     ev.preventDefault();
     const userId = ev.target.getAttribute("data-user_id");
 

@@ -25,7 +25,7 @@ export function setOnClickEdit(setNonActive) {
     });
 }
 
-function onEditButtonClick(ev) {
+const onEditButtonClick =(ev)=> {
     if (activeEdit) {
         return;
     }
@@ -46,7 +46,7 @@ function onEditButtonClick(ev) {
     parentDiv.addEventListener("submit", onEditSubmit);
 }
 
-function onEditSubmit(ev) {
+const onEditSubmit =(ev)=> {
     ev.preventDefault();
     const editMessageForm = ev.target;
     // const parentDiv = editMessageForm.parentElement.parentElement;
