@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,7 +20,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByLogin(String login) {
         try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login).getSingleResult();
+            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
@@ -30,7 +30,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByEmail(String email) {
         try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email).getSingleResult();
+            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

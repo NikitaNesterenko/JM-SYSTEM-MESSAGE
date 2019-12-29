@@ -2,6 +2,7 @@ package jm.dao;
 
 import jm.api.dao.MessageDAO;
 import jm.model.message.ChannelMessage;
+import jm.model.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
