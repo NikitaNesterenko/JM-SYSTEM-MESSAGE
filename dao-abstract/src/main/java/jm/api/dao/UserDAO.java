@@ -1,5 +1,6 @@
 package jm.api.dao;
 
+import jm.dto.UserDTO;
 import jm.model.User;
 
 import java.util.List;
@@ -26,4 +27,5 @@ public interface UserDAO {
 
     List<User> getAllUsersInThisChannel(Long id);
 
+    List<UserDTO> getUsersInWorkspace(Long id);
 }

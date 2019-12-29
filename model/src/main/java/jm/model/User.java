@@ -1,8 +1,11 @@
 package jm.model;
 
+import jm.dto.UserDTO;
+import jm.model.message.ChannelMessage;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -12,6 +15,21 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "users")
+
+@SqlResultSetMapping(
+        name = "UserDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = UserDTO.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name"),
+                        @ColumnResult(name = "last_name"),
+                        @ColumnResult(name = "avatar_url"),
+                        @ColumnResult(name = "display_name"),
+                }
+        )
+)
+
 public class User {
 
     @Id
@@ -36,9 +54,11 @@ public class User {
     @EqualsAndHashCode.Include
     private String login;
 
+    @EqualsAndHashCode.Include
     @Column(name = "email", nullable = false)
     private String email;
 
+    @EqualsAndHashCode.Include
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -85,12 +105,12 @@ public class User {
     // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
     @OneToMany
     @ToString.Exclude
-    private Set<Message> starredMessages;
+    private Set<ChannelMessage> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
-    @OneToMany
-    @ToString.Exclude
-    private Set<User> directMessagesToUsers;
+//    @OneToMany
+//    @ToString.Exclude
+//    private Set<User> directMessagesToUsers;
 
     // TODO каналы пользователя, исправить маппинг в Channel
     // юзер может создавать каналы, либо быть участником (member) в чужих каналах
@@ -138,4 +158,21 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) &&
+                email.equals(user.email) &&
+                password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password);
+    }
+
+
 }

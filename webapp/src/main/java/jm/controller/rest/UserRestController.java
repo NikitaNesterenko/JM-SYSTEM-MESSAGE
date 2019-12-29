@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import jm.dto.UserDTO;
 import jm.UserService;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -28,10 +29,11 @@ public class UserRestController {
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         logger.info("Список пользователей : ");
-        for (User user : userService.getAllUsers()) {
+        List<User> users = userService.getAllUsers();
+        for (User user : users) {
             logger.info(user.toString());
         }
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
@@ -44,12 +46,13 @@ public class UserRestController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         logger.info("Польщователь с id = {}", id);
-        logger.info(userService.getUserById(id).toString());
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+        User user = userService.getUserById(id);
+        logger.info(user.toString());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update")
-    @PreAuthorize("#user.login == authentication.principal.username")
+    @PreAuthorize("#user.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody User user) {
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
@@ -71,10 +74,11 @@ public class UserRestController {
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<User>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
-        for (User user : userService.getAllUsersInThisChannel(id)) {
+        List<User> users = userService.getAllUsersInThisChannel(id);
+        for (User user : users) {
             logger.info(user.toString());
         }
-        return ResponseEntity.ok(userService.getAllUsersInThisChannel(id));
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping(value = "/loggedUser")
@@ -82,5 +86,15 @@ public class UserRestController {
         User user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping(value = "/workspace/{id}")
+    public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id){
+        logger.info("Список пользователей Workspace с id = {}", id);
+        List<UserDTO> users = userService.getAllUsersInWorkspace(id);
+        for (UserDTO user : users) {
+            logger.info(user.toString());
+        }
+        return ResponseEntity.ok(users);
     }
 }

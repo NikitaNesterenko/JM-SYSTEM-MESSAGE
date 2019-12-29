@@ -18,6 +18,8 @@ public interface WorkspaceService {
 
     Workspace getWorkspaceByName(String name);
 
-    public List<Workspace> getWorkspacesByOwner(User user);
+    List<Workspace> getWorkspacesByOwner(User user);
+
+    List<Workspace> getWorkspacesByUser(User user);
 
 }

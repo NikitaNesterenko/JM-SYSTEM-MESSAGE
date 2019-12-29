@@ -1,7 +1,7 @@
 package jm.controller.rest;
 
 import jm.UserService;
-import jm.model.ChannelDTO;
+import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import jm.ChannelService;
 import jm.model.User;
@@ -41,8 +41,18 @@ public class ChannelRestController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable("id") Long id) {
         logger.info("Channel с id = {}", id);
-        logger.info(channelService.getChannelById(id).toString());
-        return ResponseEntity.ok(channelService.getChannelById(id));
+        Channel channel = channelService.getChannelById(id);
+        logger.info(channel.toString());
+        return ResponseEntity.ok(channel);
+    }
+
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Channel>> getChannelsByUserId(@PathVariable("id") Long id) {
+        List<Channel> channels = channelService.getChannelsByUserId(id);
+        for (Channel channel : channels) {
+            System.out.println(channel);
+        }
+        return ResponseEntity.ok(channels);
     }
 
     @PostMapping(value = "/create")
@@ -91,20 +101,24 @@ public class ChannelRestController {
     @GetMapping
     public ResponseEntity<List<Channel>> getAllChannels() {
         logger.info("Список channel: ");
-        for (Channel channel : channelService.gelAllChannels()) {
+        List<Channel> channels = channelService.gelAllChannels();
+        for (Channel channel : channels) {
             logger.info(channel.toString());
         }
-        return ResponseEntity.ok(channelService.gelAllChannels());
+        return ResponseEntity.ok(channels);
     }
 
-    @GetMapping(params = {"workspace", "login"})
+    @GetMapping("/workspace/{workspace_id}/user/{user_id}")
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
-            @RequestParam("workspace") String workspaceName,
-            @RequestParam("login") String login
+            @PathVariable("user_id") Long userId,
+            @PathVariable("workspace_id") Long workspaceId
     ) {
-        logger.info("Получен channel, где имя workspace = {}, логин пользователя = {}", workspaceName, login);
-        logger.info(channelService.getChannelByWorkspaceAndUser(workspaceName, login).toString());
-        return ResponseEntity.ok(channelService.getChannelByWorkspaceAndUser(workspaceName, login));
+        List<ChannelDTO> channels = channelService.getChannelByWorkspaceAndUser(workspaceId, userId);
+        logger.info("Получены channels, доступные юзеру с id={} из workspace с id={} ", userId, workspaceId);
+        for (ChannelDTO channel : channels) {
+            logger.info(channel.toString());
+        }
+        return ResponseEntity.ok(channels);
     }
 
     @GetMapping("/workspace/{id}")
@@ -115,6 +129,15 @@ public class ChannelRestController {
     @GetMapping("/name/{name}")
     public ResponseEntity<Channel> getChannelByName(@PathVariable("name") String name) {
         return new ResponseEntity<>(channelService.getChannelByName(name), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/archiving/{id}")
+    public ResponseEntity<Channel> archivingChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(true);
+        channelService.updateChannel(channel);
+        logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
 }
