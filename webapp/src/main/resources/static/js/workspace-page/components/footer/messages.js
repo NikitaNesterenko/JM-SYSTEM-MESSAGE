@@ -14,7 +14,8 @@ const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const user_service = new UserRestPaginationService();
 
-let divStyleShowEditMenuOnlyOwner = 'none';
+
+
 let loggedUserId = 0;
 
 //получение id залогиненного юзера
@@ -106,9 +107,9 @@ const submenu_button = '&#8285;';
 const message_menu = (message) => {
     getMessageStatus(message);
     //console.log(loggedUserId);
-
+    let divStyleShowEditMenuOnlyOwner  = 'none';
     if (loggedUserId ===message.userId) {
-        divStyleShowEditMenuOnlyOwner = 'block';
+            divStyleShowEditMenuOnlyOwner = 'block';
     }
 
     return `<div class="message-icons-menu-class" id="message-icons-menu">
