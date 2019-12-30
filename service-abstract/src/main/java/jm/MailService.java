@@ -2,6 +2,8 @@ package jm;
 
 import jm.model.CreateWorkspaceToken;
 
+import java.security.NoSuchAlgorithmException;
+
 public interface MailService {
     public void sendInviteMessage(
             String nameFrom,
@@ -10,5 +12,5 @@ public interface MailService {
             String workspace,
             String inviteLink);
 
-    public CreateWorkspaceToken sendConfirmationCode(String emailTo);
+    public CreateWorkspaceToken sendConfirmationCode(String emailTo) throws NoSuchAlgorithmException;
 }

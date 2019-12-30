@@ -1,3 +1,4 @@
+
 package jm.dao;
 
 import jm.api.dao.BotDAO;
@@ -28,6 +29,13 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
         }
     }
 
+//    @Override
+//    public Bot getBotByWorkspaceId(Workspace workspace) {
+//        return null;
+//    }
+
     @Override
-    public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
+    public Set<Channel> getChannels(Bot bot) {
+        return bot.getChannels();
+    }
 }

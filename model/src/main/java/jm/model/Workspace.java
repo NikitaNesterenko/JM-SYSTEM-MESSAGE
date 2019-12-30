@@ -3,6 +3,7 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.dto.WorkspaceDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -59,5 +60,14 @@ public class Workspace {
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
+    }
+
+    // Constructor for simplify WorkspaceDTO->Workspace conversion.
+    // copying simple fields
+    public Workspace(WorkspaceDTO workspaceDto) {
+        this.id = workspaceDto.getId();
+        this.name = workspaceDto.getName();
+        this.isPrivate = workspaceDto.getIsPrivate();
+        this.createdDate = workspaceDto.getCreatedDate();
     }
 }
