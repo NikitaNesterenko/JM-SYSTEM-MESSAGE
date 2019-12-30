@@ -11,7 +11,6 @@ export let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
-const user_service = new UserRestPaginationService();
 
 function connect() {
     let socket = new SockJS('/websocket');
