@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import jm.MessageService;
 import jm.model.message.ChannelMessage;
+import jm.model.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

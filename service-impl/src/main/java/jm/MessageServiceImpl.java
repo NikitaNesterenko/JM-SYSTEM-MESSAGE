@@ -2,6 +2,7 @@ package jm;
 
 import jm.api.dao.MessageDAO;
 import jm.model.message.ChannelMessage;
+import jm.model.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,16 +51,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void deleteMessage(Long id) {
-        messageDAO.deleteById(id);
-
-    }
+    public void deleteMessage(Long id) { messageDAO.deleteById(id); }
 
     @Override
-    public void updateMessage(ChannelMessage message) {
-        messageDAO.merge(message);
-
-    }
+    public void updateMessage(ChannelMessage message) { messageDAO.merge(message); }
 
     @Override
     public List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
