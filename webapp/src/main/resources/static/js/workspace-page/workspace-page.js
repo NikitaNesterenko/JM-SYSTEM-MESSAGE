@@ -230,3 +230,11 @@ $("#form_message_input").keypress(function (e) {
         $("#messageButton").click();
     }
 });
+
+autosize($('textarea'));
+
+$("#form_message_input").keypress(function (e) {
+    if (e.which == 13) {
+        $("#messageButton").click();
+    }
+});
