@@ -1,11 +1,10 @@
 package jm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jm.dto.UserDTO;
-import jm.model.message.ChannelMessage;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -29,7 +28,6 @@ import java.util.Set;
                 }
         )
 )
-
 public class User {
 
     @Id
@@ -43,15 +41,12 @@ public class User {
 //    private String memberId;
 
     @Column(name = "name", nullable = false)
-    @EqualsAndHashCode.Include
     private String name;
 
     @Column(name = "last_name", nullable = false)
-    @EqualsAndHashCode.Include
     private String lastName;
 
     @Column(name = "login", nullable = false)
-    @EqualsAndHashCode.Include
     private String login;
 
     @EqualsAndHashCode.Include
@@ -102,10 +97,16 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
 
-    // TODO starred messages - избранные сообщения пользователя (сообщения со звездочкой)
-    @OneToMany
+    //    @JsonSerialize(using = CustomUserSerializer.class)
+//    @JsonDeserialize(using = CustomUserDeserializer.class)
+    @JsonIgnore
     @ToString.Exclude
-    private Set<ChannelMessage> starredMessages;
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "users_starred_messages",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "starred_messages_id", referencedColumnName = "id"))
+    private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
 //    @OneToMany
@@ -159,20 +160,41 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) &&
-                email.equals(user.email) &&
-                password.equals(user.password);
+    // Constructor for simplify UserDTO->User conversion.
+    // copying simple fields
+    public User(UserDTO userDto) {
+        this.id = userDto.getId();
+        this.name = userDto.getName();
+        this.lastName = userDto.getLastName();
+        this.login = userDto.getLogin();
+        this.email = userDto.getEmail();
+        this.avatarURL = userDto.getAvatarURL();
+        this.title = userDto.getTitle();
+        this.displayName = userDto.getDisplayName();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.timeZone = userDto.getTimeZone();
+        this.online = userDto.getOnline();
+        this.userSkype = userDto.getUserSkype();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password);
-    }
+    //    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        User user = (User) o;
+//        return id.equals(user.id) &&
+//                email.equals(user.email) &&
+//                password.equals(user.password);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, email, password);
+//    }
 
 
 }
