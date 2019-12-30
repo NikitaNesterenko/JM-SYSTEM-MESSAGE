@@ -182,7 +182,7 @@ public class TestDataInitializer {
         channelGeneral.setName("general");
         channelGeneral.setUsers(this.users);
         channelGeneral.setUser(userList.get(0));
-        channelGeneral.setIsPrivate(true);
+        channelGeneral.setIsPrivate(false);
         channelGeneral.setCreatedDate(LocalDateTime.now());
         channelGeneral.setWorkspace(workspaceList.get(0));
 
