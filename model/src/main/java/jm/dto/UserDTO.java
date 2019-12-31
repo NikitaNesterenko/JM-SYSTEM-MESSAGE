@@ -28,6 +28,14 @@ public class UserDTO {
     private Integer online;
     private String userSkype;
 
+    public UserDTO(Long id, String name, String lastName, String avatarURL, String displayName) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.avatarURL = avatarURL;
+        this.displayName = displayName;
+    }
+
     // Constructor for simplify User->UserDTO conversion.
     // copying simple fields
     public UserDTO(User user) {
