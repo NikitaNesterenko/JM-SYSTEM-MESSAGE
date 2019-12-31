@@ -45,8 +45,13 @@ public class MainController {
     }
 
     @GetMapping(value = "/workspace_temp")
-    public ModelAndView workspaceTempPage() {
-        return new ModelAndView("temp/workspace-page-temp.html");
+    public ModelAndView workspacePage(HttpServletRequest request) {
+        if(request.getSession().getAttribute("WorkspaceID") != null) {
+            return new ModelAndView("workspace-page");
+        } else {
+            // при разрыве коннекта с сервером редиректик на выбор Воркспейса
+            return new ModelAndView("redirect:/chooseWorkspace");
+        }
     }
 
     @GetMapping(value = "/signin")
