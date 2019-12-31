@@ -54,24 +54,27 @@ ul.confirm-navbar li.right {
 }
 
 .form_container {
-    flex: 1;
     display: flex;
+    justify-content: center;
     align-items: center;
-    position: relative;
-    justify-content: flex-end;
-    max-width: 50%;
-    height: 678px;
-    min-width: 50%;
-    border: 1px solid #ddd;
-    background-color: #fff;
 }
 
-.workspace_form {
-    margin-left: 60px;
-    margin-right: 45px;
-    margin-bottom: 30px;
+.workspace_confirmation_form {
+    display: flex;
+    flex-direction: column;
     max-width: 400px;
-
+    padding: 60px;
+    box-shadow: 0 10px 25px #ddd;
+    border-radius: 10px;
+    height: 510px;
+    min-width: 400px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 355px;
+    margin-top: 32px;
+    margin-bottom: 16px;
 }
 
 .form_container h1 {

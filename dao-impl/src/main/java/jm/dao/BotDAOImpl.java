@@ -29,5 +29,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
+    public Set<Channel> getChannels(Bot bot) {
+        return bot.getChannels();
+    }
 }

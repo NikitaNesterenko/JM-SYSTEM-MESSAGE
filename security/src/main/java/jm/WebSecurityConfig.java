@@ -70,6 +70,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // до того как юзер залогинится, он должен получить доступ к вводу названия воркспейса
                 .antMatchers("/", "/rest/api/workspaces/name/**").permitAll();
 
+        http.authorizeRequests()
+                .antMatchers("/email/**", "/js/**" , "/image/**" , "/api/create/**").permitAll();
+                // отрыл доступ для регистрации воркспейса без авторизации
+
         // Anyone not authenticated. Avoid double signin
         http
                 .authorizeRequests()

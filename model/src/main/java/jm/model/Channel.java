@@ -84,11 +84,13 @@ public class Channel {
     @Column(name = "topic")
     private String topic;
 
-    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
+    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
         this.name = name;
         this.users = users;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
+        this.workspace = workspace;
     }
+
 }

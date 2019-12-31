@@ -158,24 +158,17 @@ public class User {
         this.login = login;
         this.email = email;
         this.password = password;
+
+    }
+    public User(String name, String lastName, String login, String email, String password,Set<Role> roles) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
-    // Constructor for simplify UserDTO->User conversion.
-    // copying simple fields
-    public User(UserDTO userDto) {
-        this.id = userDto.getId();
-        this.name = userDto.getName();
-        this.lastName = userDto.getLastName();
-        this.login = userDto.getLogin();
-        this.email = userDto.getEmail();
-        this.avatarURL = userDto.getAvatarURL();
-        this.title = userDto.getTitle();
-        this.displayName = userDto.getDisplayName();
-        this.phoneNumber = userDto.getPhoneNumber();
-        this.timeZone = userDto.getTimeZone();
-        this.online = userDto.getOnline();
-        this.userSkype = userDto.getUserSkype();
-    }
 
     //    @Override
 //    public boolean equals(Object o) {
