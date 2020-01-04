@@ -20,16 +20,11 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
     @Override
-    public Optional<Bot> getBotByWorkspaceId1(Workspace workspace) {
+    public Bot getBotByWorkspaceId(Workspace workspace) {
         return  Optional.ofNullable((Bot) entityManager.createNativeQuery("select * from bots where workspace_id=?", Bot.class)
-                    .setParameter(1, workspace)
-                    .getSingleResult());
+                .setParameter(1, workspace)
+                .getSingleResult()).get();
     }
-
-//    @Override
-//    public Bot getBotByWorkspaceId(Workspace workspace) {
-//        return null;
-//    }
 
     @Override
     public Set<Channel> getChannels(Bot bot) {

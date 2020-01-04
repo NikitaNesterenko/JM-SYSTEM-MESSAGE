@@ -1,6 +1,10 @@
 package jm.controller.rest;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jm.*;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.WorkspaceUserRoleDAO;
@@ -30,6 +34,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/create")
+@Api(value = "Create Workspace rest",description = "Сreates channels")
 public class CreateWorkspaceRestController {
 
     private UserService userService;
@@ -87,6 +92,12 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/sendEmail")
+    @ApiOperation(value = "Send email code")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     public ResponseEntity sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) throws NoSuchAlgorithmException {
         CreateWorkspaceToken token = mailService.sendConfirmationCode(emailTo);
         token.setUserEmail(emailTo);
@@ -101,6 +112,12 @@ public class CreateWorkspaceRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Confirm email")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping("/confirmEmail")
     public ResponseEntity confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
@@ -111,6 +128,12 @@ public class CreateWorkspaceRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Create workspace and set token by workspace name")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping("/workspaceName")
     public ResponseEntity workspaceName(@RequestBody String workspaceName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
@@ -128,6 +151,12 @@ public class CreateWorkspaceRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Create channel and set token")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping("/channelName")
     public ResponseEntity channelName(@RequestBody String channelName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
@@ -140,6 +169,12 @@ public class CreateWorkspaceRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Send invite message")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping("/invites")
     public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
@@ -154,6 +189,12 @@ public class CreateWorkspaceRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Set authentication")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping("/tada")
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");

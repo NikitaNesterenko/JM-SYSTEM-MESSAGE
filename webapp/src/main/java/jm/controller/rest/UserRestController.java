@@ -1,5 +1,9 @@
 package jm.controller.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
@@ -16,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/rest/api/users")
+@Api(value = "User rest",description = "Shows the User info")
 public class UserRestController {
 
     private UserService userService;
@@ -30,6 +35,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns users")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
@@ -42,6 +53,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Create user")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping(value = "/create")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
         User user = userDtoService.toEntity(userDto);
@@ -51,6 +68,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns user by ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Польщователь с id = {}", id);
@@ -61,6 +84,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Update user")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PutMapping(value = "/update")
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
@@ -75,6 +104,12 @@ public class UserRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Delete user by ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
@@ -83,6 +118,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns users by channel ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
@@ -95,6 +136,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns loogged user")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping(value = "/loggedUser")
     public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
         User user = userService.getUserByLogin(principal.getName());
@@ -104,6 +151,12 @@ public class UserRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns users by workspace ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping(value = "/workspace/{id}")
     public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);

@@ -1,5 +1,9 @@
 package jm.controller.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jm.InviteTokenService;
 import jm.MailService;
 import jm.TokenGenerator;
@@ -17,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/rest/api/invites")
+@Api(value = "Invite Token rest",description = "Shows the Invite Token info")
 public class InviteTokenRestController {
 
     private UserService userService;
@@ -36,6 +41,12 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/create")
+    @ApiOperation(value = "Create invite token and send invite message")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     public ResponseEntity invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
@@ -57,6 +68,12 @@ public class InviteTokenRestController {
         return ResponseEntity.ok(true);
     }
 
+    @ApiOperation(value = "Validation check")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping("/{hash}")
     public ModelAndView inviteJoin(@PathVariable String hash) {
         InviteToken inviteToken = inviteTokenService.getByHash(hash);
@@ -72,6 +89,12 @@ public class InviteTokenRestController {
     }
 
 
+    @ApiOperation(value = "Validation check and delete invite token")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping
     public ResponseEntity checkUser (@RequestBody InviteToken inviteToken){
         if(userService.getUserByEmail(inviteToken.getEmail()) != null) {
@@ -79,7 +102,7 @@ public class InviteTokenRestController {
             logger.info("invite token удален");
             return ResponseEntity.ok(true);
         } else {
-            logger.warn("Не удалось удалить олучить пользователя");
+            logger.warn("Не удалось удалить получить пользователя");
             return ResponseEntity.notFound().build();
         }
     }
