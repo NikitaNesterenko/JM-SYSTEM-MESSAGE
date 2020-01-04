@@ -1,5 +1,9 @@
 package jm.controller.rest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jm.MessageService;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
@@ -17,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/api/messages")
+@Api(value = "Message rest",description = "Shows the Message info")
 public class MessageRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageRestController.class);
@@ -30,6 +35,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns messages")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping
     public ResponseEntity<List<MessageDTO>> getMessages() {
         logger.info("Список сообщений : ");
@@ -42,6 +53,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns messages by channel ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping(value = "/channel/{id}")
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<Message> messages = messageService.getMessagesByChannelId(id);
@@ -54,6 +71,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Return message by ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping(value = "/{id}")
     public ResponseEntity<MessageDTO> getMessageById(@PathVariable("id") Long id) {
         Message message = messageService.getMessageById(id);
@@ -63,6 +86,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns messages by channel ID for period")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
         List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now());
@@ -70,6 +99,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Create message")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PostMapping(value = "/create")
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
         Message message = messageDtoService.toEntity(messageDto);
@@ -79,6 +114,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Update message")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @PutMapping(value = "/update")
 //    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
@@ -97,6 +138,12 @@ public class MessageRestController {
         return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
+    @ApiOperation(value = "Delete message by ID")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteMessage(@PathVariable("id") Long id) {
         messageService.deleteMessage(id);
@@ -105,6 +152,12 @@ public class MessageRestController {
     }
 
     // DTO compliant
+    @ApiOperation(value = "Returns starred messages")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Successful")
+            }
+    )
     @GetMapping("/{id}/starred")
     public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long id) {
         List<Message> starredMessages = messageService.getStarredMessagesForUser(id);

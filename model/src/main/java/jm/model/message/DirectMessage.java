@@ -1,5 +1,6 @@
 package jm.model.message;
 
+import io.swagger.annotations.ApiModelProperty;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
@@ -25,6 +26,7 @@ public class DirectMessage extends Message {
 
     @ManyToOne(targetEntity = Conversation.class)
     @JoinColumn(name = "conversation_id")
+    @ApiModelProperty(notes = "Conversation of the DirectMessage")
     private Conversation conversation;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
@@ -32,5 +34,6 @@ public class DirectMessage extends Message {
             name = "starred_message_user",
             joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @ApiModelProperty(notes = "Starred by whom of the DirectMessage")
     private Set<User> starredByWhom;
 }

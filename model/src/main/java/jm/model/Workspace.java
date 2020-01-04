@@ -3,6 +3,7 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.annotations.ApiModelProperty;
 import jm.dto.WorkspaceDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -24,34 +25,41 @@ public class Workspace {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
+    @ApiModelProperty(notes = "ID of the Workspace")
     private Long id;
 
     @Column(name = "name", nullable = false)
     @EqualsAndHashCode.Include
+    @ApiModelProperty(notes = "Name of the Workspace")
     private String name;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
+    @ApiModelProperty(notes = "Users of the Workspace")
     private Set<User> users;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    @ApiModelProperty(notes = "Channels of the Workspace")
     private Set<Channel> channels;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
+    @ApiModelProperty(notes = "User of the Workspace")
     private User user;
 
     @Column(name = "is_private", nullable = false)
+    @ApiModelProperty(notes = "Is private of the Workspace")
     private Boolean isPrivate;
 
     @Column(name = "created_date", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @ApiModelProperty(notes = "Create date of the Workspace")
     private LocalDateTime createdDate;
 
     public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {

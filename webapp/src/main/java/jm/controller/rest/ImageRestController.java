@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import io.swagger.annotations.Api;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,7 +13,9 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/images")
-public class imageRestController {
+@Api(value = "Image rest",description = "Shows the image info")
+public class ImageRestController {
+
 
     @GetMapping(value = "/{userId}/{imageName}")
     public ResponseEntity<?> getUserImage(@PathVariable String userId, @PathVariable String imageName) throws IOException {
