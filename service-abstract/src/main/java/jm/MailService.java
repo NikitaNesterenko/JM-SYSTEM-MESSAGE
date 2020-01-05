@@ -1,14 +1,19 @@
 package jm;
 
 import jm.model.CreateWorkspaceToken;
+import jm.model.User;
 
 public interface MailService {
-    public void sendInviteMessage(
+    void sendInviteMessage(
             String nameFrom,
             String emailFrom,
             String emailTo,
             String workspace,
             String inviteLink);
 
-    public CreateWorkspaceToken sendConfirmationCode(String emailTo);
+    CreateWorkspaceToken sendConfirmationCode(String emailTo);
+
+    void sendRecoveryPasswordToken(User userTo);
+
+    boolean changePasswordUserByToken(String token, String password);
 }
