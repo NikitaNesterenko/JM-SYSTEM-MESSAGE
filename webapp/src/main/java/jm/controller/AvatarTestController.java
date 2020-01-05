@@ -14,7 +14,6 @@ public class AvatarTestController {
     @GetMapping("/testAvatar99999")
     public String avatar99999() {
         createUser99999();
-
         return "redirect:" + userService.getUserByLogin("login_99999").getAvatarURL();
     }
 
