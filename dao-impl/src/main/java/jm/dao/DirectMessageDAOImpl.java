@@ -12,7 +12,7 @@ import java.util.List;
 public class DirectMessageDAOImpl extends AbstractDao<DirectMessage> implements DirectMessageDAO {
 
     public List<DirectMessage> getMessagesByConversationId(Long id) {
-        return entityManager.createQuery("select m from DirectMessage m where m.conversation.id =: id", DirectMessage.class)
+        return entityManager.createQuery("SELECT m FROM DirectMessage m WHERE m.conversation.id =: id", DirectMessage.class)
                 .setParameter("id", id)
                 .getResultList();
     }

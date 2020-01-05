@@ -33,28 +33,18 @@ import java.util.stream.Collectors;
 public class CreateWorkspaceRestController {
 
     private UserService userService;
-
     private CreateWorkspaceTokenService createWorkspaceTokenService;
-
     private MailService mailService;
-
     private WorkspaceUserRoleService workspaceUserRoleService;
-
     private WorkspaceService workspaceService;
-
     private ChannelService channelService;
-
     private Set<User> users = new HashSet<>();
+    private UserDetailsServiceImpl userDetailsService;
 
     AuthenticationManager authenticationManager;
 
-   private UserDetailsServiceImpl userDetailsService;
-
-
     @Autowired
-    public void setUserDetailsService( UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    public void setUserDetailsService( UserDetailsServiceImpl userDetailsService) { this.userDetailsService = userDetailsService; }
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
@@ -62,9 +52,7 @@ public class CreateWorkspaceRestController {
     }
 
     @Autowired
-    public void setWorkspaceUserRole(WorkspaceUserRoleService workspaceUserRoleService) {
-        this.workspaceUserRoleService = workspaceUserRoleService;
-    }
+    public void setWorkspaceUserRole(WorkspaceUserRoleService workspaceUserRoleService) { this.workspaceUserRoleService = workspaceUserRoleService; }
 
     @Autowired
     public void setWorkspaceService(WorkspaceService workspaceService) {
@@ -77,9 +65,7 @@ public class CreateWorkspaceRestController {
     }
 
     @Autowired
-    public void setCreateWorkspaceTokenService(CreateWorkspaceTokenService createWorkspaceTokenService) {
-        this.createWorkspaceTokenService = createWorkspaceTokenService;
-    }
+    public void setCreateWorkspaceTokenService(CreateWorkspaceTokenService createWorkspaceTokenService) { this.createWorkspaceTokenService = createWorkspaceTokenService; }
 
     @Autowired
     public void setMailService(MailService mailService) {
@@ -92,11 +78,10 @@ public class CreateWorkspaceRestController {
         token.setUserEmail(emailTo);
         request.getSession().setAttribute("token", token);
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
-        User user = userService.getUserByEmail(emailTo);
+        User user = userService.getUserByEmail(emailTo).get();
         if(user == null) {
-
             user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
-           userService.createUser(user);
+            userService.createUser(user);
         }
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -105,9 +90,7 @@ public class CreateWorkspaceRestController {
     public ResponseEntity confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
-        if(token.getCode() != code) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+        if(token.getCode() != code) { return new ResponseEntity(HttpStatus.NOT_FOUND); }
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -116,11 +99,11 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         token.setWorkspaceName(workspaceName);
         createWorkspaceTokenService.updateCreateWorkspaceToken(token);
-        User emailUser = userService.getUserByLogin(token.getUserEmail());
+        User emailUser = userService.getUserByLogin(token.getUserEmail()).get();
         users.add(emailUser);
         Workspace workspace1 = new Workspace(workspaceName,users, emailUser,false, LocalDateTime.now());
         workspaceService.createWorkspace(workspace1);
-        workspace1 = workspaceService.getWorkspaceByName(workspaceName);
+        workspace1 = workspaceService.getWorkspaceByName(workspaceName).get();
         Role ownerRole = new Role((long) 2, "ROLE_OWNER");
         WorkspaceUserRole workSpaceUserRole = new WorkspaceUserRole(workspace1, emailUser, ownerRole);
         workspaceUserRoleService.create(workSpaceUserRole);
@@ -133,9 +116,9 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         token.setChannelname(channelName);
         createWorkspaceTokenService.updateCreateWorkspaceToken(token);
-        Workspace workspace = workspaceService.getWorkspaceByName(token.getWorkspaceName());
+        Workspace workspace = workspaceService.getWorkspaceByName(token.getWorkspaceName()).get();
         request.getSession().setAttribute("token", token);
-        Channel channel = new Channel(channelName, users, userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now(),workspace);
+        Channel channel = new Channel(channelName, users, userService.getUserByEmail(token.getUserEmail()).get(), false, LocalDateTime.now(),workspace);
         channelService.createChannel(channel);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -145,7 +128,7 @@ public class CreateWorkspaceRestController {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
         for (int i = 0; i < invites.length; i++) {
             mailService.sendInviteMessage(
-                    userService.getUserByEmail(token.getUserEmail()).getLogin(),
+                    userService.getUserByEmail(token.getUserEmail()).get().getLogin(),
                     token.getUserEmail(),
                     invites[i],
                     token.getWorkspaceName(),

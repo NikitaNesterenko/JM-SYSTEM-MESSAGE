@@ -14,6 +14,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
+
 @Controller
 public class ChannelWSController {
 
@@ -29,7 +31,7 @@ public class ChannelWSController {
     public String createChannel(ChannelWS channelWS)
             throws JsonProcessingException {
 
-        Channel channel = channelService.getChannelByName(channelWS.getName());
+        Optional<Channel> channel = channelService.getChannelByName(channelWS.getName());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);

@@ -30,9 +30,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
 
     @Override
     public ChannelDTO toDto(Channel channel) {
-        if (channel == null) {
-            return null;
-        }
+        if (channel == null) { return null; }
 
         ChannelDTO channelDTO = new ChannelDTO();
 
@@ -54,32 +52,21 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
 
     @Override
     public List<ChannelDTO> toDto(List<Channel> channels) {
-        if (channels==null) {
-            return null;
-        }
-
+        if (channels==null) { return null; }
         List<ChannelDTO> channelDTOList = new ArrayList<>();
-        for (Channel channel : channels) {
-            channelDTOList.add(toDto(channel));
-        }
+        for (Channel channel : channels) { channelDTOList.add(toDto(channel)); }
         return channelDTOList;
     }
 
     @Override
     public Channel toEntity(ChannelDTO channelDTO) {
-        if (channelDTO==null) {
-            return null;
-        }
+        if (channelDTO==null) { return null; }
 
         Set<User> userSet = new HashSet<>();
-        for (Long id : channelDTO.getUserIds()) {
-            userSet.add(userService.getUserById(id));
-        }
+        for (Long id : channelDTO.getUserIds()) { userSet.add(userService.getUserById(id)); }
 
         Set<Bot> botSet = new HashSet<>();
-        for (Long id : channelDTO.getBotIds()) {
-            botSet.add(botService.getBotById(id));
-        }
+        for (Long id : channelDTO.getBotIds()) { botSet.add(botService.getBotById(id)); }
 
         Workspace workspace = workspaceService.getWorkspaceById(channelDTO.getWorkspaceId());
 
