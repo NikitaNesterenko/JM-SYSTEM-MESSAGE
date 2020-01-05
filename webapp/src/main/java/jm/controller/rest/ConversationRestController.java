@@ -17,23 +17,15 @@ public class ConversationRestController {
     private ConversationService conversationService;
 
     @Autowired
-    public void setConversationService(ConversationService conversationService) {
-        this.conversationService = conversationService;
-    }
+    public void setConversationService(ConversationService conversationService) { this.conversationService = conversationService; }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Conversation> getConversationById(@PathVariable Long id) {
-        return ResponseEntity.ok(conversationService.getConversationById(id));
-    }
+    public ResponseEntity<Conversation> getConversationById(@PathVariable Long id) { return ResponseEntity.ok(conversationService.getConversationById(id)); }
 
     @PostMapping(value = "/create")
     public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
-        try {
-            conversationService.createConversation(conversation);
-        } catch (IllegalArgumentException | EntityNotFoundException e) {
-            ResponseEntity.badRequest().build();
-        }
-
+        try { conversationService.createConversation(conversation);
+        } catch (IllegalArgumentException | EntityNotFoundException e) { ResponseEntity.badRequest().build(); }
         return new ResponseEntity<>(conversation, HttpStatus.OK);
     }
 
@@ -54,23 +46,14 @@ public class ConversationRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Conversation>> getAllConversations(){
-        return ResponseEntity.ok(conversationService.gelAllConversations());
-    }
+    public ResponseEntity<List<Conversation>> getAllConversations(){ return ResponseEntity.ok(conversationService.gelAllConversations()); }
 
     @GetMapping(value = "/user/{id}")
-    public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
-        return ResponseEntity.ok(conversationService.getConversationsByUserId(id));
-    }
+    public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) { return ResponseEntity.ok(conversationService.getConversationsByUserId(id)); }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
     public ResponseEntity<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
-        return new ResponseEntity<Conversation>(
-                conversationService.getConversationByUsers(firstId, secondId),
-                HttpStatus.OK
-        );
-
+        return new ResponseEntity<Conversation>(conversationService.getConversationByUsers(firstId, secondId), HttpStatus.OK);
     }
-
 }

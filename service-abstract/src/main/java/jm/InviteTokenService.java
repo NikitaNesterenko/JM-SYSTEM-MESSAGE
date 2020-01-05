@@ -2,6 +2,8 @@ package jm;
 
 import jm.model.InviteToken;
 
+import java.util.Optional;
+
 public interface InviteTokenService {
 
     void createInviteToken(InviteToken inviteToken);
@@ -10,5 +12,5 @@ public interface InviteTokenService {
 
     void deleteInviteToken(Long id);
 
-    InviteToken getByHash(String hash);
+    Optional<InviteToken> getByHash(String hash);
 }

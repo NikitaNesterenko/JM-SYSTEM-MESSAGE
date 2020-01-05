@@ -15,7 +15,6 @@ public class CreateWorkspaceController {
         return "createWorkspace/confirm-email";
     }
 
-
     @GetMapping(value = "/email/workspacename")
     public String workspaceName() { return "createWorkspace/workspace-name"; }
 

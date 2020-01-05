@@ -14,14 +14,14 @@ public class AvatarTestController {
     @GetMapping("/testAvatar99999")
     public String avatar99999() {
         createUser99999();
-        return "redirect:" + userService.getUserByLogin("login_99999").getAvatarURL();
+        return "redirect:" + userService.getUserByLogin("login_99999").get().getAvatarURL();
     }
 
     @GetMapping("/testAvatar100000")
     public String avatar100000() {
         createUser100000();
 
-        return "redirect:" + userService.getUserByLogin("login_100000").getAvatarURL();
+        return "redirect:" + userService.getUserByLogin("login_100000").get().getAvatarURL();
     }
 
     private void createUser99999() {

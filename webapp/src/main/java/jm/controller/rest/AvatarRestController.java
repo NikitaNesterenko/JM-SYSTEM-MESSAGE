@@ -13,9 +13,7 @@ public class AvatarRestController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity saveAvatar(@RequestParam("file") MultipartFile file, @PathVariable long userId){
-        return fileStorageService.saveFile(file, userId);
-    }
+    public ResponseEntity saveAvatar(@RequestParam("file") MultipartFile file, @PathVariable long userId){ return fileStorageService.saveFile(file, userId); }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteFile(@PathVariable long id){

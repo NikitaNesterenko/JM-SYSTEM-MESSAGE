@@ -1,7 +1,6 @@
 package jm;
 
 import jm.api.dao.UserDAO;
-import jm.dao.UserDAOImpl;
 import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,9 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) {
-        userDAO.merge(user);
-    }
+    public void updateUser(User user) { userDAO.merge(user); }
 
     @Override
     public User getUserById(Long id) {
@@ -52,12 +50,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        return userDAO.getUserByLogin(login);
-    }
+    public Optional<User> getUserByLogin(String login) { return userDAO.getUserByLogin(login); }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return userDAO.getUserByLogin(email);
     }
 

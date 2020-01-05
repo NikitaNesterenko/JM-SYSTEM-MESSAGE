@@ -50,13 +50,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             login = strings[0];
         }
 */
-        User user = userServiceImpl.getUserByLogin(workspaceLogin);
+        User user = userServiceImpl.getUserByLogin(workspaceLogin).get();
         org.springframework.security.core.userdetails.User.UserBuilder builder = null;
         if (user != null) {
             builder = org.springframework.security.core.userdetails.User.withUsername(workspaceLogin);
             builder.password(user.getPassword());
             // if (workspaceName != null) {
-            Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
+            Workspace workspace = workspaceService.getWorkspaceByName(workspaceName).get();
             if (workspace != null) {
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);
