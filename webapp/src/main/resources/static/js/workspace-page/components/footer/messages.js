@@ -106,13 +106,21 @@ const submenu_button = '&#8285;';
 
 const message_menu = (message) => {
     getMessageStatus(message);
-    return `<div class="message-icons-menu-class" id="message-icons-menu">` +
+    return   `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${emoji_button}</button>` + // emoji
-        `<button type="button" class="btn btn-light">${reply_button}</button>` + // reply
-        `<button type="button" class="btn btn-light" id="share-message-id" data-msg_id="${message.id}">${share_button}</button>` + // share
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_blank}</button>` + // star
-        `<button type="button" class="btn btn-light" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>&#8285;</button>` + // submenu
+        `<button type="button" class="btn btn-light">&#9786;</button>` + // emoji
+        `<button type="button" class="btn btn-light">&#128172;</button>` + // reply
+        `<button type="button" class="btn btn-light">&#10140;</button>` + // share
+        `<button id="msg-icons-menu__starred_msg" data-msg_id="${message.id}" type="button" class="btn btn-light">&#9734;</button>` + // star
+        `<button type="button" class="btn btn-light" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">&#8285;</button>` + // submenu
+        `<div class="dropdown-menu" aria-labelledby="dropdownMenuReference">`+
+        `<a class="dropdown-item" href="#">no implementation</a>`+
+        `<div class="dropdown-divider"></div>`+
+        `<a class="dropdown-item" onclick="copyLinkClick(event)" data-msg-id="${message.id}" data-user-id="${message.user === null ? '' : message.user.id}" href="#">Copy Link</a>`+
+        `<a class="dropdown-item" href="#" name="btnEditInline" data-msg-id=${message.id} data-user-id=${message.user === null ? '' : message.user.id}>Edit</a>`+
+        `<div class="dropdown-divider"></div>`+
+        `<a class="dropdown-item" href="#">no implementation</a>`+
+        `</div>`+
         `</div>` +
         `</div>`;
 };
