@@ -109,9 +109,9 @@ public class User {
     private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
-    @OneToMany
-    @ToString.Exclude
-    private Set<User> directMessagesToUsers;
+//    @OneToMany
+//    @ToString.Exclude
+//    private Set<User> directMessagesToUsers;
 
     // TODO каналы пользователя, исправить маппинг в Channel
     // юзер может создавать каналы, либо быть участником (member) в чужих каналах
@@ -158,6 +158,16 @@ public class User {
         this.login = login;
         this.email = email;
         this.password = password;
+
+    }
+    public User(String name, String lastName, String login, String email, String password,Set<Role> roles) {
+        this.name = name;
+        this.lastName = lastName;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+
     }
 
     // Constructor for simplify UserDTO->User conversion.

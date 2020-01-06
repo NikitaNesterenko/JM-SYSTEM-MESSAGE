@@ -16,6 +16,14 @@ const workspace_service = new WorkspaceRestPaginationService();
 const conversation_service = new ConversationRestPaginationService();
 const user_service = new UserRestPaginationService();
 
+//получение id залогиненного юзера
+let loggedUserId = 0;
+
+user_service.getLoggedUser().then(loggedUser => {
+    loggedUserId = loggedUser.id;
+    console.log(loggedUserId);
+});
+
 const showDefaultChannel = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then(value => {
@@ -63,27 +71,37 @@ $(document).ready(() => {
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function () {
     const channel_id = parseInt($(this).val());
     pressChannelButton(channel_id);
+
     sessionStorage.setItem("channelName", channel_id);
+    var channel_name = document.getElementById("channel_name_" + channel_id).textContent;
+    $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
     sessionStorage.setItem('conversation_id', '0'); // direct msgs
+
     refreshMemberList();
 });
 
-
 const showAllChannels = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
-    Promise.all([workspace_id]).then(value => {
+    let user_promise = user_service.getLoggedUser();
+    Promise.all([workspace_id, user_promise]).then(value => {
+        let user = value[1];
         channel_service.getChannelsByWorkspaceId(value[0].id)
             .then((respons) => {
-
                 $.each(respons, (i, item) => {
-                    $('#id-channel_sidebar__channels__list').append(`<div class="p-channel_sidebar__channel">
-                                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
-                                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
-                                                        <span class="p-channel_sidebar__name-3" id="channel_name">${item.name}</span>
-                                                    </button>
-                                                  </div>`);
-                })
+
+                    if ((item.isPrivate && user.name === item.user.name) || !item.isPrivate) {
+                        $('#id-channel_sidebar__channels__list')
+                            .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
+                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
+                                    </button>
+                                  </div>`);
+                }
+                });
+
                 //Default channel
+                $(".p-classic_nav__model__title__info__name").html("").text(respons[0].name);
                 document.getElementById("channel_button_" + respons[0].id).style.color = "white";
                 document.getElementById("channel_button_" + respons[0].id).style.background = "royalblue";
             })
@@ -169,7 +187,8 @@ $("#addChannelSubmit").click(
         const entity = {
             name: channelName,
             isPrivate: checkbox1,
-            createdDate: dateWithoutCommas
+            createdDate: dateWithoutCommas,
+            ownerId: loggedUserId
         };
         channel_service.create(entity).then((channel) => {
             sendChannel(channel);

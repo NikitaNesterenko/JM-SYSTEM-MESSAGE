@@ -237,9 +237,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                                                                             alt=""></span>
+                                         src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                         srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                         alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -528,9 +528,9 @@
                             <div class="p-classic_nav__model__title__name">
                                 <button class="p-classic_nav__model__title__name__button">
                                     <i class="p-classic_nav__model__title__name__hash_icon">
-                                        #
-                                    </i>
-                                    p_some-channel<!--                                                   Channel Name-->
+                                        #</i>
+                                    <span class="p-classic_nav__model__title__info__name"></span>
+                                    <!--                                                   Channel Name-->
                                 </button>
                             </div>
                             <div class="p-classic_nav__model__title__info">
@@ -605,7 +605,7 @@
                 <div class="p-workspace__channel_sidebar">
                     <nav class="p-channel_sidebar">
                         <div class="p-channel_sidebar__navigation_bar">
-                            <button class="p-channel_sidebar__jumper">
+                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal" data-target="#modalSearcher">
                                 <div class="p-channel_sidebar__jumper_left">
                                     <i class="p-channel_sidebar__jumper_icon">🔎</i>
                                     Jump to...
@@ -626,6 +626,7 @@
                                                     <span class="p-channel_sidebar__name-1">Threads</span>
                                                 </button>
                                             </div>
+
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__list__channels">
                                                 <div class="p-channel_sidebar__section_heading">
@@ -921,7 +922,7 @@
                                                     name="usersList"></select>
                                         </form>
                                     </div>
-                                    <div class="ql-editor">
+                                    <div>
                                         <form id="form_message">
                                             <input class="ql-editor__input-field" id="form_message_input"
                                                    placeholder="Message #p_some-channel" type="text"/>
