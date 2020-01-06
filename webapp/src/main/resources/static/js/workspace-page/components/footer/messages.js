@@ -1,14 +1,12 @@
 import {MessageRestPaginationService, ChannelRestPaginationService, WorkspaceRestPaginationService, UserRestPaginationService} from '../../../rest/entities-rest-pagination.js'
-import {setOnClickEdit} from "../../../messagesInlineEdit.js";
 import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
+import {setOnClickEdit, setDeleteStatus} from "../../../messagesInlineEdit.js";
 
 let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const user_service = new UserRestPaginationService();
-
-
 
 let loggedUserId = 0;
 
@@ -103,7 +101,7 @@ const message_menu = (message) => {
     //console.log(loggedUserId);
     let divStyleShowEditMenuOnlyOwner  = 'none';
     if (loggedUserId ===message.userId) {
-            divStyleShowEditMenuOnlyOwner = 'block';
+        divStyleShowEditMenuOnlyOwner = 'block';
     }
 
     return `<div class="message-icons-menu-class" id="message-icons-menu">
