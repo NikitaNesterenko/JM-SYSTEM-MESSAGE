@@ -223,7 +223,7 @@ export const populateDirectMessages = async () => {
     });
 };
 
-autosize($('textarea'));
+// autosize($('textarea'));
 
 $("#form_message_input").keypress(function (e) {
     if (e.which == 13) {
@@ -231,10 +231,4 @@ $("#form_message_input").keypress(function (e) {
     }
 });
 
-autosize($('textarea'));
 
-$("#form_message_input").keypress(function (e) {
-    if (e.which == 13) {
-        $("#messageButton").click();
-    }
-});
