@@ -1,8 +1,9 @@
 package jm.controller.rest;
 
 import jm.MessageService;
-import jm.model.message.ChannelMessage;
-import jm.model.message.Message;
+import jm.dto.MessageDTO;
+import jm.dto.MessageDtoService;
+import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,61 +21,71 @@ import java.util.List;
 @RequestMapping("/rest/api/messages")
 public class MessageRestController {
 
-    private static final Logger logger = LoggerFactory
-            .getLogger(MessageRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageRestController.class);
 
-    private MessageService messageService;
+    private final MessageService messageService;
+    private final MessageDtoService messageDtoService;
 
-    @Autowired
-    public void setMessageService(MessageService messageService) {
+    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService) {
         this.messageService = messageService;
+        this.messageDtoService = messageDtoService;
     }
 
+    // DTO compliant
     @GetMapping
-    public ResponseEntity<List<ChannelMessage>> getMessages() {
+    public ResponseEntity<List<MessageDTO>> getMessages() {
         logger.info("Список сообщений : ");
-        for (ChannelMessage message : messageService.getAllMessages()) {
+        List<Message> messages = messageService.getAllMessages();
+        for (Message message : messages) {
             logger.info(message.toString());
         }
         logger.info("-----------------------");
-        return new ResponseEntity<>(messageService.getAllMessages(), HttpStatus.OK);
+        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
+    // DTO compliant
     @GetMapping(value = "/channel/{id}")
-    public ResponseEntity<List<ChannelMessage>> getMessagesByChannelId(@PathVariable("id") Long id) {
-        List<ChannelMessage> messages = messageService.getMessagesByChannelId(id);
-        messages.sort(Comparator.comparing(ChannelMessage::getDateCreate));
+    public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
+        List<Message> messages = messageService.getMessagesByChannelId(id);
+        messages.sort(Comparator.comparing(Message::getDateCreate));
         logger.info("Полученные сообщения из канала с id = {} :", id);
-        for (ChannelMessage message : messages) {
+        for (Message message : messages) {
             logger.info(message.toString());
         }
-        return new ResponseEntity<>(messages, HttpStatus.OK);
+        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
+    // DTO compliant
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ChannelMessage> getMessageById(@PathVariable("id") Long id) {
+    public ResponseEntity<MessageDTO> getMessageById(@PathVariable("id") Long id) {
+        Message message = messageService.getMessageById(id);
         logger.info("Сообщение с id = {}", id);
-        logger.info(messageService.getMessageById(id).toString());
-        return new ResponseEntity<ChannelMessage>(messageService.getMessageById(id), HttpStatus.OK);
+        logger.info(message.toString());
+        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.OK);
     }
 
+    // DTO compliant
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
-    public ResponseEntity<List<ChannelMessage>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
-        return new ResponseEntity<>(messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3),
-                LocalDateTime.now()), HttpStatus.OK);
+    public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
+        List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now());
+        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
+    // DTO compliant
     @PostMapping(value = "/create")
-    public ResponseEntity<ChannelMessage> createMessage(@RequestBody ChannelMessage message) {
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
+        Message message = messageDtoService.toEntity(messageDto);
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
 
+    // DTO compliant
     @PutMapping(value = "/update")
-    @PreAuthorize("#message.user.login == authentication.principal.username")
-    public ResponseEntity updateMessage(@RequestBody ChannelMessage message, Principal principal) {
-        ChannelMessage existingMessage = messageService.getMessageById(message.getId());
+//    @PreAuthorize("#message.user.login == authentication.principal.username")
+    public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
+        Message message = messageDtoService.toEntity(messageDto);
+        Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -95,10 +106,11 @@ public class MessageRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // DTO compliant
     @GetMapping("/{id}/starred")
-    public ResponseEntity<List<ChannelMessage>> getStarredMessages(@PathVariable Long id) {
-        List<ChannelMessage> starredMessages = messageService.getStarredMessagesForUser(id);
+    public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long id) {
+        List<Message> starredMessages = messageService.getStarredMessagesForUser(id);
         logger.info("Сообщения, отмеченные пользователем.");
-        return ResponseEntity.ok(starredMessages);
+        return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
     }
 }

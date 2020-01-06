@@ -1,6 +1,7 @@
 package jm.model.message;
 
 import jm.model.Conversation;
+import jm.model.Message;
 import jm.model.User;
 import lombok.*;
 

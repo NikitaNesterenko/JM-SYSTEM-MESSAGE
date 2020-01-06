@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.Set;
 
@@ -19,13 +18,9 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
     @Override
     public Bot getBotByWorkspaceId(Workspace workspace) {
-        try {
             return (Bot) entityManager.createNativeQuery("select * from bots where workspace_id=?", Bot.class)
                     .setParameter(1, workspace)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 
     @Override

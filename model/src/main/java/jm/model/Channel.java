@@ -59,9 +59,6 @@ public class Channel {
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id"))
     @ToString.Exclude
-// Это лишняя аннотация. @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-// на уровне класса делает тоже самое.
-//    @EqualsAndHashCode.Exclude
     private Set<Bot> bots;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -87,11 +84,13 @@ public class Channel {
     @Column(name = "topic")
     private String topic;
 
-    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
+    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
         this.name = name;
         this.users = users;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
+        this.workspace = workspace;
     }
+
 }

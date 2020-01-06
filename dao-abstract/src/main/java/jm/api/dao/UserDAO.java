@@ -4,6 +4,7 @@ import jm.dto.UserDTO;
 import jm.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserDAO {
 
@@ -28,4 +29,6 @@ public interface UserDAO {
     List<User> getAllUsersInThisChannel(Long id);
 
     List<UserDTO> getUsersInWorkspace(Long id);
+
+    List<User> getUsersByIds(Set<Long> ids);
 }

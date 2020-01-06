@@ -12,7 +12,7 @@ $(document).ready(function() {
             }
         }
         sendInvites(result);
-        window.location.href = "/tada";
+        window.location.href = "/email/tada";
         return false;
     });
 });
