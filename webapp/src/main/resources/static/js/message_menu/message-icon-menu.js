@@ -12,9 +12,9 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
         let user = user_and_msg[0];
         let message = user_and_msg[1];
 
-        let principalStarredMessageIds = user["starredMessageIds"];
+        let principalStarredMessageIds = user["starredMessages"];
 
-        if (principalStarredMessageIds.find(id => id === message.id)) {
+        if (principalStarredMessageIds.find(mess => mess.id === message.id)) {
             principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message), 1);
             user["starredMessageIds"] = principalStarredMessageIds;
             user_service.update(user).then(() => {
@@ -22,8 +22,8 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
                 $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
             });
         } else {
-            principalStarredMessageIds.push(message.id);
-            user["starredMessageIds"] = principalStarredMessageIds;
+            principalStarredMessageIds.push(message);
+            user["starredMessages"] = principalStarredMessageIds;
             user_service.update(user).then(() => {
                 add_msg_starred_attr(message);
             });
