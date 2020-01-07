@@ -6,7 +6,6 @@ import jm.WorkspaceService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.User;
-import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,31 +70,41 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
             return null;
         }
 
-        Set<User> userSet = new HashSet<>();
-        for (Long id : channelDTO.getUserIds()) {
-            userSet.add(userService.getUserById(id));
+        Channel channel = new Channel();
+
+        if (channelDTO.getUserIds()!=null) {
+            Set<User> userSet = new HashSet<>();
+            for (Long id : channelDTO.getUserIds()) {
+                userSet.add(userService.getUserById(id));
+            }
+            channel.setUsers(userSet);
         }
 
-        Set<Bot> botSet = new HashSet<>();
-        for (Long id : channelDTO.getBotIds()) {
-            botSet.add(botService.getBotById(id));
+        if (channelDTO.getBotIds()!=null) {
+            Set<Bot> botSet = new HashSet<>();
+            for (Long id : channelDTO.getBotIds()) {
+                botSet.add(botService.getBotById(id));
+            }
+            channel.setBots(botSet);
         }
 
-        Workspace workspace = workspaceService.getWorkspaceById(channelDTO.getWorkspaceId());
-
+        if (channelDTO.getWorkspaceId()!=null) {
+            channel.setWorkspace(
+                    workspaceService.getWorkspaceById(channelDTO.getWorkspaceId()));
+        }
         User userOwner = userService.getUserById(channelDTO.getOwnerId());
 
-        Channel channel = new Channel();
+
         channel.setId(channelDTO.getId());
         channel.setName(channelDTO.getName());
-        channel.setUsers(userSet);
-        channel.setBots(botSet);
-        channel.setWorkspace(workspace);
         channel.setUser(userOwner);
         channel.setIsPrivate(channelDTO.getIsPrivate());
         channel.setArchived(false);
         channel.setCreatedDate(channelDTO.getCreatedDate());
-        channel.setTopic(channelDTO.getTopic());
+
+        if (channelDTO.getTopic()!=null) {
+            channel.setTopic(channelDTO.getTopic());
+        }
 
         return channel;
     }
