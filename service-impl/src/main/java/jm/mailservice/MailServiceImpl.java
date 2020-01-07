@@ -1,17 +1,22 @@
 package jm.mailservice;
 
-import jm.MailService;
+import jm.*;
 import jm.model.CreateWorkspaceToken;
+import jm.model.InviteToken;
+import jm.model.User;
+import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -20,10 +25,32 @@ public class MailServiceImpl implements MailService {
 
     private JavaMailSender emailSender;
     private MailContentService mailContentService;
+    private TokenGenerator tokenGenerator;
+    private InviteTokenService inviteTokenService;
+    private WorkspaceService workspaceService;
+    private UserService userService;
 
-    public MailServiceImpl(JavaMailSender emailSender, MailContentService mailContentService) {
+    private String subjectMessage = "Recovery password from JM System Message";
+    private int charactersInHash;
+    private String urlSiteRecoveryPassword;
+    private Long validPasswordHours;
+
+    public MailServiceImpl(JavaMailSender emailSender, MailContentService mailContentService,
+                           InviteTokenService inviteTokenService, WorkspaceService workspaceService,
+                           UserService userService,
+                           @Value("${user.password.recovery.validHours : 24}") Long validPasswordHours,
+                           @Value("${user.password.recovery.urlSite : http://localhost:8080/password-recovery/}") String urlSiteRecoveryPassword,
+                           @Value("${user.password.recovery.charactersInHash : 10}") int charactersInHash
+                           ) {
         this.emailSender = emailSender;
         this.mailContentService = mailContentService;
+        this.inviteTokenService = inviteTokenService;
+        this.workspaceService = workspaceService;
+        this.userService = userService;
+        this.validPasswordHours = validPasswordHours;
+        this.urlSiteRecoveryPassword = urlSiteRecoveryPassword;
+        this.charactersInHash = charactersInHash;
+        this.tokenGenerator = new TokenGenerator.TokenGeneratorBuilder().useDigits(true).useLower(true).build();
     }
 
     @Override
@@ -35,7 +62,7 @@ public class MailServiceImpl implements MailService {
                 inviteLink);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setTo(emailTo);;
+            messageHelper.setTo(emailTo);
             messageHelper.setSubject("Invite mail");
             messageHelper.setText(content, true);
         };
@@ -50,10 +77,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public CreateWorkspaceToken sendConfirmationCode(String emailTo) throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        int code = sr.nextInt(900000) + 100000;
-//        int code  = (int) (Math.random() * 999999);
+    public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
+        int code  = (int) (Math.random() * 999999);
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -71,4 +96,49 @@ public class MailServiceImpl implements MailService {
 
         return new CreateWorkspaceToken(code);
     }
+
+    @Override
+    public void sendRecoveryPasswordToken(User userTo) {
+        LocalDateTime now = LocalDateTime.now();
+
+        InviteToken inviteToken = new InviteToken();
+        inviteToken.setEmail(userTo.getEmail());
+        inviteToken.setHash(
+                tokenGenerator.generate(charactersInHash));
+
+        List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUser(userTo);
+        inviteToken.setWorkspace(workspacesByUser.get(0));
+        inviteToken.setFirstName(userTo.getName());
+        inviteToken.setLastName(userTo.getLastName());
+        inviteToken.setDateCreate(now);
+        inviteTokenService.createInviteToken(inviteToken);
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(userTo.getEmail());
+        simpleMailMessage.setSubject(subjectMessage);
+        simpleMailMessage.setText(urlSiteRecoveryPassword + inviteToken.getHash());
+        simpleMailMessage.setFrom("device.nexusvi@gmail.com");
+
+        emailSender.send(simpleMailMessage);
+    }
+
+    @Override
+    public boolean changePasswordUserByToken(String token, String password) {
+            String[] split = token.split("/");
+
+            InviteToken byHash = inviteTokenService.getByHash(split[4]);
+            LocalDateTime validDateCreate = byHash.getDateCreate().plusHours(validPasswordHours);
+            LocalDateTime now = LocalDateTime.now();
+
+            if (validDateCreate.isAfter(now)) {
+                User userByEmail = userService.getUserByEmail(byHash.getEmail());
+                userByEmail.setPassword(password);
+                userService.updateUser(userByEmail);
+                inviteTokenService.deleteInviteToken(byHash.getId());
+                return true;
+            }
+
+        return false;
+    }
+
 }

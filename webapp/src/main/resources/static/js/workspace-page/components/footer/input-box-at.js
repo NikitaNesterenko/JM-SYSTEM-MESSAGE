@@ -56,6 +56,7 @@ $('#associatedUserListSelect').on('change', function () {
 
     $('#form_message_input').val(str);
     document.getElementById('associatedUserList').style.display = "none";
+    $("#form_message_input").focus();
 });
 
 

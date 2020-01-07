@@ -6,7 +6,6 @@ import jm.WorkspaceService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.User;
-import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,10 +71,40 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         }
 
         Channel channel = new Channel();
+
+        if (channelDTO.getUserIds()!=null) {
+            Set<User> userSet = new HashSet<>();
+            for (Long id : channelDTO.getUserIds()) {
+                userSet.add(userService.getUserById(id));
+            }
+            channel.setUsers(userSet);
+        }
+
+        if (channelDTO.getBotIds()!=null) {
+            Set<Bot> botSet = new HashSet<>();
+            for (Long id : channelDTO.getBotIds()) {
+                botSet.add(botService.getBotById(id));
+            }
+            channel.setBots(botSet);
+        }
+
+        if (channelDTO.getWorkspaceId()!=null) {
+            channel.setWorkspace(
+                    workspaceService.getWorkspaceById(channelDTO.getWorkspaceId()));
+        }
+        User userOwner = userService.getUserById(channelDTO.getOwnerId());
+
+
+        channel.setId(channelDTO.getId());
         channel.setName(channelDTO.getName());
+        channel.setUser(userOwner);
         channel.setIsPrivate(channelDTO.getIsPrivate());
         channel.setArchived(false);
         channel.setCreatedDate(channelDTO.getCreatedDate());
+
+        if (channelDTO.getTopic()!=null) {
+            channel.setTopic(channelDTO.getTopic());
+        }
 
         return channel;
     }

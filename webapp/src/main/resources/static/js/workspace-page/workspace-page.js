@@ -16,6 +16,14 @@ const workspace_service = new WorkspaceRestPaginationService();
 const conversation_service = new ConversationRestPaginationService();
 const user_service = new UserRestPaginationService();
 
+//получение id залогиненного юзера
+let loggedUserId = 0;
+
+user_service.getLoggedUser().then(loggedUser => {
+    loggedUserId = loggedUser.id;
+    console.log(loggedUserId);
+});
+
 const showDefaultChannel = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     Promise.all([workspace_id]).then(value => {
@@ -179,7 +187,8 @@ $("#addChannelSubmit").click(
         const entity = {
             name: channelName,
             isPrivate: checkbox1,
-            createdDate: dateWithoutCommas
+            createdDate: dateWithoutCommas,
+            ownerId: loggedUserId
         };
         channel_service.create(entity).then((channel) => {
             sendChannel(channel);
