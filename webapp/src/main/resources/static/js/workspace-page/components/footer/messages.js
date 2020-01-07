@@ -665,6 +665,30 @@ export const show_direct_msgs_conversation = (messages) => {
                                                     </div>`;
         message_box.append(messages_queue_context_user_container);
     });
-
 };
 
+
+window.copyLinkClick = function(e) {
+    let value = $(e.currentTarget).attr('data-msg-id');
+    let toCopy = window.location.origin + window.location.pathname + '?channel_id=' + sessionStorage.getItem("channelName") + '&msg_id=' + value;
+    writeToBuffer(toCopy);
+};
+
+window.writeToBuffer = function(text) {
+    let textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position="fixed";  //avoid scrolling to bottom
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        let successful = document.execCommand('copy');
+        let msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
+};
