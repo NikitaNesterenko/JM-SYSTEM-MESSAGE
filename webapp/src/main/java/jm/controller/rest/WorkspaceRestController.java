@@ -56,7 +56,7 @@ public class WorkspaceRestController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity updateChannel(@RequestBody Workspace workspace) {
+    public ResponseEntity updateWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.updateWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
