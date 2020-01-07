@@ -17,6 +17,7 @@ import java.util.Set;
 public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
+
     @Override
     public Bot getBotByWorkspaceId(Workspace workspace) {
         try {
@@ -29,7 +30,5 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Set<Channel> getChannels(Bot bot) {
-        return bot.getChannels();
-    }
+    public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
 }

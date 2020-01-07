@@ -36,7 +36,7 @@ public class UserDTO {
         this.avatarURL = avatarURL;
         this.displayName = displayName;
     }
-  
+
     // Constructor for simplify User->UserDTO conversion.
     // copying simple fields
     public UserDTO(User user) {
