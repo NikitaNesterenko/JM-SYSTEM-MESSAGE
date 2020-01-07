@@ -68,7 +68,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // для входа через /signin
                 // до того как юзер залогинится, он должен получить доступ к вводу названия воркспейса
-                .antMatchers("/", "/rest/api/workspaces/name/**").permitAll();
+                // для восстановления пароля
+                .antMatchers("/", "/rest/api/workspaces/name/**", "/rest/api/users/is-exist-email/**", "/rest/api/users/password-recovery").permitAll();
 
         http.authorizeRequests()
                 .antMatchers("/email/**", "/js/**" , "/image/**" , "/api/create/**").permitAll();
@@ -79,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 /* TODO: непонятно, почему залогиненному пользователю должно быть запрещено выбрать другой воркспейс.
                     пока заменил .anonymous() на .permitAll(), если это неправильно - верните обратно :-) */
-                .antMatchers("/signin").permitAll()
+                .antMatchers("/signin", "/password-recovery/**").permitAll()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
