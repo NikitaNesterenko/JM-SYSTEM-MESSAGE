@@ -10,6 +10,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 @Service
 public class MailServiceImpl implements MailService {
 
@@ -47,8 +50,10 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
-        int code  = (int) (Math.random() * 999999);
+    public CreateWorkspaceToken sendConfirmationCode(String emailTo) throws NoSuchAlgorithmException {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        int code = sr.nextInt(900000) + 100000;
+//        int code  = (int) (Math.random() * 999999);
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);

@@ -24,6 +24,7 @@ export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
     if (userId !== undefined) {
         result_promise = user_service.getById(userId);
         editProfileButton.attr("data-user_id", userId);
+        add_attr_to_msg_button(userId);
     } else {
         result_promise = bot_service.getById(botId);
         editProfileButton.attr("data-user_id", botId);
@@ -188,6 +189,11 @@ export const file_upload = $(function () {
         // });
     });
 });
+
+// добавляет атрибут к модальному окну с информацией о пользователе
+function add_attr_to_msg_button(userId) {
+    $('#modal_1_msg_button').attr('data-user_id', userId)
+}
 
 // file upload fetch async func
 // export async function saveFile(inp) {
