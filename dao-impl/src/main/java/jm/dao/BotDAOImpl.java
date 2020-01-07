@@ -1,4 +1,3 @@
-
 package jm.dao;
 
 import jm.api.dao.BotDAO;
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.Set;
 
@@ -31,7 +29,5 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Set<Channel> getChannels(Bot bot) {
-        return bot.getChannels();
-    }
+    public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
 }
