@@ -6,6 +6,12 @@
     <title>Workspace Page</title>
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
     <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+
+    <script th:src="@{/js/rest/entities-rest-pagination.js}" type="module"></script>
     <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
@@ -34,7 +40,7 @@
     <link rel="stylesheet" th:href="@{/js/message_menu/message_menu.css}"/>
 
     <!-- emoji -->
-    <!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
     <script th:src="@{/js/emoji/index.min.js}"></script>
     <script defer th:src="@{/js/emoji/attachEmoji.js}" type="module"></script>
 
@@ -222,6 +228,7 @@
      style="position: absolute; left: 8px; top: 10px; outline: none; transition-duration: 80ms;">
     <div>
         <div class="c-menu">
+
             <div>
                 <div class="c-menu__items_scroll" no-bootstrap="1">
 
@@ -230,9 +237,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                                                                             alt=""></span>
+                                         src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                         srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                         alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -633,6 +640,7 @@
                                                     <span class="p-channel_sidebar__name-1">Threads</span>
                                                 </button>
                                             </div>
+
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__list__channels">
                                                 <div class="p-channel_sidebar__section_heading">
@@ -646,6 +654,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
                                             <!--channels list-->
                                             <div class="p-channel_sidebar__channels__list"
@@ -697,7 +706,8 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__invite_people__button" id="invite-button">
+                                                    <button class="p-channel_sidebar__invite_people__button"
+                                                            id="invite-button">
                                                         <span class="p-channel_sidebar__name-2">✚ Invite people</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
@@ -707,12 +717,15 @@
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__app">
+
                                                 <div class="p-channel_sidebar__section_heading">
                                                     <button class="p-channel_sidebar__section_heading_label__button">
                                                         App
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                                data-toggle="modal" data-target="#appsModal"
+                                                                id="addAppsButton">✚
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1079,6 +1092,339 @@
                 <button type="submit" class="btn btn-success archiveButtons" id="archivingSubmit">Yes, archive the channel</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!--Apps Modal-->
+<div class="modal fade btn-block" id="appsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+
+
+        <div class="modal-content modal-lg"
+             tabindex="-1" role="dialog" aria-label="Browse Apps">
+
+            <div class="modal-header modal-lg">
+                <div class="p-classic_nav__model__title__info">
+                    <a target="_blank"
+                       class="c-link c-button-unstyled p-apps_browser_links__link"
+                       data-qa="apps_browser_manage_apps"
+                       href="https://javamentor.slack.com/apps/manage?utm_source=in-prod&amp;utm_medium=inprod-link_manage_apps-index-click"
+                       rel="noopener noreferrer">
+                        Manage apps...
+                    </a>
+                </div>
+                <button class="c-dialog__close" type="button" data-dismiss="modal" aria-label="Close">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="contentContainer">
+
+                    <div class="container">
+                        <div class="p-apps_browser" data-qa="apps_browser">
+                            <div class="p-apps_browser__filter_container">
+                                <div class="p-classic_nav__model__title__name" data-qa="apps_browser__header">
+                                    <h2>Browse Apps</h2>
+                                </div>
+                                <button style="margin-left: 52%;" class="btn btn-outline-dark"
+                                        type="button " data-qa="apps_browser__app_directory_button">View App Directory
+                                </button>
+
+                                <div class="form-inline" data-qa="apps_browser__filter_input" role="presentation"><i
+                                        class="c-icon nudge_top_1 c-icon--search-medium" type="search_medium"
+                                        aria-hidden="true"></i><input class="c-filter_input__input btn-block"
+
+                                                                      type="text"
+                                                                      placeholder="Search by name or category (e.g. productivity, sales)"
+                                                                      value="">
+                                </div>
+                            </div>
+
+                            <div class="p-apps_browser__list_container" data-qa="apps_browser__results_list">
+                                <div role="application">
+                                    <div role="list" class="c-virtual_list c-virtual_list--scrollbar c-scrollbar">
+                                        <div data-qa="slack_kit_scrollbar" role="presentation"
+                                             class="c-scrollbar__hider">
+                                            <div role="presentation" class="c-scrollbar__child">
+                                                <div data-qa="slack_kit_list" class="c-virtual_list__scroll_container"
+                                                     role="presentation">
+                                                    <div class="c-virtual_list__item" tabindex="-1" role="listitem"
+                                                         id="app-limit-meter">
+                                                        <div class="p-apps_browser__app_limit_meter__container">
+                                                            <div class="p-apps_browser__app_limit_meter"><p>
+                                                                <b>Upgrade to add more apps</b></p>
+                                                                <p class="p-apps_browser__app_limit_meter__paragraph">
+                                                                    Your
+                                                                    team’s already using 10 apps, the max you can use
+                                                                    with the free version of Slack. Upgrade to a paid
+                                                                    plan to add as many apps as you’d like. <a
+                                                                        target="new" class="link"
+                                                                        href="#">See upgrade
+                                                                    options</a></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>In your workspace (11)</div>
+
+                                                    <table class="table">
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem">
+
+                                                                <th>
+
+                                                                    <div class="p-apps_browser__app_info">
+
+                                                                        <div class="p-apps_browser__app_name">
+                                                                            <strong>JavaMentorBot</strong>
+                                                                        </div>
+                                                                        <div class="p-apps_browser__app_description">
+                                                                            Java Mentor
+                                                                            BBot
+                                                                        </div>
+                                                                    </div>
+                                                                </th>
+                                                                <th>
+                                                                    <button class="btn btn-outline-dark"
+                                                                            data-qa="apps_browser_row_action"
+                                                                            aria-label="View app">View
+                                                                    </button>
+                                                                </th>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A6NL8MJ6Q-null-undefined">
+                                                                <div class="p-apps_browser__app" data-app="true"
+                                                                     data-app_index="4" data-is_installed="true"
+                                                                     data-app_id="A6NL8MJ6Q"
+                                                                     data-bot_user_id="U7EEKSABD"
+                                                                     data-qa="apps_browser_row" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>Google
+                                                                                    Drive</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                Get
+                                                                                notifications about Google Drive files
+                                                                                within
+                                                                                Slack
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A8GBNUWU8-B9NAX371R-undefined">
+                                                                <div class="p-apps_browser__app"
+                                                                     role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>GitHub</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                Get
+                                                                                updates
+                                                                                from the world’s leading development
+                                                                                platform on
+                                                                                Slack
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>CodeStream</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                The
+                                                                                knowledge base behind your codebase
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-ADZ494LHY-BR98RRTCZ-undefined">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>Google
+                                                                                    Calendar</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                See
+                                                                                your
+                                                                                schedule, respond to invites, and get
+                                                                                event
+                                                                                updates.
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A5GE9BMQC-BQUDPGSRH-undefined">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>Zoom</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                Easily
+                                                                                start a Zoom video meeting directly from
+                                                                                Slack.
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A0JFRSNA3-BQCE1PHEE-undefined">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>Sococo</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                The
+                                                                                Sococo
+                                                                                application for the production
+                                                                                environment.
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A0F7YS2SX-null-undefined">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>GitHub
+                                                                                    Enterprise Server</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                Source
+                                                                                control and code management.
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A0F7YS351-null-undefined">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>Google+
+                                                                                    Hangouts</strong></div>
+                                                                            <div class="p-apps_browser__app_description">
+                                                                                Bring
+                                                                                your
+                                                                                conversations to life with free video
+                                                                                calls.
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                        <tr>
+                                                            <div class="c-virtual_list__item" tabindex="-1"
+                                                                 role="listitem"
+                                                                 id="app-A0F7YS25R-B8PK2LGQ5-undefined">
+                                                                <div class="p-apps_browser__app" role="presentation">
+                                                                    <th>
+                                                                        <div class="p-apps_browser__app_info">
+                                                                            <div class="p-apps_browser__app_name">
+                                                                                <strong>Java
+                                                                                    Mentor Bot</strong></div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>
+                                                                        <button class="btn btn-outline-dark">View
+                                                                        </button>
+                                                                    </th>
+                                                                </div>
+                                                            </div>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div role="presentation" class="c-scrollbar__track">
+                                            <div role="presentation" class="c-scrollbar__bar" tabindex="-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

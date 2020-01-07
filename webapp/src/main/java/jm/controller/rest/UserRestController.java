@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
@@ -20,13 +21,15 @@ public class UserRestController {
 
     private UserService userService;
     private UserDtoService userDtoService;
+    private MailService mailService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             UserRestController.class);
 
-    UserRestController(UserService userService, UserDtoService userDtoService) {
+    UserRestController(UserService userService, UserDtoService userDtoService, MailService mailService) {
         this.userService = userService;
         this.userDtoService = userDtoService;
+        this.mailService = mailService;
     }
 
     // DTO compliant
@@ -112,5 +115,28 @@ public class UserRestController {
             logger.info(user.toString());
         }
         return ResponseEntity.ok(userDTOsList);
+    }
+
+    @GetMapping(value = "/is-exist-email/{email}")
+    public ResponseEntity isExistUserWithEmail(@PathVariable("email") String email) {
+        User userByEmail = userService.getUserByEmail(email);
+
+        if (userByEmail!=null) {
+            logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
+            mailService.sendRecoveryPasswordToken(userByEmail);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        logger.warn("Запрос на восстановление пароля пользователя с несуществующего email = {}", email);
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping(value = "/password-recovery")
+    public ResponseEntity passwordRecovery(@RequestParam(name = "token") String token,
+                                           @RequestParam(name = "password") String password) {
+
+        if (mailService.changePasswordUserByToken(token, password)) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }
