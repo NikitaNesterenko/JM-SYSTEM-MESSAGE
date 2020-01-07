@@ -76,20 +76,20 @@ const showAllChannels = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     let user_promise = user_service.getLoggedUser();
     Promise.all([workspace_id, user_promise]).then(value => {
-        let user = value[1];
+        let userId = value[1].id;
         channel_service.getChannelsByWorkspaceId(value[0].id)
             .then((respons) => {
                 $.each(respons, (i, item) => {
-
-                    if ((item.isPrivate && user.name === item.user.name) || !item.isPrivate) {
+                    if ((item.isPrivate && userId === item.ownerId) || !item.isPrivate) {
                         $('#id-channel_sidebar__channels__list')
                             .append(`<div class="p-channel_sidebar__channel">
                                     <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
                                         <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
                                     </button>
-                                  </div>`);
-                }
+                                  </div>`
+                            );
+                    }
                 });
 
                 //Default channel
