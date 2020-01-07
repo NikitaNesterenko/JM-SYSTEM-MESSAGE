@@ -14,6 +14,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChannelDTO {
+    public ChannelDTO(Long id, String name, Boolean isPrivate) {
+        this.id = id;
+        this.name = name;
+        this.isPrivate = isPrivate;
+    }
 
     private Long id;
     private String name;
