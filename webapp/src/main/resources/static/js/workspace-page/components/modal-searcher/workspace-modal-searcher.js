@@ -23,12 +23,12 @@ window.addEventListener('load', function () {
         return function() {
             searcher_modal.style.display = "block";
             const work = workspace_service.getChoosedWorkspace();
-            const user = user_service.getLoggedUser();const message = message_service.getAll();
+            const user = user_service.getLoggedUser();
             const message = message_service.getAll();
 
             Promise.all([work, user, message]).then(id_values => {
                 const load_channels = channel_service.getChannelsByWorkspaceAndUser(id_values[0].id, id_values[1].id);
-                const load_users = user_service.getUsersByWorkspace(id_values[0].id);const load_messages = message_service.getAll();
+                const load_users = user_service.getUsersByWorkspace(id_values[0].id);
                 const load_messages = message_service.getAll();
 
                 Promise.all([load_channels, load_users, load_messages]).then(values => {
