@@ -53,8 +53,6 @@ public class FileStorageService {
             if(currentAvatarName != null){
                 Path currentAvatarLocation = this.fileStorageLocation.resolve(currentAvatarName);
                 Files.delete(currentAvatarLocation);
-                user.setAvatarURL(null);
-                userService.updateUser(user);
             }
             user.setAvatarURL(newAvatarName);
             userService.updateUser(user);

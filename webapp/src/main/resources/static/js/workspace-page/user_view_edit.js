@@ -1,6 +1,5 @@
 import {UserRestPaginationService, WorkspaceRestPaginationService, BotRestPaginationService} from "../rest/entities-rest-pagination.js";
 
-
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const bot_service = new BotRestPaginationService();
@@ -72,7 +71,7 @@ export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
             $('#modal_1_user_img').attr("src", "../image/blank_user.png");
         } else {
             // $('#modal_1_user_img').attr("src", user_image);
-            $('#modal_1_user_img').attr("src", "../avatars/" + user_image);
+            $('#modal_1_user_img').attr("src", "../image/" + user_image);
         }
 
     });
@@ -139,7 +138,7 @@ export const onShowModal2 = $('#modal_2').on('show.bs.modal', function (focus) {
             $('#modal_2_user_img').attr("src", "../image/blank_user.png");
         } else {
             // $('#modal_2_user_img').attr("src", user_image);
-            $('#modal_2_user_img').attr("src", "../avatars/" + user_image);
+            $('#modal_2_user_img').attr("src", "../image/" + user_image);
         }
     });
 });
@@ -161,13 +160,14 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
         user_service.update(user).then(value => {
             $('#modal_2').modal('hide');
             // todo need to update workspace to implement user data changes
-        });
+        }).then(value => {
+            const input = document.getElementById('FileUpload1');
+            console.log(input.value);
+            uploadFile(input.files[0]);
+        })
     });
-    //location.reload(); // THE MOST IMPORTANT THING// важный, нет, ОЧЕНЬ ВАЖНЫЙ костыль.
 
-    const input = document.getElementById('FileUpload1');
     const uploadFile = (file) => {
-
         // add file to FormData object
         const formData = new FormData();
         formData.append('file', file);
@@ -182,7 +182,8 @@ export const onUserEditSubmit = $('#user_edit_submit').on('click', function (e) 
             .then(json => console.log(json))
             .catch(err => console.error(err));
     };
-    uploadFile(input.files[0]);
+
+    location.reload(); // THE MOST IMPORTANT THING// важный, нет, ОЧЕНЬ ВАЖНЫЙ костыль.
 });
 
 export const onUserDeleteAvatar = $('#RemovePhoto').on('click', function (e) {
