@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -168,27 +167,8 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
-
     }
 
-    // Constructor for simplify UserDTO->User conversion.
-    // copying simple fields
-    public User(UserDTO userDto) {
-        this.id = userDto.getId();
-        this.name = userDto.getName();
-        this.lastName = userDto.getLastName();
-        this.login = userDto.getLogin();
-        this.email = userDto.getEmail();
-        this.avatarURL = userDto.getAvatarURL();
-        this.title = userDto.getTitle();
-        this.displayName = userDto.getDisplayName();
-        this.phoneNumber = userDto.getPhoneNumber();
-        this.timeZone = userDto.getTimeZone();
-        this.starredMessages = userDto.getStarredMessages();
-        this.directMessagesToUsers = userDto.getDirectMessagesToUsers();
-        this.online = userDto.getOnline();
-        this.userSkype = userDto.getUserSkype();
-    }
 
     //    @Override
 //    public boolean equals(Object o) {
