@@ -1,11 +1,13 @@
 package jm.dto;
 
+import jm.model.Message;
 import jm.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +23,10 @@ public class UserDTO {
     private String title;
     private String displayName;
     private String phoneNumber;
-//    private Set<Long> roleIds;
+    //    private Set<Long> roleIds;
     private String timeZone;
-    private Set<Long> starredMessageIds;
-    private Set<Long> directMessagesToUserIds;
+    private Set<Message> starredMessages;
+    private Set<User> directMessagesToUsers;
     private Integer online;
     private String userSkype;
 
@@ -50,6 +52,8 @@ public class UserDTO {
         this.displayName = user.getDisplayName();
         this.phoneNumber = user.getPhoneNumber();
         this.timeZone = user.getTimeZone();
+        this.starredMessages = user.getStarredMessages();
+        this.directMessagesToUsers = user.getDirectMessagesToUsers();
         this.online = user.getOnline();
         this.userSkype = user.getUserSkype();
     }

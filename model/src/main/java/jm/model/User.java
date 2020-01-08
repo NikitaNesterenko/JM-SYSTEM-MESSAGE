@@ -169,6 +169,22 @@ public class User {
         this.roles = roles;
     }
 
+    public User(UserDTO userDto) {
+        this.id = userDto.getId();
+        this.name = userDto.getName();
+        this.lastName = userDto.getLastName();
+        this.login = userDto.getLogin();
+        this.email = userDto.getEmail();
+        this.avatarURL = userDto.getAvatarURL();
+        this.title = userDto.getTitle();
+        this.displayName = userDto.getDisplayName();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.timeZone = userDto.getTimeZone();
+        this.starredMessages = userDto.getStarredMessages();
+        this.directMessagesToUsers = userDto.getDirectMessagesToUsers();
+        this.online = userDto.getOnline();
+        this.userSkype = userDto.getUserSkype();
+    }
 
     //    @Override
 //    public boolean equals(Object o) {
