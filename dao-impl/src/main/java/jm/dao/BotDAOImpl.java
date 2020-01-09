@@ -21,12 +21,10 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     @Override
     public Bot getBotByWorkspaceId(Workspace workspace) {
         try {
-            return (Bot) entityManager.createNativeQuery("select * from bots where workspace_id=?", Bot.class)
+            return (Bot) entityManager.createNativeQuery("SELECT * FROM bots WHERE workspace_id=?", Bot.class)
                     .setParameter(1, workspace)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        } catch (NoResultException e) { return null; }
     }
 
     @Override

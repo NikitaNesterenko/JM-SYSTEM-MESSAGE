@@ -17,8 +17,8 @@ import java.util.Set;
 @Service
 @Transactional
 public class BotServiceImpl implements BotService {
-    private static final Logger logger = LoggerFactory.getLogger(BotServiceImpl.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(BotServiceImpl.class);
     private BotDAO botDAO;
 
     @Autowired
@@ -34,8 +34,7 @@ public class BotServiceImpl implements BotService {
     public void deleteBot(Long id) { botDAO.deleteById(id); }
 
     @Override
-    public void updateBot(Bot bot) { botDAO.merge(bot);
-    }
+    public void updateBot(Bot bot) { botDAO.merge(bot); }
 
     @Override
     public Bot getBotById(Long id) { return botDAO.getById(id); }

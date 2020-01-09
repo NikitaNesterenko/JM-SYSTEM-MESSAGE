@@ -17,8 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/rest/api/direct_messages")
 public class DirectMessageRestController {
-    private static final Logger logger =
-            LoggerFactory.getLogger(DirectMessageRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DirectMessageRestController.class);
 
     private DirectMessageService directMessageService;
     private DirectMessageDtoService directMessageDtoService;

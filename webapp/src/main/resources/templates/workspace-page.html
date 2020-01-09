@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Workspace Page</title>
@@ -9,8 +8,6 @@
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-
-
     <script th:src="@{/js/rest/entities-rest-pagination.js}" type="module"></script>
     <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
@@ -18,29 +15,22 @@
     <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
+    <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/workspace-page/components/navbar/channel_topic.js}" type="module"></script>
-
     <script defer th:src="@{/js/workspace-page/user_view_edit.js}" type="module"></script>
-
-
     <!--    <script defer th:src="@{/js/message-show.js}" type="module"></script>-->
     <script defer th:src="@{/js/workspace-page/components/footer/messages.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/menu.js}" type="module"></script>
-
-    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}"
-            type="module"></script>
-
+    <script defer th:src="@{/js/workspace-page/components/modal-searcher/workspace-modal-searcher.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/css/inviteModal.css}"/>
     <script defer th:src="@{/js/invite.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/css/invite.css}"/>
-
     <!-- message menu -->
     <script defer th:src="@{/js/message_menu/message-icon-menu.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/message_menu/message_menu.css}"/>
-
     <!-- emoji -->
-    <!--    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>-->
     <script th:src="@{/js/emoji/index.min.js}"></script>
     <script defer th:src="@{/js/emoji/attachEmoji.js}" type="module"></script>
 
@@ -59,27 +49,21 @@
     <!-- memberList -->
     <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
     <script defer th:src="@{/js/member-list/member-list.js}" type="module"></script>
-
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
     <!-- direct message -->
     <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>
-
     <script src="/js/helper_functions.js"></script>
 
     <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
         <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
         <link rel="stylesheet" th:href="@{/css/button.css}"/>
         <script src="/js/displayDiv.js"></script> -->
-
-
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page.css}"/>
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page-old.css}"/>
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-add-channel-modal.css}"/>
-
     <link rel="stylesheet" th:href="@{/js/workspace-page/components/modal-searcher/workspace-searcher-modal.css}"/>
-
     <script defer th:src="@{/js/workspace-page/components/primary-view/share-message.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/workspace-page/components/primary-view/share-message-modal.css}"/>
 
@@ -91,7 +75,6 @@
 </head>
 
 <body class="supports_custom_scrollbar">
-
 <!-- Small modal -->
 <div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
      aria-hidden="true">
@@ -106,8 +89,8 @@
                 <button id="modal_1_set_status_btn" type="button" class="btn btn-link">Set a status</button>
             </div>
             <div id="modal_1_user_title" class="container">
-                <!--                title-->
-                <button id="modal_1_set_title_btn" type="button" class="btn btn-link">Add a title</button>
+                <!--  Закрыто тк можно редактировать тут любого пользователя              title-->
+                <!--<button id="modal_1_set_title_btn" type="button" class="btn btn-link">Add a title</button>-->
             </div>
             <div class="container-fluid">
                 <div class="row justify-content">
@@ -142,7 +125,7 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-8 editModalList">
                             <form>
                                 <div class="form-group">
                                     <label for="first-name">First name</label>
@@ -208,7 +191,7 @@
                                 <input type="file" id="FileUpload1" style="display: none"/>
                             </div>
                             <div class="pt-2">
-                                <button type="button" class="btn btn-link btn-block">Remove photo</button>
+                                <button type="button" id="RemovePhoto"class="btn btn-link btn-block">Remove photo</button>
                             </div>
                         </div>
                     </div>
@@ -399,6 +382,7 @@
                                     or
                                 <button class="link_button many_at_once" type="button">and many at once</button>
                             </span>
+
                             <div class="p-invite_channel_picker">
                                 <div>
                                     <label for="channel_picker_dropdown_section">
@@ -541,9 +525,9 @@
                             <div class="p-classic_nav__model__title__name">
                                 <button class="p-classic_nav__model__title__name__button">
                                     <i class="p-classic_nav__model__title__name__hash_icon">
-                                        #</i>
-                                    <span class="p-classic_nav__model__title__info__name"></span>
-                                    <!--                                                   Channel Name-->
+                                        #
+                                    </i>
+                                    p_some-channel<!--                                                   Channel Name-->
                                 </button>
                             </div>
                             <div class="p-classic_nav__model__title__info">
@@ -618,7 +602,7 @@
                 <div class="p-workspace__channel_sidebar">
                     <nav class="p-channel_sidebar">
                         <div class="p-channel_sidebar__navigation_bar">
-                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal" data-target="#modalSearcher">
+                            <button class="p-channel_sidebar__jumper">
                                 <div class="p-channel_sidebar__jumper_left">
                                     <i class="p-channel_sidebar__jumper_icon">🔎</i>
                                     Jump to...
@@ -682,19 +666,19 @@
                                                 </div>
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
-<!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
-<!--                                                <div class="p-channel_sidebar__close_container">-->
-<!--                                                    <button class="p-channel_sidebar__name_button">-->
-<!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
-<!--                                                        <span class="p-channel_sidebar__name-3">-->
-<!--                                                            <span>Some username</span>-->
-<!--                                                        </span>-->
-<!--                                                    </button>-->
-<!--                                                    <button class="p-channel_sidebar__close">-->
-<!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
-<!--                                                    </button>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
+                                            <!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
+                                            <!--                                                <div class="p-channel_sidebar__close_container">-->
+                                            <!--                                                    <button class="p-channel_sidebar__name_button">-->
+                                            <!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
+                                            <!--                                                        <span class="p-channel_sidebar__name-3">-->
+                                            <!--                                                            <span>Some username</span>-->
+                                            <!--                                                        </span>-->
+                                            <!--                                                    </button>-->
+                                            <!--                                                    <button class="p-channel_sidebar__close">-->
+                                            <!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
+                                            <!--                                                    </button>-->
+                                            <!--                                                </div>-->
+                                            <!--                                            </div>-->
                                             <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
 
                                             <div class="p-channel_sidebar__direct-messages__container" id="direct-messages__container_id">
@@ -940,7 +924,7 @@
                                                     name="usersList"></select>
                                         </form>
                                     </div>
-                                    <div>
+                                    <div class="ql-editor">
                                         <form id="form_message">
                                             <input class="ql-editor__input-field" id="form_message_input"
                                                    placeholder="Message #p_some-channel" minlength="1" maxlength="1200" type="text"/>
@@ -1033,8 +1017,7 @@
             <button class="settingsButton" type="button"><span class="settingsText">Copy channel name</span></button>
             <button class="settingsButton" type="button"><span class="settingsText">Manage posting permissions</span>
             </button>
-            <button class="settingsButton2" type="button" data-toggle="modal" data-target="#additionalOptionsModal"
-                    id="additionalOptionsButton"><span class="settingsText">Additional options</span></button>
+            <button class="settingsButton2" type="button" data-toggle="modal" data-target="#additionalOptionsModal" id="additionalOptionsButton"><span class="settingsText">Additional options</span></button>
         </div>
         <div class="settingsDiv">
             <button class="settingsButton3" type="button"><span class="settingsText">Notification preference</span>
@@ -1048,8 +1031,7 @@
 <div class="additionalOptions" id="additionalOptions">
     <div align="center" class="additionalOptionsHeader" id="additionalOptionsHeader">
         <h1 class="additionalOptionsHeaderSpan" id="additionalOptionsHeaderSpan">Additional options for #</h1>
-        <button class="additionalOptionsCloseButton"><span aria-hidden="true"
-                                                           id="additionalOptionsCloseButton">&times;</span></button>
+        <button class="additionalOptionsCloseButton"><span aria-hidden="true" id="additionalOptionsCloseButton">&times;</span></button>
     </div>
     <br>
     <br>
@@ -1062,8 +1044,7 @@
             </div>
             <div>
                 <button class="additionalOptionsButton" id="exampleLink2"><span><b>Set the channel description</b>
-                <br>Channel descriptions are especially useful to new members choosing which conversations to join.</span>
-                </button>
+                <br>Channel descriptions are especially useful to new members choosing which conversations to join.</span></button>
             </div>
         </div>
     </div>
@@ -1071,34 +1052,27 @@
 
 <div class="archivingChannels" id="archivingChannels">
     <div align="center" class="additionalOptionsHeader" id="archivingChannelsHeader">
-        <button class="archivingModalLeftButton"><span aria-hidden="true" id="archivingModalLeftButton">&larr;</span>
-        </button>
+        <button class="archivingModalLeftButton"><span aria-hidden="true" id="archivingModalLeftButton">&larr;</span></button>
         <h1 class="additionalOptionsHeaderSpan" id="archivingChannelsHeaderSpan">Archive #</h1>
-        <button class="additionalOptionsCloseButton"><span aria-hidden="true"
-                                                           id="archivingChannelsCloseButton">&times;</span></button>
+        <button class="additionalOptionsCloseButton"><span aria-hidden="true" id="archivingChannelsCloseButton">&times;</span></button>
     </div>
     <br>
     <br>
     <div class="col-md-4 justify-content-center mx-auto">
         <form id="archivingForm">
             <div>
-                <p class="archivingText">Archiving is useful if you don’t think you’ll need this channel any longer.
-                    Here’s what will happen when you archive this channel:</p>
+                <p class="archivingText">Archiving is useful if you don’t think you’ll need this channel any longer. Here’s what will happen when you archive this channel:</p>
                 <ul class="archivingChannelsUl">
                     <li class="archivingText">No one will be able to send messages to it</li>
                     <li class="archivingText">Apps installed in this channel will be disabled</li>
                     <li class="archivingText">A message will be posted that you archived the channel</li>
                 </ul>
-                <p class="archivingText">Messages from archived channels will still show up in search and archives, the
-                    same way they do today. You can always un-archive an archived channel later, if you need it
-                    again.</p>
+                <p class="archivingText">Messages from archived channels will still show up in search and archives, the same way they do today. You can always un-archive an archived channel later, if you need it again.</p>
             </div>
             <br>
             <div class="form-group row align-items-end">
                 <button type="button" class="btn btn-light archiveButtons" id="archivingCancel">Cancel</button>
-                <button type="submit" class="btn btn-success archiveButtons" id="archivingSubmit">Yes, archive the
-                    channel
-                </button>
+                <button type="submit" class="btn btn-success archiveButtons" id="archivingSubmit">Yes, archive the channel</button>
             </div>
         </form>
     </div>
@@ -1469,8 +1443,7 @@
 </div>
 
 <!--Модальное окно для поиска каналов и пользователей-->
-<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-     aria-hidden="true">
+<div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog searcher-modal" role="presentation">
         <div class="modal-content">
 
@@ -1478,9 +1451,7 @@
                 <div class="search-input-box">
                     <i class="p-classic_nav__right__search__icon">🔍</i>
                     <div class="search-input-box-input">
-                        <input type="text" id="searchInput" class="form-control"
-                               placeholder="Search for messages, replies, or even insightful asides"
-                               style="border: 0px">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search for messages, replies, or even insightful asides" style="border: 0px">
                     </div>
 
                 </div>
