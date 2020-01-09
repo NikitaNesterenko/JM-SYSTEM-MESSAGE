@@ -1,30 +1,33 @@
 package jm.api.dao;
 
-import jm.model.message.ChannelMessage;
+import jm.model.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface MessageDAO {
 
-    List<ChannelMessage> getAll();
+    List<Message> getAll();
 
-    List<ChannelMessage> getMessagesByChannelId(Long id);
+    List<Message> getMessagesByChannelId(Long id);
 
-    List<ChannelMessage> getMessageByContent(String word);
+    List<Message> getMessageByContent(String word);
 
-    List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
+    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
 
-    void persist(ChannelMessage message);
+    void persist(Message message);
 
     void deleteById(Long id);
 
-    ChannelMessage merge(ChannelMessage message);
+    Message merge(Message message);
 
-    ChannelMessage getById(Long id);
+    Message getById(Long id);
 
-    List<ChannelMessage> getStarredMessagesForUser(Long id);
+    List<Message> getStarredMessagesForUser(Long userId);
+
+    List<Message> getMessagesByIds(Set<Long> ids);
 
 }

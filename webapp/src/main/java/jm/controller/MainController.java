@@ -4,20 +4,13 @@ import jm.WorkspaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
@@ -40,13 +33,16 @@ public class MainController {
     }
 
     @GetMapping(value = "/workspace")
-    public ModelAndView workspacePage() {
-        return new ModelAndView("workspace-page");
-    }
+    public ModelAndView workspacePage() { return new ModelAndView("workspace-page"); }
 
     @GetMapping(value = "/workspace_temp")
-    public ModelAndView workspaceTempPage() {
-        return new ModelAndView("temp/workspace-page-temp.html");
+    public ModelAndView workspacePage(HttpServletRequest request) {
+        if(request.getSession().getAttribute("WorkspaceID") != null) {
+            return new ModelAndView("workspace-page");
+        } else {
+            // при разрыве коннекта с сервером редиректик на выбор Воркспейса
+            return new ModelAndView("redirect:/chooseWorkspace");
+        }
     }
 
     @GetMapping(value = "/signin")
@@ -71,4 +67,11 @@ public class MainController {
 
     @GetMapping("/chooseWorkspace")
     public String chooseWorkspace() {return "choose-workspace-page";}
+
+    @GetMapping("/password-recovery/**")
+    public String passwordRecovery() {
+        return "password-recovery";
+    }
+
+
 }

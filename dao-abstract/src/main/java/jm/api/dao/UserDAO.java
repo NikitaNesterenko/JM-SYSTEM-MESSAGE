@@ -4,6 +4,7 @@ import jm.dto.UserDTO;
 import jm.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserDAO {
 
@@ -30,5 +31,7 @@ public interface UserDAO {
     User getUserByName(String name);
 
     List<UserDTO> getUsersInWorkspace(Long id);
+
+    List<User> getUsersByIds(Set<Long> ids);
 
 }

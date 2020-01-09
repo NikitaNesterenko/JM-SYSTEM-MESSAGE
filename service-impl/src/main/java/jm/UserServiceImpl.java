@@ -1,7 +1,6 @@
 package jm;
 
 import jm.api.dao.UserDAO;
-import jm.dao.UserDAOImpl;
 import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -58,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return userDAO.getUserByLogin(email);
+        return userDAO.getUserByEmail(email);
     }
 
     @Override
