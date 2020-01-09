@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @Transactional
 public class MessageDtoServiceImpl implements MessageDtoService {
 
-    private final UserDAO userDAO;
-    private final BotDAO botDAO;
-    private final ChannelDAO channelDAO;
-    private final MessageDAO messageDAO;
+    private UserDAO userDAO;
+    private BotDAO botDAO;
+    private ChannelDAO channelDAO;
+    private MessageDAO messageDAO;
 
     public MessageDtoServiceImpl(UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
         this.userDAO = userDAO;

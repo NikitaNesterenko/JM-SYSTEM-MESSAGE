@@ -1,0 +1,23 @@
+package jm.dto;
+
+import jm.model.Conversation;
+import jm.model.User;
+import jm.model.message.DirectMessage;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DirectMessageDTO extends MessageDTO {
+    private Conversation conversation;
+    private Set<User> starredByWhom;
+
+    public DirectMessageDTO(DirectMessage directMessage) {
+        this.conversation = directMessage.getConversation();
+        this.starredByWhom = directMessage.getStarredByWhom();
+    }
+}

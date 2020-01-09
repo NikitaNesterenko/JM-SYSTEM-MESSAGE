@@ -2084,8 +2084,8 @@
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
     font-family: Slack-Lato,appleLogo,sans-serif;
-    -webkit-user-modify: read-write;
-    -webkit-line-break: after-white-space;
+    /*-webkit-user-modify: read-write;*/
+    /*-webkit-line-break: after-white-space;*/
     unicode-bidi: -webkit-isolate;
     cursor: text;
     outline: none;

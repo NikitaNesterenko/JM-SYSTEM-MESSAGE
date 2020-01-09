@@ -25,8 +25,8 @@ public class UserDTO {
     private String phoneNumber;
 //    private Set<Long> roleIds;
     private String timeZone;
-    private Set<Message> starredMessages;
-    private Set<User> directMessagesToUsers;
+    private Set<Long> starredMessageIds;
+    private Set<Long> directMessagesToUserIds;
     private Integer online;
     private String userSkype;
 
@@ -52,8 +52,6 @@ public class UserDTO {
         this.displayName = user.getDisplayName();
         this.phoneNumber = user.getPhoneNumber();
         this.timeZone = user.getTimeZone();
-        this.starredMessages = user.getStarredMessages();
-        this.directMessagesToUsers = user.getDirectMessagesToUsers();
         this.online = user.getOnline();
         this.userSkype = user.getUserSkype();
     }
