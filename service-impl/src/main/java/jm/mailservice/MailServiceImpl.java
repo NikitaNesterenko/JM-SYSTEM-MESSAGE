@@ -31,17 +31,19 @@ public class MailServiceImpl implements MailService {
     private UserService userService;
 
     private String subjectMessage = "Recovery password from JM System Message";
-    private int charactersInHash;
+    private String emailSubject = "Invite mail";
     private String urlSiteRecoveryPassword;
+    private int charactersInHash;
     private Long validPasswordHours;
+    private String emailSenderValue;
 
     public MailServiceImpl(JavaMailSender emailSender, MailContentService mailContentService,
                            InviteTokenService inviteTokenService, WorkspaceService workspaceService,
                            UserService userService,
                            @Value("${user.password.recovery.validHours : 24}") Long validPasswordHours,
                            @Value("${user.password.recovery.urlSite : http://localhost:8080/password-recovery/}") String urlSiteRecoveryPassword,
-                           @Value("${user.password.recovery.charactersInHash : 10}") int charactersInHash
-                           ) {
+                           @Value("${user.password.recovery.charactersInHash : 10}") int charactersInHash,
+                           @Value("${spring.mail.username}") String emailSenderValue) {
         this.emailSender = emailSender;
         this.mailContentService = mailContentService;
         this.inviteTokenService = inviteTokenService;
@@ -50,11 +52,13 @@ public class MailServiceImpl implements MailService {
         this.validPasswordHours = validPasswordHours;
         this.urlSiteRecoveryPassword = urlSiteRecoveryPassword;
         this.charactersInHash = charactersInHash;
+        this.emailSenderValue = emailSenderValue;
         this.tokenGenerator = new TokenGenerator.TokenGeneratorBuilder().useDigits(true).useLower(true).build();
     }
 
     @Override
-    public void sendInviteMessage(String nameFrom, String emailFrom, String emailTo, String workspace, String inviteLink) {
+    public void sendInviteMessage(String nameFrom, String emailFrom, String emailTo,
+                                  String workspace, String inviteLink) {
         String content = mailContentService.build(
                 nameFrom,
                 emailFrom,
@@ -63,7 +67,7 @@ public class MailServiceImpl implements MailService {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setTo(emailTo);
-            messageHelper.setSubject("Invite mail");
+            messageHelper.setSubject(emailSubject);
             messageHelper.setText(content, true);
         };
         try {
@@ -106,6 +110,7 @@ public class MailServiceImpl implements MailService {
         inviteToken.setHash(
                 tokenGenerator.generate(charactersInHash));
 
+        //workspace нужен только для создания токена
         List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUser(userTo);
         inviteToken.setWorkspace(workspacesByUser.get(0));
         inviteToken.setFirstName(userTo.getName());
@@ -117,7 +122,7 @@ public class MailServiceImpl implements MailService {
         simpleMailMessage.setTo(userTo.getEmail());
         simpleMailMessage.setSubject(subjectMessage);
         simpleMailMessage.setText(urlSiteRecoveryPassword + inviteToken.getHash());
-        simpleMailMessage.setFrom("device.nexusvi@gmail.com");
+        simpleMailMessage.setFrom(emailSenderValue);
 
         emailSender.send(simpleMailMessage);
     }
@@ -135,9 +140,11 @@ public class MailServiceImpl implements MailService {
                 userByEmail.setPassword(password);
                 userService.updateUser(userByEmail);
                 inviteTokenService.deleteInviteToken(byHash.getId());
+                logger.info("Восстановление пароля пользователя с id = {}", userByEmail.getId());
                 return true;
             }
 
+        logger.info("Попытка восстановления пароля пользователя с помощью токена = {}", token);
         return false;
     }
 

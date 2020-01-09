@@ -19,17 +19,17 @@ const content = () => {
 
 const resetPasswordContent =
         `<div class="sign-in-text-1">
-                Password Reset
+            Сброс пароля
         </div>
         <div class="sign-in-text-2">
-            To reset your password, enter the email address you use
-            to sign in to <b>JS-MESSAGE-SYSTEM URL</b>.
+            Для сброса пароля введите email указанный
+            при реистрации <b>JS-MESSAGE-SYSTEM URL</b>.
         </div>
         <div class="sign-in-input">
             <input class="your-workspace-url text-center" id="recovery-password" type="text" placeholder="you@example.com">
         </div>
         <div class="sign-in-btn-box" id="submit">
-            <button class="sign-in-button" id="reset-password" type="submit" name="button">Get Reset Link</button>
+            <button class="sign-in-button" id="reset-password" type="submit" name="button">Получить ссылку для сброса пароля</button>
         </div>`;
 
 const setPasswordContent =
@@ -73,9 +73,6 @@ window.addEventListener("load", function () {
             const newPassword = document.getElementById("new-password").value;
             const newPasswordConfirm = document.getElementById("new-password-confirm").value;
 
-            /*
-            console.log(newPassword.value);
-            console.log(newPasswordConfirm.value); */
             console.log(newPassword);
             console.log(newPasswordConfirm);
 
@@ -92,10 +89,6 @@ window.addEventListener("load", function () {
                     "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
                 },
                 body: 'token=' + currentHref + '&password='+ newPassword
-            /*    body: JSON.stringify({
-                    'token': currentHref,
-                    'password': newPassword
-                })*/
             }).then(response => {
                 if (!response.ok) {
                     return alert("Время действия ссылки сброса пароля закончилось \n или вы ввели некоректную сслыку");
