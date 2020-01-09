@@ -3,6 +3,7 @@ package jm;
 import jm.model.CreateWorkspaceToken;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CreateWorkspaceTokenService {
 
@@ -16,7 +17,7 @@ public interface CreateWorkspaceTokenService {
 
     CreateWorkspaceToken getCreateWorkspaceTokenById(Long id);
 
-    CreateWorkspaceToken getCreateWorkspaceTokenByName(String email);
+    Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByName(String email);
 
-    CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code);
+    Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByCode(int code);
 }

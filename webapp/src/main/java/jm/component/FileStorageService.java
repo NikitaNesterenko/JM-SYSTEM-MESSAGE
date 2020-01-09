@@ -28,23 +28,16 @@ public class FileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
+        try { Files.createDirectories(this.fileStorageLocation);
+        } catch (Exception ex) { throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex); }
     }
 
     public ResponseEntity<?> saveFile(MultipartFile file, long userId){
         String newAvatarName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try{
-            if(newAvatarName.contains("..")){
-                return new ResponseEntity<>("Invalid path sequence: " + newAvatarName, HttpStatus.BAD_REQUEST);
-            }
+            if(newAvatarName.contains("..")){ return new ResponseEntity<>("Invalid path sequence: " + newAvatarName, HttpStatus.BAD_REQUEST); }
             User user = userService.getUserById(userId);
-            if(user == null){
-                return new ResponseEntity<>("User not found with id: " + userId, HttpStatus.NOT_FOUND);
-            }
+            if(user == null){ return new ResponseEntity<>("User not found with id: " + userId, HttpStatus.NOT_FOUND); }
             newAvatarName = userId + newAvatarName;
             Path newAvatarLocation = this.fileStorageLocation.resolve(newAvatarName);
             Files.copy(file.getInputStream(), newAvatarLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -66,13 +59,9 @@ public class FileStorageService {
 
     public ResponseEntity<?> deleteFile(Long userId) {
         User user = userService.getUserById(userId);
-        if (user == null){
-            return new ResponseEntity<>("User not found with id: " + userId, HttpStatus.NOT_FOUND);
-        }
+        if (user == null){ return new ResponseEntity<>("User not found with id: " + userId, HttpStatus.NOT_FOUND); }
         String currentAvatarName = user.getAvatarURL();
-        if (currentAvatarName == null){
-            return new ResponseEntity<>("No avatar present for user with id: " + userId, HttpStatus.OK);
-        }
+        if (currentAvatarName == null){return new ResponseEntity<>("No avatar present for user with id: " + userId, HttpStatus.OK); }
 
         try {
             user.setAvatarURL(null);

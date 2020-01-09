@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,49 +18,31 @@ public class ChannelServiceImpl implements ChannelService {
     private ChannelDAO channelDAO;
 
     @Autowired
-    public void setChannelDAO(ChannelDAO channelDAO) {
-        this.channelDAO = channelDAO;
-    }
+    public void setChannelDAO(ChannelDAO channelDAO) { this.channelDAO = channelDAO; }
 
     @Override
-    public List<Channel> gelAllChannels() {
-        return channelDAO.getAll();
-    }
+    public List<Channel> gelAllChannels() { return channelDAO.getAll(); }
 
     @Override
-    public void createChannel(Channel channel) {
-        channelDAO.persist(channel);
-    }
+    public void createChannel(Channel channel) { channelDAO.persist(channel); }
 
     @Override
-    public void deleteChannel(Long id) {
-        channelDAO.deleteById(id);
-    }
+    public void deleteChannel(Long id) { channelDAO.deleteById(id); }
 
     @Override
-    public void updateChannel(Channel channel) {
-        channelDAO.merge(channel);
-    }
+    public void updateChannel(Channel channel) { channelDAO.merge(channel); }
 
     @Override
-    public Channel getChannelById(Long id) {
-        return channelDAO.getById(id);
-    }
+    public Channel getChannelById(Long id) { return channelDAO.getById(id); }
 
     @Override
-    public Channel getChannelByName(String name) {
-        return channelDAO.getChannelByName(name);
-    }
+    public Optional<Channel> getChannelByName(String name) { return channelDAO.getChannelByName(name); }
 
     @Override
-    public List<Channel> getChannelsByOwner(User user) {
-        return channelDAO.getChannelsByOwner(user);
-    }
+    public List<Channel> getChannelsByOwner(User user) { return channelDAO.getChannelsByOwner(user); }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
-        return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId);
-    }
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) { return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId); }
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) { return channelDAO.getChannelsByWorkspaceId(id); }

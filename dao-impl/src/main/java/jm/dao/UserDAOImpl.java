@@ -7,11 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -20,23 +20,17 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @Override
-    public User getUserByLogin(String login) {
-        try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public Optional<User> getUserByLogin(String login) {
+            return Optional.ofNullable((User) entityManager.createQuery("FROM User WHERE login  =:login")
+                    .setParameter("login", login)
+                    .getSingleResult());
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public Optional<User> getUserByEmail(String email) {
+            return Optional.ofNullable((User) entityManager.createQuery("FROM User WHERE email  = :email")
+                    .setParameter("email", email)
+                    .getSingleResult());
     }
 
     @Override
@@ -74,7 +68,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                 "FROM workspace_user_role wur " +
                 "INNER JOIN users u ON wur.user_id = u.id " +
                 "INNER JOIN workspaces ws ON wur.workspace_id = ws.id " +
-                "WHERE (ws.id = :workspace) " +
+                "WHERE (ws.id =:workspace) " +
                 "GROUP BY u.id";
 
         return entityManager.createNativeQuery(query, "UserDTOMapping")
@@ -88,7 +82,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("select o from User o where o.id in :ids", User.class)
+                .createQuery("SELECT o FROM User o WHERE o.id IN :ids", User.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }

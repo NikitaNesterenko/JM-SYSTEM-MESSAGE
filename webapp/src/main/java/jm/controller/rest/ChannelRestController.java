@@ -27,8 +27,7 @@ public class ChannelRestController {
     private UserService userService;
     private ChannelDtoService channelDTOService;
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            ChannelRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChannelRestController.class);
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
@@ -41,9 +40,7 @@ public class ChannelRestController {
     }
 
     @Autowired
-    public void  setChannelDTOService(ChannelDtoService channelDTOService) {
-        this.channelDTOService = channelDTOService;
-    }
+    public void  setChannelDTOService(ChannelDtoService channelDTOService) { this.channelDTOService = channelDTOService; }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ChannelDTO> getChannelById(@PathVariable("id") Long id) {
@@ -57,22 +54,17 @@ public class ChannelRestController {
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<List<ChannelDTO>> getChannelsByUserId(@PathVariable("id") Long id) {
         List<Channel> channels = channelService.getChannelsByUserId(id);
-        for (Channel channel : channels) {
-            System.out.println(channel);
-        }
+        for (Channel channel : channels) { System.out.println(channel); }
         List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
-
         return ResponseEntity.ok(channelDTOList);
     }
 
     @PostMapping(value = "/create")
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
         Channel channel = channelDTOService.toEntity(channelDTO);
-
         if (principal != null) {
-            User owner = userService.getUserByLogin(principal.getName());
+            User owner = userService.getUserByLogin(principal.getName()).get();
             Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
-
             channel.setUser(owner);
             channel.setWorkspace(workspace);
         }
@@ -83,7 +75,6 @@ public class ChannelRestController {
             logger.warn("Не удалось создать channel");
             ResponseEntity.badRequest().build();
         }
-
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
@@ -91,8 +82,7 @@ public class ChannelRestController {
     public ResponseEntity updateChannel(@RequestBody ChannelDTO channelDTO) {
         Channel existingChannel = channelService.getChannelById(channelDTO.getId());
         try {
-            if (existingChannel == null) {
-                logger.warn("Channel не найден");
+            if (existingChannel == null) { logger.warn("Channel не найден");
             } else {
                 Channel channel = channelDTOService.toEntity(channelDTO);
                 channelService.updateChannel(channel);
@@ -101,7 +91,6 @@ public class ChannelRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok().build();
     }
 
@@ -116,24 +105,18 @@ public class ChannelRestController {
     public ResponseEntity<List<ChannelDTO>> getAllChannels() {
         logger.info("Список channel: ");
         List<Channel> channels = channelService.gelAllChannels();
-        for (Channel channel : channels) {
-            logger.info(channel.toString());
-        }
+        for (Channel channel : channels) { logger.info(channel.toString()); }
         List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
-
         return ResponseEntity.ok(channelDTOList);
     }
 
     @GetMapping("/workspace/{workspace_id}/user/{user_id}")
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
             @PathVariable("user_id") Long userId,
-            @PathVariable("workspace_id") Long workspaceId
-    ) {
+            @PathVariable("workspace_id") Long workspaceId) {
         List<ChannelDTO> channels = channelService.getChannelByWorkspaceAndUser(workspaceId, userId);
         logger.info("Получены channels, доступные юзеру с id={} из workspace с id={} ", userId, workspaceId);
-        for (ChannelDTO channel : channels) {
-            logger.info(channel.toString());
-        }
+        for (ChannelDTO channel : channels) { logger.info(channel.toString()); }
         return ResponseEntity.ok(channels);
     }
 
@@ -146,7 +129,7 @@ public class ChannelRestController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<ChannelDTO> getChannelByName(@PathVariable("name") String name) {
-        Channel channelByName = channelService.getChannelByName(name);
+        Channel channelByName = channelService.getChannelByName(name).get();
         ChannelDTO channelDTO = channelDTOService.toDto(channelByName);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
@@ -157,10 +140,7 @@ public class ChannelRestController {
         channel.setArchived(true);
         channelService.updateChannel(channel);
         ChannelDTO channelDTO = channelDTOService.toDto(channel);
-
-
         logger.info("Канал с id = {} архивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
-
 }

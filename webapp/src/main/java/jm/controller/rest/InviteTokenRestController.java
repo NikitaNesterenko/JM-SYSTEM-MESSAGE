@@ -53,13 +53,12 @@ public class InviteTokenRestController {
                     , workspace.getName()
                     , url + invite.getHash());
         }
-
         return ResponseEntity.ok(true);
     }
 
     @GetMapping("/{hash}")
     public ModelAndView inviteJoin(@PathVariable String hash) {
-        InviteToken inviteToken = inviteTokenService.getByHash(hash);
+        InviteToken inviteToken = inviteTokenService.getByHash(hash).get();
         ModelAndView modelAndView = new ModelAndView();
 
         if (inviteToken != null) {
@@ -67,7 +66,6 @@ public class InviteTokenRestController {
             modelAndView.setViewName("redirect:/workspace");
             return modelAndView;
         }
-
         return new ModelAndView("signin-page");
     }
 

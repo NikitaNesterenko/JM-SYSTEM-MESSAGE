@@ -26,25 +26,25 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     @Override
     public Conversation getConversationByUsers(Long firstUserId, Long secondUserId) {
         try {
-            return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
-                    .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult();
+            return (Conversation) entityManager.createNativeQuery("SELECT * FROM conversations WHERE (opener_id=? AND associated_id=?)", Conversation.class)
+                    .setParameter(1, firstUserId)
+                    .setParameter(2, secondUserId)
+                    .getSingleResult();
         } catch (NoResultException e1) {
             try {
-                return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
-                        .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult();
-            } catch (NoResultException e2) {
-                return null;
-            }
+                return (Conversation) entityManager.createNativeQuery("SELECT * FROM conversations WHERE (opener_id=? AND associated_id=?)", Conversation.class)
+                        .setParameter(1, secondUserId)
+                        .setParameter(2, firstUserId)
+                        .getSingleResult();
+            } catch (NoResultException e2) { return null; }
         }
     }
 
     @Override
     public List<Conversation> getConversationsByUserId(Long userId) {
-        try {
             return (List<Conversation>) entityManager.createNativeQuery("select * from conversations where opener_id=? or associated_id=?", Conversation.class)
-                    .setParameter(1, userId).setParameter(2, userId).getResultList();
-        } catch (NoResultException e1) {
-            return null;
-        }
+                    .setParameter(1, userId)
+                    .setParameter(2, userId)
+                    .getResultList();
     }
 }
