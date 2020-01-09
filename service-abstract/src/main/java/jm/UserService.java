@@ -24,6 +24,8 @@ public interface UserService {
 
     List<User> getAllUsersInThisChannel(Long id);
 
+    User getUserByName(String name);
+
     List<UserDTO> getAllUsersInWorkspace(Long id);
 
 }

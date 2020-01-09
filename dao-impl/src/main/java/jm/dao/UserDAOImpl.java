@@ -19,6 +19,7 @@ import java.util.Set;
 public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
+
     @Override
     public User getUserByLogin(String login) {
         try {
@@ -40,6 +41,15 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
+    public User getUserByName(String name) {
+        try {
+            return (User) entityManager.createQuery("from User where name  = :name").setParameter("name", name).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public void addRoleForUser(User user, String role) { }
 
     @Override
@@ -47,13 +57,19 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public List<User> getAllUsersInThisChannel(Long id) {
+        try {
             TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
                     .setParameter(1, id);
             List<User> userList = query.getResultList();
             for (User user : userList) {
                 System.out.println(user);
             }
+
             return userList;
+
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 //    @Override

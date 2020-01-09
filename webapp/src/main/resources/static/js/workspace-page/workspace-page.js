@@ -7,7 +7,6 @@ import {
 } from '../rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
-
 import {refreshMemberList} from "../member-list/member-list.js";
 
 const channel_service = new ChannelRestPaginationService();
@@ -36,7 +35,6 @@ const showDefaultChannel = () => {
             })
     })
 };
-
 
 window.addEventListener('load', function () {
     const modal = document.getElementById("addChannelModal");
@@ -201,7 +199,6 @@ export const populateDirectMessages = async () => {
     const principal = await user_service.getLoggedUser();
     const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
     const workspace_id = await workspace_service.getChoosedWorkspace();
-
     const direct_messages_container = document.getElementById("direct-messages__container_id");
     direct_messages_container.innerHTML = "";
 

@@ -66,6 +66,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByName(String name) { return userDAO.getUserByName(name); }
+
+    @Override
     public List<UserDTO> getAllUsersInWorkspace(Long id) {
         return userDAO.getUsersInWorkspace(id);
     }

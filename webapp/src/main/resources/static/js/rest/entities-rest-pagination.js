@@ -9,7 +9,7 @@ export class UserRestPaginationService extends RestPaginationService {
     getLoggedUser = async () => {
         const response = await fetch('/rest/api/users/loggedUser');
         return response.json()
-    }
+    };
 
     getUsersByWorkspace = async (id) => {
         const response = await fetch('/rest/api/users/workspace/' + id);
@@ -33,7 +33,6 @@ export class MessageRestPaginationService extends RestPaginationService{
         const response = await fetch(`/rest/api/messages/${id}/starred`);
         return response.json();
     };
-
     getMessageById = async (id) => {
         const response = await fetch('/rest/api/messages/' + id);
         return response.json();
@@ -155,3 +154,36 @@ export class DirectMessagesRestController extends RestPaginationService {
 
 }
 
+
+export class SendNotification {
+
+    sendPersonal = async (name, pushNotify) => {
+        await fetch('/rest/api/notification/send/' + name, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pushNotify)
+        }).then(function (response) {
+            return response;
+        })
+    };
+
+    sendToChannelMembers = async (id, pushNotify) => {
+        await fetch('/rest/api/notification/channel/' + id, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pushNotify)
+        }).then(function (response) {
+            return response;
+        })
+    };
+
+    register = async (currentToken) => {
+        fetch('/rest/api/notification/register', { method: 'post', body: currentToken });
+    };
+}

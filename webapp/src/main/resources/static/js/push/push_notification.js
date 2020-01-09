@@ -1,28 +1,22 @@
-const sound = new Audio("/audio/push.mp3");
+import {SendNotification} from '../rest/entities-rest-pagination.js'
+const personalNotification = new SendNotification();
 const pic = "/image/img.JPG";
 
-function notify (title, message){
-    Push.create(title, {
-        body: message,
-        timeout: 10000,
-        icon: pic
-    });
-    sound.play();
-}
-
-// Парсер для сообщения типа "{inputMassage: "@asdas", dateCreate: "14.11.2019 18:07", user: {…}, bot: null}"
-// user {id: 2, name: "name_2", lastName: "last-name_2", login: "login_2", email: "mymail_2@testmail.com", …}
-function notifyParseMessage(message) {
+window.sendNotification = function notifyParseMessage(message) {
     const messageFrom = message.user;
     const messageContent = message.inputMassage;
+    const messageChannel = message.channel;
     if (messageContent.includes("@",0)) {
-        const indexToStart = messageContent.indexOf("@");
-        let indexToEnd = messageContent.indexOf(" ",indexToStart);
-        if (indexToEnd == -1) {
-            indexToEnd = messageContent.length;
+        let name = messageContent.substr(1);
+        if(name === 'channel'){
+            let pushNotify = {"title":"From channel: " + messageChannel.name, "body":"test", "icon": pic, "click_action":"google.com", "ttlInSeconds":"20"};
+            personalNotification.sendToChannelMembers(messageChannel.id, pushNotify)
+        } else {
+            let pushNotify = {"title":"From: " + messageFrom.name, "body":"test", "icon": pic, "click_action":"google.com", "ttlInSeconds":"20"};
+            personalNotification.sendPersonal(name, pushNotify);
         }
-        const messageTo = messageContent.substring(indexToStart, indexToEnd);
-        notify("Message to " + messageTo, messageFrom.name + ": " + messageContent);
     }
-}
+};
+
+
 
