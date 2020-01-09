@@ -29,7 +29,7 @@ class Message {
 class DirectMessage {
     constructor(id, user, content, dateCreate, filename, conversation) {
         this.id = id;  // id нужно для редактирования сообщений
-        this.user = user;
+        this.userId = user;
         this.content = content;
         this.dateCreate = dateCreate;
         this.filename = filename;
@@ -85,7 +85,7 @@ $('#form_message').submit(function () {
             }
 
             if (channel == null && conversation != null) {
-                const message = new DirectMessage(null, user, text_message, currentDate, files[0], conversation);
+                const message = new DirectMessage(null, user.id, text_message, currentDate, files[0], conversation);
                 direct_message_service.create(message).then(messageWithId => {
                     // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
                     // которое вставляется в HTML (см. messages.js).
