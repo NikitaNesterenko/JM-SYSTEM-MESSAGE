@@ -51,7 +51,5 @@ public class JMSystemMessageApplication {
 //        return new TestDataSecurityInitializer();
 //    }
 
-    public static void main(String[] args) {
-        SpringApplication.run(JMSystemMessageApplication.class);
-    }
+    public static void main(String[] args) { SpringApplication.run(JMSystemMessageApplication.class); }
 }
