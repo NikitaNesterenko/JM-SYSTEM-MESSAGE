@@ -184,8 +184,6 @@ public class User {
         this.displayName = userDto.getDisplayName();
         this.phoneNumber = userDto.getPhoneNumber();
         this.timeZone = userDto.getTimeZone();
-        this.starredMessages = userDto.getStarredMessages();
-        this.directMessagesToUsers = userDto.getDirectMessagesToUsers();
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
     }

@@ -1,6 +1,8 @@
 package jm.controller.rest;
 
 import jm.DirectMessageService;
+import jm.dto.DirectMessageDTO;
+import jm.dto.DirectMessageDtoService;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,33 +20,40 @@ public class DirectMessageRestController {
     private static final Logger logger = LoggerFactory.getLogger(DirectMessageRestController.class);
 
     private DirectMessageService directMessageService;
+    private DirectMessageDtoService directMessageDtoService;
 
     @Autowired
-    public void setDirectMessageService(DirectMessageService directMessageService) { this.directMessageService = directMessageService; }
+    public void setDirectMessageService(DirectMessageService directMessageService, DirectMessageDtoService directMessageDtoService) {
+        this.directMessageService = directMessageService;
+        this.directMessageDtoService = directMessageDtoService;
+    }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<DirectMessage> getDirectMessageById(@PathVariable Long id) {
+    public ResponseEntity<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
         logger.info("Сообщение с id = {}", id);
         DirectMessage directMessage = directMessageService.getDirectMessageById(id);
         logger.info(directMessage.toString());
-        return new ResponseEntity<DirectMessage>(directMessage, HttpStatus.OK);
+        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<DirectMessage> createDirectMessage(@RequestBody DirectMessage message) {
-        directMessageService.saveDirectMessage(message);
-        logger.info("Созданное сообщение : {}", message);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+    public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
+        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
+        System.out.println(directMessage);
+        directMessageService.saveDirectMessage(directMessage);
+        logger.info("Созданное сообщение : {}", directMessage);
+        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<DirectMessage> updateMessage(@RequestBody DirectMessage message) {
+    public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
+        DirectMessage message = directMessageDtoService.toEntity(messageDTO);
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
-        return new ResponseEntity<>(directMessage, HttpStatus.OK);
+        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<DirectMessage> deleteMessage(@PathVariable Long id) {
+    public ResponseEntity<DirectMessageDTO> deleteMessage(@PathVariable Long id) {
         directMessageService.deleteDirectMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
         return new ResponseEntity<>(HttpStatus.OK);
