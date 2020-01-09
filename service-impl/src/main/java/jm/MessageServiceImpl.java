@@ -50,10 +50,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void deleteMessage(Long id) {
-        messageDAO.deleteById(id);
-
-    }
+    public void deleteMessage(Long id) { messageDAO.deleteById(id); }
 
     @Override
     public void updateMessage(Message message) {
