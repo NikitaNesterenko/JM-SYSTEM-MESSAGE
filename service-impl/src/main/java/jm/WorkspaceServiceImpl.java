@@ -15,8 +15,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class WorkspaceServiceImpl implements WorkspaceService {
-    private static final Logger logger = LoggerFactory.getLogger(WorkspaceServiceImpl.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(WorkspaceServiceImpl.class);
     private WorkspaceDAO workspaceDAO;
 
     @Autowired

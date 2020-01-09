@@ -26,9 +26,7 @@ public class UserDtoServiceImpl implements UserDtoService {
     @Override
     public UserDTO toDto(User user) {
 
-        if (user == null) {
-            return null;
-        }
+        if (user == null) { return null; }
 
         // creating new UserDTO with simple fields copied from User
         UserDTO userDTO = new UserDTO(user);
@@ -38,7 +36,6 @@ public class UserDtoServiceImpl implements UserDtoService {
             Set<Message> starredMessageIds = user.getStarredMessages();
             userDTO.setStarredMessages(starredMessageIds);
         }
-
         return userDTO;
     }
 
@@ -46,9 +43,7 @@ public class UserDtoServiceImpl implements UserDtoService {
     @Transactional
     public User toEntity(UserDTO userDTO) {
 
-        if (userDTO == null) {
-            return null;
-        }
+        if (userDTO == null) { return null; }
 
         // creating new User with simple fields copied from UserDTO
         User user = new User(userDTO);
@@ -57,15 +52,11 @@ public class UserDtoServiceImpl implements UserDtoService {
         Long id = userDTO.getId();
         if (id != null && user.getPassword() == null) {
             User existingUser = userDAO.getById(id);
-            if (existingUser != null) {
-                user.setPassword(existingUser.getPassword());
-            }
+            if (existingUser != null) { user.setPassword(existingUser.getPassword()); }
         }
 
         // setting up 'starredMessages'
         user.setStarredMessages(userDTO.getStarredMessages());
-
-
         return user;
     }
 

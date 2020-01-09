@@ -18,7 +18,6 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-
     private final String WITHOUT_WORKSPACE = "REGISTERED";
 
     @Autowired
@@ -67,9 +66,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 System.out.println("User " + workspaceLogin + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
 //                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
             }
-        } else {
-            throw new UsernameNotFoundException("User not found.");
-        }
+        } else { throw new UsernameNotFoundException("User not found."); }
         return builder.build();
     }
 }

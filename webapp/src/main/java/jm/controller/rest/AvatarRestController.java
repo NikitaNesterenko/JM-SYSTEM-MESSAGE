@@ -9,8 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/rest/api/avatar")
 public class AvatarRestController {
+
+    private final FileStorageService fileStorageService;
+
     @Autowired
-    private FileStorageService fileStorageService;
+    public AvatarRestController(FileStorageService fileStorageService) { this.fileStorageService = fileStorageService; }
 
     @PostMapping("/{userId}")
     public ResponseEntity saveAvatar(@RequestParam("file") MultipartFile file, @PathVariable long userId){ return fileStorageService.saveFile(file, userId); }

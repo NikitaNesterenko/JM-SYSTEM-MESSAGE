@@ -15,7 +15,6 @@ import java.util.Optional;
 public class InviteTokenServiceImpl implements InviteTokenService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private InviteTokenDAO inviteTokenDAO;
 
     @Autowired

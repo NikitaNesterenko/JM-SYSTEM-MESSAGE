@@ -21,15 +21,14 @@ import java.util.Objects;
 public class FileStorageService {
 
     private final Path fileStorageLocation;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    public FileStorageService(FileStorageProperties fileStorageProperties) {
+    public FileStorageService(FileStorageProperties fileStorageProperties, UserService userService) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         try { Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) { throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex); }
+        this.userService = userService;
     }
 
     public ResponseEntity<?> saveFile(MultipartFile file, long userId){
@@ -50,7 +49,6 @@ public class FileStorageService {
             user.setAvatarURL(newAvatarName);
             userService.updateUser(user);
             System.out.println(user.getAvatarURL());
-
             return new ResponseEntity<>("Avatar changed for user with id: " + userId, HttpStatus.CREATED);
         } catch (IOException ex){
             return new ResponseEntity<>("Avatar not changed for user with id: " + userId, HttpStatus.NOT_MODIFIED);
@@ -69,8 +67,6 @@ public class FileStorageService {
             Path currentAvatarLocation = this.fileStorageLocation.resolve(currentAvatarName);
             Files.delete(currentAvatarLocation);
             return new ResponseEntity<>("Avatar deleted for user with id: " + userId, HttpStatus.OK);
-        } catch (IOException e) {
-            return new ResponseEntity<>("Could not delete avatar for user with id: " + userId, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        } catch (IOException e) { return new ResponseEntity<>("Could not delete avatar for user with id: " + userId, HttpStatus.INTERNAL_SERVER_ERROR); }
     }
 }

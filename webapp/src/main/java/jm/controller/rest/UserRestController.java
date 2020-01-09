@@ -114,7 +114,7 @@ public class UserRestController {
 
     @GetMapping(value = "/is-exist-email/{email}")
     public ResponseEntity isExistUserWithEmail(@PathVariable("email") String email) {
-        User userByEmail = userService.getUserByEmail(email);
+        User userByEmail = userService.getUserByEmail(email).get();
 
         if (userByEmail!=null) {
             logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
@@ -129,9 +129,7 @@ public class UserRestController {
     public ResponseEntity passwordRecovery(@RequestParam(name = "token") String token,
                                            @RequestParam(name = "password") String password) {
 
-        if (mailService.changePasswordUserByToken(token, password)) {
-            return new ResponseEntity(HttpStatus.OK);
-        }
+        if (mailService.changePasswordUserByToken(token, password)) { return new ResponseEntity(HttpStatus.OK); }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }

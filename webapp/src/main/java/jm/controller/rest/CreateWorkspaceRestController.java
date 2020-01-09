@@ -79,10 +79,6 @@ public class CreateWorkspaceRestController {
         request.getSession().setAttribute("token", token);
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
         User user = userService.getUserByEmail(emailTo).get();
-        if(user == null) {
-            user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
-            userService.createUser(user);
-        }
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -126,11 +122,11 @@ public class CreateWorkspaceRestController {
     @PostMapping("/invites")
     public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
-        for (int i = 0; i < invites.length; i++) {
+        for (String invite : invites) {
             mailService.sendInviteMessage(
                     userService.getUserByEmail(token.getUserEmail()).get().getLogin(),
                     token.getUserEmail(),
-                    invites[i],
+                    invite,
                     token.getWorkspaceName(),
                     "http://localhost:8080/");
         }

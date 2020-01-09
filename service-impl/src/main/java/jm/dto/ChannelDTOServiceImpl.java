@@ -18,94 +18,67 @@ import java.util.stream.Collectors;
 @Service
 public class ChannelDTOServiceImpl implements ChannelDtoService {
 
-    @Autowired
-    UserService userService;
+    final UserService userService;
+    final BotService botService;
+    final WorkspaceService workspaceService;
 
-    @Autowired
-    BotService botService;
-
-    @Autowired
-    WorkspaceService workspaceService;
+    public ChannelDTOServiceImpl(UserService userService, BotService botService, WorkspaceService workspaceService) {
+        this.userService = userService;
+        this.botService = botService;
+        this.workspaceService = workspaceService;
+    }
 
     @Override
     public ChannelDTO toDto(Channel channel) {
-        if (channel == null) {
-            return null;
-        }
 
+        if (channel == null) { return null; }
         ChannelDTO channelDTO = new ChannelDTO();
-
         Set<Long> userIds = channel.getUsers().stream().map(User::getId).collect(Collectors.toSet());
         channelDTO.setUserIds(userIds);
-
         Set<Long> botIds = channel.getBots().stream().map(Bot::getId).collect(Collectors.toSet());
         channelDTO.setBotIds(botIds);
-
         channelDTO.setId(channel.getId());
         channelDTO.setName(channel.getName());
         channelDTO.setWorkspaceId(channel.getWorkspace().getId());
         channelDTO.setOwnerId(channel.getUser().getId());
         channelDTO.setIsPrivate(channel.getIsPrivate());
         channelDTO.setTopic(channel.getTopic());
-
         return channelDTO;
     }
 
     @Override
     public List<ChannelDTO> toDto(List<Channel> channels) {
-        if (channels==null) {
-            return null;
-        }
 
+        if (channels==null) { return null; }
         List<ChannelDTO> channelDTOList = new ArrayList<>();
-        for (Channel channel : channels) {
-            channelDTOList.add(toDto(channel));
-        }
+        for (Channel channel : channels) { channelDTOList.add(toDto(channel)); }
         return channelDTOList;
     }
 
     @Override
     public Channel toEntity(ChannelDTO channelDTO) {
-        if (channelDTO==null) {
-            return null;
-        }
 
+        if (channelDTO==null) { return null; }
         Channel channel = new Channel();
-
         if (channelDTO.getUserIds()!=null) {
             Set<User> userSet = new HashSet<>();
-            for (Long id : channelDTO.getUserIds()) {
-                userSet.add(userService.getUserById(id));
-            }
+            for (Long id : channelDTO.getUserIds()) { userSet.add(userService.getUserById(id)); }
             channel.setUsers(userSet);
         }
-
         if (channelDTO.getBotIds()!=null) {
             Set<Bot> botSet = new HashSet<>();
-            for (Long id : channelDTO.getBotIds()) {
-                botSet.add(botService.getBotById(id));
-            }
+            for (Long id : channelDTO.getBotIds()) { botSet.add(botService.getBotById(id)); }
             channel.setBots(botSet);
         }
-
-        if (channelDTO.getWorkspaceId()!=null) {
-            channel.setWorkspace(
-                    workspaceService.getWorkspaceById(channelDTO.getWorkspaceId()));
-        }
+        if (channelDTO.getWorkspaceId()!=null) { channel.setWorkspace(workspaceService.getWorkspaceById(channelDTO.getWorkspaceId())); }
         User userOwner = userService.getUserById(channelDTO.getOwnerId());
-
-
         channel.setId(channelDTO.getId());
         channel.setName(channelDTO.getName());
         channel.setUser(userOwner);
         channel.setIsPrivate(channelDTO.getIsPrivate());
         channel.setArchived(false);
         channel.setCreatedDate(channelDTO.getCreatedDate());
-
-        if (channelDTO.getTopic()!=null) {
-            channel.setTopic(channelDTO.getTopic());
-        }
-
+        if (channelDTO.getTopic()!=null) { channel.setTopic(channelDTO.getTopic()); }
         return channel;
     }
 }

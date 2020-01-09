@@ -25,9 +25,7 @@ public class StorageServiceImpl  implements StorageService {
     @Override
     public String store(MultipartFile file) throws IOException {
         Path uploadDir = Paths.get(uploadPath);
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectory(uploadDir);
-        }
+        if (!Files.exists(uploadDir)) { Files.createDirectory(uploadDir); }
         String fileName = file.getOriginalFilename();
         file.transferTo(Paths.get(uploadPath + "/" + fileName));
         logger.info("File upload was successful");
@@ -43,13 +41,9 @@ public class StorageServiceImpl  implements StorageService {
         try {
             Path file = load(filename);
             Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
+            if (resource.exists() || resource.isReadable()) { return resource; }
         }
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        catch (MalformedURLException e) { e.printStackTrace(); }
         return null;
     }
 }

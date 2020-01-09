@@ -30,9 +30,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     @Override
-    public DirectMessage updateDirectMessage(DirectMessage directMessage) {
-        return this.directMessageDAO.merge(directMessage);
-    }
+    public DirectMessage updateDirectMessage(DirectMessage directMessage) { return this.directMessageDAO.merge(directMessage); }
 
     @Override
     public void deleteDirectMessage(Long id) {
@@ -40,7 +38,5 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     @Override
-    public List<DirectMessage> getMessagesByConversationId(Long id) {
-        return this.directMessageDAO.getMessagesByConversationId(id);
-    }
+    public List<DirectMessage> getMessagesByConversationId(Long id) { return this.directMessageDAO.getMessagesByConversationId(id); }
 }

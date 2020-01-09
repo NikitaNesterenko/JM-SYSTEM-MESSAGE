@@ -24,9 +24,7 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
                 .setParameter("user", user)
                 .getResultList();
         Set<Role> roles = new HashSet<>();
-        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
-            roles.add(workspaceUserRole.getRole());
-        }
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) { roles.add(workspaceUserRole.getRole()); }
         return roles;
     }
 
@@ -38,9 +36,7 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
                 .setParameter("workspace", workspace)
                 .getResultList();
         Set<User> users = new HashSet<>();
-        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
-            users.add(workspaceUserRole.getUser());
-        }
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) { users.add(workspaceUserRole.getUser()); }
         return users;
     }
 
@@ -52,9 +48,7 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
                 .setParameter("user", user)
                 .getResultList();
         Set<Workspace> workspaces = new HashSet<>();
-        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
-            workspaces.add(workspaceUserRole.getWorkspace());
-        }
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) { workspaces.add(workspaceUserRole.getWorkspace()); }
         return workspaces;
     }
 

@@ -28,17 +28,14 @@ public class ChannelWSController {
 
     @MessageMapping("/channel")
     @SendTo("/topic/channel")
-    public String createChannel(ChannelWS channelWS)
-            throws JsonProcessingException {
+    public String createChannel(ChannelWS channelWS) throws JsonProcessingException {
 
         Optional<Channel> channel = channelService.getChannelByName(channelWS.getName());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-//        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-
+//      objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         ObjectWriter objectWriter = objectMapper.writerWithView(ChannelViews.IdNameView.class);
-
         return objectWriter.writeValueAsString(channel);
     }
 }

@@ -35,9 +35,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
     @Override
     public MessageDTO toDto(Message message) {
 
-        if (message == null) {
-            return null;
-        }
+        if (message == null) { return null; }
 
         // creating new MessageDTO with simple fields copied from Message
         MessageDTO messageDto = new MessageDTO(message);
@@ -62,9 +60,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
         // setting up 'sharedMessageId'
         Message sharedMessage = message.getSharedMessage();
-        if (sharedMessage != null) {
-            messageDto.setSharedMessageId(sharedMessage.getId());
-        }
+        if (sharedMessage != null) { messageDto.setSharedMessageId(sharedMessage.getId()); }
 
         // setting up 'recipientUserIds'
         Set<Long> recipientUserIds = message.getRecipientUsers().stream().map(User::getId).collect(Collectors.toSet());
@@ -72,35 +68,25 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
         // setting up 'parentMessageId'
         Message parentMessage = message.getParentMessage();
-        if (parentMessage != null) {
-            messageDto.setParentMessageId(parentMessage.getId());
-        }
-
+        if (parentMessage != null) { messageDto.setParentMessageId(parentMessage.getId()); }
         return messageDto;
     }
 
     @Override
     public Message toEntity(MessageDTO messageDto) {
 
-        if (messageDto == null) {
-            return null;
-        }
+        if (messageDto == null) { return null; }
 
         // creating new Message with simple fields copied from MessageDTO
         Message message = new Message(messageDto);
 
         // setting up 'user' or 'bot'
-        if (messageDto.getUserId() != null) {
-            message.setUser(userDAO.getById(messageDto.getUserId()));
-        } else if (messageDto.getBotId() != null) {
-            message.setBot(botDAO.getById(messageDto.getBotId()));
-        }
+        if (messageDto.getUserId() != null) { message.setUser(userDAO.getById(messageDto.getUserId()));
+        } else if (messageDto.getBotId() != null) { message.setBot(botDAO.getById(messageDto.getBotId())); }
 
         // setting up 'sharedMessage'
         Long sharedMessageId = messageDto.getSharedMessageId();
-        if (sharedMessageId != null) {
-            message.setSharedMessage(messageDAO.getById(sharedMessageId));
-        }
+        if (sharedMessageId != null) { message.setSharedMessage(messageDAO.getById(sharedMessageId)); }
 
         // setting up 'recipientUsers'
         Set<Long> recipientUserIds = messageDto.getRecipientUserIds();
@@ -109,10 +95,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
         // parentMessageId
         Long parentMessageId = messageDto.getParentMessageId();
-        if (parentMessageId != null) {
-            message.setParentMessage(messageDAO.getById(parentMessageId));
-        }
-
+        if (parentMessageId != null) { message.setParentMessage(messageDAO.getById(parentMessageId)); }
         return message;
     }
 }

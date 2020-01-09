@@ -24,7 +24,6 @@ public class InviteTokenRestController {
     private TokenGenerator tokenGenerator;
     private MailService mailService;
 
-
     private static final Logger logger = LoggerFactory.getLogger(
             InviteTokenRestController.class);
 

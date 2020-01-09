@@ -15,10 +15,8 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public void persist(Conversation conversation) {
-        if (
-                getConversationByUsers(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
-                        || getConversationByUsers(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
-        ) {
+        if (getConversationByUsers(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
+                        || getConversationByUsers(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null) {
             entityManager.merge(conversation);
         }
     }

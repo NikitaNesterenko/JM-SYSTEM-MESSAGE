@@ -44,9 +44,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
                     .setParameter(1, id);
             List<User> userList = query.getResultList();
-            for (User user : userList) {
-                System.out.println(user);
-            }
+            for (User user : userList) { System.out.println(user); }
             return userList;
     }
 
@@ -78,9 +76,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public List<User> getUsersByIds(Set<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
-            return Collections.emptyList();
-        }
+        if (ids == null || ids.isEmpty()) { return Collections.emptyList(); }
         return entityManager
                 .createQuery("SELECT o FROM User o WHERE o.id IN :ids", User.class)
                 .setParameter("ids", ids)

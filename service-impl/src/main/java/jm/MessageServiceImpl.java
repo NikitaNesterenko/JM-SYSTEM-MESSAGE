@@ -16,7 +16,6 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
-
     private MessageDAO messageDAO;
 
     @Autowired
@@ -50,26 +49,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void deleteMessage(Long id) {
-        messageDAO.deleteById(id);
-
-    }
+    public void deleteMessage(Long id) { messageDAO.deleteById(id); }
 
     @Override
-    public void updateMessage(Message message) {
-        messageDAO.merge(message);
-
-    }
+    public void updateMessage(Message message) { messageDAO.merge(message); }
 
     @Override
-    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
-        return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
-    }
+    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) { return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate); }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
-        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate);
-    }
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) { return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate); }
 
     @Override
     public List<Message> getStarredMessagesForUser(Long id) {
