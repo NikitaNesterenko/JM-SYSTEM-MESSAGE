@@ -9,8 +9,9 @@ export class Members {
     showMemberList() {
         this.channelService.getById(sessionStorage.getItem("channelName")).then(
             channel => {
-                const chn_users = channel.users;
-                $('#memberListPlaceholder').append(this.createMemberList(chn_users));
+                const member_list = $('#memberListPlaceholder');
+                member_list.empty();
+                member_list.append(this.createMemberList(channel.users));
             }
         )
     }
