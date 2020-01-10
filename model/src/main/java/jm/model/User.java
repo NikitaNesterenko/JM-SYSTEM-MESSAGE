@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -168,11 +167,8 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
-
     }
 
-    // Constructor for simplify UserDTO->User conversion.
-    // copying simple fields
     public User(UserDTO userDto) {
         this.id = userDto.getId();
         this.name = userDto.getName();

@@ -21,7 +21,8 @@ window.addEventListener('load', function () {
 
     function showSearchBlock() {
         return function() {
-            searcher_modal.style.display = "block";
+            $('#modalSearcher').modal('show');
+            //searcher_modal.style.display = "block";
             const work = workspace_service.getChoosedWorkspace();
             const user = user_service.getLoggedUser();
             const message = message_service.getAll();
@@ -33,9 +34,8 @@ window.addEventListener('load', function () {
 
                 Promise.all([load_channels, load_users, load_messages]).then(values => {
                     available_channels = values[0];
-                    available_users = values[1];
+                    available_users = values[1];available_messages = values[2];
                     available_messages = values[2];
-
                     showSearchResult(available_channels, available_users, available_messages);
                 })
             })
@@ -67,11 +67,11 @@ function showChannels(channels) {
 }
 
 function showUsers(users) {
-    return users.map((user) => displayItem(user.id, "user",user.name + " " + user.lastName, userPic(user))).join("");
+        return users.map((user) => displayItem(user.id, "user", user.name + " " + user.lastName, userPic(user))).join("");
 }
 
 function showMessages(messages) {
-    return messages.map((message) => displayItem(message.id, "message",message.content, "")).join("");
+        return messages.map((message) => displayItem(message.id, "message", message.content, "")).join("");
 }
 
 function channelPic(channel) {
