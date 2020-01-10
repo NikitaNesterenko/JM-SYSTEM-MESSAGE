@@ -120,7 +120,6 @@ public class MessageRestController {
         for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId)) {
             logger.info(message.toString());
         }
-        logger.info("-----------------------");
         return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId), HttpStatus.OK);
     }
 }

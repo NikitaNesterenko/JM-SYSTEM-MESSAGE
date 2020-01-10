@@ -71,7 +71,5 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) {
-        return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId);
-    }
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) { return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId); }
 }
