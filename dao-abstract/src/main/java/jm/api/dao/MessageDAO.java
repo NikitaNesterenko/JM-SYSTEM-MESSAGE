@@ -18,7 +18,6 @@ public interface MessageDAO {
 
     List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
 
-    void persist(Message message);
     List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId);
 
     void persist(Message message);

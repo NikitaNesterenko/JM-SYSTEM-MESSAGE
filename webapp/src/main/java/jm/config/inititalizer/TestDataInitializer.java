@@ -256,7 +256,7 @@ public class TestDataInitializer {
         this.messages.add(message4);
 
         Message message_5 = new Message();
-        message_5.setChannel(channels.get(1));
+        message_5.setChannelId(channels.get(1).getId());
         message_5.setUser(userList.get(1));
         message_5.setContent("@channel hello everybody!");
         message_5.setDateCreate(LocalDateTime.now());
@@ -265,7 +265,7 @@ public class TestDataInitializer {
         this.messages.add(message_5);
 
         Message message_6 = new Message();
-        message_6.setChannel(channels.get(2));
+        message_6.setChannelId(channels.get(2).getId());
         message_6.setUser(userList.get(2));
         message_6.setContent("@channel today is a good day");
         message_6.setDateCreate(LocalDateTime.now());

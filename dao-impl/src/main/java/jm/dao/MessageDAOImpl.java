@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -95,14 +94,9 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     @Override
-    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) {
-        try {
-            List<Message> resultList = entityManager.createNativeQuery("select id, content, date_create, filename, bot_id, channel_id, messages.user_id  from messages inner join channels_users using (channel_id) where channels_users.user_id = ? and content like '%@channel%'", Message.class)
+    public List getAllMessagesReceivedFromChannelsByUserId(Long userId) {
+            return entityManager.createNativeQuery("select id, content, date_create, filename, bot_id, channel_id, messages.user_id  from messages inner join channels_users using (channel_id) where channels_users.user_id = ? and content like '%@channel%'", Message.class)
                     .setParameter(1, userId)
                     .getResultList();
-            return resultList;
-        } catch (NoResultException e) {
-            return null;
-        }
     }
 }
