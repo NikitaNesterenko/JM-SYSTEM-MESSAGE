@@ -1,16 +1,13 @@
-import {ChannelRestPaginationService, BotRestPaginationService, WorkspaceRestPaginationService} from '../rest/entities-rest-pagination.js'
 import {
     BotRestPaginationService,
     ChannelRestPaginationService,
     WorkspaceRestPaginationService,
     ConversationRestPaginationService,
     UserRestPaginationService
-} from '../rest/entities-rest-pagination.js'
+} from '../rest/entities-rest-pagination.js';
 import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
-
 import {refreshMemberList} from "../member-list/member-list.js";
-import {UserRestPaginationService} from "../rest/entities-rest-pagination";
 
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
