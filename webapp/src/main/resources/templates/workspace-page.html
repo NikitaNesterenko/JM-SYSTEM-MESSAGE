@@ -18,6 +18,7 @@
     <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
+    <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/workspace-page/components/navbar/channel_topic.js}" type="module"></script>
 
@@ -59,6 +60,12 @@
     <!-- activities info -->
     <script defer th:src="@{/js/activities/view_activities.js}" type="module"></script>
 <!--    <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>-->
+
+    <!-- thread panel-->
+    <script defer th:src="@{/js/thread/thread-view.js}" type="module"></script>
+    <script defer th:src="@{/js/thread/thread-input-box.js}" type="module"></script>
+    <script defer th:src="@{/js/thread/thread-messages.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/thread/thread-view.css}"/>
 
     <!-- memberList -->
     <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
@@ -307,9 +314,16 @@
                             </button>
                         </div>
                         <div class="c-menu_item__li" data-qa="sign-out-wrapper">
+                            <a href="/logout">
                             <button class="c-button-unstyled c-menu_item__button" type="button">
-                                <div class="c-menu_item__label">Sign out of <strong>Java Mentoring</strong></div>
+                                <div class="c-menu_item__label">
+                                    Sign out of
+                                    <strong>
+                                        Java Mentoring
+                                    </strong>
+                                </div>
                             </button>
+                            </a>
                         </div>
                         <div aria-hidden="true"
                              class="c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child">

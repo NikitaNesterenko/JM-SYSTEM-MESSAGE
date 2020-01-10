@@ -23,7 +23,7 @@ public class UserDTO {
     private String title;
     private String displayName;
     private String phoneNumber;
-//    private Set<Long> roleIds;
+    //    private Set<Long> roleIds;
     private String timeZone;
     private Set<Long> starredMessageIds;
     private Set<Long> directMessagesToUserIds;

@@ -1,18 +1,16 @@
-import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
+import {close_right_panel, open_right_panel, is_open} from "../right_slide_panel/right_panel.js";
+import {close_right_thread_panel} from "../right_slide_panel/right_thread_panel.js";
+
 import {attachMemberListBtnClickHandler} from "/js/member-list/member-list.js";
 
-// toggle right panel
-let is_open;
-$(document).on('load', () => is_open = false);
-
 let toggle_right_menu = () => {
+
     if (is_open) {
         close_right_panel();
-        is_open = false;
     } else {
-        open_right_panel();
+        close_right_thread_panel();
         get_channel_info_panel();
-        is_open = true;
+        open_right_panel();
         attachMemberListBtnClickHandler();
     }
 };

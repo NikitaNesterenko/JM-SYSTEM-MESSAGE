@@ -4,10 +4,9 @@ import {
     WorkspaceRestPaginationService,
     ConversationRestPaginationService,
     UserRestPaginationService
-} from '../rest/entities-rest-pagination.js'
+} from '../rest/entities-rest-pagination.js';
 import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
-
 import {refreshMemberList} from "../member-list/member-list.js";
 
 const channel_service = new ChannelRestPaginationService();
