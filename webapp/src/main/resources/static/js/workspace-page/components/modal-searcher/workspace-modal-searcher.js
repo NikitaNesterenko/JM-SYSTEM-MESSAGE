@@ -1,9 +1,4 @@
-import {
-    ChannelRestPaginationService,
-    MessageRestPaginationService,
-    UserRestPaginationService,
-    WorkspaceRestPaginationService
-} from '../../../rest/entities-rest-pagination.js'
+import {ChannelRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from '../../../rest/entities-rest-pagination.js'
 
 const channel_service = new ChannelRestPaginationService();
 const user_service = new UserRestPaginationService();
@@ -41,26 +36,15 @@ window.addEventListener('load', function () {
             })
         }
     }
-
-    searcher_btn.onclick = showSearchBlock();
-    searcher_sidebar_btn.onclick = showSearchBlock();
 });
 
-const showSearchResult = (channels, users, messages)=>{
+function showSearchResult(channels, users) {
     $('#idSearchContent').html(`<ol role="listbox">
-     <div class="search_channels_in_modal" id="search_channel_in_modal_id">
-     ${showChannels(channels)}
-     </div>
+            <div class="search_channels_in_modal" id="search_channel_in_modal_id"> ${showChannels(channels)}</div>
+            <div class="search_users_in_modal"> ${showUsers(users)}</div>
+        </ol>`)
+};
 
-     <div class="search_users_in_modal">
-     ${showUsers(users)}
-     </div>
-
-     <div class="search_message_in_modal">
-     ${showMessages(messages)}
-     </div>
-
-     </ol>`)};
 
 function showChannels(channels) {
     return channels.map((channel) => displayItem(channel.id, "channel", channel.name, channelPic(channel))).join("");
@@ -79,15 +63,11 @@ function channelPic(channel) {
     if (channel.isPrivate) {
         pic = "*";
     }
-    return `<i class="searcher__channel_icon_prefix">
-            ${pic}
-            </i>`;
+    return `<i class="searcher__channel_icon_prefix"> ${pic}</i>`;
 }
 
 function userPic(user) {
-    return `<i class="searcher__channel_icon_prefix">
-            @
-            </i>`;
+    return `<i class="searcher__channel_icon_prefix"> @ </i>`;
 }
 
 function displayItem(id, itemClass, itemName, pic) {
@@ -122,11 +102,15 @@ $('#searchInput').bind("change paste keyup", function() {
 $("#idSearchContent").on("click", "li.search-field-li", function(){
     const id = $(this).data("id");
     const type = $(this).data("type");
-    if (type==="channel") {
+    if (type=="channel") {
         pressChannelButton(id);
         sessionStorage.setItem("channelName", id);
-    } else if (type==="user") {
+    } else if (type=="user") {
         console.log("Открытие личной переписки с User с id=" + id);
     }
     $("#modalSearcher").modal("hide");
 });
+
+
+
+

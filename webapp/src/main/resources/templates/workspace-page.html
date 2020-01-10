@@ -18,6 +18,7 @@
     <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
+    <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/workspace-page/components/navbar/channel_topic.js}" type="module"></script>
 
@@ -55,6 +56,12 @@
     <!-- channel info -->
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
+
+    <!-- thread panel-->
+    <script defer th:src="@{/js/thread/thread-view.js}" type="module"></script>
+    <script defer th:src="@{/js/thread/thread-input-box.js}" type="module"></script>
+    <script defer th:src="@{/js/thread/thread-messages.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/thread/thread-view.css}"/>
 
     <!-- memberList -->
     <link rel="stylesheet" th:href="@{/css/member-list.css}"/>
@@ -902,7 +909,8 @@
                         <div class="p-flexpane_header">
                             <div class="p-flexpane_header__primary">
                                 <div class="p-flexpane_header__primary_content">
-                                    <div class="p-flexpane__title_container">About this channel</div>
+                                    <div class="p-flexpane__title_container"></div>
+<!--                                    <div class="p-flexpane__title_container">About this channel</div>-->
                                 </div>
                                 <button class="p-flexpane_header__control__button">
                                     <i class="c-icon--times">✖</i>

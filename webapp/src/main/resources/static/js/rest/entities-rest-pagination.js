@@ -11,17 +11,19 @@ export class UserRestPaginationService extends RestPaginationService {
         if (response.ok) {
             return await response.json();
         }
-    }
+    };
 
     getUsersByWorkspace = async (id) => {
         const response = await fetch('/rest/api/users/workspace/' + id);
         return response.json();
     }
 }
-export class MessageRestPaginationService extends RestPaginationService{
-    constructor(){
+
+export class MessageRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/messages');
     }
+
     getAllMessagesByChannelId = async (id) => {
         const response = await fetch('/rest/api/messages/channel/' + id);
         return response.json();
@@ -41,35 +43,40 @@ export class MessageRestPaginationService extends RestPaginationService{
         return response.json();
     };
 }
-export class BotRestPaginationService extends RestPaginationService{
-    constructor(){
+
+export class BotRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/bot');
     }
+
     getBotByWorkspaceId = async (id) => {
         const response = await fetch('/rest/api/bot/workspace/' + id)
         return await response.json()
             .catch(err => console.log(err.status));
     };
 }
+
 export class ChannelRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels');
     }
+
     getChannelsByWorkspaceId = async (id) => {
         const response = await fetch('/rest/api/channels/workspace/' + id)
         return await response.json()
             .catch(err => console.log(err.status));
-    }
+    };
+
     getChannelByName = async (name) => {
         const response = await fetch('/rest/api/channels/name/' + name)
         return await response.json()
             .catch(err => console.log(err.status));
-    }
+    };
 
     getChannelsByWorkspaceAndUser = async (workspace_id, user_id) => {
         const response = await fetch('/rest/api/channels/workspace/' + workspace_id + '/user/' + user_id);
         return response.json();
-    }
+    };
 
     getChannelsByUserId = async (id) => {
         const response = await fetch('/rest/api/channels/user/' + id)
@@ -78,16 +85,18 @@ export class ChannelRestPaginationService extends RestPaginationService {
     };
 
     archivingChannel = async (id) => {
-        const response = await fetch(`/rest/api/channels/archiving/${id}`,{
+        const response = await fetch(`/rest/api/channels/archiving/${id}`, {
             method: 'POST'
         });
         return response.json();
     }
 }
-export class WorkspaceRestPaginationService extends RestPaginationService{
-    constructor(){
+
+export class WorkspaceRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/workspaces');
     }
+
     getWorkspaceByName = async (name) => {
         const response = await fetch('/rest/api/workspaces/name/' + name);
         if (!response.ok) {
@@ -127,9 +136,33 @@ export class StorageService {
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/invites');
     }
+}
+
+export class ThreadChannelRestPaginationService extends  RestPaginationService{
+    constructor(){
+        super('/rest/api/threads');
+    }
+    getThreadChannelByChannelMessageId = async (id) => {
+        const response = await fetch('/rest/api/threads/' + id);
+        return response.json();
+    };
+    getThreadChannelMessagesByThreadChannelId = async (id) => {
+        const response = await fetch('/rest/api/threads/messages/' + id);
+        return response.json();
+    };
+}
+
+export class ThreadChannelMessageRestPaginationService extends  RestPaginationService{
+    constructor(){
+        super('/rest/api/threads/messages');
+    }
+    getThreadChannelMessagesByThreadChannelId = async (id) => {
+        const response = await fetch('/rest/api/threads/messages/' + id);
+        return response.json();
+    };
 }
 
 export class ConversationRestPaginationService extends RestPaginationService {

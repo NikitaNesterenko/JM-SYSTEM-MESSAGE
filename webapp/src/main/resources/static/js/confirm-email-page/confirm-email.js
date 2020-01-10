@@ -16,7 +16,7 @@ $("input").each(function() {
     }
 });
 
-function spill($this, val) {
+const spill =($this, val)=> {
     var maxlength = $this.data("maxlength");
     if ( val.length >= maxlength ) {
         $this.val(val.substring(0, maxlength));
@@ -27,7 +27,7 @@ function spill($this, val) {
         $this.val(val);
 }
 
-function checkIfEmpty() {
+const checkIfEmpty =()=> {
     let arrayInputs = $('input').map(function () {
         return this.value;
     }).get()
@@ -39,7 +39,7 @@ function checkIfEmpty() {
     }
 }
 
-function send() {
+const send =()=> {
         let arrayInputs = $('input').map(function () {
             return this.value;
         }).get();
