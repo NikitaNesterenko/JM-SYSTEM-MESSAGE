@@ -48,3 +48,10 @@ $(document).ready(async () => {
     const dm_chat = new ActiveChatMembers();
     await dm_chat.populateDirectMessages();
 });
+
+$("#google-calendar-button").click(
+    function () {
+        location.href = "/application/google/calendar";
+        return false;
+    }
+);
