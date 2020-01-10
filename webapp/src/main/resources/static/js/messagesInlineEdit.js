@@ -25,7 +25,19 @@ export function setOnClickEdit(setNonActive) {
     });
 }
 
-const onEditButtonClick =(ev)=> {
+export function setDeleteStatus(message) {
+    user_service.getLoggedUser().then(loggedUser => {
+        const deleteButtons = document.getElementsByName("btnDeleteInline");
+        for (const deleteButton of deleteButtons) {
+            const msgUserId = deleteButton.getAttribute("data-user-id");
+            if (Number.parseInt(msgUserId) === loggedUser.id) {
+                deleteButton.addEventListener("click", {handleEvent : onDeleteButtonClick, message: message});
+            }
+        }
+    });
+}
+
+function onEditButtonClick(ev) {
     if (activeEdit) {
         return;
     }
@@ -46,7 +58,7 @@ const onEditButtonClick =(ev)=> {
     parentDiv.addEventListener("submit", onEditSubmit);
 }
 
-const onEditSubmit =(ev)=> {
+function onEditSubmit(ev) {
     ev.preventDefault();
     const editMessageForm = ev.target;
     // const parentDiv = editMessageForm.parentElement.parentElement;
@@ -67,17 +79,33 @@ const onEditSubmit =(ev)=> {
         const currentDate = convert_date_to_format_Json(new Date());
         const message = {
             "id": messageId,
-            "user": user,
-            "channel": channel,
+            "userId": user.id,
+            "channelId": channel.id,
             "content": messageText,
             "dateCreate": currentDate,
-            "filename": messageAttachment,
-            "starredByWhom":starredMessagesForUser
+            "filename": messageAttachment
         };
         message_service.update(message).then(() => {
             sendName(message);
         });
     });
+}
+
+function onDeleteButtonClick(event) {
+    const message = this.message;
+    const messageId = event.currentTarget.getAttribute("data-msg-id");
+
+    if (Number.parseInt(messageId) === message.id) {
+        console.log("year");
+        console.log(message.content);
+
+        message.isDeleted = true;
+        console.log(message.isDeleted);
+
+        message_service.update(message).then(() => {
+            sendName(message);
+        });
+    }
 }
 
 /**

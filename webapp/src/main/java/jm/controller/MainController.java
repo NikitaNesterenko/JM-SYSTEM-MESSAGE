@@ -32,6 +32,28 @@ public class MainController {
         return "home-page";
     }
 
+    @PostMapping(value = "/workspace/create")
+    public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("usersList") String[] usersList,
+                                @RequestParam("owner") String owner, @RequestParam(value = "isPrivate", required = false) boolean isPrivate) {
+        ModelAndView modelAndView = new ModelAndView();
+        //TODO
+        modelAndView.setViewName("redirect:/workspace");
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/workspace")
+    public ModelAndView workspacePage() { return new ModelAndView("workspace-page"); }
+
+    @GetMapping(value = "/workspace_temp")
+    public ModelAndView workspacePage(HttpServletRequest request) {
+        if(request.getSession().getAttribute("WorkspaceID") != null) {
+            return new ModelAndView("workspace-page");
+        } else {
+            // при разрыве коннекта с сервером редиректик на выбор Воркспейса
+            return new ModelAndView("redirect:/chooseWorkspace");
+        }
+    }
+
     /*
      @GetMapping(value = "/workspace_temp")
      public ModelAndView workspaceTempPage() {
@@ -59,4 +81,11 @@ public class MainController {
 
     @GetMapping("/chooseWorkspace")
     public String chooseWorkspace() {return "choose-workspace-page";}
+
+    @GetMapping("/password-recovery/**")
+    public String passwordRecovery() {
+        return "password-recovery";
+    }
+
+
 }

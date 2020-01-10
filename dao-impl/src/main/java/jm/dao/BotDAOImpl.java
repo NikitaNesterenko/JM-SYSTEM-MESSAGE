@@ -1,4 +1,3 @@
-
 package jm.dao;
 
 import jm.api.dao.BotDAO;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -19,14 +17,18 @@ import java.util.Set;
 public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
+
     @Override
-    public Optional<Bot> getBotByWorkspaceId1(Workspace workspace) {
-        return  Optional.ofNullable((Bot) entityManager.createNativeQuery("select * from bots where workspace_id=?", Bot.class)
+    public Bot getBotByWorkspaceId(Workspace workspace) {
+        try {
+            return (Bot) entityManager.createNativeQuery("select * from bots where workspace_id=?", Bot.class)
                     .setParameter(1, workspace)
-                    .getSingleResult());
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
 }
-

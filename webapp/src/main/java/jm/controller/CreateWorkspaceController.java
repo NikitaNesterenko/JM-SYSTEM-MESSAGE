@@ -7,25 +7,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/createWorkspace/**")
 public class CreateWorkspaceController {
 
-    @GetMapping(value = "/create")
+    @GetMapping(value = "/email/create")
     public String workspacePageNew() { return "createWorkspace/new-workspace-page.html"; }
 
-    @GetMapping(value = "/confirmemail")
+    @GetMapping(value = "/email/confirmemail")
     public String confirmEmail() {
         return "createWorkspace/confirm-email";
     }
 
 
-    @GetMapping(value = "/workspacename")
+    @GetMapping(value = "/email/workspacename")
     public String workspaceName() { return "createWorkspace/workspace-name"; }
 
-    @GetMapping(value = "/channelname")
+    @GetMapping(value = "/email/channelname")
     public String channelName() { return "createWorkspace/channel-name"; }
 
-    @GetMapping(value = "/invites")
+    @GetMapping(value = "/email/invites")
     public String inviteUsersPage() { return "createWorkspace/invites-page"; }
 
-    @GetMapping(value = "/tada")
+    @GetMapping(value = "/email/tada")
     public String tadaPage() { return "createWorkspace/tada-page"; }
 
 }

@@ -48,7 +48,7 @@ const send =()=> {
        if(result === null) {
            alert("ne tot kod :)")
        } else {
-           setTimeout(function(){ window.location.href = "/workspacename";}, 1000);
+           setTimeout(function(){ window.location.href = "/email/workspacename";}, 1000);
 
        }
 }

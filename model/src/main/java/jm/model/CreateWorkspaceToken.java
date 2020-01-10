@@ -37,4 +37,5 @@ public class CreateWorkspaceToken {
         this.code = code;
     }
 
+
 }

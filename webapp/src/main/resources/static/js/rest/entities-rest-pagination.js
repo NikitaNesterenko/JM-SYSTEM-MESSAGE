@@ -35,6 +35,7 @@ export class MessageRestPaginationService extends RestPaginationService {
         const response = await fetch(`/rest/api/messages/${id}/starred`);
         return response.json();
     };
+
     getMessageById = async (id) => {
         const response = await fetch('/rest/api/messages/' + id);
         return response.json();
@@ -124,9 +125,7 @@ export class StorageService {
         const response = await fetch(`/upload`, {
             method: 'POST',
             body: file
-        }).then(response => {
-            return response.text()
-        });
+        }).then(response => {return response.text()});
         return response;
     }
 }
@@ -160,3 +159,32 @@ export class ThreadChannelMessageRestPaginationService extends  RestPaginationSe
         return response.json();
     };
 }
+
+export class ConversationRestPaginationService extends RestPaginationService {
+    constructor(){
+        super('/rest/api/conversations');
+    }
+
+    getAllConversationsByUserId = async (id) => {
+        const response = await fetch(`/rest/api/conversations/user/${id}`);
+        return response.json();
+    };
+
+    getConversationForUsers = async (id_1, id_2) => {
+        const response = await fetch(`/rest/api/conversations/users/${id_1}/${id_2}`);
+        return response.json();
+    };
+}
+
+export class DirectMessagesRestController extends RestPaginationService {
+    constructor() {
+        super('/rest/api/direct_messages');
+    }
+
+    getAllMessagesByConversationId = async (id) => {
+        const response = await fetch(`/rest/api/direct_messages/conversation/${id}`);
+        return response.json();
+    };
+
+}
+
