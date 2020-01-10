@@ -112,7 +112,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .failureHandler(jmAuthenticationFailureHandler())
                 .and()
                 .logout()
-                .logoutUrl("/perform_logout")
+                .logoutUrl("/logout")
                 .permitAll()
                 .invalidateHttpSession(true)
                 .and()
