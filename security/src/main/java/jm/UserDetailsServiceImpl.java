@@ -18,7 +18,6 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-
     private final String WITHOUT_WORKSPACE = "REGISTERED";
 
     @Autowired
@@ -50,13 +49,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             login = strings[0];
         }
 */
-        User user = userServiceImpl.getUserByLogin(workspaceLogin);
+        User user = userServiceImpl.getUserByLogin(workspaceLogin).get();
         org.springframework.security.core.userdetails.User.UserBuilder builder = null;
         if (user != null) {
             builder = org.springframework.security.core.userdetails.User.withUsername(workspaceLogin);
             builder.password(user.getPassword());
             // if (workspaceName != null) {
-            Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
+            Workspace workspace = workspaceService.getWorkspaceByName(workspaceName).get();
             if (workspace != null) {
                 Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
                 builder.authorities(authorities);
@@ -67,9 +66,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 System.out.println("User " + workspaceLogin + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
 //                logger.info("User " + login + "logged in JM-SYSTEM-MESSAGE with roles: " + WITHOUT_WORKSPACE);
             }
-        } else {
-            throw new UsernameNotFoundException("User not found.");
-        }
+        } else { throw new UsernameNotFoundException("User not found."); }
         return builder.build();
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/rest/api/users")
@@ -37,9 +38,7 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
         List<User> users = userService.getAllUsers();
-        for (User user : users) {
-            logger.info(user.toString());
-        }
+        for (User user : users) { logger.info(user.toString()); }
         List<UserDTO> userDTOList = userDtoService.toDto(users);
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
@@ -73,6 +72,7 @@ public class UserRestController {
             logger.warn("Пользователь не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+        user.setAvatarURL(user.getAvatarURL());
         userService.updateUser(user);
         logger.info("Обновленный пользователь: {}", user);
         return new ResponseEntity(HttpStatus.OK);
@@ -90,9 +90,7 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
         List<User> users = userService.getAllUsersInThisChannel(id);
-        for (User user : users) {
-            logger.info(user.toString());
-        }
+        for (User user : users) { logger.info(user.toString()); }
         List<UserDTO> userDTOList = userDtoService.toDto(users);
         return ResponseEntity.ok(userDTOList);
     }
@@ -100,9 +98,9 @@ public class UserRestController {
     // DTO compliant
     @GetMapping(value = "/loggedUser")
     public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
-        User user = userService.getUserByLogin(principal.getName());
+        Optional<User> user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
-        UserDTO userDTO = userDtoService.toDto(user);
+        UserDTO userDTO = userDtoService.toDto(user.get());
         return ResponseEntity.ok(userDTO);
     }
 
@@ -111,15 +109,13 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);
         List<UserDTO> userDTOsList = userService.getAllUsersInWorkspace(id);
-        for (UserDTO user : userDTOsList) {
-            logger.info(user.toString());
-        }
+        for (UserDTO user : userDTOsList) { logger.info(user.toString()); }
         return ResponseEntity.ok(userDTOsList);
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
     public ResponseEntity isExistUserWithEmail(@PathVariable("email") String email) {
-        User userByEmail = userService.getUserByEmail(email);
+        User userByEmail = userService.getUserByEmail(email).get();
 
         if (userByEmail!=null) {
             logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
@@ -134,9 +130,7 @@ public class UserRestController {
     public ResponseEntity passwordRecovery(@RequestParam(name = "token") String token,
                                            @RequestParam(name = "password") String password) {
 
-        if (mailService.changePasswordUserByToken(token, password)) {
-            return new ResponseEntity(HttpStatus.OK);
-        }
+        if (mailService.changePasswordUserByToken(token, password)) { return new ResponseEntity(HttpStatus.OK); }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }

@@ -8,21 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class AvatarTestController {
+
+    final UserService userService;
     @Autowired
-    UserService userService;
+    public AvatarTestController(UserService userService) { this.userService = userService; }
 
     @GetMapping("/testAvatar99999")
     public String avatar99999() {
         createUser99999();
-
-        return "redirect:" + userService.getUserByLogin("login_99999").getAvatarURL();
+        return "redirect:" + userService.getUserByLogin("login_99999").get().getAvatarURL();
     }
 
     @GetMapping("/testAvatar100000")
     public String avatar100000() {
         createUser100000();
-
-        return "redirect:" + userService.getUserByLogin("login_100000").getAvatarURL();
+        return "redirect:" + userService.getUserByLogin("login_100000").get().getAvatarURL();
     }
 
     private void createUser99999() {

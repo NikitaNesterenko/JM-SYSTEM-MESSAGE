@@ -19,14 +19,12 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @SuppressWarnings("unchecked")
     public Set<Role> getRole(Workspace workspace, User user) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where workspace = :workspace and user=:user")
+                .createQuery("FROM WorkspaceUserRole WHERE workspace=:workspace AND user=:user")
                 .setParameter("workspace", workspace)
                 .setParameter("user", user)
                 .getResultList();
         Set<Role> roles = new HashSet<>();
-        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
-            roles.add(workspaceUserRole.getRole());
-        }
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) { roles.add(workspaceUserRole.getRole()); }
         return roles;
     }
 
@@ -34,13 +32,11 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @SuppressWarnings("unchecked")
     public Set<User> getUsersByWorkspace(Workspace workspace) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where workspace = :workspace")
+                .createQuery("FROM WorkspaceUserRole WHERE workspace=:workspace")
                 .setParameter("workspace", workspace)
                 .getResultList();
         Set<User> users = new HashSet<>();
-        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
-            users.add(workspaceUserRole.getUser());
-        }
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) { users.add(workspaceUserRole.getUser()); }
         return users;
     }
 
@@ -48,13 +44,11 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @SuppressWarnings("unchecked")
     public Set<Workspace> getWorkspacesByUsers(User user) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where user=:user")
+                .createQuery("FROM WorkspaceUserRole WHERE user=:user")
                 .setParameter("user", user)
                 .getResultList();
         Set<Workspace> workspaces = new HashSet<>();
-        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
-            workspaces.add(workspaceUserRole.getWorkspace());
-        }
+        for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) { workspaces.add(workspaceUserRole.getWorkspace()); }
         return workspaces;
     }
 

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MainController {
+
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     @Autowired
     WorkspaceService workspaceService;
@@ -37,41 +38,25 @@ public class MainController {
 
     @GetMapping(value = "/workspace_temp")
     public ModelAndView workspacePage(HttpServletRequest request) {
-        if(request.getSession().getAttribute("WorkspaceID") != null) {
-            return new ModelAndView("workspace-page");
-        } else {
-            // при разрыве коннекта с сервером редиректик на выбор Воркспейса
-            return new ModelAndView("redirect:/chooseWorkspace");
-        }
+        if(request.getSession().getAttribute("WorkspaceID") != null) { return new ModelAndView("workspace-page");
+        } else { return new ModelAndView("redirect:/chooseWorkspace"); }
     }
 
     @GetMapping(value = "/signin")
-    public ModelAndView signInPage() {
-        return new ModelAndView("signin-page");
-    }
+    public ModelAndView signInPage() { return new ModelAndView("signin-page"); }
 
     @GetMapping(value = "/admin")
-    public ModelAndView adminPage() {
-        return new ModelAndView("admin-page");
-    }
+    public ModelAndView adminPage() { return new ModelAndView("admin-page"); }
 
     @GetMapping(value = "/searchChannel")
-    public String searchChannelPage() {
-        return "search-channel-page";
-    }
+    public String searchChannelPage() { return "search-channel-page"; }
 
     @GetMapping(value = "/searchUsers")
-    public String searchUsersPage() {
-        return "search-users-page";
-    }
+    public String searchUsersPage() { return "search-users-page"; }
 
     @GetMapping("/chooseWorkspace")
     public String chooseWorkspace() {return "choose-workspace-page";}
 
     @GetMapping("/password-recovery/**")
-    public String passwordRecovery() {
-        return "password-recovery";
-    }
-
-
+    public String passwordRecovery() { return "password-recovery"; }
 }

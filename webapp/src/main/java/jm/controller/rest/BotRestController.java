@@ -102,7 +102,7 @@ public class BotRestController {
 
     @PostMapping("/{id}/channels/{name}/messages")
     public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
-        Channel channel = channelService.getChannelByName(name);
+        Channel channel = channelService.getChannelByName(name).get();
         Bot bot = botService.getBotById(id);
         message.setChannelId(channel.getId());
         message.setBot(bot);
@@ -119,37 +119,29 @@ public class BotRestController {
 
     @GetMapping("/{id}/channels/{name}/messages/hour")
     public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusHours(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusHours(1));
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
     public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusDays(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusDays(1));
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
     public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusWeeks(1));
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
     public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
+        return getListResponseEntity(botId, channelName, LocalDateTime.now().minusMonths(1));
+    }
+
+    private ResponseEntity<List<Message>> getListResponseEntity(@PathVariable("id") Long botId, @PathVariable("name") String channelName, LocalDateTime localDateTime) {
+        Channel channel = channelService.getChannelByName(channelName).get();
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusMonths(1);
+        LocalDateTime startDate = localDateTime;
         return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
     }
 }

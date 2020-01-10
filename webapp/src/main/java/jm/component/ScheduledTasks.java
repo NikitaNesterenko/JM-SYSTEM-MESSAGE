@@ -5,5 +5,4 @@ import org.springframework.stereotype.Component;
 
 @Component
 @EnableScheduling
-public class ScheduledTasks {
-}
+public class ScheduledTasks { }

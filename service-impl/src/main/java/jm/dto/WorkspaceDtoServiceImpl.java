@@ -28,9 +28,7 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
     @Override
     public WorkspaceDTO toDto(Workspace workspace) {
 
-        if (workspace == null) {
-            return null;
-        }
+        if (workspace == null) { return null; }
 
         // creating new WorkspaceDTO with simple fields copied from Workspace
         WorkspaceDTO workspaceDto = new WorkspaceDTO(workspace);
@@ -46,16 +44,13 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
             Set<Long> channelIds = workspace.getChannels().stream().map(Channel::getId).collect(Collectors.toSet());
             workspaceDto.setUserIds(channelIds);
         }
-
         return workspaceDto;
     }
 
     @Override
     public Workspace toEntity(WorkspaceDTO workspaceDto) {
 
-        if (workspaceDto == null) {
-            return null;
-        }
+        if (workspaceDto == null) { return null; }
 
         // creating new Workspace with simple fields copied from WorkspaceDTO
         Workspace workspace = new Workspace(workspaceDto);
@@ -77,7 +72,6 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
         // setting up 'user'
         User owner = userDAO.getById(workspaceDto.getOwnerId());
         workspace.setUser(owner);
-
         return null;
     }
 }

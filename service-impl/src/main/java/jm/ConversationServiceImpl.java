@@ -46,12 +46,8 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public Conversation getConversationByUsers(Long firstUserId, Long secondUserId) {
-        return conversationDAO.getConversationByUsers(firstUserId, secondUserId);
-    }
+    public Conversation getConversationByUsers(Long firstUserId, Long secondUserId) { return conversationDAO.getConversationByUsers(firstUserId, secondUserId); }
 
     @Override
-    public List<Conversation> getConversationsByUserId(Long userId) {
-        return conversationDAO.getConversationsByUserId(userId);
-    }
+    public List<Conversation> getConversationsByUserId(Long userId) { return conversationDAO.getConversationsByUserId(userId); }
 }

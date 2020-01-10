@@ -131,12 +131,12 @@ public class MailServiceImpl implements MailService {
     public boolean changePasswordUserByToken(String token, String password) {
             String[] split = token.split("/");
 
-            InviteToken byHash = inviteTokenService.getByHash(split[4]);
+            InviteToken byHash = inviteTokenService.getByHash(split[4]).get();
             LocalDateTime validDateCreate = byHash.getDateCreate().plusHours(validPasswordHours);
             LocalDateTime now = LocalDateTime.now();
 
             if (validDateCreate.isAfter(now)) {
-                User userByEmail = userService.getUserByEmail(byHash.getEmail());
+                User userByEmail = userService.getUserByEmail(byHash.getEmail()).get();
                 userByEmail.setPassword(password);
                 userService.updateUser(userByEmail);
                 inviteTokenService.deleteInviteToken(byHash.getId());

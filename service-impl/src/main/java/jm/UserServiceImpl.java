@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private UserDAO userDAO;
 
     @Autowired
@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
         userDAO.persist(user);
     }
 
-
     @Override
     public void deleteUser(Long id) {
         userDAO.deleteById(id);
@@ -51,14 +50,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        return userDAO.getUserByLogin(login);
-    }
+    public Optional<User> getUserByLogin(String login) { return userDAO.getUserByLogin(login); }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userDAO.getUserByEmail(email);
-    }
+    public Optional<User> getUserByEmail(String email) { return userDAO.getUserByEmail(email); }
 
     @Override
     public List<User> getAllUsersInThisChannel(Long id) {

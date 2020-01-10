@@ -39,8 +39,6 @@ public class KafkaTestController {
 //    }
 
     private void printTopic(Collection<TopicListing> listTopic) {
-        for (TopicListing topic : listTopic) {
-            System.out.println(topic);
-        }
+        for (TopicListing topic : listTopic) { System.out.println(topic); }
     }
 }

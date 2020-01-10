@@ -8,19 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class InviteTokenServiceImpl implements InviteTokenService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private InviteTokenDAO inviteTokenDAO;
 
     @Autowired
-    public InviteTokenDAO setInviteTokenDAO(InviteTokenDAO inviteTokenDAO) {
-        return this.inviteTokenDAO = inviteTokenDAO;
-    }
+    public InviteTokenDAO setInviteTokenDAO(InviteTokenDAO inviteTokenDAO) { return this.inviteTokenDAO = inviteTokenDAO; }
 
     public InviteToken getById(Long id) {
         return inviteTokenDAO.getById(id);
@@ -37,7 +35,5 @@ public class InviteTokenServiceImpl implements InviteTokenService {
     }
 
     @Override
-    public InviteToken getByHash(String hash) {
-        return inviteTokenDAO.getByHash(hash);
-    }
+    public Optional<InviteToken> getByHash(String hash) { return inviteTokenDAO.getByHash(hash); }
 }
