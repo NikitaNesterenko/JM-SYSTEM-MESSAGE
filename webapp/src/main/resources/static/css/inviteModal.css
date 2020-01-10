@@ -204,6 +204,17 @@ ul.confirm-navbar li.right {
 .form_flex {
     display: flex;
     flex-direction: row;
+    overflow: auto;
+    height: 400px;
+}
+.table_invite{
+    width: 100%;
+}
+
+#inviteEmails_{
+    width: 500px;
+    height: 100px;
+    resize: none;
 }
 
 .head_form {

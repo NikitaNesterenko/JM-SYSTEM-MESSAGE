@@ -32,6 +32,12 @@ public class WorkspaceUserRole implements GrantedAuthority {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    public WorkspaceUserRole(Workspace workspace, User user, Role role) {
+        this.workspace = workspace;
+        this.user = user;
+        this.role = role;
+    }
+
     @Override
     public String getAuthority() {
         return role.getRole();

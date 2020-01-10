@@ -4,6 +4,7 @@ import jm.model.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface MessageDAO {
 
@@ -17,6 +18,7 @@ public interface MessageDAO {
 
     List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
 
+    void persist(Message message);
     List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId);
 
     void persist(Message message);
@@ -27,6 +29,8 @@ public interface MessageDAO {
 
     Message getById(Long id);
 
-    List<Message> getStarredMessagesForUser(Long id);
+    List<Message> getStarredMessagesForUser(Long userId);
+
+    List<Message> getMessagesByIds(Set<Long> ids);
 
 }

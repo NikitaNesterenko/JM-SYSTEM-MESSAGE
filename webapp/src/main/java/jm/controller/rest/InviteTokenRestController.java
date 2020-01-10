@@ -83,5 +83,4 @@ public class InviteTokenRestController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }

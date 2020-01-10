@@ -1,8 +1,13 @@
 package jm.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -37,4 +42,8 @@ public class InviteToken {
     @JoinColumn(name = "workspace_id"/*, nullable = false*/)
     private Workspace workspace;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    private LocalDateTime dateCreate;
 }

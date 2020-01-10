@@ -1,7 +1,7 @@
 package jm;
 
 import jm.api.dao.MessageDAO;
-import jm.model.message.ChannelMessage;
+import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,54 +25,51 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<ChannelMessage> getAllMessages() {
+    public List<Message> getAllMessages() {
         return messageDAO.getAll();
     }
 
     @Override
-    public List<ChannelMessage> getMessagesByChannelId(Long id) {
+    public List<Message> getMessagesByChannelId(Long id) {
         return messageDAO.getMessagesByChannelId(id);
     }
 
     @Override
-    public List<ChannelMessage> getMessagesByContent(String word) {
+    public List<Message> getMessagesByContent(String word) {
         return messageDAO.getMessageByContent(word);
     }
 
     @Override
-    public ChannelMessage getMessageById(Long id) {
+    public Message getMessageById(Long id) {
         return messageDAO.getById(id);
     }
 
     @Override
-    public void createMessage(ChannelMessage message) {
+    public void createMessage(Message message) {
         messageDAO.persist(message);
     }
 
     @Override
-    public void deleteMessage(Long id) {
-        messageDAO.deleteById(id);
-
-    }
+    public void deleteMessage(Long id) { messageDAO.deleteById(id); }
 
     @Override
-    public void updateMessage(ChannelMessage message) {
+    public void updateMessage(Message message) {
         messageDAO.merge(message);
 
     }
 
     @Override
-    public List<ChannelMessage> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
         return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
     }
 
     @Override
-    public List<ChannelMessage> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
         return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate);
     }
 
     @Override
-    public List<ChannelMessage> getStarredMessagesForUser(Long id) {
+    public List<Message> getStarredMessagesForUser(Long id) {
         return messageDAO.getStarredMessagesForUser(id);
     }
 
