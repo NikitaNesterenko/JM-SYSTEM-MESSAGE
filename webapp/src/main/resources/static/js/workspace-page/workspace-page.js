@@ -1,9 +1,9 @@
 import {
     BotRestPaginationService,
     ChannelRestPaginationService,
-    WorkspaceRestPaginationService,
     ConversationRestPaginationService,
-    UserRestPaginationService
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from '../rest/entities-rest-pagination.js'
 import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
@@ -241,3 +241,10 @@ export const populateDirectMessages = async () => {
         }
     });
 };
+
+$("#google-calendar-button").click(
+    function () {
+        location.href = "/application/google/calendar";
+        return false;
+    }
+);
