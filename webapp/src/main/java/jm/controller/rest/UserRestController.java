@@ -72,6 +72,7 @@ public class UserRestController {
             logger.warn("Пользователь не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+        user.setAvatarURL(user.getAvatarURL());
         userService.updateUser(user);
         logger.info("Обновленный пользователь: {}", user);
         return new ResponseEntity(HttpStatus.OK);
