@@ -10,6 +10,10 @@ export class UserRestPaginationService extends RestPaginationService {
         const response = await fetch('/rest/api/users/loggedUser');
         return response.json()
     };
+        if (response.ok) {
+            return await response.json();
+        }
+    }
 
     getUsersByWorkspace = async (id) => {
         const response = await fetch('/rest/api/users/workspace/' + id);
@@ -115,7 +119,10 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 
     getChoosedWorkspace = async () => {
         const response = await fetch('/rest/api/workspaces/choosed');
-        return response.json()
+
+        if (response.ok) {
+            return await response.json();
+        }
     };
 }
 
