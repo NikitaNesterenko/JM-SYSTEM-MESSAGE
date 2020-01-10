@@ -8,12 +8,10 @@ export class UserRestPaginationService extends RestPaginationService {
 
     getLoggedUser = async () => {
         const response = await fetch('/rest/api/users/loggedUser');
-        return response.json()
-    };
         if (response.ok) {
             return await response.json();
         }
-    }
+    };
 
     getUsersByWorkspace = async (id) => {
         const response = await fetch('/rest/api/users/workspace/' + id);

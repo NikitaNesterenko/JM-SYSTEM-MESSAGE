@@ -36,8 +36,6 @@ window.addEventListener('load', function () {
             })
         }
     }
-
-    };
 });
 
 function showSearchResult(channels, users) {
@@ -45,13 +43,8 @@ function showSearchResult(channels, users) {
             <div class="search_channels_in_modal" id="search_channel_in_modal_id"> ${showChannels(channels)}</div>
             <div class="search_users_in_modal"> ${showUsers(users)}</div>
         </ol>`)
-}
+};
 
-     <div class="search_message_in_modal">
-     ${showMessages(messages)}
-     </div>
-
-     </ol>`)};
 
 function showChannels(channels) {
     return channels.map((channel) => displayItem(channel.id, "channel", channel.name, channelPic(channel))).join("");
