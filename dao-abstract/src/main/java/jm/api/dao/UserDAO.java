@@ -28,4 +28,8 @@ public interface UserDAO {
     List<User> getAllUsersInThisChannel(Long id);
 
     List<UserDTO> getUsersInWorkspace(Long id);
+
+    int getUnreadMesssagesCount(Long userId, Long channelId);
+
+    void readAllUnreadMessages(Long userId, Long channelId);
 }

@@ -1,7 +1,6 @@
 package jm;
 
 import jm.api.dao.UserDAO;
-import jm.dao.UserDAOImpl;
 import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -70,5 +69,16 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsersInWorkspace(Long id) {
         return userDAO.getUsersInWorkspace(id);
     }
+
+    @Override
+    public int getUnreadMesssagesCount(Long userId, Long channelId) {
+        return userDAO.getUnreadMesssagesCount(userId, channelId);
+    }
+
+    @Override
+    public void readAllUnreadMessages(Long userId, Long channelId) {
+        userDAO.readAllUnreadMessages(userId, channelId);
+    }
+
 
 }

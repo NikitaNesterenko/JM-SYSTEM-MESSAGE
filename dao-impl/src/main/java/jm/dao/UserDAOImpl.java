@@ -2,7 +2,9 @@ package jm.dao;
 
 import jm.api.dao.UserDAO;
 import jm.dto.UserDTO;
+import jm.model.Channel;
 import jm.model.User;
+import jm.model.UsersUnreadMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -66,5 +68,55 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         return entityManager.createNativeQuery(query, "UserDTOMapping")
                 .setParameter("workspace", id)
                 .getResultList();
+    }
+
+    @Override
+    public int getUnreadMesssagesCount(Long userId, Long channelId) {
+        String getQuery = "select * from users_unread_messages where user_id = :user_id and channel_id = :channel_id";
+        UsersUnreadMessages usersUnreadMessages;
+
+        try {
+             usersUnreadMessages = (UsersUnreadMessages) entityManager.createNativeQuery(getQuery, UsersUnreadMessages.class)
+                    .setParameter("user_id", userId)
+                    .setParameter("channel_id", channelId)
+                    .getSingleResult();
+
+
+        } catch (NoResultException e) {
+            usersUnreadMessages = createUserUnreadMessages(userId, channelId);
+            usersUnreadMessages.setUnreadCount(0);
+        }
+
+        usersUnreadMessages.setUnreadCount(usersUnreadMessages.getUnreadCount() + 1);
+
+        return entityManager.merge(usersUnreadMessages).getUnreadCount();
+    }
+
+    @Override
+    public void readAllUnreadMessages(Long userId, Long channelId) {
+        String getQuery = "select * from users_unread_messages where user_id = :user_id and channel_id = :channel_id";
+        UsersUnreadMessages usersUnreadMessages;
+
+        try {
+            usersUnreadMessages = (UsersUnreadMessages) entityManager.createNativeQuery(getQuery, UsersUnreadMessages.class)
+                    .setParameter("user_id", userId)
+                    .setParameter("channel_id", channelId)
+                    .getSingleResult();
+
+
+        } catch (NoResultException e) {
+            usersUnreadMessages = createUserUnreadMessages(userId, channelId);
+        }
+
+        usersUnreadMessages.setUnreadCount(0);
+        entityManager.merge(usersUnreadMessages);
+    }
+
+    private UsersUnreadMessages createUserUnreadMessages(Long userId, Long channelId) {
+        UsersUnreadMessages usersUnreadMessages = new UsersUnreadMessages();
+        usersUnreadMessages.setChannel((Channel) entityManager.createNativeQuery("select * from Channels where id = :id", Channel.class).setParameter("id", channelId).getSingleResult());
+        usersUnreadMessages.setUser((User) entityManager.createNativeQuery("select * from Users where id = :id", User.class).setParameter("id", userId).getSingleResult());
+
+        return usersUnreadMessages;
     }
 }

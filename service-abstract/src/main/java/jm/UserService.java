@@ -25,4 +25,8 @@ public interface UserService {
 
     List<UserDTO> getAllUsersInWorkspace(Long id);
 
+    int getUnreadMesssagesCount(Long userId, Long channelId);
+
+    void readAllUnreadMessages(Long userId, Long channelId);
+
 }

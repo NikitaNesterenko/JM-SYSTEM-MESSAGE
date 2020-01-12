@@ -140,4 +140,19 @@ public class ChannelRestController {
         return new ResponseEntity<>(channel, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/unread_messages/{channel_id}/{user_id}")
+    public ResponseEntity<Integer> getUnreadMessagesForChannel(@PathVariable("channel_id") Long channel_id,
+                                                               @PathVariable("user_id") Long user_id) {
+        int unreadCount = userService.getUnreadMesssagesCount(user_id, channel_id);
+
+        return new ResponseEntity<>(unreadCount, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/unread_messages/read_all/{channel_id}/{user_id}")
+    public ResponseEntity<String> readAllUnreadMessages(@PathVariable("channel_id") Long channel_id,
+                                                               @PathVariable("user_id") Long user_id) {
+        userService.readAllUnreadMessages(user_id, channel_id);
+
+        return new ResponseEntity<String>("all messages is read", HttpStatus.OK);
+    }
 }

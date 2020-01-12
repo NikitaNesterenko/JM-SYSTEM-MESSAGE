@@ -1,7 +1,8 @@
 import {
     ChannelRestPaginationService,
     MessageRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    UserRestPaginationService
 } from '../../../rest/entities-rest-pagination.js'
 import {setOnClickEdit} from "../../../messagesInlineEdit.js";
 import {getMessageStatus} from "../../../message_menu/message-icon-menu.js";
@@ -12,6 +13,7 @@ let stompClient = null;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const user_service = new UserRestPaginationService();
 
 function connect() {
     let socket = new SockJS('/websocket');
@@ -25,6 +27,13 @@ function connect() {
                     if (result.channel !=null && result.channel.id === channel_id) {
                         // showMessage(result);
                         updateMessages();
+                    } else if (result.channel !=null && result.channel.id != channel_id) {
+                        const user_promise = user_service.getLoggedUser();
+                        Promise.all([user_promise])
+                            .then(value => {
+                                const user = value[0];
+                                showUnreadMessages(result.channel.id, user.id);
+                            });
                     }
                     notifyParseMessage(result);
                 }
@@ -519,6 +528,33 @@ window.updateMessages = function updateMessages() {
     });
 };
 
+window.showUnreadMessages = function showUnreadMessages(channel_id, user_id) {
+    $.ajax({
+        url: '/rest/api/channels/unread_messages/' + channel_id + "/" + user_id,
+        async: false,
+        type: 'get',
+        success: function (response) {
+            let unreadMsgId = "#unreadMsgCount_" + channel_id;
+            $(unreadMsgId).text(response);
+            $(unreadMsgId).removeAttr("hidden");
+        }
+    });
+};
+
+window.readAllUnreadMessages = function readAllUnreadMessages(channel_id, user_id) {
+    $.ajax({
+        url: '/rest/api/channels/unread_messages/read_all/' + channel_id + "/" + user_id,
+        async: false,
+        type: 'post',
+        data: null,
+        contentType: "application/json"
+    });
+
+    let unreadMsgId = "#unreadMsgCount_" + channel_id;
+    $(unreadMsgId).text(0);
+    $(unreadMsgId).attr("hidden", "");
+};
+
 // updateMessages();
 
 function showBotMessage(message) {
@@ -570,6 +606,12 @@ window.pressChannelButton = function pressChannelButton(id) {
     document.getElementById("channel_button_" + id).style.color = "white";
     document.getElementById("channel_button_" + id).style.background = "royalblue";
     channel_id = id;
+    const user_promise = user_service.getLoggedUser();
+    Promise.all([user_promise])
+        .then(value => {
+            const user = value[0];
+            readAllUnreadMessages(channel_id, user.id);
+        });
     updateMessages();
 };
 
