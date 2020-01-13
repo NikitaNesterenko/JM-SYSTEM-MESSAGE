@@ -47,18 +47,6 @@ public class ChannelRestControllerTest {
     }
 
     @Test
-    public void setChannelService() {
-    }
-
-    @Test
-    public void setUserService() {
-    }
-
-    @Test
-    public void setChannelDTOService() {
-    }
-
-    @Test
     public void getChannelById() throws Exception {
         Long testId_1 = 1L;
         String getUrl = URL + "{id}";
@@ -84,29 +72,20 @@ public class ChannelRestControllerTest {
     }
 
     @Test
-    public void getChannelByIdNotFound() throws Exception {
-        Long testId_1 = 1L;
+    public void getChannelByIdBadRequest() throws Exception {
+        String testId_BadRequest = "xyz";
         String getUrl = URL + "{id}";
 
-        Channel channel = new Channel();
-        channel.setId(testId_1);
-        channel.setName("test");
-        channel.setIsPrivate(true);
-
-        ChannelDTO channelDTO = new ChannelDTO(channel.getId(), channel.getName(), channel.getIsPrivate());
-
-//        when(channelServiceMock.getChannelById(testId_1)).thenReturn(null);
-//        when(channelDtoServiceMock.toDto(channel)).thenReturn(channelDTO);
-        mockMvc.perform(get(getUrl, "111"))
+        mockMvc.perform(get(getUrl, testId_BadRequest))
                 .andExpect(status().isBadRequest());
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-//                .andExpect(jsonPath("$.id", is(1)))
-//                .andExpect(jsonPath("$.name", is("test")))
-//                .andExpect(jsonPath("$.isPrivate", is(Boolean.TRUE)));
 
-        verify(channelServiceMock, times(1)).getChannelById(any());
         verifyNoMoreInteractions(channelServiceMock);
     }
+
+//    Нет реализации ответа ресеКонтроллера при запросе отсутствующего канала
+//    @Test
+//    public void getChannelByIdNotFound() throws Exception {
+//    }
 
     @Test
     public void getChannelsByUserId() {
@@ -114,6 +93,8 @@ public class ChannelRestControllerTest {
 
     @Test
     public void createChannel() {
+        final String createUrl = URL + "create";
+
     }
 
     @Test
