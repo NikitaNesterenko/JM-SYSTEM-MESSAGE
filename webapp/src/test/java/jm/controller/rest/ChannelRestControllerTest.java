@@ -120,7 +120,7 @@ public class ChannelRestControllerTest {
 
     @Test
     public void createChannelBadRequest() throws Exception {
-        final String createUrl = URL + "create";
+        String createUrl = URL + "create";
 
         mockMvc.perform(post(createUrl))
                 .andExpect(status().isBadRequest());
@@ -141,7 +141,41 @@ public class ChannelRestControllerTest {
     }
 
     @Test
-    public void updateChannel() {
+    public void updateChannel() throws Exception {
+        String updateUrl = URL + "update";
+        Long testId_1 = 1L;
+
+        Channel channel = new Channel();
+        channel.setId(testId_1);
+        channel.setName("test");
+        channel.setIsPrivate(true);
+
+        when(channelServiceMock.getChannelById(testId_1)).thenReturn(channel);
+
+        mockMvc.perform(put(updateUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(channel)))
+                .andExpect(status().isOk());
+        verify(channelServiceMock, times(1)).updateChannel(any());
+    }
+
+    @Test
+    public void updateChannelBadRequest() throws Exception {
+        String updateUrl = URL + "update";
+
+        mockMvc.perform(put(updateUrl))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(put(updateUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(null)))
+                .andExpect(status().isBadRequest());
+
+        Object notChannelObject = "notChannelObject";
+        mockMvc.perform(put(updateUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(notChannelObject)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
