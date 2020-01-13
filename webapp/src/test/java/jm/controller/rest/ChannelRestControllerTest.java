@@ -3,6 +3,7 @@ package jm.controller.rest;
 import com.google.gson.Gson;
 import jm.ChannelService;
 import jm.dto.ChannelDTO;
+import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +27,9 @@ public class ChannelRestControllerTest {
     private static final String URL = "/rest/api/channels/";
     @Mock
     private ChannelService channelServiceMock;
+
+    @Mock
+    private ChannelDtoService channelDtoServiceMock;
 
     @InjectMocks
     private ChannelRestController channelRestControllerMock;
