@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
@@ -48,8 +49,8 @@ public class ChannelRestControllerTest {
 
     @Test
     public void getChannelById() throws Exception {
-        Long testId_1 = 1L;
         String getUrl = URL + "{id}";
+        Long testId_1 = 1L;
 
         Channel channel = new Channel();
         channel.setId(testId_1);
@@ -92,9 +93,51 @@ public class ChannelRestControllerTest {
     }
 
     @Test
-    public void createChannel() {
+    public void createChannel() throws Exception {
+        final String createUrl = URL + "create";
+        Long testId_1 = 1L;
+
+        Channel channel = new Channel();
+        channel.setId(testId_1);
+        channel.setName("test");
+        channel.setIsPrivate(true);
+
+        ChannelDTO channelDTO = new ChannelDTO(channel.getId(), channel.getName(), channel.getIsPrivate());
+
+        mockMvc.perform(post(createUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(channelDTO)))
+
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("test")))
+                .andExpect(jsonPath("$.isPrivate", is(Boolean.TRUE)))
+                .andExpect(status().isOk());
+
+        verify(channelServiceMock, times(1)).createChannel(any());
+        verifyNoMoreInteractions(channelServiceMock);
+    }
+
+    @Test
+    public void createChannelBadRequest() throws Exception {
         final String createUrl = URL + "create";
 
+        mockMvc.perform(post(createUrl))
+                .andExpect(status().isBadRequest());
+        verifyNoMoreInteractions(channelServiceMock);
+
+        mockMvc.perform(post(createUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(null)))
+                .andExpect(status().isBadRequest());
+        verifyNoMoreInteractions(channelServiceMock);
+
+        Object notChannelObject = "notChannelObject";
+        mockMvc.perform(post(createUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.objectToJson(notChannelObject)))
+                .andExpect(status().isBadRequest());
+        verifyNoMoreInteractions(channelServiceMock);
     }
 
     @Test
