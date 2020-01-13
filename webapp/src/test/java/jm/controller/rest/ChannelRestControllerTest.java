@@ -1,25 +1,22 @@
 package jm.controller.rest;
 
-import com.google.gson.Gson;
 import jm.ChannelService;
 import jm.dto.ChannelDTO;
 import jm.dto.ChannelDtoService;
 import jm.model.Channel;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -179,11 +176,68 @@ public class ChannelRestControllerTest {
     }
 
     @Test
-    public void deleteChannel() {
+    public void deleteChannel() throws Exception {
+
+        final String deleteUrl = URL + "delete/{id}";
+
+        Long testId1 = 1L;
+        mockMvc.perform(delete(deleteUrl, testId1))
+                .andExpect(status().isOk());
+        verify(channelServiceMock, times(1)).deleteChannel(testId1);
+        verifyNoMoreInteractions(channelServiceMock);
     }
 
     @Test
-    public void getAllChannels() {
+    public void deleteChannelBadRequest() throws Exception {
+
+        final String deleteUrl = URL + "delete/{id}";
+
+        mockMvc.perform(delete(deleteUrl, "something_text"))
+                .andExpect(status().isBadRequest());
+        verifyNoMoreInteractions(channelServiceMock);
+
+//        Если передать любой невалидный Id(цифру) ответ будет 200
+//        mockMvc.perform(delete(deleteUrl, 2)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(TestUtils.objectToJson(null)))
+//                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getAllChannels() throws Exception {
+        Long testId_1 = 1L;
+        Long testId_2 = 2L;
+
+        Channel channel1 = new Channel();
+        channel1.setId(testId_1);
+        channel1.setName("test_1");
+        channel1.setIsPrivate(true);
+
+        Channel channel2 = new Channel();
+        channel2.setId(testId_2);
+        channel2.setName("test_2");
+        channel2.setIsPrivate(false);
+
+        ChannelDTO channelDTO1 = new ChannelDTO(channel1.getId(), channel1.getName(), channel1.getIsPrivate());
+        ChannelDTO channelDTO2 = new ChannelDTO(channel2.getId(), channel2.getName(), channel2.getIsPrivate());
+
+
+        when(channelServiceMock.gelAllChannels()).thenReturn(Arrays.asList(channel1, channel2));
+        when(channelDtoServiceMock.toDto(Arrays.asList(channel1, channel2))).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
+
+        mockMvc.perform(get(URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("test_1")))
+                .andExpect(jsonPath("$[0].isPrivate", is(Boolean.TRUE)))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].name", is("test_2")))
+                .andExpect(jsonPath("$[1].isPrivate", is(Boolean.FALSE)));
+
+        verify(channelServiceMock, times(1)).gelAllChannels();
+        verifyNoMoreInteractions(channelServiceMock);
     }
 
     @Test
