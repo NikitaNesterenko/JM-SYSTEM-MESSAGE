@@ -8,7 +8,9 @@ import {
 import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
 import {refreshMemberList} from "../member-list/member-list.js";
+import {NavHeader} from "./components/navbar/NavHeader.js";
 
+const wks_header = new NavHeader();
 const channel_service = new ChannelRestPaginationService();
 const bot_service = new BotRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -22,6 +24,7 @@ user_service.getLoggedUser().then(loggedUser => {
     loggedUserId = loggedUser.id;
     console.log(loggedUserId);
 });
+
 
 const showDefaultChannel = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
@@ -68,12 +71,12 @@ $(document).ready(() => {
 });
 
 $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function () {
+    wks_header.setChannelTitle($(this).find('i').text(), $(this).find('span').text()).setInfo();
+
     const channel_id = parseInt($(this).val());
     pressChannelButton(channel_id);
 
     sessionStorage.setItem("channelName", channel_id);
-    var channel_name = document.getElementById("channel_name_" + channel_id).textContent;
-    $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
     sessionStorage.setItem('conversation_id', '0'); // direct msgs
 
     refreshMemberList();
