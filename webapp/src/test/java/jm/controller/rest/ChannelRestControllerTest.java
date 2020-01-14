@@ -1,21 +1,28 @@
 package jm.controller.rest;
 
 import jm.ChannelService;
+import jm.UserService;
 import jm.dto.ChannelDTO;
 import jm.dto.ChannelDtoService;
 import jm.model.Channel;
+import jm.model.User;
+import jm.model.Workspace;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -28,11 +35,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class ChannelRestControllerTest {
     private static final String URL = "/rest/api/channels/";
+
     @Mock
     private ChannelService channelServiceMock;
 
     @Mock
     private ChannelDtoService channelDtoServiceMock;
+
+    @Mock
+    private UserService userServiceMock;
+
+    @Mock
+    private Principal principal;
+
+    @Mock
+    private HttpSession session;
+
+    @Mock
+    private MockHttpServletRequest request;
 
     @InjectMocks
     private ChannelRestController channelRestControllerMock;
@@ -80,19 +100,16 @@ public class ChannelRestControllerTest {
         verifyNoMoreInteractions(channelServiceMock);
     }
 
-//    Нет реализации ответа ресеКонтроллера при запросе отсутствующего канала
-//    @Test
-//    public void getChannelByIdNotFound() throws Exception {
-//    }
-
-    @Test
-    public void getChannelsByUserId() {
-    }
-
     @Test
     public void createChannel() throws Exception {
-        final String createUrl = URL + "create";
+        String createUrl = URL + "create";
         Long testId_1 = 1L;
+
+        User user1 = new User();
+        user1.setLogin("login_1");
+
+        Workspace workspace = new Workspace();
+        workspace.setId(15L);
 
         Channel channel = new Channel();
         channel.setId(testId_1);
@@ -101,8 +118,17 @@ public class ChannelRestControllerTest {
 
         ChannelDTO channelDTO = new ChannelDTO(channel.getId(), channel.getName(), channel.getIsPrivate());
 
+        when(userServiceMock.getUserByLogin(principal.getName())).thenReturn(user1);
+
+        when(request.getSession()).thenReturn(session);
+        when(userServiceMock.getUserByLogin("login_1")).thenReturn(user1);
+        when(Objects.requireNonNull(request.getSession()).getAttribute("WorkspaceID")).thenReturn(workspace);
+
+        when(channelDtoServiceMock.toEntity(channelDTO)).thenReturn(channel);
+
         mockMvc.perform(post(createUrl)
-                .contentType(MediaType.APPLICATION_JSON)
+                .principal(principal)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(TestUtils.objectToJson(channelDTO)))
 
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -118,6 +144,35 @@ public class ChannelRestControllerTest {
     @Test
     public void createChannelBadRequest() throws Exception {
         String createUrl = URL + "create";
+
+
+        User user1 = new User();
+        user1.setLogin("login_1");
+
+        Workspace workspace = new Workspace();
+        workspace.setId(15L);
+
+        Channel channel = new Channel();
+        channel.setId(1L);
+        channel.setName("test");
+        channel.setIsPrivate(true);
+
+        ChannelDTO channelDTO = new ChannelDTO(channel.getId(), channel.getName(), channel.getIsPrivate());
+
+        when(userServiceMock.getUserByLogin(principal.getName())).thenReturn(user1);
+
+        when(request.getSession()).thenReturn(session);
+        when(userServiceMock.getUserByLogin("login_1")).thenReturn(user1);
+        when(Objects.requireNonNull(request.getSession()).getAttribute("WorkspaceID")).thenReturn(workspace);
+
+        when(channelDtoServiceMock.toEntity(channelDTO)).thenReturn(channel);
+
+        mockMvc.perform(post(createUrl)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.objectToJson(channelDTO)))
+
+                .andExpect(status().isBadRequest());
+        verifyNoMoreInteractions(channelServiceMock);
 
         mockMvc.perform(post(createUrl))
                 .andExpect(status().isBadRequest());
@@ -177,8 +232,7 @@ public class ChannelRestControllerTest {
 
     @Test
     public void deleteChannel() throws Exception {
-
-        final String deleteUrl = URL + "delete/{id}";
+        String deleteUrl = URL + "delete/{id}";
 
         Long testId1 = 1L;
         mockMvc.perform(delete(deleteUrl, testId1))
@@ -189,8 +243,7 @@ public class ChannelRestControllerTest {
 
     @Test
     public void deleteChannelBadRequest() throws Exception {
-
-        final String deleteUrl = URL + "delete/{id}";
+        String deleteUrl = URL + "delete/{id}";
 
         mockMvc.perform(delete(deleteUrl, "something_text"))
                 .andExpect(status().isBadRequest());
@@ -238,21 +291,5 @@ public class ChannelRestControllerTest {
 
         verify(channelServiceMock, times(1)).gelAllChannels();
         verifyNoMoreInteractions(channelServiceMock);
-    }
-
-    @Test
-    public void getChannelsByWorkspaceAndUser() {
-    }
-
-    @Test
-    public void getChannelsByWorkspaceId() {
-    }
-
-    @Test
-    public void getChannelByName() {
-    }
-
-    @Test
-    public void archivingChannel() {
     }
 }
