@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -97,10 +98,6 @@ public class MessageRestControllerTest {
     }
 
     @Test
-    public void getMessagesByChannelId() {
-    }
-
-    @Test
     public void getMessageById() throws Exception {
         String getUrl = URL + "{id}";
         Long testId_1 = 1L;
@@ -127,10 +124,6 @@ public class MessageRestControllerTest {
 
         verify(messageServiceMock, times(1)).getMessageById(testId_1);
         verifyNoMoreInteractions(messageServiceMock);
-    }
-
-    @Test
-    public void getMessagesByChannelIdForPeriod() {
     }
 
     @Test
@@ -274,10 +267,32 @@ public class MessageRestControllerTest {
     }
 
     @Test
-    public void deleteMessage() {
+    public void deleteMessage() throws Exception {
+        String deleteUrl = URL + "delete/{id}";
+
+        Long testId1 = 1L;
+        mockMvc.perform(delete(deleteUrl, testId1))
+                .andExpect(status().isOk());
+        verify(messageServiceMock, Mockito.times(1)).deleteMessage(testId1);
+        verifyNoMoreInteractions(messageServiceMock);
     }
 
     @Test
-    public void getStarredMessages() {
+    public void deleteMessageBadRequest() throws Exception {
+        String deleteUrl = URL + "delete/{id}";
+
+        mockMvc.perform(delete(deleteUrl, "something_text"))
+                .andExpect(status().isBadRequest());
+        verifyNoMoreInteractions(messageServiceMock);
+
+        String testId2 = "something_text";
+        mockMvc.perform(delete(deleteUrl, testId2))
+                .andExpect(status().isBadRequest());
+
+//        Если передать любой невалидный Id(цифру) ответ будет 200
+//        mockMvc.perform(delete(deleteUrl, 2)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(TestUtils.objectToJson(null)))
+//                .andExpect(status().isBadRequest());
     }
 }
