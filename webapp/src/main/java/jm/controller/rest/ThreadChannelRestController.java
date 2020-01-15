@@ -2,6 +2,9 @@ package jm.controller.rest;
 
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
+import jm.dto.MessageDTO;
+import jm.dto.MessageDtoService;
+import jm.model.Message;
 import jm.model.ThreadChannel;
 import jm.model.message.ThreadChannelMessage;
 import org.slf4j.Logger;
@@ -22,6 +25,7 @@ public class ThreadChannelRestController {
 
     private ThreadChannelService threadChannelService;
     private ThreadChannelMessageService threadChannelMessageService;
+    private MessageDtoService messageDtoService;
 
     @Autowired
     public void setThreadService(ThreadChannelService threadChannelService) {
@@ -33,9 +37,18 @@ public class ThreadChannelRestController {
         this.threadChannelMessageService = threadChannelMessageService;
     }
 
+    @Autowired
+    public void setMessageDtoService(MessageDtoService messageDtoService) {
+        this.messageDtoService = messageDtoService;
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody ThreadChannel threadChannel) {
+    public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
         System.out.println("ТРЕД!");
+        Message message = messageDtoService.toEntity(messageDTO);
+//        Message message = new Message(messageDTO);
+        ThreadChannel threadChannel  = new ThreadChannel(message);
+        System.out.println(threadChannel);
         threadChannelService.createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);
         return new ResponseEntity<>(threadChannel, HttpStatus.CREATED);
