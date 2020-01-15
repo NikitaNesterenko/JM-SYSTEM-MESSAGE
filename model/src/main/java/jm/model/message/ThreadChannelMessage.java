@@ -1,5 +1,7 @@
 package jm.model.message;
 
+import jm.model.Message;
+import jm.model.ThreadChannel;
 import lombok.*;
 
 import javax.persistence.Entity;
