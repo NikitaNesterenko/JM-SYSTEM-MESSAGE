@@ -15,7 +15,7 @@ export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
     const editProfileButton = $(this).find("#modal_1_edit_profile_btn");
     editProfileButton.hide();
 
-    // console.log($(e.relatedTarget).data('user_id'));
+
     let userId = $(e.relatedTarget).data('user_id');
     let botId = $(e.relatedTarget).data('bot_id');
 
@@ -60,7 +60,11 @@ export const onShowModal1 = modal1.on('show.bs.modal', function (e) {
         // user title
         let user_title = user.title;
         if (user_title == null || user_title === "") {
-            $('#modal_1_set_title_btn').show();
+            if (user.id === loggedUser.id ) {
+                $('#modal_1_set_title_btn').show();
+            } else {
+                $('#modal_1_set_title_btn').hide();
+            }
         } else {
             $('#modal_1_set_title_btn').hide();
             $(this).find('#modal_1_user_title').text(user_title);
