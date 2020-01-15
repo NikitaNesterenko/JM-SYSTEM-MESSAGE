@@ -25,7 +25,6 @@ export const sendName = (message) => {
 };
 
 export const updateMessagesThreadChannel = (channelMessageId) => {
-
     $('.p-flexpane__title_container').text('Thread');
     const message_box_wrapper = $('.p-flexpane__inside_body-scrollbar__hider');
     const message_box = $('.p-flexpane__inside_body-scrollbar__child');
@@ -49,11 +48,9 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
     const threadChannel_promise = threadChannel_service.getThreadChannelByChannelMessageId(channelMessageId);
 
     threadChannel_promise.then(threadChannel => {
-
         threadChannelMessage_service.getThreadChannelMessagesByThreadChannelId(threadChannel.id).then(threadChannelMessages => {
 
-            if (threadChannel.channelMessage.user !== null) {
-
+            if (threadChannel.message.user !== null) {
                 let messages_queue_context_user_container = document.createElement('div');
 
                 messages_queue_context_user_container.className = "c-virtual_list__item";
@@ -61,11 +58,11 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
                 let messages_queue_context_user_container_date = document.createElement('span');
                 messages_queue_context_user_container_date.className = "c-virtual_list__item__date";
 
-                const time = threadChannel.channelMessage.dateCreate.split(' ')[1];
-                const date = threadChannel.channelMessage.dateCreate.split(' ')[0];
+                const time = threadChannel.message.dateCreate.split(' ')[1];
+                const date = threadChannel.message.dateCreate.split(' ')[0];
 
                 // Берем дату без времени
-                let parts_date = threadChannel.channelMessage.dateCreate.split(' ')[0];
+                let parts_date = threadChannel.message.dateCreate.split(' ')[0];
                 // Получаем год - месяц - число
                 parts_date = parts_date.split('.');
 
@@ -84,16 +81,16 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
                     }
                     message_box.append(messages_queue_context_user_container_date);
                 }
-                messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${threadChannel.channelMessage.id}_user_${threadChannel.channelMessage.user.id}_content">
+                messages_queue_context_user_container.innerHTML = `<div class="c-message--light" id="message_${threadChannel.message.id}_user_${threadChannel.message.user.id}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
                                                             </button>
                                                         </div>
                                                         <div class="c-message__content--feature_sonic_inputs">
-                                                            <div class="c-message__content_header" id="message_${threadChannel.channelMessage.id}_user_${threadChannel.channelMessage.user.id}_content_header">
+                                                            <div class="c-message__content_header" id="message_${threadChannel.message.id}_user_${threadChannel.message.user.id}_content_header">
                                                                 <span class="c-message__sender">
-                                                                    <a href="#modal_1" class="message__sender" data-user_id="${threadChannel.channelMessage.user.id}" data-toggle="modal">${threadChannel.channelMessage.user.name}</a>
+                                                                    <a href="#modal_1" class="message__sender" data-user_id="${threadChannel.message.user.id}" data-toggle="modal">${threadChannel.message.user.name}</a>
                                                                 </span>
                                                                 <a class="c-timestamp--static">
                                                                     <span class="c-timestamp__label">
@@ -104,9 +101,9 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
                                                                     </span>
                                                                 </a>
                                                             </div>
-                                                            <div class="c-message__content_body" data-message-id="${threadChannel.channelMessage.id}" id="message_id-${threadChannel.channelMessage.id}">
+                                                            <div class="c-message__content_body" data-message-id="${threadChannel.message.id}" id="message_id-${threadChannel.message.id}">
                                                             <span class="c-message__body">
-                                                                ${threadChannel.channelMessage.content}
+                                                                ${threadChannel.message.content}
                                                             </span> 
                                                             </div>                                                                                                                    
                                                         </div>
@@ -115,13 +112,11 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
                                                                                                          
                                                     </div>`;
                 message_box.append(messages_queue_context_user_container);
-            }
-            ;
+            };
 
             threadChannelMessages.forEach(function (threadChannelMessage, i) {
 
                 if (threadChannelMessage.user !== null) {
-
                     let messages_queue_context_user_container = document.createElement('div');
 
                     messages_queue_context_user_container.className = "c-virtual_list__item";

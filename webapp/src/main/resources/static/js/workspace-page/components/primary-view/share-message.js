@@ -4,6 +4,8 @@ import {
     MessageRestPaginationService
 } from '../../../rest/entities-rest-pagination.js'
 
+// import {createThreadChannel, toggle_right_thread_menu,channelMessageId,currentChannelMessageId} from "../../../thread/thread-view.js";
+
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
@@ -17,6 +19,14 @@ class SharedMessage {
         this.sharedMessageId = sharedMessageId;
     }
 }
+//
+// $(document).on('click', '#thread-panel', function (e) {
+//     channelMessageId = $(e.target).data('msg_id');
+//     createThreadChannel(channelMessageId);
+//     toggle_right_thread_menu();
+//
+//     currentChannelMessageId = channelMessageId;
+// });
 
 $(document).on('click', '#share_message_submit_button_id', function (e) {
     const msg_id = $(e.target).data('share_msg_id');

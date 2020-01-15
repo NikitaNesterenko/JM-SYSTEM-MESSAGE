@@ -1,15 +1,8 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jm.model.message.ChannelMessage;
-import jm.model.message.Message;
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,9 +17,13 @@ public class ThreadChannel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(targetEntity = ChannelMessage.class)
+    @OneToOne(targetEntity = Message.class)
     @JoinColumn(name="message_id")
-    private ChannelMessage channelMessage;
+    private Message message;
+
+    public ThreadChannel(Message message) {
+        this.message = message;
+    }
 
 //    @Column(name = "created_date", nullable = false)
 //    @JsonSerialize(using = LocalDateTimeSerializer.class)
