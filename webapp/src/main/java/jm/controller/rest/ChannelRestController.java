@@ -163,4 +163,22 @@ public class ChannelRestController {
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/starunstar/{id}")
+    public ResponseEntity starUnstar(@PathVariable("id") Long id){
+        Channel channel = channelService.getChannelById(id);
+        Boolean starred = channel.getStarred();
+        if (starred == null){
+            channel.setStarred(true);
+        }
+        else {
+            channel.setStarred(!starred);
+        }
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelDTOService.toDto(channel);
+
+
+        logger.info("Канал с id = {} добавлен в раздел/убран из раздела Starred", id);
+        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+    }
+
 }

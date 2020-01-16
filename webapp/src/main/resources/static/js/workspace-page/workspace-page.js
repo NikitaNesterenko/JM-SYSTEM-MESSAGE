@@ -9,6 +9,8 @@ import {getAllUsersInThisChannel} from "../ajax/userRestController.js";
 import {updateAllMessages} from "./components/footer/messages.js";
 import {refreshMemberList} from "../member-list/member-list.js";
 import {NavHeader} from "./components/navbar/NavHeader.js";
+import {starUnstarChannel} from "../ajax/channelRestController.js";
+import {starUnstarConversation} from "../ajax/conversationRestController.js";
 
 const wks_header = new NavHeader();
 const channel_service = new ChannelRestPaginationService();
@@ -70,9 +72,10 @@ $(document).ready(() => {
     populateDirectMessages();
 });
 
-$(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function () {
-    wks_header.setChannelTitle($(this).find('i').text(), $(this).find('span').text()).setInfo();
+let chanel_id_for_starring;
 
+$(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", function () {
+    wks_header.setChannelTitle($(this).find('i').text(), $(this).find('span').text()).setInfoChannel();
     const channel_id = parseInt($(this).val());
     pressChannelButton(channel_id);
 
@@ -80,9 +83,22 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     sessionStorage.setItem('conversation_id', '0'); // direct msgs
 
     refreshMemberList();
+    chanel_id_for_starring = $(this).val();
 });
 
-const showAllChannels = () => {
+$(".p-channel_sidebar__stared__list").on("click", "button.p-channel_sidebar__name_button", function () {
+    wks_header.setChannelTitle($(this).find('i').text(), $(this).find('span').text()).setInfoChannel();
+    chanel_id_for_starring = $(this).val()
+});
+
+$(document).ready(function () {
+
+    $(document).on("click", ".p-classic_nav__model__title__info__star", function () {
+        starUnstarChannel(chanel_id_for_starring);
+    });
+});
+
+export const showAllChannels = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     let user_promise = user_service.getLoggedUser();
     Promise.all([workspace_id, user_promise]).then(value => {
@@ -91,14 +107,33 @@ const showAllChannels = () => {
             .then((respons) => {
                 $.each(respons, (i, item) => {
                     if ((item.isPrivate && userId === item.ownerId) || !item.isPrivate) {
-                        $('#id-channel_sidebar__channels__list')
-                            .append(`<div class="p-channel_sidebar__channel">
+                        if (item.starred){
+                            if (document.getElementById('id-p-channel_sidebar__channel_' + item.id) != null) {
+                                document.getElementById('id-p-channel_sidebar__channel_' + item.id).remove();
+                            }
+                            $('#id-channel_sidebar__starred__list')
+                                .append(`<div id="id-p-channel_sidebar__channel_${item.id}" class="p-channel_sidebar__channel">
                                     <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
                                         <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
                                     </button>
                                   </div>`
-                            );
+                                );
+                        }
+                        else
+                        {
+                            if (document.getElementById('id-p-channel_sidebar__channel_' + item.id) != null) {
+                                document.getElementById('id-p-channel_sidebar__channel_' + item.id).remove();
+                            }
+                            $('#id-channel_sidebar__channels__list')
+                                .append(`<div id="id-p-channel_sidebar__channel_${item.id}" class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
+                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
+                                    </button>
+                                  </div>`
+                                );
+                        }
                     }
                 });
 
@@ -198,48 +233,84 @@ $("#addChannelSubmit").click(
     }
 );
 
-export const populateDirectMessages = async () => {
+let conversation_id_for_starring;
 
-    const principal = await user_service.getLoggedUser();
-    const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
-    const workspace_id = await workspace_service.getChoosedWorkspace();
+$(".p-channel_sidebar__direct-messages__container").on("click", "button.p-channel_sidebar__conversation_name_button", function () {
+    wks_header.setChannelTitle($(this).find('i').text(), $(this).find('span').text()).setInfoConversation();
+    conversation_id_for_starring = $(this).val();
+});
 
-    const direct_messages_container = document.getElementById("direct-messages__container_id");
-    direct_messages_container.innerHTML = "";
+$(".p-channel_sidebar__stared__list").on("click", "button.p-channel_sidebar__conversation_name_button", function () {
+    wks_header.setChannelTitle($(this).find('i').text(), $(this).find('span').text()).setInfoConversation();
+    chanel_id_for_starring = $(this).val()
+});
 
-    conversations.forEach(function (conversation, i) {
-        let conversation_queue_context_container = null;
-        if (conversation.workspace.id === workspace_id.id) {
-            if(conversation.openingUser.id === principal.id) {
-                conversation_queue_context_container = document.createElement('div');
-                conversation_queue_context_container.className = "p-channel_sidebar__close_container";
-                conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button" data-user_id="${conversation.associatedUser.id}">
+$(document).ready(function () {
+
+    $(document).on("click", ".p-classic_nav__model__title__conversation__info__star", function () {
+        starUnstarConversation(conversation_id_for_starring);
+    });
+});
+
+    export const populateDirectMessages = async () => {
+
+        const principal = await user_service.getLoggedUser();
+        const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
+        const workspace_id = await workspace_service.getChoosedWorkspace();
+
+        let direct_messages_container;
+        conversations.forEach(function (conversation, i) {
+            let conversation_queue_context_container = null;
+            if (conversation.workspace.id === workspace_id.id) {
+                if (!conversation.starred) {
+                    if (document.getElementById('p-channel_sidebar__close_container_' + conversation.id) != null) {
+                        document.getElementById('p-channel_sidebar__close_container_' + conversation.id).remove();
+                    }
+                    direct_messages_container = ('#direct-messages__container_id');
+                    createHTMLDirectMessages(direct_messages_container, conversation, conversation_queue_context_container, principal);
+                }
+                else{
+                    if (document.getElementById('p-channel_sidebar__close_container_' + conversation.id) != null) {
+                        document.getElementById('p-channel_sidebar__close_container_' + conversation.id).remove();
+                    }
+                    direct_messages_container = ('#id-channel_sidebar__starred__list');
+                    createHTMLDirectMessages(direct_messages_container, conversation, conversation_queue_context_container, principal);
+                }
+            }
+        });
+    };
+
+    const createHTMLDirectMessages = (direct_messages_container, conversation, conversation_queue_context_container, principal) =>{
+        if (conversation.openingUser.id === principal.id) {
+            conversation_queue_context_container = document.createElement('div');
+            conversation_queue_context_container.className = "p-channel_sidebar__close_container";
+            conversation_queue_context_container.id = "p-channel_sidebar__close_container_" + conversation.id;
+            conversation_queue_context_container.innerHTML = `
+                                                    <button class="p-channel_sidebar__conversation_name_button" value="${conversation.id}">
                                                         <i class="p-channel_sidebar__channel_icon_circle" data-user_id="${conversation.associatedUser.id}">●</i>
                                                         <span class="p-channel_sidebar__name-3" data-user_id="${conversation.associatedUser.id}">
-                                                            <span data-user_id="${conversation.associatedUser.id}">${conversation.associatedUser.name}</span>
-                                                        </span>
+                                                        ${conversation.associatedUser.name}</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
                                                         <i class="p-channel_sidebar__close__icon">✖</i>
                                                     </button>
             `;
-            } else {
-                conversation_queue_context_container = document.createElement('div');
-                conversation_queue_context_container.className = "p-channel_sidebar__close_container";
-                conversation_queue_context_container.innerHTML = `
-                                                    <button class="p-channel_sidebar__name_button" data-user_id="${conversation.openingUser.id}">
+            $(direct_messages_container).append(conversation_queue_context_container);
+        } else {
+            conversation_queue_context_container = document.createElement('div');
+            conversation_queue_context_container.className = "p-channel_sidebar__close_container";
+            conversation_queue_context_container.id = "p-channel_sidebar__close_container_" + conversation.id;
+            conversation_queue_context_container.innerHTML = `
+                                                    <button class="p-channel_sidebar__conversation_name_button" value="${conversation.id}">
                                                         <i class="p-channel_sidebar__channel_icon_circle" data-user_id="${conversation.openingUser.id}">●</i>
                                                         <span class="p-channel_sidebar__name-3" data-user_id="${conversation.openingUser.id}">
-                                                            <span data-user_id="${conversation.associatedUser.id}">${conversation.openingUser.name}</span>
-                                                        </span>
+                                                            ${conversation.openingUser.name}</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
                                                         <i class="p-channel_sidebar__close__icon">✖</i>
                                                     </button>
             `;
-            }
-            direct_messages_container.append(conversation_queue_context_container);
+            $(direct_messages_container).append(conversation_queue_context_container);
         }
-    });
 };
+
