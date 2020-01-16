@@ -73,4 +73,17 @@ public class ConversationRestController {
 
     }
 
+    @PutMapping(value = "/starunstar/{id}")
+    public ResponseEntity<Conversation> starUnstar(@PathVariable("id") Long id){
+        Conversation conversation = conversationService.getConversationById(id);
+        Boolean starred = conversation.getStarred();
+        if (starred == null){
+            conversation.setStarred(true);
+        }
+        else {
+            conversation.setStarred(!starred);
+        }
+        conversationService.updateConversation(conversation);
+        return ResponseEntity.ok().build();
+    }
 }

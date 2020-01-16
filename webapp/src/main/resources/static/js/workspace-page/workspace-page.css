@@ -551,6 +551,24 @@
     cursor: pointer;
 }
 
+.p-classic_nav__model__title__conversation__info__star {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    user-select: none;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    vertical-align: initial;
+    cursor: pointer;
+}
+
 .p-classic_nav__model__title__info__members {
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
@@ -571,7 +589,47 @@
     align-items: baseline;
 }
 
+.p-classic_nav__model__title__conversation__info__members {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    user-select: none;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    vertical-align: initial;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+}
+
 .p-classic_nav__model__title__info__pins {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    user-select: none;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    vertical-align: initial;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+}
+
+.p-classic_nav__model__title__conversation__info__pins {
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
     user-select: none;
@@ -645,6 +703,26 @@
     width: 1em;
 }
 
+.p-classic_nav__model__title__conversation__info__star__icon {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    user-select: none;
+    color: inherit;
+    font: inherit;
+    text-align: initial;
+    cursor: pointer;
+    box-sizing: inherit;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    width: 1em;
+}
+
 .p-classic_nav__model__title__info__members__icon {
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
@@ -685,7 +763,45 @@
     width: 1em;
 }
 
+.p-classic_nav__model__title__conversation__info__pins__icon {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    user-select: none;
+    color: inherit;
+    font: inherit;
+    text-align: initial;
+    cursor: pointer;
+    box-sizing: inherit;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    width: 1em;
+}
+
 .p-classic_nav__model__title__info__topic__text {
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    font-size: 13px;
+    line-height: 1.38463;
+    font-weight: 400;
+    user-select: none;
+    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    box-sizing: inherit;
+    position: relative;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.p-classic_nav__model__title__conversation__info__topic__text {
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
@@ -721,7 +837,45 @@
     overflow-wrap: break-word;
 }
 
+.p-classic_nav__model__title__conversation__info__topic__content {
+    font-variant-ligatures: common-ligatures;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    font-size: 13px;
+    line-height: 1.38463;
+    font-weight: 400;
+    user-select: none;
+    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    white-space: nowrap;
+    unicode-bidi: -webkit-isolate;
+    box-sizing: inherit;
+    position: relative;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
 .p-classic_nav__model__title__info__topic__edit {
+    -webkit-font-smoothing: antialiased;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    user-select: none;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    font: inherit;
+    margin: 0;
+    line-height: inherit;
+    overflow: initial;
+    padding: 0;
+    text-align: initial;
+    vertical-align: initial;
+    cursor: pointer;
+    display: none;
+    margin-left: 8px;
+    color: rgba(var(--sk_highlight,18,100,163),1);
+}
+
+.p-classic_nav__model__title__conversation__info__topic__edit {
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
     user-select: none;
@@ -1613,6 +1767,34 @@
 }
 
 .p-channel_sidebar__name_button:focus {
+    color: white;
+    background: royalblue;
+}
+
+.p-channel_sidebar__conversation_name_button {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: inherit;
+    background: none;
+    border: 0;
+    color: rgb(188,171,188);
+    font: inherit;
+    margin: 0;
+    overflow: initial;
+    vertical-align: initial;
+    cursor: pointer;
+    line-height: 1;
+    display: block;
+    opacity: 1;
+    text-align: left;
+    width: 99%;
+    transition: color .1s ease-out;
+    white-space: nowrap;
+    font-weight: 700;
+    padding: 0 0 0 20px;
+    outline: none;
+}
+
+.p-channel_sidebar__conversation_name_button:focus {
     color: white;
     background: royalblue;
 }

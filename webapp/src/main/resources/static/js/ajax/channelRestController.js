@@ -1,4 +1,5 @@
-export const getChannelById = (id) => {
+import {showAllChannels} from "../workspace-page/workspace-page.js";
+const getChannelById = (id) => {
     let result = null;
     $.ajax({
         type: 'get',
@@ -10,7 +11,7 @@ export const getChannelById = (id) => {
     return result;
 };
 
-export const createChannel = (channel) => {
+ const createChannel = (channel) => {
     let result = null;
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
@@ -25,7 +26,7 @@ export const createChannel = (channel) => {
     return result;
 };
 
-export const updateChannel = (channel) => {
+ const updateChannel = (channel) => {
     const jsonChannel = JSON.stringify(channel);
     $.ajax({
         type: 'put',
@@ -36,7 +37,7 @@ export const updateChannel = (channel) => {
     });
 };
 
-export const deleteChannel = (id) => {
+ const deleteChannel = (id) => {
     $.ajax({
         type: 'delete',
         async: false,
@@ -44,7 +45,7 @@ export const deleteChannel = (id) => {
     });
 };
 
-export const getAllChannels = () => {
+ const getAllChannels = () => {
     let channels = null;
     $.ajax({
         url: '/rest/api/channels',
@@ -57,3 +58,11 @@ export const getAllChannels = () => {
     return channels;
 };
 
+ export const starUnstarChannel = id => {
+    $.ajax({
+        type: 'put',
+        async: false,
+        url: "/rest/api/channels/starunstar/" + id
+    });
+    showAllChannels();
+};

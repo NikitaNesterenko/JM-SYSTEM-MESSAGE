@@ -35,6 +35,9 @@ public class Conversation {
     @Column(name = "show_for_associated", nullable = false)
     private Boolean showForAssociated;
 
+    @Column(name = "starred")
+    private Boolean starred;
+
     public Conversation(User openingUser, User associatedUser, Workspace workspace, Boolean showForOpener, Boolean showForAssociated) {
         this.openingUser = openingUser;
         this.associatedUser = associatedUser;
