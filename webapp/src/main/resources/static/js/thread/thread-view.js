@@ -11,8 +11,8 @@ const threadChannel_service = new ThreadChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
 
 class ThreadChannel {
-    constructor(channelMessage) {
-        this.channelMessage = channelMessage;
+    constructor(message) {
+        this.message = message;
     }
 }
 
@@ -35,7 +35,7 @@ let currentChannelMessageId;
 
 let toggle_right_thread_menu = () => {
 
-    if (!is_open_thread || (channelMessageId != currentChannelMessageId)) {
+    if (!is_open_thread || (channelMessageId !== currentChannelMessageId)) {
         close_right_panel();
         open_right_thread_panel();
         open_right_thread_panel();
@@ -50,14 +50,12 @@ $(document).on('click', '#thread-panel', function (e) {
     currentChannelMessageId = channelMessageId;
 });
 
-const createThreadChannel = channelMessageId => {
-
+export const createThreadChannel = channelMessageId => {
     message_service.getById(channelMessageId).then((message) => {
-
         const threadChannel_promise = threadChannel_service.getThreadChannelByChannelMessageId(message.id);
 
         threadChannel_promise.catch(value => {
-            threadChannel_service.create(new ThreadChannel(message)).then(v => {
+            threadChannel_service.create(message).then(v => {
                 updateMessagesThreadChannel(channelMessageId);
             });
         });

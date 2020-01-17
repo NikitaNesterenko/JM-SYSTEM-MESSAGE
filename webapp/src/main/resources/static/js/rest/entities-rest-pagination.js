@@ -136,7 +136,7 @@ export class StorageService {
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
-    constructor() {
+    constructor(){
         super('/rest/api/invites');
     }
 }
@@ -147,6 +147,15 @@ export class ThreadChannelRestPaginationService extends  RestPaginationService{
     }
     getThreadChannelByChannelMessageId = async (id) => {
         const response = await fetch('/rest/api/threads/' + id);
+        return response.json();
+    };
+    createThreadChanel = async (entity) => {
+        alert(this.url + '/create');
+        const response = await fetch(`/rest/api/threads/create`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(entity)
+        });
         return response.json();
     };
     getThreadChannelMessagesByThreadChannelId = async (id) => {
@@ -163,6 +172,14 @@ export class ThreadChannelMessageRestPaginationService extends  RestPaginationSe
         const response = await fetch('/rest/api/threads/messages/' + id);
         return response.json();
     };
+    createThreadMsg = async (msg,user) => {
+        const response = await fetch(`/rest/api/threads/messages/create`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(msg,user)
+        });
+        return response.json();
+    }
 }
 
 export class ConversationRestPaginationService extends RestPaginationService {

@@ -32,6 +32,8 @@ $(document).on('submit', '#form_thread-message', function (e) {
     Promise.all([user_promise, threadChannel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
 
         const user = value[0];
+        delete user.starredMessageIds;
+        delete user.directMessagesToUserIds;
         const threadChannel = value[1];
 
         const message_input_element = document.getElementById("form_thread-message_input");
