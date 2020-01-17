@@ -119,7 +119,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
         const response = await fetch('/rest/api/workspaces/choosed');
 
         if (response.ok) {
-            return await response.json();
+            return await response.json()
         }
     };
 }

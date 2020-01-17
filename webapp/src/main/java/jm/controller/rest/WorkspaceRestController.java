@@ -81,7 +81,11 @@ public class WorkspaceRestController {
     @GetMapping("/choosed")
     public ResponseEntity<Workspace> getChoosedWorkspace(HttpServletRequest request) {
        Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+       System.out.println("******************WorkspaceID**********************");
+       System.out.println(request.getSession().getAttribute("WorkspaceID"));
+       System.out.println("******************WorkspaceID**********************");
+
+       return new ResponseEntity<>(workspace, HttpStatus.OK);
     }
 
     @GetMapping("/choosed/{name}")
