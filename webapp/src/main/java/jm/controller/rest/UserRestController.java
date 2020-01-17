@@ -99,11 +99,11 @@ public class UserRestController {
 
     // DTO compliant
     @GetMapping(value = "/loggedUser")
-    public ResponseEntity<User> getLoggedUserId(Principal principal) {
+    public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
         User user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
         UserDTO userDTO = userDtoService.toDto(user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userDTO);
     }
 
     // DTO compliant
