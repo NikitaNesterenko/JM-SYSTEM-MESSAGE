@@ -27,6 +27,7 @@ public class ChannelDTO {
     private Long workspaceId;
     private Long ownerId;
     private Boolean isPrivate;
+    private Boolean starred;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
