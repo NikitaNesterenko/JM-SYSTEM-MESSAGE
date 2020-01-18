@@ -1,5 +1,5 @@
 import {ChannelView} from "/js/workspace-page/components/sidebar/ChannelView.js";
-import {setDeleteStatus} from "/js/messagesInlineEdit.js";
+import {setDeleteStatus, setOnClickEdit} from "/js/messagesInlineEdit.js";
 
 export class StompClient {
 
@@ -27,18 +27,22 @@ export class StompClient {
             if (result.userId != null && !result.isDeleted) {
                 result['content'] = result.inputMassage;
                 if (result.channelId === channel_id) {
-                    if (result.sharedMessageId === null) {
-                        this.message_loader.setMessage(result);
+                    if (result.isDeleted !== null) {
+                        if (result.sharedMessageId === null) {
+                            this.message_loader.setMessage(result);
+                        } else {
+                            this.message_loader.setSharedMessage(result);
+                        }
+                        this.message_loader.dialog.messageBoxWrapper();
                     } else {
-                        this.message_loader.setSharedMessage(result);
+                        this.message_loader.updateMessage(result);
                     }
-                    setDeleteStatus(result);
-                    this.message_loader.dialog.messageBoxWrapper();
                 }
             } else {
                 this.message_loader.dialog.deleteMessage(result.id, result.userId);
             }
             notifyParseMessage(result);
+            setOnClickEdit(true);
         });
     }
 

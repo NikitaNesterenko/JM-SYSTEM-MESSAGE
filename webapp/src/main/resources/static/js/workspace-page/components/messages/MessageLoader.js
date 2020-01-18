@@ -53,6 +53,7 @@ export class MessageLoader {
             .setContent()
             .attachedFile()
             .setMenuIcons();
+        setDeleteStatus(message);
     }
 
     async setSharedMessage(message) {
@@ -66,6 +67,7 @@ export class MessageLoader {
                     .setExtraMessage(message.content)
                     .setSharedMessage(shared_message)
                     .setMenuIcons();
+                setDeleteStatus(message);
             }
         );
     }
@@ -87,5 +89,14 @@ export class MessageLoader {
             .setContent()
             .setThreadMenuIcons()
             .messageBoxWrapper();
+    }
+
+    updateMessage(message) {
+        this.dialog.setUser(this.getUser(message))
+            .updateContainer(message)
+            .setAvatar()
+            .setMessageContentHeader()
+            .setContent()
+            .setMenuIcons();
     }
 }

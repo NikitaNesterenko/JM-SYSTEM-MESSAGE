@@ -80,6 +80,7 @@ function onEditSubmit(ev) {
         const message = {
             "id": messageId,
             "userId": user.id,
+            "userName": user.name,
             "channelId": channel.id,
             "content": messageText,
             "dateCreate": currentDate,

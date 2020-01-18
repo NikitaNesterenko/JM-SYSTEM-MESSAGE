@@ -52,6 +52,16 @@ export class MessageDialogView {
         return this;
     }
 
+    updateContainer(message) {
+        this.message = message;
+        const content = $("<div class='c-message__content--feature_sonic_inputs'></div>");
+        this.root = $(`#message_${message.id}_user_${message.userId}_content`);
+        this.root.empty();
+        this.root.append(content);
+
+        return this;
+    }
+
     setDateHeader(message_date) {
         const dt = $(`<span class="c-virtual_list__item__date"></span>`)
         const current_day = message_date.split(' ')[0].split('.')[0];
