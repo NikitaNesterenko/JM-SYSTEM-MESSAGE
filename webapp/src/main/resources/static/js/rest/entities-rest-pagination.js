@@ -52,7 +52,7 @@ export class BotRestPaginationService extends RestPaginationService {
     getBotByWorkspaceId = async (id) => {
         const response = await fetch('/rest/api/bot/workspace/' + id)
         return await response.json()
-            .catch(err => console.log(err.status));
+            .catch(err => console.log('Нет бота для этого WorkSpace'));
     };
 }
 
@@ -117,7 +117,6 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 
     getChoosedWorkspace = async () => {
         const response = await fetch('/rest/api/workspaces/choosed');
-
         if (response.ok) {
             return await response.json()
         }

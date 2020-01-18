@@ -3,6 +3,7 @@ package jm.controller.rest;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
+import jm.dto.WorkspaceDTO;
 import jm.model.User;
 import jm.model.Workspace;
 import org.apache.kafka.common.protocol.types.Field;
@@ -79,13 +80,13 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/choosed")
-    public ResponseEntity<Workspace> getChoosedWorkspace(HttpServletRequest request) {
-       Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
-       System.out.println("******************WorkspaceID**********************");
-       System.out.println(request.getSession().getAttribute("WorkspaceID"));
-       System.out.println("******************WorkspaceID**********************");
-
-       return new ResponseEntity<>(workspace, HttpStatus.OK);
+    public ResponseEntity<WorkspaceDTO> getChoosedWorkspace(HttpServletRequest request) {
+       Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+       if(workspace==null){
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
+       WorkspaceDTO workspaceDTO=new WorkspaceDTO(workspace);
+       return new ResponseEntity<>(workspaceDTO, HttpStatus.OK);
     }
 
     @GetMapping("/choosed/{name}")
