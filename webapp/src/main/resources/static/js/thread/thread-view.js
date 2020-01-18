@@ -27,6 +27,7 @@ let toggle_right_thread_menu = () => {
 
 $(document).on('click', '#thread-panel', function (e) {
     channelMessageId = $(e.target).data('msg_id');
+    window.thread_id = channelMessageId;
     createThreadChannel(channelMessageId);
     toggle_right_thread_menu();
 

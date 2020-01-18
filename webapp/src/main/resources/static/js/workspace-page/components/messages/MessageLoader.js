@@ -7,7 +7,9 @@ export class MessageLoader {
 
     constructor() {
         const message_dialog = new MessageDialogView();
+        const message_thread = new MessageDialogView();
         this.dialog = message_dialog.messageBox("#all-messages");
+        this.thread = message_thread.messageBox(".p-flexpane__inside_body-scrollbar__child");
         this.message_service = new MessageRestPaginationService();
     }
 
@@ -75,5 +77,15 @@ export class MessageLoader {
             user.name = message.botNickName;
         }
         return user;
+    }
+
+    setThreadMessage(message) {
+        this.thread.setUser(this.getUser(message))
+            .container(message)
+            .setAvatar()
+            .setMessageContentHeader()
+            .setContent()
+            .setThreadMenuIcons()
+            .messageBoxWrapper();
     }
 }

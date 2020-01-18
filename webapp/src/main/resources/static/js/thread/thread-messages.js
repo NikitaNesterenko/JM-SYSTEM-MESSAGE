@@ -4,27 +4,13 @@ import {
 } from '../rest/entities-rest-pagination.js'
 
 import {showInput} from "./thread-view.js";
-import {stompClient} from "../workspace-page/components/footer/messages.js";
 import {MessageDialogView} from "/js/workspace-page/components/messages/MessageDialogView.js";
+import {setDeleteStatus, setOnClickEdit} from "/js/messagesInlineEdit.js";
 
 const threadChannel_service = new ThreadChannelRestPaginationService();
 const threadChannelMessage_service = new ThreadChannelMessageRestPaginationService();
 const message_dialog = new MessageDialogView();
 const dialog = message_dialog.messageBox(".p-flexpane__inside_body-scrollbar__child");
-
-export const sendName = (message) => {
-    // alert("MY");
-    stompClient.send("/app/message", {}, JSON.stringify({
-        'id': message.id,
-        //'channel': message.channel,
-        'inputMassage': message.content,
-        'dateCreate': message.dateCreate,
-        'user': message.user,
-        'threadChannel': message.threadChannel
-        //'bot': message.bot,
-        //'filename': message.filename
-    }));
-};
 
 export const updateMessagesThreadChannel = (channelMessageId) => {
     $('.p-flexpane__title_container').text('Thread');
@@ -41,6 +27,7 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
                     .setMessageContentHeader()
                     .setContent()
                     .setThreadMenuIcons();
+                setDeleteStatus(threadChannel.message)
             }
 
             threadChannelMessages.forEach(function (threadChannelMessage, i) {
@@ -52,10 +39,12 @@ export const updateMessagesThreadChannel = (channelMessageId) => {
                         .setMessageContentHeader()
                         .setContent()
                         .setThreadMenuIcons();
+                    setDeleteStatus(threadChannelMessage);
                 }
             });
 
             dialog.messageBoxWrapper();
+            setOnClickEdit(true);
             showInput();
         })
     })

@@ -9,6 +9,7 @@ export class StompClient {
 
         window.sendName = (message) => this.sendName(message);
         window.sendChannel = (channel) => this.sendChannel(channel);
+        window.sendThread = (message) => this.sendThread(message);
     }
 
     connect() {
@@ -16,6 +17,7 @@ export class StompClient {
             console.log('Connected: ' + frame);
             this.subscribeMessage();
             this.subscribeChannel();
+            this.subscribeThread();
         });
     }
 
@@ -48,11 +50,32 @@ export class StompClient {
         });
     }
 
+    subscribeThread() {
+        this.stompClient.subscribe('/topic/threads', (message) => {
+            let result = JSON.parse(message.body);
+            if (result.parentMessageId === thread_id) {
+                this.message_loader.setThreadMessage(result);
+            }
+        })
+    }
+
     sendChannel(channel) {
         this.stompClient.send('/app/channel', {}, JSON.stringify({
             'name': channel.name,
             'isPrivate': channel.isPrivate
         }));
+    }
+
+    sendThread(message) {
+        this.stompClient.send('/app/thread', {}, JSON.stringify({
+            'id': message.id,
+            'userId': message.user.id,
+            'userName': message.user.name,
+            'content': message.content,
+            'isDeleted': message.isDeleted,
+            'dateCreate': message.dateCreate,
+            'parentMessageId': message.threadChannel.message.id,
+        }))
     }
 
     sendName(message) {

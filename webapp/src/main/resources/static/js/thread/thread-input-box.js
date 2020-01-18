@@ -4,9 +4,6 @@ import {
     ThreadChannelMessageRestPaginationService
 } from '../rest/entities-rest-pagination.js'
 
-import {showMessage} from "./thread-view.js";
-import {sendName} from "./thread-messages.js"
-
 const threadChannel_service = new ThreadChannelRestPaginationService();
 const threadChannelMessage_service = new ThreadChannelMessageRestPaginationService();
 const user_service = new UserRestPaginationService();
@@ -44,10 +41,8 @@ $(document).on('submit', '#form_thread-message', function (e) {
         const threadChannelMessage = new ThreadChannelMessage(null, user, text_message, currentDate, threadChannel);
 
         threadChannelMessage_service.create(threadChannelMessage).then(messageWithId => {
-            // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-            // которое вставляется в HTML (см. messages.js).
-            sendName(messageWithId);
-            showMessage(threadChannelMessage);
+            window.thread_id = messageWithId.threadChannel.message.id;
+            sendThread(messageWithId);
         });
     });
     return false;

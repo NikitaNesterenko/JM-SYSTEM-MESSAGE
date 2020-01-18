@@ -119,8 +119,8 @@ export class MessageDialogView {
         const icons_container =$('<div class="message-icons-menu-class" id="thread-message-icons-menu"></div>');
         const icons_elements = this.menu_icons.createMenuIcons()
             .emojiBtn()
-            .replyBtn()
-            .shareBtn();
+            .starBtn(this.message.id)
+            .dropdownBtn(this.message.id, this.message.userId);
         icons_container.append(icons_elements.getMenuIcons());
         this.root.append(icons_container);
         return this;
