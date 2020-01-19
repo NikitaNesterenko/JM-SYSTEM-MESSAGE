@@ -101,6 +101,10 @@ $('#form_message').submit(function () {
                                         );
                                 });
                                 pressChannelButton(firstChannelId)
+                                sessionStorage.setItem("channelName", firstChannelId);
+                                var channel_name = document.getElementById("channel_name_" + firstChannelId).textContent;
+                                $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
+                                sessionStorage.setItem('conversation_id', '0');
                             });
                         });
                     });
