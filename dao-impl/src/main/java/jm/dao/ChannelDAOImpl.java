@@ -50,7 +50,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
                 "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
                 "LEFT JOIN users u ON chu.user_id = u.id " +
-                "WHERE (ws.id = :workspace_id AND ((u.id = :user_id AND ch.is_private = true) OR ch.is_private = false)) " +
+                "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
                 "GROUP BY ch.id";
 
         return entityManager.createNativeQuery(query, "ChannelDTOMapping")

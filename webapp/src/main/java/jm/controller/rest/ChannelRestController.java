@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/rest/api/channels")
@@ -75,6 +77,9 @@ public class ChannelRestController {
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
+            Set<User> users = new HashSet<>();
+            users.add(owner);
+            channel.setUsers(users);
         }
         try {
             channelService.createChannel(channel);

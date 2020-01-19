@@ -4,13 +4,15 @@ import {
     MessageRestPaginationService,
     StorageService,
     ConversationRestPaginationService,
-    DirectMessagesRestController
+    DirectMessagesRestController,
+    WorkspaceRestPaginationService
 } from '../../../rest/entities-rest-pagination.js'
 import {show_dialog} from "../primary-view/direct-message.js";
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
+const workspace_service = new WorkspaceRestPaginationService();
 const storage_service = new StorageService();
 const conversation_service = new ConversationRestPaginationService();
 const direct_message_service = new DirectMessagesRestController();
@@ -55,46 +57,89 @@ $('#form_message').submit(function () {
 
     Promise.all([user_promise, channel_promise, conversation_promise])
         .then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
-        const user = value[0];
-        const channel = value[1];
-        const conversation = value[2];
+            const user = value[0];
+            const channel = value[1];
+            const conversation = value[2];
 
-        const message_input_element = document.getElementById("form_message_input");
-        const text_message = message_input_element.value;
-        message_input_element.value = null;
-        const currentDate = convert_date_to_format_Json(new Date());
-
-
-        const files = document.getElementById("file_selector").files;
-        let filename = null;
-        if (files.length > 0) {
-            const data = new FormData();
-            data.append("file", files[0]);
-            filename = storage_service.uploadFile(data);
-            $("#file_selector").val("");
-            $('#attached_file').html("");
-        }
-        Promise.all([filename]).then(files => {
-            if (conversation == null) {
-                const message = new Message(null, channel.id, user.id, text_message, currentDate, files[0]);
-                message_service.create(message).then(messageWithId => {
-                    // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-                    // которое вставляется в HTML (см. messages.js).
-                    sendName(messageWithId);
-                });
+            const message_input_element = document.getElementById("form_message_input");
+            const text_message = message_input_element.value;
+            message_input_element.value = null;
+            if (text_message.startsWith('/leave ')) {
+                let channelName = text_message.substring(7);
+                const channel_promise = channel_service.getChannelByName(channelName);
+                channel_promise.then(function (channel) {
+                    const channelUsers = channel.userIds;
+                    channelUsers.splice(channelUsers.indexOf(user.id), 1);
+                    const entity = {
+                        id: channel.id,
+                        name: channelName,
+                        userIds: channelUsers,
+                        ownerId: channel.ownerId,
+                        isPrivate: channel.isPrivate,
+                        createdDate: channel.createdDate,
+                        workspaceId: channel.workspaceId
+                    };
+                    channel_service.update(entity).then(() => {
+                        $(".p-channel_sidebar__channels__list").html('')
+                        const user_promise = user_service.getLoggedUser();
+                        const workspace_promise = workspace_service.getChoosedWorkspace();
+                        Promise.all([user_promise,workspace_promise]).then((respons) => {
+                            let channel_promise = channel_service.getChannelsByWorkspaceAndUser(respons[1].id, respons[0].id);
+                            channel_promise.then(channels => {
+                                let firstChannelId = 0;
+                                channels.forEach(function (channel, i) {
+                                    if (i===0) {
+                                        firstChannelId = channel.id
+                                    }
+                                    $('#id-channel_sidebar__channels__list')
+                                        .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
+                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
+                                    </button>
+                                  </div>`
+                                        );
+                                });
+                                pressChannelButton(firstChannelId)
+                            });
+                        });
+                    });
+                })
+                return
             }
+            const currentDate = convert_date_to_format_Json(new Date());
 
-            if (channel == null && conversation != null) {
-                const message = new DirectMessage(null, user.id, text_message, currentDate, files[0], conversation);
-                direct_message_service.create(message).then(messageWithId => {
-                    // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-                    // которое вставляется в HTML (см. messages.js).
-                    sendName(messageWithId);
-                    show_dialog(conversation);
-                });
+
+            const files = document.getElementById("file_selector").files;
+            let filename = null;
+            if (files.length > 0) {
+                const data = new FormData();
+                data.append("file", files[0]);
+                filename = storage_service.uploadFile(data);
+                $("#file_selector").val("");
+                $('#attached_file').html("");
             }
+            Promise.all([filename]).then(files => {
+                if (conversation == null) {
+                    const message = new Message(null, channel.id, user.id, text_message, currentDate, files[0]);
+                    message_service.create(message).then(messageWithId => {
+                        // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
+                        // которое вставляется в HTML (см. messages.js).
+                        sendName(messageWithId);
+                    });
+                }
+
+                if (channel == null && conversation != null) {
+                    const message = new DirectMessage(null, user.id, text_message, currentDate, files[0], conversation);
+                    direct_message_service.create(message).then(messageWithId => {
+                        // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
+                        // которое вставляется в HTML (см. messages.js).
+                        sendName(messageWithId);
+                        show_dialog(conversation);
+                    });
+                }
+            });
         });
-    });
     return false;
 });
 

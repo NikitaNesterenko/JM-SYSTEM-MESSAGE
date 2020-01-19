@@ -11,7 +11,9 @@
             </Pattern>
         </layout>
     </appender>
-
+    <logger name="jm.controller.rest" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
 
         <file>${LOGS}</file>
@@ -30,9 +32,7 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <logger name="jm.controller.rest" level="INFO" additivity="false">
-        <appender-ref ref="FILE"/>
-    </logger>
+
 
     <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
