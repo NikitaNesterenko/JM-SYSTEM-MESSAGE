@@ -1,5 +1,6 @@
 import {RefreshUserList} from "./refreshUserList.js"
 import {ShowFilteredUsers} from "./showFilteredUsers.js"
+import {OnUserEditSubmit} from "./onUserEditSubmit";
 
 export  class AddEventListener {
 
@@ -16,9 +17,10 @@ export  class AddEventListener {
         };
         let refreshUserList = new RefreshUserList();
         refreshUserList.refreshUserList();
+        const onUserEdiSubmit = new OnUserEditSubmit(ev);
         let showFilteredUsers = new ShowFilteredUsers();
 
-        document.getElementById("user_edit_submit").addEventListener("click", onUserEditSubmit);
+        document.getElementById("user_edit_submit").addEventListener("click", onUserEditSubmit.onUserEdiSubmit());
         document.getElementById("searchValue").addEventListener("keyup", showFilteredUsers.showFilteredUsers);
     }
 }
