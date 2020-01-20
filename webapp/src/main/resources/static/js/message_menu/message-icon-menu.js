@@ -1,6 +1,6 @@
 import {MessageRestPaginationService, UserRestPaginationService} from "../rest/entities-rest-pagination.js";
 import {star_button_blank, star_button_filled} from "../workspace-page/components/footer/messages.js";
-import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel-old.js";
+import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 import {updateAllMessages} from "../workspace-page/components/footer/messages.js";
 
 const user_service = new UserRestPaginationService();

@@ -1,7 +1,7 @@
 import {MessageRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {MessageDialogView} from "../primary-view/MessageDialogView.js";
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
-import {getMessageStatus} from "/js/message_menu/message-icon-menu-old.js";
+import {getMessageStatus} from "/js/message_menu/message-icon-menu.js";
 
 export class UpdateMessages {
 

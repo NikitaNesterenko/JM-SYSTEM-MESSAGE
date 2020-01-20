@@ -7,7 +7,7 @@ export class NewWorkspaceEventHandler {
             const email = $('#target-email').val();
             const sender = new SendEmail(email);
             sender.sendEmail();
-            window.location.href = "/confirmemail";
+            window.location.href = "/email/confirmemail";
             return false;
         });
     }

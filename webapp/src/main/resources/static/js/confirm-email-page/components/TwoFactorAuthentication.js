@@ -48,7 +48,7 @@ export class TwoFactorAuthentication {
             alert("ne tot kod :)");
         } else {
             setTimeout(function () {
-                window.location.href = "/workspacename";
+                window.location.href = "/email/workspacename";
             }, 1000);
         }
     }
