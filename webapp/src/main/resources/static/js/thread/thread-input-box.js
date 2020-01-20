@@ -4,20 +4,18 @@ import {
     ThreadChannelMessageRestPaginationService
 } from '../rest/entities-rest-pagination.js'
 
-import {showMessage} from "./thread-view.js";
-import {sendName} from "./thread-messages.js"
-
 const threadChannel_service = new ThreadChannelRestPaginationService();
 const threadChannelMessage_service = new ThreadChannelMessageRestPaginationService();
 const user_service = new UserRestPaginationService();
 
 class ThreadChannelMessage {
-    constructor(id, user, content, dateCreate, threadChannel) {
+    constructor(id, userId, userName, content, dateCreate, parentMessageId) {
         this.id = id;  // id нужно для редактирования сообщений
-        this.user = user;
+        this.userId = userId;
+        this.userName = userName;
         this.content = content;
         this.dateCreate = dateCreate;
-        this.threadChannel = threadChannel;
+        this.parentMessageId = parentMessageId;
     }
 }
 
@@ -32,8 +30,6 @@ $(document).on('submit', '#form_thread-message', function (e) {
     Promise.all([user_promise, threadChannel_promise]).then(value => {  //После того как Юзер и Чаннел будут получены, начнется выполнение этого блока
 
         const user = value[0];
-        delete user.starredMessageIds;
-        delete user.directMessagesToUserIds;
         const threadChannel = value[1];
 
         const message_input_element = document.getElementById("form_thread-message_input");
@@ -41,13 +37,11 @@ $(document).on('submit', '#form_thread-message', function (e) {
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
 
-        const threadChannelMessage = new ThreadChannelMessage(null, user, text_message, currentDate, threadChannel);
+        const threadChannelMessage = new ThreadChannelMessage(null, user.id, user.name, text_message, currentDate, threadChannel.message.id);
 
         threadChannelMessage_service.create(threadChannelMessage).then(messageWithId => {
-            // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-            // которое вставляется в HTML (см. messages.js).
-            sendName(messageWithId);
-            showMessage(threadChannelMessage);
+            window.thread_id = messageWithId.parentMessageId;
+            sendThread(messageWithId);
         });
     });
     return false;

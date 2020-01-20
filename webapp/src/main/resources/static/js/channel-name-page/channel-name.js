@@ -1,11 +1,5 @@
-import {takeChannelName} from "../ajax/createWorkspaceRestController.js";
+import {NameButton} from "./components/NameButton.js";
 
+const nameButton = new NameButton();
 
-$(document).ready(function() {
-    $("#button-name").click(function(){
-        let name = $('#signup_channel_name').val();
-        takeChannelName(name);
-        window.location.href = "/email/invites";
-        return false;
-    });
-});
+$(document).ready(nameButton.namebutton());
