@@ -1,4 +1,4 @@
-import {UserRestPaginationService} from "../../rest/entities-rest-pagination";
+import {UserRestPaginationService} from "../../rest/entities-rest-pagination.js";
 
 export class Create_workspace {
     constructor() {

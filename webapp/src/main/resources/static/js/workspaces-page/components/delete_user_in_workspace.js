@@ -1,4 +1,4 @@
-import {UpdateUsersInWorkspaceTable} from "./update_users_in_workspace_table";
+import {UpdateUsersInWorkspaceTable} from "./update_users_in_workspace_table.js";
 
 export class Delete_user_in_workspace {
 

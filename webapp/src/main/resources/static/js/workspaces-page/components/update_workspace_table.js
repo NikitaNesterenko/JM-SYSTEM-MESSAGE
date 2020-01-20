@@ -1,5 +1,5 @@
-import {UpdateUsersInWorkspaceTable} from "./update_users_in_workspace_table";
-import {DeleteWorkspace} from "./delete-workspace";
+import {UpdateUsersInWorkspaceTable} from "./update_users_in_workspace_table.js";
+import {DeleteWorkspace} from "./delete-workspace.js";
 
 export class UpdateWorkspaceTable {
     constructor() {

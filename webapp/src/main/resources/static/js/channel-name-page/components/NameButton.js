@@ -1,4 +1,4 @@
-import {takeChannelName} from "../../ajax/createWorkspaceRestController";
+import {takeChannelName} from "../../ajax/createWorkspaceRestController.js";
 
 export class NameButton {
     constructor() {

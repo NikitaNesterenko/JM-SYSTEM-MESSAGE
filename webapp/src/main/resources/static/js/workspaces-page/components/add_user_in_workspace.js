@@ -1,5 +1,5 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService} from "../../rest/entities-rest-pagination";
-import {UpdateUsersInWorkspaceTable} from "./update_users_in_workspace_table";
+import {UserRestPaginationService, WorkspaceRestPaginationService} from "../../rest/entities-rest-pagination.js";
+import {UpdateUsersInWorkspaceTable} from "./update_users_in_workspace_table.js";
 
 export class Add_user_in_workspace {
 

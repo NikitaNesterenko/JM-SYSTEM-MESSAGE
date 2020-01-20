@@ -1,3 +1,5 @@
+import {GetUsers} from "../../ajax/userRestController/getUsers.js";
+
 export class FilterUserList {
 
     constructor(users) {
@@ -7,7 +9,10 @@ export class FilterUserList {
     filterUserList() {
         const regExp = new RegExp(document.getElementById("searchValue").value, "i");
         let filteredUsers;
-        filteredUsers = this.users.filter(u => (
+        let users = [];
+        let getUsers = new GetUsers();
+        users = getUsers.getUsers(); // get all users from DB
+        filteredUsers = users.filter(u => (
                 u.login.match(regExp)
                 || u.name.match(regExp)
                 || u.lastName.match(regExp)

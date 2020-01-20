@@ -1,7 +1,6 @@
 import {ShowAllChannels} from "./components/showAllChannels.js"
 import {Propertychange} from "./components/propertychange.js"
 import {JsFilterChannel} from "./components/js-filter-channel.js"
-import {findEl} from "../filter-channel";
 
 const filterInput = $('#filter-channel'), filterUl = $('.ul-channel');
 let channelNames = [];

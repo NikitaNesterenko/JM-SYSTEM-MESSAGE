@@ -1,4 +1,4 @@
-import {WorkspaceRestPaginationService} from "../../rest/entities-rest-pagination";
+import {WorkspaceRestPaginationService} from "../../rest/entities-rest-pagination.js";
 
 export class DeleteWorkspace {
     constructor(id) {

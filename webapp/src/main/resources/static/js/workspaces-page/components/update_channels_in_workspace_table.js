@@ -1,5 +1,5 @@
-import {WorkspaceRestPaginationService} from "../../rest/entities-rest-pagination";
-import {Update_add_channels_in_workspace_table} from "./update_add_channels_in_workspace_table";
+import {WorkspaceRestPaginationService} from "../../rest/entities-rest-pagination.js";
+import {Update_add_channels_in_workspace_table} from "./update_add_channels_in_workspace_table.js";
 
 export class UpdateChannelsInWorkspaceTable {
     constructor(id) {

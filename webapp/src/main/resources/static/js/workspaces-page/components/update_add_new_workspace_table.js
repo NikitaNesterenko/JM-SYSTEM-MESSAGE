@@ -1,4 +1,4 @@
-import {UserRestPaginationService} from "../../rest/entities-rest-pagination";
+import {UserRestPaginationService} from "../../rest/entities-rest-pagination.js";
 
 export class Update_add_new_workspace_table {
     constructor() {

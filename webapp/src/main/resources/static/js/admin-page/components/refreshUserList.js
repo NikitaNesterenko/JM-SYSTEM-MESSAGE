@@ -1,5 +1,5 @@
 import {GetUsers} from "/js/ajax/userRestController/getUsers.js";
-import {ShowFilteredUsers} from "./showFilteredUsers.js";
+import {Loadhandler} from "./loadhandler.js";
 
 export class RefreshUserList{
 
@@ -7,8 +7,9 @@ export class RefreshUserList{
             let users = [];
             let getUsers = new GetUsers();
             users = getUsers.getUsers(); // get all users from DB
-            let showFilteredUsers = new ShowFilteredUsers(users);
-            showFilteredUsers.showFilteredUsers();  // display users filtered by input search string
+            const handler = new Loadhandler();
+            handler.showFilteredUsers(users);
+            // display users filtered by input search string
     }
 
 

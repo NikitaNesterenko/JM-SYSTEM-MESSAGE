@@ -1,4 +1,4 @@
-import {UpdateChannelsInWorkspaceTable} from "./update_channels_in_workspace_table";
+import {UpdateChannelsInWorkspaceTable} from "./update_channels_in_workspace_table.js";
 
 export class Delete_channel_in_workspace {
     constructor(workspace_id) {
