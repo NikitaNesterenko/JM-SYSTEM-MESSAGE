@@ -22,7 +22,7 @@ let loggedUserId = 0;
 
 user_service.getLoggedUser().then(loggedUser => {
     loggedUserId = loggedUser.id;
-    console.log(loggedUserId);
+    console.log('Login user ID is: '+loggedUserId);
 });
 
 

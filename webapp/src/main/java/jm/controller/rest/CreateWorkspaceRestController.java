@@ -104,7 +104,7 @@ public class CreateWorkspaceRestController {
     @PostMapping("/confirmEmail")
     public ResponseEntity confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         if(token.getCode() != code) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -142,7 +142,7 @@ public class CreateWorkspaceRestController {
 
     @PostMapping("/invites")
     public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         for (int i = 0; i < invites.length; i++) {
             mailService.sendInviteMessage(
                     userService.getUserByEmail(token.getUserEmail()).getLogin(),
@@ -156,7 +156,7 @@ public class CreateWorkspaceRestController {
 
     @PostMapping("/tada")
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         UserDetails userDetails = userDetailsService.loadUserByUsername(token.getUserEmail());
         UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         sToken.setDetails(new WebAuthenticationDetails(request));

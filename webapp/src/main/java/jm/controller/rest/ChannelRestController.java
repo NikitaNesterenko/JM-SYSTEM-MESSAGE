@@ -71,7 +71,7 @@ public class ChannelRestController {
 
         if (principal != null) {
             User owner = userService.getUserByLogin(principal.getName());
-            Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+            Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
