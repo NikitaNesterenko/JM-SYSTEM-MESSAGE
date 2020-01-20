@@ -42,4 +42,6 @@ public class InputMessage {
 
     private Long sharedMessageId;
 
+    private Boolean isDeleted;
+
 }

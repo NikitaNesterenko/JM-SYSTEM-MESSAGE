@@ -1,6 +1,7 @@
 export class RestPaginationService {
     constructor(url) {
-        this.url = url;
+        this.url
+            = url;
     }
 
     getPage = async (numberPage, size, sort) => {

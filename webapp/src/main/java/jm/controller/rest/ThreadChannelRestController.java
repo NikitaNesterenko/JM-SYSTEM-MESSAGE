@@ -2,8 +2,7 @@ package jm.controller.rest;
 
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
-import jm.dto.MessageDTO;
-import jm.dto.MessageDtoService;
+import jm.dto.*;
 import jm.model.Message;
 import jm.model.ThreadChannel;
 import jm.model.message.ThreadChannelMessage;
@@ -26,6 +25,18 @@ public class ThreadChannelRestController {
     private ThreadChannelService threadChannelService;
     private ThreadChannelMessageService threadChannelMessageService;
     private MessageDtoService messageDtoService;
+    private ThreadMessageDtoService threadMessageDtoService;
+    private ThreadDtoService threadDtoService;
+
+    @Autowired
+    public void setThreadDtoService(ThreadDtoService threadDtoService) {
+        this.threadDtoService = threadDtoService;
+    }
+
+    @Autowired
+    public void setThreadMessageDtoService(ThreadMessageDtoService threadMessageDtoService) {
+        this.threadMessageDtoService = threadMessageDtoService;
+    }
 
     @Autowired
     public void setThreadService(ThreadChannelService threadChannelService) {
@@ -55,10 +66,11 @@ public class ThreadChannelRestController {
     }
 
     @PostMapping("/messages/create")
-    public ResponseEntity<ThreadChannelMessage> createThreadChannelMessage(@RequestBody ThreadChannelMessage threadChannelMessage) {
-        System.out.println("CREATE!!! - " + threadChannelMessage);
+    public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
+        System.out.println("CREATE!!! - " + threadMessageDTO);
+        ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
-        return new ResponseEntity<>(threadChannelMessage, HttpStatus.CREATED);
+        return new ResponseEntity<>(threadMessageDTO, HttpStatus.CREATED);
     }
 
 //    @GetMapping("/messages/{id}")
@@ -71,16 +83,16 @@ public class ThreadChannelRestController {
 //    }
 
     @GetMapping("/{message_id}")
-    public ResponseEntity<ThreadChannel> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
+    public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
         System.out.println("GET-THREADCHANNEL - " + temp);
-        return new ResponseEntity<>(temp, HttpStatus.OK);
+        return new ResponseEntity<>(threadDtoService.toDto(temp), HttpStatus.OK);
     }
 
     @GetMapping("/messages/{id}")
-    public ResponseEntity<List<ThreadChannelMessage>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
+    public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
         List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
         System.out.println("LIST - " + list.toString());
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(threadMessageDtoService.toDto(list), HttpStatus.OK);
     }
 }
