@@ -38,7 +38,6 @@ public class ThreadMessageDTO {
         this.dateCreate = message.getDateCreate();
         this.filename = message.getFilename();
         this.isDeleted = message.getIsDeleted();
-        this.parentMessageId = message.getThreadChannel().getMessage().getId();
     }
 
     public ThreadMessageDTO(Long id, Long userId, String content, LocalDateTime dateCreate, Long parentMessageId, Boolean isDeleted, String userName) {

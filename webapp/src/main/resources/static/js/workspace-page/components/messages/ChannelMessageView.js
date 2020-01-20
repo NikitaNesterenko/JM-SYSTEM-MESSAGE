@@ -3,7 +3,7 @@ import {MessageDialogView} from "/js/workspace-page/components/messages/MessageD
 import {getMessageStatus} from "/js/message_menu/message-icon-menu.js";
 import {setDeleteStatus, setOnClickEdit} from "/js/messagesInlineEdit.js";
 
-export class MessageLoader {
+export class ChannelMessageView {
 
     constructor() {
         const message_dialog = new MessageDialogView();
@@ -37,29 +37,27 @@ export class MessageLoader {
                     await this.setSharedMessage(message);
                 }
                 this.dialog.messageBoxWrapper();
-                setDeleteStatus(message);
             }
         }
         setOnClickEdit(true);
     }
 
     setMessage(message) {
-        const user = this.getUser(message);
-        this.dialog.setUser(user)
+        this.dialog.setUser(message.userId, message.userName)
             .setDateHeader(message.dateCreate)
             .container(message)
             .setAvatar()
             .setMessageContentHeader()
             .setContent()
-            .attachedFile()
-            .setMenuIcons();
+            .setMenuIcons()
+            .attachedFile();
         setDeleteStatus(message);
     }
 
     async setSharedMessage(message) {
         await this.message_service.getMessageById(message.sharedMessageId).then(
             shared_message => {
-                this.dialog.setUser(this.getUser(message))
+                this.dialog.setUser(message.userId, message.userName)
                     .setDateHeader(message.dateCreate)
                     .container(message)
                     .setAvatar()
@@ -72,27 +70,8 @@ export class MessageLoader {
         );
     }
 
-    getUser(message) {
-        let user = {id: message.userId, name: message.userName};
-        if (message.userId === null) {
-            user.id = message.botId;
-            user.name = message.botNickName;
-        }
-        return user;
-    }
-
-    setThreadMessage(message) {
-        this.thread.setUser(this.getUser(message))
-            .container(message)
-            .setAvatar()
-            .setMessageContentHeader()
-            .setContent()
-            .setThreadMenuIcons()
-            .messageBoxWrapper();
-    }
-
     updateMessage(message) {
-        this.dialog.setUser(this.getUser(message))
+        this.dialog.setUser(message.userId, message.userName)
             .updateContainer(message)
             .setAvatar()
             .setMessageContentHeader()

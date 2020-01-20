@@ -1,54 +1,68 @@
+import {MessageDialogView} from "./MessageDialogView.js";
 import {
-    MessageRestPaginationService,
+    ThreadChannelMessageRestPaginationService,
     ThreadChannelRestPaginationService
-} from '../rest/entities-rest-pagination.js'
+} from "/js/rest/entities-rest-pagination.js";
+import {setDeleteStatus, setOnClickEdit} from "/js/messagesInlineEdit.js";
 
-import {close_right_panel} from "../right_slide_panel/right_panel.js";
-import {open_right_thread_panel, is_open_thread} from "../right_slide_panel/right_thread_panel.js";
-import {updateMessagesThreadChannel} from "./thread-messages.js";
+export class ThreadMessageView {
 
-const threadChannel_service = new ThreadChannelRestPaginationService();
-const message_service = new MessageRestPaginationService();
-
-let channelMessageId;
-let currentChannelMessageId;
-
-let toggle_right_thread_menu = () => {
-
-    if (!is_open_thread || (channelMessageId !== currentChannelMessageId)) {
-        close_right_panel();
-        open_right_thread_panel();
-        open_right_thread_panel();
+    constructor() {
+        const message_dialog = new MessageDialogView();
+        this.dialog = message_dialog.messageBox(".p-flexpane__inside_body-scrollbar__child");
+        this.threadChannel_service = new ThreadChannelRestPaginationService();
+        this.threadChannelMessage_service = new ThreadChannelMessageRestPaginationService();
     }
-};
 
-$(document).on('click', '#thread-panel', function (e) {
-    channelMessageId = $(e.target).data('msg_id');
-    window.thread_id = channelMessageId;
-    createThreadChannel(channelMessageId);
-    toggle_right_thread_menu();
+    setThreadTitle() {
+        const channel_name = $('.p-classic_nav__model__title__info__name').text();
+        const title_container = $('.p-flexpane__title_container');
+        title_container.text("Thread");
+        title_container.append(`<p style="font-size: 13px; font-weight: 400" class="mb-0 pb-0">${channel_name}</p>`);
+        return this;
+    }
 
-    currentChannelMessageId = channelMessageId;
-});
-
-export const createThreadChannel = channelMessageId => {
-    message_service.getById(channelMessageId).then((message) => {
-        const threadChannel_promise = threadChannel_service.getThreadChannelByChannelMessageId(message.id);
-
-        threadChannel_promise.then(
-            () => updateMessagesThreadChannel(channelMessageId)
-        ).catch(
-            () => threadChannel_service.create(message).then(
-                () => updateMessagesThreadChannel(channelMessageId)
-            )
+    showAllMessages(message_id) {
+        this.dialog.emptyMessageBox();
+        this.threadChannel_service.getThreadChannelByChannelMessageId(message_id).then(
+            thread => {
+                this.setMessage(thread.message);
+                this.threadChannelMessage_service.getThreadChannelMessagesByThreadChannelId(thread.id).then(
+                    messages => {
+                        this.updateAll(messages);
+                    }
+                );
+            }
         );
-    });
-};
+        return this;
+    }
 
-export const showInput = () => {
-    const input_box = $('.p-flexpane__inside_body-scrollbar__hider');
-    input_box.find('.pt-2').remove();
-    input_box.append(`
+    updateAll(messages) {
+        messages.forEach((message, idx) => {
+           this.setMessage(message);
+           setDeleteStatus(message);
+        });
+
+        this.dialog.messageBoxWrapper();
+        setOnClickEdit(true);
+    }
+
+    setMessage(message) {
+        if (message.userId !== null) {
+            this.dialog.setUser(message.userId, message.userName)
+                .container(message)
+                .setAvatar()
+                .setMessageContentHeader()
+                .setContent()
+                .setThreadMenuIcons()
+                .messageBoxWrapper();
+        }
+    }
+
+    showInputMessageBox() {
+        const input_box = $('.p-flexpane__inside_body-scrollbar__hider');
+        input_box.find('.pt-2').remove();
+        input_box.append(`
             <div class="pt-2 mt-2">
                 <footer class="p-workspace__primary_view_thread_footer">
                     <div class="p-message_pane_thread_input">
@@ -92,4 +106,5 @@ export const showInput = () => {
                     </div>
                 </footer>
             </div>`);
-};
+    }
+}

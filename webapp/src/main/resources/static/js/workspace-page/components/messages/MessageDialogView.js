@@ -1,14 +1,6 @@
 import {MessageMenuIcon} from "./MessageMenuIcon.js";
 
 export class MessageDialogView {
-    // ICONS = {
-    //     EMOJI_BUTTON: '&#9786;',
-    //     REPLY_BUTTON: '&#128172;',
-    //     SHARE_BUTTON: '&#10140;',
-    //     STAR_BUTTON_BLANK: '\u2606',
-    //     STAR_BUTTON_FILLED: '\u2605',
-    //     MSG_EDIT_BUTTON: '&#8285;'
-    // };
     userWhoShareMsg = null;
     message;
     today = new Date();
@@ -18,8 +10,8 @@ export class MessageDialogView {
         this.menu_icons = new MessageMenuIcon();
     }
 
-    setUser(user) {
-        this.userWhoShareMsg = user;
+    setUser(user_id, user_name) {
+        this.userWhoShareMsg = {userId: user_id, userName: user_name};
         return this;
     }
 
@@ -43,7 +35,7 @@ export class MessageDialogView {
         const container = $(`<div class='c-virtual_list__item'></div>`);
         const content = $("<div class='c-message__content--feature_sonic_inputs'></div>");
 
-        this.root = $(`<div class="c-message--light" id="message_${this.message.id}_user_${this.userWhoShareMsg.id}_content"></div>`);
+        this.root = $(`<div class="c-message--light" id="message_${this.message.id}_user_${this.userWhoShareMsg.userId}_content"></div>`);
         this.root.append(content);
 
         container.append(this.root);
@@ -123,6 +115,7 @@ export class MessageDialogView {
            .dropdownBtn(this.message.id, this.message.userId);
        icons_container.append(icons_elements.getMenuIcons());
        this.root.append(icons_container);
+       return this;
     }
 
     setThreadMenuIcons() {
@@ -143,7 +136,7 @@ export class MessageDialogView {
             <div class="c-message__content_header" id="message_${this.message.id}_user_${this.getMessageUserId()}_content_header">
                 <span class="c-message__sender" >
                     <a class="message__sender" href="#modal_1" class="message__sender" id="user_${this.getMessageUserId()}" ${this.getDataUserIdAttr()} data-toggle="modal">
-                        ${this.userWhoShareMsg.name}
+                        ${this.userWhoShareMsg.userName}
                     </a>
                 </span>
                 <a class="c-timestamp--static">

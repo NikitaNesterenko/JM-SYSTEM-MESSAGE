@@ -1,12 +1,12 @@
 import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {MessageLoader} from "/js/workspace-page/components/messages/MessageLoader.js";
+import {ChannelMessageView} from "/js/workspace-page/components/messages/ChannelMessageView.js";
 
 export class ChannelView {
     default_channel = null;
 
     constructor() {
         this.channel_service = new ChannelRestPaginationService();
-        this.message_loader = new MessageLoader();
+        this.channel_message_view = new ChannelMessageView();
     }
 
     setLoggedUser(loggedUser) {
@@ -23,7 +23,7 @@ export class ChannelView {
                     if (this.default_channel !== null) {
                         this.setLocalStorageSettings(this.default_channel.id);
                         this.setChannelBGColor(this.default_channel);
-                        this.message_loader.update();
+                        this.channel_message_view.update();
                     }
                 }
             }
@@ -67,7 +67,7 @@ export class ChannelView {
     }
 
     selectChannel(id) {
-        this.message_loader.update().then(() => this.setLocalStorageSettings(id));
+        this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
         $('.p-channel_sidebar__channel').each((idx, channel) => {
             let bg_color = {color: "rgb(188,171,188)", background: "none"};
 

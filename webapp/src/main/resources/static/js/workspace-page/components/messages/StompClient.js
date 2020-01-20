@@ -1,11 +1,12 @@
 import {ChannelView} from "/js/workspace-page/components/sidebar/ChannelView.js";
-import {setDeleteStatus, setOnClickEdit} from "/js/messagesInlineEdit.js";
+import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 
 export class StompClient {
 
-    constructor(message_loader) {
+    constructor(channel_message_view, thread_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
-        this.message_loader = message_loader;
+        this.channel_message_view = channel_message_view;
+        this.thread_view = thread_view;
 
         window.sendName = (message) => this.sendName(message);
         window.sendChannel = (channel) => this.sendChannel(channel);
@@ -29,17 +30,17 @@ export class StompClient {
                 if (result.channelId === channel_id) {
                     if (result.isDeleted !== null) {
                         if (result.sharedMessageId === null) {
-                            this.message_loader.setMessage(result);
+                            this.channel_message_view.setMessage(result);
                         } else {
-                            this.message_loader.setSharedMessage(result);
+                            this.channel_message_view.setSharedMessage(result);
                         }
-                        this.message_loader.dialog.messageBoxWrapper();
+                        this.channel_message_view.dialog.messageBoxWrapper();
                     } else {
-                        this.message_loader.updateMessage(result);
+                        this.channel_message_view.updateMessage(result);
                     }
                 }
             } else {
-                this.message_loader.dialog.deleteMessage(result.id, result.userId);
+                this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
             }
             notifyParseMessage(result);
             setOnClickEdit(true);
@@ -58,7 +59,7 @@ export class StompClient {
         this.stompClient.subscribe('/topic/threads', (message) => {
             let result = JSON.parse(message.body);
             if (result.parentMessageId === thread_id) {
-                this.message_loader.setThreadMessage(result);
+                this.thread_view.setMessage(result);
             }
         })
     }
@@ -73,12 +74,12 @@ export class StompClient {
     sendThread(message) {
         this.stompClient.send('/app/thread', {}, JSON.stringify({
             'id': message.id,
-            'userId': message.user.id,
-            'userName': message.user.name,
+            'userId': message.userId,
+            'userName': message.userName,
             'content': message.content,
             'isDeleted': message.isDeleted,
             'dateCreate': message.dateCreate,
-            'parentMessageId': message.threadChannel.message.id,
+            'parentMessageId': message.parentMessageId,
         }))
     }
 

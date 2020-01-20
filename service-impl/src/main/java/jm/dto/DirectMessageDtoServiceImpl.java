@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +31,20 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         this.botDAO = botDAO;
         this.channelDAO = channelDAO;
         this.messageDAO = messageDAO;
+    }
+
+    @Override
+    public List<DirectMessageDTO> toDto(List<DirectMessage> directMessages) {
+        if (directMessages == null || directMessages.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<DirectMessageDTO> directMessageDTOList = new ArrayList<>();
+        for (DirectMessage directMessage: directMessages) {
+            directMessageDTOList.add(toDto(directMessage));
+        }
+
+        return directMessageDTOList;
     }
 
     @Override
@@ -76,6 +90,9 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
             directMessageDTO.setParentMessageId(parentMessage.getId());
         }
 
+        directMessageDTO.setContent(directMessage.getContent());
+        directMessageDTO.setDateCreate(directMessage.getDateCreate());
+
         return directMessageDTO;
     }
 
@@ -94,6 +111,11 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
         directMessage.setContent(directMessageDTO.getContent());
         directMessage.setDateCreate(directMessageDTO.getDateCreate());
+
+        Set<Long> recipientUserIds = directMessageDTO.getRecipientUserIds();
+        List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
+        directMessage.setRecipientUsers(new HashSet<>(recipientUsers));
+
         return directMessage;
     }
 }
