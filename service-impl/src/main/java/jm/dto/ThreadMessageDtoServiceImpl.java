@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -44,8 +45,8 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
 
     @Override
     public List<ThreadMessageDTO> toDto(List<ThreadChannelMessage> threadChannelMessages) {
-        if (threadChannelMessages == null) {
-            return null;
+        if (threadChannelMessages == null || threadChannelMessages.isEmpty()) {
+            return Collections.emptyList();
         }
 
         List<ThreadMessageDTO> threadMessageDTOList = new ArrayList<>();

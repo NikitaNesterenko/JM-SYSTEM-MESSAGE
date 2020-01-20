@@ -7,9 +7,7 @@ export class ChannelMessageView {
 
     constructor() {
         const message_dialog = new MessageDialogView();
-        const message_thread = new MessageDialogView();
         this.dialog = message_dialog.messageBox("#all-messages");
-        this.thread = message_thread.messageBox(".p-flexpane__inside_body-scrollbar__child");
         this.message_service = new MessageRestPaginationService();
     }
 
