@@ -1,6 +1,8 @@
 package jm.model.message;
 
+import jm.dto.DirectMessageDTO;
 import jm.model.Conversation;
+import jm.model.Message;
 import jm.model.User;
 import lombok.*;
 
@@ -32,4 +34,9 @@ public class DirectMessage extends Message {
             joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> starredByWhom;
+
+    public DirectMessage(DirectMessageDTO directMessageDTO) {
+        this.conversation = directMessageDTO.getConversation();
+        this.starredByWhom = directMessageDTO.getStarredByWhom();
+    }
 }

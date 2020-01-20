@@ -10,22 +10,22 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
     getUserAndMessage(msg_id).then(user_and_msg => {
         let user = user_and_msg[0];
-        let msg = user_and_msg[1];
+        let message = user_and_msg[1];
 
-        let starredBy = msg["starredByWhom"];
+        let principalStarredMessageIds = user["starredMessageIds"];
 
-        if (starredBy.find(usr => usr.id === user.id)) {
-            starredBy.splice(starredBy.indexOf(user), 1);
-            msg["starredByWhom"] = starredBy;
-            message_service.update(msg).then(() => {
+        if (principalStarredMessageIds.find(id => id === message.id)) {
+            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message), 1);
+            user["starredMessageIds"] = principalStarredMessageIds;
+            user_service.update(user).then(() => {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
-                $(`#message_${msg_id}_user_${msg.user.id}_starred`).remove();
+                $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
             });
         } else {
-            starredBy.push(user);
-            msg["starredByWhom"] = starredBy;
-            message_service.update(msg).then(() => {
-                add_msg_starred_attr(msg);
+            principalStarredMessageIds.push(message.id);
+            user["starredMessageIds"] = principalStarredMessageIds;
+            user_service.update(user).then(() => {
+                add_msg_starred_attr(message);
             });
         }
 
@@ -50,8 +50,8 @@ const getUser = async () => {
 export const getMessageStatus = (message) => {
     getUser().then(res => {
         let user = res[0];
-        let starredBy = message["starredByWhom"];
-        if (starredBy.find(usr => usr.id === user.id)) {
+        let principalStarredMessageIds = user["starredMessageIds"];
+        if (principalStarredMessageIds.find(id => id === message.id)) {
             add_msg_starred_attr(message);
         }
     });
@@ -114,16 +114,16 @@ const starred_message_menu = (message) => {
 
 const add_msg_to_right_panel = (time, message) => {
     return `<div class="c-virtual_list__item right-panel-msg-menu">
-                                        <div class="c-message--light" id="message_${message.id}_user_${message.user.id}_content">
+                                        <div class="c-message--light" id="message_${message.id}_user_${message.userId}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
                                                             </button>
                                                         </div>
                                                         <div class="c-message__content--feature_sonic_inputs">
-                                                            <div class="c-message__content_header" id="message_${message.id}_user_${message.user.id}_content_header">
+                                                            <div class="c-message__content_header" id="message_${message.id}_user_${message.userId}_content_header">
                                                                 <span class="c-message__sender">
-                                                                    <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.name}</a>
+                                                                    <a href="#modal_1" class="message__sender" id="user_${message.userId}" data-user_id="${message.userId}" data-toggle="modal">${message.userName}</a>
                                                                 </span>
                                                                 <a class="c-timestamp--static">
                                                                     <span class="c-timestamp__label">
@@ -162,8 +162,8 @@ const add_empty_content_to_right_panel = () => {
 
 const add_msg_starred_attr = (message) => {
     $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
-    $(`#message_${message.id}_user_${message.user.id}_content`).prepend(
-        `<span id="message_${message.id}_user_${message.user.id}_starred" class="">`
+    $(`#message_${message.id}_user_${message.userId}_content`).prepend(
+        `<span id="message_${message.id}_user_${message.userId}_starred" class="">`
         + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
         + `</span>`);
 };

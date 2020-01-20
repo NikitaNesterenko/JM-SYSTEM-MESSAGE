@@ -16,6 +16,7 @@ $(document).ready(() => {
         let inputStart = input.value.slice(0, input.selectionStart);
         let inputEnd = input.value.slice(input.selectionEnd);
         input.value = inputStart + emoji + inputEnd;
+        $("#form_message_input").focus();
     });
 
     emojiButton.addEventListener('click', () => {

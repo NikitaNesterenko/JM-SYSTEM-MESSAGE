@@ -19,7 +19,9 @@ public class InputMessage {
 
     private Long id;  // нужно для редактирования сообщений
 
-    private Channel channel;  // нужно чтобы новые и измененные сообщения не попадали сначала в любой открытый ченнел
+    private Long channelId;  // нужно чтобы новые и измененные сообщения не попадали сначала в любой открытый ченнел
+
+    private String channelName;
 
     private String inputMassage;
 
@@ -28,10 +30,18 @@ public class InputMessage {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
-    private User user;
+    private Long userId;
 
-    private Bot bot;
+    private String userName;
+
+    private Long botId;
+
+    private String botNickName;
 
     private String filename;
+
+    private Long sharedMessageId;
+
+    private Boolean isDeleted;
 
 }
