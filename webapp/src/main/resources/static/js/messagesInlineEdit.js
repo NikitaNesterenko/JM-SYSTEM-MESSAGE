@@ -80,6 +80,7 @@ function onEditSubmit(ev) {
         const message = {
             "id": messageId,
             "userId": user.id,
+            "userName": user.name,
             "channelId": channel.id,
             "content": messageText,
             "dateCreate": currentDate,
@@ -96,12 +97,8 @@ function onDeleteButtonClick(event) {
     const messageId = event.currentTarget.getAttribute("data-msg-id");
 
     if (Number.parseInt(messageId) === message.id) {
-        console.log("year");
-        console.log(message.content);
-
+        delete message.inputMassage;
         message.isDeleted = true;
-        console.log(message.isDeleted);
-
         message_service.update(message).then(() => {
             sendName(message);
         });
