@@ -1,6 +1,4 @@
 package jm.dto;
-
-import jm.model.Conversation;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import lombok.AllArgsConstructor;
@@ -13,11 +11,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DirectMessageDTO extends MessageDTO {
-    private Conversation conversation;
+    private Long conversationId;
+    private Boolean isUpdated;
     private Set<User> starredByWhom;
 
     public DirectMessageDTO(DirectMessage directMessage) {
-        this.conversation = directMessage.getConversation();
+        this.conversationId = directMessage.getConversation().getId();
         this.starredByWhom = directMessage.getStarredByWhom();
     }
 }

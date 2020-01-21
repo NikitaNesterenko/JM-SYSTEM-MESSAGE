@@ -1,9 +1,6 @@
 package jm.dto;
 
-import jm.api.dao.BotDAO;
-import jm.api.dao.ChannelDAO;
-import jm.api.dao.MessageDAO;
-import jm.api.dao.UserDAO;
+import jm.api.dao.*;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
@@ -21,16 +18,16 @@ import java.util.stream.Collectors;
 public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
     private UserDAO userDAO;
-    private BotDAO botDAO;
     private ChannelDAO channelDAO;
-    private MessageDAO messageDAO;
+    private ConversationDAO conversationDAO;
+
+
 
     @Autowired
-    public void setDirectMessageDtoServiceImpl(UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
+    public void setDirectMessageDtoServiceImpl(UserDAO userDAO, ChannelDAO channelDAO, ConversationDAO conversationDAO) {
         this.userDAO = userDAO;
-        this.botDAO = botDAO;
         this.channelDAO = channelDAO;
-        this.messageDAO = messageDAO;
+        this.conversationDAO = conversationDAO;
     }
 
     @Override
@@ -55,7 +52,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         }
 
         DirectMessageDTO directMessageDTO = new DirectMessageDTO(directMessage);
-
+        directMessageDTO.setId(directMessage.getId());
 
         User user = directMessage.getUser();
         Bot bot = directMessage.getBot();
@@ -92,6 +89,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
         directMessageDTO.setContent(directMessage.getContent());
         directMessageDTO.setDateCreate(directMessage.getDateCreate());
+        directMessageDTO.setIsDeleted(directMessage.getIsDeleted());
 
         return directMessageDTO;
     }
@@ -103,7 +101,12 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
             return null;
         }
 
-        DirectMessage directMessage = new DirectMessage(directMessageDTO);
+        DirectMessage directMessage = new DirectMessage();
+        directMessage.setId(directMessageDTO.getId());
+
+        if (directMessageDTO.getConversationId() != null) {
+            directMessage.setConversation(conversationDAO.getById(directMessageDTO.getConversationId()));
+        }
 
         if (directMessageDTO.getUserId() != null) {
             directMessage.setUser(userDAO.getById(directMessageDTO.getUserId()));
@@ -111,6 +114,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
         directMessage.setContent(directMessageDTO.getContent());
         directMessage.setDateCreate(directMessageDTO.getDateCreate());
+        directMessage.setIsDeleted(directMessageDTO.getIsDeleted());
 
         Set<Long> recipientUserIds = directMessageDTO.getRecipientUserIds();
         List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
