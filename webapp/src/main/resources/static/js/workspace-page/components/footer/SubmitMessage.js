@@ -3,10 +3,8 @@ import {
     ChannelRestPaginationService,
     MessageRestPaginationService,
     StorageService,
-    ConversationRestPaginationService,
     DirectMessagesRestController
 } from '/js/rest/entities-rest-pagination.js'
-import {show_dialog} from "../primary-view/direct-message.js";
 import {FileUploader} from "../FileUploader.js";
 
 export class SubmitMessage {
@@ -17,7 +15,6 @@ export class SubmitMessage {
     constructor() {
         this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
-        this.conversation_service = new ConversationRestPaginationService();
         this.message_service = new MessageRestPaginationService();
         this.direct_message_service = new DirectMessagesRestController();
         this.storage_service = new StorageService();
@@ -43,7 +40,7 @@ export class SubmitMessage {
             }
 
             if (conversation_id !== '0') {
-                this.sendDirectMessage(conversation_id);
+                await this.sendDirectMessage(conversation_id);
             }
         });
     }
@@ -78,8 +75,9 @@ export class SubmitMessage {
 
         const entity = {
             id: null,
-            channel: this.channel,
-            user: this.user,
+            channelId: this.channel.id,
+            userId: this.user.id,
+            userName: this.user.name,
             content: content,
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles()
@@ -91,22 +89,21 @@ export class SubmitMessage {
     }
 
     async sendDirectMessage(conversation_id) {
-        await this.setConversation(conversation_id);
         await this.setUser();
 
         const entity = {
             id: null,
-            user: this.user,
+            userId: this.user.id,
+            userName: this.user.name,
             content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
-            conversation: this.conversation
+            conversationId: conversation_id
         };
 
         this.direct_message_service.create(entity).then(
             msg_id => {
-                sendName(msg_id);
-                show_dialog(this.conversation);
+                sendDM(msg_id);
             }
         );
 
@@ -123,12 +120,4 @@ export class SubmitMessage {
             channel => this.channel = channel
         )
     }
-
-    async setConversation(id) {
-        await this.conversation_service.getById(id).then(
-            conversation => this.conversation = conversation
-        );
-    }
-
-
 }
