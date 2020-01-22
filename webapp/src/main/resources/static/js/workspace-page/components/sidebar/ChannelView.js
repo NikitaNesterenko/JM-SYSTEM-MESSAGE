@@ -68,16 +68,15 @@ export class ChannelView {
 
     selectChannel(id) {
         this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
-        $('.p-channel_sidebar__channel').each((idx, channel) => {
+        $('.p-channel_sidebar__name_button').each((idx, btn) => {
             let bg_color = {color: "rgb(188,171,188)", background: "none"};
 
-            if ($(channel).find(`#channel_button_${id}`).length) {
+            if ($(btn).filter(`[id=channel_button_${id}]`).length) {
                 bg_color = {color: "white", background: "royalblue"};
             }
 
-            $(channel).find('.p-channel_sidebar__name_button').css(bg_color);
+            $(btn).css(bg_color);
         });
-
     }
 
     checkPrivacy(channel) {

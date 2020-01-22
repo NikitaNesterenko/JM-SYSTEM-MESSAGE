@@ -49,6 +49,12 @@ public class DirectMessageRestController {
     @PutMapping(value = "/update")
     public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
         DirectMessage message = directMessageDtoService.toEntity(messageDTO);
+        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
+        if (isCreated == null) {
+            logger.warn("Сообщение не найдено");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        message.setDateCreate(isCreated.getDateCreate());
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
         return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
     }

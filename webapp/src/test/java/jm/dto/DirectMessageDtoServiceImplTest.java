@@ -50,6 +50,7 @@ public class DirectMessageDtoServiceImplTest {
     directMessage.setUser(user1);
     directMessage.setDateCreate(localDateTime);
     directMessage.setIsDeleted(true);
+    directMessage.setFilename("file.txt");
   }
 
   @Test
@@ -72,6 +73,7 @@ public class DirectMessageDtoServiceImplTest {
     assertEquals(localDateTime, directMessageDTO.getDateCreate());
     assertEquals(conversation.getId(), directMessageDTO.getConversationId());
     assertTrue(directMessageDTO.getIsDeleted());
+    assertEquals("file.txt", directMessageDTO.getFilename());
   }
 
   @Test
@@ -92,6 +94,7 @@ public class DirectMessageDtoServiceImplTest {
     directMessageDTO.setUserId(1L);
     directMessageDTO.setDateCreate(localDateTime);
     directMessageDTO.setIsDeleted(true);
+    directMessageDTO.setFilename("file.txt");
 
     DirectMessage dm = directMessageDtoService.toEntity(directMessageDTO);
 
@@ -102,6 +105,7 @@ public class DirectMessageDtoServiceImplTest {
     assertEquals(localDateTime, dm.getDateCreate());
     assertTrue(dm.getIsDeleted());
     assertEquals(0, dm.getRecipientUsers().size());
+    assertEquals("file.txt", dm.getFilename());
   }
 
   @Test

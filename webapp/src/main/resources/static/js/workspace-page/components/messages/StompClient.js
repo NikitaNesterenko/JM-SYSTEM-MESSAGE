@@ -26,7 +26,7 @@ export class StompClient {
     }
 
     subscribeMessage() {
-        this.stompClient.subscribe('/topic/messages', (message) => {
+        this.stompClient.subscribe('/topic/messages', async (message) => {
             let result = JSON.parse(message.body);
             if (result.userId != null && !result.isDeleted) {
                 result['content'] = result.inputMassage;
@@ -35,7 +35,7 @@ export class StompClient {
                         if (result.sharedMessageId === null) {
                             this.channel_message_view.setMessage(result);
                         } else {
-                            this.channel_message_view.setSharedMessage(result);
+                            await this.channel_message_view.setSharedMessage(result);
                         }
                         this.channel_message_view.dialog.messageBoxWrapper();
                     } else {
@@ -72,7 +72,6 @@ export class StompClient {
             const response = JSON.parse(message.body);
             const current_conversation = parseInt(sessionStorage.getItem('conversation_id'));
             if (!response.isDeleted) {
-                console.warn(response);
                 if (response.isUpdated) {
                     this.dm_view.updateMessage(response);
                 } else {

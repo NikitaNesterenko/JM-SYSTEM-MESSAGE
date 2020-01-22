@@ -90,6 +90,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         directMessageDTO.setContent(directMessage.getContent());
         directMessageDTO.setDateCreate(directMessage.getDateCreate());
         directMessageDTO.setIsDeleted(directMessage.getIsDeleted());
+        directMessageDTO.setFilename(directMessage.getFilename());
 
         return directMessageDTO;
     }
@@ -119,6 +120,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         Set<Long> recipientUserIds = directMessageDTO.getRecipientUserIds();
         List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
         directMessage.setRecipientUsers(new HashSet<>(recipientUsers));
+        directMessage.setFilename(directMessageDTO.getFilename());
 
         return directMessage;
     }

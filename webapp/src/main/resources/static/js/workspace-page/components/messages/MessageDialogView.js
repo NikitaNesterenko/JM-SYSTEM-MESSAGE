@@ -118,6 +118,19 @@ export class MessageDialogView {
        return this;
     }
 
+    setDMMenuIcons(logged_user_id) {
+        const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
+        const icons_elements = this.menu_icons.createMenuIcons()
+            .emojiBtn()
+            .replyBtn(this.message.id)
+            .shareBtn(this.message.id)
+            .starBtn(this.message.id)
+            .dropdownBtnDM(this.message.id, this.message.userId, logged_user_id);
+        icons_container.append(icons_elements.getMenuIcons());
+        this.root.append(icons_container);
+        return this;
+    }
+
     setThreadMenuIcons() {
         const icons_container =$('<div class="message-icons-menu-class" id="thread-message-icons-menu"></div>');
         const icons_elements = this.menu_icons.createMenuIcons()

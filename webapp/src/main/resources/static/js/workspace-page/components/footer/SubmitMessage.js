@@ -3,10 +3,8 @@ import {
     ChannelRestPaginationService,
     MessageRestPaginationService,
     StorageService,
-    ConversationRestPaginationService,
     DirectMessagesRestController
 } from '/js/rest/entities-rest-pagination.js'
-import {show_dialog} from "../primary-view/direct-message.js";
 import {FileUploader} from "../FileUploader.js";
 
 export class SubmitMessage {
@@ -17,7 +15,6 @@ export class SubmitMessage {
     constructor() {
         this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
-        this.conversation_service = new ConversationRestPaginationService();
         this.message_service = new MessageRestPaginationService();
         this.direct_message_service = new DirectMessagesRestController();
         this.storage_service = new StorageService();
@@ -43,7 +40,7 @@ export class SubmitMessage {
             }
 
             if (conversation_id !== '0') {
-                this.sendDirectMessage(conversation_id);
+                await this.sendDirectMessage(conversation_id);
             }
         });
     }
@@ -107,7 +104,6 @@ export class SubmitMessage {
         this.direct_message_service.create(entity).then(
             msg_id => {
                 sendDM(msg_id);
-                // show_dialog(conversation_id);
             }
         );
 
@@ -124,12 +120,4 @@ export class SubmitMessage {
             channel => this.channel = channel
         )
     }
-
-    async setConversation(id) {
-        await this.conversation_service.getById(id).then(
-            conversation => this.conversation = conversation
-        );
-    }
-
-
 }

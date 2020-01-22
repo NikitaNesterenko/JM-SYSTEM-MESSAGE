@@ -76,4 +76,32 @@ export class MessageMenuIcon {
         `);
         return this;
     }
+
+    dropdownBtnDM(message_id, user_id, logged_user_id) {
+        if (logged_user_id === user_id) {
+            this.menu.append(` 
+                <button type="button" class="btn btn-light" id="dropdownMenuButton_${message_id}" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${this.ICONS.MSG_EDIT_BUTTON}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${message_id}">
+                    <a class="dropdown-item btnEdit_DM" href="#" data-msg-id=${message_id} data-user-id=${user_id}>Edit Message</a>
+                    <a class="dropdown-item btnDelete_DM" href="#" data-msg-id=${message_id} data-user-id=${user_id}>Delete Message</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Else action</a>
+                </div> 
+            `);
+        } else {
+            this.menu.append(` 
+                <button type="button" class="btn btn-light" id="dropdownMenuButton_${message_id}" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${this.ICONS.MSG_EDIT_BUTTON}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${message_id}">
+                    <a class="dropdown-item" href="#">Else action</a>
+                </div> 
+            `);
+        }
+        return this;
+    }
 }
