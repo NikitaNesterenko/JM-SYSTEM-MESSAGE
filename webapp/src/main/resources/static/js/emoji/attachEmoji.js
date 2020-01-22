@@ -1,4 +1,4 @@
-// import EmojiButton from "index.min";
+
 
 $(document).ready(() => {
     const emojiButton = document.querySelector("#inputEmojiButton");

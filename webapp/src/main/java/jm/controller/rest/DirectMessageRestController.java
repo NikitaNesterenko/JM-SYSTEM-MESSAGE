@@ -61,9 +61,9 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/conversation/{id}")
-    public ResponseEntity<List<DirectMessage>> getMessagesByConversationId(@PathVariable Long id) {
+    public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
         List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id);
         messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(messages, HttpStatus.OK);
+        return new ResponseEntity<>(directMessageDtoService.toDto(messages), HttpStatus.OK);
     }
 }
