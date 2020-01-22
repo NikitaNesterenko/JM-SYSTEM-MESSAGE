@@ -1,14 +1,15 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService, ConversationRestPaginationService, DirectMessagesRestController} from "/js/rest/entities-rest-pagination.js";
+import {WorkspaceRestPaginationService, ConversationRestPaginationService, DirectMessagesRestController} from "/js/rest/entities-rest-pagination.js";
+import {GetUser} from "/js/ajax/userRestController/getUser.js";
 import {ActiveChatMembers} from "./ActiveChatMembers.js";
-import {UpdateMessages} from "/js/workspace-page/components/footer/UpdateMessages.js";
+// import {DirectMessageView} from "/js/workspace-page/components/messages/DirectMessageView.js";
 
-export class DirectMessageView {
+export class DMView {
 
-    constructor() {
-        this.user_service = new UserRestPaginationService();
+    constructor(dm_view) {
         this.workspace_service = new WorkspaceRestPaginationService();
         this.conversation_service = new ConversationRestPaginationService();
         this.direct_message_service = new DirectMessagesRestController();
+        this.direct_message_view = dm_view;
         this.dm_chat = new ActiveChatMembers();
     }
 
@@ -19,28 +20,37 @@ export class DirectMessageView {
         });
     }
 
+    setLoggedUser(logged_user) {
+        this.logged_user = logged_user;
+        this.direct_message_view.logged_user = logged_user;
+    }
+
     onClickDirectMessageChat() {
-        $(document).on('click', '.p-channel_sidebar__name_button, .p-channel_sidebar__channel_icon_circle, .p-channel_sidebar__name-3, .p-channel_sidebar__name-3 span', async (event) => {
-           const userId = event.target.getAttribute('data-user_id');
-           if (userId) {
-               await this.show(userId);
-           }
+        $(document).on('click', '.p-channel_sidebar__name_button[data-user_id]', async (event) => {
+            $(".p-channel_sidebar__name_button").each(function (idx, elem) {
+                $(elem).css({color: "rgb(188,171,188)", background: "none"});
+            });
+            $(event.currentTarget).css({color: "white", background: "royalblue"});
+            const userId = event.currentTarget.getAttribute('data-user_id');
+            if (userId) {
+                await this.show(userId);
+            }
         });
     }
 
     async show(userId) {
-        const principal = await this.user_service.getLoggedUser();
-        const respondent = await this.user_service.getById(userId);
+        const user = new GetUser(userId);
+        const respondent = user.getUser(userId);
         const workspace = await this.workspace_service.getChoosedWorkspace();
 
-        if (principal.id !== respondent.id) {
-            let conversation = await this.conversation_service.getConversationForUsers(principal.id, respondent.id);
+        if (this.logged_user.id !== respondent.id) {
+            let conversation = await this.conversation_service.getConversationForUsers(this.logged_user.id, respondent.id);
 
             if (conversation != null) {
-                await this.show_dialog(conversation);
+                await this.showDialog(conversation.id);
             } else {
-                await this.createConversation(principal, respondent, workspace);
-                conversation = await this.conversation_service.getConversationForUsers(principal.id, respondent.id);
+                await this.createConversation(this.logged_user, respondent, workspace);
+                conversation = await this.conversation_service.getConversationForUsers(this.logged_user.id, respondent.id);
                 await this.dm_chat.populateDirectMessages();
             }
 
@@ -55,11 +65,10 @@ export class DirectMessageView {
         }
     }
 
-    async show_dialog(conversation) {
-        const msg_dialog = new UpdateMessages();
-        const messages = await this.direct_message_service.getAllMessagesByConversationId(conversation.id);
-        await msg_dialog.updateAll(messages);
-    };
+    async showDialog(conversation_id) {
+        const messages = await this.direct_message_service.getAllMessagesByConversationId(conversation_id);
+        await this.direct_message_view.showAllMessages(messages);
+    }
 
     async createConversation(principal, respondent, workspace) {
         const entity = {

@@ -44,4 +44,6 @@ public class InputMessage {
 
     private Boolean isDeleted;
 
+    private Boolean isUpdated;
+
 }

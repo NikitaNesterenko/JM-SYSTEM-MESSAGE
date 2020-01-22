@@ -1,7 +1,8 @@
 import {
     MessageRestPaginationService,
     ChannelRestPaginationService,
-    UserRestPaginationService
+    UserRestPaginationService,
+    DirectMessagesRestController
 } from './rest/entities-rest-pagination.js'
 
 let activeEdit = false;
@@ -9,6 +10,7 @@ let activeEdit = false;
 const message_service = new MessageRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const user_service = new UserRestPaginationService();
+const dm_service = new DirectMessagesRestController();
 
 export function setOnClickEdit(setNonActive) {
     if (setNonActive) {
@@ -31,7 +33,7 @@ export function setDeleteStatus(message) {
         for (const deleteButton of deleteButtons) {
             const msgUserId = deleteButton.getAttribute("data-user-id");
             if (Number.parseInt(msgUserId) === loggedUser.id) {
-                deleteButton.addEventListener("click", {handleEvent : onDeleteButtonClick, message: message});
+                deleteButton.addEventListener("click", {handleEvent: onDeleteButtonClick, message: message});
             }
         }
     });
@@ -86,9 +88,17 @@ function onEditSubmit(ev) {
             "dateCreate": currentDate,
             "filename": messageAttachment
         };
-        message_service.update(message).then(() => {
-            sendName(message);
-        });
+        if (message.channelId !== undefined) {
+            message_service.update(message).then(() => {
+                sendName(message);
+            });
+        } else {
+            message["conversationId"] = parseInt(sessionStorage.getItem("conversation_id"));
+            message["isUpdated"] = true;
+            dm_service.update(message).then(() => {
+                sendDM(message);
+            })
+        }
     });
 }
 
@@ -99,9 +109,17 @@ function onDeleteButtonClick(event) {
     if (Number.parseInt(messageId) === message.id) {
         delete message.inputMassage;
         message.isDeleted = true;
-        message_service.update(message).then(() => {
-            sendName(message);
-        });
+        if (message.channelId !== null) {
+            message_service.update(message).then(() => {
+                sendName(message);
+            });
+        }
+
+        if (message.conversationId !== null) {
+            dm_service.update(message).then(() => {
+                sendDM(message);
+            })
+        }
     }
 }
 
