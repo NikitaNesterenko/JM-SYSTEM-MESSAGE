@@ -1,4 +1,4 @@
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelRestPaginationService, BotRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "/js/workspace-page/components/messages/ChannelMessageView.js";
 
 export class ChannelView {
@@ -7,10 +7,13 @@ export class ChannelView {
     constructor() {
         this.channel_service = new ChannelRestPaginationService();
         this.channel_message_view = new ChannelMessageView();
+        this.bot_service = new BotRestPaginationService();
+
     }
 
     setLoggedUser(loggedUser) {
         this.loggedUser = loggedUser;
+        this.channel_message_view.logged_user = loggedUser;
         return this;
     }
 
@@ -27,6 +30,35 @@ export class ChannelView {
                     }
                 }
             }
+        );
+        this.showBots(workspace_id);
+    }
+
+    showBots(workspace_id) {
+        this.bot_service.getBotByWorkspaceId(workspace_id).then(
+            bot => {
+                if (bot !== undefined) {
+                    this.addBot(bot);
+                }
+            }
+        );
+    }
+
+    addBot(bot) {
+        $('#bot_representation').append(
+            `<div class="p-channel_sidebar__direct-messages__container">
+                <div class="p-channel_sidebar__close_container">
+                    <button class="p-channel_sidebar__name_button">
+                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                        <span class="p-channel_sidebar__name-3">
+                            <span>` + bot['nickName'] + `</span>
+                        </span>
+                    </button>
+                    <button class="p-channel_sidebar__close">
+                        <i class="p-channel_sidebar__close__icon">✖</i>
+                    </button>
+                </div>
+            </div>`
         );
     }
 
@@ -68,19 +100,18 @@ export class ChannelView {
 
     selectChannel(id) {
         this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
-        $('.p-channel_sidebar__channel').each((idx, channel) => {
+        $('.p-channel_sidebar__name_button').each((idx, btn) => {
             let bg_color = {color: "rgb(188,171,188)", background: "none"};
 
-            if ($(channel).find(`#channel_button_${id}`).length) {
+            if ($(btn).filter(`[id=channel_button_${id}]`).length) {
                 bg_color = {color: "white", background: "royalblue"};
             }
 
-            $(channel).find('.p-channel_sidebar__name_button').css(bg_color);
+            $(btn).css(bg_color);
         });
-
     }
 
     checkPrivacy(channel) {
-        return (channel.isPrivate && this.loggedUser === channel.ownerId) || !channel.isPrivate;
+        return (channel.isPrivate && this.loggedUser.id === channel.ownerId) || !channel.isPrivate;
     }
 }

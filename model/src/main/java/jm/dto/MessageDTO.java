@@ -32,6 +32,8 @@ public class MessageDTO {
 
     private Boolean isDeleted = false;
 
+    private Boolean isUpdated = false;
+
     private Long channelId;
 
     private Long sharedMessageId;

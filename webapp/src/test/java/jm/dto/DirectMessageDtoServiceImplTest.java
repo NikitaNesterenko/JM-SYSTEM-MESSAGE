@@ -1,9 +1,6 @@
 package jm.dto;
 
-import jm.api.dao.BotDAO;
-import jm.api.dao.ChannelDAO;
-import jm.api.dao.MessageDAO;
-import jm.api.dao.UserDAO;
+import jm.api.dao.*;
 import jm.model.Conversation;
 import jm.model.User;
 import jm.model.Workspace;
@@ -31,19 +28,19 @@ public class DirectMessageDtoServiceImplTest {
   private Conversation conversation = new Conversation(user1, user2, wks, true, true);
 
   @Mock UserDAO userDAO;
-  @Mock BotDAO botDAO;
   @Mock ChannelDAO channelDAO;
-  @Mock MessageDAO messageDAO;
+  @Mock ConversationDAO conversationDAO;
 
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     directMessageDtoService = new DirectMessageDtoServiceImpl();
-    directMessageDtoService.setDirectMessageDtoServiceImpl(userDAO, botDAO, channelDAO, messageDAO);
+    directMessageDtoService.setDirectMessageDtoServiceImpl(userDAO, channelDAO, conversationDAO);
 
     user1.setId(1L);
     user2.setId(2L);
     wks.setId(1L);
+    conversation.setId(4L);
 
     directMessage = new DirectMessage();
     directMessage.setConversation(conversation);
@@ -52,6 +49,8 @@ public class DirectMessageDtoServiceImplTest {
     directMessage.setContent("test dm");
     directMessage.setUser(user1);
     directMessage.setDateCreate(localDateTime);
+    directMessage.setIsDeleted(true);
+    directMessage.setFilename("file.txt");
   }
 
   @Test
@@ -65,13 +64,17 @@ public class DirectMessageDtoServiceImplTest {
 
     assertEquals(user1.getId(), directMessageDTO.getUserId());
     assertEquals(user1.getName(), directMessageDTO.getUserName());
+    assertEquals(1L, (long) directMessageDTO.getId());
     assertNull(directMessageDTO.getChannelName());
     assertNull(directMessageDTO.getSharedMessageId());
     assertEquals(0, directMessageDTO.getRecipientUserIds().size());
     assertNull(directMessageDTO.getParentMessageId());
     assertEquals("test dm", directMessageDTO.getContent());
     assertEquals(localDateTime, directMessageDTO.getDateCreate());
-    assertEquals(conversation, directMessageDTO.getConversation());
+    assertEquals(conversation.getId(), directMessageDTO.getConversationId());
+    assertTrue(directMessageDTO.getIsDeleted());
+    assertEquals("file.txt", directMessageDTO.getFilename());
+    assertFalse(directMessageDTO.getIsUpdated());
   }
 
   @Test
@@ -83,22 +86,27 @@ public class DirectMessageDtoServiceImplTest {
   public void toEntity_Should_Return_Direct_Message() {
     when(userDAO.getById(1L)).thenReturn(user1);
     when(userDAO.getUsersByIds(null)).thenReturn(Collections.emptyList());
+    when(conversationDAO.getById(4L)).thenReturn(conversation);
 
     DirectMessageDTO directMessageDTO = new DirectMessageDTO();
-    directMessageDTO.setConversation(conversation);
+    directMessageDTO.setId(1L);
+    directMessageDTO.setConversationId(conversation.getId());
     directMessageDTO.setContent("test dm entity");
     directMessageDTO.setUserId(1L);
     directMessageDTO.setDateCreate(localDateTime);
-    directMessageDTO.setIsDeleted(false);
+    directMessageDTO.setIsDeleted(true);
+    directMessageDTO.setFilename("file.txt");
 
     DirectMessage dm = directMessageDtoService.toEntity(directMessageDTO);
 
     assertEquals(conversation, dm.getConversation());
+    assertEquals(1L, (long) dm.getId());
     assertEquals("test dm entity", dm.getContent());
     assertEquals(user1, dm.getUser());
     assertEquals(localDateTime, dm.getDateCreate());
-    assertFalse(dm.getIsDeleted());
+    assertTrue(dm.getIsDeleted());
     assertEquals(0, dm.getRecipientUsers().size());
+    assertEquals("file.txt", dm.getFilename());
   }
 
   @Test
@@ -112,7 +120,8 @@ public class DirectMessageDtoServiceImplTest {
 
   @Test
   public void toDto_Should_Return_List_With_DirectMessageDTOs() {
-    List<DirectMessageDTO> directMessageDTOList = directMessageDtoService.toDto(Collections.singletonList(directMessage));
+    List<DirectMessageDTO> directMessageDTOList =
+        directMessageDtoService.toDto(Collections.singletonList(directMessage));
 
     assertEquals(user1.getId(), directMessageDTOList.get(0).getUserId());
     assertEquals(user1.getName(), directMessageDTOList.get(0).getUserName());
@@ -122,6 +131,6 @@ public class DirectMessageDtoServiceImplTest {
     assertNull(directMessageDTOList.get(0).getParentMessageId());
     assertEquals("test dm", directMessageDTOList.get(0).getContent());
     assertEquals(localDateTime, directMessageDTOList.get(0).getDateCreate());
-    assertEquals(conversation, directMessageDTOList.get(0).getConversation());
+    assertEquals(conversation.getId(), directMessageDTOList.get(0).getConversationId());
   }
 }

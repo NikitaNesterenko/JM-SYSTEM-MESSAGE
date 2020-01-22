@@ -1,6 +1,7 @@
 package jm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
 import jm.dto.ThreadMessageDTO;
 import jm.model.InputMessage;
@@ -21,6 +22,13 @@ public class MessagesController {
     @MessageMapping("/thread")
     @SendTo("/topic/threads")
     public String threadCreation(ThreadMessageDTO message) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(message);
+    }
+
+    @MessageMapping("/direct_message")
+    @SendTo("/topic/dm")
+    public String directMessageCreation(DirectMessageDTO message) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(message);
     }

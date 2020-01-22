@@ -5,6 +5,7 @@ export class MessageDialogView {
     message;
     today = new Date();
     last_day_show;
+    editDeleteClass;
 
     constructor() {
         this.menu_icons = new MessageMenuIcon();
@@ -105,17 +106,30 @@ export class MessageDialogView {
         return this;
     }
 
-    setMenuIcons() {
+    setMenuIcons(logged_user_id) {
        const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
        const icons_elements = this.menu_icons.createMenuIcons()
            .emojiBtn()
            .replyBtn(this.message.id)
            .shareBtn(this.message.id)
            .starBtn(this.message.id)
-           .dropdownBtn(this.message.id, this.message.userId);
+           .dropdownBtn(this.message.id, this.message.userId, logged_user_id, this.editDeleteClass);
        icons_container.append(icons_elements.getMenuIcons());
        this.root.append(icons_container);
        return this;
+    }
+
+    setDMMenuIcons(logged_user_id) {
+        const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
+        const icons_elements = this.menu_icons.createMenuIcons()
+            .emojiBtn()
+            .replyBtn(this.message.id)
+            .shareBtn(this.message.id)
+            .starBtn(this.message.id)
+            .dropdownBtnDM(this.message.id, this.message.userId, logged_user_id);
+        icons_container.append(icons_elements.getMenuIcons());
+        this.root.append(icons_container);
+        return this;
     }
 
     setThreadMenuIcons() {
