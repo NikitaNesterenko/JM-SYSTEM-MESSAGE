@@ -12,7 +12,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class DirectMessageDTO extends MessageDTO {
     private Long conversationId;
-    private Boolean isUpdated;
     private Set<User> starredByWhom;
 
     public DirectMessageDTO(DirectMessage directMessage) {

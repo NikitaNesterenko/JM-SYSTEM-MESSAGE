@@ -31,16 +31,16 @@ export class StompClient {
             if (result.userId != null && !result.isDeleted) {
                 result['content'] = result.inputMassage;
                 if (result.channelId === channel_id) {
-                    if (result.isDeleted !== null) {
-                        if (result.sharedMessageId === null) {
-                            this.channel_message_view.setMessage(result);
-                        } else {
-                            await this.channel_message_view.setSharedMessage(result);
-                        }
-                        this.channel_message_view.dialog.messageBoxWrapper();
-                    } else {
+                    if (result.isUpdated) {
                         this.channel_message_view.updateMessage(result);
+                    } else {
+                        if (result.sharedMessageId === null) {
+                            this.channel_message_view.createMessage(result);
+                        } else {
+                            await this.channel_message_view.createSharedMessage(result);
+                        }
                     }
+                    this.channel_message_view.dialog.messageBoxWrapper();
                 }
             } else {
                 this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
@@ -54,6 +54,7 @@ export class StompClient {
         this.channelview = new ChannelView();
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
+            console.warn(chn);
             this.channelview.addChannelIntoSidebarChannelList(chn);
         });
     }
@@ -76,7 +77,7 @@ export class StompClient {
                     this.dm_view.updateMessage(response);
                 } else {
                     if (response.conversationId === current_conversation) {
-                        this.dm_view.setMessage(response);
+                        this.dm_view.createMessage(response);
                     }
                 }
             } else {
@@ -127,6 +128,7 @@ export class StompClient {
             'id': message.id,
             'inputMassage': message.content,
             'isDeleted': message.isDeleted,
+            'isUpdated': message.isUpdated,
             'dateCreate': message.dateCreate,
             'userId': message.userId,
             'userName': message.userName,

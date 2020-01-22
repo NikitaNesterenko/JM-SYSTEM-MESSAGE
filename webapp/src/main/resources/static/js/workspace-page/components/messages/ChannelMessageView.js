@@ -1,19 +1,16 @@
-import {MessageRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {MessageDialogView} from "/js/workspace-page/components/messages/MessageDialogView.js";
-import {getMessageStatus} from "/js/message_menu/message-icon-menu.js";
-import {setDeleteStatus, setOnClickEdit} from "/js/messagesInlineEdit.js";
+import {MessageView} from "/js/workspace-page/components/messages/MessageView.js";
 
-export class ChannelMessageView {
+export class ChannelMessageView extends MessageView {
 
-    constructor() {
-        const message_dialog = new MessageDialogView();
-        this.dialog = message_dialog.messageBox("#all-messages");
-        this.message_service = new MessageRestPaginationService();
+    constructor(logged_user) {
+        super(logged_user);
+        this.dialog.messageBox("#all-messages");
+        this.dialog.editDeleteClass = "ChannelMessage";
     }
 
     async update() {
         const messages = await this.getAllMessagesFourMonthsAgo(channel_id);
-        await this.updateAll(messages);
+        await this.showAllMessages(messages);
     }
 
     async getAllMessagesFourMonthsAgo(channel_id) {
@@ -23,57 +20,35 @@ export class ChannelMessageView {
         return this.message_service.getMessagesByChannelIdForPeriod(channel_id, start_date, end_date);
     }
 
-    async updateAll(messages) {
-        this.dialog.emptyMessageBox();
-
-        for (const message of messages) {
-            if (!message.isDeleted) {
-                getMessageStatus(message);
-                if (message.sharedMessageId == null) {
-                    this.setMessage(message);
-                } else {
-                    await this.setSharedMessage(message);
-                }
-                this.dialog.messageBoxWrapper();
-            }
-        }
-        setOnClickEdit(true);
+    onEditSubmit(event, message_id) {
+        super.onEditSubmit(event, message_id);
+        const content = $(event.currentTarget);
+        const msg = $(event.target).find('input').val();
+        const filename = $(event.target).attr("data-attachment");
+        content.find(".c-message__inline_editor").replaceWith(`<span class="c-message__body">${msg}</span>`);
+        const message = {
+            "id": message_id,
+            "userId": this.logged_user.id,
+            "userName": this.logged_user.name,
+            "channelId": parseInt(sessionStorage.getItem("channelName")),
+            "content": msg,
+            "dateCreate": convert_date_to_format_Json(new Date()),
+            "filename": filename,
+            "isUpdated": true
+        };
+        this.message_service.update(message).then(
+            () => sendName(message)
+        )
     }
 
-    setMessage(message) {
-        this.dialog.setUser(message.userId, message.userName)
-            .setDateHeader(message.dateCreate)
-            .container(message)
-            .setAvatar()
-            .setMessageContentHeader()
-            .setContent()
-            .setMenuIcons()
-            .attachedFile();
-        setDeleteStatus(message);
-    }
-
-    async setSharedMessage(message) {
-        await this.message_service.getMessageById(message.sharedMessageId).then(
-            shared_message => {
-                this.dialog.setUser(message.userId, message.userName)
-                    .setDateHeader(message.dateCreate)
-                    .container(message)
-                    .setAvatar()
-                    .setMessageContentHeader()
-                    .setExtraMessage(message.content)
-                    .setSharedMessage(shared_message)
-                    .setMenuIcons();
-                setDeleteStatus(message);
-            }
-        );
-    }
-
-    updateMessage(message) {
-        this.dialog.setUser(message.userId, message.userName)
-            .updateContainer(message)
-            .setAvatar()
-            .setMessageContentHeader()
-            .setContent()
-            .setMenuIcons();
+    modify(message_id) {
+       this.message_service.getById(message_id).then(
+           message => {
+               message.isDeleted = true;
+               this.message_service.update(message).then(
+                   () => sendName(message)
+               )
+           }
+       );
     }
 }

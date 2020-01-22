@@ -2,7 +2,7 @@ import {
     ConversationRestPaginationService,
     UserRestPaginationService,
     WorkspaceRestPaginationService
-} from "../../../rest/entities-rest-pagination.js";
+} from "/js/rest/entities-rest-pagination.js";
 
 export class ActiveChatMembers {
 

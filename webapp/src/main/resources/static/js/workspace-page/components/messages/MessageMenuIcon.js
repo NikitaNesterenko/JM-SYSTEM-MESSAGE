@@ -54,26 +54,31 @@ export class MessageMenuIcon {
         return this;
     }
 
-    dropdownBtn(message_id, user_id) {
-        this.menu.append(` 
-            <button type="button" class="btn btn-light" id="dropdownMenuButton_${message_id}" 
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ${this.ICONS.MSG_EDIT_BUTTON}
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${message_id}">
-                <div id="showOnlyOwner_${message_id}">
-                    <button type="button" class="btn btn-light btn-block" name="btnEditInline" 
-                            data-msg-id=${message_id} data-user-id=${user_id === null ? '' : user_id}>
-                    Edit
-                    </button>
-                    <button type="button" class="btn btn-light btn-block" name="btnDeleteInline" 
-                            data-msg-id=${message_id} data-user-id=${user_id === null ? '' : user_id}>
-                    Delete
-                    </button>
-                </div>
-                <a class="dropdown-item" href="#">Else action</a>
-            </div> 
-        `);
+    dropdownBtn(message_id, user_id, logged_user_id, btn_class) {
+        if (logged_user_id === user_id) {
+            this.menu.append(` 
+                <button type="button" class="btn btn-light" id="dropdownMenuButton_${message_id}" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${this.ICONS.MSG_EDIT_BUTTON}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${message_id}">
+                    <a class="dropdown-item btnEdit_${btn_class}" href="#" data-msg-id=${message_id} data-user-id=${user_id}>Edit Message</a>
+                    <a class="dropdown-item btnDelete_${btn_class}" href="#" data-msg-id=${message_id} data-user-id=${user_id}>Delete Message</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Else action</a>
+                </div> 
+            `);
+        } else {
+            this.menu.append(` 
+                <button type="button" class="btn btn-light" id="dropdownMenuButton_${message_id}" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${this.ICONS.MSG_EDIT_BUTTON}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${message_id}">
+                    <a class="dropdown-item" href="#">Else action</a>
+                </div> 
+            `);
+        }
         return this;
     }
 

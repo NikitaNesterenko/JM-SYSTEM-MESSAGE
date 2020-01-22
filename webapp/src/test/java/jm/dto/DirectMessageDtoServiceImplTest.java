@@ -74,6 +74,7 @@ public class DirectMessageDtoServiceImplTest {
     assertEquals(conversation.getId(), directMessageDTO.getConversationId());
     assertTrue(directMessageDTO.getIsDeleted());
     assertEquals("file.txt", directMessageDTO.getFilename());
+    assertFalse(directMessageDTO.getIsUpdated());
   }
 
   @Test

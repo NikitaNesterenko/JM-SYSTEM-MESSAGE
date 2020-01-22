@@ -1,5 +1,5 @@
-import {DirectMessageView} from "/js/workspace-page/components/messages/DirectMessageView.js";
-import {GetLoggedUser} from "/js/ajax/userRestController/getLoggedUser.js";
+// import {DirectMessageView} from "/js/workspace-page/components/messages/DirectMessageView.js";
+// import {GetLoggedUser} from "/js/ajax/userRestController/getLoggedUser.js";
 
 // const loggedUser = new GetLoggedUser();
 // const dm_view = new DirectMessageView(loggedUser.getLoggedUser());
