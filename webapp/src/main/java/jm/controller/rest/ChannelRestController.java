@@ -43,7 +43,7 @@ public class ChannelRestController {
     }
 
     @Autowired
-    public void  setChannelDTOService(ChannelDtoService channelDTOService) {
+    public void setChannelDTOService(ChannelDtoService channelDTOService) {
         this.channelDTOService = channelDTOService;
     }
 
@@ -72,18 +72,16 @@ public class ChannelRestController {
 
         Channel channel;
         channel = channelService.getChannelByName(channelDTO.getName());
-        if( channel == null) {
+        if (channel == null) {
             channel = channelDTOService.toEntity(channelDTO);
-            if (principal != null) {
-                User owner = userService.getUserByLogin(principal.getName());
-                Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+            User owner = userService.getUserByLogin(principal.getName());
+            Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
 
-                channel.setUser(owner);
-                channel.setWorkspace(workspace);
-                Set<User> users = new HashSet<>();
-                users.add(owner);
-                channel.setUsers(users);
-            }
+            channel.setUser(owner);
+            channel.setWorkspace(workspace);
+            Set<User> users = new HashSet<>();
+            users.add(owner);
+            channel.setUsers(users);
             try {
                 channelService.createChannel(channel);
                 logger.info("Cозданный channel: {}", channel);
