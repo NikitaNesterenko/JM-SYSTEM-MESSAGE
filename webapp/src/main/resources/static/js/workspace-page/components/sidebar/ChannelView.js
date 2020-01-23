@@ -8,7 +8,10 @@ export class ChannelView {
         this.channel_service = new ChannelRestPaginationService();
         this.channel_message_view = new ChannelMessageView();
         this.bot_service = new BotRestPaginationService();
-
+        window.pressChannelButton = (id) => {
+            window.channel_id = id;
+            this.selectChannel(id);
+        }
     }
 
     setLoggedUser(loggedUser) {
