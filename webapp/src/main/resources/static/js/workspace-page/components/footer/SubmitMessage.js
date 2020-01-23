@@ -35,10 +35,11 @@ export class SubmitMessage {
         $("#form_message").submit(async (event) => {
             event.preventDefault();
 
-            const content = this.getMessageInput()
+            const content =  $("#form_message_input").val()
             if (content.startsWith('/leave ')) {
                 let channelName = content.substring(7)
                 this.leaveChannel(channelName)
+                $("#form_message_input").val("")
                 return
             }
 
