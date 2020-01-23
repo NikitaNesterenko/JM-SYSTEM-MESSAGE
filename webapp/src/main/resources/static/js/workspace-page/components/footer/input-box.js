@@ -1,18 +1,18 @@
 import {
+    WorkspaceRestPaginationService,
     UserRestPaginationService,
     ChannelRestPaginationService,
     MessageRestPaginationService,
     StorageService,
     ConversationRestPaginationService,
-    DirectMessagesRestController,
-    WorkspaceRestPaginationService
+    DirectMessagesRestController
 } from '../../../rest/entities-rest-pagination.js'
 import {show_dialog} from "../primary-view/direct-message.js";
 
+const workspace_service = new WorkspaceRestPaginationService();
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
-const workspace_service = new WorkspaceRestPaginationService();
 const storage_service = new StorageService();
 const conversation_service = new ConversationRestPaginationService();
 const direct_message_service = new DirectMessagesRestController();
