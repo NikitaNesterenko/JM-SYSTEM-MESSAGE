@@ -13,7 +13,7 @@ function notify (title, message){
 // Парсер для сообщения типа "{inputMassage: "@asdas", dateCreate: "14.11.2019 18:07", user: {…}, bot: null}"
 // user {id: 2, name: "name_2", lastName: "last-name_2", login: "login_2", email: "mymail_2@testmail.com", …}
 const notifyParseMessage =(message)=> {
-    const messageFrom = message.user;
+    const messageFrom = message.userName;
     const messageContent = message.inputMassage;
     if (messageContent.includes("@",0)) {
         const indexToStart = messageContent.indexOf("@");

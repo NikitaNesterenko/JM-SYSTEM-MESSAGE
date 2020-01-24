@@ -1,12 +1,15 @@
-import { SendEmail } from '/js/ajax/createWorkspaceRestController/sendEmail.js';
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class NewWorkspaceEventHandler {
+
+    constructor() {
+        this.workspace_service = new WorkspaceRestPaginationService();
+    }
 
     documentReady() {
         $("#button-email").click(() => {
             const email = $('#target-email').val();
-            const sender = new SendEmail(email);
-            sender.sendEmail();
+            this.workspace_service.sendEmail(email);
             window.location.href = "/email/confirmemail";
             return false;
         });

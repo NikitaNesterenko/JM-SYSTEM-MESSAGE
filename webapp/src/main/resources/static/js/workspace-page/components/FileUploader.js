@@ -1,7 +1,10 @@
+import {StorageService} from "/js/rest/entities-rest-pagination.js";
+
 export class FileUploader {
 
     constructor() {
         this.selected_file = null;
+        this.storage_service = new StorageService();
     }
 
     onProfileFileUpload() {
@@ -22,5 +25,16 @@ export class FileUploader {
             }
             $('#attached_file').html(attachedFile);
         });
+    }
+
+    async saveFile(file) {
+        if (file !== undefined) {
+            const data = new FormData();
+            data.append("file", file);
+            await this.storage_service.uploadFile(data);
+            $('#attached_file').html("");
+            return file.name;
+        }
+        return null;
     }
 }

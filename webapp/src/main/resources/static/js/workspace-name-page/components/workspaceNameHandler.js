@@ -1,13 +1,16 @@
-import {TakeWorkspaceName} from "../../ajax/createWorkspaceRestController/takeWorkspaceName.js";
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class WorkspaceNameHandle {
+
+    constructor() {
+        this.workspace_service = new WorkspaceRestPaginationService();
+    }
     documentReady() {
 
-        $(document).ready(function() {
-            $("#button-name").click(function(){
+        $(document).ready(() => {
+            $("#button-name").click(() => {
                 let name = $('#signup_workspace_name').val();
-                const takeWorkspaceName = new TakeWorkspaceName(name);
-                takeWorkspaceName.takeWorkspaceName();
+                this.workspace_service.takeWorkspaceName(name);
                 window.location.href = "/email/channelname";
                 return false;
             });
