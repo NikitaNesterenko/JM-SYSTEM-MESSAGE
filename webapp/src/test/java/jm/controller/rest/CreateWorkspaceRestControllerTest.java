@@ -41,22 +41,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CreateWorkspaceRestControllerTest {
 
     private static final String URL = "/rest/api/workspaces/";
-    @Mock
-    private UserService userService;
+
     @Mock
     private CreateWorkspaceTokenService createWorkspaceTokenService;
-    @Mock
-    private MailService mailService;
-    @Mock
-    private WorkspaceUserRoleService workspaceUserRoleService;
     @Mock
     private WorkspaceService workspaceService;
     @Mock
     private ChannelService channelService;
-    @Mock
-    private Set<User> users = new HashSet<>();
-    @Mock
-    private UserDetailsServiceImpl userDetailsService;
+
 
     final String email = "test@mail.ru";
     final String code = "1234";
