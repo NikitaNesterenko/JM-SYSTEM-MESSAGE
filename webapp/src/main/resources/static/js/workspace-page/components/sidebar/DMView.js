@@ -1,7 +1,6 @@
 import {WorkspaceRestPaginationService, ConversationRestPaginationService, DirectMessagesRestController} from "/js/rest/entities-rest-pagination.js";
-import {GetUser} from "/js/ajax/userRestController/getUser.js";
 import {ActiveChatMembers} from "./ActiveChatMembers.js";
-// import {DirectMessageView} from "/js/workspace-page/components/messages/DirectMessageView.js";
+import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class DMView {
 
@@ -9,6 +8,7 @@ export class DMView {
         this.workspace_service = new WorkspaceRestPaginationService();
         this.conversation_service = new ConversationRestPaginationService();
         this.direct_message_service = new DirectMessagesRestController();
+        this.user_service = new UserRestPaginationService();
         this.direct_message_view = dm_view;
         this.dm_chat = new ActiveChatMembers();
     }
@@ -39,8 +39,7 @@ export class DMView {
     }
 
     async show(userId) {
-        const user = new GetUser(userId);
-        const respondent = user.getUser(userId);
+        const respondent = await this.user_service.getById(userId);
         const workspace = await this.workspace_service.getChoosedWorkspace();
 
         if (this.logged_user.id !== respondent.id) {

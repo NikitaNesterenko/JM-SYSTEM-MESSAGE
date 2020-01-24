@@ -1,9 +1,10 @@
-import {SendCode} from "/js/ajax/createWorkspaceRestController/sendCode.js";
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class TwoFactorAuthentication {
 
     constructor({root}) {
         this.root = $(root);
+        this.workspace_service = new WorkspaceRestPaginationService();
     }
 
     setInputEvents() {
@@ -43,13 +44,15 @@ export class TwoFactorAuthentication {
     }
 
     sendCode(code) {
-        const sender = new SendCode(code);
-        if (sender.sendCode() === null) {
-            alert("ne tot kod :)");
-        } else {
-            setTimeout(function () {
-                window.location.href = "/email/workspacename";
-            }, 1000);
-        }
+        this.workspace_service.sendCode(code).then(
+            status => {
+                if (status !== 200) {
+                    alert("ne tot kod :)");
+                } else {
+                    setTimeout(function () {
+                        window.location.href = "/email/workspacename";
+                    }, 1000);
+                }
+            });
     }
 }

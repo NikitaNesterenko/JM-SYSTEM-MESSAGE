@@ -1,9 +1,12 @@
-import {getChannelName} from "../ajax/createWorkspaceRestController.js";
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
-let respons = getChannelName();
-let textP = $('#workspace_name_label');
-textP.text("Tada! Meet your team’s first channel: #" + respons);
-
+const workspace_service = new WorkspaceRestPaginationService();
+workspace_service.tada().then(
+    channel_name => {
+        let textP = $('#workspace_name_label');
+        textP.text("Tada! Meet your team’s first channel: #" + channel_name);
+    }
+);
 
 $("#button-name").click(function() {
         window.location.href = "/chooseWorkspace";

@@ -1,14 +1,15 @@
-import {takeChannelName} from "../../ajax/createWorkspaceRestController.js";
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class NameButton {
     constructor() {
+        this.workspace_service = new WorkspaceRestPaginationService();
     }
 
     namebutton(){
-        $("#button-name").click(function(){
+        $("#button-name").click(() => {
             let name = $('#signup_channel_name').val();
-            takeChannelName(name);
-            window.location.href = "/email/invites"
+            this.workspace_service.takeWorkspaceName(name);
+            window.location.href = "/email/invites";
             return false;
         });
     }

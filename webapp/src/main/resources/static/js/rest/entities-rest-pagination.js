@@ -16,7 +16,12 @@ export class UserRestPaginationService extends RestPaginationService {
     getUsersByWorkspace = async (id) => {
         const response = await fetch('/rest/api/users/workspace/' + id);
         return response.json();
-    }
+    };
+
+    getUsersByChannelId = async (channel_id) => {
+        const users = await fetch(`/rest/api/users/channel/${channel_id}`);
+        return await users.json();
+    };
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -54,6 +59,26 @@ export class BotRestPaginationService extends RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     };
+}
+
+export class ChannelTopicRestPaginationService extends RestPaginationService {
+    constructor() {
+        super('/rest/api/channels/');
+    }
+
+    async getChannelTopic(channel_id) {
+        const chn_topic = await fetch(`/rest/api/channels/${channel_id}/topic`);
+        return await chn_topic.json().catch(err => console.log(err.status));
+    }
+
+    async updateChannelTopic(channel_id, topic) {
+        const chn_topic = await fetch(`/rest/api/channels/${channel_id}/topic/update`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(topic)
+        });
+        return await chn_topic.json().catch(err => console.log(err.status));
+    }
 }
 
 export class ChannelRestPaginationService extends RestPaginationService {
@@ -112,7 +137,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 
     setChoosedWorkspace = async (name) => {
         const response = await fetch('/rest/api/workspaces/choosed/' + name);
-        return response.json()
+        return await response.json()
     };
 
     getChoosedWorkspace = async () => {
@@ -122,6 +147,41 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
             return await response.json();
         }
     };
+
+    sendCode = async (code) => {
+        const response = await fetch('/api/create/confirmEmail', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: code
+        });
+        return response.status;
+    };
+
+    sendEmail = (email) => {
+        const response = fetch('/api/create/sendEmail', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: email
+        });
+        return response.status;
+    };
+
+    takeWorkspaceName = (wks_name) => {
+        const response = fetch('/api/create/workspaceName', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: wks_name
+        });
+        return response.status;
+    };
+
+    tada = async () => {
+        const response = await fetch('/api/create/tada', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        });
+        return response;
+    }
 }
 
 export class StorageService {
@@ -138,6 +198,14 @@ export class StorageService {
 export class InviteRestPaginationService extends RestPaginationService {
     constructor(){
         super('/rest/api/invites');
+    }
+
+    async sendInvites(emails) {
+        return await fetch('/api/create/invites', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(emails)
+        });
     }
 }
 

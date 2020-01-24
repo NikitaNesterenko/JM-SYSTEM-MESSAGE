@@ -34,6 +34,8 @@ public class InputMessage {
 
     private String userName;
 
+    private String userAvatarUrl;
+
     private Long botId;
 
     private String botNickName;
