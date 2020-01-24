@@ -1,15 +1,17 @@
-import {GetUsers} from "/js/ajax/userRestController/getUsers.js";
 import {Loadhandler} from "./loadhandler.js";
+import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class RefreshUserList{
 
+    constructor() {
+        this.user_service = new UserRestPaginationService();
+    }
+
     refreshUserList(){
-            let users = [];
-            let getUsers = new GetUsers();
-            users = getUsers.getUsers(); // get all users from DB
             const handler = new Loadhandler();
-            handler.showFilteredUsers(users);
-            // display users filtered by input search string
+            this.user_service.getAll().then(
+                users => handler.showFilteredUsers(users)
+            );
     }
 
 

@@ -1,13 +1,14 @@
-import {ChannelView} from "/js/workspace-page/components/sidebar/ChannelView.js";
+// import {ChannelView} from "/js/workspace-page/components/sidebar/ChannelView.js";
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 
 export class StompClient {
 
-    constructor(channel_message_view, thread_view, direct_message_view) {
+    constructor(channel_message_view, thread_view, direct_message_view, channel_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
         this.channel_message_view = channel_message_view;
         this.thread_view = thread_view;
         this.dm_view = direct_message_view;
+        this.channelview = channel_view;
 
         window.sendName = (message) => this.sendName(message);
         window.sendChannel = (channel) => this.sendChannel(channel);
@@ -51,10 +52,9 @@ export class StompClient {
     }
 
     subscribeChannel() {
-        this.channelview = new ChannelView();
+        // this.channelview = new ChannelView();
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
-            console.warn(chn);
             this.channelview.addChannelIntoSidebarChannelList(chn);
         });
     }

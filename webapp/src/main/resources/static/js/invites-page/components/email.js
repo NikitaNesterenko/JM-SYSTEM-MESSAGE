@@ -1,11 +1,12 @@
-import {sendInvites} from "../ajax/createWorkspaceRestController.js";
+import {InviteRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class Email {
     constructor() {
+        this.invite_service = new InviteRestPaginationService();
     }
 
     email(){
-        $("#button-email").click(function(){
+        $("#button-email").click(() => {
             let arrayInputs = $('input').map(function () {
                 return this.value;
             }).get();
@@ -15,8 +16,9 @@ export class Email {
                     result.push(arrayInputs[i])
                 }
             }
-            sendInvites(result);
-            window.location.href = "/email/tada";
+            this.invite_service.sendInvites(result).then(
+                () => window.location.href = "/email/tada"
+            );
             return false;
         });
     }
