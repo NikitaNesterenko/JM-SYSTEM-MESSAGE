@@ -59,6 +59,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         if (user != null) {
             directMessageDTO.setUserId(user.getId());
             directMessageDTO.setUserName(user.getName());
+            directMessageDTO.setUserAvatarUrl(user.getAvatarURL());
         } else if (bot != null) {
             directMessageDTO.setBotId(bot.getId());
             directMessageDTO.setBotNickName(bot.getNickName());

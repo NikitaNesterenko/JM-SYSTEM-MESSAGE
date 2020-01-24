@@ -45,16 +45,6 @@ export class MessageDialogView {
         return this;
     }
 
-    updateContainer(message) {
-        this.message = message;
-        const content = $("<div class='c-message__content--feature_sonic_inputs'></div>");
-        this.root = $(`#message_${message.id}_user_${message.userId}_content`);
-        this.root.empty();
-        this.root.append(content);
-
-        return this;
-    }
-
     setDateHeader(message_date) {
         const dt = $(`<span class="c-virtual_list__item__date"></span>`)
         const current_day = message_date.split(' ')[0].split('.')[0];
@@ -97,12 +87,21 @@ export class MessageDialogView {
     }
 
     setAvatar() {
-        this.root.prepend(`
-            <div class="c-message__gutter--feature_sonic_inputs">
-                <button class="c-message__avatar__button">
-                    <img class="c-avatar__image">
-                </button>
-            </div>`);
+        if (this.message.userAvatarUrl == null) {
+            this.root.prepend(`
+                <div class="c-message__gutter--feature_sonic_inputs">
+                    <button class="c-message__avatar__button">
+                        <img class="c-avatar__image">
+                    </button>
+                </div>`);
+        } else {
+            this.root.prepend(`
+                <div class="c-message__gutter--feature_sonic_inputs">
+                    <button class="c-message__avatar__button">
+                        <img class="c-avatar__image" src="/files/${this.message.userAvatarUrl}">
+                    </button>
+                </div>`);
+        }
         return this;
     }
 
@@ -117,19 +116,6 @@ export class MessageDialogView {
        icons_container.append(icons_elements.getMenuIcons());
        this.root.append(icons_container);
        return this;
-    }
-
-    setDMMenuIcons(logged_user_id) {
-        const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
-        const icons_elements = this.menu_icons.createMenuIcons()
-            .emojiBtn()
-            .replyBtn(this.message.id)
-            .shareBtn(this.message.id)
-            .starBtn(this.message.id)
-            .dropdownBtnDM(this.message.id, this.message.userId, logged_user_id);
-        icons_container.append(icons_elements.getMenuIcons());
-        this.root.append(icons_container);
-        return this;
     }
 
     setThreadMenuIcons() {

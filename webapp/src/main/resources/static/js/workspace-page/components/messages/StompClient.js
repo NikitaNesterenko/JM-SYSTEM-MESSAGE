@@ -77,6 +77,7 @@ export class StompClient {
                     this.dm_view.updateMessage(response);
                 } else {
                     if (response.conversationId === current_conversation) {
+                        console.warn(response);
                         this.dm_view.createMessage(response);
                     }
                 }
@@ -98,6 +99,7 @@ export class StompClient {
             'id': message.id,
             'userId': message.userId,
             'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
             'content': message.content,
             'isDeleted': message.isDeleted,
             'dateCreate': message.dateCreate,
@@ -114,6 +116,7 @@ export class StompClient {
             'dateCreate': message.dateCreate,
             'userId': message.userId,
             'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
             'filename': message.filename,
             'sharedMessageId': message.sharedMessageId,
             'conversationId': message.conversationId
@@ -132,6 +135,7 @@ export class StompClient {
             'dateCreate': message.dateCreate,
             'userId': message.userId,
             'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
             'botId': message.botId,
             'botNickName': message.botNickName,
             'filename': message.filename,

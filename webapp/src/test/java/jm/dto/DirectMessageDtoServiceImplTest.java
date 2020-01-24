@@ -38,6 +38,7 @@ public class DirectMessageDtoServiceImplTest {
     directMessageDtoService.setDirectMessageDtoServiceImpl(userDAO, channelDAO, conversationDAO);
 
     user1.setId(1L);
+    user1.setAvatarURL("image.jpg");
     user2.setId(2L);
     wks.setId(1L);
     conversation.setId(4L);
@@ -75,6 +76,7 @@ public class DirectMessageDtoServiceImplTest {
     assertTrue(directMessageDTO.getIsDeleted());
     assertEquals("file.txt", directMessageDTO.getFilename());
     assertFalse(directMessageDTO.getIsUpdated());
+    assertEquals("image.jpg", directMessageDTO.getUserAvatarUrl());
   }
 
   @Test
