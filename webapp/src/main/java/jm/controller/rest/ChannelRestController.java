@@ -82,8 +82,7 @@ public class ChannelRestController {
                 return new ResponseEntity<>(channelDTO, HttpStatus.OK);
 
             } catch (IllegalArgumentException | EntityNotFoundException e) {
-                logger.warn("Не удалось создать channel");
-                return ResponseEntity.badRequest().build();
+                logger.warn("Не удалось создать channel: {}", channel);
             }
         }
         return ResponseEntity.badRequest().build();
