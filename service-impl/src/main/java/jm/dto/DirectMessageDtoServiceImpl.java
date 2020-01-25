@@ -1,9 +1,6 @@
 package jm.dto;
 
-import jm.api.dao.BotDAO;
-import jm.api.dao.ChannelDAO;
-import jm.api.dao.MessageDAO;
-import jm.api.dao.UserDAO;
+import jm.api.dao.*;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
@@ -13,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,16 +18,30 @@ import java.util.stream.Collectors;
 public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
     private UserDAO userDAO;
-    private BotDAO botDAO;
     private ChannelDAO channelDAO;
-    private MessageDAO messageDAO;
+    private ConversationDAO conversationDAO;
+
+
 
     @Autowired
-    public void setDirectMessageDtoServiceImpl(UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
+    public void setDirectMessageDtoServiceImpl(UserDAO userDAO, ChannelDAO channelDAO, ConversationDAO conversationDAO) {
         this.userDAO = userDAO;
-        this.botDAO = botDAO;
         this.channelDAO = channelDAO;
-        this.messageDAO = messageDAO;
+        this.conversationDAO = conversationDAO;
+    }
+
+    @Override
+    public List<DirectMessageDTO> toDto(List<DirectMessage> directMessages) {
+        if (directMessages == null || directMessages.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<DirectMessageDTO> directMessageDTOList = new ArrayList<>();
+        for (DirectMessage directMessage: directMessages) {
+            directMessageDTOList.add(toDto(directMessage));
+        }
+
+        return directMessageDTOList;
     }
 
     @Override
@@ -41,13 +52,14 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         }
 
         DirectMessageDTO directMessageDTO = new DirectMessageDTO(directMessage);
-
+        directMessageDTO.setId(directMessage.getId());
 
         User user = directMessage.getUser();
         Bot bot = directMessage.getBot();
         if (user != null) {
             directMessageDTO.setUserId(user.getId());
             directMessageDTO.setUserName(user.getName());
+            directMessageDTO.setUserAvatarUrl(user.getAvatarURL());
         } else if (bot != null) {
             directMessageDTO.setBotId(bot.getId());
             directMessageDTO.setBotNickName(bot.getNickName());
@@ -76,6 +88,11 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
             directMessageDTO.setParentMessageId(parentMessage.getId());
         }
 
+        directMessageDTO.setContent(directMessage.getContent());
+        directMessageDTO.setDateCreate(directMessage.getDateCreate());
+        directMessageDTO.setIsDeleted(directMessage.getIsDeleted());
+        directMessageDTO.setFilename(directMessage.getFilename());
+
         return directMessageDTO;
     }
 
@@ -86,7 +103,12 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
             return null;
         }
 
-        DirectMessage directMessage = new DirectMessage(directMessageDTO);
+        DirectMessage directMessage = new DirectMessage();
+        directMessage.setId(directMessageDTO.getId());
+
+        if (directMessageDTO.getConversationId() != null) {
+            directMessage.setConversation(conversationDAO.getById(directMessageDTO.getConversationId()));
+        }
 
         if (directMessageDTO.getUserId() != null) {
             directMessage.setUser(userDAO.getById(directMessageDTO.getUserId()));
@@ -94,6 +116,13 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
         directMessage.setContent(directMessageDTO.getContent());
         directMessage.setDateCreate(directMessageDTO.getDateCreate());
+        directMessage.setIsDeleted(directMessageDTO.getIsDeleted());
+
+        Set<Long> recipientUserIds = directMessageDTO.getRecipientUserIds();
+        List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
+        directMessage.setRecipientUsers(new HashSet<>(recipientUsers));
+        directMessage.setFilename(directMessageDTO.getFilename());
+
         return directMessage;
     }
 }

@@ -32,6 +32,8 @@ public class MessageDTO {
 
     private Boolean isDeleted = false;
 
+    private Boolean isUpdated = false;
+
     private Long channelId;
 
     private Long sharedMessageId;
@@ -46,6 +48,7 @@ public class MessageDTO {
     private String userName;
     private String botNickName;
     private String channelName;
+    private String userAvatarUrl;
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields

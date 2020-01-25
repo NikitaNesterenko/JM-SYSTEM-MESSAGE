@@ -1,0 +1,54 @@
+import {MessageView} from "/js/workspace-page/components/messages/MessageView.js";
+
+export class ChannelMessageView extends MessageView {
+
+    constructor(logged_user) {
+        super(logged_user);
+        this.dialog.messageBox("#all-messages");
+        this.dialog.editDeleteClass = "ChannelMessage";
+    }
+
+    async update() {
+        const messages = await this.getAllMessagesFourMonthsAgo(channel_id);
+        await this.showAllMessages(messages);
+    }
+
+    async getAllMessagesFourMonthsAgo(channel_id) {
+        let start_date = new Date();
+        let end_date = new Date();
+        start_date.setMonth(start_date.getMonth() - 4);
+        return this.message_service.getMessagesByChannelIdForPeriod(channel_id, start_date, end_date);
+    }
+
+    onEditSubmit(event, message_id) {
+        super.onEditSubmit(event, message_id);
+        const content = $(event.currentTarget);
+        const msg = $(event.target).find('input').val();
+        const filename = $(event.target).attr("data-attachment");
+        content.find(".c-message__inline_editor").replaceWith(`<span class="c-message__body">${msg}</span>`);
+        const message = {
+            "id": message_id,
+            "userId": this.logged_user.id,
+            "userName": this.logged_user.name,
+            "channelId": parseInt(sessionStorage.getItem("channelName")),
+            "content": msg,
+            "dateCreate": convert_date_to_format_Json(new Date()),
+            "filename": filename,
+            "isUpdated": true
+        };
+        this.message_service.update(message).then(
+            () => sendName(message)
+        )
+    }
+
+    modify(message_id) {
+       this.message_service.getById(message_id).then(
+           message => {
+               message.isDeleted = true;
+               this.message_service.update(message).then(
+                   () => sendName(message)
+               )
+           }
+       );
+    }
+}

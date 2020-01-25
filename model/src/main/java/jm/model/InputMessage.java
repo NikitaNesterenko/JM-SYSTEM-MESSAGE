@@ -34,6 +34,8 @@ public class InputMessage {
 
     private String userName;
 
+    private String userAvatarUrl;
+
     private Long botId;
 
     private String botNickName;
@@ -41,5 +43,9 @@ public class InputMessage {
     private String filename;
 
     private Long sharedMessageId;
+
+    private Boolean isDeleted;
+
+    private Boolean isUpdated;
 
 }

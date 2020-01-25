@@ -49,6 +49,12 @@ public class DirectMessageRestController {
     @PutMapping(value = "/update")
     public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
         DirectMessage message = directMessageDtoService.toEntity(messageDTO);
+        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
+        if (isCreated == null) {
+            logger.warn("Сообщение не найдено");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        message.setDateCreate(isCreated.getDateCreate());
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
         return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
     }
@@ -61,9 +67,9 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/conversation/{id}")
-    public ResponseEntity<List<DirectMessage>> getMessagesByConversationId(@PathVariable Long id) {
+    public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
         List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id);
         messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(messages, HttpStatus.OK);
+        return new ResponseEntity<>(directMessageDtoService.toDto(messages), HttpStatus.OK);
     }
 }

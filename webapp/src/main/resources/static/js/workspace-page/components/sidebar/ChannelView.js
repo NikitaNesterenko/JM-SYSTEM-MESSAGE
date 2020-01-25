@@ -1,15 +1,22 @@
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {updateAllMessages} from "/js/workspace-page/components/footer/messages.js";
+import {ChannelRestPaginationService, BotRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelMessageView} from "/js/workspace-page/components/messages/ChannelMessageView.js";
 
 export class ChannelView {
     default_channel = null;
 
     constructor() {
         this.channel_service = new ChannelRestPaginationService();
+        this.channel_message_view = new ChannelMessageView();
+        this.bot_service = new BotRestPaginationService();
+        window.pressChannelButton = (id) => {
+            window.channel_id = id;
+            this.selectChannel(id);
+        }
     }
 
     setLoggedUser(loggedUser) {
         this.loggedUser = loggedUser;
+        this.channel_message_view.logged_user = loggedUser;
         return this;
     }
 
@@ -22,10 +29,39 @@ export class ChannelView {
                     if (this.default_channel !== null) {
                         this.setLocalStorageSettings(this.default_channel.id);
                         this.setChannelBGColor(this.default_channel);
-                        updateAllMessages();
+                        this.channel_message_view.update();
                     }
                 }
             }
+        );
+        this.showBots(workspace_id);
+    }
+
+    showBots(workspace_id) {
+        this.bot_service.getBotByWorkspaceId(workspace_id).then(
+            bot => {
+                if (bot !== undefined) {
+                    this.addBot(bot);
+                }
+            }
+        );
+    }
+
+    addBot(bot) {
+        $('#bot_representation').append(
+            `<div class="p-channel_sidebar__direct-messages__container">
+                <div class="p-channel_sidebar__close_container">
+                    <button class="p-channel_sidebar__name_button">
+                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                        <span class="p-channel_sidebar__name-3">
+                            <span>` + bot['nickName'] + `</span>
+                        </span>
+                    </button>
+                    <button class="p-channel_sidebar__close">
+                        <i class="p-channel_sidebar__close__icon">✖</i>
+                    </button>
+                </div>
+            </div>`
         );
     }
 
@@ -65,7 +101,20 @@ export class ChannelView {
         window.channel_id = chn_id;
     }
 
+    selectChannel(id) {
+        this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
+        $('.p-channel_sidebar__name_button').each((idx, btn) => {
+            let bg_color = {color: "rgb(188,171,188)", background: "none"};
+
+            if ($(btn).filter(`[id=channel_button_${id}]`).length) {
+                bg_color = {color: "white", background: "royalblue"};
+            }
+
+            $(btn).css(bg_color);
+        });
+    }
+
     checkPrivacy(channel) {
-        return (channel.isPrivate && this.loggedUser === channel.ownerId) || !channel.isPrivate;
+        return (channel.isPrivate && this.loggedUser.id === channel.ownerId) || !channel.isPrivate;
     }
 }

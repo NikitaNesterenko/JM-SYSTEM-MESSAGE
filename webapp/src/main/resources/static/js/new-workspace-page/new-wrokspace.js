@@ -1,10 +1,4 @@
-import {sendEmail} from "../ajax/createWorkspaceRestController.js";
+import {NewWorkspaceEventHandler} from "./components/NewWorkspaceEventHandler.js";
 
-$(document).ready(function() {
-   $("#button-email").click(function(){
-      let email = $('#target-email').val();
-      sendEmail(email);
-      window.location.href = "/email/confirmemail";
-      return false;
-   });
-});
+const handler = new NewWorkspaceEventHandler();
+$(document).ready(() => handler.documentReady());

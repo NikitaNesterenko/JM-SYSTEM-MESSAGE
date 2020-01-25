@@ -92,6 +92,7 @@ public class MessageRestController {
         }
         if (principal.getName().equals(existingMessage.getUser().getLogin())) {
             logger.info("Существующее сообщение: {}", existingMessage);
+            message.setDateCreate(existingMessage.getDateCreate());
             messageService.updateMessage(message);
             logger.info("Обновленное сообщение: {}", message);
             return new ResponseEntity(HttpStatus.OK);
