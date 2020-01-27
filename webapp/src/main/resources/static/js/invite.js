@@ -57,7 +57,7 @@ window.addEventListener('load', function () {
 
     $('.invites-modal-close').on('click', function () {
         $('.invites-modal').hide();
-        $('.invites_modal_close').hide();
+        $('.invites-modal-close').hide();
         $('.p-client_container').show();
         $(':input', '#input_form').val('');
     });
