@@ -15,23 +15,20 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
         let principalStarredMessageIds = user["starredMessageIds"];
 
         if (principalStarredMessageIds.find(id => id === message.id)) {
-            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message), 1);
+            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message.id), 1);
             user["starredMessageIds"] = principalStarredMessageIds;
             user_service.update(user).then(() => {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
                 $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
+                reopen_right_menu();
             });
         } else {
             principalStarredMessageIds.push(message.id);
             user["starredMessageIds"] = principalStarredMessageIds;
             user_service.update(user).then(() => {
                 add_msg_starred_attr(message);
+                reopen_right_menu();
             });
-        }
-
-        if (is_open) {
-            toggle_right_menu();
-            toggle_right_menu();
         }
     });
 });
@@ -93,6 +90,13 @@ let toggle_right_menu = () => {
     }
 };
 
+let reopen_right_menu = () => {
+    if (is_open) {
+        toggle_right_menu();
+        toggle_right_menu();
+    }
+};
+
 $('.p-classic_nav__right__star__button').on('click', () => {
     toggle_right_menu();
 });
@@ -126,9 +130,9 @@ const add_msg_to_right_panel = (time, message) => {
                                                                     <a href="#modal_1" class="message__sender" id="user_${message.userId}" data-user_id="${message.userId}" data-toggle="modal">${message.userName}</a>
                                                                 </span>
                                                                 <a class="c-timestamp--static">
-                                                                    <span class="c-timestamp__label">
+                                                                    <!--<span class="c-timestamp__label">
                                                                         ${time}
-                                                                    </span>
+                                                                    </span>-->
                                                                     <span class="c-timestamp__label">
                                                                         ${message.dateCreate}
                                                                     </span>                                                                     
