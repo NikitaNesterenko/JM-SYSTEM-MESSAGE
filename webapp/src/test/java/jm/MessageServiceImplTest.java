@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 
@@ -51,14 +52,14 @@ class MessageServiceImplTest {
         messages.add(message2);
 
         Mockito.when(messageDAO.getAll()).thenReturn(messages);
-        Assert.assertEquals(messageService.getAllMessages(), messages);
+        assertEquals(messageService.getAllMessages(), messages);
     }
 
     @Test
     public void getAllMessages_In_List_Was_Null() {
         List<Message> messages = null;
         Mockito.when(messageDAO.getAll()).thenReturn(messages);
-        Assert.assertEquals(messageService.getAllMessages(), null);
+        assertEquals(messageService.getAllMessages(), null);
     }
 
     @Test
@@ -83,14 +84,15 @@ class MessageServiceImplTest {
         messages.add(message2);
 
         Mockito.when(messageDAO.getMessagesByChannelId(1L)).thenReturn(messages);
-        Assert.assertEquals(messageService.getMessagesByChannelId(1L), messages);
+        assertEquals(messageService.getMessagesByChannelId(1L), messages);
     }
 
     @Test
     public void getMessagesByChannelId_In_List_Was_Null() {
         List<Message> messages = null;
         Mockito.when(messageDAO.getMessagesByChannelId(any())).thenReturn(null);
-        Assert.assertEquals(messageService.getMessagesByChannelId(1L), null);
+        assertEquals(messageService.getMessagesByChannelId(1L), null);
+
     }
 
     @Test
@@ -115,14 +117,14 @@ class MessageServiceImplTest {
         messages.add(message2);
 
         Mockito.when(messageDAO.getMessageByContent("user")).thenReturn(messages);
-        Assert.assertEquals(messageService.getMessagesByContent("user"), messages);
+        assertEquals(messageService.getMessagesByContent("user"), messages);
     }
 
     @Test
     public void getMessagesByContent_In_List_Was_Null() {
         List<Message> messages = null;
         Mockito.when(messageDAO.getMessageByContent("user")).thenReturn(null);
-        Assert.assertEquals(messageService.getMessagesByContent("user"), null);
+        assertEquals(messageService.getMessagesByContent("user"), null);
     }
 
     @Test
@@ -136,13 +138,13 @@ class MessageServiceImplTest {
         message1.setChannelId(1L);
 
         Mockito.when(messageDAO.getById(1L)).thenReturn(message1);
-        Assert.assertEquals(messageService.getMessageById(1L), message1);
+        assertEquals(messageService.getMessageById(1L), message1);
     }
 
     @Test
     public void getMessageById_In_Message_Was_Null() {
         Mockito.when(messageDAO.getById(1L)).thenReturn(null);
-        Assert.assertEquals(messageService.getMessageById(1L), null);
+        assertEquals(messageService.getMessageById(1L), null);
     }
 
 
@@ -168,13 +170,13 @@ class MessageServiceImplTest {
         messages.add(message2);
 
         Mockito.when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any())).thenReturn(messages);
-        Assert.assertEquals(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now()), messages);
+        assertEquals(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now()), messages);
     }
 
     @Test
     public void getMessagesByChannelIdForPeriod_In_List_Was_Null() {
         Mockito.when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any())).thenReturn(null);
-        Assert.assertEquals(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now()), null);
+        assertEquals(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now()), null);
     }
 
     @Test
