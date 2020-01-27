@@ -41,7 +41,7 @@ public class ChannelRestController {
     }
 
     @Autowired
-    public void  setChannelDTOService(ChannelDtoService channelDTOService) {
+    public void setChannelDTOService(ChannelDtoService channelDTOService) {
         this.channelDTOService = channelDTOService;
     }
 
@@ -75,16 +75,17 @@ public class ChannelRestController {
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
-        }
-        try {
-            channelService.createChannel(channel);
-            logger.info("Cозданный channel: {}", channel);
-        } catch (IllegalArgumentException | EntityNotFoundException e) {
-            logger.warn("Не удалось создать channel");
-            ResponseEntity.badRequest().build();
-        }
 
-        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+            try {
+                channelService.createChannel(channel);
+                logger.info("Cозданный channel: {}", channel);
+                return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+
+            } catch (IllegalArgumentException | EntityNotFoundException e) {
+                logger.warn("Не удалось создать channel: {}", channel);
+            }
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping(value = "/update")
