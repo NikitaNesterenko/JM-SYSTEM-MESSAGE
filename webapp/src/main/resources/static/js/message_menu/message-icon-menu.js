@@ -40,8 +40,9 @@ $(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
         let channel = message.channelId;
         $(`#channel_button_${channel}`).click();
         msg_userId = message.userId;
+        document.getElementById(`message_${msg_id}_user_${msg_userId}_content`).scrollIntoView(true);
         });
-    $(`message_${msg_id}_user_${msg_userId}_content`).scrollIntoView({block: "center", behavior: "smooth"});
+
 });
 
 const getUserAndMessage = async (id) => {
