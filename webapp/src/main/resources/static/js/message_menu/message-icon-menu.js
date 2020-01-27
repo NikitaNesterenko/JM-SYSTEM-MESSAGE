@@ -33,6 +33,17 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
     });
 });
 
+$(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
+    let msg_id = $(e.target).data('msg_id');
+    let msg_userId = 0;
+    message_service.getById(msg_id).then(message => {
+        let channel = message.channelId;
+        $(`#channel_button_${channel}`).click();
+        msg_userId = message.userId;
+        });
+    $(`message_${msg_id}_user_${msg_userId}_content`).scrollIntoView({block: "center", behavior: "smooth"});
+});
+
 const getUserAndMessage = async (id) => {
     const user = await user_service.getLoggedUser();
     const msg = await message_service.getById(id);
@@ -110,7 +121,7 @@ const back_to_msg = '&#8678;';
 const starred_message_menu = (message) => {
     return `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${back_to_msg}</button>` + // back
+        `<button id="msg-icons-menu__back_to_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${back_to_msg}</button>` + // back
         `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
         `</div>` +
         `</div>`;
