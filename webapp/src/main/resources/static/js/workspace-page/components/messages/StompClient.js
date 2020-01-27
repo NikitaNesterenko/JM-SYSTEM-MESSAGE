@@ -1,4 +1,3 @@
-// import {ChannelView} from "/js/workspace-page/components/sidebar/ChannelView.js";
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 
 export class StompClient {
@@ -47,12 +46,10 @@ export class StompClient {
                 this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
             }
             notifyParseMessage(result);
-            setOnClickEdit(true);
         });
     }
 
     subscribeChannel() {
-        // this.channelview = new ChannelView();
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
             this.channelview.addChannelIntoSidebarChannelList(chn);
@@ -77,7 +74,6 @@ export class StompClient {
                     this.dm_view.updateMessage(response);
                 } else {
                     if (response.conversationId === current_conversation) {
-                        console.warn(response);
                         this.dm_view.createMessage(response);
                     }
                 }
