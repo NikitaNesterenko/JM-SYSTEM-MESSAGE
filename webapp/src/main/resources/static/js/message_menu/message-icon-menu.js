@@ -1,9 +1,10 @@
-import {MessageRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from "../rest/entities-rest-pagination.js";
+import {MessageRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService, ChannelRestPaginationService} from "../rest/entities-rest-pagination.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const channel_service = new ChannelRestPaginationService();
 const star_button_blank = '\u2606';
 const star_button_filled = '\u2605';
 
@@ -34,14 +35,20 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
     });
 });
 
+//переход к сообщению из списка избранного
 $(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
-    let msg_userId = 0;
     message_service.getById(msg_id).then(message => {
-        let channel = message.channelId;
-        $(`#channel_button_${channel}`).click();
-        msg_userId = message.userId;
-        document.getElementById(`message_${msg_id}_user_${msg_userId}_content`).scrollIntoView(true);
+        const {channelId, userId, id} = message;
+        //смена номера активного канала
+        window.pressChannelButton(channelId);
+        //сделал задержку перед скроллом к конкретному сообщению.
+        // Надо попробовать отловить событие завершения отрисовки всех сообщений в канале и скролл к концу
+        setTimeout(function() {
+            let myElement = document.getElementById(`message_${id}_user_${userId}_content`);
+            let topPos = myElement.offsetTop;
+            document.getElementById("all-message-wrapper").scrollTop = topPos;
+        }, 500)
         });
 });
 
@@ -73,26 +80,32 @@ let populateRightPane = (user) => {
     target_element.empty();
     workspace_service.getChoosedWorkspace().then(workspace => {
         let currentWorkspaceId = workspace.id; //получаем id выбранного workspace
-        /*TODO
-        *  получить список кангалов данного workspace (/rest/api/channels/workspace/id)
-        *  проверять, соответствуют ли сообщения данным каналам
-        *  ЛИБО
-        *  получать id канала из сообщения -> получать channel -> сверять workspace.id канала с текущим id*/
-        user_service.getLoggedUser()
-        .then((user) => {
-            message_service.getStarredMessagesForUser(user.id)
-                .then((messages) => {
-                    if (messages.length !== 0) {
-                        messages.forEach((message, i) => {
-                            const time = message.dateCreate.split(' ')[1];
-                            target_element.append(add_msg_to_right_panel(message));
+        channel_service.getChannelsByWorkspaceId(currentWorkspaceId).then(channels => {
+            // получаем массив каналов для выбранного workspace
+            let curWorkspaceChannels = [];
+            channels.forEach((channel, i) => {
+                curWorkspaceChannels.push(channel.id)
+            });
+            user_service.getLoggedUser()
+                .then((user) => {
+                    message_service.getStarredMessagesForUser(user.id)
+                        .then((messages) => {
+                            if (messages.length !== 0) {
+                                messages.forEach((message, i) => {
+                                    //в списке избранных сообщений показываем только те,
+                                    // которые соответствуют выбранному workspace
+                                    if (curWorkspaceChannels.find(id => id === message.channelId)) {
+                                        const time = message.dateCreate.split(' ')[1];
+                                        target_element.append(add_msg_to_right_panel(message));
+                                    }
+                                });
+                            } else {
+                                target_element.append(add_empty_content_to_right_panel());
+                            }
                         });
-                    } else {
-                        target_element.append(add_empty_content_to_right_panel());
-                    }
                 });
         });
-});
+    })
 };
 
 // toggle right panel
@@ -184,9 +197,10 @@ const add_empty_content_to_right_panel = () => {
 };
 
 const add_msg_starred_attr = (message) => {
-    $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
-    $(`#message_${message.id}_user_${message.userId}_content`).prepend(
-        `<span id="message_${message.id}_user_${message.userId}_starred" class="">`
+    const {id, userId} = message;
+    $(`#msg-icons-menu__starred_msg_${id}`).text(star_button_filled);
+    $(`#message_${id}_user_${userId}_content`).prepend(
+        `<span id="message_${id}_user_${userId}_starred" class="">`
         + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
         + `</span>`);
 };
