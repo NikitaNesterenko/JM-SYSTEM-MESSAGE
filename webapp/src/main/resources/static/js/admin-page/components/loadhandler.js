@@ -66,21 +66,22 @@ export class Loadhandler {
                     filteredUsers => {
                         userListContent.innerHTML = "";
                         for (let i = 0; i < filteredUsers.length; i++) {
+                            const {id, login, name, lastName, email} = filteredUsers[i];
                             userListContent.innerHTML += `<div class="row-group-content-row">
                                 <div class="row-group-column-content login">
-                                    <span class="login">${filteredUsers[i].login}</span>
+                                    <span class="login">${login}</span>
                                 </div>
                                 <div class="row-group-column-content name">
-                                    <span class="name">${filteredUsers[i].name}</span>
+                                    <span class="name">${name}</span>
                                 </div>
                                 <div class="row-group-column-content lastName">
-                                    <span class="lastName">${filteredUsers[i].lastName}</span>
+                                    <span class="lastName">${lastName}</span>
                                 </div>
                                 <div class="row-group-column-content email">
-                                    <span class="email">${filteredUsers[i].email}</span>
+                                    <span class="email">${email}</span>
                                 </div>
                                 <div class="row-group-column-content">
-                                    <button data-user_id="${filteredUsers[i].id}" class="btn-user-info">---</button>
+                                    <button data-user_id="${id}" class="btn-user-info">---</button>
                                 </div>
                             </div>`;
                         }
