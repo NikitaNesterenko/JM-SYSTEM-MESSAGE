@@ -113,7 +113,7 @@ export class ChannelView {
 
     selectChannel(id) {
         this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
-        $('.p-channel_sidebar__name_button').each((idx, btn) => {
+        document.querySelectorAll('.p-channel_sidebar__name_button').forEach(btn => {
             let bg_color = {color: "rgb(188,171,188)", background: "none"};
 
             if ($(btn).filter(`[id=channel_button_${id}]`).length) {

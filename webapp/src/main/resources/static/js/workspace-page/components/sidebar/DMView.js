@@ -27,7 +27,8 @@ export class DMView {
 
     onClickDirectMessageChat() {
         $(document).on('click', '.p-channel_sidebar__name_button[data-user_id]', async (event) => {
-            $(".p-channel_sidebar__name_button").each(function (idx, elem) {
+
+            $(".p-channel_sidebar__name_button").get().forEach(elem => {
                 $(elem).css({color: "rgb(188,171,188)", background: "none"});
             });
             $(event.currentTarget).css({color: "white", background: "royalblue"});

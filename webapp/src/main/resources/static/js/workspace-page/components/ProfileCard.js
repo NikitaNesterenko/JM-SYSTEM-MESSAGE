@@ -168,7 +168,7 @@ export class ProfileCard {
     }
 
     reload() {
-        $('.p-channel_sidebar__name_button').each((idx, item) => {
+        $('.p-channel_sidebar__name_button').get().forEach(item => {
             if ($(item).css("color") === "rgb(255, 255, 255)") {
                 $(item).click();
             }

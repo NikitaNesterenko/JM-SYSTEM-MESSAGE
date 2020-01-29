@@ -32,13 +32,6 @@ const showAllUsers = (text) => {
                         `<option id="atUserSelectOption" class="atUserSelectOption" value="${id}">${name}</option>`
                     );
             });
-
-/*            $.each(response, (i, item) => {
-                $('#associatedUserListSelect')
-                    .append(
-                        `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
-                    );
-            });*/
         });
     }else{
         allUsers.then(response => {           //После того как Юзеры будут получены, начнется выполнение этого блока
@@ -51,16 +44,6 @@ const showAllUsers = (text) => {
                         );
                 }
             });
-
-
-/*            $.each(response, (i, item) => {
-                if ((item.name).includes(text)) {
-                    $('#associatedUserListSelect')
-                        .append(
-                            `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
-                        );
-                }
-            });*/
         });
     }
 };
@@ -68,7 +51,7 @@ const showAllUsers = (text) => {
 $('#associatedUserListSelect').on('change', function () {
     let str = "";
     // For multiple choice
-    $("select option:selected").each(function () {
+    $("select option:selected").get().forEach(() => {
         users.push($(this).val());
         let text = $(this).text();
         if (text !== ' --') {

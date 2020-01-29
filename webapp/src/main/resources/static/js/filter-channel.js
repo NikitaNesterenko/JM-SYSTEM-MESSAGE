@@ -4,7 +4,7 @@ export function findEl(el, array, value) {
     el.empty();//очищаем список совпадений
     for (let i = 0; i < array.length; i++) {
         if (array[i].match('^' + value)) {//проверяем каждый елемент на совпадение побуквенно
-            el.children('li').each(function () {//проверяем есть ли совпавшие елементы среди выведенных
+            el.children('li').get().forEach(() => {//проверяем есть ли совпавшие елементы среди выведенных
                 if (array[i] === $(this).text()) {
                     coincidence = true;//если есть совпадения то true
                 }

@@ -68,8 +68,8 @@ export class MenuSettingsModal {
     }
 
     removeChannelFromSidebarList(channel_id) {
-        const channel_btn = $('.p-channel_sidebar__channel');
-        channel_btn.each(function (idx, item) {
+        const channel_btn = document.querySelectorAll('.p-channel_sidebar__channel');
+        channel_btn.forEach(item => {
             if ($(item).find(`#channel_button_${channel_id}`).length > 0) {
                 $(item).remove();
             }

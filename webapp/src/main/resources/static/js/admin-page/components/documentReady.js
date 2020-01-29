@@ -19,6 +19,9 @@ export class DocumentReady{
             $('.admin-page').show();
         });
 
-        this.user_service.getLoggedUser().then((user) => { $('#loggedUserName').text(`${user.name}  ${user.lastName}`.toUpperCase())});
+
+        this.user_service.getLoggedUser().then((user) => {
+            const {name, lastName} = user;
+            $('#loggedUserName').text(`${name}  ${lastName}`.toUpperCase())});
     }
 }

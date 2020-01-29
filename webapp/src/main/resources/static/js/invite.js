@@ -64,20 +64,22 @@ window.addEventListener('load', function () {
 
     $('#inviteSend').on('click', function () {
 
-        let content_invites = $('[class ^= "content-form-"]');
-        let emails = $('[id ^= "inviteEmail_"]');
+        let content_invites = document.querySelectorAll('[class ^= "content-form-"]');
+        //let emails = $('[id ^= "inviteEmail_"]');
+        let emails = document.querySelectorAll('[id ^= "inviteEmail_"]');
         let emailArrays = document.getElementById('inviteEmails_').value.replace('(',' ').replace(')',' ').replace(',','').split(' ').filter(str=>str.length>1);
-        let names = $('[id ^= "inviteName_"]');
+        //let names = $('[id ^= "inviteName_"]');
+        let names = document.querySelectorAll('[id ^= "inviteName_"]');
         let invites = [];
 
-        $.each(emailArrays, (i = emailArrays.length) => {
+        emailArrays.forEach( (i = emailArrays.length) => {
             let pattern = new RegExp('[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+');
             if(pattern.test((emailArrays[i]))){
                 invites.push(new Invite(emailArrays[i]));
             }
         });
 
-        $.each(content_invites, (i, item) => {
+        content_invites.forEach((item, i) => {
             if (emails[i].value !== '') { invites.push(new Invite(emails[i].value, names[i].value));}
         });
 
