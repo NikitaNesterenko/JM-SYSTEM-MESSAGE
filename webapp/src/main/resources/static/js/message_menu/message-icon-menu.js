@@ -1,8 +1,10 @@
-import {MessageRestPaginationService, UserRestPaginationService} from "../rest/entities-rest-pagination.js";
+import {MessageRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService, ChannelRestPaginationService} from "../rest/entities-rest-pagination.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
+const workspace_service = new WorkspaceRestPaginationService();
+const channel_service = new ChannelRestPaginationService();
 const star_button_blank = '\u2606';
 const star_button_filled = '\u2605';
 
@@ -15,25 +17,39 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
         let principalStarredMessageIds = user["starredMessageIds"];
 
         if (principalStarredMessageIds.find(id => id === message.id)) {
-            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message), 1);
+            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message.id), 1);
             user["starredMessageIds"] = principalStarredMessageIds;
             user_service.update(user).then(() => {
                 $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
                 $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
+                reopen_right_menu();
             });
         } else {
             principalStarredMessageIds.push(message.id);
             user["starredMessageIds"] = principalStarredMessageIds;
             user_service.update(user).then(() => {
                 add_msg_starred_attr(message);
+                reopen_right_menu();
             });
         }
-
-        if (is_open) {
-            toggle_right_menu();
-            toggle_right_menu();
-        }
     });
+});
+
+//переход к сообщению из списка избранного
+$(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
+    let msg_id = $(e.target).data('msg_id');
+    message_service.getById(msg_id).then(message => {
+        const {channelId, userId, id} = message;
+        //смена номера активного канала
+        window.pressChannelButton(channelId);
+        //сделал задержку перед скроллом к конкретному сообщению.
+        // Надо попробовать отловить событие завершения отрисовки всех сообщений в канале и скролл к концу
+        setTimeout(function() {
+            let myElement = document.getElementById(`message_${id}_user_${userId}_content`);
+            let topPos = myElement.offsetTop;
+            document.getElementById("all-message-wrapper").scrollTop = topPos;
+        }, 500)
+        });
 });
 
 const getUserAndMessage = async (id) => {
@@ -62,20 +78,34 @@ let populateRightPane = (user) => {
     $('.p-flexpane__title_container').text('Starred Items');
     const target_element = $('.p-flexpane__inside_body-scrollbar__child');
     target_element.empty();
-    user_service.getLoggedUser()
-        .then((user) => {
-            message_service.getStarredMessagesForUser(user.id)
-                .then((messages) => {
-                    if (messages.length !== 0) {
-                        messages.forEach((message, i) => {
-                            const time = message.dateCreate.split(' ')[1];
-                            target_element.append(add_msg_to_right_panel(time, message));
+    workspace_service.getChoosedWorkspace().then(workspace => {
+        let currentWorkspaceId = workspace.id; //получаем id выбранного workspace
+        channel_service.getChannelsByWorkspaceId(currentWorkspaceId).then(channels => {
+            // получаем массив каналов для выбранного workspace
+            let curWorkspaceChannels = [];
+            channels.forEach((channel, i) => {
+                curWorkspaceChannels.push(channel.id)
+            });
+            user_service.getLoggedUser()
+                .then((user) => {
+                    message_service.getStarredMessagesForUser(user.id)
+                        .then((messages) => {
+                            if (messages.length !== 0) {
+                                messages.forEach((message, i) => {
+                                    //в списке избранных сообщений показываем только те,
+                                    // которые соответствуют выбранному workspace
+                                    if (curWorkspaceChannels.find(id => id === message.channelId)) {
+                                        const time = message.dateCreate.split(' ')[1];
+                                        target_element.append(add_msg_to_right_panel(message));
+                                    }
+                                });
+                            } else {
+                                target_element.append(add_empty_content_to_right_panel());
+                            }
                         });
-                    } else {
-                        target_element.append(add_empty_content_to_right_panel());
-                    }
                 });
         });
+    })
 };
 
 // toggle right panel
@@ -93,6 +123,13 @@ let toggle_right_menu = () => {
     }
 };
 
+let reopen_right_menu = () => {
+    if (is_open) {
+        toggle_right_menu();
+        toggle_right_menu();
+    }
+};
+
 $('.p-classic_nav__right__star__button').on('click', () => {
     toggle_right_menu();
 });
@@ -104,38 +141,37 @@ $(document).on('click', '#to-starred-messages-link', () => {
 // right panel msg menu
 const back_to_msg = '&#8678;';
 const starred_message_menu = (message) => {
+    const {id} = message;
     return `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button type="button" class="btn btn-light">${back_to_msg}</button>` + // back
-        `<button id="msg-icons-menu__starred_msg_${message.id}" data-msg_id="${message.id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
+        `<button id="msg-icons-menu__back_to_msg_${id}" data-msg_id="${id}" type="button" class="btn btn-light">${back_to_msg}</button>` + // back
+        `<button id="msg-icons-menu__starred_msg_${id}" data-msg_id="${id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
         `</div>` +
         `</div>`;
 };
 
-const add_msg_to_right_panel = (time, message) => {
+const add_msg_to_right_panel = (message) => {
+    const {id, userId, dateCreate, userName, content} = message;
     return `<div class="c-virtual_list__item right-panel-msg-menu">
-                                        <div class="c-message--light" id="message_${message.id}_user_${message.userId}_content">
+                                        <div class="c-message--light" id="message_${id}_user_${userId}_content">
                                                         <div class="c-message__gutter--feature_sonic_inputs">
                                                             <button class="c-message__avatar__button">
                                                                 <img class="c-avatar__image">
                                                             </button>
                                                         </div>
                                                         <div class="c-message__content--feature_sonic_inputs">
-                                                            <div class="c-message__content_header" id="message_${message.id}_user_${message.userId}_content_header">
+                                                            <div class="c-message__content_header" id="message_${id}_user_${userId}_content_header">
                                                                 <span class="c-message__sender">
-                                                                    <a href="#modal_1" class="message__sender" id="user_${message.userId}" data-user_id="${message.userId}" data-toggle="modal">${message.userName}</a>
+                                                                    <a href="#modal_1" class="message__sender" id="user_${userId}" data-user_id="${userId}" data-toggle="modal">${userName}</a>
                                                                 </span>
-                                                                <a class="c-timestamp--static">
+                                                                <a class="c-timestamp--static">                                                                    
                                                                     <span class="c-timestamp__label">
-                                                                        ${time}
-                                                                    </span>
-                                                                    <span class="c-timestamp__label">
-                                                                        ${message.dateCreate}
+                                                                        ${dateCreate}
                                                                     </span>                                                                     
                                                                 </a>
                                                             </div>
                                                             <span class="c-message__body">
-                                                                ${message.content}
+                                                                ${content}
                                                             </span>
                                                         </div>
                                                         ${starred_message_menu(message)}
@@ -161,9 +197,10 @@ const add_empty_content_to_right_panel = () => {
 };
 
 const add_msg_starred_attr = (message) => {
-    $(`#msg-icons-menu__starred_msg_${message.id}`).text(star_button_filled);
-    $(`#message_${message.id}_user_${message.userId}_content`).prepend(
-        `<span id="message_${message.id}_user_${message.userId}_starred" class="">`
+    const {id, userId} = message;
+    $(`#msg-icons-menu__starred_msg_${id}`).text(star_button_filled);
+    $(`#message_${id}_user_${userId}_content`).prepend(
+        `<span id="message_${id}_user_${userId}_starred" class="">`
         + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
         + `</span>`);
 };

@@ -47,6 +47,9 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channelDTO.setOwnerId(channel.getUser().getId());
         channelDTO.setIsPrivate(channel.getIsPrivate());
         channelDTO.setTopic(channel.getTopic());
+        channelDTO.setCreatedDate(channel.getCreatedDate());
+
+        channelDTO.setIsArchived(channel.getArchived());
 
         return channelDTO;
     }
