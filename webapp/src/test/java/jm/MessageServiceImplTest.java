@@ -98,7 +98,7 @@ class MessageServiceImplTest {
         assertEquals(messageService.getMessageById(1L), null);
     }
 
-
+    //
     @Test
     public void getMessagesByChannelIdForPeriod_In_List() {
         when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any())).thenReturn(messages);
