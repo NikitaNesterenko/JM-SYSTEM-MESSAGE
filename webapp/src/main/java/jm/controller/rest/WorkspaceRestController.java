@@ -3,11 +3,11 @@ package jm.controller.rest;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
-import jm.dto.WorkspaceDTO;
 import jm.model.User;
 import jm.model.Workspace;
 import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -80,13 +82,12 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/choosed")
-    public ResponseEntity<WorkspaceDTO> getChoosedWorkspace(HttpServletRequest request) {
-       Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
-       if(workspace==null){
-           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Workspace> getChoosedWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
+       Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+       if(workspace==null) {
+           return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
        }
-       WorkspaceDTO workspaceDTO=new WorkspaceDTO(workspace);
-       return new ResponseEntity<>(workspaceDTO, HttpStatus.OK);
+        return new ResponseEntity<>(workspace, HttpStatus.OK);
     }
 
     @GetMapping("/choosed/{name}")

@@ -41,10 +41,10 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping(value = "/workspace")
-    public ModelAndView workspacePage() { return new ModelAndView("workspace-page"); }
+    /*@GetMapping(value = "/workspace")
+    public ModelAndView workspacePage() { return new ModelAndView("workspace-page"); }*/
 
-    @GetMapping(value = "/workspace_temp")
+    @GetMapping(value = "/workspace")
     public ModelAndView workspacePage(HttpServletRequest request) {
         if(request.getSession(false).getAttribute("WorkspaceID") != null) {
             return new ModelAndView("workspace-page");

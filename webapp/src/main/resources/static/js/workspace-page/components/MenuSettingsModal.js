@@ -59,8 +59,25 @@ export class MenuSettingsModal {
     onArchiveSubmit() {
         $('#archivingForm').submit((e) => {
             e.preventDefault();
-            this.channel_service.archivingChannel(this.channel_id).then(() => this.closeAllModals());
+            this.channel_service.archivingChannel(this.channel_id).then(
+                chn => {
+                    this.removeChannelFromSidebarList(chn.id);
+                    this.closeAllModals()
+                });
         });
+    }
+
+    removeChannelFromSidebarList(channel_id) {
+        const channel_btn = $('.p-channel_sidebar__channel');
+        channel_btn.each(function (idx, item) {
+            if ($(item).find(`#channel_button_${channel_id}`).length > 0) {
+                $(item).remove();
+            }
+        });
+        $('#id-channel_sidebar__channels__list .p-channel_sidebar__channel')
+            .first()
+            .find('button')
+            .click();
     }
 
     addChannelTitle(elementHeader) {
