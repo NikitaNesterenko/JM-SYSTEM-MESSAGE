@@ -80,6 +80,107 @@ $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__n
     refreshMemberList();
 });
 
+$("#id-app_sidebar__apps__list").on("click", function () {
+    $("#calendarMenu").remove();
+    showMenuForGoogleCalendarChannel();
+});
+
+function showMenuForGoogleCalendarChannel() {
+    $(".p-workspace__primary_view_contents").html(`<div class="nav_workspace_messages" id="calendarMenu">
+        <div class="c-tabs__tab_menu">
+        <button class="c-button-unstyled c-tabs__tab col-1" type="button" id="homeButton" onclick="homeAction();" tabindex="-1">
+        <span>Home</span>
+        </button>
+        <button class="c-button-unstyled c-tabs__tab col-1" type="button" id="messagesButton" onclick="messageAction()" tabindex="-1">
+        <span>Messages</span>
+        </button>
+        </div>
+        </div>` + $(".p-workspace__primary_view_contents").html());
+}
+
+window.homeAction = function homeAction() {
+    $(".p-workspace__footer").attr("hidden", "hidden");
+    showCalendarWorkspace();
+    $('#datepicker').datepicker({
+        dateFormat: "dd.mm.yy",
+        onSelect: function(dateText) {
+            getCalendarEvents(dateText);
+        }
+    });
+}
+
+window.messageAction = function messageAction() {
+    alert(3);
+    $(".p-workspace__primary_view_bodyMessage").html(`<div>
+         <span id="dayInfo">Message</span>
+     </div>`);
+}
+
+function showCalendarWorkspace() {
+    $(".p-workspace__primary_view_body").html(`<div class="ml-2 mr-2">
+        <div>
+            <span id="dayInfo">Today</span>
+            <button id="settingsButton" onclick="showCalendarSettings()">Setting</button>
+        </div>
+        <div>
+            <button id="todayButton" onclick="showTodayCalendar()">Today</button>
+            <button id="tomorrowButton" onclick="showTomorrowCalendar()">Tomorrow</button>
+            <div id="datepicker"></div>
+        </div>
+        <div id="id-events_div">
+            <span id="infoLabel">Your schedule for today is empty</span>
+        </div>
+    </div>`);
+}
+
+window.showCalendarSettings = function showCalendarSettings() {
+    alert("TO DO");
+};
+
+window.showTodayCalendar = function showTodayCalendar() {
+    let today = new Date();
+    //today.getDate() + "/" + today.getMonth() + 1 + "/" + today.getFullYear()
+    getCalendarEvents(today.toLocaleDateString('ru-RU'));
+};
+
+window.showTomorrowCalendar = function showTomorrowCalendar() {
+    let tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate()+1);
+    getCalendarEvents(tomorrow.toLocaleDateString('ru-RU'));
+};
+
+window.getCalendarEvents = function getCalendarEvents(date) {
+    // alert(date);
+    $.ajax({
+        url: 'application/google/calendar/showDateEvent/' + date,
+        async: false,
+        type: 'get',
+        success: function (response) {
+            showEvents(response);
+        }
+    });
+};
+
+window.showEvents = function showEvents(response) {
+    console.log(response);
+    if (response.length > 0) {
+        $('#id-events_div').html('');
+        $.each(response, (i, item) => {
+            let date = new Date(item.start.dateTime.value)
+            $('#id-events_div')
+                .append(`<div class="">
+                               <div>${date.toLocaleString('ru-RU')}</div>
+                                <div>${item.summary}</div>
+                                    <div>${item.description}</div>
+                                  </div>`
+                );
+        });
+    } else {
+        $('#id-events_div').html(`<span id="infoLabel">Your schedule for this day is empty</span>`);
+
+    }
+};
+
 const showAllChannels = () => {
     let workspace_id = workspace_service.getChoosedWorkspace();
     let user_promise = user_service.getLoggedUser();
@@ -89,14 +190,25 @@ const showAllChannels = () => {
             .then((respons) => {
                 $.each(respons, (i, item) => {
                     if ((item.isPrivate && userId === item.ownerId) || !item.isPrivate) {
-                        $('#id-channel_sidebar__channels__list')
-                            .append(`<div class="p-channel_sidebar__channel">
+                        if (!item.isApp) {
+                            $('#id-channel_sidebar__channels__list')
+                                .append(`<div class="p-channel_sidebar__channel">
                                     <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
                                         <i class="p-channel_sidebar__channel_icon_prefix">#</i>
                                         <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
                                     </button>
                                   </div>`
-                            );
+                                );
+                        } else {
+                            $('#id-app_sidebar__apps__list')
+                                .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${item.id}" value="${item.id}">
+                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${item.id}">${item.name}</span>
+                                    </button>
+                                  </div>`
+                                );
+                        }
                     }
                 });
 

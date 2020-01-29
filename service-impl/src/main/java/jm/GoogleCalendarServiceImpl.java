@@ -16,10 +16,12 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.Calendar.Events;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
+import jm.api.dao.GoogleCalendarDAO;
 import jm.model.Channel;
 import jm.model.Message;
 import jm.model.User;
 import jm.model.Workspace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +35,16 @@ import java.util.List;
 
 @Service
 public class GoogleCalendarServiceImpl implements GoogleCalendarService {
+    @Autowired
+    private GoogleCalendarDAO calendarDAO;
+
     private ChannelService channelService;
     private UserService userService;
     private WorkspaceService workspaceService;
     private MessageService messageService;
-    private String nameChannelStartWth = "Google_calendar_";
-    private String nameGoogleBot = "G-bot";
-    private String accessTokenSuffix = "_AccessToken";
-    private Path fileStorageLocation;
     private String pathApplicationFiles;
+    private String nameChannelStartWth = "Google Calendar ";
+    private String nameGoogleBot = "G-bot";
     private String redirectURI;
     private String applicationName;
     private int updatePeriod;
@@ -81,7 +84,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         createGoogleCalendarChannel(principalName);
 
         LocalDateTime now = LocalDateTime.now();
-        DateTime dateStart = DateTime.parseRfc3339(now.toString());
+        DateTime dateStart = DateTime.parseRfc3339(now.toString()); //TODO: use date without +3 hours
         DateTime dateEnd = DateTime.parseRfc3339(now.plusDays(updatePeriod).toString());
 
         Calendar calendarByCallbackCode = getCalendarByCallbackCode(code, principalName);
@@ -134,6 +137,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
             channel.setIsPrivate(true);
             channel.setCreatedDate(createDate);
             channel.setWorkspace(workspacesByUser.get(0));
+            channel.setIsApp(true);
 
             channelService.createChannel(channel);
         }
@@ -174,79 +178,72 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     public void getGoogleCalendarEvent(Calendar clientCalendar, DateTime dateStart, DateTime dateEnd,
                                        String principalName) {
 
-        if (clientCalendar!=null && dateStart!=null && dateEnd!=null && principalName!=null) {
+        List<Event> items = getEvents(clientCalendar, dateStart, dateEnd);
+
+        if (principalName != null) {
+            User userByLogin = userService.getUserByLogin(principalName);
+            String desiredNameGoogleChannel = nameChannelStartWth + userByLogin.getId();
+            Channel googleChannel = channelService.getChannelByName(desiredNameGoogleChannel);
+            User googleUser = userService.getUserByLogin(nameGoogleBot);
+
+            for (Event event : items) {
+
+                if (googleChannel != null) {
+                    //не нашел нормальной конвертации event Date в LocalDateTime
+                    String substringToParseLocalDateTime = event.getStart().toString().substring(13, 32);
+                    LocalDateTime start = LocalDateTime.parse(substringToParseLocalDateTime);
+
+                    String eventDescription = event.getDescription() == null ? "" : " / " + event.getDescription();
+                    String contentEvent = start + " / " + event.getSummary() + eventDescription;
+
+
+                    if (contentEvent.length() > 255) {
+                        contentEvent = contentEvent.substring(0, 254);
+                    }
+                    Message message = new Message(googleChannel.getId(),
+                            googleUser,
+                            contentEvent,
+                            start.minusHours(warningBeforeEvent));
+                    messageService.createMessage(message);
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<Event> getEvents(String principalName, DateTime dataStart, DateTime dataEnd) {
+        Calendar calendarByAccessToken = getCalendarByAccessToken(principalName);
+        return getEvents(calendarByAccessToken, dataStart, dataEnd);
+    }
+
+    private List<Event> getEvents(Calendar clientCalendar, DateTime dateStart, DateTime dateEnd) {
+        List<Event> items = null;
+
+        if (clientCalendar != null && dateStart != null && dateEnd != null) {
             com.google.api.services.calendar.model.Events eventList;
             Events events = clientCalendar.events();
             try {
                 eventList = events.list("primary").setTimeMin(dateStart).setTimeMax(dateEnd).execute();
-                List<Event> items = eventList.getItems();
-
-                User userByLogin = userService.getUserByLogin(principalName);
-                String desiredNameGoogleChannel = nameChannelStartWth + userByLogin.getId();
-                Channel googleChannel = channelService.getChannelByName(desiredNameGoogleChannel);
-                User googleUser = userService.getUserByLogin(nameGoogleBot);
-
-                for (Event event : items) {
-
-                    if (googleChannel != null) {
-                        //не нашел нормальной конвертации event Date в LocalDateTime
-                        String substringToParseLocalDateTime = event.getStart().toString().substring(13, 32);
-                        LocalDateTime start = LocalDateTime.parse(substringToParseLocalDateTime);
-
-
-                        String contentEvent = start + " / " + event.getSummary() + " / " + event.getDescription();
-
-
-                        if (contentEvent.length() > 255) {
-                            contentEvent = contentEvent.substring(0, 254);
-                        }
-                        Message message = new Message(googleChannel.getId(),
-                                googleUser,
-                                contentEvent,
-                                start.minusHours(warningBeforeEvent));
-                        messageService.createMessage(message);
-                    }
-                }
+                items = eventList.getItems();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        return items;
     }
 
     @Override
     public void saveGoogleCalendarClientAccessToken(String accessToken, String principalName) {
 
-        if (!accessToken.isEmpty()&&!principalName.isEmpty()) {
-            fileStorageLocation = Paths.get(pathApplicationFiles).toAbsolutePath().normalize();
-
-            Path path = fileStorageLocation.resolve(nameChannelStartWth + principalName + this.accessTokenSuffix);
-            try (FileOutputStream fileOutputStream = new FileOutputStream(path.toString());
-                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-
-                objectOutputStream.writeObject(accessToken);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (!accessToken.isEmpty() && !principalName.isEmpty()) {
+            calendarDAO.saveToken(principalName, accessToken);
         }
     }
 
     @Override
     public String loadGoogleCalendarClientAccessToken(String principalName) {
-
-        fileStorageLocation = Paths.get(pathApplicationFiles).toAbsolutePath().normalize();
-        Path path = fileStorageLocation.resolve(nameChannelStartWth + principalName + accessTokenSuffix);
-        String accessToken = null;
-
-        try (FileInputStream fileInputStream = new FileInputStream(path.toString());
-             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-
-            accessToken = (String) objectInputStream.readObject();
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return accessToken;
+        return calendarDAO.loadToken(principalName);
     }
 
     @Override

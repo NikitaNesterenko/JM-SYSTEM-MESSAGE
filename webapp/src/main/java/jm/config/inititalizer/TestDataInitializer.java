@@ -185,6 +185,7 @@ public class TestDataInitializer {
         channelGeneral.setIsPrivate(false);
         channelGeneral.setCreatedDate(LocalDateTime.now());
         channelGeneral.setWorkspace(workspaceList.get(0));
+        channelGeneral.setIsApp(false);
 
         channelDAO.persist(channelGeneral);
         this.channels.add(channelGeneral);
@@ -196,6 +197,7 @@ public class TestDataInitializer {
         channelRandom.setIsPrivate(false);
         channelRandom.setCreatedDate(LocalDateTime.now());
         channelRandom.setWorkspace(workspaceList.get(0));
+        channelRandom.setIsApp(false);
 
         channelDAO.persist(channelRandom);
         this.channels.add(channelRandom);
@@ -207,6 +209,7 @@ public class TestDataInitializer {
         channel3.setIsPrivate(true);
         channel3.setCreatedDate(LocalDateTime.now());
         channel3.setWorkspace(workspaceList.get(1));
+        channel3.setIsApp(false);
 
         channelDAO.persist(channel3);
         this.channels.add(channel3);

@@ -47,6 +47,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channelDTO.setOwnerId(channel.getUser().getId());
         channelDTO.setIsPrivate(channel.getIsPrivate());
         channelDTO.setTopic(channel.getTopic());
+        channelDTO.setIsApp(channel.getIsApp());
 
         return channelDTO;
     }
@@ -105,6 +106,8 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         if (channelDTO.getTopic()!=null) {
             channel.setTopic(channelDTO.getTopic());
         }
+
+        channel.setIsApp(channelDTO.getIsApp());
 
         return channel;
     }
