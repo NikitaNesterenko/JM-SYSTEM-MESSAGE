@@ -7,6 +7,7 @@ import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
+import org.mockito.internal.util.collections.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +70,7 @@ public class ChannelRestController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-        Channel channel;
-        channel = channelService.getChannelByName(channelDTO.getName());
+        Channel channel = channelService.getChannelByName(channelDTO.getName());
         if (channel == null) {
             channel = channelDTOService.toEntity(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
@@ -78,15 +78,13 @@ public class ChannelRestController {
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
-            Set<User> users = new HashSet<>();
-            users.add(owner);
-            channel.setUsers(users);
+            channel.setUsers(Sets.newSet(owner));
             try {
                 channelService.createChannel(channel);
                 logger.info("Cозданный channel: {}", channel);
             } catch (IllegalArgumentException | EntityNotFoundException e) {
                 logger.warn("Не удалось создать channel");
-                ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().build();
             }
         } else {
             Set<User> users = channel.getUsers();
