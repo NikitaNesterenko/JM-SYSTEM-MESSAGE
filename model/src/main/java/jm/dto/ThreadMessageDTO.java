@@ -32,6 +32,8 @@ public class ThreadMessageDTO {
 
     private String userName;
 
+    private String userAvatarUrl;
+
     public ThreadMessageDTO(ThreadChannelMessage message) {
         this.id = message.getId();
         this.content = message.getContent();

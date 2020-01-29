@@ -1,13 +1,13 @@
-import {ChannelView} from "/js/workspace-page/components/sidebar/ChannelView.js";
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 
 export class StompClient {
 
-    constructor(channel_message_view, thread_view, direct_message_view) {
+    constructor(channel_message_view, thread_view, direct_message_view, channel_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
         this.channel_message_view = channel_message_view;
         this.thread_view = thread_view;
         this.dm_view = direct_message_view;
+        this.channelview = channel_view;
 
         window.sendName = (message) => this.sendName(message);
         window.sendChannel = (channel) => this.sendChannel(channel);
@@ -46,15 +46,12 @@ export class StompClient {
                 this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
             }
             notifyParseMessage(result);
-            setOnClickEdit(true);
         });
     }
 
     subscribeChannel() {
-        this.channelview = new ChannelView();
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
-            console.warn(chn);
             this.channelview.addChannelIntoSidebarChannelList(chn);
         });
     }
@@ -98,6 +95,7 @@ export class StompClient {
             'id': message.id,
             'userId': message.userId,
             'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
             'content': message.content,
             'isDeleted': message.isDeleted,
             'dateCreate': message.dateCreate,
@@ -114,6 +112,7 @@ export class StompClient {
             'dateCreate': message.dateCreate,
             'userId': message.userId,
             'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
             'filename': message.filename,
             'sharedMessageId': message.sharedMessageId,
             'conversationId': message.conversationId
@@ -132,6 +131,7 @@ export class StompClient {
             'dateCreate': message.dateCreate,
             'userId': message.userId,
             'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
             'botId': message.botId,
             'botNickName': message.botNickName,
             'filename': message.filename,

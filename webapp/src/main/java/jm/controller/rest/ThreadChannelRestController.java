@@ -70,7 +70,7 @@ public class ThreadChannelRestController {
         System.out.println("CREATE!!! - " + threadMessageDTO);
         ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
-        return new ResponseEntity<>(threadMessageDTO, HttpStatus.CREATED);
+        return new ResponseEntity<>(threadMessageDtoService.toDto(threadChannelMessage), HttpStatus.CREATED);
     }
 
 //    @GetMapping("/messages/{id}")

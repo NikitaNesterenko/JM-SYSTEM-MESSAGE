@@ -63,7 +63,11 @@ export class MessageView {
     }
 
     createMessage(message) {
-        this.dialog.setUser(message.userId, message.userName)
+        const user = message.userId === null ? {id: message.botId, name: message.botNickName} : {
+            id: message.userId,
+            name: message.userName
+        };
+        this.dialog.setUser(user.id, user.name)
             .setDateHeader(message.dateCreate)
             .container(message)
             .setAvatar()
@@ -88,7 +92,8 @@ export class MessageView {
         )
     }
 
-    modify() {}
+    modify() {
+    }
 
     updateMessage(message) {
         $(`#message_id-${message.id}`)

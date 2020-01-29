@@ -48,6 +48,7 @@ public class MessageDTO {
     private String userName;
     private String botNickName;
     private String channelName;
+    private String userAvatarUrl;
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields

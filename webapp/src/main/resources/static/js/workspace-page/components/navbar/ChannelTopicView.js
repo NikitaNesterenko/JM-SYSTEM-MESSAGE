@@ -1,5 +1,4 @@
-import {GetChannelTopic} from "/js/ajax/channelTopicRestController/getChannelTopic.js";
-import {UpdateChannelTopic} from "/js/ajax/channelTopicRestController/updateChannelTopic.js";
+import {ChannelTopicRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class ChannelTopicView {
     channel_topic;
@@ -7,6 +6,7 @@ export class ChannelTopicView {
 
     constructor() {
         this.channel_id = sessionStorage.getItem("channelName");
+        this.channel_topic_service = new ChannelTopicRestPaginationService();
     }
 
     buildEvents() {
@@ -23,34 +23,38 @@ export class ChannelTopicView {
     }
 
     onChannelTopicMouseOver() {
-        $("#topic_string_block").on("mouseover mouseout", function () {
+        $(document).on("mouseover mouseout", "#topic_string_block", function () {
             $("#topic_button").toggle();
         });
     }
 
     onClickChannelEdit() {
-        $('#topic_button').on('click', () => {
+        $(document).on('click', '#topic_button', () => {
             this.updateTopic();
         });
     }
 
     setTopic() {
         if (this.channel_id != 0 && this.channel_id != null) {
-            const chn_topic = new GetChannelTopic(this.channel_id);
-            this.channel_topic = this.checkTopic(chn_topic.getChannelTopic());
-            $("#topic_string").text(this.channel_topic);
+            this.channel_topic_service.getChannelTopic(this.channel_id).then(chn_topic => {
+                if (chn_topic !== null && chn_topic !== undefined) {
+                    this.channel_topic = this.checkTopic(chn_topic);
+                    $("#topic_string").text(this.channel_topic);
+                }
+            });
         }
     }
 
     checkTopic(topic) {
-        return topic === "" || topic === null ? "Enter channel topic here." : topic.replace(/"/g, '');
+        return topic === "" || topic === "null" ? "Enter channel topic here." : topic.replace(/"/g, '');
     }
 
     updateTopic() {
         const newTopic = prompt("Please provide topic for the channel:", this.channel_topic);
-        const chn_topic = new UpdateChannelTopic(this.channel_id, newTopic);
-        chn_topic.updateChannelTopic();
-        this.channel_topic = newTopic;
-        $("#topic_string").text(newTopic);
+        if (newTopic != null) {
+            this.channel_topic_service.updateChannelTopic(this.channel_id, newTopic).then(chn_topic => {
+                $("#topic_string").text(this.checkTopic(chn_topic));
+            });
+        }
     }
 }

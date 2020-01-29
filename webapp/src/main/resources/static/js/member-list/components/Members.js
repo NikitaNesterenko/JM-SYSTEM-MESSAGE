@@ -1,12 +1,19 @@
-import {GetAllUsersInThisChannel} from "/js/ajax/userRestController/getAllUsersInThisChannel.js";
+import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class Members {
 
+    constructor() {
+        this.user_service = new UserRestPaginationService();
+    }
+
     showMemberList() {
-        const users = new GetAllUsersInThisChannel(sessionStorage.getItem("channelName"));
         const member_list = $('#memberListPlaceholder');
-        member_list.empty();
-        member_list.append(this.createMemberList(users.getAllUsersInThisChannel()));
+        this.user_service.getUsersByChannelId(sessionStorage.getItem("channelName")).then(
+            users => {
+                member_list.empty();
+                member_list.append(this.createMemberList(users));
+            }
+        );
     }
 
     createMemberList(users) {

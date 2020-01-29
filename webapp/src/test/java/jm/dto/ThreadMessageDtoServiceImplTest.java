@@ -35,7 +35,9 @@ public class ThreadMessageDtoServiceImplTest {
     MockitoAnnotations.initMocks(this);
 
     user1.setId(1L);
+    user1.setAvatarURL("image_1.jpg");
     user2.setId(2L);
+    user2.setAvatarURL("image_2.jpg");
 
     threadMessageDtoService = new ThreadMessageDtoServiceImpl();
     threadMessageDtoService.setUserDAO(userDAO);
@@ -65,6 +67,7 @@ public class ThreadMessageDtoServiceImplTest {
     assertEquals(20L, (long) threadMessageDTO.getId());
     assertEquals(2L, (long) threadMessageDTO.getUserId());
     assertEquals("Joshua", threadMessageDTO.getUserName());
+    assertEquals("image_2.jpg", threadMessageDTO.getUserAvatarUrl());
     assertEquals("Thread Message Content", threadMessageDTO.getContent());
     assertEquals(3L, (long) threadMessageDTO.getParentMessageId());
     assertEquals(localDateTime, threadMessageDTO.getDateCreate());

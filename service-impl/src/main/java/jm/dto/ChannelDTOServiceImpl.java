@@ -49,6 +49,8 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channelDTO.setTopic(channel.getTopic());
         channelDTO.setCreatedDate(channel.getCreatedDate());
 
+        channelDTO.setIsArchived(channel.getArchived());
+
         return channelDTO;
     }
 
