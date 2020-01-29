@@ -2,14 +2,18 @@ import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.
 
 export class WorkspaceSelectBox {
 
-    constructor() {
+    constructor()  {
         this.workspaceService = new WorkspaceRestPaginationService();
     }
 
     workspaceOptions() {
         this.workspaceService.getWorkspacesByLogged().then(
             workspaces => {
-                $.each(workspaces, (idx, wks) => { this.setOption(wks.name) });
+                workspaces.forEach(workspace => { this.setOption(workspace.name) });
+
+
+
+                //$.each(workspaces, (idx, wks) => { this.setOption(wks.name) });
             }
         );
         return this;

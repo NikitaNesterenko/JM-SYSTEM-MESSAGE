@@ -13,9 +13,12 @@ export class ChannelFilter {
     getAllChannels() {
         this.user_service.getAll().then(
             channels => {
-                $.each(channels, (i, item) => {
-                    this.channel_names.push(item.name);
+                channels.forEach(channel => {
+                    this.channel_names.push(channel.name);
                 })
+                /*$.each(channels, (i, item) => {
+                    this.channel_names.push(item.name);
+                })*/
             }
         )
     }

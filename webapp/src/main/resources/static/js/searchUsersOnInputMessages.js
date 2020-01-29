@@ -25,23 +25,42 @@ const showAllUsers = (text) => {
 
     if (!text) {
         allUsers.then(response => {           //После того как Юзеры будут получены, начнется выполнение этого блока
-            $.each(response, (i, item) => {
+            response.forEach(item => {
+                const {id, name} = item;
+                $('#associatedUserListSelect')
+                    .append(
+                        `<option id="atUserSelectOption" class="atUserSelectOption" value="${id}">${name}</option>`
+                    );
+            });
+
+/*            $.each(response, (i, item) => {
                 $('#associatedUserListSelect')
                     .append(
                         `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
                     );
-            });
+            });*/
         });
     }else{
         allUsers.then(response => {           //После того как Юзеры будут получены, начнется выполнение этого блока
-            $.each(response, (i, item) => {
+            response.forEach(item => {
+                const {id, name} = item
+                if ((item.name).includes(text)) {
+                    $('#associatedUserListSelect')
+                        .append(
+                            `<option id="atUserSelectOption" class="atUserSelectOption" value="${id}">${name}</option>`
+                        );
+                }
+            });
+
+
+/*            $.each(response, (i, item) => {
                 if ((item.name).includes(text)) {
                     $('#associatedUserListSelect')
                         .append(
                             `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
                         );
                 }
-            });
+            });*/
         });
     }
 };

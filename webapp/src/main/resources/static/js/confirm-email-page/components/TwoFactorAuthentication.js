@@ -9,7 +9,7 @@ export class TwoFactorAuthentication {
 
     setInputEvents() {
         let result = [];
-        this.root.each(function (idx) {
+        this.root.forEach(function (idx) {
             let $this = $(this);
             $this.data("maxlength", $this.prop("maxlength"));
             $this.data("index", idx);
@@ -22,6 +22,25 @@ export class TwoFactorAuthentication {
                 event.data.sendCode(result.join(""));
             }
         });
+
+
+
+
+
+
+/*        this.root.each(function (idx) {
+            let $this = $(this);
+            $this.data("maxlength", $this.prop("maxlength"));
+            $this.data("index", idx);
+            $this.removeAttr("maxlength");
+        }).bind("input", this, function (event) {
+            let $this = $(this);
+            event.data.spill($this, $this.val());
+            result[$this.data("index")] = $this.val();
+            if (event.data.checkIfEmpty() !== false && result.length === 6) {
+                event.data.sendCode(result.join(""));
+            }
+        });*/
     }
 
     spill(inputBox, val) {

@@ -66,14 +66,24 @@ export class ChannelView {
     }
 
     addChannels(channels) {
-        $.each(channels, (idx, chn) => {
+        channels.forEach(channel => {
+            if (!channel.isArchived && this.checkPrivacy(channel)) {
+                if (this.default_channel === null) {
+                    this.default_channel = channel;
+                }
+                this.addChannelIntoSidebarChannelList(channel);
+            }
+        });
+
+
+/*        $.each(channels, (idx, chn) => {
             if (!chn.isArchived && this.checkPrivacy(chn)) {
                 if (this.default_channel === null) {
                     this.default_channel = chn;
                 }
                 this.addChannelIntoSidebarChannelList(chn);
             }
-        });
+        });*/
     }
 
     addChannelIntoSidebarChannelList(channel) {

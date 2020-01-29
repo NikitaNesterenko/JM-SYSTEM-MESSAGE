@@ -7,13 +7,20 @@ export class MentionUser {
         this.user_service = new UserRestPaginationService();
     }
 
+
     showAllUser() {
         this.user_service.getAll().then(
             users => {
-                $.each(users, (idx, user) => {
+                users.forEach(user => {
+                    const {id, name} = user;
+                    $('#associatedUserListSelect')
+                        .append(`<option id="atUserSelectOption" class="atUserSelectOption" value="${id}">${name}</option>`);
+                })
+
+                /*$.each(users, (idx, user) => {
                     $('#associatedUserListSelect')
                         .append(`<option id="atUserSelectOption" class="atUserSelectOption" value="${user.id}">${user.name}</option>`);
-                });
+                });*/
             }
         );
     }
