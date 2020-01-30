@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestDataInitializer {
@@ -35,6 +32,8 @@ public class TestDataInitializer {
     private BotDAO botDAO;
     @Autowired
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
+    @Autowired
+    private SlashCommandDao slashCommandDao;
 
     @Autowired
     private ConversationService conversationService;
@@ -75,6 +74,8 @@ public class TestDataInitializer {
     private void dataInit() {
         createRoles();
         createUsers();
+        createSlashCommands();
+
         createWorkspaces();
         createBots();
         createChannels();
@@ -83,6 +84,20 @@ public class TestDataInitializer {
 
         createConversations();
         createDirectMessages();
+    }
+
+    private void createSlashCommands(){
+        SlashCommand command = new SlashCommand();
+        command.setName("topic");
+        command.setUrl("/rest/api/bot/slackbot/");
+        command.setDescription("test description");
+        command.setHints("test Hints");
+        Map<String, String> param = new HashMap<>();
+        param.put("workspaceId", "2");
+        param.put("botId", "1");
+        param.put("channelId", "4");
+        //command.setParameters(new HashMap<>());
+        slashCommandDao.persist(command);
     }
 
     private void createRoles() {
@@ -300,6 +315,7 @@ public class TestDataInitializer {
 
     private void createBots() {
         Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
+        bot.getCommands().add(slashCommandDao.getById(1L));
         this.bots.add(bot);
         botDAO.persist(bot);
     }

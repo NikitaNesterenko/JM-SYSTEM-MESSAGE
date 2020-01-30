@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -44,6 +45,12 @@ public class Bot {
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    //@JoinTable(name = "bots_slashCommands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slashCommand_id"))
+    //@JoinColumn(name = "command_id")
+    //@JoinTable(name = "slash_commands", inverseJoinColumns = @JoinColumn(name = "command_id"))
+    private Set<SlashCommand> commands = new HashSet<>();
+
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -54,6 +61,15 @@ public class Bot {
         this.name = name;
         this.nickName = nickName;
         this.workspace = workspace;
+        this.dateCreate = dateCreate;
+        this.commands = new HashSet<>();
+    }
+
+    public Bot(String name, String nickName, Workspace workspace, Set<SlashCommand> commands, LocalDateTime dateCreate) {
+        this.name = name;
+        this.nickName = nickName;
+        this.workspace = workspace;
+        this.commands = commands;
         this.dateCreate = dateCreate;
     }
 
