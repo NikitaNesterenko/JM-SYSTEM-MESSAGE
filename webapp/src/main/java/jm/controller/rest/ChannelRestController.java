@@ -7,6 +7,7 @@ import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
+import org.mockito.internal.util.collections.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/rest/api/channels")
@@ -41,7 +44,7 @@ public class ChannelRestController {
     }
 
     @Autowired
-    public void setChannelDTOService(ChannelDtoService channelDTOService) {
+    public void  setChannelDTOService(ChannelDtoService channelDTOService) {
         this.channelDTOService = channelDTOService;
     }
 
@@ -67,25 +70,29 @@ public class ChannelRestController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-        Channel channel = channelDTOService.toEntity(channelDTO);
-
-        if (principal != null) {
+        Channel channel = channelService.getChannelByName(channelDTO.getName());
+        if (channel == null) {
+            channel = channelDTOService.toEntity(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
             Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
-
+            channel.setUsers(Sets.newSet(owner));
             try {
                 channelService.createChannel(channel);
                 logger.info("Cозданный channel: {}", channel);
-                return new ResponseEntity<>(channelDTO, HttpStatus.OK);
-
             } catch (IllegalArgumentException | EntityNotFoundException e) {
-                logger.warn("Не удалось создать channel: {}", channel);
+                logger.warn("Не удалось создать channel");
+                return ResponseEntity.badRequest().build();
             }
+        } else {
+            Set<User> users = channel.getUsers();
+            users.add(userService.getUserByLogin(principal.getName()));
+            channelService.updateChannel(channel);
+            channelDTO = channelDTOService.toDto(channel);
         }
-        return ResponseEntity.badRequest().build();
+        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update")
