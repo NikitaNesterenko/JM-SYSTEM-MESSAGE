@@ -35,7 +35,7 @@ public class Message {
     @JoinColumn(name = "bot_id")
     private Bot bot;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     @EqualsAndHashCode.Include
     private String content;
 
@@ -47,6 +47,9 @@ public class Message {
 
     @Column(name = "filename")
     private String filename;
+
+    @Column(name = "voiceMessage", length = 100000)
+    private Byte[] voiceMessage;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -87,6 +90,7 @@ public class Message {
     // ===================================
     // Construct
     // ===================================
+
     public Message(Long channelId, User user, String content, LocalDateTime dateCreate) {
         this.channelId = channelId;
         this.user = user;

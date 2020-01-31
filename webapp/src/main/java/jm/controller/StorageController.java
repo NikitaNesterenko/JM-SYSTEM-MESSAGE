@@ -10,7 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 @RestController
 public class StorageController {
@@ -30,11 +34,16 @@ public class StorageController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestParam MultipartFile file) throws IOException {
+        System.out.println("UPLOAD CONTROLLER " + file);
+        System.out.println("UPLOAD CONTROLLER " + file.getSize());
+        System.out.println("UPLOAD CONTROLLER " + file.getResource());
+        System.out.println("UPLOAD CONTROLLER " + file.getOriginalFilename());
+        System.out.println("UPLOAD CONTROLLER " + file.getName());
+        System.out.println("UPLOAD CONTROLLER " + file.getContentType());
+        System.out.println("UPLOAD CONTROLLER " + Arrays.toString(file.getBytes()));
         String filename = storageService.store(file);
         return new ResponseEntity<>(filename, HttpStatus.OK);
     }
-
 }

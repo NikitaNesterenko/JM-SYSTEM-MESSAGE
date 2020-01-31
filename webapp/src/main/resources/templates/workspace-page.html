@@ -7,8 +7,12 @@
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
     <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+            crossorigin="anonymous"></script>
 
 
     <script th:src="@{/js/rest/entities-rest-pagination.js}" type="module"></script>
@@ -94,6 +98,22 @@
             integrity="sha256-z4cKT3yF+afIn8eFXJc+nRpGtwcmNEClvf+ikgsZcRo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
             integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
+
+
+    <!--  Tab Icon by DV -->
+    <link rel="shortcut icon"
+          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAzFBMVEVKFEyScpNLFU1cK16Mao1hMmOEX4WObZBWJFiQb5FZKFtNGE97VH1QHFJOGVBsQW5jNWV2TXdsQG1aKVxdLV9WI1dwRXGObI9pPGpTIFVPG1FfL2FSH1RVIld8VX1YJlpOGlBbK12RcZJMFk5iNGSBW4JmOGhgMGF3TniLaIx9Vn5lN2eFYYaNa45eLmB5UXtkN2ZUIVaGYodkNmVtQm9YJ1pRHVOHZImCXIN1THZgMWKDXoR9V392TniMaY1nOmmKZ4tpPWtXJVlvRHFqMc1IAAABCklEQVR4Xr3RxZLEIBSG0f9C3NPuPu7u/v7vNEE6dFdRM7s+i0sFvg0EO9X0/CQFeqfeCWwyh4gmCKgSwGJOlRCuWG5gMSKBrcTch03jvwD9Z9eFNcj4gcRj1EE2H5n7OaS93+lA7uXQPKo96kDt9aH4JnDUNS+xEEsLSmKCC0zFMoWY3RmUdBKSFCYDoHPmNCCCaw6DSTC2v8bnw+E9llHrCkBUHkvJbbz1hC4Tl+khWtDaHrQjGXAxH1CSEWwGzUJMH09ktKHkRPTCdBCEdfCKteItj6EDjDuHUvnBsKkO7EywIvr8+juofMNCnnTVUsCird6Gq99o80PkRFh6VcZgFafyYDDDbv0CWLgS6JWTyyIAAAAASUVORK5CYII="
+          sizes="16x16 32x32 48x48" type="image/png">
+    <!--  Icon Library by DV  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--  Voice messaging feature by DV  -->
+    <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
+    <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <!--    <link rel="stylesheet" type="text/css" href="js/voice-message/style.css">-->
+    <!--  Workspace nickname by DV  -->
+    <script src="../js/vavilov/innerJs/environment.js"></script>
+
 
 </head>
 
@@ -244,9 +264,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                         src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                         srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                         alt=""></span>
+                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                                                                             alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -311,14 +331,14 @@
                         </div>
                         <div class="c-menu_item__li" data-qa="sign-out-wrapper">
                             <a href="/logout">
-                            <button class="c-button-unstyled c-menu_item__button" type="button">
-                                <div class="c-menu_item__label">
-                                    Sign out of
-                                    <strong>
-                                        Java Mentoring
-                                    </strong>
-                                </div>
-                            </button>
+                                <button class="c-button-unstyled c-menu_item__button" type="button">
+                                    <div class="c-menu_item__label">
+                                        Sign out of
+                                        <strong>
+                                            Java Mentoring
+                                        </strong>
+                                    </div>
+                                </button>
                             </a>
                         </div>
                         <div aria-hidden="true"
@@ -396,8 +416,10 @@
                                 <table class="table_invite">
                                     <tr><td>Email Address</td><td>Name (optional)</td><td></td></tr>
                                     <tr class="content-form-">
-                                        <td><input type="text" id="inviteEmail_" class="confirm_input" placeholder="name@example.com" value=""></td>
-                                        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name" placeholder="name" value=""></td>
+                                        <td><input type="text" id="inviteEmail_" class="confirm_input"
+                                                   placeholder="name@example.com" value=""></td>
+                                        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name"
+                                                   placeholder="name" value=""></td>
                                         <td style="visibility: hidden"><span class="btn delete">X</span></td>
                                     </tr>
                                     <tr class="table_invite_modal">
@@ -409,7 +431,8 @@
                             </span>
 
                             <span class="add_row_invites">
-                                <button class="plus link_button" id="addInviteModal" type="button">&#8853 Add another</button>
+                                <button class="plus link_button" id="addInviteModal"
+                                        type="button">&#8853 Add another</button>
                                     or
                                 <button class="link_button many_at_once" type="button">and many at once</button>
                             </span>
@@ -445,7 +468,8 @@
                                 </tr>
                             </table>
                         </form>
-                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back</button>
+                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back
+                        </button>
                     </div>
                 </div>
             </div>
@@ -495,7 +519,8 @@
             <div class="all-messages" id="all-messages"> -->
 
 <!-- Share message MODAL -->
-<div class="modal fade" id="shareMessageModal" tabindex="-1" role="dialog" aria-labelledby="shareMessageModal" aria-hidden="true">
+<div class="modal fade" id="shareMessageModal" tabindex="-1" role="dialog" aria-labelledby="shareMessageModal"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -534,18 +559,20 @@
                                 </button>
                                 <div class="p-classic_nav__team_header__team__dnd_container">
                                     <button class="p-classic_nav__team_header__team__dnd">
-                                        <i class="p-classic_nav__team_header__team__dnd__bell_icon">
-                                            🔔
+                                        <i class="material-icons p-classic_nav__team_header__team__dnd__bell_icon"
+                                           type="bell-o">
+                                            notifications_none
                                         </i>
                                     </button>
                                 </div>
                             </div>
                             <div class="p-classic_nav__team_header__user">
-                                <i class="p-classic_nav__team_header__user__presence">
-                                    ●
+                                <i class="material-icons">
+                                    fiber_manual_record
                                 </i>
                                 <span class="p-classic_nav__team_header__user__name">
-                                    <span class="p-classic_nav__team_header__user__name__truncate">Some Username</span>
+                                    <span class="p-classic_nav__team_header__user__name__truncate"
+                                          id="WorkspaceUsername"></span>
                                 </span>
                             </div>
                         </div>
@@ -632,9 +659,11 @@
                 <div class="p-workspace__channel_sidebar">
                     <nav class="p-channel_sidebar">
                         <div class="p-channel_sidebar__navigation_bar">
-                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal" data-target="#modalSearcher">
+                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal"
+                                    data-target="#modalSearcher">
                                 <div class="p-channel_sidebar__jumper_left">
-                                    <i class="p-channel_sidebar__jumper_icon">🔎</i>
+                                    <i class="material-icons p-channel_sidebar__jumper_icon"
+                                       style="vertical-align: middle;">search</i>
                                     Jump to...
                                 </div>
                                 <span class="p-channel_sidebar__jumper_keys">Ctrl+K</span>
@@ -673,16 +702,6 @@
                                             <div class="p-channel_sidebar__channels__list"
                                                  id="id-channel_sidebar__channels__list"></div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
-                                            <div class="p-channel_sidebar__add_channel">
-                                                <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__add_channel__button">
-                                                        <span class="p-channel_sidebar__name-2">Add a channel</span>
-                                                    </button>
-                                                    <button class="p-channel_sidebar__close">
-                                                        <i class="p-channel_sidebar__close__icon">✖</i>
-                                                    </button>
-                                                </div>
-                                            </div>
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__direct-messages">
                                                 <div class="p-channel_sidebar__section_heading">
@@ -696,26 +715,29 @@
                                                 </div>
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
-<!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
-<!--                                                <div class="p-channel_sidebar__close_container">-->
-<!--                                                    <button class="p-channel_sidebar__name_button">-->
-<!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
-<!--                                                        <span class="p-channel_sidebar__name-3">-->
-<!--                                                            <span>Some username</span>-->
-<!--                                                        </span>-->
-<!--                                                    </button>-->
-<!--                                                    <button class="p-channel_sidebar__close">-->
-<!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
-<!--                                                    </button>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
+                                            <!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
+                                            <!--                                                <div class="p-channel_sidebar__close_container">-->
+                                            <!--                                                    <button class="p-channel_sidebar__name_button">-->
+                                            <!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
+                                            <!--                                                        <span class="p-channel_sidebar__name-3">-->
+                                            <!--                                                            <span>Some username</span>-->
+                                            <!--                                                        </span>-->
+                                            <!--                                                    </button>-->
+                                            <!--                                                    <button class="p-channel_sidebar__close">-->
+                                            <!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
+                                            <!--                                                    </button>-->
+                                            <!--                                                </div>-->
+                                            <!--                                            </div>-->
+                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
+                                            <!--ЛИЧКА!!!-->
 
-                                            <div class="p-channel_sidebar__direct-messages__container" id="direct-messages__container_id">
+                                            <div class="p-channel_sidebar__direct-messages__container"
+                                                 id="direct-messages__container_id">
 
                                             </div>
 
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
+                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
+                                            <!--ЛИЧКА!!!-->
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
@@ -910,7 +932,7 @@
                             <div class="p-flexpane_header__primary">
                                 <div class="p-flexpane_header__primary_content">
                                     <div class="p-flexpane__title_container"></div>
-<!--                                    <div class="p-flexpane__title_container">About this channel</div>-->
+                                    <!--                                    <div class="p-flexpane__title_container">About this channel</div>-->
                                 </div>
                                 <button class="p-flexpane_header__control__button">
                                     <i class="c-icon--times">✖</i>
@@ -934,110 +956,54 @@
 
             <div class="p-workspace__footer">
                 <footer class="p-workspace__primary_view_footer">
-                    <div class="p-message_pane_input">
-                        <div class="p-message_pane_input_inner">
-                            <div class="p-workspace__input">
-                                <div class="menu" id="menu">
-                                </div>
-                                <div class="p-message_input_field">
-                                    <div class="ql-buttons">
-                                        <button class="c-texty_input__button--emoji" id="inputEmojiButton">
-                                            <i class="c-icon--smile-o">😊</i>
-                                        </button>
-                                        <button class="c-texty_input__button" id="showAssociatedUsers">
-                                            <i class="c-icon--mentions">@</i>
-                                        </button>
-                                    </div>
-                                    <div class="associatedUserList" id="associatedUserList">
-                                        <form>
-                                            <select class="associatedUserListSelect"
-                                                    id="associatedUserListSelect" multiple
-                                                    name="usersList"></select>
-                                        </form>
-                                    </div>
-                                    <div>
-                                        <form id="form_message">
-                                            <input class="ql-editor__input-field" id="form_message_input"
-                                                   placeholder="Message #p_some-channel" minlength="1" maxlength="1200" type="text"/>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <button class="p-message_input_file_button" id="attach_file">
-                                    <i class="c-icon--paperclip">📎</i>
-                                </button>
-
+                    <div style="margin: 5px 10px 5px 10px; height: 90%; border: 1px solid gray; border-radius: 8px;
+                        position: relative;">
+                        <div class="p-message_pane_input p-message_input_field" style="height: 50%; align-content: center;
+                            border-top-left-radius: 8px;
+                            border-top-right-radius: 8px;">
+                            <div class="associatedUserList" id="associatedUserList">
+                                <form>
+                                    <select class="associatedUserListSelect"
+                                            id="associatedUserListSelect" multiple
+                                            name="usersList">
+                                    </select>
+                                </form>
                             </div>
-                            <span id="attached_file"></span>
-                            <input type="file" id="file_selector" style="display: none"/>
+                            <form id="form_message" style="height: 100%; width: 100%; text-align: center;">
+                                <input class="ql-editor__input-field" id="form_message_input"
+                                       placeholder="Заменить на динамический контент" minlength="1" maxlength="1200"
+                                       type="text"/>
 
-                            <div class="p-notification_bar">
-                                <div class="p-notification_bar__section--left"></div>
-                                <div class="p-notification_bar__section--right">
-                                    <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>
-                                </div>
-                            </div>
+                                <span id="attached_file"></span>
+                                <input type="file" id="file_selector" style="display: none"/>
 
+                                <ol id="inputMe"></ol>
+                                <span id="attached_voiceMessage"></span>
+                                <input type="file" id="vm_selector" style="display: none"/>
+                            </form>
+                        </div>
+                        <div class="p-notification_bar"
+                             style="height: min-content; width: 100%; position: absolute; bottom: 0; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                            <button id="attach_file" class="iconsVD">
+                                <i class="material-icons">attach_file</i>
+                            </button>
+                            <button id="inputEmojiButton" class="iconsVD">
+                                <i class="material-icons">mood</i>
+                            </button>
+                            <button id="showAssociatedUsers" class="iconsVD">
+                                <i class="material-icons">share</i>
+                            </button>
+                            <button id="voiceMessageBtn" class="iconsVD" onclick="recording()" style="align-items: center">
+                                <i class="material-icons">mic_none</i>
+                            </button>
                         </div>
                     </div>
                 </footer>
             </div>
-
         </div>
     </div>
-
-    <!--     <div id="info-box" class="info-box" style="display:none;">
-            <h3>Info Box</h3>
-            <p>-</p>
-            <h3>Users</h3>
-            <p>-</p>
-            <p>
-            <h3><a href="/searchUsers">Search User</a></h3>
-            <p>-</p>
-            <div class="user-box" id="user-box">
-            </div>
-        </div> -->
-
 </div>
 
-<!--&lt;!&ndash;add channel modal&ndash;&gt;-->
-<!--<div class="add-channel-modal" id="addChannelModal">-->
-<!--    <div class="add-channel-modal-content">-->
-<!--        <form method="post" th:action="@{/workspace/create}">-->
-<!--            <div class="add-channel-modal-header">-->
-<!--                <span class="addChannelClose">&times;</span>-->
-<!--                <h2>Create channel</h2>-->
-<!--            </div>-->
-<!--            <div class="add-channel-modal-body">-->
-<!--                <p><b> Name </b></p>-->
-<!--                <p><input class="add-channel-input" id="name" name="name" type="text"></p>-->
-<!--                <p><b> Users </b></p>-->
-<!--                &lt;!&ndash;<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>&ndash;&gt;-->
-<!--                <select id="usersList" multiple="multiple" name="usersList">-->
-<!--                    <option value=""> &#45;&#45;</option>-->
-<!--                    <option th:each="user : ${listUser}"-->
-<!--                            th:utext="${user.getLogin()}"-->
-<!--                            th:value="${user.getLogin()}"/>-->
-<!--                </select>-->
-<!--                <p><b> Owner </b></p>-->
-<!--                &lt;!&ndash;<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>&ndash;&gt;-->
-<!--                <select id="owner" name="owner">-->
-<!--                    <option value=""> &#45;&#45;</option>-->
-<!--                    <option th:each="user : ${listUser}"-->
-<!--                            th:utext="${user.getLogin()}"-->
-<!--                            th:value="${user.getLogin()}"/>-->
-<!--                </select>-->
-<!--                <p><b> Private </b></p>-->
-<!--                <p><input class="add-channel-input" id="isPrivate" name="isPrivate" type="checkbox"><br></p>-->
-<!--            </div>-->
-<!--            <div class="add-channel-modal-footer">-->
-<!--                <p>-->
-<!--                    <button class="submitCreateChannel" type="submit"> Add new channel</button>-->
-<!--                </p>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
 <div class="settingsList" id="settingsList">
     <div>
         <div class="settingsDiv">

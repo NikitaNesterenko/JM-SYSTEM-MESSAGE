@@ -64,7 +64,28 @@ export class SubmitMessage {
             $('#attached_file').html("");
             return files.name;
         }
+
+        const audioInput = $("#audioInput");
+        const src = audioInput.prop('src');
+        let blob = await fetch(src).then(r => r.blob());
+
+        if (blob !== undefined) {
+            const formData = new FormData();
+            let name = 'voiceMessage_' + generateUID() + '.mp3';
+            formData.append('file', blob, name);
+            await this.storage_service.uploadFile(formData);
+            $('#inputMe').html("");
+            return name;
+        }
         return null;
+
+        function generateUID() {
+            let firstPart = (Math.random() * 46656) | 0;
+            let secondPart = (Math.random() * 46656) | 0;
+            firstPart = ("000" + firstPart.toString(36)).slice(-3);
+            secondPart = ("000" + secondPart.toString(36)).slice(-3);
+            return firstPart + secondPart;
+        }
     }
 
     async sendChannelMessage(channel_name) {
