@@ -1,6 +1,7 @@
-package jm;
+package jm.service;
 
 
+import jm.MessageServiceImpl;
 import jm.dao.MessageDAOImpl;
 import jm.model.Message;
 import org.junit.jupiter.api.Test;
