@@ -33,8 +33,6 @@ public class ChannelDTO {
     private LocalDateTime createdDate;
 
     private String topic;
-    private Boolean isApp;
     private Boolean isArchived;
     private Boolean isApp;
-
 }
