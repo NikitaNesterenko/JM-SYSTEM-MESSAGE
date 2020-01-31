@@ -133,7 +133,7 @@ class MessageServiceImplTest {
     public void getStarredMessagesForUser() {
         when(messageDAO.getStarredMessagesForUser(any())).thenReturn(messages);
         assertEquals(messageService.getStarredMessagesForUser(1L), messages);
-        verify(messageDAO).getMessagesByBotIdByChannelIdForPeriod(any(),any(), any(), any());
+        verify(messageDAO).getStarredMessagesForUser(any());
     }
 
     @Test
