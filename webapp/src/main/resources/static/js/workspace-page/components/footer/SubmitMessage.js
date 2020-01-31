@@ -6,6 +6,7 @@ import {
     DirectMessagesRestController
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
+import {Command} from "./Command.js";
 
 export class SubmitMessage {
     user;
@@ -29,20 +30,29 @@ export class SubmitMessage {
     }
 
     onMessageSubmit() {
+
         $("#form_message").submit(async (event) => {
             event.preventDefault();
+            const hasCommand = await this.checkCommand();
+            if (!hasCommand) {
+                const channel_name = sessionStorage.getItem("channelName");
+                const conversation_id = sessionStorage.getItem('conversation_id');
 
-            const channel_name = sessionStorage.getItem("channelName");
-            const conversation_id = sessionStorage.getItem('conversation_id');
+                if (channel_name !== '0') {
+                    this.sendChannelMessage(channel_name);
+                }
 
-            if (channel_name !== '0') {
-                this.sendChannelMessage(channel_name);
-            }
-
-            if (conversation_id !== '0') {
-                await this.sendDirectMessage(conversation_id);
+                if (conversation_id !== '0') {
+                    await this.sendDirectMessage(conversation_id);
+                }
             }
         });
+    }
+
+    async checkCommand() {
+        await this.setUser();
+        const commands = new Command(this.user);
+        return commands.isCommand($("#form_message_input").val());
     }
 
     getMessageInput() {

@@ -1,9 +1,10 @@
 import {MessageView} from "/js/workspace-page/components/messages/MessageView.js";
+import {Command} from "../footer/Command.js";
 
 export class ChannelMessageView extends MessageView {
 
     constructor(logged_user) {
-        super(logged_user);
+        super(logged_user, new Command(logged_user));
         this.dialog.messageBox("#all-messages");
         this.dialog.editDeleteClass = "ChannelMessage";
     }

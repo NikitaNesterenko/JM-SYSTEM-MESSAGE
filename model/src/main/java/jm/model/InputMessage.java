@@ -48,4 +48,6 @@ public class InputMessage {
 
     private Boolean isUpdated;
 
+    private String pluginName;
+
 }

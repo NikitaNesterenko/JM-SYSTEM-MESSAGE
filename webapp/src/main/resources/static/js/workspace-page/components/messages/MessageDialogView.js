@@ -95,10 +95,11 @@ export class MessageDialogView {
                     </button>
                 </div>`);
         } else {
+            const avatar = this.message.userId === null ? this.message.userAvatarUrl : `/files/${this.message.userAvatarUrl}`;
             this.root.prepend(`
                 <div class="c-message__gutter--feature_sonic_inputs">
                     <button class="c-message__avatar__button">
-                        <img class="c-avatar__image" src="/files/${this.message.userAvatarUrl}">
+                        <img class="c-avatar__image" src="${avatar}">
                     </button>
                 </div>`);
         }
@@ -106,20 +107,20 @@ export class MessageDialogView {
     }
 
     setMenuIcons(logged_user_id) {
-       const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
-       const icons_elements = this.menu_icons.createMenuIcons()
-           .emojiBtn()
-           .replyBtn(this.message.id)
-           .shareBtn(this.message.id)
-           .starBtn(this.message.id)
-           .dropdownBtn(this.message.id, this.message.userId, logged_user_id, this.editDeleteClass);
-       icons_container.append(icons_elements.getMenuIcons());
-       this.root.append(icons_container);
-       return this;
+        const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
+        const icons_elements = this.menu_icons.createMenuIcons()
+            .emojiBtn()
+            .replyBtn(this.message.id)
+            .shareBtn(this.message.id)
+            .starBtn(this.message.id)
+            .dropdownBtn(this.message.id, this.message.userId, logged_user_id, this.editDeleteClass);
+        icons_container.append(icons_elements.getMenuIcons());
+        this.root.append(icons_container);
+        return this;
     }
 
     setThreadMenuIcons() {
-        const icons_container =$('<div class="message-icons-menu-class" id="thread-message-icons-menu"></div>');
+        const icons_container = $('<div class="message-icons-menu-class" id="thread-message-icons-menu"></div>');
         const icons_elements = this.menu_icons.createMenuIcons()
             .emojiBtn()
             .starBtn(this.message.id)
@@ -244,4 +245,8 @@ export class MessageDialogView {
             .remove();
     }
 
+    setPluginContent() {
+        this.root.find(".c-message__content--feature_sonic_inputs").append(this.message.content);
+        return this;
+    }
 }

@@ -281,3 +281,14 @@ export class DirectMessagesRestController extends RestPaginationService {
 
 }
 
+export class PluginRestPaginationService extends RestPaginationService {
+    constructor() {
+        super('/rest/plugin');
+    }
+
+    async getZoomToken() {
+        const plugin = await fetch('/rest/plugin/zoom');
+        return plugin.json();
+    }
+}
+

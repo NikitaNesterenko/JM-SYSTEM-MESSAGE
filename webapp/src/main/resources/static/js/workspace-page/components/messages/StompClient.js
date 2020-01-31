@@ -1,4 +1,5 @@
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
+import {Command} from "/js/workspace-page/components/footer/Command.js";
 
 export class StompClient {
 
@@ -8,6 +9,8 @@ export class StompClient {
         this.thread_view = thread_view;
         this.dm_view = direct_message_view;
         this.channelview = channel_view;
+
+        this.commands = new Command();
 
         window.sendName = (message) => this.sendName(message);
         window.sendChannel = (channel) => this.sendChannel(channel);
@@ -28,8 +31,8 @@ export class StompClient {
     subscribeMessage() {
         this.stompClient.subscribe('/topic/messages', async (message) => {
             let result = JSON.parse(message.body);
+            result['content'] = result.inputMassage;
             if (result.userId != null && !result.isDeleted) {
-                result['content'] = result.inputMassage;
                 if (result.channelId === channel_id) {
                     if (result.isUpdated) {
                         this.channel_message_view.updateMessage(result);
@@ -43,7 +46,11 @@ export class StompClient {
                     this.channel_message_view.dialog.messageBoxWrapper();
                 }
             } else {
-                this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
+                if (result.isDeleted) {
+                    this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
+                } else {
+                    this.commands.checkMessage(result);
+                }
             }
             notifyParseMessage(result);
         });
