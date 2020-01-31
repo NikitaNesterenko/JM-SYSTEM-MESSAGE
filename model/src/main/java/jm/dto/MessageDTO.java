@@ -49,6 +49,7 @@ public class MessageDTO {
     private String botNickName;
     private String channelName;
     private String userAvatarUrl;
+    private String pluginName;
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields

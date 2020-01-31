@@ -52,6 +52,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
         } else if (bot != null) {
             messageDto.setBotId(bot.getId());
             messageDto.setBotNickName(bot.getNickName());
+            messageDto.setPluginName(bot.getName());
         }
 
         // setting up 'channelName'

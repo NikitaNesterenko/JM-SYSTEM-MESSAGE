@@ -4,9 +4,10 @@ import {getMessageStatus} from "/js/message_menu/message-icon-menu.js";
 
 export class MessageView {
 
-    constructor(logged_user) {
+    constructor(logged_user, commands) {
         this.logged_user = logged_user;
         this.dialog = new MessageDialogView();
+        this.commands = commands;
         this.message_service = new MessageRestPaginationService();
     }
 
@@ -50,6 +51,10 @@ export class MessageView {
         this.dialog.emptyMessageBox();
 
         for (const message of messages) {
+            const hasPlugin = await this.commands.checkMessage(message);
+            if (hasPlugin) {
+                continue;
+            }
             if (!message.isDeleted) {
                 getMessageStatus(message);
                 if (message.sharedMessageId == null) {

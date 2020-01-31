@@ -1,10 +1,15 @@
 package jm.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -112,6 +117,16 @@ public class User {
     @OneToMany
     @ToString.Exclude
     private Set<User> directMessagesToUsers;
+
+    @Column(name = "zoom_token", length = 2000)
+    private String zoomToken;
+
+    @Column(name = "zoom_refresh_token", length = 2000)
+    private String refreshZoomToken;
+
+    @Column(name = "zoom_expire_date")
+    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    private LocalDateTime expireDateZoomToken;
 
     // TODO каналы пользователя, исправить маппинг в Channel
     // юзер может создавать каналы, либо быть участником (member) в чужих каналах
