@@ -43,11 +43,11 @@ public class SlashCommand {
     @EqualsAndHashCode.Include
     private String hints;
 
-    @Column(name = "parameters", nullable = false)
+/*    @Column(name = "parameters", nullable = false)
     //@JsonSerialize(using = CollectionSerializer.class)
     //@Type(type = "org.hibernate.type.CollectionType")
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-    private Map<String, String> parameters = new HashMap<>();
+    private Map<String, String> parameters = new HashMap<>();*/
 
     public SlashCommand(String name, String url, String description, String hints/*, Map<String, String> parameters*/) {
         this.name = name;

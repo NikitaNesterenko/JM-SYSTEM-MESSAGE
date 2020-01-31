@@ -4,7 +4,8 @@ import {
     ChannelRestPaginationService,
     MessageRestPaginationService,
     StorageService,
-    DirectMessagesRestController
+    DirectMessagesRestController,
+    SlashCommandRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 
@@ -21,6 +22,7 @@ export class SubmitMessage {
         this.message_service = new MessageRestPaginationService();
         this.direct_message_service = new DirectMessagesRestController();
         this.storage_service = new StorageService();
+        this.slashCommandService = new SlashCommandRestPaginationService();
     }
 
     onAttachFileClick() {
@@ -94,10 +96,29 @@ export class SubmitMessage {
             filename: await this.getFiles()
         };
 
+
+
         this.message_service.create(entity).then(
             msg_id => sendName(msg_id)
         );
+        this.sendSlashCommand(entity);
     }
+
+    async sendSlashCommand(entity) {
+        if (entity.content.startsWith("/")) {
+            const comm = entity.content.slice(1, entity.content.indexOf(" "));
+            const slashCommand = await this.slashCommandService.getSlashCommandByName(comm);
+
+            const command = {
+                channel_id: entity.channelId,
+                user_id: entity.userId,
+                command: entity.content
+            }
+            let resp = await this.slashCommandService.sendSlashCommand(slashCommand.url, command);
+        }
+    }
+
+
 
     async sendDirectMessage(conversation_id) {
         await this.setUser();

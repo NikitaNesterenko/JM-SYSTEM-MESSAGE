@@ -89,7 +89,7 @@ public class TestDataInitializer {
     private void createSlashCommands(){
         SlashCommand command = new SlashCommand();
         command.setName("topic");
-        command.setUrl("/rest/api/bot/slackbot/");
+        command.setUrl("/app/bot/slackbot/");
         command.setDescription("test description");
         command.setHints("test Hints");
         Map<String, String> param = new HashMap<>();

@@ -61,6 +61,36 @@ export class BotRestPaginationService extends RestPaginationService {
     };
 }
 
+export class SlashCommandRestPaginationService extends RestPaginationService {
+    constructor() {
+        super("/rest/api/slashcommand");
+    }
+
+    getSlashCommandsByBotId = async (id) => {
+        const response = await fetch('/rest/api/slashcommand/bot/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    getSlashCommandByName = async (name) => {
+        const response = await fetch('/rest/api/slashcommand/name/' + name)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    }
+
+    sendSlashCommand = async (url, command) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(command)
+        })
+        return await response.json()
+            .catch(err => console.log(err.status));
+    }
+}
+
 export class ChannelTopicRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels/');

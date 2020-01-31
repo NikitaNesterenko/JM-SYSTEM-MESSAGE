@@ -18,7 +18,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public SlashCommand getByName(String commandName) {
        try {
-           return (SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?")
+           return (SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
                    .setParameter(1, commandName)
                    .getSingleResult();
        } catch (NoResultException e){
