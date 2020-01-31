@@ -2,24 +2,22 @@ import {UserRestPaginationService} from './rest/entities-rest-pagination.js'
 
 export let users = [];
 
-const user_service = new UserRestPaginationService();
+const userService = new UserRestPaginationService();
 const modal = document.getElementById('associatedUserList');
-const at = document.getElementById('showAssociatedUsers');
+const atButton = document.getElementById('showAssociatedUsers');
 
 let index;
-let elemkeyDown;
+let elemKeyDown;
 let positionCursor;
-let sub_user;
+let subUser;
 let isSearchUser = false;
-let isAtBuutonClick = false;
+let isAtButtonClick = false;
 
 let inpMessage = document.getElementById('form_message_input');
 
-at.onclick = function () {
-    if (isAtBuutonClick === true) {
-        modal.style.display = "none";
-        isSearchUser = false;
-        isAtBuutonClick = false;
+atButton.onclick = function () {
+    if (isAtButtonClick === true) {
+        cancelSearchAt();
     } else {
         let position = inpMessage.selectionEnd;
         let text = inpMessage.value;
@@ -31,7 +29,7 @@ at.onclick = function () {
         inpMessage.focus();
         inpMessage.setSelectionRange(position + 2, position + 2);
 
-        isAtBuutonClick = true;
+        isAtButtonClick = true;
         pasteUserInText();
     }
 };
@@ -45,22 +43,22 @@ export function pasteUserInText() {
     positionCursor = inpMessage.selectionEnd;
 
     inpMessage.onkeydown = function handle(e) {
-        elemkeyDown = e.key;
+        elemKeyDown = e.key;
     };
 
     searchAt(text);
 
     if (isSearchUser) {
         modal.style.display = "block";
-        sub_user = text.slice(index, positionCursor);
-        showAllUsers(sub_user)
+        subUser = text.slice(index, positionCursor);
+        showAllUsers(subUser)
     } else {
         modal.style.display = "none";
     }
 }
 
 function searchAt(text) {
-    if ((text.length <= 1 && text.slice(0, 1) === "@") || (elemkeyDown === "@" && text.slice(positionCursor - 2, positionCursor) === " @") || isSearchUser || isAtBuutonClick) {
+    if ((text.length <= 1 && text.slice(0, 1) === "@") || (elemKeyDown === "@" && text.slice(positionCursor - 2, positionCursor) === " @") || isSearchUser || isAtButtonClick) {
         if (!isSearchUser) {
             index = positionCursor;
             isSearchUser = true;
@@ -68,14 +66,14 @@ function searchAt(text) {
     }
 }
 
-function str_replace(str, sub, rep, index) {
+function strReplace(str, sub, rep, index) {
     str = str.split('');
     str.splice(index, sub.length, rep);
     return str.join('');
 }
 
 const showAllUsers = (text) => {
-    const allUsers = user_service.getAll();
+    const allUsers = userService.getAll();
     $('#associatedUserListSelect')
         .find('option')
         .remove()
@@ -83,7 +81,7 @@ const showAllUsers = (text) => {
 
     if (!text) {
         allUsers.then(response => {           //После того как Юзеры будут получены, начнется выполнение этого блока
-            $.each(response, (i, item) => {
+            response.forEach(function (item) {
                 $('#associatedUserListSelect')
                     .append(
                         `<option id="atUserSelectOption" class="atUserSelectOption" value="${item.id}">${item.name}</option>`
@@ -92,7 +90,7 @@ const showAllUsers = (text) => {
         });
     } else {
         allUsers.then(response => {           //После того как Юзеры будут получены, начнется выполнение этого блока
-            $.each(response, (i, item) => {
+            response.forEach(function (item) {
                 if ((item.name).includes(text)) {
                     $('#associatedUserListSelect')
                         .append(
@@ -100,6 +98,9 @@ const showAllUsers = (text) => {
                         );
                 }
             });
+            if (!$('#atUserSelectOption').length) {
+                cancelSearchAt();
+            }
         });
     }
 };
@@ -111,10 +112,10 @@ $('#associatedUserListSelect').on('change', function () {
         let text = $(this).text();
         if (text !== ' --') {
             let rep = "@" + text + " ";
-            let sub = "@" + sub_user;
-            result = str_replace(inpMessage.value, sub, rep, index - 1);
+            let sub = "@" + subUser;
+            result = strReplace(inpMessage.value, sub, rep, index - 1);
             isSearchUser = false;
-            isAtBuutonClick = false;
+            isAtButtonClick = false;
         }
     });
 
@@ -128,8 +129,12 @@ document.addEventListener("mouseup", function (e) {
     let buttonAt = $('#showAssociatedUsers font');
 
     if (!block.is(e.target) && !buttonAt.is(e.target)) {
-        modal.style.display = "none";
-        isSearchUser = false;
-        isAtBuutonClick = false;
+        cancelSearchAt();
     }
 });
+
+function cancelSearchAt() {
+    modal.style.display = "none";
+    isSearchUser = false;
+    isAtButtonClick = false;
+}
