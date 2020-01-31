@@ -7,14 +7,17 @@ import jm.dto.SlashCommandDto;
 import jm.model.Channel;
 import jm.model.Message;
 import jm.model.SlashCommand;
+import org.apache.kafka.common.protocol.types.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 @RestController
@@ -26,11 +29,12 @@ public class SlackBotController {
     @Autowired
     private MessageService messageService;
     @Autowired
-    BotService botService;
+    private BotService botService;
+
 
 
     @PostMapping
-    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) {
+    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) throws URISyntaxException {
         if (command.getCommand().startsWith("/topic")) {
             setTopic(command.getChannel_id(), command.getCommand().substring(7));
         }
@@ -38,7 +42,7 @@ public class SlackBotController {
     }
     private void setTopic(Long id, String topic) {
         Channel channel = channelService.getChannelById(id);
-        channel.setTopic(topic);
+        channel.setTopic("\"" + topic + "\"");
         channelService.updateChannel(channel);
         Message message = new Message();
         message.setBot(botService.getBotById(1L));
@@ -47,6 +51,5 @@ public class SlackBotController {
         message.setContent("Topic was changed");
         message.setChannelId(id);
         messageService.createMessage(message);
-
     }
 }
