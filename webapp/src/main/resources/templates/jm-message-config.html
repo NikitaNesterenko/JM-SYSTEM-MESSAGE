@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Slack config</title>
+    <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <div class="py-3 ml-5" >
+                <a href="javascript:void(0)">
+                    <img alt="Zoom Logo"
+                         src="https://applications.zoom.us/common/images/ZoomLogo.png"
+                         class="img-fluid" style="width: 150px">
+                </a>
+            </div>
+        </div>
+
+        <div class="container">
+            <img class="img-fluid mx-auto d-block mt-5" src="https://uploads-ssl.webflow.com/5c2cf73471ff122caedb51c8/5cd15b546e80bf3794eedd26_social-image.png"
+                 style="width: 140px; height: 78px; max-width: 100%">
+            <h1 class="text-center mt-3" style="font-weight: 700; font-size: 20px;">System Message</h1>
+            <div class="shadow-none py-3 mb-5 mt-5 rounded px-2" style="background-color: #f4f4f8;">
+                <ul style="list-style: none; font-size: 20px;" class="px-3">
+                    <li>Your integration is ready to go! You can do the following:</li>
+                    <br>
+                    <li>Start or join a Zoom meeting directly from your JM-System-Message channel by using the "/zoom" slash command.
+                    </li>
+                    <li>Start a phone call directly from your JM-System-Message channel by using the "/zoom call [@contact/phone
+                        number]" slash command.
+                    </li>
+                    <br>
+                    <li>By default your JM-System-Message channel will receive a recording link when a Zoom meeting is started from the
+                        channel. You can disable the meeting recording link using the following setting. You can also change
+                        the setting later by using the <span style="font-weight: bold;">/zoom config</span> slash command.
+                    </li>
+                </ul>
+            </div>
+            <div class="text-lg-center">
+                <span>You are connected to
+                    <span style="font-weight: bold;" id="workspace_name">---</span>
+                    , if it is not your workspace, please click
+                    <a>here</a> to disconnect.
+                </span>
+            </div>
+            <div class="form-row justify-content-center mx-auto mt-3">
+                <div class="col-auto ">
+                    <div class="form-check mb-2 ">
+                        <input type="checkbox" class="form-check-input" value="" id="exampleCheck1" style="width: 24px; height: 24px;">
+                        <label class="form-check-label ml-2 pt-1" for="exampleCheck1">Disable meeting recording link</label>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary btn-sm ml-3">
+                        <span class="">Save</span>
+                    </button>
+                </div>
+            </div>&nbsp;&nbsp;&nbsp;
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(async () => {
+            const response = await fetch('/rest/api/workspaces/choosed');
+            if (response.ok) {
+                const wks = await response.json();
+               $('#workspace_name').text(wks.name);
+            }
+        })
+    </script>
+</body>
+</html>

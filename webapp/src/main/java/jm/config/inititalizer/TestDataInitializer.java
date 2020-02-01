@@ -300,8 +300,11 @@ public class TestDataInitializer {
 
     private void createBots() {
         Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
+        Bot zoom = new Bot("zoom", "Zoom", workspaceDAO.getById(1L), LocalDateTime.now());
         this.bots.add(bot);
+        this.bots.add(zoom);
         botDAO.persist(bot);
+        botDAO.persist(zoom);
     }
 
     private void createLinkRoles() {

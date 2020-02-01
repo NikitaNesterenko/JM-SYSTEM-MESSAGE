@@ -1,4 +1,5 @@
 import {
+    WorkspaceRestPaginationService,
     UserRestPaginationService,
     ChannelRestPaginationService,
     MessageRestPaginationService,
@@ -6,13 +7,16 @@ import {
     DirectMessagesRestController
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
+import {Command} from "./Command.js";
 
 export class SubmitMessage {
     user;
     channel = null;
     conversation = null;
+    workspace;
 
     constructor() {
+        this.workspace_service = new WorkspaceRestPaginationService();
         this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.message_service = new MessageRestPaginationService();
@@ -29,20 +33,38 @@ export class SubmitMessage {
     }
 
     onMessageSubmit() {
+
         $("#form_message").submit(async (event) => {
             event.preventDefault();
+            const hasCommand = await this.checkCommand();
+            if (!hasCommand) {
 
-            const channel_name = sessionStorage.getItem("channelName");
-            const conversation_id = sessionStorage.getItem('conversation_id');
+                const content =  $("#form_message_input").val()
+                if (content.startsWith('/leave ')) {
+                    let channelName = content.substring(7)
+                    this.leaveChannel(channelName)
+                    $("#form_message_input").val("")
+                    return
+                }
 
-            if (channel_name !== '0') {
-                this.sendChannelMessage(channel_name);
-            }
+                const channel_name = sessionStorage.getItem("channelName");
+                const conversation_id = sessionStorage.getItem('conversation_id');
 
-            if (conversation_id !== '0') {
-                await this.sendDirectMessage(conversation_id);
+                if (channel_name !== '0') {
+                    this.sendChannelMessage(channel_name);
+                }
+
+                if (conversation_id !== '0') {
+                    await this.sendDirectMessage(conversation_id);
+                }
             }
         });
+    }
+
+    async checkCommand() {
+        await this.setUser();
+        const commands = new Command(this.user);
+        return commands.isCommand($("#form_message_input").val());
     }
 
     getMessageInput() {
@@ -139,6 +161,67 @@ export class SubmitMessage {
     async setChannel(id) {
         await this.channel_service.getById(id).then(
             channel => this.channel = channel
+        )
+    }
+
+    async setChannelByName(channelName) {
+        await this.channel_service.getChannelByName(channelName).then(
+            channel => this.channel = channel
+        )
+    }
+
+    async setWorkspace() {
+        await this.workspace_service.getChoosedWorkspace().then(
+            workspace => this.workspace = workspace
+        )
+    }
+
+    async leaveChannel(channelName) {
+        await this.setUser()
+        await this.setChannelByName(channelName)
+        await this.setWorkspace()
+        const channelUsers = this.channel.userIds
+        channelUsers.splice(channelUsers.indexOf(this.user.id), 1)
+
+        const entity = {
+            id: this.channel.id,
+            name: channelName,
+            userIds: channelUsers,
+            ownerId: this.channel.ownerId,
+            isPrivate: this.channel.isPrivate,
+            createdDate: this.channel.createdDate,
+            workspaceId: this.channel.workspaceId
+        };
+
+        await this.channel_service.update(entity).then(() => {
+            $(".p-channel_sidebar__channels__list").html('')
+            this.renewChannels(this.workspace.id,this.user.id)
+        })
+
+    }
+    async renewChannels(workspace_id,user_id) {
+        await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id,user_id).then(
+            channels => {
+                let firstChannelId = 0;
+                channels.forEach(function (channel, i) {
+                    if (i===0) {
+                        firstChannelId = channel.id
+                    }
+                    $('#id-channel_sidebar__channels__list')
+                        .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
+                                        <i class="p-channel_sidebar__channel_icon_prefix">#</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
+                                    </button>
+                                  </div>`
+                        );
+                });
+                pressChannelButton(firstChannelId)
+                sessionStorage.setItem("channelName", firstChannelId);
+                let channel_name = document.getElementById("channel_name_" + firstChannelId).textContent;
+                $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
+                sessionStorage.setItem('conversation_id', '0');
+            }
         )
     }
 }

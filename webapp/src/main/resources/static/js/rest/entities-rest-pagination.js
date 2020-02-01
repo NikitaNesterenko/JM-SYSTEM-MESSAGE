@@ -142,10 +142,13 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 
     getChoosedWorkspace = async () => {
         const response = await fetch('/rest/api/workspaces/choosed');
-
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
         if (response.ok) {
             return await response.json();
         }
+
     };
 
     sendCode = async (code) => {
@@ -276,5 +279,16 @@ export class DirectMessagesRestController extends RestPaginationService {
         return response.json();
     };
 
+}
+
+export class PluginRestPaginationService extends RestPaginationService {
+    constructor() {
+        super('/rest/plugin');
+    }
+
+    async getZoomToken() {
+        const plugin = await fetch('/rest/plugin/zoom');
+        return plugin.json();
+    }
 }
 
