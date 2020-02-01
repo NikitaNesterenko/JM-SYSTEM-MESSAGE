@@ -36,13 +36,12 @@ public class StorageController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(@RequestParam MultipartFile file) throws IOException {
-        System.out.println("UPLOAD CONTROLLER " + file);
-        System.out.println("UPLOAD CONTROLLER " + file.getSize());
-        System.out.println("UPLOAD CONTROLLER " + file.getResource());
-        System.out.println("UPLOAD CONTROLLER " + file.getOriginalFilename());
-        System.out.println("UPLOAD CONTROLLER " + file.getName());
-        System.out.println("UPLOAD CONTROLLER " + file.getContentType());
-        System.out.println("UPLOAD CONTROLLER " + Arrays.toString(file.getBytes()));
+        String filename = storageService.store(file);
+        return new ResponseEntity<>(filename, HttpStatus.OK);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> handleFileUpload(@RequestParam MultipartFile file) throws IOException {
         String filename = storageService.store(file);
         return new ResponseEntity<>(filename, HttpStatus.OK);
     }

@@ -76,6 +76,7 @@ export class MessageDialogView {
     }
 
     attachedFile() {
+        const url = "../files/" + this.message.filename;
         if (this.message.filename !== null) {
             if (!this.message.filename.match("mp3")) {
                 const msg = $(`#message_id-${this.message.id}`);
@@ -84,42 +85,14 @@ export class MessageDialogView {
                     <a target="_blank"  href = "/files/${this.message.filename}">${this.message.filename}</a>
                 </span>`);
             } else if (this.message.filename.match("mp3")) {
-                fetch("/files/" + this.message.filename)
-                    .then(res => res.blob())
-                    .then(blob => console.log("blob  " + blob));
                 const msg = $(`#message_id-${this.message.id}`);
                 msg.append(`<br>
                 <span class="c-message__attachment">
-                <audio controls="" src="${dataURItoBlob("/files/" + this.message.filename)}" id="audioOutput"></audio>
-<!--                    <a target="_blank"  href = "/files/${this.message.filename}">${this.message.filename}</a>-->
+                <audio style="margin: 5px;" controls="" src="${url}" id="audioOutput" preload="auto"></audio>
                 </span>`);
             }
         }
         return this;
-
-        // function dataURItoBlob(dataURI) {
-        //     // convert base64 to raw binary data held in a string
-        //     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-        //     let byteString = atob(dataURI.split(',')[1]);
-        //
-        //     // separate out the mime component
-        //     let mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-        //
-        //     // write the bytes of the string to an ArrayBuffer
-        //     let ab = new ArrayBuffer(byteString.length);
-        //
-        //     // create a view into the buffer
-        //     let ia = new Uint8Array(ab);
-        //
-        //     // set the bytes of the buffer to the correct values
-        //     for (let i = 0; i < byteString.length; i++) {
-        //         ia[i] = byteString.charCodeAt(i);
-        //     }
-        //
-        //     // write the ArrayBuffer to a blob, and you're done
-        //     let blob = new Blob([ab], {type: mimeString});
-        //     return blob;
-        // }
     }
 
     setAvatar() {
@@ -142,20 +115,20 @@ export class MessageDialogView {
     }
 
     setMenuIcons(logged_user_id) {
-       const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
-       const icons_elements = this.menu_icons.createMenuIcons()
-           .emojiBtn()
-           .replyBtn(this.message.id)
-           .shareBtn(this.message.id)
-           .starBtn(this.message.id)
-           .dropdownBtn(this.message.id, this.message.userId, logged_user_id, this.editDeleteClass);
-       icons_container.append(icons_elements.getMenuIcons());
-       this.root.append(icons_container);
-       return this;
+        const icons_container = $('<div class="message-icons-menu-class" id="message-icons-menu"></div>');
+        const icons_elements = this.menu_icons.createMenuIcons()
+            .emojiBtn()
+            .replyBtn(this.message.id)
+            .shareBtn(this.message.id)
+            .starBtn(this.message.id)
+            .dropdownBtn(this.message.id, this.message.userId, logged_user_id, this.editDeleteClass);
+        icons_container.append(icons_elements.getMenuIcons());
+        this.root.append(icons_container);
+        return this;
     }
 
     setThreadMenuIcons() {
-        const icons_container =$('<div class="message-icons-menu-class" id="thread-message-icons-menu"></div>');
+        const icons_container = $('<div class="message-icons-menu-class" id="thread-message-icons-menu"></div>');
         const icons_elements = this.menu_icons.createMenuIcons()
             .emojiBtn()
             .starBtn(this.message.id)

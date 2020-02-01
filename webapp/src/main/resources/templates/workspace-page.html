@@ -547,34 +547,31 @@
             <div class="p-workspace__top_nav">
                 <div class="p-classic_nav">
                     <div class="p-classic_nav__team_header">
-                        <div class="p-classic_nav__team_header__content">
-                            <div class="p-classic_nav__team_header__team">
-                                <div class="p-classic_nav__team_header__team__name">
-                                    Some Team<!--                                                           Team Name-->
-                                </div>
-                                <button class="p-classic_nav__team_header__team__icon_button">
-                                    <i class="p-classic_nav__team_header__team__icon">
-                                        ˅
+                        <div class="p-classic_nav__team_header__team">
+                            <span class="p-classic_nav__team_header__team__name">
+                                Some Team
+                            </span>
+                            <button class="iconsVD-sideBar">
+                                <i class="material-icons">
+                                    keyboard_arrow_down
+                                </i>
+                            </button>
+                            <div class="p-classic_nav__team_header__team__dnd_container">
+                                <button class="iconsVD-sideBar">
+                                    <i class="material-icons" type="bell-o">
+                                        notifications_none
                                     </i>
                                 </button>
-                                <div class="p-classic_nav__team_header__team__dnd_container">
-                                    <button class="p-classic_nav__team_header__team__dnd">
-                                        <i class="material-icons p-classic_nav__team_header__team__dnd__bell_icon"
-                                           type="bell-o">
-                                            notifications_none
-                                        </i>
-                                    </button>
-                                </div>
                             </div>
-                            <div class="p-classic_nav__team_header__user">
-                                <i class="material-icons">
-                                    fiber_manual_record
-                                </i>
-                                <span class="p-classic_nav__team_header__user__name">
+                        </div>
+                        <div class="p-classic_nav__team_header__user">
+                            <i class="material-icons" style="border-radius: 2px; font-size: 15px; color: green;">
+                                fiber_manual_record
+                            </i>
+                            <span class="p-classic_nav__team_header__user__name">
                                     <span class="p-classic_nav__team_header__user__name__truncate"
                                           id="WorkspaceUsername"></span>
-                                </span>
-                            </div>
+                            </span>
                         </div>
                     </div>
                     <div class="p-classic_nav__channel_header">
@@ -584,7 +581,6 @@
                                     <i class="p-classic_nav__model__title__name__hash_icon">
                                         #</i>
                                     <span class="p-classic_nav__model__title__info__name"></span>
-                                    <!--                                                   Channel Name-->
                                 </button>
                             </div>
                             <div class="p-classic_nav__model__title__info">
@@ -662,8 +658,8 @@
                             <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal"
                                     data-target="#modalSearcher">
                                 <div class="p-channel_sidebar__jumper_left">
-                                    <i class="material-icons p-channel_sidebar__jumper_icon"
-                                       style="vertical-align: middle;">search</i>
+                                    <i class="material-icons"
+                                       style="margin: 2px; font-size: 20px; vertical-align: middle;">search</i>
                                     Jump to...
                                 </div>
                                 <span class="p-channel_sidebar__jumper_keys">Ctrl+K</span>
@@ -958,9 +954,11 @@
                 <footer class="p-workspace__primary_view_footer">
                     <div style="margin: 5px 10px 5px 10px; height: 90%; border: 1px solid gray; border-radius: 8px;
                         position: relative;">
-                        <div class="p-message_pane_input p-message_input_field" style="height: 50%; align-content: center;
-                            border-top-left-radius: 8px;
-                            border-top-right-radius: 8px;">
+                        <div class="p-message_pane_input p-message_input_field" style="padding-top: 10px; bottom: 0;
+                        height: min-content;
+                        align-content: center;
+                        border-top-left-radius: 8px;
+                        border-top-right-radius: 8px;">
                             <div class="associatedUserList" id="associatedUserList">
                                 <form>
                                     <select class="associatedUserListSelect"
@@ -973,27 +971,28 @@
                                 <input class="ql-editor__input-field" id="form_message_input"
                                        placeholder="Заменить на динамический контент" minlength="1" maxlength="1200"
                                        type="text"/>
-
-                                <span id="attached_file"></span>
-                                <input type="file" id="file_selector" style="display: none"/>
-
-                                <ol id="inputMe"></ol>
-                                <span id="attached_voiceMessage"></span>
-                                <input type="file" id="vm_selector" style="display: none"/>
                             </form>
                         </div>
+                        <div name="attachedFiles">
+                            <span id="attached_file"></span>
+                            <input type="file" id="file_selector" style="display: none"/>
+
+                            <ol id="inputMe"></ol>
+                            <span id="attached_voiceMessage"></span>
+                            <input type="file" id="vm_selector" style="display: none"/></div>
                         <div class="p-notification_bar"
                              style="height: min-content; width: 100%; position: absolute; bottom: 0; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
-                            <button id="attach_file" class="iconsVD">
+                            <button id="attach_file" class="iconsVD-messageBox" style="margin-left: 10px;">
                                 <i class="material-icons">attach_file</i>
                             </button>
-                            <button id="inputEmojiButton" class="iconsVD">
+                            <button id="inputEmojiButton" class="iconsVD-messageBox">
                                 <i class="material-icons">mood</i>
                             </button>
-                            <button id="showAssociatedUsers" class="iconsVD">
+                            <button id="showAssociatedUsers" class="iconsVD-messageBox">
                                 <i class="material-icons">share</i>
                             </button>
-                            <button id="voiceMessageBtn" class="iconsVD" onclick="recording()" style="align-items: center">
+                            <button id="voiceMessageBtn" class="iconsVD-messageBox VoiceMessageButton" onclick="recording()"
+                                    style="align-items: center">
                                 <i class="material-icons">mic_none</i>
                             </button>
                         </div>

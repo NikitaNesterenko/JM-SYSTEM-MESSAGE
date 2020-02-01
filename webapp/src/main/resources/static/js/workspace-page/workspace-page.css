@@ -132,7 +132,31 @@
     grid-template-rows: auto;
 }
 
-.iconsVD {
+.material-icons {
+    margin: 6px 3px;
+}
+
+.VoiceMessageButton {
+    transition: color 200ms ease;
+}
+
+.VoiceMessageButtonBlink{
+    color:transparent;
+}
+
+.iconsVD-sideBar {
+    font-size: 20px;
+    color: rgb(188,171,188);
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none !important;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    height: min-content;
+}
+
+.iconsVD-messageBox {
     font-size: 20px;
     color: #646f83;
     background-color: Transparent;
@@ -143,7 +167,7 @@
     outline:none;
 }
 
-.iconsVD:hover {
+.iconsVD-messageBox:hover {
     background-color: silver;
 }
 
@@ -191,7 +215,7 @@
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     box-sizing: inherit;
-    padding: 8px 16px;
+    padding: 4px 16px;
     user-select: none;
     -webkit-app-region: drag;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
@@ -259,7 +283,6 @@
 
 .p-classic_nav__team_header__team {
     font-size: 15px;
-    line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
@@ -298,8 +321,7 @@
     color: #FFFFFF;
     cursor: pointer;
     box-sizing: inherit;
-    font-size: 18px;
-    line-height: 1.33334;
+    font-size: 16px;
     font-weight: 900;
     display: block;
     text-overflow: ellipsis;
@@ -329,7 +351,6 @@
 
 .p-classic_nav__team_header__team__dnd_container {
     font-size: 15px;
-    line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
@@ -2793,6 +2814,7 @@
     unicode-bidi: -webkit-isolate;
     box-sizing: inherit;
     width: 100%;
+    height: min-content;
     color: rgba(var(--sk_primary_foreground,29,28,29),1);
     word-wrap: break-word;
     margin: 8px 0 -4px;
@@ -3006,7 +3028,6 @@
 }
 
 .ql-editor__input-field {
-
     font-weight: 400;
     color: rgba(var(--sk_primary_foreground,29,28,29),1);
     -webkit-font-smoothing: antialiased;
@@ -3021,15 +3042,15 @@
     font-size: 15px;
     line-height: 1.46668;
     box-sizing: inherit;
-    margin: 0;
+    margin: 5px;
     padding: 0;
     counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
     width: 95%;
-    height: 100%;
     outline: none;
     border-color: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
+    /*height: ;*/
 }
 
 
