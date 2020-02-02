@@ -1,14 +1,31 @@
+import {SlashCommandRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+const commandService = new SlashCommandRestPaginationService();
+
 export class MenuChatBox {
-    allActions = ['invite', 'archive', 'join', 'leave', 'who'];
-    actionsArray;
+
+    allActions = [];
+    actionsArray = [];
 
     constructor() {
         this.input = $('#form_message_input');
     }
 
     updateActionsArray() {
-        this.actionsArray = [];
-        this.allActions.forEach(e => this.addActionIfExist(e));
+        this.allActions = ['invite', 'archive', 'join', 'leave', 'who'];
+        commandService.getAllSlashCommands().then(response => {
+            response.forEach(command => {
+                this.allActions.push(command.name);
+            });
+            this.actionsArray = [];
+            this.allActions.forEach(e => this.addActionIfExist(e));
+        });
+/*        allCommands.forEach(command => {
+            this.allActions.push(command.name)
+        });*/
+
+        //this.actionsArray = [];
+
+        //this.allActions.forEach(e => this.addActionIfExist(e));
 
     }
 

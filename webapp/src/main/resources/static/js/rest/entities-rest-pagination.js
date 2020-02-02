@@ -72,6 +72,12 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
             .catch(err => console.log(err.status));
     };
 
+    getAllSlashCommands = async () => {
+        const response = await fetch('/rest/api/slashcommand/all')
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
     getSlashCommandByName = async (name) => {
         const response = await fetch('/rest/api/slashcommand/name/' + name)
         return await response.json()

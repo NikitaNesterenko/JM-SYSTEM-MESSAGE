@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -55,5 +57,12 @@ public class SlashCommandRestController {
         SlashCommand command = slashCommandService.getSlashCommandByName(name);
         return ResponseEntity.ok(command);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<SlashCommand>> getAllSlashCommand(){
+        logger.info("Getting all SlashCommands");
+        return ResponseEntity.ok(slashCommandService.getAllSlashCommands());
+    }
+
 
 }
