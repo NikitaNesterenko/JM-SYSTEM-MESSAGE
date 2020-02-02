@@ -67,6 +67,25 @@ export class MenuSettingsModal {
         });
     }
 
+    onJumpToDateBtnClick() {
+        $('#jumpToDate').click(() => {
+            alert('jumpToDate');
+        });
+    }
+
+    onCopyChannelNameBtnClick() {
+        $('#copyChannelName').click(() => {
+            let channelName = $('#channelName span').text();
+            let tempText = document.createElement("input");
+            document.body.appendChild(tempText);
+            tempText.setAttribute("id", "tempText_id");
+            document.getElementById("tempText_id").value = channelName;
+            tempText.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempText);
+        });
+    }                                              
+
     removeChannelFromSidebarList(channel_id) {
         const channel_btn = $('.p-channel_sidebar__channel');
         channel_btn.each(function (idx, item) {
@@ -132,6 +151,8 @@ export class MenuSettingsModal {
         this.onArchiveCloseBtnClick();
         this.onArchiveCancel();
         this.onArchiveSubmit();
+        this.onJumpToDateBtnClick();
+        this.onCopyChannelNameBtnClick();
     }
 
 
