@@ -19,6 +19,10 @@ $('.p-classic_nav__model__button__details').on('click', () => {
     toggle_right_menu();
 });
 
+$('#channelDetails').on('click', () => {
+    toggle_right_menu();
+});
+
 const get_channel_info_panel = () => {
     $('.p-flexpane__title_container').text('About this channel');
     const target_element = $('.p-flexpane__inside_body-scrollbar__child');
