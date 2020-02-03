@@ -73,13 +73,19 @@ export class MenuSettingsModal {
         });
     }
 
+    onAddPeopleToChannelBtnClick() {
+        $('#addPeopleToChannel').click(() => {
+            alert('AddPeopleToChannel');
+        });
+    }
+
     onCopyChannelNameBtnClick() {
         $('#copyChannelName').click(() => {
             let channelName = $('#channelName span').text();
             let tempText = document.createElement("input");
             document.body.appendChild(tempText);
             tempText.setAttribute("id", "tempText_id");
-            document.getElementById("tempText_id").value = channelName;
+            document.getElementById("tempText_id").value = '#' + channelName;
             tempText.select();
             document.execCommand("copy");
             document.body.removeChild(tempText);
@@ -152,6 +158,7 @@ export class MenuSettingsModal {
         this.onArchiveCancel();
         this.onArchiveSubmit();
         this.onJumpToDateBtnClick();
+        this.onAddPeopleToChannelBtnClick();
         this.onCopyChannelNameBtnClick();
     }
 
