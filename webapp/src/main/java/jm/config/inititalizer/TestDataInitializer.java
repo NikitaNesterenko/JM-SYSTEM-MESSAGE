@@ -92,11 +92,11 @@ public class TestDataInitializer {
         command.setUrl("/app/bot/slackbot/");
         command.setDescription("test description");
         command.setHints("test Hints");
-        Map<String, String> param = new HashMap<>();
+/*        Map<String, String> param = new HashMap<>();
         param.put("workspaceId", "2");
-        param.put("botId", "1");
+        param.put("botId", "2");
         param.put("channelId", "4");
-        //command.setParameters(new HashMap<>());
+        //command.setParameters(new HashMap<>());*/
         slashCommandDao.persist(command);
     }
 
@@ -315,9 +315,21 @@ public class TestDataInitializer {
 
     private void createBots() {
         Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
-        bot.getCommands().add(slashCommandDao.getById(1L));
+
+        bot.getWorkspaces().add(workspaceDAO.getById(1L));
+        bot.getWorkspaces().add(workspaceDAO.getById(2L));
+
+
+        Bot slackBot = new Bot("bot_2", "SlackBot", workspaceDAO.getById(2L), LocalDateTime.now());
+        slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
+        slackBot.getWorkspaces().add(workspaceDAO.getById(2L));
+        slackBot.getCommands().add(slashCommandDao.getById(1L));
+
         this.bots.add(bot);
+        this.bots.add(slackBot);
+
         botDAO.persist(bot);
+        botDAO.persist(slackBot);
     }
 
     private void createLinkRoles() {

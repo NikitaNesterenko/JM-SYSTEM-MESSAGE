@@ -106,7 +106,7 @@ export class SubmitMessage {
 
     async sendSlashCommand(entity) {
         if (entity.content.startsWith("/")) {
-            const comm = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ?entity.content.length : entity.content.indexOf(" "));
+            const comm = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
             const slashCommand = await this.slashCommandService.getSlashCommandByName(comm);
 
             const command = {

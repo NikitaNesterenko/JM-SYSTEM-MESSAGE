@@ -39,9 +39,11 @@ export class ChannelView {
 
     showBots(workspace_id) {
         this.bot_service.getBotByWorkspaceId(workspace_id).then(
-            bot => {
-                if (bot !== undefined) {
-                    this.addBot(bot);
+            bots => {
+                if (bots !== undefined) {
+                    bots.forEach(bot => {
+                        this.addBot(bot);
+                    });
                 }
             }
         );

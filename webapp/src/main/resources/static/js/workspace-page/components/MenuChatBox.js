@@ -3,34 +3,27 @@ const commandService = new SlashCommandRestPaginationService();
 
 export class MenuChatBox {
 
-    allActions = [];
     actionsArray = [];
 
     constructor() {
         this.input = $('#form_message_input');
+        window.getCommandsList = async () => {
+            window.allActions = ['invite', 'archive', 'join', 'leave', 'who'];
+            const commands = await commandService.getAllSlashCommands();
+            commands.forEach(command => {
+                window.allActions.push(command.name)
+            });
+            this.updateActionsArray(window.allActions);
+        }
     }
 
-    updateActionsArray() {
-        this.allActions = ['invite', 'archive', 'join', 'leave', 'who'];
-        commandService.getAllSlashCommands().then(response => {
-            response.forEach(command => {
-                this.allActions.push(command.name);
-            });
-            this.actionsArray = [];
-            this.allActions.forEach(e => this.addActionIfExist(e));
-        });
-/*        allCommands.forEach(command => {
-            this.allActions.push(command.name)
-        });*/
-
-        //this.actionsArray = [];
-
-        //this.allActions.forEach(e => this.addActionIfExist(e));
-
+    updateActionsArray(actions) {
+        this.actionsArray = [];
+        window.allActions.forEach(e => this.addActionIfExist(e));
     }
 
     addActionIfExist(action_name) {
-        if (action_name.startsWith(this.input.val().substr(1))) {
+        if (action_name.startsWith(this.input.val().substr(1, this.input.val().indexOf(" ") < 0 ? this.input.val().length - 1 : this.input.val().indexOf(" ") - 1 ))) {
             this.actionsArray.push(this.createActionElement(action_name));
         }
     }

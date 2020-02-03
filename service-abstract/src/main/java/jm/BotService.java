@@ -2,6 +2,7 @@ package jm;
 
 import jm.model.Bot;
 import jm.model.Channel;
+import jm.model.SlashCommand;
 import jm.model.Workspace;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public interface BotService {
 
     Bot GetBotByWorkspaceId(Workspace workspace);
 
+    List<Bot> GetBotsByWorkspaceId(Workspace workspace);
+
     Set<Channel> getChannels(Bot bot);
+
+    Bot getBotBySlashCommand(SlashCommand slashCommand);
 }

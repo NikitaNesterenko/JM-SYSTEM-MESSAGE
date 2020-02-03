@@ -3,6 +3,7 @@ package jm.controller;
 import jm.BotService;
 import jm.ChannelService;
 import jm.MessageService;
+import jm.SlashCommandService;
 import jm.dto.SlashCommandDto;
 import jm.model.Channel;
 import jm.model.Message;
@@ -30,11 +31,14 @@ public class SlackBotController {
     private MessageService messageService;
     @Autowired
     private BotService botService;
+    @Autowired
+    private SlashCommandService slashCommandService;
 
 
 
     @PostMapping
     public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) throws URISyntaxException {
+
         if (command.getCommand().startsWith("/topic")) {
             setTopic(command.getChannel_id(), command.getCommand().substring(7));
         }
@@ -45,7 +49,7 @@ public class SlackBotController {
         channel.setTopic("\"" + topic + "\"");
         channelService.updateChannel(channel);
         Message message = new Message();
-        message.setBot(botService.getBotById(1L));
+        message.setBot(botService.getBotById(2L));
         message.setDateCreate(LocalDateTime.now());
         message.setIsDeleted(false);
         message.setContent("Topic was changed");

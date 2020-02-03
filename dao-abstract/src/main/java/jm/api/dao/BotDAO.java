@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.model.Bot;
 import jm.model.Channel;
+import jm.model.SlashCommand;
 import jm.model.Workspace;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public interface BotDAO {
 
     Bot getBotByWorkspaceId(Workspace workspace);
 
+    List<Bot> getBotsByWorkspaceId(Workspace workspace);
+
     Set<Channel> getChannels(Bot bot);
+
+    Bot getBotByCommand(SlashCommand slashCommand);
 }

@@ -3,6 +3,7 @@ package jm;
 import jm.api.dao.BotDAO;
 import jm.model.Bot;
 import jm.model.Channel;
+import jm.model.SlashCommand;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,5 +47,15 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
+    public List<Bot> GetBotsByWorkspaceId(Workspace workspace) {
+        return botDAO.getBotsByWorkspaceId(workspace);
+    }
+
+    @Override
     public Set<Channel> getChannels(Bot bot) { return botDAO.getChannels(bot); }
+
+    @Override
+    public Bot getBotBySlashCommand(SlashCommand slashCommand) {
+        return botDAO.getBotByCommand(slashCommand);
+    }
 }

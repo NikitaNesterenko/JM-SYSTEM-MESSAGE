@@ -1,6 +1,7 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.WorkspaceDTO;
@@ -44,6 +45,13 @@ public class Workspace {
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
     private User user;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "workspaces_bots", joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "bot_id"))
+    @ToString.Exclude
+    private Set<Bot> bots;
 
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;

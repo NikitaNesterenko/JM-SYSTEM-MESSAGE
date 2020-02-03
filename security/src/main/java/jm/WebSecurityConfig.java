@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // для входа через /signin
                 // до того как юзер залогинится, он должен получить доступ к вводу названия воркспейса
                 // для восстановления пароля
-                .antMatchers("/", "/rest/api/workspaces/name/**", "/rest/api/users/is-exist-email/**", "/rest/api/users/password-recovery", "/rest/api/bot/**", "/rest/api/bot/", "/rest/api/slashcommand/**", "/rest/api/slashcommand/", "/app/**", "/app").permitAll();
+                .antMatchers("/", "/rest/api/workspaces/name/**", "/rest/api/users/is-exist-email/**", "/rest/api/users/password-recovery", "/rest/api/bot/**", "/rest/api/bot/", "/rest/api/slashcommand/**", "/rest/api/slashcommand/", "/app/**", "/app", "/rest", "/rest/**").permitAll();
 
         http.authorizeRequests()
                 .antMatchers("/email/**", "/js/**" , "/image/**" , "/api/create/**").permitAll();

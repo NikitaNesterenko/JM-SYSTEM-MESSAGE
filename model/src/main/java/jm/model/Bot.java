@@ -1,6 +1,7 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -39,6 +40,12 @@ public class Bot {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "workspaces_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "workspace_id"))
+    @ToString.Exclude
+    private Set<Workspace> workspaces = new HashSet<>();
 
     @JsonIgnoreProperties
     @ManyToMany(fetch = FetchType.LAZY)
