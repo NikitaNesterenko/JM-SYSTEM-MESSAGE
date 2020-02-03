@@ -1043,7 +1043,7 @@
             <button id="jumpToDate" class="settingsButton1" type="button">
                 <span class="settingsText">Jump to date...</span>
             </button>
-            <button class="settingsButton" type="button"><span class="settingsText">Add people to channel</span>
+            <button id="addPeopleToChannel" class="settingsButton" type="button"><span class="settingsText">Add people to channel</span>
             </button>
             <button id="channelDetails" class="settingsButton" type="button"><span class="settingsText">View channel details</span></button>
             <button id="copyChannelName" class="settingsButton" type="button"><span class="settingsText">Copy channel name</span></button>
@@ -1058,7 +1058,7 @@
             </button>
             <button class="settingsButton4" type="button"><span class="settingsText">Mute channel</span></button>
         </div>
-        <button class="settingsButton5" type="button"><span class="settingsText">Add app</span></button>
+        <button class="settingsButton5" type="button" data-toggle="modal" data-target="#appsModal"><span class="settingsText">Add app</span></button>
     </div>
 </div>
 
@@ -1077,6 +1077,11 @@
             <div class="formButton">
                 <button class="additionalOptionsButton" id="exampleLink1"><span><b>Archive this channel</b>
                 <br>If you don’t think it will be used anymore and you want to clean up, archive it. The channel can be unarchived later (but everyone will have been removed).</span>
+                </button>
+            </div>
+            <div>
+                <button class="additionalOptionsButton" id="exampleLink3"><span><b>Share with another organization</b>
+                <br>In a shared channel, people from two separate organizations can send messages, share files, and work together in Slack. Learn more</span>
                 </button>
             </div>
             <div>
