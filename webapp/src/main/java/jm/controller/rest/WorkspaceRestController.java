@@ -83,7 +83,7 @@ public class WorkspaceRestController {
 
     @GetMapping("/choosed")
     public ResponseEntity<Workspace> getChoosedWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
-       Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+       Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
        if(workspace==null) {
            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
        }
@@ -96,7 +96,7 @@ public class WorkspaceRestController {
         if (workspace == null) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-        request.getSession().setAttribute("WorkspaceID", workspace);
+        request.getSession(false).setAttribute("WorkspaceID", workspace);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 

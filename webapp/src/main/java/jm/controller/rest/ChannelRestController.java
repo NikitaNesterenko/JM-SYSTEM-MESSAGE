@@ -74,7 +74,7 @@ public class ChannelRestController {
         if (channel == null) {
             channel = channelDTOService.toEntity(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
-            Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+            Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
