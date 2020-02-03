@@ -39,7 +39,7 @@ public class InviteTokenRestController {
     public ResponseEntity invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
-        Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
         invites.stream()
                 .forEach(x -> {x.setHash(tokenGenerator.generate(charactersInHash));
