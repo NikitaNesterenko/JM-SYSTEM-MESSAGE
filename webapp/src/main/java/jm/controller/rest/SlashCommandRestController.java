@@ -64,5 +64,11 @@ public class SlashCommandRestController {
         return ResponseEntity.ok(slashCommandService.getAllSlashCommands());
     }
 
+    @GetMapping("/workspace/id/{id}")
+    public ResponseEntity<?> getSlashCommandsByWorkspace(@PathVariable Long id) {
+        logger.info("Getting all SlashCommands for workspace with id = {}", id);
+        return ResponseEntity.ok(slashCommandService.getSlashCommandsByWorkspace(workspaceService.getWorkspaceById(id)));
+    }
+
 
 }

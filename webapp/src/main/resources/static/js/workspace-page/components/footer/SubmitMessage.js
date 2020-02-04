@@ -107,6 +107,19 @@ export class SubmitMessage {
     async sendSlashCommand(entity) {
         if (entity.content.startsWith("/")) {
             const comm = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
+            //доделать выбор данных из window.currentCommands
+            window.currentCommands.forEach(com => async () => {
+                if (com.name === comm) {
+                    const command = {
+                        channel_id: entity.channelId,
+                        user_id: entity.userId,
+                        command: entity.content
+                    };
+                    await this.slashCommandService.sendSlashCommand(com.url, command);
+                }
+            });
+/*
+
             const slashCommand = await this.slashCommandService.getSlashCommandByName(comm);
 
             const command = {
@@ -114,7 +127,7 @@ export class SubmitMessage {
                 user_id: entity.userId,
                 command: entity.content
             }
-            let resp = await this.slashCommandService.sendSlashCommand(slashCommand.url, command);
+            let resp = await this.slashCommandService.sendSlashCommand(slashCommand.url, command);*/
         }
     }
 

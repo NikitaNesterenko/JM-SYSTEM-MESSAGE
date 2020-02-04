@@ -1,18 +1,26 @@
-import {SlashCommandRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {SlashCommandRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 const commandService = new SlashCommandRestPaginationService();
+const workspaceService= new WorkspaceRestPaginationService();
 
 export class MenuChatBox {
 
     actionsArray = [];
 
     constructor() {
+        //формируем список команд, доступных в данном воркспейсе
         this.input = $('#form_message_input');
         window.getCommandsList = async () => {
             window.allActions = ['invite', 'archive', 'join', 'leave', 'who'];
-            const commands = await commandService.getAllSlashCommands();
-            commands.forEach(command => {
+            //запоминаем id выбранного workspace
+            await workspaceService.getChoosedWorkspace().then(workspace => {
+                window.choosedWorkspace = workspace.id
+            });
+            //получаем все команды для данного workspace и сохраняем их в глобальной переменной
+            window.currentCommands = await commandService.getSlashCommandsByWorkspace(window.choosedWorkspace);
+            window.currentCommands.forEach(command => {
                 window.allActions.push(command.name)
             });
+            //обновляем окно списка команд
             this.updateActionsArray(window.allActions);
         }
     }

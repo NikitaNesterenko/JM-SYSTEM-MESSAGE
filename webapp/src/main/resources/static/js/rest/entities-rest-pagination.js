@@ -78,11 +78,17 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
             .catch(err => console.log(err.status));
     };
 
+    getSlashCommandsByWorkspace = async (id) => {
+        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
     getSlashCommandByName = async (name) => {
         const response = await fetch('/rest/api/slashcommand/name/' + name)
         return await response.json()
             .catch(err => console.log(err.status));
-    }
+    };
 
     sendSlashCommand = async (url, command) => {
         const response = await fetch(url, {

@@ -1,17 +1,9 @@
 package jm.model;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.CollectionSerializer;
-import com.fasterxml.jackson.databind.ser.std.MapSerializer;
-
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 @Setter
