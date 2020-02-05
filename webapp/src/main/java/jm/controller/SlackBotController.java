@@ -1,13 +1,12 @@
 package jm.controller;
 
-import jm.BotService;
-import jm.ChannelService;
-import jm.MessageService;
-import jm.SlashCommandService;
+import jm.*;
 import jm.dto.SlashCommandDto;
 import jm.model.Channel;
 import jm.model.Message;
 import jm.model.SlashCommand;
+import jm.model.User;
+import jm.model.message.DirectMessage;
 import org.apache.kafka.common.protocol.types.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +32,12 @@ public class SlackBotController {
     private BotService botService;
     @Autowired
     private SlashCommandService slashCommandService;
+    @Autowired
+    private ConversationService conversationService;
+    @Autowired
+    private DirectMessageService directMessageService;
+    @Autowired
+    private UserService userService;
 
 
 
@@ -41,6 +46,8 @@ public class SlackBotController {
 
         if (command.getCommand().startsWith("/topic")) {
             setTopic(command.getChannel_id(), command.getCommand().substring(7));
+        } else if (command.getCommand().startsWith("/dm")) {
+            //sendDirectMessage();
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -55,5 +62,15 @@ public class SlackBotController {
         message.setContent("Topic was changed");
         message.setChannelId(id);
         messageService.createMessage(message);
+    }
+
+    private void sendDirectMessage(Long fromId, String toUsername, String message, Long channelId){
+/*        Channel channel = channelService.getChannelById(channelId);
+        User toUser = userService.;
+        Long wsId = channel.getWorkspace().getId();
+        DirectMessage dm = new DirectMessage();
+        dm.setConversation();*/
+
+
     }
 }

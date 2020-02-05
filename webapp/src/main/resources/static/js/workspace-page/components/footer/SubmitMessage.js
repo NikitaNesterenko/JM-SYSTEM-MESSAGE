@@ -55,6 +55,8 @@ export class SubmitMessage {
             if (conversation_id !== '0') {
                 await this.sendDirectMessage(conversation_id);
             }
+
+
         });
     }
 
@@ -106,28 +108,17 @@ export class SubmitMessage {
 
     async sendSlashCommand(entity) {
         if (entity.content.startsWith("/")) {
-            const comm = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
-            //доделать выбор данных из window.currentCommands
-            window.currentCommands.forEach(com => async () => {
-                if (com.name === comm) {
-                    const command = {
+            const inputCommand = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
+            window.currentCommands.forEach(command => {
+                if (command.name === inputCommand) {
+                    const sendCommand = {
                         channel_id: entity.channelId,
                         user_id: entity.userId,
                         command: entity.content
                     };
-                    await this.slashCommandService.sendSlashCommand(com.url, command);
+                    this.slashCommandService.sendSlashCommand(command.url, sendCommand);
                 }
             });
-/*
-
-            const slashCommand = await this.slashCommandService.getSlashCommandByName(comm);
-
-            const command = {
-                channel_id: entity.channelId,
-                user_id: entity.userId,
-                command: entity.content
-            }
-            let resp = await this.slashCommandService.sendSlashCommand(slashCommand.url, command);*/
         }
     }
 
