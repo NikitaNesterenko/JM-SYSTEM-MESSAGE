@@ -87,17 +87,24 @@ public class TestDataInitializer {
     }
 
     private void createSlashCommands(){
-        SlashCommand command = new SlashCommand();
-        command.setName("topic");
-        command.setUrl("/app/bot/slackbot/");
-        command.setDescription("test description");
-        command.setHints("test Hints");
+        SlashCommand topicChangeCommand = new SlashCommand();
+        topicChangeCommand.setName("topic");
+        topicChangeCommand.setUrl("/app/bot/slackbot/");
+        topicChangeCommand.setDescription("test description");
+        topicChangeCommand.setHints("test Hints");
 /*        Map<String, String> param = new HashMap<>();
         param.put("workspaceId", "2");
         param.put("botId", "2");
-        param.put("channelId", "4");
+                param.put("channelId", "4");
         //command.setParameters(new HashMap<>());*/
-        slashCommandDao.persist(command);
+        slashCommandDao.persist(topicChangeCommand);
+
+        SlashCommand directMessageCommand = new SlashCommand();
+        directMessageCommand.setName("dm");
+        directMessageCommand.setUrl("/app/bot/slackbot");
+        directMessageCommand.setDescription("DM discription");
+        directMessageCommand.setHints("DM Hints");
+        slashCommandDao.persist(directMessageCommand);
     }
 
     private void createRoles() {
@@ -315,7 +322,7 @@ public class TestDataInitializer {
 
     private void createBots() {
         Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
-        bot.getWorkspaces().add(workspaceDAO.getById(1L));
+        //bot.getWorkspaces().add(workspaceDAO.getById(1L));
         bot.getWorkspaces().add(workspaceDAO.getById(2L));
 
         Bot zoom = new Bot("zoom", "Zoom", workspaceDAO.getById(1L), LocalDateTime.now());
@@ -324,8 +331,9 @@ public class TestDataInitializer {
 
         Bot slackBot = new Bot("bot_2", "SlackBot", workspaceDAO.getById(2L), LocalDateTime.now());
         slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
-        slackBot.getWorkspaces().add(workspaceDAO.getById(2L));
+        //slackBot.getWorkspaces().add(workspaceDAO.getById(2L));
         slackBot.getCommands().add(slashCommandDao.getById(1L));
+        slackBot.getCommands().add(slashCommandDao.getById(2L));
 
         this.bots.add(bot);
         this.bots.add(zoom);
