@@ -315,9 +315,11 @@ public class TestDataInitializer {
 
     private void createBots() {
         Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
-
         bot.getWorkspaces().add(workspaceDAO.getById(1L));
         bot.getWorkspaces().add(workspaceDAO.getById(2L));
+
+        Bot zoom = new Bot("zoom", "Zoom", workspaceDAO.getById(1L), LocalDateTime.now());
+        zoom.getWorkspaces().add(workspaceDAO.getById(1L));
 
 
         Bot slackBot = new Bot("bot_2", "SlackBot", workspaceDAO.getById(2L), LocalDateTime.now());
@@ -326,10 +328,12 @@ public class TestDataInitializer {
         slackBot.getCommands().add(slashCommandDao.getById(1L));
 
         this.bots.add(bot);
-        this.bots.add(slackBot);
+        this.bots.add(zoom);
+
 
         botDAO.persist(bot);
         botDAO.persist(slackBot);
+        botDAO.persist(zoom);
     }
 
     private void createLinkRoles() {
