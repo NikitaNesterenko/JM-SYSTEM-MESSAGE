@@ -17,7 +17,6 @@
     <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
-    <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
@@ -953,7 +952,7 @@
                                         </button>
                                     </div>
                                     <div class="associatedUserList" id="associatedUserList">
-                                        <form>
+                                        <form id="associatedUserListForm">
                                             <select class="associatedUserListSelect"
                                                     id="associatedUserListSelect" multiple
                                                     name="usersList"></select>
@@ -1507,6 +1506,71 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
+            <div id="searchDataContainer" style="display: none">
+                <div class="" id="searchDataTab" style="padding: 10px">
+                    <ul class="nav nav-tabs mb-4" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Messages</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Channels</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" id="pills-people-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-people" aria-selected="false">People</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+                        </div>
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+                        </div>
+                        <div class="tab-pane fade" id="pills-people" role="tabpanel" aria-labelledby="pills-people-tab">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="searchDataView" style="padding: 10px">
+                    <div class="col-8" id="searchDataResults">
+
+                    </div>
+
+                    <div class="col-4" id="searchDataFilters">
+                        <h5>Filter by <mark>(not working)</mark></h5>
+
+                        <div id="searchDataFilterUsers">
+                            <p>Shared by</p>
+                            <dl></dl>
+                        </div>
+
+                        <div id="searchDataFilterChannels">
+                            <p>Shared in</p>
+                            <dl></dl>
+                        </div>
+
+                        <div id="searchDataFilterDate">
+                            <p>Date</p>
+                            <input id="searchDataFilterDateFrom" type="date" placeholder="Start">
+                            <input id="searchDataFilterDateTill" type="date" placeholder="End">
+                        </div>
+
+                        <br>
+
+                        <div id="searchDataFilterOther">
+                            <p>More Options</p>
+                            <label>
+                                <input id="searchDataFilterOtherBot" type="checkbox">
+                                Hide bots
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
             <div id="idSearchContent">
                 Что-то пошло не так
             </div>
