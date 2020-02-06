@@ -1,5 +1,8 @@
 package jm.controller.rest;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ConversationService;
 import jm.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/api/conversations")
+@Tag(name = "conversation", description = "Conversation API")
 public class ConversationRestController {
 
     private ConversationService conversationService;
@@ -22,11 +26,18 @@ public class ConversationRestController {
     }
 
     @GetMapping(value = "/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get conversation by id")
+    })
     public ResponseEntity<Conversation> getConversationById(@PathVariable Long id) {
         return ResponseEntity.ok(conversationService.getConversationById(id));
     }
 
     @PostMapping(value = "/create")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: conversation created"),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to create conversation")
+    })
     public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
         try {
             conversationService.createConversation(conversation);
@@ -38,6 +49,10 @@ public class ConversationRestController {
     }
 
     @PutMapping(value = "/update")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: conversation updated"),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to update conversation")
+    })
     public ResponseEntity<Conversation> updateConversation(@RequestBody Conversation conversation) {
         try {
             Conversation updated = conversationService.updateConversation(conversation);
@@ -48,29 +63,41 @@ public class ConversationRestController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: conversation deleted")
+    })
     public ResponseEntity<Conversation> deleteConversation(@PathVariable Long id) {
         conversationService.deleteConversation(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get all conversations")
+    })
     public ResponseEntity<List<Conversation>> getAllConversations(){
         return ResponseEntity.ok(conversationService.gelAllConversations());
     }
 
     @GetMapping(value = "/user/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get conversations by user id")
+    })
     public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
         return ResponseEntity.ok(conversationService.getConversationsByUserId(id));
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get conversation by respondents")
+    })
     public ResponseEntity<Conversation> getConversationByRespondents(
-            @PathVariable Long firstId, @PathVariable Long secondId) {
+            @PathVariable Long firstId, @PathVariable Long secondId
+    ) {
         return new ResponseEntity<Conversation>(
                 conversationService.getConversationByUsers(firstId, secondId),
                 HttpStatus.OK
         );
-
     }
 
 }

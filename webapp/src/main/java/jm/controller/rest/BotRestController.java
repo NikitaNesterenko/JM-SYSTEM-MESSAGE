@@ -1,5 +1,8 @@
 package jm.controller.rest;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.BotService;
 import jm.ChannelService;
 import jm.MessageService;
@@ -23,6 +26,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/rest/api/bot")
+@Tag(name = "bot", description = "Bot API")
 public class BotRestController {
 
     private final BotService botService;
@@ -43,6 +47,10 @@ public class BotRestController {
 
     // DTO compliant
     @GetMapping("/workspace/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get bot by workspace"),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
+    })
     public ResponseEntity<BotDTO> getBotByWorkspace(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
         Bot bot = botService.GetBotByWorkspaceId(workspace);
@@ -57,6 +65,9 @@ public class BotRestController {
 
     // DTO compliant
     @GetMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get bot by id")
+    })
     public ResponseEntity<BotDTO> getBotById(@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
         //logger.info(botService.getBotById(id).toString());
@@ -66,6 +77,10 @@ public class BotRestController {
 
     // DTO compliant
     @PostMapping(value = "/create")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "CREATED: bot created"),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create bot")
+    })
     public ResponseEntity createBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         try {
@@ -80,6 +95,10 @@ public class BotRestController {
 
     // DTO compliant
     @PutMapping(value = "/update")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: bot updated"),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND: failed to update bot")
+    })
     public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
@@ -94,6 +113,9 @@ public class BotRestController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: bot deleted")
+    })
     public ResponseEntity deleteBot(@PathVariable("id") Long id) {
         botService.deleteBot(id);
         logger.info("Удален бот с id = {}", id);
@@ -101,6 +123,9 @@ public class BotRestController {
     }
 
     @PostMapping("/{id}/channels/{name}/messages")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "CREATED: bot message created")
+    })
     public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
         Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
@@ -112,12 +137,18 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get channels by bot")
+    })
     public ResponseEntity<Set<Channel>> getChannels(@PathVariable("id") Long id) {
         Bot bot = botService.getBotById(id);
         return new ResponseEntity<>(botService.getChannels(bot), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/hour")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get bot messages per hour")
+    })
     public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
@@ -127,6 +158,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get bot messages per day")
+    })
     public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
@@ -136,6 +170,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get bot messages per week")
+    })
     public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
@@ -145,6 +182,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: get bot messages per month")
+    })
     public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);

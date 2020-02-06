@@ -1,5 +1,8 @@
 package jm.controller.rest;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.InviteTokenService;
 import jm.MailService;
 import jm.TokenGenerator;
@@ -17,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/rest/api/invites")
+@Tag(name = "invite", description = "Invite token API")
 public class InviteTokenRestController {
 
     private UserService userService;
@@ -36,6 +40,9 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/create")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: invites were send")
+    })
     public ResponseEntity invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
@@ -73,7 +80,11 @@ public class InviteTokenRestController {
 
 
     @PostMapping
-    public ResponseEntity checkUser (@RequestBody InviteToken inviteToken){
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK: user checked"),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to check user")
+    })
+    public ResponseEntity checkUser(@RequestBody InviteToken inviteToken){
         if(userService.getUserByEmail(inviteToken.getEmail()) != null) {
             inviteTokenService.deleteInviteToken(inviteToken.getId());
             logger.info("invite token удален");
