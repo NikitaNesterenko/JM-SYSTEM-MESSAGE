@@ -1,4 +1,5 @@
 import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -7,6 +8,7 @@ export class MenuSettingsModal {
 
     constructor() {
         this.channel_service = new ChannelRestPaginationService();
+        this.users_service = new UserRestPaginationService();
         this.settingBtn = $('#settingsMenuButton, .p-classic_nav__model__button__settings__icon');
     }
 
@@ -74,21 +76,24 @@ export class MenuSettingsModal {
     }
 
     onAddPeopleToChannelBtnClick() {
-        $('#addPeopleToChannel').click(() => {
-            alert('AddPeopleToChannel');
+        $("#tags").on("keyup", (event) => {
+            let suggestions = [];
+            this.users_service.getUsersByWorkspace(1).then(
+                users => {
+                    $.each(users, (k, v) => {
+                        suggestions.push(v.name);
+                    })
+                });
+            $("#tags").autocomplete({
+                source: suggestions,
+                appendTo : '.ui-widget'
+            });
         });
     }
 
     onCopyChannelNameBtnClick() {
         $('#copyChannelName').click(() => {
-            let channelName = $('#channelName span').text();
-            let tempText = document.createElement("input");
-            document.body.appendChild(tempText);
-            tempText.setAttribute("id", "tempText_id");
-            document.getElementById("tempText_id").value = '#' + channelName;
-            tempText.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempText);
+            navigator.clipboard.writeText('#' + $('#channelName span').text());
         });
     }                                              
 
