@@ -276,6 +276,8 @@ public class TestDataInitializer {
         workspace1.setUser(userJohn);
         workspace1.setIsPrivate(false);
         workspace1.setCreatedDate(LocalDateTime.now());
+        workspace1.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
+        workspace1.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace1);
         this.workspaces.add(workspace1);
@@ -286,6 +288,8 @@ public class TestDataInitializer {
         workspace2.setUser(userStepan);
         workspace2.setIsPrivate(true);
         workspace2.setCreatedDate(LocalDateTime.now());
+        workspace2.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
+        workspace2.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace2);
         this.workspaces.add(workspace2);
@@ -296,6 +300,8 @@ public class TestDataInitializer {
         workspace3.setUser(userJohn);
         workspace3.setIsPrivate(false);
         workspace3.setCreatedDate(LocalDateTime.now());
+        workspace3.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
+        workspace3.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace3);
         this.workspaces.add(workspace3);

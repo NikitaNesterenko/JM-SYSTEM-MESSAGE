@@ -72,8 +72,8 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         this.redirectURI = redirectURI;
         this.applicationName = applicationName;
         this.updatePeriod = updatePeriod;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
+        //this.clientId = clientId;
+        //this.clientSecret = clientSecret;
         this.warningBeforeEvent = warningBeforeEvent;
     }
 
@@ -98,10 +98,10 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public String authorize() throws GeneralSecurityException, IOException {
+    public String authorize(String principalName) throws GeneralSecurityException, IOException {
 
         AuthorizationCodeRequestUrl authorizationUrl;
-
+        setGoogleClientIdAndSecret(principalName);
         if (flow == null) {
             GoogleClientSecrets.Details web = new GoogleClientSecrets.Details();
             web.setClientId(clientId);
@@ -263,5 +263,11 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
                     .setApplicationName(applicationName).build();
         }
         return null;
+    }
+    public void setGoogleClientIdAndSecret(String principalName) {
+        User user = userService.getUserByLogin(principalName);
+        List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUser(user);
+        clientId = workspacesByUser.get(0).getGoogleClientId();
+        clientSecret = workspacesByUser.get(0).getGoogleClientSecret();
     }
 }

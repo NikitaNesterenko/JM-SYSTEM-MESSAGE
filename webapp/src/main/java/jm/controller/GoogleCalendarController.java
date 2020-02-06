@@ -28,8 +28,8 @@ public class GoogleCalendarController {
     }
 
     @GetMapping
-    public RedirectView googleConnection() throws Exception {
-        String authorize = googleCalendarService.authorize();
+    public RedirectView googleConnection(Principal principal) throws Exception {
+        String authorize = googleCalendarService.authorize(principal.getName());
         return new RedirectView(authorize);
     }
 

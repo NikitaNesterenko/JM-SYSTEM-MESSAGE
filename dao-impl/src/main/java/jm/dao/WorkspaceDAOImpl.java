@@ -36,7 +36,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public List<Workspace> getWorkspacesByUser(User user) {
-            String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
+            String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date, ws.google_client_id, ws.google_client_secret "
                     + "from workspaces ws "
                     + "right join workspace_user_role wur on ws.id = wur.workspace_id "
                     + "where wur.user_id = :userid "

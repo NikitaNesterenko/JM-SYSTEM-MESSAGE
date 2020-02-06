@@ -16,7 +16,7 @@ public interface GoogleCalendarService {
 
     List<Event> getEvents(String principalName, DateTime dataStart, DateTime dataEnd);
 
-    String authorize() throws GeneralSecurityException, IOException;
+    String authorize(String principalName) throws GeneralSecurityException, IOException;
 
     void createGoogleCalendarChannel(String principalName);
 
