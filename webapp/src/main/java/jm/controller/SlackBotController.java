@@ -1,6 +1,8 @@
 package jm.controller;
 
 import jm.*;
+import jm.dto.MessageDTO;
+import jm.dto.MessageDtoService;
 import jm.dto.SlashCommandDto;
 import jm.model.*;
 import jm.model.message.DirectMessage;
@@ -9,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/app/bot/slackbot")
@@ -33,48 +40,59 @@ public class SlackBotController {
     private DirectMessageService directMessageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    MessageDtoService messageDtoService;
 
     private Bot bot;
 
 
 
-    @PostMapping
-    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) throws URISyntaxException {
+    @PostMapping()
+    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command){
         String currentCommand = command.getCommand();
+        ResponseEntity<?> resp = null;
         if (currentCommand.startsWith("/topic")) {
-            setTopic(command.getChannel_id(), currentCommand.substring(7));
+            resp = setTopic(command.getChannelId(), currentCommand.substring(7));
         } else if (currentCommand.startsWith("/dm ")) {
             String[] words = currentCommand.replaceAll("\\s+"," ").trim().split("\\s");
             String toUserName = words[1].startsWith("@") ? words[1] : null;
             if (toUserName != null) {
-                sendDirectMessage(command.getUser_id(), toUserName.substring(1),
+                resp = sendDirectMessage(command.getUserId(), toUserName.substring(1),
                         currentCommand.substring(currentCommand.indexOf(toUserName) + toUserName.length() + 1),
-                        command.getChannel_id());
+                        command.getChannelId());
+                resp = null;
             }
+        } else if (currentCommand.startsWith("/leave")) {
+
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        System.out.println("asd");
+        return resp == null? new ResponseEntity<>(HttpStatus.OK) : resp;
     }
-    private void setTopic(Long id, String topic) {
+
+
+    private ResponseEntity<?> setTopic(Long id, String topic) {
         //Изменение топика канала
         Channel channel = channelService.getChannelById(id);
         channel.setTopic("\"" + topic + "\"");
         channelService.updateChannel(channel);
 
         //отправка сообщения ботом
-        sendRequestMessage(id, "Topic was changed");
+        return sendRequestMessage(id, "Topic was changed");
     }
 
-    private void sendDirectMessage(Long fromId, String toUsername, String message, Long channelId){
+    private ResponseEntity<?> sendDirectMessage(Long fromId, String toUsername, String message, Long channelId){
         User toUser = userService.getUserByName(toUsername);
 
         if (toUser == null) {
-            return;
+            return sendRequestMessage(channelId, "User @" + toUsername + " not found");
         }
+
         Channel channel = channelService.getChannelById(channelId);
         Workspace workspace = channel.getWorkspace();
-        DirectMessage dm = new DirectMessage();
-        Conversation conv = conversationService.getConversationByUsers(fromId, toUser.getId());
 
+        //Получаем conversation двух пользователей, если существовала
+        Conversation conv = conversationService.getConversationByUsers(fromId, toUser.getId());
+        //создаем новый conversation для пользователей
         if (conv == null) {
             conv = new Conversation();
             conv.setOpeningUser(userService.getUserById(fromId));
@@ -86,22 +104,29 @@ public class SlackBotController {
             conv = conversationService.getConversationByUsers(fromId, toUser.getId());
         }
 
+        //создаем DirectMessage
+        DirectMessage dm = new DirectMessage();
         dm.setConversation(conv);
         dm.setDateCreate(LocalDateTime.now());
         dm.setUser(userService.getUserById(fromId));
         dm.setContent(message);
         dm.setIsDeleted(false);
         directMessageService.saveDirectMessage(dm);
+
+        return sendRequestMessage(channelId, "Message for @" + toUsername + " was sent");
     }
 
-    private void sendRequestMessage(Long channelId, String message){
+    //Метод создания сообщения от бота в канале channelId
+    private ResponseEntity<?> sendRequestMessage(Long channelId, String message){
         Message newMessage = new Message();
         newMessage.setBot(getBot());
         newMessage.setDateCreate(LocalDateTime.now());
         newMessage.setIsDeleted(false);
         newMessage.setContent(message);
         newMessage.setChannelId(channelId);
+        newMessage.setRecipientUsers(new HashSet<>());
         messageService.createMessage(newMessage);
+        return new ResponseEntity<>(messageDtoService.toDto(newMessage), HttpStatus.CREATED);
     }
 
     private Bot getBot() {
@@ -110,6 +135,18 @@ public class SlackBotController {
         }
         return bot;
     }
+
+/*    @MessageMapping("/slackbot")
+    @SendTo("/topic/slackbot")
+    public ResponseEntity<?> sendMessage(@RequestBody SlashCommandDto command) {
+        String currentCommand = command.getCommand();
+        String newTopic =  currentCommand.substring(7);
+        setTopic(command.getChannelId(), newTopic);
+        Map<String, String> response = new HashMap<>();
+        response.put("command", "topic");
+        response.put("topic", newTopic);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }*/
 
 
 }

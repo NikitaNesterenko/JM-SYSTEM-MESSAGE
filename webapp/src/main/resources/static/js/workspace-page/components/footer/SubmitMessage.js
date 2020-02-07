@@ -2,6 +2,7 @@ import {
     WorkspaceRestPaginationService,
     UserRestPaginationService,
     ChannelRestPaginationService,
+    ChannelTopicRestPaginationService,
     MessageRestPaginationService,
     StorageService,
     DirectMessagesRestController,
@@ -40,14 +41,6 @@ export class SubmitMessage {
             event.preventDefault();
             const hasCommand = await this.checkCommand();
             if (!hasCommand) {
-
-                const content =  $("#form_message_input").val()
-                if (content.startsWith('/leave ')) {
-                    let channelName = content.substring(7)
-                    this.leaveChannel(channelName)
-                    $("#form_message_input").val("")
-                    return
-                }
 
                 const channel_name = sessionStorage.getItem("channelName");
                 const conversation_id = sessionStorage.getItem('conversation_id');
@@ -111,10 +104,10 @@ export class SubmitMessage {
 
 
 
-        this.message_service.create(entity).then(
+        await this.message_service.create(entity).then(
             msg_id => sendName(msg_id)
         );
-        this.sendSlashCommand(entity);
+        await this.sendSlashCommand(entity);
     }
 
     async sendSlashCommand(entity) {
@@ -123,11 +116,24 @@ export class SubmitMessage {
             window.currentCommands.forEach(command => {
                 if (command.name === inputCommand) {
                     const sendCommand = {
-                        channel_id: entity.channelId,
-                        user_id: entity.userId,
+                        channelId: entity.channelId,
+                        userId: entity.userId,
                         command: entity.content
                     };
-                    this.slashCommandService.sendSlashCommand(command.url, sendCommand);
+                    if ((inputCommand === "topic") || inputCommand === "leave") {
+                        sendSlackBotCommand(sendCommand);
+                    } else {
+                        this.slashCommandService.sendSlashCommand(command.url, sendCommand).then(
+                        msg_id => {
+                            if (!msg_id == undefined){
+                                sendName(msg_id);
+                            }
+                        }
+                    )/*.then(() => {
+                        if (inputCommand === "topic") {
+                            document.getElementById("topic_string").textContent = "ololo";
+                        }
+                    })*/;}
                 }
             });
         }

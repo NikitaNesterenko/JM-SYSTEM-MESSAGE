@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SlashCommandDto {
         private String command;
-        private Long channel_id;
-        private Long user_id;
+        private Long channelId;
+        private Long userId;
 
 
 }

@@ -105,6 +105,13 @@ public class TestDataInitializer {
         directMessageCommand.setDescription("DM discription");
         directMessageCommand.setHints("DM Hints");
         slashCommandDao.persist(directMessageCommand);
+
+        SlashCommand leaveCommand = new SlashCommand();
+        leaveCommand.setName("leave");
+        leaveCommand.setUrl("/app/bot/slackbot");
+        leaveCommand.setDescription("Leave discription");
+        leaveCommand.setHints("Leave Hints");
+        slashCommandDao.persist(leaveCommand);
     }
 
     private void createRoles() {
@@ -334,6 +341,7 @@ public class TestDataInitializer {
         //slackBot.getWorkspaces().add(workspaceDAO.getById(2L));
         slackBot.getCommands().add(slashCommandDao.getById(1L));
         slackBot.getCommands().add(slashCommandDao.getById(2L));
+        slackBot.getCommands().add(slashCommandDao.getById(3L));
 
         this.bots.add(bot);
         this.bots.add(zoom);

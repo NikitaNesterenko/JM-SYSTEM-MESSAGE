@@ -1,7 +1,11 @@
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 import {Command} from "/js/workspace-page/components/footer/Command.js";
 
+import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessage.js"
+
 export class StompClient {
+
+
 
     constructor(channel_message_view, thread_view, direct_message_view, channel_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
@@ -9,6 +13,10 @@ export class StompClient {
         this.thread_view = thread_view;
         this.dm_view = direct_message_view;
         this.channelview = channel_view;
+        this.sm = new SubmitMessage();
+
+
+        this.handlers = [];
 
         this.commands = new Command();
 
@@ -16,6 +24,7 @@ export class StompClient {
         window.sendChannel = (channel) => this.sendChannel(channel);
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
+        window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message);
     }
 
     connect() {
@@ -25,6 +34,7 @@ export class StompClient {
             this.subscribeChannel();
             this.subscribeThread();
             this.subscribeDirectMessage();
+            this.subscribeSlackBot();
         });
     }
 
@@ -32,7 +42,7 @@ export class StompClient {
         this.stompClient.subscribe('/topic/messages', async (message) => {
             let result = JSON.parse(message.body);
             result['content'] = result.inputMassage;
-            if (result.userId != null && !result.isDeleted) {
+            if ((result.userId != null || result.botId != null) && !result.isDeleted) {
                 if (result.channelId === channel_id) {
                     if (result.isUpdated) {
                         this.channel_message_view.updateMessage(result);
@@ -54,6 +64,25 @@ export class StompClient {
             }
             notifyParseMessage(result);
         });
+    }
+
+    subscribeSlackBot() {
+        this.stompClient.subscribe("/topic/slackbot", (data) => {
+            const slackBot = JSON.parse(data.body);
+            if (slackBot.command === "topic") {
+                if (window.channel_id == slackBot.channelId) {
+                    $("#topic_string").text(slackBot.topic);
+                }
+            } else if (slackBot.command === "leave"){
+                if (slackBot.userId == window.loggedUserId) {
+                    console.log("hello");
+                    $(".p-channel_sidebar__channels__list").html('');
+                    this.sm.renewChannels(window.choosedWorkspace, window.loggedUserId).then(() => console.log("ok"));
+                }
+                this.sendName(JSON.parse(slackBot.report));
+            }
+           // this.handlers.forEach()
+        })
     }
 
     subscribeChannel() {
@@ -149,4 +178,27 @@ export class StompClient {
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));
     }
+
+    sendSlackBotCommand(message) {
+        let entity = {
+            'id': message.id,
+            'inputMassage': message.content,
+            'command': message.command,
+            'isDeleted': message.isDeleted,
+            'isUpdated': message.isUpdated,
+            'dateCreate': message.dateCreate,
+            'userId': message.userId,
+            'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
+            'botId': message.botId,
+            'botNickName': message.botNickName,
+            'filename': message.filename,
+            'sharedMessageId': message.sharedMessageId,
+            'channelId': message.channelId,
+            'channelName': message.channelName
+        };
+
+        this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
+    }
+
 }
