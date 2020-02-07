@@ -1,8 +1,12 @@
 package jm.controller.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jm.dto.BotDTO;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,11 +22,19 @@ import java.io.InputStream;
 @Tag(name = "image", description = "Image API")
 public class imageRestController {
 
+    //TODO: change mediaType
     @GetMapping(value = "/{userId}/{imageName}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK: get user image"),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to find user image")
-    })
+    @Operation(summary = "Get user image",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = BotDTO.class)
+                            ),
+                            description = "OK: get user image"
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to find user image")
+            })
     public ResponseEntity<?> getUserImage(@PathVariable String userId, @PathVariable String imageName) throws IOException {
         try {
             InputStream in = getClass().getResourceAsStream("/static/image/" + userId + "/" + imageName);
