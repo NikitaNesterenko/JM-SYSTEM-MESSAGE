@@ -3,6 +3,9 @@ package jm.controller;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import jm.GoogleCalendarService;
+import jm.model.Workspace;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,15 +32,19 @@ public class GoogleCalendarController {
     }
 
     @GetMapping
-    public RedirectView googleConnection(Principal principal) throws Exception {
-        String authorize = googleCalendarService.authorize(principal.getName());
+    public RedirectView googleConnection(HttpServletRequest request, Principal principal) throws Exception {
+        Workspace workspace = getWorkspaceFromSession(request);
+        if(workspace==null) {
+            return  new RedirectView("/chooseWorkspace");
+        }
+        String authorize = googleCalendarService.authorize(workspace,principal.getName());
         return new RedirectView(authorize);
     }
 
     @GetMapping(params = "code")
-    public String oauth2Callback(@RequestParam(value = "code") String code, Principal principal) {
+    public String oauth2Callback(@RequestParam(value = "code") String code, HttpServletRequest request, Principal principal) {
 
-        googleCalendarService.firstStartClientAuthorization(code, principal.getName());
+        googleCalendarService.firstStartClientAuthorization(code, getWorkspaceFromSession(request), principal.getName());
 
         return "redirect:/workspace";
     }
@@ -67,6 +75,10 @@ public class GoogleCalendarController {
         googleCalendarService.secondStart(principal.getName(), dateStart, dateEnd);
 
         return "redirect:/workspace";
+    }
+
+    private Workspace getWorkspaceFromSession (HttpServletRequest request) {
+        return (Workspace) request.getSession(false).getAttribute("WorkspaceID");
     }
 }
 

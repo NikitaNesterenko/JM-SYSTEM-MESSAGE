@@ -57,8 +57,6 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
     public GoogleCalendarServiceImpl(ChannelService channelService, UserService userService,
                                      WorkspaceService workspaceService, MessageService messageService,
-                                     @Value("${google.client.client-id}")String clientId,
-                                     @Value("${google.client.client-secret}") String clientSecret,
                                      @Value("${file.upload-dir.application}") String pathApplicationFiles,
                                      @Value("${google.client.redirectUri}") String redirectURI,
                                      @Value("${application.name}") String applicationName,
@@ -78,10 +76,10 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public void firstStartClientAuthorization(String code, String principalName) {
+    public void firstStartClientAuthorization(String code, Workspace workspace, String principalName) {
 
         createGoogleBot();
-        createGoogleCalendarChannel(principalName);
+        createGoogleCalendarChannel(workspace,principalName);
 
         LocalDateTime now = LocalDateTime.now();
         DateTime dateStart = DateTime.parseRfc3339(now.toString()); //TODO: use date without +3 hours
@@ -98,10 +96,10 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public String authorize(String principalName) throws GeneralSecurityException, IOException {
+    public String authorize(Workspace workspace,String principalName) throws GeneralSecurityException, IOException {
 
         AuthorizationCodeRequestUrl authorizationUrl;
-        setGoogleClientIdAndSecret(principalName);
+        setGoogleClientIdAndSecret(workspace,principalName);
         if (flow == null) {
             GoogleClientSecrets.Details web = new GoogleClientSecrets.Details();
             web.setClientId(clientId);
@@ -120,14 +118,13 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
 
     @Override
-    public void createGoogleCalendarChannel(String principalName) {
+    public void createGoogleCalendarChannel(Workspace workspace,String principalName) {
 
         User user = userService.getUserByLogin(principalName);
         String nameChannel = nameChannelStartWth + user.getId();
         Channel channelByName = channelService.getChannelByName(nameChannel);
 
         if (channelByName==null) {
-            List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUser(user);
             LocalDateTime createDate = LocalDateTime.now();
 
             Channel channel = new Channel();
@@ -136,7 +133,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
             channel.setArchived(false);
             channel.setIsPrivate(true);
             channel.setCreatedDate(createDate);
-            channel.setWorkspace(workspacesByUser.get(0));
+            channel.setWorkspace(workspace);
             channel.setIsApp(true);
 
             channelService.createChannel(channel);
@@ -264,10 +261,9 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         }
         return null;
     }
-    public void setGoogleClientIdAndSecret(String principalName) {
+    public void setGoogleClientIdAndSecret(Workspace workspace,String principalName) {
         User user = userService.getUserByLogin(principalName);
-        List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUser(user);
-        clientId = workspacesByUser.get(0).getGoogleClientId();
-        clientSecret = workspacesByUser.get(0).getGoogleClientSecret();
+        clientId = workspace.getGoogleClientId();
+        clientSecret = workspace.getGoogleClientSecret();
     }
 }
