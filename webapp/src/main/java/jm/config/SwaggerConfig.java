@@ -15,73 +15,73 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi botOpenApi() {
-        String[] path = {"/rest/api/bot**"};
+        String[] path = {"/rest/api/bot/**"};
         return getGroupedOpenApi(path, "bot");
     }
 
     @Bean
     public GroupedOpenApi channelOpenApi() {
-        String[] path = {"/rest/api/channels**"};
+        String[] path = {"/rest/api/channels/**"};
         return getGroupedOpenApi(path, "channel");
     }
 
     @Bean
     public GroupedOpenApi conversationOpenApi() {
-        String[] path = {"/rest/api/conversations**"};
+        String[] path = {"/rest/api/conversations/**"};
         return getGroupedOpenApi(path, "conversation");
     }
 
     @Bean
     public GroupedOpenApi createWorkspaceOpenApi() {
-        String[] path = {"/api/create**"};
+        String[] path = {"/api/create/**"};
         return getGroupedOpenApi(path, "create workspace");
     }
 
     @Bean
     public GroupedOpenApi directMessageOpenApi() {
-        String[] path = {"/rest/api/direct_messages**"};
+        String[] path = {"/rest/api/direct_messages/**"};
         return getGroupedOpenApi(path, "direct message");
     }
 
     @Bean
     public GroupedOpenApi imageOpenApi() {
-        String[] path = {"/images**"};
+        String[] path = {"/images/**"};
         return getGroupedOpenApi(path, "image");
     }
 
     @Bean
     public GroupedOpenApi inviteTokenOpenApi() {
-        String[] path = {"/rest/api/invites**"};
+        String[] path = {"/rest/api/invites/**"};
         return getGroupedOpenApi(path, "invite");
     }
 
     @Bean
     public GroupedOpenApi messageOpenApi() {
-        String[] path = {"/rest/api/messages**"};
+        String[] path = {"/rest/api/messages/**"};
         return getGroupedOpenApi(path, "message");
     }
 
     @Bean
     public GroupedOpenApi pluginOpenApi() {
-        String[] path = {"/rest/plugin**"};
+        String[] path = {"/rest/plugin/**"};
         return getGroupedOpenApi(path, "plugin");
     }
 
     @Bean
     public GroupedOpenApi threadOpenApi() {
-        String[] path = {"/rest/api/threads**"};
+        String[] path = {"/rest/api/threads/**"};
         return getGroupedOpenApi(path, "thread");
     }
 
     @Bean
     public GroupedOpenApi userOpenApi() {
-        String[] path = {"/rest/api/users**"};
+        String[] path = {"/rest/api/users/**"};
         return getGroupedOpenApi(path, "user");
     }
 
     @Bean
     public GroupedOpenApi workspaceOpenApi() {
-        String[] path = {"/rest/api/workspaces**"};
+        String[] path = {"/rest/api/workspaces/**"};
         return getGroupedOpenApi(path, "workspace");
     }
 
