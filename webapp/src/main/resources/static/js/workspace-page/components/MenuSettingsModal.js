@@ -1,5 +1,4 @@
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -7,6 +6,7 @@ export class MenuSettingsModal {
     channel_id;
 
     constructor() {
+        this.workspace_service = new WorkspaceRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.users_service = new UserRestPaginationService();
         this.settingBtn = $('#settingsMenuButton, .p-classic_nav__model__button__settings__icon');
@@ -21,7 +21,6 @@ export class MenuSettingsModal {
                 $('#settingsList').css("display", "none");
             }
         });
-
     }
 
     onAdditionalOptionsBtnClick() {
@@ -75,27 +74,69 @@ export class MenuSettingsModal {
         });
     }
 
-    onAddPeopleToChannelBtnClick() {
-        $("#tags").on("keyup", (event) => {
-            let suggestions = [];
-            this.users_service.getUsersByWorkspace(1).then(
-                users => {
-                    $.each(users, (k, v) => {
-                        suggestions.push(v.name);
-                    })
-                });
-            $("#tags").autocomplete({
-                source: suggestions,
-                appendTo : '.ui-widget'
-            });
-        });
-    }
-
     onCopyChannelNameBtnClick() {
         $('#copyChannelName').click(() => {
             navigator.clipboard.writeText('#' + $('#channelName span').text());
         });
-    }                                              
+    }
+
+    onAddPeopleToChannelBtnClick() {
+        $('#addBtn').click(() => {
+            let name = $('#tags').val();
+            this.workspace_service.getChoosedWorkspace().then(
+                workspace => {
+                    this.users_service.getUsersByWorkspace(workspace.id).then(
+                        usersByWorkspace => {
+                            usersByWorkspace.forEach((userByWorkspace) => {
+                                if(userByWorkspace.name === name) {
+                                    let id = userByWorkspace.id;
+                                    this.users_service.getUserById(id).then(
+                                        user => {
+                                            this.channel_service.getChannelByName($('#channelName span').text()).then(
+                                                channel => {
+                                                    channel.userIds.push(user.id);
+                                                    this.channel_service.updateChannel(channel);
+                                                })
+                                        })
+                                }
+                            });
+                        })
+                });
+        });
+    }
+
+    onAddPeopleToChannelKeyUp() {
+        $("#tags").on("keyup", (event) => {
+            let usersByWorkspaceArr = [];
+            let usersByChannelArr = [];
+            this.workspace_service.getChoosedWorkspace().then(
+                workspace => {
+                    this.users_service.getUsersByWorkspace(workspace.id).then(
+                        usersByWorkspace => {
+                            usersByWorkspace.forEach((userByWorkspace) => {
+                                usersByWorkspaceArr.push(userByWorkspace.name);
+                            });
+                            this.users_service.getUsersByChannelId(this.channel_id).then(
+                                usersByChannel => {
+                                    usersByChannel.forEach((userByChannel) => {
+                                        usersByChannelArr.push(userByChannel.name);
+                                    });
+                                    let difference = usersByWorkspaceArr.filter(x => !usersByChannelArr.includes(x));
+                                    let name = $("#tags").autocomplete({
+                                        source: difference,
+                                        appendTo : '.ui-widget',
+                                        minLength: 0
+                                    });
+                                    if(name.length != 0) {
+                                        $('#addBtn').removeAttr('disabled');
+                                    } else {
+                                        $('#addBtn').attr('disabled', 'disabled');
+                                    }
+                                });
+                        });
+                });
+        });
+    }
 
     removeChannelFromSidebarList(channel_id) {
         const channel_btn = $('.p-channel_sidebar__channel');
@@ -163,8 +204,9 @@ export class MenuSettingsModal {
         this.onArchiveCancel();
         this.onArchiveSubmit();
         this.onJumpToDateBtnClick();
-        this.onAddPeopleToChannelBtnClick();
+        this.onAddPeopleToChannelKeyUp();
         this.onCopyChannelNameBtnClick();
+        this.onAddPeopleToChannelBtnClick();
     }
 
 

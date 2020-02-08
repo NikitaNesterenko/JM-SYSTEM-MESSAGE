@@ -22,6 +22,11 @@ export class UserRestPaginationService extends RestPaginationService {
         const users = await fetch(`/rest/api/users/channel/${channel_id}`);
         return await users.json();
     };
+
+    getUserById = async (id) => {
+        const user = await fetch(`/rest/api/users/${id}`);
+        return await user.json();
+    }
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -114,6 +119,15 @@ export class ChannelRestPaginationService extends RestPaginationService {
             method: 'POST'
         });
         return response.json();
+    };
+
+    updateChannel = async (channel) => {
+        const response = await fetch(`/rest/api/channels/update`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(channel)
+        });
+        return response.status;
     }
 }
 
@@ -148,7 +162,6 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
         if (response.ok) {
             return await response.json();
         }
-
     };
 
     sendCode = async (code) => {
