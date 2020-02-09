@@ -74,6 +74,7 @@ public class MessageRestController {
     // DTO compliant
     @PostMapping(value = "/create")
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
+        messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
