@@ -1,6 +1,8 @@
 package jm.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jm.dto.SlashCommandDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,17 +37,30 @@ public class SlashCommand {
     @EqualsAndHashCode.Include
     private String hints;
 
-/*    @Column(name = "parameters", nullable = false)
-    //@JsonSerialize(using = CollectionSerializer.class)
-    //@Type(type = "org.hibernate.type.CollectionType")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
-    private Map<String, String> parameters = new HashMap<>();*/
+    @ManyToOne
+    @JsonIgnore
+    private Bot bot;
 
-    public SlashCommand(String name, String url, String description, String hints/*, Map<String, String> parameters*/) {
+    public SlashCommand(String name, String url, String description, String hints, Bot bot) {
         this.name = name;
         this.url = url;
         this.description = description;
         this.hints = hints;
-        //this.parameters = parameters;
+        this.bot = bot;
+    }
+
+    public SlashCommand(String name, String url, String description, String hints) {
+        this.name = name;
+        this.url = url;
+        this.description = description;
+        this.hints = hints;
+    }
+
+    public SlashCommand(SlashCommandDto dto){
+        this.id = dto.getId();
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.url = dto.getUrl();
+        this.hints = dto.getHints();
     }
 }

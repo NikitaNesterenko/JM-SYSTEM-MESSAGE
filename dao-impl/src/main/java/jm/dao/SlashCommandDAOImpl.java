@@ -32,7 +32,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public List<SlashCommand> getByWorkspace(Workspace workspace) {
         try {
-            return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM bots_commands bc JOIN slash_commands sc JOIN workspaces_bots wb ON sc.id = bc.commands_id AND bc.bot_id = wb.bot_id WHERE wb.workspace_id=?", SlashCommand.class)
+            return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM jm_message_system.bots_slash_commands bc JOIN slash_commands sc JOIN workspaces_bots wb ON sc.id = bc.slash_command_id AND bc.bot_id = wb.bot_id WHERE wb.workspace_id=?", SlashCommand.class)
                     .setParameter(1, workspace)
                     .getResultList();
         } catch (NoResultException e) {
@@ -43,7 +43,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public List<SlashCommand> getByBotId(Long id) {
         try {
-            return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM bots_commands bc JOIN slash_commands sc ON bc.commands_id = sc.id WHERE bc.bot_id=?", SlashCommand.class)
+            return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM bots_slash_commands bc JOIN slash_commands sc ON bc.slash_command_id = sc.id WHERE bc.bot_id=?", SlashCommand.class)
                     .setParameter(1, id)
                     .getResultList();
         } catch (NullPointerException e) {

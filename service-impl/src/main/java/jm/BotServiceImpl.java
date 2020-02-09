@@ -42,11 +42,6 @@ public class BotServiceImpl implements BotService {
     public Bot getBotById(Long id) { return botDAO.getById(id); }
 
     @Override
-    public Bot GetBotByWorkspaceId(Workspace workspace) {
-       return botDAO.getBotByWorkspaceId(workspace);
-    }
-
-    @Override
     public List<Bot> GetBotsByWorkspaceId(Workspace workspace) {
         return botDAO.getBotsByWorkspaceId(workspace);
     }

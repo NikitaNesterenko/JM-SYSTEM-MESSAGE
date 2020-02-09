@@ -75,11 +75,11 @@ export class StompClient {
                 }
             } else if (slackBot.command === "leave"){
                 if (slackBot.userId == window.loggedUserId) {
-                    console.log("hello");
                     $(".p-channel_sidebar__channels__list").html('');
-                    this.sm.renewChannels(window.choosedWorkspace, window.loggedUserId).then(() => console.log("ok"));
+                    this.sm.renewChannels(window.choosedWorkspace, window.loggedUserId);
+                } else {
+                    this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                 }
-                this.sendName(JSON.parse(slackBot.report));
             }
            // this.handlers.forEach()
         })

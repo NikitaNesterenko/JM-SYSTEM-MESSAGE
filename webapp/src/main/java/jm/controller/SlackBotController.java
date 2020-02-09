@@ -1,5 +1,7 @@
 package jm.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.*;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
@@ -25,59 +27,45 @@ import java.util.HashSet;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/app/bot/slackbot")
 public class SlackBotController {
     private Logger logger = LoggerFactory.getLogger(SlackBotController.class);
-    @Autowired
     private ChannelService channelService;
-    @Autowired
     private MessageService messageService;
-    @Autowired
     private BotService botService;
-    @Autowired
     private ConversationService conversationService;
-    @Autowired
     private DirectMessageService directMessageService;
-    @Autowired
     private UserService userService;
-    @Autowired
-    MessageDtoService messageDtoService;
+    private MessageDtoService messageDtoService;
 
     private Bot bot;
 
+    @Autowired
+    public SlackBotController(ChannelService channelService, MessageService messageService, BotService botService, ConversationService conversationService, DirectMessageService directMessageService, UserService userService, MessageDtoService messageDtoService) {
+        this.channelService = channelService;
+        this.messageService = messageService;
+        this.botService = botService;
+        this.conversationService = conversationService;
+        this.directMessageService = directMessageService;
+        this.userService = userService;
+        this.messageDtoService = messageDtoService;
+    }
 
-
-    @PostMapping()
+    @PostMapping("/app/bot/slackbot")
     public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command){
         String currentCommand = command.getCommand();
         ResponseEntity<?> resp = null;
-        if (currentCommand.startsWith("/topic")) {
-            resp = setTopic(command.getChannelId(), currentCommand.substring(7));
-        } else if (currentCommand.startsWith("/dm ")) {
+        if (currentCommand.startsWith("/dm ")) {
             String[] words = currentCommand.replaceAll("\\s+"," ").trim().split("\\s");
             String toUserName = words[1].startsWith("@") ? words[1] : null;
             if (toUserName != null) {
                 resp = sendDirectMessage(command.getUserId(), toUserName.substring(1),
                         currentCommand.substring(currentCommand.indexOf(toUserName) + toUserName.length() + 1),
                         command.getChannelId());
-                resp = null;
+            } else {
+                resp = sendRequestMessage(command.getChannelId(), "Command is incorrect");
             }
-        } else if (currentCommand.startsWith("/leave")) {
-
         }
-        System.out.println("asd");
         return resp == null? new ResponseEntity<>(HttpStatus.OK) : resp;
-    }
-
-
-    private ResponseEntity<?> setTopic(Long id, String topic) {
-        //Изменение топика канала
-        Channel channel = channelService.getChannelById(id);
-        channel.setTopic("\"" + topic + "\"");
-        channelService.updateChannel(channel);
-
-        //отправка сообщения ботом
-        return sendRequestMessage(id, "Topic was changed");
     }
 
     private ResponseEntity<?> sendDirectMessage(Long fromId, String toUsername, String message, Long channelId){
@@ -136,17 +124,59 @@ public class SlackBotController {
         return bot;
     }
 
-/*    @MessageMapping("/slackbot")
+    @MessageMapping("/slackbot")
     @SendTo("/topic/slackbot")
-    public ResponseEntity<?> sendMessage(@RequestBody SlashCommandDto command) {
+    public String getWsCommand(@RequestBody SlashCommandDto command) throws JsonProcessingException {
         String currentCommand = command.getCommand();
-        String newTopic =  currentCommand.substring(7);
-        setTopic(command.getChannelId(), newTopic);
         Map<String, String> response = new HashMap<>();
-        response.put("command", "topic");
-        response.put("topic", newTopic);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }*/
+        if (currentCommand.startsWith("/topic")) {
+            String newTopic =  currentCommand.substring(7);
+            setTopic(command.getChannelId(), newTopic);
+            response.put("command", "topic");
+            response.put("topic", newTopic);
+            response.put("channelId", command.getChannelId().toString());
+        } else if (currentCommand.startsWith("/leave")) {
+            String commandBody = currentCommand.length() > 6 ? currentCommand.substring(7) : "";
+            String channelName = commandBody.replaceAll("\\s+"," ").trim();
+            Channel channel = channelService.getChannelByName(channelName);
+            if (channel == null) {
+                channel = channelService.getChannelById(command.getChannelId());
+            }
+            response.put("report",leaveChannel(channel, command.getUserId()));
+            response.put("command", "leave");
+            response.put("userId", command.getUserId().toString());
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(response);
+    }
+
+    private void setTopic(Long ChannelId, String topic) {
+        //Изменение топика канала
+        Channel channel = channelService.getChannelById(ChannelId);
+        channel.setTopic("\"" + topic + "\"");
+        channelService.updateChannel(channel);
+
+    }
+
+    private String leaveChannel(Channel channel, Long userId) throws JsonProcessingException {
+        User user = userService.getUserById(userId);
+        channel.getUsers().remove(user);
+        channelService.updateChannel(channel);
+        return sendRequestMessage(channel.getId(), user);
+    }
+
+    private String sendRequestMessage(Long channelId, User user) throws JsonProcessingException {
+        Message newMessage = new Message();
+        newMessage.setUser(user);
+        newMessage.setDateCreate(LocalDateTime.now());
+        newMessage.setIsDeleted(false);
+        newMessage.setContent("was left channel");
+        newMessage.setChannelId(channelId);
+        newMessage.setRecipientUsers(new HashSet<>());
+        messageService.createMessage(newMessage);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(messageDtoService.toDto(newMessage));
+    }
 
 
 }

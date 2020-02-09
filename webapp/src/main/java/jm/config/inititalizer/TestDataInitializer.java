@@ -328,15 +328,15 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        Bot bot = new Bot("bot_1", "bot", workspaceDAO.getById(2L), LocalDateTime.now());
+        Bot bot = new Bot("bot_1", "bot", LocalDateTime.now());
         //bot.getWorkspaces().add(workspaceDAO.getById(1L));
         bot.getWorkspaces().add(workspaceDAO.getById(2L));
 
-        Bot zoom = new Bot("zoom", "Zoom", workspaceDAO.getById(1L), LocalDateTime.now());
+        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now());
         zoom.getWorkspaces().add(workspaceDAO.getById(1L));
 
 
-        Bot slackBot = new Bot("bot_2", "SlackBot", workspaceDAO.getById(2L), LocalDateTime.now());
+        Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now());
         slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
         //slackBot.getWorkspaces().add(workspaceDAO.getById(2L));
         slackBot.getCommands().add(slashCommandDao.getById(1L));

@@ -37,11 +37,6 @@ public class Bot {
     @EqualsAndHashCode.Include
     private String nickName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "workspace_id", nullable = false)
-    private Workspace workspace;
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "workspaces_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "workspace_id"))
     @ToString.Exclude
@@ -53,9 +48,7 @@ public class Bot {
     private Set<Channel> channels;
 
     @OneToMany(fetch = FetchType.LAZY)
-    //@JoinTable(name = "bots_slashCommands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slashCommand_id"))
-    //@JoinColumn(name = "command_id")
-    //@JoinTable(name = "slash_commands", inverseJoinColumns = @JoinColumn(name = "command_id"))
+    @JoinTable(name = "bots_slashCommands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slashCommand_id"))
     private Set<SlashCommand> commands = new HashSet<>();
 
     @Column(name = "date_create", nullable = false)
@@ -64,18 +57,16 @@ public class Bot {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
-    public Bot(String name, String nickName, Workspace workspace, LocalDateTime dateCreate) {
+    public Bot(String name, String nickName, LocalDateTime dateCreate) {
         this.name = name;
         this.nickName = nickName;
-        this.workspace = workspace;
         this.dateCreate = dateCreate;
         this.commands = new HashSet<>();
     }
 
-    public Bot(String name, String nickName, Workspace workspace, Set<SlashCommand> commands, LocalDateTime dateCreate) {
+    public Bot(String name, String nickName, Set<SlashCommand> commands, LocalDateTime dateCreate) {
         this.name = name;
         this.nickName = nickName;
-        this.workspace = workspace;
         this.commands = commands;
         this.dateCreate = dateCreate;
     }
