@@ -51,10 +51,7 @@ public class Message {
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
-    // from ChannelMessage
-//    @ManyToOne
-//    @JoinColumn(name = "channel_id")
-    @Column(name = "channel_id")
+    @JoinColumn(name = "channel_id")
     private Long channelId;
 
     // from ChannelMessage

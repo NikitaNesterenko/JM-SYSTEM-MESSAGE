@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface BotService {
 
-    List<Bot> gelAllBots();
+    List<Bot> getAllBots();
 
     void createBot(Bot bot);
 
@@ -19,7 +19,7 @@ public interface BotService {
 
     Bot getBotById(Long id);
 
-    Bot GetBotByWorkspaceId(Workspace workspace);
+    Bot getBotByWorkspaceId(Workspace workspace);
 
     Set<Channel> getChannels(Bot bot);
 }

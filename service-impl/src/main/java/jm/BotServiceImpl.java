@@ -25,7 +25,7 @@ public class BotServiceImpl implements BotService {
     public void setBotDAO(BotDAO botDAO) { this.botDAO = botDAO; }
 
     @Override
-    public List<Bot> gelAllBots() { return botDAO.getAll(); }
+    public List<Bot> getAllBots() { return botDAO.getAll(); }
 
     @Override
     public void createBot(Bot bot) { botDAO.persist(bot); }
@@ -41,7 +41,7 @@ public class BotServiceImpl implements BotService {
     public Bot getBotById(Long id) { return botDAO.getById(id); }
 
     @Override
-    public Bot GetBotByWorkspaceId(Workspace workspace) {
+    public Bot getBotByWorkspaceId(Workspace workspace) {
        return botDAO.getBotByWorkspaceId(workspace);
     }
 

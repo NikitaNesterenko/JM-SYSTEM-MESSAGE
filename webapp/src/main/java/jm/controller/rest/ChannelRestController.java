@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import jm.ChannelService;
 import jm.UserService;
+import jm.dao.MessageDAOImpl;
 import jm.dto.ChannelDTO;
 import jm.dto.ChannelDtoService;
 import jm.model.Channel;
@@ -29,6 +30,7 @@ public class ChannelRestController {
     private ChannelService channelService;
     private UserService userService;
     private ChannelDtoService channelDTOService;
+    private MessageDAOImpl messageDAO;
 
     private static final Logger logger = LoggerFactory.getLogger(
             ChannelRestController.class);
@@ -165,8 +167,6 @@ public class ChannelRestController {
         channel.setArchived(true);
         channelService.updateChannel(channel);
         ChannelDTO channelDTO = channelDTOService.toDto(channel);
-
-
         logger.info("Канал с id = {} архивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }

@@ -47,6 +47,7 @@ function onEditButtonClick(ev) {
 
     const messageId = ev.currentTarget.getAttribute("data-msg-id");
     const parentDiv = document.getElementById("message_id-" + messageId);
+    parentDiv.scrollTop = parentDiv.scrollHeight;
     const spanElement = parentDiv.getElementsByClassName("c-message__body")[0];
     const messageText = spanElement.innerText;
     const attachment = parentDiv.getElementsByClassName("c-message__attachment")[0];

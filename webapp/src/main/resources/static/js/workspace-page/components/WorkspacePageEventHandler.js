@@ -51,7 +51,8 @@ export class WorkspacePageEventHandler {
 
             this.channel_service.create(entity).then(chn => {
                 sendChannel(chn);
-            })
+            });
+            $('#exampleInputChannelName').val('');
         });
     }
 
