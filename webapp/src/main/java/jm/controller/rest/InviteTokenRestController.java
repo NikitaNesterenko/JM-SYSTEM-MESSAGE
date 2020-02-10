@@ -1,5 +1,10 @@
 package jm.controller.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.InviteTokenService;
 import jm.MailService;
 import jm.TokenGenerator;
@@ -17,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/rest/api/invites")
+@Tag(name = "invite", description = "Invite token API")
 public class InviteTokenRestController {
 
     private UserService userService;
@@ -36,14 +42,26 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/create")
+    @Operation(summary = "Send invite token",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = InviteToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: invites were send")
+            })
     public ResponseEntity invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
         invites.stream()
-                .forEach(x -> {x.setHash(tokenGenerator.generate(charactersInHash));
-                    x.setWorkspace(workspace);});
+                .forEach(x -> {
+                    x.setHash(tokenGenerator.generate(charactersInHash));
+                    x.setWorkspace(workspace);
+                });
 
         for (InviteToken invite : invites) {
             inviteTokenService.createInviteToken(invite);
@@ -73,8 +91,19 @@ public class InviteTokenRestController {
 
 
     @PostMapping
-    public ResponseEntity checkUser (@RequestBody InviteToken inviteToken){
-        if(userService.getUserByEmail(inviteToken.getEmail()) != null) {
+    @Operation(summary = "Check user",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = InviteToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: user checked"),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to check user")
+            })
+    public ResponseEntity checkUser(@RequestBody InviteToken inviteToken) {
+        if (userService.getUserByEmail(inviteToken.getEmail()) != null) {
             inviteTokenService.deleteInviteToken(inviteToken.getId());
             logger.info("invite token удален");
             return ResponseEntity.ok(true);
