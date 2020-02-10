@@ -1,5 +1,11 @@
 package jm.controller.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
 import jm.dto.*;
@@ -17,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/api/threads")
+@Tag(name = "thread", description = "Thread Channel API")
 public class ThreadChannelRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(
@@ -54,11 +61,21 @@ public class ThreadChannelRestController {
     }
 
     @PostMapping("/create")
+    @Operation(summary = "Create thread channel",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ThreadChannel.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "201", description = "thread channel created")
+            })
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
         System.out.println("ТРЕД!");
         Message message = messageDtoService.toEntity(messageDTO);
 //        Message message = new Message(messageDTO);
-        ThreadChannel threadChannel  = new ThreadChannel(message);
+        ThreadChannel threadChannel = new ThreadChannel(message);
         System.out.println(threadChannel);
         threadChannelService.createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);
@@ -66,6 +83,16 @@ public class ThreadChannelRestController {
     }
 
     @PostMapping("/messages/create")
+    @Operation(summary = "Create thread channel message",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ThreadMessageDTO.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "201", description = "thread channel message created")
+            })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
         System.out.println("CREATE!!! - " + threadMessageDTO);
         ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
@@ -83,6 +110,16 @@ public class ThreadChannelRestController {
 //    }
 
     @GetMapping("/{message_id}")
+    @Operation(summary = "Get thread channel by message id",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ThreadDTO.class)
+                            ),
+                            description = "OK: get thread channel"
+                    )
+            })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
         System.out.println("GET-THREADCHANNEL - " + temp);
@@ -90,6 +127,16 @@ public class ThreadChannelRestController {
     }
 
     @GetMapping("/messages/{id}")
+    @Operation(summary = "Get thread channel message by thread channel id",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(type = "array", implementation = ThreadMessageDTO.class)
+                            ),
+                            description = "OK: find thread channel messages"
+                    )
+            })
     public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
         List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
         System.out.println("LIST - " + list.toString());
