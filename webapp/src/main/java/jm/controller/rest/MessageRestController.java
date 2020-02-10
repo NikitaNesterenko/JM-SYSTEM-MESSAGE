@@ -132,6 +132,7 @@ public class MessageRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: message created")
             })
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
+        messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
