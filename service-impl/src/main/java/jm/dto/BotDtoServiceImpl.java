@@ -38,6 +38,9 @@ public class BotDtoServiceImpl implements BotDtoService {
         // creating new BotDTO with simple fields copied from Bot
         BotDTO botDTO = new BotDTO(bot);
 
+        botDTO.setWorkspacesId(new HashSet<>());
+        botDTO.setSlashCommandsIds(new HashSet<>());
+
         // setting up 'workspaceId'
         Set<Workspace> workspaces = bot.getWorkspaces();
         if ((workspaces != null) && !workspaces.isEmpty()) {
@@ -46,7 +49,7 @@ public class BotDtoServiceImpl implements BotDtoService {
 
         Set<SlashCommand> slashCommands = bot.getCommands();
         if ((slashCommands != null) && !slashCommands.isEmpty()) {
-            slashCommands.forEach(slashCommand -> botDTO.getWorkspacesId().add(slashCommand.getId()));
+            slashCommands.forEach(slashCommand -> botDTO.getSlashCommandsIds().add(slashCommand.getId()));
         }
 
         // setting up 'channelIds'

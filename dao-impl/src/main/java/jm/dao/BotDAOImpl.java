@@ -24,7 +24,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     @Override
     public List<Bot> getBotsByWorkspaceId(Workspace workspace) {
         try {
-            return (List<Bot>) entityManager.createNativeQuery("SELECT b.id, b.date_create, b.name, b.nick_name, b.workspace_id FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
+            return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
                     .setParameter(1, workspace)
                     .getResultStream().collect(Collectors.toList());
         } catch (NoResultException e) {

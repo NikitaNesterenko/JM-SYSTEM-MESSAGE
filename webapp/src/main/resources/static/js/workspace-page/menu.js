@@ -5,8 +5,11 @@ const m = new MenuChatBox();
 const userService = new UserRestPaginationService();
 $('#form_message').keyup(() => m.findActions());
 $(document).ready(async () => {
-    await getCommandsList();
     await userService.getLoggedUser().then(user => {
         window.loggedUserId = user.id;
-    })
+    });
+    await getCommandsList();
+    /*await userService.getLoggedUser().then(user => {
+        window.loggedUserId = user.id;
+    })*/
 });

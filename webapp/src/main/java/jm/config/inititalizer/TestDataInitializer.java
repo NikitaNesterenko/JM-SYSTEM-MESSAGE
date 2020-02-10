@@ -92,11 +92,6 @@ public class TestDataInitializer {
         topicChangeCommand.setUrl("/app/bot/slackbot/");
         topicChangeCommand.setDescription("test description");
         topicChangeCommand.setHints("test Hints");
-/*        Map<String, String> param = new HashMap<>();
-        param.put("workspaceId", "2");
-        param.put("botId", "2");
-                param.put("channelId", "4");
-        //command.setParameters(new HashMap<>());*/
         slashCommandDao.persist(topicChangeCommand);
 
         SlashCommand directMessageCommand = new SlashCommand();
@@ -112,6 +107,14 @@ public class TestDataInitializer {
         leaveCommand.setDescription("Leave discription");
         leaveCommand.setHints("Leave Hints");
         slashCommandDao.persist(leaveCommand);
+
+        SlashCommand joinCommand = new SlashCommand();
+        joinCommand.setName("join");
+        joinCommand.setUrl("/app/bot/slackbot");
+        joinCommand.setDescription("Join discription");
+        joinCommand.setHints("Join Hints");
+        slashCommandDao.persist(joinCommand);
+
     }
 
     private void createRoles() {
@@ -342,6 +345,7 @@ public class TestDataInitializer {
         slackBot.getCommands().add(slashCommandDao.getById(1L));
         slackBot.getCommands().add(slashCommandDao.getById(2L));
         slackBot.getCommands().add(slashCommandDao.getById(3L));
+        slackBot.getCommands().add(slashCommandDao.getById(4L));
 
         this.bots.add(bot);
         this.bots.add(zoom);

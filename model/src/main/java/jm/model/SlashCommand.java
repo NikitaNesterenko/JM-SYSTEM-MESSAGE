@@ -38,7 +38,7 @@ public class SlashCommand {
     private String hints;
 
     @ManyToOne
-    @JsonIgnore
+    //@JsonIgnore
     private Bot bot;
 
     public SlashCommand(String name, String url, String description, String hints, Bot bot) {

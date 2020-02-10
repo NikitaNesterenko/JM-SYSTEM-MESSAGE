@@ -38,13 +38,22 @@ public class SlashCommandRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getSlashCommandById(@PathVariable Long id){
+    public ResponseEntity<?> getSlashCommandById(@PathVariable Long id) {
         logger.info("Slash command with id = {}", id);
         return ResponseEntity.ok(slashCommandDtoService.toDto(slashCommandService.getSlashCommandById(id)));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateSlashCommand(@PathVariable Long id, SlashCommandDto slashCommandDto) {
+    @PostMapping("/create")
+    public ResponseEntity<?> createSlashCommand(SlashCommandDto slashCommandDto) {
+        SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
+        slashCommandService.createSlashCommand(sc);
+        logger.info("Created SlashCommand: {}", sc);
+        return new ResponseEntity<>(sc, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateSlashCommand(SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
         SlashCommand existCommand = slashCommandService.getSlashCommandById(sc.getId());
         if (existCommand == null) {
@@ -58,22 +67,29 @@ public class SlashCommandRestController {
     }
 
 
-    //@DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteMessage(@PathVariable Long id) {
+        slashCommandService.deleteSlashCommand(id);
+        logger.info("SlashCommand with id: {} was deleted", id);
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
 
     @GetMapping("/bot/{id}")
-    public ResponseEntity<?> getSlashCommandByBotId(@PathVariable Long id){
+    public ResponseEntity<?> getSlashCommandByBotId(@PathVariable Long id) {
         logger.info("Slash command for Bot with id = {}", id);
         return ResponseEntity.ok(slashCommandDtoService.toDto(slashCommandService.getSlashCommandsByBotId(id)));
     }
 
     @PostMapping("/bot/{id}")
-    public ResponseEntity<?> addSlashCommandToBot(@PathVariable Long id, SlashCommandDto slashCommandDto){
+    public ResponseEntity<?> addSlashCommandToBot(@PathVariable Long id, SlashCommandDto slashCommandDto) {
         Bot bot = botService.getBotById(id);
         if (bot == null) {
             logger.warn("Bot with id = {} not found", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
+        sc.setBot(bot);
         List<SlashCommand> slashCommands = slashCommandService.getSlashCommandsByBotId(id);
 
         if (slashCommands.stream().anyMatch(command -> command.getName().equals(sc.getName()))) {
@@ -87,16 +103,15 @@ public class SlashCommandRestController {
     }
 
 
-
     @GetMapping("/name/{name}")
-    public ResponseEntity<?> getSlashCommandByName(@PathVariable String name){
+    public ResponseEntity<?> getSlashCommandByName(@PathVariable String name) {
         logger.info("Slash command with name = {}", name);
         SlashCommand command = slashCommandService.getSlashCommandByName(name);
         return ResponseEntity.ok(slashCommandDtoService.toDto(command));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllSlashCommand(){
+    public ResponseEntity<?> getAllSlashCommand() {
         logger.info("Getting all SlashCommands");
         return ResponseEntity.ok(slashCommandDtoService.toDto(slashCommandService.getAllSlashCommands()));
     }

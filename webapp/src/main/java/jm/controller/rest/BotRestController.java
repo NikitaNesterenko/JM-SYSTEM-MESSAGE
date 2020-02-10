@@ -45,14 +45,12 @@ public class BotRestController {
     @GetMapping("/workspace/{id}")
     public ResponseEntity<List<BotDTO>> getBotByWorkspace(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
-        //Bot bot = botService.GetBotByWorkspaceId(workspace);
         List<Bot> bots = botService.GetBotsByWorkspaceId(workspace);
         if (bots.isEmpty()) {
             logger.warn("Не удалось найти бота для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         logger.info("Бот для workspace c id = {}", id);
-        //logger.info(bot.toString());
         return new ResponseEntity<>(botDtoService.toDto(bots), HttpStatus.OK);
     }
 

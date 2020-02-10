@@ -68,8 +68,9 @@ export class ChannelView {
     }
 
     addChannels(channels) {
+        $('#id-channel_sidebar__channels__list').empty();
         $.each(channels, (idx, chn) => {
-            if (!chn.isArchived && this.checkPrivacy(chn)) {
+            if (!chn.isArchived && this.checkPrivacy(chn) && chn.userIds.includes(window.loggedUserId)) {
                 if (this.default_channel === null) {
                     this.default_channel = chn;
                 }

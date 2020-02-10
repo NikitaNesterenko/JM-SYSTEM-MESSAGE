@@ -77,8 +77,21 @@ export class StompClient {
                 if (slackBot.userId == window.loggedUserId) {
                     $(".p-channel_sidebar__channels__list").html('');
                     this.sm.renewChannels(window.choosedWorkspace, window.loggedUserId);
-                } else {
+                } else if (window.channel_id == slackBot.channelId){
                     this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+                }
+            } else if (slackBot.command === "join") {
+                if (slackBot.status === "OK") {
+                    if (slackBot.userId == window.loggedUserId) {
+                        this.channelview.showAllChannels(window.choosedWorkspace);
+                        setTimeout(function() {
+                            window.pressChannelButton(slackBot.channelId);
+                            },1000);
+                    } else {
+                        if (!(JSON.parse(slackBot.report).content === "")) {
+                            this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+                        }
+                    }
                 }
             }
            // this.handlers.forEach()
@@ -88,7 +101,17 @@ export class StompClient {
     subscribeChannel() {
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
-            this.channelview.addChannelIntoSidebarChannelList(chn);
+            if (chn.userIds.includes(window.loggedUserId)) {
+                let isPresent = false;
+                document.querySelectorAll("[id^=channel_button_]").forEach(id => {
+                    if (id.value == chn.id) {
+                        isPresent = true;
+                    }
+                })
+                if (!isPresent) {
+                    this.channelview.addChannelIntoSidebarChannelList(chn);
+                }
+            }
         });
     }
 
