@@ -300,8 +300,8 @@ public class TestDataInitializer {
         workspace3.setUser(userJohn);
         workspace3.setIsPrivate(false);
         workspace3.setCreatedDate(LocalDateTime.now());
-        workspace3.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
-        workspace3.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
+        workspace3.setGoogleClientId("");
+        workspace3.setGoogleClientSecret("");
 
         workspaceDAO.persist(workspace3);
         this.workspaces.add(workspace3);

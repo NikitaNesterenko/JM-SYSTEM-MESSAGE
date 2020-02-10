@@ -11,7 +11,7 @@ import {ChannelView} from "./components/sidebar/ChannelView.js";
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const logged_user = user_service.getLoggedUser();
-const current_wks = workspace_service.getChoosedWorkspace();
+let current_wks = workspace_service.getChoosedWorkspace();
 
 
 window.addEventListener('load', async () => {
@@ -72,7 +72,7 @@ window.homeAction = function homeAction() {
     showCalendarWorkspace();
     $('#datepicker').datepicker({
         dateFormat: "dd.mm.yy",
-        onSelect: function(dateText) {
+        onSelect: function (dateText) {
             getCalendarEvents(dateText);
         }
     });
@@ -114,7 +114,7 @@ window.showTodayCalendar = function showTodayCalendar() {
 
 window.showTomorrowCalendar = function showTomorrowCalendar() {
     let tomorrow = new Date();
-    tomorrow.setDate(new Date().getDate()+1);
+    tomorrow.setDate(new Date().getDate() + 1);
     getCalendarEvents(tomorrow.toLocaleDateString('ru-RU'));
 };
 
@@ -151,8 +151,38 @@ window.showEvents = function showEvents(response) {
 };
 
 $("#google-calendar-button").click(
-    function () {
-        location.href = "/application/google/calendar";
-        return false;
+    async function () {
+        current_wks = await workspace_service.getChoosedWorkspace();
+        if (!(current_wks.googleClientId) || !(current_wks.googleClientSecret)) {
+            $("#addGoogleCalendarIdSecretModal").modal('toggle')
+        } else {
+            location.href = "/application/google/calendar";
+            return false;
+        }
+    }
+);
+
+$("#addGoogleCalendarIdSecretSubmit").click(
+    async function () {
+        current_wks = await workspace_service.getChoosedWorkspace();
+        let  googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
+        let googleCalendarClientSecret = $("#InputGoogleCalendarClientSecret").val();
+        const entity = {
+            id: (current_wks).id,
+            name: (current_wks).name,
+            users: (current_wks).users,
+            channels: (current_wks).channels,
+            user: (current_wks).user,
+            isPrivate: (current_wks).isPrivate,
+            createdDate: (current_wks).createdDate,
+            googleClientId: googleCalendarClientId,
+            googleClientSecret: googleCalendarClientSecret
+        }
+        await workspace_service.update(entity).then(()=>{
+            $("#addGoogleCalendarIdSecretModal").modal('toggle')
+            $('#appsModal').modal('toggle')
+            location.href = "/application/google/calendar";
+            return false;
+        });
     }
 );

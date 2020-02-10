@@ -750,7 +750,7 @@
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
                                             <div class="p-channel_sidebar__add_app">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__add_app__button">
+                                                    <button class="p-channel_sidebar__add_app__button" data-toggle="modal" data-target="#appsModal">
                                                         <span class="p-channel_sidebar__name-2">Add apps</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
@@ -1573,6 +1573,39 @@
 
             <div id="idSearchContent">
                 Что-то пошло не так
+            </div>
+        </div>
+    </div>
+</div>
+<!--Модальное окно для ввода GoogleCalendar ID Secret-->
+<div class="modal fade" id="addGoogleCalendarIdSecretModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Введите GoogleCalendar ID & Secret</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="InputGoogleCalendarClientId">ID</label>
+                        <input type="email" class="form-control" id="InputGoogleCalendarClientId"
+                               value="270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGoogleCalendarClientSecret">ID</label>
+                        <input type="email" class="form-control" id="InputGoogleCalendarClientSecret"
+                               value="256bTZoiZUa6eKiGVmI-T4wb">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-dismiss="modal" id="addGoogleCalendarIdSecretSubmit" class="btn btn-success">Submit
+                </button>
             </div>
         </div>
     </div>
