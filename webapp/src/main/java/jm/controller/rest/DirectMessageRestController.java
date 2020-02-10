@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: direct message created")
             })
     public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
+        directMessageDTO.setDateCreate(LocalDateTime.now());
         DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
         System.out.println(directMessage);
         directMessageService.saveDirectMessage(directMessage);
