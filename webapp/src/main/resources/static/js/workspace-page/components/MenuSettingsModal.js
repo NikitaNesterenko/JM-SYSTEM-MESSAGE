@@ -1,4 +1,4 @@
-import {ChannelRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -6,9 +6,7 @@ export class MenuSettingsModal {
     channel_id;
 
     constructor() {
-        this.workspace_service = new WorkspaceRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
-        this.users_service = new UserRestPaginationService();
         this.settingBtn = $('#settingsMenuButton, .p-classic_nav__model__button__settings__icon');
     }
 
@@ -21,6 +19,7 @@ export class MenuSettingsModal {
                 $('#settingsList').css("display", "none");
             }
         });
+
     }
 
     onAdditionalOptionsBtnClick() {
@@ -64,76 +63,6 @@ export class MenuSettingsModal {
                 chn => {
                     this.removeChannelFromSidebarList(chn.id);
                     this.closeAllModals()
-                });
-        });
-    }
-
-    onJumpToDateBtnClick() {
-        $('#jumpToDate').click(() => {
-            alert('jumpToDate');
-        });
-    }
-
-    onCopyChannelNameBtnClick() {
-        $('#copyChannelName').click(() => {
-            navigator.clipboard.writeText('#' + $('#channelName span').text());
-        });
-    }
-
-    onAddPeopleToChannelBtnClick() {
-        $('#addBtn').click(() => {
-            let name = $('#tags').val();
-            this.workspace_service.getChoosedWorkspace().then(
-                workspace => {
-                    this.users_service.getUsersByWorkspace(workspace.id).then(
-                        usersByWorkspace => {
-                            usersByWorkspace.forEach((userByWorkspace) => {
-                                if(userByWorkspace.name === name) {
-                                    let id = userByWorkspace.id;
-                                    this.users_service.getUserById(id).then(
-                                        user => {
-                                            this.channel_service.getChannelByName($('#channelName span').text()).then(
-                                                channel => {
-                                                    channel.userIds.push(user.id);
-                                                    this.channel_service.updateChannel(channel);
-                                                })
-                                        })
-                                }
-                            });
-                        })
-                });
-        });
-    }
-
-    onAddPeopleToChannelKeyUp() {
-        $("#tags").on("keyup", (event) => {
-            let usersByWorkspaceArr = [];
-            let usersByChannelArr = [];
-            this.workspace_service.getChoosedWorkspace().then(
-                workspace => {
-                    this.users_service.getUsersByWorkspace(workspace.id).then(
-                        usersByWorkspace => {
-                            usersByWorkspace.forEach((userByWorkspace) => {
-                                usersByWorkspaceArr.push(userByWorkspace.name);
-                            });
-                            this.users_service.getUsersByChannelId(this.channel_id).then(
-                                usersByChannel => {
-                                    usersByChannel.forEach((userByChannel) => {
-                                        usersByChannelArr.push(userByChannel.name);
-                                    });
-                                    let difference = usersByWorkspaceArr.filter(x => !usersByChannelArr.includes(x));
-                                    let name = $("#tags").autocomplete({
-                                        source: difference,
-                                        appendTo : '.ui-widget',
-                                        minLength: 0
-                                    });
-                                    if(name.length != 0) {
-                                        $('#addBtn').removeAttr('disabled');
-                                    } else {
-                                        $('#addBtn').attr('disabled', 'disabled');
-                                    }
-                                });
-                        });
                 });
         });
     }
@@ -203,10 +132,6 @@ export class MenuSettingsModal {
         this.onArchiveCloseBtnClick();
         this.onArchiveCancel();
         this.onArchiveSubmit();
-        this.onJumpToDateBtnClick();
-        this.onAddPeopleToChannelKeyUp();
-        this.onCopyChannelNameBtnClick();
-        this.onAddPeopleToChannelBtnClick();
     }
 
 
