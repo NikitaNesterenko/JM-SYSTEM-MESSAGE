@@ -10,7 +10,7 @@ export class MenuChatBox {
         //формируем список команд, доступных в данном воркспейсе
         this.input = $('#form_message_input');
         window.getCommandsList = async () => {
-            window.allActions = ['invite', 'archive', 'join', 'who'];
+            window.allActions = ['invite', 'archive', 'who'];
             //запоминаем id выбранного workspace
             await workspaceService.getChoosedWorkspace().then(workspace => {
                 window.choosedWorkspace = workspace.id

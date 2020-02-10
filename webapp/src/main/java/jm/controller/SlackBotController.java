@@ -167,6 +167,7 @@ public class SlackBotController {
             } else {
                 response.put("command", "join");
                 response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Command is incorrect"));
                 response.put("userId", command.getUserId().toString());
             }
 
@@ -215,6 +216,24 @@ public class SlackBotController {
             return sendRequestMessage(channel.getId(), user, "Joined to channel");
         }
         return null;
+    }
+
+    private String sendTempRequestMessage(Long channelId, Object author, String reportMsg) throws JsonProcessingException {
+        Message newMessage = new Message();
+        if (author instanceof User) {
+            newMessage.setUser((User) author);
+        }
+        if (author instanceof Bot) {
+            newMessage.setBot((Bot) author);
+        }
+        newMessage.setDateCreate(LocalDateTime.now());
+        newMessage.setIsDeleted(false);
+        newMessage.setContent(reportMsg);
+        newMessage.setChannelId(channelId);
+        newMessage.setRecipientUsers(new HashSet<>());
+        //messageService.createMessage(newMessage);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(messageDtoService.toDto(newMessage));
     }
 
 

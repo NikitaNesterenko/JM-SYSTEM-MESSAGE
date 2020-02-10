@@ -15,16 +15,13 @@ export class StompClient {
         this.channelview = channel_view;
         this.sm = new SubmitMessage();
 
-
-        this.handlers = [];
-
         this.commands = new Command();
 
         window.sendName = (message) => this.sendName(message);
         window.sendChannel = (channel) => this.sendChannel(channel);
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
-        window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message);
+        window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message); //вебсокет дефолтного бота
     }
 
     connect() {
@@ -70,40 +67,52 @@ export class StompClient {
         this.stompClient.subscribe("/topic/slackbot", (data) => {
             const slackBot = JSON.parse(data.body);
             if (slackBot.command === "topic") {
+                //смена топика канала
                 if (window.channel_id == slackBot.channelId) {
                     $("#topic_string").text(slackBot.topic);
                 }
             } else if (slackBot.command === "leave"){
                 if (slackBot.userId == window.loggedUserId) {
-                    $(".p-channel_sidebar__channels__list").html('');
-                    this.sm.renewChannels(window.choosedWorkspace, window.loggedUserId);
-                } else if (window.channel_id == slackBot.channelId){
+                    //обновление списка каналов у пользователя, покинувшего канал
+                    this.channelview.showAllChannels(window.choosedWorkspace); //нужно додумать как правильно определять, какой канал выбрать активным
+                    setTimeout(function() {
+                        window.pressChannelButton(window.channel_id);
+                    },1000);
+                } else if (window.channel_id == JSON.parse(slackBot.report).channelId){
+                    //сообщение в нужном канале других пользователей о том, что пользователь покинул канал
                     this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                 }
             } else if (slackBot.command === "join") {
                 if (slackBot.status === "OK") {
+                    //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
                     if (slackBot.userId == window.loggedUserId) {
                         this.channelview.showAllChannels(window.choosedWorkspace);
                         setTimeout(function() {
                             window.pressChannelButton(slackBot.channelId);
                             },1000);
                     } else {
-                        if (!(JSON.parse(slackBot.report).content === "")) {
+                        //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
+                        let report = JSON.parse(slackBot.report);
+                        if (!(report.content === "") && (report.channelId == window.channel_id)) {
                             this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                         }
                     }
+                } else {
+                    //если операция отработала неуспешно, то показывается временное сообщение об ошибке
+                    if (slackBot.userId == window.loggedUserId) {
+                        this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+                    }
                 }
             }
-           // this.handlers.forEach()
         })
     }
 
     subscribeChannel() {
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
-            if (chn.userIds.includes(window.loggedUserId)) {
+            if (chn.userIds.includes(window.loggedUserId)) { //проверка, является ли пользолватель членом канала
                 let isPresent = false;
-                document.querySelectorAll("[id^=channel_button_]").forEach(id => {
+                document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
                     if (id.value == chn.id) {
                         isPresent = true;
                     }
@@ -223,5 +232,6 @@ export class StompClient {
 
         this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
     }
+
 
 }

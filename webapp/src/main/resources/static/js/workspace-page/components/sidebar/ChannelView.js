@@ -22,7 +22,8 @@ export class ChannelView {
 
     showAllChannels(workspace_id) {
         this.setLocalStorageSettings(0);
-        this.channel_service.getChannelsByWorkspaceId(workspace_id).then(
+        //берем каналы для конкретного пользователя и конкретного воркспейса
+        this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, this.loggedUser.id).then(
             channels => {
                 if (channels.length > 0) {
                     this.addChannels(channels);
@@ -68,9 +69,9 @@ export class ChannelView {
     }
 
     addChannels(channels) {
-        $('#id-channel_sidebar__channels__list').empty();
+        $('#id-channel_sidebar__channels__list').empty(); //обнулдяем список каналов перед заполнением
         $.each(channels, (idx, chn) => {
-            if (!chn.isArchived && this.checkPrivacy(chn) && chn.userIds.includes(window.loggedUserId)) {
+            if (!chn.isArchived && this.checkPrivacy(chn)) {
                 if (this.default_channel === null) {
                     this.default_channel = chn;
                 }
