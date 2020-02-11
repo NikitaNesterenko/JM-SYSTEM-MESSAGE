@@ -73,16 +73,20 @@ export class StompClient {
                 }
             } else if (slackBot.command === "leave"){
                 if (slackBot.userId == window.loggedUserId) {
-                    //обновление списка каналов у пользователя, покинувшего канал
-                    this.channelview.showAllChannels(window.choosedWorkspace); //нужно додумать как правильно определять, какой канал выбрать активным
-                    setTimeout(function() {
-                        window.pressChannelButton(window.channel_id);
-                    },1000);
+                    if (slackBot.status === "OK") {
+                        //обновление списка каналов у пользователя, покинувшего канал
+                        this.channelview.showAllChannels(window.choosedWorkspace); //нужно додумать как правильно определять, какой канал выбрать активным
+                        setTimeout(function () {
+                            window.pressChannelButton(window.channel_id);
+                        }, 1000);
+                    } else {
+                        this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+                    }
                 } else if (window.channel_id == JSON.parse(slackBot.report).channelId){
                     //сообщение в нужном канале других пользователей о том, что пользователь покинул канал
                     this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                 }
-            } else if (slackBot.command === "join") {
+            } else if (slackBot.command === "join" || slackBot.command === "open") {
                 if (slackBot.status === "OK") {
                     //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
                     if (slackBot.userId == window.loggedUserId) {
@@ -99,6 +103,28 @@ export class StompClient {
                     }
                 } else {
                     //если операция отработала неуспешно, то показывается временное сообщение об ошибке
+                    if (slackBot.userId == window.loggedUserId) {
+                        this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+                    }
+                }
+            } else if (slackBot.command === "shrug") {
+                this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+            } else if (slackBot.command === "invite") {
+                if (slackBot.status === "OK") {
+                    if (JSON.parse(slackBot.targets).includes(window.loggedUserId)) { //проверка. пригласили ли нового пользователя
+                        let isPresent = false;
+                        document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
+                            if (id.value == JSON.parse(slackBot.channel).id) {
+                                isPresent = true;
+                            }
+                        })
+                        if (!isPresent) {
+                            this.channelview.addChannelIntoSidebarChannelList(JSON.parse(slackBot.channel));
+                        }
+                    } if (JSON.parse(slackBot.channel).id == window.channel_id) {
+                        this.channel_message_view.createMessage(JSON.parse(slackBot.report));
+                    }
+                } else if (slackBot.status === "ERROR") {
                     if (slackBot.userId == window.loggedUserId) {
                         this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                     }

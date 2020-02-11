@@ -120,7 +120,8 @@ export class SubmitMessage {
                         userId: entity.userId,
                         command: entity.content
                     };
-                    if ((inputCommand === "topic") || inputCommand === "leave" || inputCommand === "join") {
+                    if ((inputCommand === "topic") || inputCommand === "leave" || inputCommand === "join" ||
+                        inputCommand === "shrug" || inputCommand === "open" || inputCommand === "invite") {
                         sendSlackBotCommand(sendCommand);
                     } else {
                         this.slashCommandService.sendSlashCommand(command.url, sendCommand).then(

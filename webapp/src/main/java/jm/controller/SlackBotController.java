@@ -23,9 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class SlackBotController {
@@ -39,7 +37,7 @@ public class SlackBotController {
     private MessageDtoService messageDtoService;
     private ChannelDtoService channelDtoService;
 
-
+    private final String INCORRECT_COMMAND = "Command is incorrect";
 
     private Bot bot;
 
@@ -136,6 +134,7 @@ public class SlackBotController {
     public String getWsCommand(@RequestBody SlashCommandDto command) throws JsonProcessingException {
         String currentCommand = command.getCommand();
         Map<String, String> response = new HashMap<>();
+        response.put("userId", command.getUserId().toString());
         ObjectMapper mapper = new ObjectMapper();
         if (currentCommand.startsWith("/topic")) {
             String newTopic =  currentCommand.substring(7);
@@ -144,33 +143,81 @@ public class SlackBotController {
             response.put("topic", newTopic);
             response.put("channelId", command.getChannelId().toString());
         } else if (currentCommand.startsWith("/leave")) {
+            response.put("command", "leave");
             String commandBody = currentCommand.length() > 6 ? currentCommand.substring(7) : "";
             String channelName = commandBody.replaceAll("\\s+"," ").trim();
             Channel channel = channelService.getChannelByName(channelName);
             if (channel == null) {
-                channel = channelService.getChannelById(command.getChannelId());
+                if (channelName.equals("")) {
+                    channel = channelService.getChannelById(command.getChannelId());
+                    response.put("report", leaveChannel(channel, command.getUserId()));
+                    response.put("status", "OK");
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                }
+            } else {
+                response.put("report", leaveChannel(channel, command.getUserId()));
+                response.put("status", "OK");
             }
-            response.put("report",leaveChannel(channel, command.getUserId()));
-            response.put("command", "leave");
-            response.put("userId", command.getUserId().toString());
-        } else if (currentCommand.startsWith("/join")) {
+        } else if (currentCommand.startsWith("/join") || currentCommand.startsWith("/open")) {
+            response.put("command", "join");
             String commandBody = currentCommand.length() > 5 ? currentCommand.substring(6) : "";
             String channelName = commandBody.replaceAll("\\s+"," ").trim();
             Channel channel = channelService.getChannelByName(channelName);
             if (channel != null) {
                 response.put("report", joinChannel(channel, command.getUserId()));
-                response.put("command", "join");
                 response.put("status", "OK");
-                response.put("userId", command.getUserId().toString());
                 response.put("channelId", channel.getId().toString());
                 response.put("channel", mapper.writeValueAsString(channelDtoService.toDto(channel)));
             } else {
-                response.put("command", "join");
                 response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Command is incorrect"));
-                response.put("userId", command.getUserId().toString());
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
             }
 
+        } else if (currentCommand.startsWith("/shrug")) {
+            response.put("command", "shrug");
+            String messText = currentCommand.length() > 6 ? currentCommand.substring(6).trim() : "";
+            response.put("report", sendRequestMessage(command.getChannelId(),
+                    userService.getUserById(command.getUserId()), messText + " ¯\\_(ツ)_/¯"));
+            response.put("status", "OK");
+        } else if (currentCommand.startsWith("/invite")) {
+            response.put("command", "invite");
+            String commandBody = currentCommand.length() > 9 ? currentCommand.substring(8).replaceAll("\\s+"," ").trim() : "";
+            String[] words = commandBody.split("\\s+");
+            List<User> invitedUsers = new ArrayList<>(); //список пользователей, которыхприглашаем
+            List<String> channelsName = new ArrayList<>(); //список каналов, куда приглашаем, выбираем только первый (пока что?)
+            Channel channelToInvite;
+            //пробегаемся по сообщению и вытаскиваем ники пользователей (отмечены @) и имена каналов (отмечены №)
+            Arrays.asList(words).forEach(word -> {
+                if (word.startsWith("@")) {
+                    invitedUsers.add(userService.getUserByName(word.substring(1)));
+                } else  {
+                    channelsName.add(word);
+                }
+            });
+            //если канал не указан, то выбираем канал, в который отправлена команда, иначе выбираем первый упомянутый канал
+            if (!channelsName.isEmpty()) {
+                channelToInvite = channelService.getChannelByName(channelsName.get(0));
+            } else {
+                channelToInvite = channelService.getChannelById(command.getChannelId());
+            }
+            //убираем всех существующих на канале пользователей
+            invitedUsers.removeAll(channelToInvite.getUsers());
+            //если список пользователей пуст или указанный канал не найден отправляем ошибку
+            if (channelToInvite != null && !invitedUsers.isEmpty()) {
+                response.put("report", inviteUsersToChannel(invitedUsers, channelToInvite, command.getUserId()));
+                response.put("status", "OK");
+                List<Long> finalUserIds = new ArrayList<>();
+                invitedUsers.forEach(user -> finalUserIds.add(user.getId()));
+                response.put("targets", mapper.writeValueAsString(finalUserIds)); //id добавленный пользователей
+                response.put("channel", mapper.writeValueAsString(channelToInvite)); //канал, куда добавляли пользователей
+                response.put("channelId", command.getChannelId().toString()); //id канала, откуда отправлена команда
+            } else {
+                response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), channelToInvite == null ?
+                        "Channel not found" : "Users list is empty or all users are already in channel"));
+            }
         }
         return mapper.writeValueAsString(response);
     }
@@ -231,10 +278,35 @@ public class SlackBotController {
         newMessage.setContent(reportMsg);
         newMessage.setChannelId(channelId);
         newMessage.setRecipientUsers(new HashSet<>());
-        //messageService.createMessage(newMessage);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(messageDtoService.toDto(newMessage));
     }
+
+    private String inviteUsersToChannel(List<User> invitedUsers, Channel targetChannel, Long inviterId) throws JsonProcessingException {
+        List<User> newUsersInChannel = new ArrayList<>(); //список новый пользователей
+        List<User> existUsers = new ArrayList<>(); //список уже существующих в канале пользователей
+        Workspace ws = targetChannel.getWorkspace();
+        invitedUsers.forEach(user -> {
+            if (targetChannel.getUsers().contains(user) || !ws.getUsers().contains(user)) {
+                existUsers.add(user);
+            } else {
+                targetChannel.getUsers().add(user);
+                newUsersInChannel.add(user);
+            }
+        });
+        channelService.updateChannel(targetChannel);
+        User invitingUser = userService.getUserById(inviterId);
+        StringBuffer sb = new StringBuffer("Invite ");
+        newUsersInChannel.forEach(user -> sb.append("@").append(user.getName()).append(" "));
+        sb.append("to this channel");
+        invitedUsers.removeAll(existUsers); //убираем существующих пользователей, оставляем только вновь приглашенных.
+        return sendRequestMessage(targetChannel.getId(), invitingUser, sb.toString());
+    }
+
+
+
+
+
 
 
 }
