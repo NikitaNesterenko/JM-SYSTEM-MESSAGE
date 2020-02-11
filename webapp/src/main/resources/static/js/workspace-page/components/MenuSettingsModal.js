@@ -125,7 +125,7 @@ export class MenuSettingsModal {
                                     let name = $("#tags").autocomplete({
                                         source: difference,
                                         appendTo : '.ui-widget',
-                                        minLength: 0
+                                        minLength: 1
                                     });
                                     if(name.length != 0) {
                                         $('#addBtn').removeAttr('disabled');
