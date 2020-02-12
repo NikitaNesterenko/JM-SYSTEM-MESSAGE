@@ -2,11 +2,9 @@ package jm.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import jm.*;
-import jm.dto.ChannelDtoService;
-import jm.dto.MessageDTO;
-import jm.dto.MessageDtoService;
-import jm.dto.SlashCommandDto;
+import jm.dto.*;
 import jm.model.*;
 import jm.model.message.DirectMessage;
 import org.apache.kafka.common.protocol.types.Field;
@@ -36,6 +34,7 @@ public class SlackBotController {
     private UserService userService;
     private MessageDtoService messageDtoService;
     private ChannelDtoService channelDtoService;
+    private DirectMessageDtoService directMessageDtoService;
 
     private final String INCORRECT_COMMAND = "Command is incorrect";
 
@@ -44,7 +43,8 @@ public class SlackBotController {
     @Autowired
     public SlackBotController(ChannelService channelService, MessageService messageService, BotService botService,
                               ConversationService conversationService, DirectMessageService directMessageService,
-                              UserService userService, MessageDtoService messageDtoService, ChannelDtoService channelDtoService) {
+                              UserService userService, MessageDtoService messageDtoService, ChannelDtoService channelDtoService,
+                              DirectMessageDtoService directMessageDtoService) {
         this.channelService = channelService;
         this.messageService = messageService;
         this.botService = botService;
@@ -53,9 +53,10 @@ public class SlackBotController {
         this.userService = userService;
         this.messageDtoService = messageDtoService;
         this.channelDtoService = channelDtoService;
+        this.directMessageDtoService = directMessageDtoService;
     }
 
-    @PostMapping("/app/bot/slackbot")
+/*    @PostMapping("/app/bot/slackbot")
     public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command){
         String currentCommand = command.getCommand();
         ResponseEntity<?> resp = null;
@@ -71,14 +72,9 @@ public class SlackBotController {
             }
         }
         return resp == null? new ResponseEntity<>(HttpStatus.OK) : resp;
-    }
+    }*/
 
-    private ResponseEntity<?> sendDirectMessage(Long fromId, String toUsername, String message, Long channelId){
-        User toUser = userService.getUserByName(toUsername);
-
-        if (toUser == null) {
-            return sendRequestMessage(channelId, "User @" + toUsername + " not found");
-        }
+    private String sendDirectMessage(Long fromId, User toUser, String message, Long channelId) throws JsonProcessingException {
 
         Channel channel = channelService.getChannelById(channelId);
         Workspace workspace = channel.getWorkspace();
@@ -106,7 +102,9 @@ public class SlackBotController {
         dm.setIsDeleted(false);
         directMessageService.saveDirectMessage(dm);
 
-        return sendRequestMessage(channelId, "Message for @" + toUsername + " was sent");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        return mapper.writeValueAsString(dm);
     }
 
     //Метод создания сообщения от бота в канале channelId
@@ -132,9 +130,9 @@ public class SlackBotController {
     @MessageMapping("/slackbot")
     @SendTo("/topic/slackbot")
     public String getWsCommand(@RequestBody SlashCommandDto command) throws JsonProcessingException {
-        String currentCommand = command.getCommand();
+        String currentCommand = command.getCommand().trim();
         Map<String, String> response = new HashMap<>();
-        response.put("userId", command.getUserId().toString());
+        response.put("userId", command.getUserId().toString()); //Id пользователя, отправившего запрос
         ObjectMapper mapper = new ObjectMapper();
         if (currentCommand.startsWith("/topic")) {
             String newTopic =  currentCommand.substring(7);
@@ -163,7 +161,8 @@ public class SlackBotController {
         } else if (currentCommand.startsWith("/join") || currentCommand.startsWith("/open")) {
             response.put("command", "join");
             String commandBody = currentCommand.length() > 5 ? currentCommand.substring(6) : "";
-            String channelName = commandBody.replaceAll("\\s+"," ").trim();
+            String channelName = getChannelsNamesFromSmg(currentCommand).size() > 1 ? "" :
+                    getChannelsNamesFromSmg(currentCommand).get(0);
             Channel channel = channelService.getChannelByName(channelName);
             if (channel != null) {
                 response.put("report", joinChannel(channel, command.getUserId()));
@@ -218,6 +217,63 @@ public class SlackBotController {
                 response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), channelToInvite == null ?
                         "Channel not found" : "Users list is empty or all users are already in channel"));
             }
+        } else if (currentCommand.startsWith("/who")) {
+            response.put("command", "who");
+
+            if (currentCommand.split("\\s+")[0].equals("/who")) {
+                Channel currentChannel = channelService.getChannelById(command.getChannelId());
+                response.put("report", whoAreInChannel(currentChannel, command.getUserId()));
+                response.put("status", "OK");
+            } else {
+                response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+            }
+        } else if (currentCommand.startsWith("/remove") || currentCommand.startsWith("/kick")) {
+            response.put("command", "kick");
+            response.put("channelId", command.getChannelId().toString());
+            Channel currentChannel = channelService.getChannelById(command.getChannelId());
+            List<User> kickedUser = new ArrayList<>();
+            getUserNamesFromMessage(currentCommand).forEach(userName -> {
+                User user = userService.getUserByName(userName);
+                if (currentChannel.getUsers().contains(user)) {
+                    kickedUser.add(user);
+                }
+            });
+            if (kickedUser.size() > 0) {
+                response.put("status", "OK");
+                response.put("report", kickUsers(kickedUser, currentChannel, command.getUserId()));
+                response.put("kickedUsersIds", mapper.writeValueAsString(kickedUser.stream().map(user -> user.getId()).toArray()));
+            } else {
+                response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(currentChannel.getId(), getBot(), "Users not found"));
+            }
+        } else if (currentCommand.startsWith("/msg ")) {
+            response.put("command", "msg");
+            String targetChannelName = getChannelsNamesFromSmg(currentCommand).get(0);
+            Channel targetChannel = channelService.getChannelByName(targetChannelName);
+            if (targetChannel != null) {
+                response.put("status", "OK");
+                response.put("report", sendRequestMessage(targetChannel.getId(), userService.getUserById(command.getUserId()),
+                        currentCommand.substring(currentCommand.indexOf(targetChannelName) + targetChannelName.length())));
+                response.put("channelId", targetChannel.getId().toString());
+            } else {
+                response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+            }
+        } else if (currentCommand.startsWith("/dm ")) {
+            response.put("command", "dm");
+            String targetUserName = getUserNamesFromMessage(currentCommand).get(0);
+            User targetUser = userService.getUserByName(targetUserName);
+            if (targetUser != null) {
+                response.put("status", "OK");
+                response.put("report", sendDirectMessage(command.getUserId(), targetUser,
+                        currentCommand.substring(currentCommand.indexOf(targetUserName) + targetUserName.length()), command.getChannelId()));
+                response.put("targetUserId", targetUser.getId().toString());
+                response.put("conversationId", conversationService.getConversationByUsers(command.getUserId(), targetUser.getId()).getId().toString());
+            } else {
+                response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "User @" + targetUserName + " not found"));
+            }
         }
         return mapper.writeValueAsString(response);
     }
@@ -227,7 +283,6 @@ public class SlackBotController {
         Channel channel = channelService.getChannelById(ChannelId);
         channel.setTopic("\"" + topic + "\"");
         channelService.updateChannel(channel);
-
     }
 
     private String leaveChannel(Channel channel, Long userId) throws JsonProcessingException {
@@ -302,6 +357,68 @@ public class SlackBotController {
         invitedUsers.removeAll(existUsers); //убираем существующих пользователей, оставляем только вновь приглашенных.
         return sendRequestMessage(targetChannel.getId(), invitingUser, sb.toString());
     }
+
+    private String whoAreInChannel(Channel targetChannel, Long targetUserId) throws JsonProcessingException {
+        StringBuffer sb = new StringBuffer("Users here:");
+        Set<User> usersOnChannel = targetChannel.getUsers();
+        User targetUser = userService.getUserById(targetUserId);
+        boolean targetUserIsOnChannel = usersOnChannel.contains(targetUser);
+        if (usersOnChannel.size() == 0) {
+            sb.append(" hmmm...Nobody? wtf");
+        } else if (usersOnChannel.size() == 1 && targetUserIsOnChannel) {
+            sb.append(" just you");
+        } else {
+            targetChannel.getUsers().forEach(user -> {
+                if (!user.equals(targetUser)) {
+                    sb.append(" @").append(user.getName());
+                }
+            });
+            sb.append(targetUserIsOnChannel ? " and you." : ".");
+        }
+        return sendTempRequestMessage(targetChannel.getId(), getBot(), sb.toString());
+    }
+
+    private List<String> getUserNamesFromMessage(String msg) {
+        List<String> usersNames = new ArrayList<>();
+        Arrays.asList(msg.replaceAll("\\s+", " ").split(" ")).forEach(word -> {
+            if (word.startsWith("@")) {
+                usersNames.add(word.substring(1));
+            }
+        });
+        if (usersNames.size() == 0) {
+            usersNames.add("");
+        }
+        return usersNames;
+    }
+
+    private List<String> getChannelsNamesFromSmg(String msg) {
+        List<String> channelsNames = new ArrayList<>();
+        Arrays.asList(msg.replaceAll("\\s+", " ").split(" ")).forEach(word -> {
+            if (word.startsWith("#")) {
+                channelsNames.add(word.substring(1));
+            }
+        });
+        if (channelsNames.size() == 0) {
+            channelsNames.add("");
+        }
+        return channelsNames;
+    }
+
+    private String kickUsers(List<User> usersToKick, Channel targetChannel, Long userId) throws JsonProcessingException {
+        User currentUser = userService.getUserById(userId);
+        targetChannel.getUsers().removeAll(usersToKick);
+        channelService.updateChannel(targetChannel);
+        StringBuffer msg = new StringBuffer("Users:");
+        usersToKick.forEach(user -> msg.append(" @").append(user.getName()));
+        msg.append(usersToKick.size() > 1 ? " were" : " was");
+        msg.append(" kicked from channel");
+        msg.append(" by @").append(currentUser.getName());
+        return sendRequestMessage(targetChannel.getId(), getBot(), msg.toString());
+    }
+
+
+
+
 
 
 

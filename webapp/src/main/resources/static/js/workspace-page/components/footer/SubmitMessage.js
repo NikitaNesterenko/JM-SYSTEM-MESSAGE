@@ -40,6 +40,7 @@ export class SubmitMessage {
         $("#form_message").submit(async (event) => {
             event.preventDefault();
             const hasCommand = await this.checkCommand();
+            window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
 
                 const channel_name = sessionStorage.getItem("channelName");
@@ -53,8 +54,6 @@ export class SubmitMessage {
                     await this.sendDirectMessage(conversation_id);
                 }
             }
-
-
         });
     }
 
@@ -62,6 +61,19 @@ export class SubmitMessage {
         await this.setUser();
         const commands = new Command(this.user);
         return commands.isCommand($("#form_message_input").val());
+    }
+
+    checkSlashCommand() {
+        let message = $("#form_message_input").val();
+        let isCommand = false
+        if (message.startsWith('/')) {
+            window.allActions.forEach(action => {
+                if (message.substr(1).startsWith(action)) {
+                    isCommand = true;
+                }
+            })
+        }
+        return isCommand;
     }
 
     getMessageInput() {
@@ -102,12 +114,16 @@ export class SubmitMessage {
             filename: await this.getFiles()
         };
 
+        if (window.hasSlashCommand) {
+            await this.sendSlashCommand(entity);
+        } else {
+            await this.message_service.create(entity).then(
+                msg_id => sendName(msg_id)
+            );
+        }
+/*
 
-
-        await this.message_service.create(entity).then(
-            msg_id => sendName(msg_id)
-        );
-        await this.sendSlashCommand(entity);
+        await this.sendSlashCommand(entity);*/
     }
 
     async sendSlashCommand(entity) {
@@ -121,7 +137,9 @@ export class SubmitMessage {
                         command: entity.content
                     };
                     if ((inputCommand === "topic") || inputCommand === "leave" || inputCommand === "join" ||
-                        inputCommand === "shrug" || inputCommand === "open" || inputCommand === "invite") {
+                        inputCommand === "shrug" || inputCommand === "open" || inputCommand === "invite" ||
+                        inputCommand === "who" || inputCommand === "kick" || inputCommand === "remove" ||
+                        inputCommand === "msg" || inputCommand === "dm") {
                         sendSlackBotCommand(sendCommand);
                     } else {
                         this.slashCommandService.sendSlashCommand(command.url, sendCommand).then(

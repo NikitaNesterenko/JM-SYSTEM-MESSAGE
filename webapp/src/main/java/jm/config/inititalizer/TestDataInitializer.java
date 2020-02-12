@@ -99,7 +99,7 @@ public class TestDataInitializer {
         SlashCommand directMessageCommand = new SlashCommand();
         directMessageCommand.setName("dm");
         directMessageCommand.setUrl("/app/bot/slackbot");
-        directMessageCommand.setDescription("DM discription");
+        directMessageCommand.setDescription("DM description");
         directMessageCommand.setHints("DM Hints");
         slashCommandDao.persist(directMessageCommand);
         sc.add(directMessageCommand);
@@ -107,7 +107,7 @@ public class TestDataInitializer {
         SlashCommand leaveCommand = new SlashCommand();
         leaveCommand.setName("leave");
         leaveCommand.setUrl("/app/bot/slackbot");
-        leaveCommand.setDescription("Leave discription");
+        leaveCommand.setDescription("Leave description");
         leaveCommand.setHints("Leave Hints");
         slashCommandDao.persist(leaveCommand);
         sc.add(leaveCommand);
@@ -115,7 +115,7 @@ public class TestDataInitializer {
         SlashCommand joinCommand = new SlashCommand();
         joinCommand.setName("join");
         joinCommand.setUrl("/app/bot/slackbot");
-        joinCommand.setDescription("Join discription");
+        joinCommand.setDescription("Join description");
         joinCommand.setHints("Join Hints");
         slashCommandDao.persist(joinCommand);
         sc.add(joinCommand);
@@ -123,7 +123,7 @@ public class TestDataInitializer {
         SlashCommand openCommand = new SlashCommand();
         openCommand.setName("open");
         openCommand.setUrl("/app/bot/slackbot");
-        openCommand.setDescription("Join discription");
+        openCommand.setDescription("Join description");
         openCommand.setHints("Join Hints");
         slashCommandDao.persist(openCommand);
         sc.add(openCommand);
@@ -131,7 +131,7 @@ public class TestDataInitializer {
         SlashCommand shrugCommand = new SlashCommand();
         shrugCommand.setName("shrug");
         shrugCommand.setUrl("/app/bot/slackbot");
-        shrugCommand.setDescription("Shrug discription");
+        shrugCommand.setDescription("Shrug description");
         shrugCommand.setHints("Shrug Hints");
         slashCommandDao.persist(shrugCommand);
         sc.add(shrugCommand);
@@ -139,10 +139,42 @@ public class TestDataInitializer {
         SlashCommand inviteCommand = new SlashCommand();
         inviteCommand.setName("invite");
         inviteCommand.setUrl("/app/bot/slackbot");
-        inviteCommand.setDescription("Shrug discription");
+        inviteCommand.setDescription("Shrug description");
         inviteCommand.setHints("Shrug Hints");
         slashCommandDao.persist(inviteCommand);
         sc.add(inviteCommand);
+
+        SlashCommand whoCommand = new SlashCommand();
+        whoCommand.setName("who");
+        whoCommand.setUrl("/app/bot/slackbot");
+        whoCommand.setDescription("Who description");
+        whoCommand.setHints("Who Hints");
+        slashCommandDao.persist(whoCommand);
+        sc.add(whoCommand);
+
+        SlashCommand kickCommand = new SlashCommand();
+        kickCommand.setName("kick");
+        kickCommand.setUrl("/app/bot/slackbot");
+        kickCommand.setDescription("Kick description");
+        kickCommand.setHints("Kick Hints");
+        slashCommandDao.persist(kickCommand);
+        sc.add(kickCommand);
+
+        SlashCommand removeCommand = new SlashCommand();
+        removeCommand.setName("remove");
+        removeCommand.setUrl("/app/bot/slackbot");
+        removeCommand.setDescription("Remove description");
+        removeCommand.setHints("Remove Hints");
+        slashCommandDao.persist(removeCommand);
+        sc.add(removeCommand);
+
+        SlashCommand msgCommand = new SlashCommand();
+        msgCommand.setName("msg");
+        msgCommand.setUrl("/app/bot/slackbot");
+        msgCommand.setDescription("Msg description");
+        msgCommand.setHints("Msg Hints");
+        slashCommandDao.persist(msgCommand);
+        sc.add(msgCommand);
     }
 
     private void createRoles() {
