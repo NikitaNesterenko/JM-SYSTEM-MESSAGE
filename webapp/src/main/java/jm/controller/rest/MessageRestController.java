@@ -199,4 +199,13 @@ public class MessageRestController {
         logger.info("Сообщения, отмеченные пользователем.");
         return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
     }
+
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<List<Message>> getMessagesFromChannelsForUser(@PathVariable("id") Long userId) {
+        logger.info("Список сообщений для юзера от всех @channel: ");
+        for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId)) {
+            logger.info(message.toString());
+        }
+        return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId), HttpStatus.OK);
+    }
 }
