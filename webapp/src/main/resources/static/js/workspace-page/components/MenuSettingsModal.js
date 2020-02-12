@@ -138,6 +138,12 @@ export class MenuSettingsModal {
         });
     }
 
+    onMuteChannel() {
+        $('#muteChannel').click(() => {
+            alert('muteChannel');
+        })
+    }
+
     removeChannelFromSidebarList(channel_id) {
         const channel_btn = $('.p-channel_sidebar__channel');
         channel_btn.each(function (idx, item) {
@@ -207,6 +213,7 @@ export class MenuSettingsModal {
         this.onAddPeopleToChannelKeyUp();
         this.onCopyChannelNameBtnClick();
         this.onAddPeopleToChannelBtnClick();
+        this.onMuteChannel();
     }
 
 
