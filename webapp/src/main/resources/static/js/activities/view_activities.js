@@ -4,7 +4,7 @@ import {MessageRestPaginationService, UserRestPaginationService} from "../rest/e
 const user_service = new UserRestPaginationService();
 const message_service = new MessageRestPaginationService();
 
-let populateRightPaneActivity = (user) => {
+export let populateRightPaneActivity = (user) => {
     $('.p-flexpane__title_container').text('Activities');
     const target_element = $('.p-flexpane__inside_body-scrollbar__child');
     target_element.empty();
@@ -25,7 +25,7 @@ let populateRightPaneActivity = (user) => {
 };
 
 // toggle right panel
-let is_open;
+export let is_open;
 $(document).on('load', () => is_open = false);
 
 let toggle_right_menu = () => {
@@ -40,7 +40,7 @@ let toggle_right_menu = () => {
 };
 
 // event on click at button (activities)
-$('.p-classic_nav__right__activity__button').on('click', () => {
+$('.p-classic_nav__right__activity__button, .p-flexpane_header__control__button').on('click', () => {
     toggle_right_menu();
 });
 

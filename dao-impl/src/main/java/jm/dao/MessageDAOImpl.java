@@ -100,7 +100,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 //    }
     @Override
     public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) {
-        return entityManager.createQuery("select m from Message m where m.user.id =:userId", Message.class)
+        return entityManager.createQuery("select m from Message m join  m.recipientUsers u where u.id =:userId", Message.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
