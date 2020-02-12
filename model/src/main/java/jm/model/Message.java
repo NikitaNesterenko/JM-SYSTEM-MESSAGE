@@ -137,15 +137,6 @@ public class Message {
         this.channelId = messageDto.getChannelId();
     }
 
-    public Message(Long id, String content, LocalDateTime dateCreate, String filename, Bot bot, Long channelId) {
-        this.id = id;
-        this.content = content;
-        this.dateCreate = dateCreate;
-        this.filename = filename;
-        this.bot = bot;
-        this.channelId = channelId;
-    }
-
     //    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
 //        this.channel = channel;
 //        this.user = user;
