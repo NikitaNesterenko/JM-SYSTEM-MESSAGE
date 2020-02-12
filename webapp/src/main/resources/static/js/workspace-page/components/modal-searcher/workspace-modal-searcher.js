@@ -28,7 +28,7 @@ window.addEventListener('load', function () {
     function showSearchBlock() {
         $("#modalSearcher").modal("show");
 
-        const work = workspace_service.getChoosedWorkspace();
+        const work = workspace_service.getChosenWorkspace();
         const user = user_service.getLoggedUser();
         const message = message_service.getAll();
 

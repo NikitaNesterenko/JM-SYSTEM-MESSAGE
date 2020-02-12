@@ -79,7 +79,8 @@ export class MessageView {
             .setMessageContentHeader()
             .setContent()
             .setMenuIcons(this.logged_user.id)
-            .attachedFile();
+            .attachedFile()
+            .attachedVoiceMessage();
     }
 
     async createSharedMessage(message) {

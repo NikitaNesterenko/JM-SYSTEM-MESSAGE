@@ -6,7 +6,7 @@ import jm.model.Workspace;
 import java.util.List;
 
 public interface WorkspaceService {
-    List<Workspace> gelAllWorkspaces();
+    List<Workspace> getAllWorkspaces();
 
     void createWorkspace(Workspace workspace);
 

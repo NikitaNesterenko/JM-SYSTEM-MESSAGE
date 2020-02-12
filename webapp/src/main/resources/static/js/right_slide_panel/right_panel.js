@@ -22,6 +22,7 @@ export const open_right_panel = () => {
     "p-workspace__sidebar p-workspace__primary_view p-workspace__secondary_view"
     "p-workspace__sidebar p-workspace__footer p-workspace__footer"`); //p-workspace__secondary_view
     $('.p-workspace__secondary_view').css('display', 'grid');
+    is_open = true;
 };
 
 $('.p-flexpane_header__control__button').on('click', close_right_panel);

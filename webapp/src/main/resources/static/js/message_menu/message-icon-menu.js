@@ -78,7 +78,7 @@ let populateRightPane = (user) => {
     $('.p-flexpane__title_container').text('Starred Items');
     const target_element = $('.p-flexpane__inside_body-scrollbar__child');
     target_element.empty();
-    workspace_service.getChoosedWorkspace().then(workspace => {
+    workspace_service.getChosenWorkspace().then(workspace => {
         let currentWorkspaceId = workspace.id; //получаем id выбранного workspace
         channel_service.getChannelsByWorkspaceId(currentWorkspaceId).then(channels => {
             // получаем массив каналов для выбранного workspace

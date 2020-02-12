@@ -1,4 +1,3 @@
-//webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
 
 let gumStream; 						//stream from getUserMedia()
@@ -8,13 +7,12 @@ let encodingType; 					//holds selected encoding for resulting audio (file)
 let encodeAfterRecord = true;       //when to encode
 let count = 0;						//count of pressing button for start/stop recording
 
-// shim for AudioContext when it's not avb. 
+// shim for AudioContext when it's not avb.
 let AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioContext; //new audio context to help us record
+let audioContext;
 
 function recording() {
-    if (count % 2 == 0) { //wtf js
-
+    if (count % 2 === 0) {
         document.getElementById("voiceMessageBtn").style.color="red";
         $('#inputMe').html("");
 
@@ -23,17 +21,13 @@ function recording() {
             console.log("getUserMedia() success, stream created, initializing WebAudioRecorder...");
 
             audioContext = new AudioContext();
-
-            //assign to gumStream for later use
             gumStream = stream;
 
-            /* use the stream */
             input = audioContext.createMediaStreamSource(stream);
 
             //stop the input from playing back through the speakers
             //input.connect(audioContext.destination)
 
-            //get the encoding
             encodingType = "mp3";
 
             recorder = new WebAudioRecorder(input, {
@@ -50,7 +44,7 @@ function recording() {
 
             recorder.onComplete = function (recorder, blob) {
                 console.log("Encoding complete");
-                createDownloadLink(blob);
+                buildAudio(blob);
             };
 
             recorder.setOptions({
@@ -82,7 +76,7 @@ function recording() {
     }
 }
 
-function createDownloadLink(blob) {
+function buildAudio(blob) {
 
     let url = URL.createObjectURL(blob);
     let au = document.createElement('audio');
@@ -92,4 +86,9 @@ function createDownloadLink(blob) {
     au.id = "audioInput";
 
     inputMe.appendChild(au);
+}
+
+function rndFunc(id) {
+    alert("1" + id);
+    console.log("1" + id);
 }

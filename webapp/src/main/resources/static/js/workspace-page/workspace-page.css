@@ -1,3 +1,10 @@
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
 .supports_custom_scrollbar {
     margin: 0;
     padding: 0;
@@ -132,8 +139,18 @@
     grid-template-rows: auto;
 }
 
-.material-icons {
+.buttons-MessageBox {
     margin: 6px 3px;
+}
+
+.buttons-SideBar {
+    margin: 5px 0;
+    padding: 0;
+}
+
+.buttons-TopBar {
+    margin: 5px 5px;
+    color: lightslategray;
 }
 
 .VoiceMessageButton {
@@ -142,6 +159,10 @@
 
 .VoiceMessageButtonBlink{
     color:transparent;
+}
+
+.noselect {
+    user-select: none;
 }
 
 .iconsVD-sideBar {
@@ -154,6 +175,18 @@
     overflow: hidden;
     outline:none;
     height: min-content;
+}
+
+.iconsVD-sideBar:hover {
+    color: #d5d8cc;
+}
+
+.directMessageFindButton {
+
+}
+
+.directMessageModal {
+
 }
 
 .iconsVD-messageBox {
@@ -294,10 +327,10 @@
     box-sizing: inherit;
     display: flex;
     align-items: center;
+    height: 30px;
 }
 
 .p-classic_nav__team_header__user {
-    line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
@@ -308,7 +341,6 @@
     cursor: pointer;
     box-sizing: inherit;
     display: flex;
-    align-items: center;
     font-size: 14px;
 }
 
@@ -693,26 +725,6 @@
     width: 1em;
 }
 
-.p-classic_nav__model__title__info__members__icon {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    user-select: none;
-    color: inherit;
-    font: inherit;
-    text-align: initial;
-    cursor: pointer;
-    box-sizing: inherit;
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: auto;
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    width: 1em;
-}
-
 .p-classic_nav__model__title__info__pins__icon {
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
@@ -787,114 +799,6 @@
     display: none;
     margin-left: 8px;
     color: rgba(var(--sk_highlight,18,100,163),1);
-}
-
-.p-classic_nav__model__button__call {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    box-sizing: inherit;
-    background: none;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    border-radius: 4px;
-    color: rgba(var(--sk_foreground_low,29,28,29),.13);
-    font-size: 20px;
-}
-
-.p-classic_nav__model__button__call__icon {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    font: inherit;
-    line-height: inherit;
-    text-align: initial;
-    cursor: pointer;
-    color: rgba(var(--sk_foreground_low,29,28,29),.13);
-    box-sizing: inherit;
-    position: relative;
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-    justify-content: center;
-    font-weight: bolder;
-}
-
-.p-classic_nav__model__button__details {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    box-sizing: inherit;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    border-radius: 4px;
-    background: rgba(var(--sk_foreground_low,29,28,29),.13);
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-}
-
-.p-classic_nav__model__button__details__icon {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    font: inherit;
-    line-height: inherit;
-    text-align: initial;
-    cursor: pointer;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    box-sizing: inherit;
-    position: relative;
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-    justify-content: center;
-    font-weight: bolder;
-}
-
-.p-classic_nav__model__button__settings {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    box-sizing: inherit;
-    background: none;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
-    border-radius: 4px;
-    font-size: 20px;
-    font-weight: bolder;
 }
 
 .p-classic_nav__model__button__settings__icon {
@@ -1522,6 +1426,7 @@
 }
 
 .p-channel_sidebar__channels__button {
+    position: absolute;
     -webkit-font-smoothing: antialiased;
     box-sizing: inherit;
     background: none;
@@ -1537,7 +1442,7 @@
     display: block;
     opacity: 1;
     text-align: left;
-    width: 100%;
+    width: min-content;
     transition: color .1s ease-out;
     white-space: nowrap;
     font-weight: 700;
@@ -1624,18 +1529,22 @@
 }
 
 .p-channel_sidebar__channel {
+    position: relative;
     line-height: 1.46668;
     font-weight: 400;
-    font-variant-ligatures: common-ligatures;
+    /*font-variant-ligatures: common-ligatures;*/
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-size: 15px;
-    box-sizing: inherit;
     height: 26px;
 }
 
 .p-channel_sidebar__channel:hover {
-    background: #150037;
+    background: #461643;
+}
+
+.p-channel_sidebar__channel:hover .cross {
+    display: inline-block;
 }
 
 .p-channel_sidebar__name_button {
@@ -1659,11 +1568,6 @@
     font-weight: 700;
     padding: 0 0 0 20px;
     outline: none;
-}
-
-.p-channel_sidebar__name_button:focus {
-    color: white;
-    background: royalblue;
 }
 
 .p-channel_sidebar__channel_icon_prefix {
@@ -1823,24 +1727,16 @@
     box-sizing: inherit;
     background: none;
     border: 0;
-    color: inherit;
-    font: inherit;
-    margin: 0;
-    overflow: initial;
-    padding: 0;
     text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    opacity: 0;
     position: absolute;
     top: 3px;
     right: .75rem;
     line-height: 1;
+    display: none;
 }
 
 .p-channel_sidebar__close__icon {
     -webkit-font-smoothing: antialiased;
-    color: inherit;
     font: inherit;
     text-align: initial;
     cursor: pointer;
@@ -1852,7 +1748,19 @@
     height: 20px;
     align-items: center;
     justify-content: center;
+    color: gainsboro;
 }
+
+.p-channel_sidebar__close__icon:hover {
+    -webkit-animation: color-change 1s forwards;
+}
+
+@-webkit-keyframes color-change {
+    0% { color: gainsboro; }
+    50% { color: #b4545e; }
+    100% { color: red; }
+}
+
 
 .p-channel_sidebar__direct-messages {
     line-height: 1.46668;
@@ -1934,9 +1842,6 @@
     position: relative;
     align-items: center;
     justify-content: center;
-    height: auto;
-    line-height: inherit;
-    margin: 0 1px 0 -4px;
     font-family: Slack v2;
     font-size: 20px;
     font-style: normal;
@@ -1946,8 +1851,6 @@
     width: 20px;
     flex-shrink: 0;
     color: #2BAC76;
-    opacity: 1;
-    padding-bottom: 5px;
 }
 
 .p-channel_sidebar__channel_icon_circle:hover {

@@ -26,7 +26,7 @@ export class DMView {
     }
 
     onClickDirectMessageChat() {
-        $(document).on('click', '.p-channel_sidebar__name_button[data-user_id]', async (event) => {
+        $(document).on('click', '.p-channel_sidebar__name_button', async (event) => {
             $(".p-channel_sidebar__name_button").each(function (idx, elem) {
                 $(elem).css({color: "rgb(188,171,188)", background: "none"});
             });
@@ -40,7 +40,7 @@ export class DMView {
 
     async show(userId) {
         const respondent = await this.user_service.getById(userId);
-        const workspace = await this.workspace_service.getChoosedWorkspace();
+        const workspace = await this.workspace_service.getChosenWorkspace();
 
         if (this.logged_user.id !== respondent.id) {
             let conversation = await this.conversation_service.getConversationForUsers(this.logged_user.id, respondent.id);
@@ -84,7 +84,7 @@ export class DMView {
         $('.p-classic_nav__model__title__name__button').text(respondent.displayName);
         $('.p-classic_nav__model__title__info')
             .html(`<button class="p-classic_nav__model__title__info__star">
-                   <i class="p-classic_nav__model__title__info__star__icon">☆</i>
+                   <i style="font-size: 18px; color: orange;">☆</i>
                </button>
                <span class="p-classic_nav__model__title__info__sep">|</span>
                <span class="p-classic_nav__model__title__info_status">active</span>

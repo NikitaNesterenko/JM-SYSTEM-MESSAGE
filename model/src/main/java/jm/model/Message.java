@@ -48,8 +48,11 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
-    @Column(name = "voiceMessage", length = 100000)
-    private Byte[] voiceMessage;
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "voice_message",
+//            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "name"))
+//            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
+    private String voiceMessage;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -137,6 +140,7 @@ public class Message {
         this.content = messageDto.getContent();
         this.dateCreate = messageDto.getDateCreate();
         this.filename = messageDto.getFilename();
+        this.voiceMessage = messageDto.getVoiceMessage();
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
     }

@@ -39,11 +39,11 @@ export class SubmitMessage {
             const hasCommand = await this.checkCommand();
             if (!hasCommand) {
 
-                const content =  $("#form_message_input").val()
+                const content =  $("#form_message_input").val();
                 if (content.startsWith('/leave ')) {
-                    let channelName = content.substring(7)
-                    this.leaveChannel(channelName)
-                    $("#form_message_input").val("")
+                    let channelName = content.substring(7);
+                    this.leaveChannel(channelName);
+                    $("#form_message_input").val("");
                     return
                 }
 
@@ -86,16 +86,19 @@ export class SubmitMessage {
             $('#attached_file').html("");
             return files.name;
         }
+        return null;
+    }
 
+    async getVoiceMessage() {
         const audioInput = $("#audioInput");
         const src = audioInput.prop('src');
-        let blob = await fetch(src).then(r => r.blob());
 
-        if (blob !== undefined) {
-            const formData = new FormData();
+        if (src !== undefined) {
+            let blob = await fetch(src).then(r => r.blob());
+            const data = new FormData();
             let name = 'voiceMessage_' + generateUID() + '.mp3';
-            formData.append('file', blob, name);
-            await this.storage_service.uploadFile(formData);
+            data.append('file', blob, name);
+            await this.storage_service.uploadFile(data);
             $('#inputMe').html("");
             return name;
         }
@@ -114,21 +117,22 @@ export class SubmitMessage {
         await this.setChannel(channel_name);
         await this.setUser();
 
-        const content = this.getMessageInput();
-
-        const entity = {
+        let entity = {
             id: null,
             channelId: this.channel.id,
             userId: this.user.id,
             userName: this.user.name,
-            content: content,
+            content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
-            filename: await this.getFiles()
+            filename: await this.getFiles(),
+            voiceMessage: await this.getVoiceMessage()
         };
 
-        this.message_service.create(entity).then(
-            msg_id => sendName(msg_id)
-        );
+        if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
+            this.message_service.create(entity).then(
+                message => sendName(message)
+            );
+        }
     }
 
     async sendDirectMessage(conversation_id) {
@@ -171,7 +175,7 @@ export class SubmitMessage {
     }
 
     async setWorkspace() {
-        await this.workspace_service.getChoosedWorkspace().then(
+        await this.workspace_service.getChosenWorkspace().then(
             workspace => this.workspace = workspace
         )
     }

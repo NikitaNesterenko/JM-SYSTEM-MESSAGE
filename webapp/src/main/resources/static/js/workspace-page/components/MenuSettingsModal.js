@@ -7,11 +7,11 @@ export class MenuSettingsModal {
 
     constructor() {
         this.channel_service = new ChannelRestPaginationService();
-        this.settingBtn = $('#settingsMenuButton, .p-classic_nav__model__button__settings__icon');
+        this.settingBtn = $('#settingsMenuButton .buttons-TopBar');
     }
 
     onMenuSettingsBtnClick() {
-        $(document).on('mouseup', (event) => {
+        $('#settingBtn .buttons-TopBar').on('mouseup', (event) => {
             if (this.settingBtn.is(event.target)) {
                 this.channel_id = sessionStorage.getItem("channelName");
                 $('#settingsList').css("display", "block");
@@ -20,6 +20,14 @@ export class MenuSettingsModal {
             }
         });
 
+        // $(document).on('mouseup', (event) => {
+        //     if (this.settingBtn.is(event.target)) {
+        //         this.channel_id = sessionStorage.getItem("channelName");
+        //         $('#settingsList').css("display", "block");
+        //     } else {
+        //         $('#settingsList').css("display", "none");
+        //     }
+        // });
     }
 
     onAdditionalOptionsBtnClick() {

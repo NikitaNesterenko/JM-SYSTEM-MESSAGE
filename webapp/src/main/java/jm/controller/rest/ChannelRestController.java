@@ -11,12 +11,15 @@ import org.mockito.internal.util.collections.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +49,25 @@ public class ChannelRestController {
     @Autowired
     public void  setChannelDTOService(ChannelDtoService channelDTOService) {
         this.channelDTOService = channelDTOService;
+    }
+
+    @GetMapping("/chosen")
+    public ResponseEntity<Workspace> getChosenChannel(HttpServletRequest request, HttpServletResponse response) {
+        Workspace workspace = (Workspace) request.getSession().getAttribute("ChannelId");
+        if (workspace == null) {
+            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseChannel").build();
+        }
+        return new ResponseEntity<>(workspace, HttpStatus.OK);
+    }
+
+    @GetMapping("/chosen/{id}")
+    public ResponseEntity<Boolean> chosenChannel(@PathVariable("id") long id, HttpServletRequest request) {
+        Channel channel = channelService.getChannelById(id);
+        if (channel == null) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+        request.getSession().setAttribute("ChannelId", channel);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

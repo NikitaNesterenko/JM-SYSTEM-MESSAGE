@@ -78,11 +78,11 @@ public class WorkspaceRestController {
 
     @GetMapping
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
-        return new ResponseEntity<>(workspaceService.gelAllWorkspaces(),HttpStatus.OK);
+        return new ResponseEntity<>(workspaceService.getAllWorkspaces(),HttpStatus.OK);
     }
 
-    @GetMapping("/choosed")
-    public ResponseEntity<Workspace> getChoosedWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping("/chosen")
+    public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
        Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
        if(workspace==null) {
            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
@@ -90,8 +90,8 @@ public class WorkspaceRestController {
         return new ResponseEntity<>(workspace, HttpStatus.OK);
     }
 
-    @GetMapping("/choosed/{name}")
-    public ResponseEntity<Boolean> choosedWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
+    @GetMapping("/chosen/{name}")
+    public ResponseEntity<Boolean> chosenWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
         Workspace workspace = workspaceService.getWorkspaceByName(name);
         if (workspace == null) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
@@ -102,7 +102,7 @@ public class WorkspaceRestController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
-        return choosedWorkspace(name, request);
+        return chosenWorkspace(name, request);
     }
 
     @GetMapping("/byLoggedUser")
