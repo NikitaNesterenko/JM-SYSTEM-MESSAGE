@@ -69,4 +69,7 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getStarredMessagesForUser(Long id) {
         return messageDAO.getStarredMessagesForUser(id);
     }
+
+    @Override
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) { return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId); }
 }

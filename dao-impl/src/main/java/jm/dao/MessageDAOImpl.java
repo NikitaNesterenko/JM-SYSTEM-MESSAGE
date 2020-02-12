@@ -66,9 +66,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getStarredMessagesForUser(Long userId) {
         return entityManager.createQuery(
-                "select sm from User u join u.starredMessages as sm where u.id = :user_id",
-                Message.class
-        )
+                "select sm from User u join u.starredMessages as sm where u.id = :user_id", Message.class)
                 .setParameter("user_id", userId)
                 .getResultList();
     }
@@ -91,6 +89,19 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         return entityManager
                 .createQuery("select o from Message o where o.id in :ids", Message.class)
                 .setParameter("ids", ids)
+                .getResultList();
+    }
+
+//    @Override
+//    public List getAllMessagesReceivedFromChannelsByUserId(Long userId) {
+//        return entityManager.createNativeQuery("select id, content, date_create, filename, bot_id, channel_id, messages.user_id  from messages inner join channels_users using (channel_id) where channels_users.user_id = ? and content like '%@channel%'")
+//                .setParameter(1, userId)
+//                .getResultList();
+//    }
+    @Override
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) {
+        return entityManager.createQuery("select m from Message m where m.user.id =:userId", Message.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 }

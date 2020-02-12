@@ -48,8 +48,9 @@ export class MessageRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-    getMessageById = async (id) => {
-        const response = await fetch('/rest/api/messages/' + id);
+    // messages from all channels where user is member
+    getMessagesFromChannelsForUser = async (id) => {
+        const response = await fetch(`/rest/api/messages/user/${id}`);
         return response.json();
     };
 }
