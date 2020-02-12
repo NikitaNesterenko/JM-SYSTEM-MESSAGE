@@ -252,25 +252,15 @@ public class TestDataInitializer {
         messageDAO.persist(message4);
         this.messages.add(message4);
 
-        Message message_5 = new Message();
-        message_5.setChannelId(channels.get(2).getId());
-        message_5.setUser(userList.get(1));
-        message_5.setContent("@John hello everybody!");
-        message_5.setDateCreate(LocalDateTime.now());
-        message_5.setRecipientUsers(Collections.singleton(userService.getUserById(1L)));
+        Message message5 = new Message();
+        message5.setChannelId(channels.get(2).getId());
+        message5.setUser(userList.get(1));
+        message5.setContent("@John hello everybody!");
+        message5.setDateCreate(LocalDateTime.now());
+        message5.setRecipientUsers(Collections.singleton(userService.getUserById(1L)));
 
-        messageDAO.persist(message_5);
-        this.messages.add(message_5);
-
-        Message message_6 = new Message();
-        message_6.setChannelId(channels.get(2).getId());
-        message_6.setUser(userList.get(2));
-        message_6.setContent("@channel today is a good day");
-        message_6.setDateCreate(LocalDateTime.now());
-
-        messageDAO.persist(message_6);
-        this.messages.add(message_6);
-
+        messageDAO.persist(message5);
+        this.messages.add(message5);
     }
 
     private void createWorkspaces() {
