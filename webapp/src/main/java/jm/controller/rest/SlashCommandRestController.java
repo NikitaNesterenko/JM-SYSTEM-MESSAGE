@@ -97,6 +97,8 @@ public class SlashCommandRestController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } else {
             slashCommandService.createSlashCommand(sc);
+            bot.getCommands().add(sc);
+            botService.updateBot(bot);
             logger.info("Slash command created");
             return new ResponseEntity<>(sc, HttpStatus.CREATED);
         }

@@ -68,7 +68,7 @@ export class SubmitMessage {
         let isCommand = false
         if (message.startsWith('/')) {
             window.allActions.forEach(action => {
-                if (message.substr(1).startsWith(action)) {
+                if (message.substr(1, message.indexOf(" ") < 0 ? message.length :  message.indexOf(" ") - 1) === action) {
                     isCommand = true;
                 }
             })
@@ -121,9 +121,6 @@ export class SubmitMessage {
                 msg_id => sendName(msg_id)
             );
         }
-/*
-
-        await this.sendSlashCommand(entity);*/
     }
 
     async sendSlashCommand(entity) {
@@ -134,25 +131,16 @@ export class SubmitMessage {
                     const sendCommand = {
                         channelId: entity.channelId,
                         userId: entity.userId,
-                        command: entity.content
+                        command: entity.content,
+                        name: inputCommand
                     };
-                    if ((inputCommand === "topic") || inputCommand === "leave" || inputCommand === "join" ||
-                        inputCommand === "shrug" || inputCommand === "open" || inputCommand === "invite" ||
-                        inputCommand === "who" || inputCommand === "kick" || inputCommand === "remove" ||
-                        inputCommand === "msg" || inputCommand === "dm") {
+                    if (command.botId == 1) {
+                        //если это команда от слакБота, то отправляем через вебсокет.
                         sendSlackBotCommand(sendCommand);
                     } else {
-                        this.slashCommandService.sendSlashCommand(command.url, sendCommand).then(
-                        msg_id => {
-                            if (!msg_id == undefined){
-                                sendName(msg_id);
-                            }
-                        }
-                    )/*.then(() => {
-                        if (inputCommand === "topic") {
-                            document.getElementById("topic_string").textContent = "ololo";
-                        }
-                    })*/;}
+                        //иначе просто отправляем пост запрос по урлу
+                        this.slashCommandService.sendSlashCommand(command.url, sendCommand);
+                    }
                 }
             });
         }

@@ -33,7 +33,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     public List<SlashCommand> getByWorkspace(Workspace workspace) {
         try {
             return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM jm_message_system.bots_slash_commands bc JOIN slash_commands sc JOIN workspaces_bots wb ON sc.id = bc.slash_command_id AND bc.bot_id = wb.bot_id WHERE wb.workspace_id=?", SlashCommand.class)
-                    .setParameter(1, workspace)
+                    .setParameter(1, workspace.getId())
                     .getResultList();
         } catch (NoResultException e) {
             return null;

@@ -25,7 +25,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     public List<Bot> getBotsByWorkspaceId(Workspace workspace) {
         try {
             return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
-                    .setParameter(1, workspace)
+                    .setParameter(1, workspace.getId())
                     .getResultStream().collect(Collectors.toList());
         } catch (NoResultException e) {
             return null;
@@ -39,7 +39,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     public Bot getBotByCommand(SlashCommand slashCommand) {
         try{
             return (Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
-                    .setParameter(1, slashCommand)
+                    .setParameter(1, slashCommand.getId())
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

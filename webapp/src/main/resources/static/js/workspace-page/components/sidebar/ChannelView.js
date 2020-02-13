@@ -11,6 +11,7 @@ export class ChannelView {
         window.pressChannelButton = (id) => {
             window.channel_id = id;
             this.selectChannel(id);
+            sessionStorage.setItem('conversation_id', '0');
         }
     }
 

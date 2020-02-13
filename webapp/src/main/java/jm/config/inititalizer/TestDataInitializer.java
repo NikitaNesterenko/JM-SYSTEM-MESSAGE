@@ -123,8 +123,8 @@ public class TestDataInitializer {
         SlashCommand openCommand = new SlashCommand();
         openCommand.setName("open");
         openCommand.setUrl("/app/bot/slackbot");
-        openCommand.setDescription("Join description");
-        openCommand.setHints("Join Hints");
+        openCommand.setDescription("Open description");
+        openCommand.setHints("Open Hints");
         slashCommandDao.persist(openCommand);
         sc.add(openCommand);
 
@@ -139,8 +139,8 @@ public class TestDataInitializer {
         SlashCommand inviteCommand = new SlashCommand();
         inviteCommand.setName("invite");
         inviteCommand.setUrl("/app/bot/slackbot");
-        inviteCommand.setDescription("Shrug description");
-        inviteCommand.setHints("Shrug Hints");
+        inviteCommand.setDescription("Invite description");
+        inviteCommand.setHints("Invite Hints");
         slashCommandDao.persist(inviteCommand);
         sc.add(inviteCommand);
 
@@ -175,6 +175,22 @@ public class TestDataInitializer {
         msgCommand.setHints("Msg Hints");
         slashCommandDao.persist(msgCommand);
         sc.add(msgCommand);
+
+        SlashCommand renameCommand = new SlashCommand();
+        renameCommand.setName("rename");
+        renameCommand.setUrl("/app/bot/slackbot");
+        renameCommand.setDescription("Rename description");
+        renameCommand.setHints("Rename Hints");
+        slashCommandDao.persist(renameCommand);
+        sc.add(renameCommand);
+
+        SlashCommand archiveCommand = new SlashCommand();
+        archiveCommand.setName("archive");
+        archiveCommand.setUrl("/app/bot/slackbot");
+        archiveCommand.setDescription("Rename description");
+        archiveCommand.setHints("Rename Hints");
+        slashCommandDao.persist(archiveCommand);
+        sc.add(archiveCommand);
     }
 
     private void createRoles() {
@@ -391,32 +407,28 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        Bot bot = new Bot("bot_1", "bot", LocalDateTime.now());
-        //bot.getWorkspaces().add(workspaceDAO.getById(1L));
-        bot.getWorkspaces().add(workspaceDAO.getById(2L));
-
         Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now());
         zoom.getWorkspaces().add(workspaceDAO.getById(1L));
 
 
         Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now());
         slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
-        //slackBot.getWorkspaces().add(workspaceDAO.getById(2L));
-        sc.forEach(command -> slackBot.getCommands().add(command));
-        /*slackBot.getCommands().add(slashCommandDao.getById(1L));
-        slackBot.getCommands().add(slashCommandDao.getById(2L));
-        slackBot.getCommands().add(slashCommandDao.getById(3L));
-        slackBot.getCommands().add(slashCommandDao.getById(4L));
-        slackBot.getCommands().add(slashCommandDao.getById(5L));
-        slackBot.getCommands().add(slashCommandDao.getById(6L));*/
+        sc.forEach(command -> {
+            slackBot.getCommands().add(command);
+        });
 
-        this.bots.add(bot);
+
+        this.bots.add(slackBot);
         this.bots.add(zoom);
 
-
-        botDAO.persist(bot);
         botDAO.persist(slackBot);
         botDAO.persist(zoom);
+
+        sc.forEach(command -> {
+            command.setBot(slackBot);
+            slashCommandDao.merge(command);
+        });
+
     }
 
     private void createLinkRoles() {
