@@ -1,10 +1,12 @@
 import {ChannelRestPaginationService, BotRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "/js/workspace-page/components/messages/ChannelMessageView.js";
+import {UserRestPaginationService} from "../../../rest/entities-rest-pagination.js";
 
 export class ChannelView {
     default_channel = null;
 
     constructor() {
+        this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.channel_message_view = new ChannelMessageView();
         this.bot_service = new BotRestPaginationService();
@@ -39,14 +41,21 @@ export class ChannelView {
         this.showBots(workspace_id);
     }
 
-    setFlaggedItems(channelId) {
+    setFlaggedItems() {
         $("#flaggedItems").append(0);
-        alert(channelId)
+        alert(sessionStorage.getItem("channelName"))
     }
 
     showPeopleInChannel(channelId) {
-        $("#peopleInChat").append(0);
-        alert(channelId)
+        alert(channelId);
+        const countOfPeopleInChannel = $("#peopleInChat");
+        this.user_service.getUsersByChannelId(channelId).then(
+            users => {
+                countOfPeopleInChannel.empty();
+                countOfPeopleInChannel.append(users.length);
+            }
+        );
+
     }
 
     showBots(workspace_id) {

@@ -7,17 +7,14 @@
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
     <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-            crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <link href="css/jquery-ui.css" rel="stylesheet">
 
     <script th:src="@{/js/rest/entities-rest-pagination.js}" type="module"></script>
     <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
+    <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
@@ -55,6 +52,13 @@
     <script defer th:src="@{/js/right_slide_panel/right_panel.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/right_slide_panel/right_panel.css}"/>
 
+    <!-- channel info -->
+    <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
+
+    <!-- activities info -->
+    <script defer th:src="@{/js/activities/view_activities.js}" type="module"></script>
+
     <!-- thread panel-->
     <script defer th:src="@{/js/thread/thread-view.js}" type="module"></script>
     <script defer th:src="@{/js/thread/thread-input-box.js}" type="module"></script>
@@ -72,6 +76,7 @@
     <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>
 
     <script src="/js/helper_functions.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
         <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
@@ -93,7 +98,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
             integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
 
-
     <!--  Tab Icon by DV -->
     <link rel="shortcut icon"
           href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAzFBMVEVKFEyScpNLFU1cK16Mao1hMmOEX4WObZBWJFiQb5FZKFtNGE97VH1QHFJOGVBsQW5jNWV2TXdsQG1aKVxdLV9WI1dwRXGObI9pPGpTIFVPG1FfL2FSH1RVIld8VX1YJlpOGlBbK12RcZJMFk5iNGSBW4JmOGhgMGF3TniLaIx9Vn5lN2eFYYaNa45eLmB5UXtkN2ZUIVaGYodkNmVtQm9YJ1pRHVOHZImCXIN1THZgMWKDXoR9V392TniMaY1nOmmKZ4tpPWtXJVlvRHFqMc1IAAABCklEQVR4Xr3RxZLEIBSG0f9C3NPuPu7u/v7vNEE6dFdRM7s+i0sFvg0EO9X0/CQFeqfeCWwyh4gmCKgSwGJOlRCuWG5gMSKBrcTch03jvwD9Z9eFNcj4gcRj1EE2H5n7OaS93+lA7uXQPKo96kDt9aH4JnDUNS+xEEsLSmKCC0zFMoWY3RmUdBKSFCYDoHPmNCCCaw6DSTC2v8bnw+E9llHrCkBUHkvJbbz1hC4Tl+khWtDaHrQjGXAxH1CSEWwGzUJMH09ktKHkRPTCdBCEdfCKteItj6EDjDuHUvnBsKkO7EywIvr8+juofMNCnnTVUsCird6Gq99o80PkRFh6VcZgFafyYDDDbv0CWLgS6JWTyyIAAAAASUVORK5CYII="
@@ -103,8 +107,6 @@
     <!--  Voice messaging feature by DV  -->
     <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
     <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
-    <!--  Workspace nickname by DV  -->
-    <script src="../js/vavilov/innerJs/environment.js"></script>
 
     <!-- channel info -->
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
@@ -703,20 +705,18 @@
                                                  id="direct-messages__container_id">
                                             </div>
 
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
-                                            <!--ЛИЧКА!!!-->
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
-                                            <!--                                            <div class="p-channel_sidebar__invite_people">-->
-                                            <!--                                                <div class="p-channel_sidebar__close_container">-->
-                                            <!--                                                    <button class="p-channel_sidebar__invite_people__button"-->
-                                            <!--                                                            id="invite-button">-->
-                                            <!--                                                        <span class="p-channel_sidebar__name-2">✚ Invite people</span>-->
-                                            <!--                                                    </button>-->
-                                            <!--                                                    <button class="p-channel_sidebar__close">-->
-                                            <!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
-                                            <!--                                                    </button>-->
-                                            <!--                                                </div>-->
-                                            <!--                                            </div>-->
+                                            <div class="p-channel_sidebar__invite_people">
+                                                <div class="p-channel_sidebar__close_container">
+                                                    <button class="p-channel_sidebar__invite_people__button"
+                                                            id="invite-button">
+                                                        <span class="p-channel_sidebar__name-2">✚ Invite people</span>
+                                                    </button>
+                                                    <button class="p-channel_sidebar__close">
+                                                        <i class="p-channel_sidebar__close__icon">✖</i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__app">
 

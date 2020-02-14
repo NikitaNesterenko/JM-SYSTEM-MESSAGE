@@ -4,21 +4,13 @@ import jm.MessageService;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
 import jm.model.Message;
-import org.json.HTTP;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -32,6 +24,8 @@ public class MessageRestController {
 
     private final MessageService messageService;
     private final MessageDtoService messageDtoService;
+
+    private final static String TOPIC = "Kafka_ExampleTopic";
 
     public MessageRestController(MessageService messageService, MessageDtoService messageDtoService) {
         this.messageService = messageService;
@@ -51,7 +45,7 @@ public class MessageRestController {
     }
 
     // DTO compliant
-    @GetMapping(value = "/channel/{id}")
+    @GetMapping("/channel/{id}")
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<Message> messages = messageService.getMessagesByChannelId(id);
         messages.sort(Comparator.comparing(Message::getDateCreate));

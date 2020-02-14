@@ -1,3 +1,9 @@
+// import {
+//     ConversationRestPaginationService,
+//     UserRestPaginationService,
+//     WorkspaceRestPaginationService
+// } from "../../rest/entities-rest-pagination";
+
 URL = window.URL || window.webkitURL;
 
 let gumStream; 						//stream from getUserMedia()
@@ -7,7 +13,6 @@ let encodingType; 					//holds selected encoding for resulting audio (file)
 let encodeAfterRecord = true;       //when to encode
 let count = 0;						//count of pressing button for start/stop recording
 
-// shim for AudioContext when it's not avb.
 let AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioContext;
 
@@ -88,7 +93,48 @@ function buildAudio(blob) {
     inputMe.appendChild(au);
 }
 
-function rndFunc(id) {
-    alert("1" + id);
-    console.log("1" + id);
-}
+// function rndFunc(id) {
+//     alert(" " + id);
+//     console.log(" " + id);
+//
+//     this.user_service = new UserRestPaginationService();
+//     this.conversation_service = new ConversationRestPaginationService();
+//     this.workspace_service = new WorkspaceRestPaginationService();
+//
+//     const principal = this.user_service.getLoggedUser();
+//     this.conversation_service.deleteConversation(id);
+//     this.conversation_service.deleteById(id);
+//     const conversations = this.conversation_service.getAllConversationsByUserId(principal.id);
+//     const workspace_id = this.workspace_service.getChosenWorkspace();
+//
+//     const direct_messages_container = $("#direct-messages__container_id");
+//     direct_messages_container.empty();
+//
+//     conversations.forEach((conversation, i) => {
+//         if (conversation.workspace.id === workspace_id.id) {
+//             const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel" ' +
+//                 'style="height: min-content; width: 100%;"></div>');
+//             conversation_queue_context_container.className = "p-channel_sidebar__channel";
+//             if (conversation.openingUser.id === principal.id) {
+//                 conversation_queue_context_container.append(messageChat(conversation.associatedUser, conversation.id));
+//             } else {
+//                 conversation_queue_context_container.append(messageChat(conversation.openingUser, conversation.id));
+//             }
+//             direct_messages_container.append(conversation_queue_context_container);
+//         }
+//     });
+//
+//     function messageChat(user, conversationId) {
+//         return `
+//             <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
+//                 <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">●</i>
+//                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
+//                     <span data-user_id="${user.id}">${user.name}</span>
+//                 </span>
+//             </button>
+//             <button class="p-channel_sidebar__close cross">
+//                 <i id="deleteDmButton" data-convId="" class="p-channel_sidebar__close__icon" onclick="rndFunc(${conversationId})">✖</i>
+//             </button>
+//         `;
+//     }
+// }

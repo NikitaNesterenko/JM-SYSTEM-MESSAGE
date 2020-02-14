@@ -35,6 +35,34 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
     });
 });
 
+$(document).on('click', '[id^=deleteDmButton]', function (e) {
+    alert("2");
+    let msg_id = $(e.target).data('msg_id');
+    getUserAndMessage(msg_id).then(user_and_msg => {
+        let user = user_and_msg[0];
+        let message = user_and_msg[1];
+
+        let principalStarredMessageIds = user["starredMessageIds"];
+
+        if (principalStarredMessageIds.find(id => id === message.id)) {
+            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message.id), 1);
+            user["starredMessageIds"] = principalStarredMessageIds;
+            user_service.update(user).then(() => {
+                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
+                $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
+                reopen_right_menu();
+            });
+        } else {
+            principalStarredMessageIds.push(message.id);
+            user["starredMessageIds"] = principalStarredMessageIds;
+            user_service.update(user).then(() => {
+                add_msg_starred_attr(message);
+                reopen_right_menu();
+            });
+        }
+    });
+});
+
 //переход к сообщению из списка избранного
 $(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
