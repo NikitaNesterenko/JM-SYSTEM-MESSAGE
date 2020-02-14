@@ -1,7 +1,6 @@
 package jm.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jm.dto.SlashCommandDto;
 import lombok.*;
 
@@ -56,7 +55,7 @@ public class SlashCommand {
         this.hints = hints;
     }
 
-    public SlashCommand(SlashCommandDto dto){
+    public SlashCommand(SlashCommandDto dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();

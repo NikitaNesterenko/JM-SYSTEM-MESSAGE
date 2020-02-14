@@ -4,16 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jm.*;
-import jm.dto.*;
+import jm.dto.ChannelDtoService;
+import jm.dto.DirectMessageDtoService;
+import jm.dto.MessageDtoService;
+import jm.dto.SlashCommandDto;
 import jm.model.*;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -51,12 +57,13 @@ public class SlackBotController {
         this.directMessageDtoService = directMessageDtoService;
     }
 
-    @PostMapping("/app/bot/slackbot") // обработка команд для бота, которые реализованы не через вебсокет (их на данный момент нет).
-    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command){
+    @PostMapping("/app/bot/slackbot")
+    // обработка команд для бота, которые реализованы не через вебсокет (их на данный момент нет).
+    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) {
         String currentCommand = command.getCommand();
         ResponseEntity<?> resp = null;
 
-        return resp == null? new ResponseEntity<>(HttpStatus.OK) : resp;
+        return resp == null ? new ResponseEntity<>(HttpStatus.OK) : resp;
     }
 
     private Bot getBot() {
@@ -78,6 +85,7 @@ public class SlackBotController {
         response.put("userId", command.getUserId().toString()); //Id пользователя, отправившего запрос
         response.put("command", commandName); //добавляем название команды в ответ
         response.put("channelId", command.getChannelId().toString()); //добавляем Id канала, в котором отправлена команда
+        response.put("report", "{}");
 
         ObjectMapper mapper = new ObjectMapper();
         if (commandName.equals("topic")) {
@@ -88,6 +96,7 @@ public class SlackBotController {
                 setTopic(command.getChannelId(), commandBody);
                 response.put("topic", commandBody);
                 response.put("status", "OK");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Topic was changed"));
             }
         } else if (commandName.equals("leave")) {
             String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
@@ -282,11 +291,11 @@ public class SlackBotController {
     }
 
     private String sendPermRequestMessage(Long channelId, Object author, String reportMsg) throws JsonProcessingException {
-        return createMessage(channelId, author, reportMsg,true);
+        return createMessage(channelId, author, reportMsg, true);
     }
 
     private String sendTempRequestMessage(Long channelId, Object author, String reportMsg) throws JsonProcessingException {
-        return createMessage(channelId, author, reportMsg,false);
+        return createMessage(channelId, author, reportMsg, false);
     }
 
     private String createMessage(Long channelId, Object author, String reportMsg, boolean saveToBase) throws JsonProcessingException {
@@ -410,7 +419,6 @@ public class SlackBotController {
         channelService.updateChannel(targetChannel);
         return sendPermRequestMessage(targetChannel.getId(), user, "archived #" + targetChannel.getName() + ". The contents will still be browsable.");
     }
-
 
 
 }
