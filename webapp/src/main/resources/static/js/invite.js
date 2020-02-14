@@ -11,13 +11,7 @@ class Invite {
 
 // Добавление строк в инвайт модального окна
 jQuery('.plus').click(function () {
-    jQuery('.table_invite_modal').before(
-        `<tr class="content-form-">
-        <td><input type="text" id="inviteEmail_" class="confirm_input" placeholder="name@example.com" value=""></td>
-        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name" placeholder="name" value=""></td>
-        <td valign="top"><span class="btn delete">X</span></td>
-        </tr>`
-    );
+    addNewEmailLineIntoInviteModal();
 });
 // Удаление строк в инвайте модельного окна
 jQuery(document).on('click', '.delete', function () {
@@ -43,15 +37,11 @@ window.addEventListener('load', function () {
     };
 
     $('#invite-button').on('click', function () {
-        $('.invites-modal').show();
-        $('.invites-modal-close').show();
-        $('.p-client_container').hide();
+        showInviteModalOnWorkspace();
     });
 
     invite_from_menu_user_workspace.onclick = function () {
-        $('.invites-modal').show();
-        $('.invites-modal-close').show();
-        $('.p-client_container').hide();
+        showInviteModalOnWorkspace();
         $('.menu-user-workspace').hide();
     };
 
@@ -59,6 +49,12 @@ window.addEventListener('load', function () {
         $('.invites-modal').hide();
         $('.invites-modal-close').hide();
         $('.p-client_container').show();
+        //удаление добавленных строк email
+        document.querySelectorAll(".content-form-").forEach((elem, idx) => {
+            if (idx > 0) {
+                elem.remove()
+            }
+        });
         $(':input', '#input_form').val('');
     });
 
@@ -91,4 +87,25 @@ window.addEventListener('load', function () {
             menu_modal.style.display = "none";
         }
     });
+
+
 });
+//отображение модального окна invite в отдельную функцию
+export const showInviteModalOnWorkspace = () => {
+    $('.invites-modal').show();
+    $('.invites-modal-close').show();
+    $('.p-client_container').hide();
+};
+
+export const addNewEmailLineIntoInviteModal = (email) => {
+    if (!email) {
+        email = "";
+    }
+    jQuery('.table_invite_modal').before(
+        `<tr class="content-form-">
+        <td><input type="text" id="inviteEmail_" class="confirm_input" placeholder="name@example.com" value="${email}"></td>
+        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name" placeholder="name" value=""></td>
+        <td valign="top"><span class="btn delete">X</span></td>
+        </tr>`
+    )
+};

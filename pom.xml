@@ -141,12 +141,13 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.2.25</version>
         </dependency>
-
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-data-rest</artifactId>
             <version>1.2.25</version>
         </dependency>
+
+
 
     </dependencies>
 

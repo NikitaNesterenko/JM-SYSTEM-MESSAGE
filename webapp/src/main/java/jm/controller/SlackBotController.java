@@ -171,7 +171,7 @@ public class SlackBotController {
             if (kickedUser.size() > 0) {
                 response.put("status", "OK");
                 response.put("report", kickUsers(kickedUser, currentChannel, command.getUserId()));
-                response.put("kickedUsersIds", mapper.writeValueAsString(kickedUser.stream().map(user -> user.getId()).toArray()));
+                response.put("kickedUsersIds", mapper.writeValueAsString(kickedUser.stream().map(User::getId).toArray()));
             } else {
                 response.put("status", "ERROR");
                 response.put("report", sendTempRequestMessage(currentChannel.getId(), getBot(), "Users not found"));
@@ -214,6 +214,21 @@ public class SlackBotController {
         } else if (commandName.equals("archive")) {
             response.put("status", "OK");
             response.put("report", archiveChannel(currentChannel, currentUser));
+        } else if (commandName.equals("invite_people")) {
+            //boolean isEMailFirst;
+            List<String> emailsList = new ArrayList<>();
+            Arrays.asList(commandBody.replaceAll("\\s+", " ").split(" ")).forEach(word -> {
+                if (word.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
+                    emailsList.add(word);
+                }
+            });
+            if (emailsList.size() == 0) {
+                response.put("status", "ERROR");
+                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Emails not found"));
+            } else {
+                response.put("status", "OK");
+                response.put("usersList", mapper.writeValueAsString(emailsList));
+            }
         }
         return mapper.writeValueAsString(response);
     }

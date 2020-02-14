@@ -191,6 +191,14 @@ public class TestDataInitializer {
         archiveCommand.setHints("Rename Hints");
         slashCommandDao.persist(archiveCommand);
         sc.add(archiveCommand);
+
+        SlashCommand invitePeopleCommand = new SlashCommand();
+        invitePeopleCommand.setName("invite_people");
+        invitePeopleCommand.setUrl("/app/bot/slackbot");
+        invitePeopleCommand.setDescription("Invite_people description");
+        invitePeopleCommand.setHints("Invite_people Hints");
+        slashCommandDao.persist(invitePeopleCommand);
+        sc.add(invitePeopleCommand);
     }
 
     private void createRoles() {

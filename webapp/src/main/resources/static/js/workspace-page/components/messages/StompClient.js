@@ -3,6 +3,8 @@ import {Command} from "/js/workspace-page/components/footer/Command.js";
 
 import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
+import { showInviteModalOnWorkspace, addNewEmailLineIntoInviteModal } from "/js/invite.js";
+import { deleteChannelFromList } from "/js/workspace-page/components/sidebar/ChannelView.js";
 
 export class StompClient {
 
@@ -82,7 +84,7 @@ export class StompClient {
                 if (slackBot.userId == window.loggedUserId) {
                     if (slackBot.status === "OK") {
                         //обновление списка каналов у пользователя, покинувшего канал
-                        this.deleteChannelFromList(slackBot.targetChannelId);
+                        deleteChannelFromList(slackBot.targetChannelId);
                     }
                 } else if (window.channel_id == JSON.parse(slackBot.report).channelId) {
                     //сообщение в нужном канале других пользователей о том, что пользователь покинул канал
@@ -137,7 +139,7 @@ export class StompClient {
             } else if (slackBot.command === "kick" || slackBot.command === "remove") {
                 if (slackBot.status === "OK") {
                     if (JSON.parse(slackBot.kickedUsersIds).includes(window.loggedUserId)) {
-                        this.deleteChannelFromList(slackBot.channelId)
+                        deleteChannelFromList(slackBot.channelId)
                     } else {
                         this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                         this.channel_message_view.dialog.messageBoxWrapper();
@@ -173,6 +175,17 @@ export class StompClient {
                 if (slackBot.status === "OK" && slackBot.channelId == window.channel_id) {
                     this.channel_message_view.createMessage(JSON.parse(slackBot.report));
                     this.channel_message_view.dialog.messageBoxWrapper();
+                }
+            } else if (slackBot.command === "invite_people") {
+                if (slackBot.status === "OK" && slackBot.userId == window.loggedUserId) {
+                    JSON.parse(slackBot.usersList).forEach((email, idx) => {
+                        if (idx > 0) {
+                            addNewEmailLineIntoInviteModal(email)
+                        } else {
+                            document.querySelectorAll('#inviteEmail_').item(0).value = email;
+                        }
+                    });
+                    showInviteModalOnWorkspace();
                 }
             }
         })
@@ -303,18 +316,5 @@ export class StompClient {
         };
 
         this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
-    }
-
-    deleteChannelFromList(targetChannelId) {
-        document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
-            if (id.value == targetChannelId) {
-                //удаляем канал из списка
-                id.parentElement.remove();
-                //если удаляемый канал был активен, то выбираем первый канал в списке
-                if (window.channel_id == targetChannelId) {
-                    window.pressChannelButton(document.querySelectorAll("[id^=channel_button_]").item(0).value)
-                }
-            }
-        })
     }
 }

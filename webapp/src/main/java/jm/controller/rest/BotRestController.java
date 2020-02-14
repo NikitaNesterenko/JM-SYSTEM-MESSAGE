@@ -1,8 +1,5 @@
 package jm.controller.rest;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.BotService;
 import jm.ChannelService;
 import jm.MessageService;
@@ -50,10 +47,10 @@ public class BotRestController {
         Workspace workspace = workspaceService.getWorkspaceById(id);
         List<Bot> bots = botService.GetBotsByWorkspaceId(workspace);
         if (bots.isEmpty()) {
-            logger.warn("Не удалось найти бота для workspace с id = {}", id);
+            logger.warn("Не удалось найти ботов для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Бот для workspace c id = {}", id);
+        logger.info("Боты для workspace c id = {}", id);
         return new ResponseEntity<>(botDtoService.toDto(bots), HttpStatus.OK);
     }
 

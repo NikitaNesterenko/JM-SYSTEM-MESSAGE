@@ -20,6 +20,7 @@ export class MenuChatBox {
             window.currentCommands.forEach(command => {
                 window.allActions.push(command.name)
             });
+            window.allActions = window.allActions.sort();
             //обновляем окно списка команд
             this.updateActionsArray(window.allActions);
         }
