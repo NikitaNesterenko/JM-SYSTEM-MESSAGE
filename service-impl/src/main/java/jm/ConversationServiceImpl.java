@@ -2,7 +2,6 @@ package jm;
 
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
-import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +46,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation getConversationByUsers(Long firstUserId, Long secondUserId) {
-        return conversationDAO.getConversationByUsers(firstUserId, secondUserId);
+        return conversationDAO.getConversationByUsersId(firstUserId, secondUserId);
     }
 
     @Override

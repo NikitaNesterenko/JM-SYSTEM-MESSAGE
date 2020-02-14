@@ -111,7 +111,7 @@ public class MailServiceImpl implements MailService {
                 tokenGenerator.generate(charactersInHash));
 
         //workspace нужен только для создания токена
-        List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUser(userTo);
+        List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUserId(userTo.getId());
         inviteToken.setWorkspace(workspacesByUser.get(0));
         inviteToken.setFirstName(userTo.getName());
         inviteToken.setLastName(userTo.getLastName());

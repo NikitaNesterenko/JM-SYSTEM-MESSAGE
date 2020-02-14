@@ -58,7 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // if (workspaceName != null) {
             Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
             if (workspace != null) {
-                Set<Role> authorities = workspaceUserRoleService.getRole(workspace, user);
+                Set<Role> authorities = workspaceUserRoleService.getRole(workspace.getId(), user.getId());
                 builder.authorities(authorities);
                 System.out.println("User " + workspaceLogin + " logged in " + workspace.getName() + " with roles: " + authorities);
 //                logger.info("User " + login + " logged in " + workspaceName + " with roles: " + authorities);

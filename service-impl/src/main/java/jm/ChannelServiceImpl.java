@@ -3,7 +3,6 @@ package jm;
 import jm.dto.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
-import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,8 +51,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Channel> getChannelsByOwner(User user) {
-        return channelDAO.getChannelsByOwner(user);
+    public List<Channel> getChannelsByOwnerId(Long ownerId) {
+        return channelDAO.getChannelsByOwnerId(ownerId);
     }
 
     @Override

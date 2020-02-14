@@ -61,7 +61,7 @@ public class BotRestController {
             })
     public ResponseEntity<BotDTO> getBotByWorkspace(@PathVariable("id") Long id) {
         Workspace workspace = workspaceService.getWorkspaceById(id);
-        Bot bot = botService.GetBotByWorkspaceId(workspace);
+        Bot bot = botService.GetBotByWorkspaceId(workspace.getId());
         if (bot == null) {
             logger.warn("Не удалось найти бота для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
