@@ -216,6 +216,7 @@ public class SlackBotController {
                 response.put("status", "OK");
                 response.put("report", renameChannel(commandBody, channelToRename, currentUser));
                 response.put("newChannelName", commandBody);
+                response.put("targetChannelId", channelToRename.getId().toString());
             } else {
                 response.put("status", "ERROR");
                 response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));

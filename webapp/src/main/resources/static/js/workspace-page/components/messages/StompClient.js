@@ -74,23 +74,18 @@ export class StompClient {
         this.stompClient.subscribe("/topic/slackbot", (data) => {
             const slackBot = JSON.parse(data.body);
             const {userId, channelId, status, command} = slackBot;
-
             const isAuthor = userId == window.loggedUserId;
             const isOk = status === "OK";
             const report = JSON.parse(slackBot.report);
-
-
             //временное сообщение о некотрректности команды
             if (status === "ERROR" && isAuthor) {
                 this.showMessageInCurrentChannel(report);
             }
-
-
-
             if (command === "topic") {
                 //смена топика канала
-                if (window.channel_id == channelId) {
+                if (isOk && isAuthor && window.channel_id == channelId) {
                     document.querySelector("#topic_string").textContent = slackBot.topic;
+                    this.showMessageInCurrentChannel(report)
                 }
             } else if (command === "leave"){
                 if (isAuthor) {
@@ -124,13 +119,7 @@ export class StompClient {
             } else if (command === "invite") {
                 if (isOk) {
                     if (JSON.parse(slackBot.targets).includes(window.loggedUserId)) { //проверка. пригласили ли нового пользователя
-                        let isPresent = false;
-                        document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
-                            if (id.value === JSON.parse(slackBot.channel).id) {
-                                isPresent = true;
-                            }
-                        });
-                        if (!isPresent) {
+                        if (!this.isChannelPresentInChannelsList(JSON.parse(slackBot.channel).id)) {
                             this.channelview.addChannelIntoSidebarChannelList(JSON.parse(slackBot.channel));
                             this.channel_message_view.dialog.messageBoxWrapper();
                         }
@@ -166,10 +155,14 @@ export class StompClient {
                     }
                 }
             } else if (command === "rename") {
-                if (isOk && channelId == window.channel_id) {
-                    document.querySelector(".p-classic_nav__model__title__info__name").textContent = slackBot.newChannelName;
-                    document.querySelector("#channel_name_1").textContent = slackBot.newChannelName;
-                    this.showMessageInCurrentChannel(report);
+                if (isOk) {
+                    if (channelId == window.channel_id) {
+                        document.querySelector(".p-classic_nav__model__title__info__name").textContent = slackBot.newChannelName;
+                        this.showMessageInCurrentChannel(report);
+                    }
+                }
+                if (this.isChannelPresentInChannelsList(slackBot.targetChannelId)) {
+                    document.querySelector(`#channel_name_${slackBot.targetChannelId}`).textContent = slackBot.newChannelName;
                 }
             } else if (command === "archive") {
                 if (isOk && channelId == window.channel_id) {
@@ -321,5 +314,16 @@ export class StompClient {
     showMessageInCurrentChannel(message) {
         this.channel_message_view.createMessage(message);
         this.channel_message_view.dialog.messageBoxWrapper();
+    }
+
+    //проверка, присутствует ли канал в списке каналов пользователя
+    isChannelPresentInChannelsList(chn_id) {
+        let isPresent = false;
+        document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
+            if (id.value == chn_id) {
+                isPresent = true;
+            }
+        });
+        return isPresent;
     }
 }
