@@ -10,6 +10,7 @@ import {
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
+import {users, clearUsers} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -111,7 +112,8 @@ export class SubmitMessage {
             userName: this.user.name,
             content: content,
             dateCreate: convert_date_to_format_Json(new Date()),
-            filename: await this.getFiles()
+            filename: await this.getFiles(),
+            recipientUserIds: users
         };
 
         if (window.hasSlashCommand) {
@@ -121,6 +123,7 @@ export class SubmitMessage {
                 msg_id => sendName(msg_id)
             );
         }
+        clearUsers();
     }
 
     async sendSlashCommand(entity) {

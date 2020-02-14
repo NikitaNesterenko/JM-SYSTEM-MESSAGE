@@ -1,5 +1,6 @@
 import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 import {Command} from "/js/workspace-page/components/footer/Command.js";
+import {is_open, populateRightPaneActivity} from "/js/activities/view_activities.js";
 
 import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
@@ -63,6 +64,9 @@ export class StompClient {
                 }
             }
             notifyParseMessage(result);
+            if (is_open) {
+                populateRightPaneActivity();
+            }
         });
     }
 
