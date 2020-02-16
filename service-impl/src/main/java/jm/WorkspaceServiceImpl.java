@@ -1,7 +1,6 @@
 package jm;
 
 import jm.api.dao.WorkspaceDAO;
-import jm.model.User;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +51,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     public Workspace getWorkspaceByName(String name) { return workspaceDAO.getWorkspaceByName(name); }
 
     @Override
-    public List<Workspace> getWorkspacesByOwner(User user) { return workspaceDAO.getWorkspacesByOwner(user);}
+    public List<Workspace> getWorkspacesByOwnerId(Long ownerId) { return workspaceDAO.getWorkspacesByOwnerId(ownerId);}
 
     @Override
-    public List<Workspace> getWorkspacesByUser(User user) {
-        return workspaceDAO.getWorkspacesByUser(user);
+    public List<Workspace> getWorkspacesByUserId(Long userId) {
+        return workspaceDAO.getWorkspacesByUserId(userId);
     }
 
 }

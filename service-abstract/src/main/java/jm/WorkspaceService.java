@@ -1,6 +1,5 @@
 package jm;
 
-import jm.model.User;
 import jm.model.Workspace;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public interface WorkspaceService {
 
     Workspace getWorkspaceByName(String name);
 
-    List<Workspace> getWorkspacesByOwner(User user);
+    List<Workspace> getWorkspacesByOwnerId(Long ownerId);
 
-    List<Workspace> getWorkspacesByUser(User user);
+    List<Workspace> getWorkspacesByUserId(Long userId);
 
 }
