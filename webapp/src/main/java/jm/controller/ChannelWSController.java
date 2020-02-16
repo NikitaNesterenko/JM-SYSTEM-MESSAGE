@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jm.ChannelService;
+import jm.dto.ChannelDTOServiceImpl;
+import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.ChannelWS;
+import jm.model.ChannelWSTopic;
 import jm.views.ChannelViews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,10 +21,12 @@ import org.springframework.stereotype.Controller;
 public class ChannelWSController {
 
     private ChannelService channelService;
+    private ChannelDtoService channelDTOService;
 
     @Autowired
-    public void setChannelService(ChannelService channelService) {
+    public void setChannelService(ChannelService channelService, ChannelDtoService channelDTOService) {
         this.channelService = channelService;
+        this.channelDTOService = channelDTOService;
     }
 
     @MessageMapping("/channel")
@@ -31,12 +36,19 @@ public class ChannelWSController {
 
         Channel channel = channelService.getChannelByName(channelWS.getName());
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
-//        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
+    }
 
-        ObjectWriter objectWriter = objectMapper.writerWithView(ChannelViews.IdNameView.class);
-
-        return objectWriter.writeValueAsString(channel);
+    // id -айди канала на котором изменить топик
+    // topic - на что изменить
+    @MessageMapping("/channel.changeTopic")
+    @SendTo("/topic/channel.changeTopic")
+    public String changeChannelTopic(ChannelWSTopic zapros)
+            throws JsonProcessingException {
+        Long channel_id=Long.parseLong(zapros.getId());
+        Channel channel = channelService.getChannelById(channel_id);
+        channel.setTopic(zapros.getTopic());
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
     }
 }

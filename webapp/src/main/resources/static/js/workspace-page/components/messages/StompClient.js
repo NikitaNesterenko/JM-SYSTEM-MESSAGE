@@ -17,6 +17,7 @@ export class StompClient {
         window.sendChannel = (channel) => this.sendChannel(channel);
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
+        window.sendChannelTopicChange = (id,topic) => this.sendChannelTopicChange(id,topic);
     }
 
     connect() {
@@ -26,6 +27,7 @@ export class StompClient {
             this.subscribeChannel();
             this.subscribeThread();
             this.subscribeDirectMessage();
+            this.subscribeChannelChangeTopic();
         });
     }
 
@@ -152,5 +154,21 @@ export class StompClient {
         };
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));
+    }
+
+    //посылаем сообщение на смену канала
+    sendChannelTopicChange(id,topic){
+        this.stompClient.send('/app/channel.changeTopic', {}, JSON.stringify({
+            'id': id,
+            'topic': topic
+        }));
+    }
+    //подписка на смену топика текущего канала
+    subscribeChannelChangeTopic() {
+        this.stompClient.subscribe('/topic/channel.changeTopic', (channel) => {
+            const chn = JSON.parse(channel.body);
+            console.log(channel.body);
+            document.querySelector("#topic_string").textContent = chn.topic;
+        });
     }
 }
