@@ -13,7 +13,7 @@ export class MenuSettingsModal {
     onMenuSettingsBtnClick() {
         $('#settingBtn .buttons-TopBar').on('mouseup', (event) => {
             if (this.settingBtn.is(event.target)) {
-                this.channel_id = sessionStorage.getItem("channelName");
+                this.channel_id = sessionStorage.getItem("channelId");
                 $('#settingsList').css("display", "block");
             } else {
                 $('#settingsList').css("display", "none");

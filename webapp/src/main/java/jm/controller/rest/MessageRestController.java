@@ -8,9 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -24,8 +22,6 @@ public class MessageRestController {
 
     private final MessageService messageService;
     private final MessageDtoService messageDtoService;
-
-    private final static String TOPIC = "Kafka_ExampleTopic";
 
     public MessageRestController(MessageService messageService, MessageDtoService messageDtoService) {
         this.messageService = messageService;

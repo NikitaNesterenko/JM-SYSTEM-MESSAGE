@@ -47,7 +47,7 @@ export class SubmitMessage {
                     return
                 }
 
-                const channel_name = sessionStorage.getItem("channelName");
+                const channel_name = sessionStorage.getItem("channelId");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_name !== '0') {
@@ -124,9 +124,10 @@ export class SubmitMessage {
             userName: this.user.name,
             content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
-            filename: await this.getFiles(),
-            voiceMessage: await this.getVoiceMessage()
+            filename: await this.getFiles(), //name
+            voiceMessage: await this.getVoiceMessage() //name
         };
+
 
         if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
             this.message_service.create(entity).then(
@@ -168,8 +169,8 @@ export class SubmitMessage {
         )
     }
 
-    async setChannelByName(channelName) {
-        await this.channel_service.getChannelByName(channelName).then(
+    async setChannelByName(channelId) {
+        await this.channel_service.getChannelByName(channelId).then(
             channel => this.channel = channel
         )
     }
@@ -181,11 +182,11 @@ export class SubmitMessage {
     }
 
     async leaveChannel(channelName) {
-        await this.setUser()
-        await this.setChannelByName(channelName)
-        await this.setWorkspace()
-        const channelUsers = this.channel.userIds
-        channelUsers.splice(channelUsers.indexOf(this.user.id), 1)
+        await this.setUser();
+        await this.setChannelByName(channelName);
+        await this.setWorkspace();
+        const channelUsers = this.channel.userIds;
+        channelUsers.splice(channelUsers.indexOf(this.user.id), 1);
 
         const entity = {
             id: this.channel.id,
@@ -220,8 +221,8 @@ export class SubmitMessage {
                                   </div>`
                         );
                 });
-                pressChannelButton(firstChannelId)
-                sessionStorage.setItem("channelName", firstChannelId);
+                pressChannelButton(firstChannelId);
+                sessionStorage.setItem("channelId", firstChannelId);
                 let channel_name = document.getElementById("channel_name_" + firstChannelId).textContent;
                 $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
                 sessionStorage.setItem('conversation_id', '0');

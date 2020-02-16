@@ -17,7 +17,7 @@ export class NavHeader {
         return this;
     }
 
-    setInfo() {
+    setInfo(numOfPeople, numOfStarredItems) {
         this.header
             .find('.p-classic_nav__model__title__info')
             .replaceWith(`
@@ -28,12 +28,12 @@ export class NavHeader {
                     <span class="p-classic_nav__model__title__info__sep">|</span>
                         <button class="p-classic_nav__model__title__info__members">
                         <i class="material-icons">people</i>
-                    &nbsp;<i id="peopleInChat"></i>
+                    &nbsp;<i id="peopleInChat"> ${numOfPeople} </i>
                     </button>
                     <span class="p-classic_nav__model__title__info__sep">|</span>
                         <button class="p-classic_nav__model__title__info__pins">
                         <i class="material-icons">flag</i>
-                    &nbsp;<i id="flaggedItems"></i>
+                    &nbsp;<i id="flaggedItems"> ${numOfStarredItems} </i>
                     </button>
                     <span class="p-classic_nav__model__title__info__sep">|</span>
                     <div class="p-classic_nav__model__title__info__item">

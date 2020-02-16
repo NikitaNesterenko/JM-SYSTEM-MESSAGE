@@ -33,7 +33,7 @@ $('.back_modal_button').click(function() {
 
 window.addEventListener('load', function () {
 
-    const menu_header = document.getElementsByClassName("p-classic_nav__team_header__content")[0];
+    const menu_header = document.getElementsByClassName("p-classic_nav__team_header")[0];
     const menu_modal = document.getElementsByClassName("menu-user-workspace")[0];
 
     const invite_from_menu_user_workspace = document.getElementById("invite-from-menu-user-workspace");

@@ -43,19 +43,28 @@ export class ChannelView {
 
     setFlaggedItems() {
         $("#flaggedItems").append(0);
-        alert(sessionStorage.getItem("channelName"))
+        alert(sessionStorage.getItem("channelId"))
     }
 
     showPeopleInChannel(channelId) {
-        alert(channelId);
-        const countOfPeopleInChannel = $("#peopleInChat");
-        this.user_service.getUsersByChannelId(channelId).then(
+        // alert(channelId);
+        // const countOfPeopleInChannel = $("#peopleInChat");
+        // this.user_service.getUsersByChannelId(channelId).then(
+        //     users => {
+        //         countOfPeopleInChannel.empty();
+        //         countOfPeopleInChannel.append(users.length);
+        //     }
+        // );
+
+        alert(sessionStorage.getItem("channelId"));
+        const member_list = $('#memberListPlaceholder');
+        this.user_service.getUsersByChannelId(sessionStorage.getItem("channelId")).then(
             users => {
-                countOfPeopleInChannel.empty();
-                countOfPeopleInChannel.append(users.length);
+                alert(users);
+                member_list.empty();
+                member_list.append(this.createMemberList(users));
             }
         );
-
     }
 
     showBots(workspace_id) {
@@ -125,7 +134,7 @@ export class ChannelView {
     }
 
     setLocalStorageSettings(chn_id) {
-        sessionStorage.setItem('channelName', chn_id);
+        sessionStorage.setItem('channelId', chn_id);
         sessionStorage.setItem('conversation_id', '0');
         window.channel_id = chn_id;
     }

@@ -11,10 +11,10 @@ import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
-const channel_service = new ChannelRestPaginationService();
+// const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
 const current_wks = workspace_service.getChosenWorkspace();
-const current_chn = channel_service.getChosenChannel();
+// const current_chn = channel_service.getChosenChannel();
 
 
 window.addEventListener('load', async () => {
@@ -28,8 +28,8 @@ window.addEventListener('load', async () => {
 
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
-    channel_view.setFlaggedItems(current_chn);
-    channel_view.showPeopleInChannel((await current_chn).users);
+    // channel_view.setFlaggedItems();
+    // channel_view.showPeopleInChannel();
 
     const stomp_client = new StompClient(channel_message_view, thread_view, direct_message_view, channel_view);
     stomp_client.connect();

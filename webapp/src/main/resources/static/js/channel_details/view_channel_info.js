@@ -1,8 +1,7 @@
 import {close_right_panel, open_right_panel, is_open} from "../right_slide_panel/right_panel.js";
 import {close_right_thread_panel} from "../right_slide_panel/right_thread_panel.js";
-
 import {attachMemberListBtnClickHandler} from "/js/member-list/member-list.js";
-import {ConversationRestPaginationService} from "../rest/entities-rest-pagination.js";
+
 
 let toggle_right_menu = () => {
     if (is_open) {
@@ -18,13 +17,6 @@ let toggle_right_menu = () => {
 $('#infoButton').on('click', () => {
     toggle_right_menu();
 });
-
-$('#deleteDmButton .p-channel_sidebar__close__icon').on('click', () => {
-    let id = $(this).data('conversationId');
-    this.conversation_service = new ConversationRestPaginationService();
-    this.conversation_service.deleteConversation(id)
-});
-
 
 const get_channel_info_panel = () => {
     $('.p-flexpane__title_container').text('About this channel');

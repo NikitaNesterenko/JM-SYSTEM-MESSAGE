@@ -47,9 +47,9 @@ public class ConversationRestController {
         }
     }
 
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Conversation> deleteConversation(@PathVariable Long id) {
-        conversationService.deleteConversation(id);
+    @GetMapping(value = "/delete/{conversationID}/{userID}")
+    public ResponseEntity<Conversation> deleteConversation(@PathVariable Long conversationID, @PathVariable Long userID) {
+        conversationService.deleteConversation(conversationID, userID);
         return ResponseEntity.ok().build();
     }
 

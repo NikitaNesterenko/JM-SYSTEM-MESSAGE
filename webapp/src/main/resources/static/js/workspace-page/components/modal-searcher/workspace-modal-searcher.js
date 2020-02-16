@@ -149,7 +149,7 @@ $("#idSearchContent").on("click", "li.search-field-li", function () {
 
     if (type === "channel") {
         pressChannelButton(id);
-        sessionStorage.setItem("channelName", id);
+        sessionStorage.setItem("channelId", id);
     } else if (type === "user") {
         //TODO redirect to direct message
         console.log("Открытие личной переписки с User с id=" + id);

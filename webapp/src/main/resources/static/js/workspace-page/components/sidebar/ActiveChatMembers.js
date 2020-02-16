@@ -13,7 +13,9 @@ export class ActiveChatMembers {
     }
 
     async populateDirectMessages() {
-        const principal = await this.user_service.getLoggedUser();
+        const principal = await this.user_service.getLoggedUser().then(user => {
+            this.conversation_service.getAllConversationsByUserId(user.id).then(this.workspace_service.getChosenWorkspace())
+        });
         const conversations = await this.conversation_service.getAllConversationsByUserId(principal.id);
         const workspace_id = await this.workspace_service.getChosenWorkspace();
 
@@ -44,7 +46,7 @@ export class ActiveChatMembers {
                 </span>
             </button>
             <button class="p-channel_sidebar__close cross">
-                <i id="deleteDmButton" data-convId="" class="p-channel_sidebar__close__icon" onclick="rndFunc(${conversationId})">✖</i>
+                <i id="deleteDmButton" data-conversationId="${conversationId}" class="p-channel_sidebar__close__icon">✖</i>
             </button>
         `;
     }

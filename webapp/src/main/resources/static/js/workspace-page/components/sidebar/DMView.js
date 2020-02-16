@@ -55,9 +55,9 @@ export class DMView {
 
             this.set_nav_title(respondent);
             sessionStorage.setItem("conversation_id", conversation.id);
-            const channel_id = sessionStorage.getItem('channelName');
+            const channel_id = sessionStorage.getItem('channelId');
             if (channel_id !== null) {
-                sessionStorage.setItem('channelName', '0');
+                sessionStorage.setItem('channelId', '0');
             }
         } else {
             console.log('Principal and respondent ids are equal.')

@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
 import jm.model.User;
+import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -46,5 +47,30 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
         } catch (NoResultException e1) {
             return null;
         }
+    }
+
+//    @Override
+//    public void deleteById(Long conversationID, Long userID) {
+//        int id = entityManager.createNativeQuery("SELECT opener_id FROM conversations WHERE id=?", Conversation.class)
+//                .setParameter(1, conversationID).getFirstResult();
+//
+//        if (id == userID) {
+//            entityManager.createNativeQuery("UPDATE conversations SET show_for_opener=? WHERE opener_id=? and id=?", Conversation.class)
+//                    .setParameter(1, 0).setParameter(2, userID).setParameter(3, conversationID).getResultList();
+//        } else {
+//            entityManager.createNativeQuery("UPDATE conversations SET show_for_associated=? WHERE associated_id=? and id=?", Conversation.class)
+//                    .setParameter(1, 0).setParameter(2, userID).setParameter(3, conversationID).getResultList();
+//        }p-classic_nav__team_header
+//    }
+
+    @Override
+    public void deleteById(Long conversationID, Long userID) {
+        entityManager.createNativeQuery("" +
+                "UPDATE conversations\n" +
+                "SET\n" +
+                "    show_for_opener = IF(opener_id = ?, false, true),\n" +
+                "    show_for_associated = IF(associated_id = ?, false, true)\n" +
+                "WHERE id = ?", Conversation.class)
+                .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
     }
 }

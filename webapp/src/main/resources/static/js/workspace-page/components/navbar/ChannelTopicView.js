@@ -5,7 +5,7 @@ export class ChannelTopicView {
     channel_id;
 
     constructor() {
-        this.channel_id = sessionStorage.getItem("channelName");
+        this.channel_id = sessionStorage.getItem("channelId");
         this.channel_topic_service = new ChannelTopicRestPaginationService();
     }
 
@@ -17,7 +17,7 @@ export class ChannelTopicView {
 
     onClickChannelSelection() {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", () => {
-            this.channel_id = sessionStorage.getItem("channelName");
+            this.channel_id = sessionStorage.getItem("channelId");
             this.setTopic();
         })
     }
