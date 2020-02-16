@@ -3,14 +3,13 @@ package jm.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.mysql.cj.jdbc.Blob;
 import jm.model.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.type.BlobType;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Lob;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -58,6 +57,7 @@ public class MessageDTO {
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields
+
     public MessageDTO(Message message) {
         this.id = message.getId();
         this.content = message.getContent();
@@ -76,4 +76,5 @@ public class MessageDTO {
         this.dateCreate = dateCreate;
         this.channelId = channelId;
     }
+
 }

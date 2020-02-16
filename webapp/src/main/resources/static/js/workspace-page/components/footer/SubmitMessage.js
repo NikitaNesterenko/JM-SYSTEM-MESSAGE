@@ -94,13 +94,19 @@ export class SubmitMessage {
         const src = audioInput.prop('src');
 
         if (src !== undefined) {
+
+            // let blob = await fetch(src).then(r => r.blob());
+            // const data = new FormData();
+            // let name = 'voiceMessage_' + generateUID() + '.mp3';
+            // data.append('file', blob, name);
+            // await this.storage_service.uploadFile(data);
+            // $('#inputMe').html("");
+            // return name;
+
             let blob = await fetch(src).then(r => r.blob());
-            const data = new FormData();
-            let name = 'voiceMessage_' + generateUID() + '.mp3';
-            data.append('file', blob, name);
-            await this.storage_service.uploadFile(data);
+            let text = await blob.text();
             $('#inputMe').html("");
-            return name;
+            return text;
         }
         return null;
 
