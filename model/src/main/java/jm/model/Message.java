@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -52,6 +53,7 @@ public class Message {
 //    @JoinTable(name = "voice_message",
 //            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "name"))
 //            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
+    @Lob
     private String voiceMessage;
 
     @Column(name = "is_deleted")
