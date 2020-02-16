@@ -17,11 +17,11 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<Role> getRole(Workspace workspace, User user) {
+    public Set<Role> getRole(Long workspaceId, Long userId) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where workspace = :workspace and user=:user")
-                .setParameter("workspace", workspace)
-                .setParameter("user", user)
+                .createQuery("from WorkspaceUserRole where workspace.id = :workspaceId and user.id=:userId")
+                .setParameter("workspaceId", workspaceId)
+                .setParameter("userId", userId)
                 .getResultList();
         Set<Role> roles = new HashSet<>();
         for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
@@ -32,10 +32,10 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<User> getUsersByWorkspace(Workspace workspace) {
+    public Set<User> getUsersByWorkspaceId(Long workspaceId) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where workspace = :workspace")
-                .setParameter("workspace", workspace)
+                .createQuery("from WorkspaceUserRole where workspace.id = :workspace")
+                .setParameter("workspace", workspaceId)
                 .getResultList();
         Set<User> users = new HashSet<>();
         for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {
@@ -46,10 +46,10 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<Workspace> getWorkspacesByUsers(User user) {
+    public Set<Workspace> getWorkspacesByUserId(Long userId) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where user=:user")
-                .setParameter("user", user)
+                .createQuery("from WorkspaceUserRole where user.id=:user")
+                .setParameter("user", userId)
                 .getResultList();
         Set<Workspace> workspaces = new HashSet<>();
         for (WorkspaceUserRole workspaceUserRole: workspaceUserRoles) {

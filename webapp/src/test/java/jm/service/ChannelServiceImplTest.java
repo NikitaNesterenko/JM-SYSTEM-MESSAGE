@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.util.collections.Sets;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,16 +83,16 @@ public class ChannelServiceImplTest {
 
     @Test
     void getChannelsByOwner() {
-        Mockito.when(channelDAO.getChannelsByOwner(any(User.class))).thenReturn(channels);
-        assertEquals(channelService.getChannelsByOwner(user1), channels);
-        verify(channelDAO).getChannelsByOwner(user1);
+        Mockito.when(channelDAO.getChannelsByOwnerId(any(Long.class))).thenReturn(channels);
+        assertEquals(channelService.getChannelsByOwnerId(user1.getId()), channels);
+        verify(channelDAO).getChannelsByOwnerId(user1.getId());
     }
 
     @Test
     void getChannelsByOwnerWasNull() {
-        Mockito.when(channelDAO.getChannelsByOwner(any(User.class))).thenReturn(null);
-        assertEquals(channelService.getChannelsByOwner(user1), null);
-        verify(channelDAO).getChannelsByOwner(user1);
+        Mockito.when(channelDAO.getChannelsByOwnerId(any(Long.class))).thenReturn(null);
+        assertEquals(channelService.getChannelsByOwnerId(user1.getId()), null);
+        verify(channelDAO).getChannelsByOwnerId(user1.getId());
     }
 
     @Test
