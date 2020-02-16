@@ -49,9 +49,15 @@ export class WorkspacePageEventHandler {
                 ownerId: this.logged_user.id
             };
 
-            this.channel_service.create(entity).then(chn => {
-                sendChannel(chn);
-            })
+            this.channel_service.getChannelByName(entity.name).then(chn => {
+                if (typeof(chn) === 'undefined') {
+                    this.channel_service.create(entity).then(chn => {
+                        sendChannel(chn);
+                    })
+                } else {
+                    alert('That name is already taken by a channel, username, or user group.');
+                }
+            });
         });
     }
 

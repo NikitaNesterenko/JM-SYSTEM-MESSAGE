@@ -125,7 +125,7 @@ export class MenuSettingsModal {
                                     let name = $("#tags").autocomplete({
                                         source: difference,
                                         appendTo : '.ui-widget',
-                                        minLength: 0
+                                        minLength: 1
                                     });
                                     if(name.length != 0) {
                                         $('#addBtn').removeAttr('disabled');
@@ -136,6 +136,12 @@ export class MenuSettingsModal {
                         });
                 });
         });
+    }
+
+    onMuteChannel() {
+        $('#muteChannel').click(() => {
+            alert('muteChannel');
+        })
     }
 
     removeChannelFromSidebarList(channel_id) {
@@ -207,6 +213,7 @@ export class MenuSettingsModal {
         this.onAddPeopleToChannelKeyUp();
         this.onCopyChannelNameBtnClick();
         this.onAddPeopleToChannelBtnClick();
+        this.onMuteChannel();
     }
 
 

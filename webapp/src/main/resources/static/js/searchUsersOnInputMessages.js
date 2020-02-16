@@ -138,3 +138,6 @@ function cancelSearchAt() {
     isSearchUser = false;
     isAtButtonClick = false;
 }
+export function clearUsers() {
+    users=[];
+}
