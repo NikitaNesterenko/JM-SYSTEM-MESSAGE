@@ -41,6 +41,13 @@ public class Workspace {
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels;
 
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "workspaces_apps",
+            joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "app_id"))
+    private Set<Apps> apps;
+
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
     private User user;
