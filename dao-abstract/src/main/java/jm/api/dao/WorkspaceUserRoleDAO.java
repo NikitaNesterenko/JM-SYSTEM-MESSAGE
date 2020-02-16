@@ -20,10 +20,10 @@ public interface WorkspaceUserRoleDAO {
 
     WorkspaceUserRole getById(Long id);
 
-    Set<Role> getRole(Workspace workspace, User user);
+    Set<Role> getRole(Long workspaceId, Long userId);
 
-    Set<User> getUsersByWorkspace(Workspace workspace);
+    Set<User> getUsersByWorkspaceId(Long workspaceId);
 
-    Set<Workspace> getWorkspacesByUsers(User user);
+    Set<Workspace> getWorkspacesByUserId(Long userId);
 
 }

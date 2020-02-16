@@ -2,7 +2,6 @@ package jm.dao;
 
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
-import jm.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -16,15 +15,15 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     @Override
     public void persist(Conversation conversation) {
         if (
-                getConversationByUsers(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
-                        || getConversationByUsers(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
+                getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
+                        || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
         ) {
             entityManager.merge(conversation);
         }
     }
 
     @Override
-    public Conversation getConversationByUsers(Long firstUserId, Long secondUserId) {
+    public Conversation getConversationByUsersId(Long firstUserId, Long secondUserId) {
         try {
             return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
                     .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult();
