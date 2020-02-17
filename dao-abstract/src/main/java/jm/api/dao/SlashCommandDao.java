@@ -1,8 +1,6 @@
 package jm.api.dao;
 
-import jm.model.Bot;
 import jm.model.SlashCommand;
-import jm.model.Workspace;
 
 import java.util.List;
 
@@ -20,12 +18,9 @@ public interface SlashCommandDao {
 
     SlashCommand getByName(String commandName);
 
-    List<SlashCommand> getByWorkspace(Workspace workspace);
+    List<SlashCommand> getByWorkspaceId(Long id);
 
     List<SlashCommand> getByBotId(Long id);
-
-
-
 
 
 }

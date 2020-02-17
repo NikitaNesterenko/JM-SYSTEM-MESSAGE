@@ -1,29 +1,26 @@
 package jm;
 
-import jm.api.dao.BotDAO;
 import jm.api.dao.SlashCommandDao;
-import jm.model.Bot;
 import jm.model.SlashCommand;
-import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
 @Transactional
-public class SlashCommandServiceImpl implements SlashCommandService{
+public class SlashCommandServiceImpl implements SlashCommandService {
     private static final Logger logger = LoggerFactory.getLogger(SlashCommand.class);
 
     private SlashCommandDao slashCommandDao;
 
     @Autowired
-    public void setSlashCommandDAO(SlashCommandDao slashCommandDAO){ this.slashCommandDao = slashCommandDAO; }
+    public void setSlashCommandDAO(SlashCommandDao slashCommandDAO) {
+        this.slashCommandDao = slashCommandDAO;
+    }
 
     @Override
     public List<SlashCommand> getAllSlashCommands() {
@@ -61,8 +58,8 @@ public class SlashCommandServiceImpl implements SlashCommandService{
     }
 
     @Override
-    public List<SlashCommand> getSlashCommandsByWorkspace(Workspace workspace) {
-        return slashCommandDao.getByWorkspace(workspace);
+    public List<SlashCommand> getSlashCommandsByWorkspaceId(Long id) {
+        return slashCommandDao.getByWorkspaceId(id);
     }
 
 

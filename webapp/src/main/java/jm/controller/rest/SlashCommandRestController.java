@@ -1,7 +1,8 @@
 package jm.controller.rest;
 
-import jm.*;
-import jm.dto.BotDtoService;
+import jm.BotService;
+import jm.SlashCommandService;
+import jm.WorkspaceService;
 import jm.dto.SlashCommandDto;
 import jm.dto.SlashCommandDtoService;
 import jm.model.Bot;
@@ -14,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping(value = "/rest/api/slashcommand")
@@ -121,7 +120,7 @@ public class SlashCommandRestController {
     @GetMapping("/workspace/id/{id}")
     public ResponseEntity<?> getSlashCommandsByWorkspace(@PathVariable Long id) {
         logger.info("Getting all SlashCommands for workspace with id = {}", id);
-        return ResponseEntity.ok(slashCommandDtoService.toDto(slashCommandService.getSlashCommandsByWorkspace(workspaceService.getWorkspaceById(id))));
+        return ResponseEntity.ok(slashCommandDtoService.toDto(slashCommandService.getSlashCommandsByWorkspaceId(id)));
     }
 
     @GetMapping("/bot/id/{id}/")

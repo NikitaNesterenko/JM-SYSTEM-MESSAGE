@@ -1,9 +1,7 @@
 package jm.dao;
 
 import jm.api.dao.SlashCommandDao;
-import jm.model.Bot;
 import jm.model.SlashCommand;
-import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -30,10 +28,10 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     }
 
     @Override
-    public List<SlashCommand> getByWorkspace(Workspace workspace) {
+    public List<SlashCommand> getByWorkspaceId(Long id) {
         try {
             return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM jm_message_system.bots_slash_commands bc JOIN slash_commands sc JOIN workspaces_bots wb ON sc.id = bc.slash_command_id AND bc.bot_id = wb.bot_id WHERE wb.workspace_id=?", SlashCommand.class)
-                    .setParameter(1, workspace.getId())
+                    .setParameter(1, id)
                     .getResultList();
         } catch (NoResultException e) {
             return null;
