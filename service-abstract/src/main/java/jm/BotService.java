@@ -20,9 +20,9 @@ public interface BotService {
 
     Bot getBotById(Long id);
 
-    List<Bot> GetBotsByWorkspaceId(Workspace workspace);
+    List<Bot> getBotsByWorkspaceId(Long id);
 
     Set<Channel> getChannels(Bot bot);
 
-    Bot getBotBySlashCommand(SlashCommand slashCommand);
+    Bot getBotBySlashCommandId(Long id);
 }

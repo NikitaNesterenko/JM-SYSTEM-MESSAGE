@@ -20,10 +20,10 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
     @Override
-    public List<Bot> getBotsByWorkspaceId(Workspace workspace) {
+    public List<Bot> getBotsByWorkspaceId(Long id) {
         try {
             return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
-                    .setParameter(1, workspace.getId())
+                    .setParameter(1, id)
                     .getResultList();
         } catch (NoResultException e) {
             return null;
@@ -36,10 +36,10 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Bot getBotByCommand(SlashCommand slashCommand) {
+    public Bot getBotByCommandId(Long id) {
         try {
             return (Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
-                    .setParameter(1, slashCommand.getId())
+                    .setParameter(1, id)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

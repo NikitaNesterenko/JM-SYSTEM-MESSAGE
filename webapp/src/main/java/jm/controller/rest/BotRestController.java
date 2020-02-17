@@ -60,8 +60,7 @@ public class BotRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
     public ResponseEntity<List<BotDTO>> getBotByWorkspace(@PathVariable("id") Long id) {
-        Workspace workspace = workspaceService.getWorkspaceById(id);
-        List<Bot> bots = botService.GetBotsByWorkspaceId(workspace);
+        List<Bot> bots = botService.getBotsByWorkspaceId(id);
         if (bots.isEmpty()) {
             logger.warn("Не удалось найти ботов для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

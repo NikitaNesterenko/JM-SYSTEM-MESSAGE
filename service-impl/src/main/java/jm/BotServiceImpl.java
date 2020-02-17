@@ -42,15 +42,15 @@ public class BotServiceImpl implements BotService {
     public Bot getBotById(Long id) { return botDAO.getById(id); }
 
     @Override
-    public List<Bot> GetBotsByWorkspaceId(Workspace workspace) {
-        return botDAO.getBotsByWorkspaceId(workspace);
+    public List<Bot> getBotsByWorkspaceId(Long id) {
+        return botDAO.getBotsByWorkspaceId(id);
     }
 
     @Override
     public Set<Channel> getChannels(Bot bot) { return botDAO.getChannels(bot); }
 
     @Override
-    public Bot getBotBySlashCommand(SlashCommand slashCommand) {
-        return botDAO.getBotByCommand(slashCommand);
+    public Bot getBotBySlashCommandId(Long id) {
+        return botDAO.getBotByCommandId(id);
     }
 }
