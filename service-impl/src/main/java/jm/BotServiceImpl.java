@@ -52,4 +52,5 @@ public class BotServiceImpl implements BotService {
     public Bot getBotBySlashCommandId(Long id) {
         return botDAO.getBotByCommandId(id);
     }
+
 }
