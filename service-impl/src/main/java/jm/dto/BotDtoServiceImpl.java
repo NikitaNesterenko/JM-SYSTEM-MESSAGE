@@ -1,9 +1,11 @@
 package jm.dto;
 
 import jm.api.dao.ChannelDAO;
+import jm.api.dao.SlashCommandDao;
 import jm.api.dao.WorkspaceDAO;
 import jm.model.Bot;
 import jm.model.Channel;
+import jm.model.SlashCommand;
 import jm.model.Workspace;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +20,12 @@ public class BotDtoServiceImpl implements BotDtoService {
 
     private final ChannelDAO channelDAO;
     private final WorkspaceDAO workspaceDAO;
+    private final SlashCommandDao slashCommandDao;
 
-    public BotDtoServiceImpl(ChannelDAO channelDAO, WorkspaceDAO workspaceDAO) {
+    public BotDtoServiceImpl(ChannelDAO channelDAO, WorkspaceDAO workspaceDAO, SlashCommandDao slashCommandDao) {
         this.channelDAO = channelDAO;
         this.workspaceDAO = workspaceDAO;
+        this.slashCommandDao = slashCommandDao;
     }
 
     @Override
@@ -34,10 +38,18 @@ public class BotDtoServiceImpl implements BotDtoService {
         // creating new BotDTO with simple fields copied from Bot
         BotDTO botDTO = new BotDTO(bot);
 
+        botDTO.setWorkspacesId(new HashSet<>());
+        botDTO.setSlashCommandsIds(new HashSet<>());
+
         // setting up 'workspaceId'
-        Workspace workspace = bot.getWorkspace();
-        if (workspace != null) {
-            botDTO.setWorkspaceId(workspace.getId());
+        Set<Workspace> workspaces = bot.getWorkspaces();
+        if ((workspaces != null) && !workspaces.isEmpty()) {
+            workspaces.forEach(workspace -> botDTO.getWorkspacesId().add(workspace.getId()));
+        }
+
+        Set<SlashCommand> slashCommands = bot.getCommands();
+        if ((slashCommands != null) && !slashCommands.isEmpty()) {
+            slashCommands.forEach(slashCommand -> botDTO.getSlashCommandsIds().add(slashCommand.getId()));
         }
 
         // setting up 'channelIds'
@@ -61,8 +73,15 @@ public class BotDtoServiceImpl implements BotDtoService {
         Bot bot = new Bot(botDto);
 
         // setting up 'workspace'
-        if (botDto.getWorkspaceId() != null) {
-            bot.setWorkspace(workspaceDAO.getById(botDto.getWorkspaceId()));
+        Set<Long> ws = botDto.getWorkspacesId();
+        if ((ws != null) && !ws.isEmpty()) {
+            ws.forEach(id -> bot.getWorkspaces().add(workspaceDAO.getById(id)));
+        }
+
+
+        Set<Long> sc = botDto.getSlashCommandsIds();
+        if ((sc != null) && !sc.isEmpty()) {
+            sc.forEach(id -> bot.getCommands().add(slashCommandDao.getById(id)));
         }
 
         // setting up 'channels'
