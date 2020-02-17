@@ -14,7 +14,6 @@ import jm.dto.BotDtoService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
-import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
