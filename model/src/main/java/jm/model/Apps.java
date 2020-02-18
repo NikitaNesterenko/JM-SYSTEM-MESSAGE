@@ -27,12 +27,6 @@ public class Apps {
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    public Apps(String name, String token, Workspace workspace) {
-        this.name = name;
-        this.token = token;
-        this.workspace = workspace;
-    }
-
     public Apps() {
     }
 }
