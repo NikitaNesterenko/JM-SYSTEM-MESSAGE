@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,8 +17,9 @@ public class BotDTO {
     private Long id;
     private String name;
     private String nickName;
-    private Long workspaceId;
+    private Set<Long> workspacesId;
     private Set<Long> channelIds;
+    private Set<Long> slashCommandsIds;
     private LocalDateTime dateCreate;
 
     // Constructor for simplify Bot->BotDTO conversion.

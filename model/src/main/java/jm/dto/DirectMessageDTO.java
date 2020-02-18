@@ -18,4 +18,6 @@ public class DirectMessageDTO extends MessageDTO {
         this.conversationId = directMessage.getConversation().getId();
         this.starredByWhom = directMessage.getStarredByWhom();
     }
+
+
 }

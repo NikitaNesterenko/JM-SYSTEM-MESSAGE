@@ -49,7 +49,7 @@ public class MainController {
 
     @GetMapping(value = "/workspace")
     public ModelAndView workspacePage(HttpServletRequest request) {
-        if(request.getSession().getAttribute("WorkspaceID") != null) {
+        if(request.getSession(false).getAttribute("WorkspaceID") != null) {
             return new ModelAndView("workspace-page");
         } else {
             // при разрыве коннекта с сервером редиректик на выбор Воркспейса

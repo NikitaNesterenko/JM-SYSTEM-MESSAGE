@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <title>Workspace Page</title>
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <link href="css/jquery-ui.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
             integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
             crossorigin="anonymous"></script>
@@ -19,7 +24,6 @@
     <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
     <script th:src="@{../bootstrap/bootstrap-4.3.1-dist/js/bootstrap.min.js}"></script>
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
-    <script defer th:src="@{/js/workspace-page/components/footer/input-box-at.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
@@ -61,6 +65,9 @@
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
 
+    <!-- activities info -->
+    <script defer th:src="@{/js/activities/view_activities.js}" type="module"></script>
+
     <!-- thread panel-->
     <script defer th:src="@{/js/thread/thread-view.js}" type="module"></script>
     <script defer th:src="@{/js/thread/thread-input-box.js}" type="module"></script>
@@ -78,6 +85,7 @@
     <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>
 
     <script src="/js/helper_functions.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
         <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
@@ -576,7 +584,7 @@
                     </div>
                     <div class="p-classic_nav__channel_header">
                         <div class="p-classic_nav__model__title">
-                            <div class="p-classic_nav__model__title__name">
+                            <div id="channelName" class="p-classic_nav__model__title__name">
                                 <button class="p-classic_nav__model__title__name__button">
                                     <i class="p-classic_nav__model__title__name__hash_icon">
                                         #</i>
@@ -761,11 +769,13 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="p-channel_sidebar__channels__list"
+                                                 id="id-app_sidebar__apps__list"></div>
                                             <div class="bot-representation" id="bot_representation"></div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
                                             <div class="p-channel_sidebar__add_app">
                                                 <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__add_app__button">
+                                                    <button class="p-channel_sidebar__add_app__button" data-toggle="modal" data-target="#appsModal">
                                                         <span class="p-channel_sidebar__name-2">Add apps</span>
                                                     </button>
                                                     <button class="p-channel_sidebar__close">
@@ -791,7 +801,7 @@
                 </div>
             </div>
             <div class="p-workspace__primary_view" id="all-message-wrapper">
-                <div class="p-workspace__primary_view_contents">
+                <div class="p-workspace__primary_view_contents" id="workspaceContent">
                     <div class="p-workspace__primary_view_body">
                         <div class="p-message_pane--classic-nav" id="all-messages">
 
@@ -927,8 +937,8 @@
                         <div class="p-flexpane_header">
                             <div class="p-flexpane_header__primary">
                                 <div class="p-flexpane_header__primary_content">
+                                    <div class="p-flexpane__title_container">About this channel</div>
                                     <div class="p-flexpane__title_container"></div>
-                                    <!--                                    <div class="p-flexpane__title_container">About this channel</div>-->
                                 </div>
                                 <button class="p-flexpane_header__control__button">
                                     <i class="c-icon--times">✖</i>
@@ -1006,22 +1016,70 @@
 <div class="settingsList" id="settingsList">
     <div>
         <div class="settingsDiv">
-            <button class="settingsButton1" type="button"><span class="settingsText">Jump to date...</span></button>
-            <button class="settingsButton" type="button"><span class="settingsText">Add people to channel</span>
+            <button id="jumpToDate" class="settingsButton1" type="button">
+                <span class="settingsText">Jump to date...</span>
             </button>
-            <button class="settingsButton" type="button"><span class="settingsText">View channel details</span></button>
-            <button class="settingsButton" type="button"><span class="settingsText">Copy channel name</span></button>
+            <button class="settingsButton" data-toggle="modal" data-target="#addPeopleToChannelModal" type="button"><span class="settingsText">Add people to channel</span>
+            </button>
+            <button id="channelDetails" class="settingsButton" type="button"><span class="settingsText">View channel details</span></button>
+            <button id="copyChannelName" class="settingsButton" type="button"><span class="settingsText">Copy channel name</span></button>
             <button class="settingsButton" type="button"><span class="settingsText">Manage posting permissions</span>
             </button>
             <button class="settingsButton2" type="button" data-toggle="modal" data-target="#additionalOptionsModal"
                     id="additionalOptionsButton"><span class="settingsText">Additional options</span></button>
         </div>
+
         <div class="settingsDiv">
-            <button class="settingsButton3" type="button"><span class="settingsText">Notification preference</span>
+            <button class="settingsButton3" type="button" data-toggle="modal" data-target="#notificationPreferenceModal"><span class="settingsText">Notification preference</span>
             </button>
-            <button class="settingsButton4" type="button"><span class="settingsText">Mute channel</span></button>
+            <button id="muteChannel" class="settingsButton4" type="button"><span class="settingsText">Mute channel</span></button>
         </div>
-        <button class="settingsButton5" type="button"><span class="settingsText">Add app</span></button>
+        <button class="settingsButton5" type="button" data-toggle="modal" data-target="#appsModal"><span class="settingsText">Add app</span></button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addPeopleToChannelModal" tabindex="-1" role="dialog" aria-labelledby="addPeopleToChannelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPeopleToChannelModalLabel">Add people</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="ui-widget">
+                    <label for="tags"></label>
+                    <input size="50" id="tags" type="search" placeholder="Yian, @steve, @usergroup, name@example.com" autocomplete='off'>
+                </div>
+                <p class="text-center">To add a teammate who’s not on Slack, you’ll need to invite them first.</p>
+                <button style="float: right" id='addBtn' type="button" class="btn btn-success" data-dismiss="modal" disabled>Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notificationPreferenceModal" tabindex="-1" role="dialog" aria-labelledby="notificationPreferenceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationPreferenceModalLabel">Notifications</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="/image/svg/alert-triangle.svg" class="text-warning" alt="Alert" width="32" height="32" title="Bootstrap"><br>
+                <strong>Desktop notifications are disabled</strong>
+                <p>To set your notifications for this channel, you’ll need to enable desktop notifications first.</p>
+                <button type="button" class="btn btn-success">Enable Notifications</button>
+            </div>
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+<!--            </div>-->
+        </div>
     </div>
 </div>
 
@@ -1038,6 +1096,11 @@
             <div class="formButton">
                 <button class="additionalOptionsButton" id="exampleLink1"><span><b>Archive this channel</b>
                 <br>If you don’t think it will be used anymore and you want to clean up, archive it. The channel can be unarchived later (but everyone will have been removed).</span>
+                </button>
+            </div>
+            <div>
+                <button class="additionalOptionsButton" id="exampleLink3"><span><b>Share with another organization</b>
+                <br>In a shared channel, people from two separate organizations can send messages, share files, and work together in Slack. Learn more</span>
                 </button>
             </div>
             <div>
@@ -1279,7 +1342,7 @@
                                                                         </div>
                                                                     </th>
                                                                     <th>
-                                                                        <button class="btn btn-outline-dark">View
+                                                                        <button class="btn btn-outline-dark" id="google-calendar-button">View
                                                                         </button>
                                                                     </th>
                                                                 </div>
@@ -1470,6 +1533,39 @@
             </div>
             <div id="idSearchContent">
                 Что-то пошло не так
+            </div>
+        </div>
+    </div>
+</div>
+<!--Модальное окно для ввода GoogleCalendar ID Secret-->
+<div class="modal fade" id="addGoogleCalendarIdSecretModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Введите GoogleCalendar ID & Secret</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="InputGoogleCalendarClientId">ID</label>
+                        <input type="email" class="form-control" id="InputGoogleCalendarClientId"
+                               value="270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGoogleCalendarClientSecret">ID</label>
+                        <input type="email" class="form-control" id="InputGoogleCalendarClientSecret"
+                               value="256bTZoiZUa6eKiGVmI-T4wb">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-dismiss="modal" id="addGoogleCalendarIdSecretSubmit" class="btn btn-success">Submit
+                </button>
             </div>
         </div>
     </div>

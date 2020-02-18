@@ -22,6 +22,11 @@ export class UserRestPaginationService extends RestPaginationService {
         const users = await fetch(`/rest/api/users/channel/${channel_id}`);
         return await users.json();
     };
+
+    getUserById = async (id) => {
+        const user = await fetch(`/rest/api/users/${id}`);
+        return await user.json();
+    }
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -47,6 +52,12 @@ export class MessageRestPaginationService extends RestPaginationService {
         const response = await fetch('/rest/api/messages/' + id);
         return response.json();
     };
+
+        // messages from all channels where user is member
+    getMessagesFromChannelsForUser = async (id) => {
+        const response = await fetch(`/rest/api/messages/user/${id}`);
+        return response.json();
+    };
 }
 
 export class BotRestPaginationService extends RestPaginationService {
@@ -59,6 +70,48 @@ export class BotRestPaginationService extends RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     };
+}
+
+export class SlashCommandRestPaginationService extends RestPaginationService {
+    constructor() {
+        super("/rest/api/slashcommand");
+    }
+
+    getSlashCommandsByBotId = async (id) => {
+        const response = await fetch('/rest/api/slashcommand/bot/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    getAllSlashCommands = async () => {
+        const response = await fetch('/rest/api/slashcommand/all')
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    getSlashCommandsByWorkspace = async (id) => {
+        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    getSlashCommandByName = async (name) => {
+        const response = await fetch('/rest/api/slashcommand/name/' + name)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    sendSlashCommand = async (url, command) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(command)
+        })
+        return await response.json()
+            .catch(err => console.log(err.status));
+    }
 }
 
 export class ChannelTopicRestPaginationService extends RestPaginationService {
@@ -114,6 +167,15 @@ export class ChannelRestPaginationService extends RestPaginationService {
             method: 'POST'
         });
         return response.json();
+    };
+
+    updateChannel = async (channel) => {
+        const response = await fetch(`/rest/api/channels/update`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(channel)
+        });
+        return response.status;
     }
 }
 
@@ -148,7 +210,6 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
         if (response.ok) {
             return await response.json();
         }
-
     };
 
     sendCode = async (code) => {

@@ -2,12 +2,15 @@ import {
     WorkspaceRestPaginationService,
     UserRestPaginationService,
     ChannelRestPaginationService,
+    ChannelTopicRestPaginationService,
     MessageRestPaginationService,
     StorageService,
-    DirectMessagesRestController
+    DirectMessagesRestController,
+    SlashCommandRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
+import {users, clearUsers} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -22,6 +25,7 @@ export class SubmitMessage {
         this.message_service = new MessageRestPaginationService();
         this.direct_message_service = new DirectMessagesRestController();
         this.storage_service = new StorageService();
+        this.slashCommandService = new SlashCommandRestPaginationService();
     }
 
     onAttachFileClick() {
@@ -37,15 +41,8 @@ export class SubmitMessage {
         $("#form_message").submit(async (event) => {
             event.preventDefault();
             const hasCommand = await this.checkCommand();
+            window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
-
-                const content =  $("#form_message_input").val()
-                if (content.startsWith('/leave ')) {
-                    let channelName = content.substring(7)
-                    this.leaveChannel(channelName)
-                    $("#form_message_input").val("")
-                    return
-                }
 
                 const channel_name = sessionStorage.getItem("channelName");
                 const conversation_id = sessionStorage.getItem('conversation_id');
@@ -65,6 +62,19 @@ export class SubmitMessage {
         await this.setUser();
         const commands = new Command(this.user);
         return commands.isCommand($("#form_message_input").val());
+    }
+
+    checkSlashCommand() {
+        let message = $("#form_message_input").val();
+        let isCommand = false
+        if (message.startsWith('/')) {
+            window.allActions.forEach(action => {
+                if (message.substr(1, message.indexOf(" ") < 0 ? message.length :  message.indexOf(" ") - 1) === action) {
+                    isCommand = true;
+                }
+            })
+        }
+        return isCommand;
     }
 
     getMessageInput() {
@@ -123,13 +133,44 @@ export class SubmitMessage {
             userName: this.user.name,
             content: content,
             dateCreate: convert_date_to_format_Json(new Date()),
-            filename: await this.getFiles()
+            filename: await this.getFiles(),
+            recipientUserIds: users
         };
 
-        this.message_service.create(entity).then(
-            msg_id => sendName(msg_id)
-        );
+        if (window.hasSlashCommand) {
+            await this.sendSlashCommand(entity);
+        } else {
+            await this.message_service.create(entity).then(
+                msg_id => sendName(msg_id)
+            );
+        }
+        clearUsers();
     }
+
+    async sendSlashCommand(entity) {
+        if (entity.content.startsWith("/")) {
+            const inputCommand = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
+            window.currentCommands.forEach(command => {
+                if (command.name === inputCommand) {
+                    const sendCommand = {
+                        channelId: entity.channelId,
+                        userId: entity.userId,
+                        command: entity.content,
+                        name: inputCommand
+                    };
+                    if (command.botId == 1) {
+                        //если это команда от слакБота, то отправляем через вебсокет.
+                        sendSlackBotCommand(sendCommand);
+                    } else {
+                        //иначе просто отправляем пост запрос по урлу
+                        this.slashCommandService.sendSlashCommand(command.url, sendCommand);
+                    }
+                }
+            });
+        }
+    }
+
+
 
     async sendDirectMessage(conversation_id) {
         await this.setUser();

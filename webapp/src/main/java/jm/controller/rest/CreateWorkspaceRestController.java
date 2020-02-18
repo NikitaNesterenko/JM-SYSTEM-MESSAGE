@@ -1,9 +1,16 @@
 package jm.controller.rest;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.*;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.WorkspaceUserRoleDAO;
+import jm.dto.BotDTO;
 import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +37,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/create")
+@Tag(name = "create workspace", description = "Create workspace API")
 public class CreateWorkspaceRestController {
 
     private UserService userService;
@@ -87,24 +95,45 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/sendEmail")
+    @Operation(summary = "Send email confirmation code",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateWorkspaceToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: email code was send")
+            })
     public ResponseEntity sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) throws NoSuchAlgorithmException {
         CreateWorkspaceToken token = mailService.sendConfirmationCode(emailTo);
         token.setUserEmail(emailTo);
-        request.getSession().setAttribute("token", token);
+        request.getSession(false).setAttribute("token", token);
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
         User user = userService.getUserByEmail(emailTo);
         if(user == null) {
 
             user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
-           userService.createUser(user);
+            userService.createUser(user);
         }
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/confirmEmail")
+    @Operation(summary = "Confirm email",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateWorkspaceToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: email confirmed"),
+                    @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to find token code")
+            })
     public ResponseEntity confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         if(token.getCode() != code) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -112,8 +141,18 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/workspaceName")
+    @Operation(summary = "Set workspace name",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateWorkspaceToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: workspace name was set")
+            })
     public ResponseEntity workspaceName(@RequestBody String workspaceName, HttpServletRequest request) {
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         token.setWorkspaceName(workspaceName);
         createWorkspaceTokenService.updateCreateWorkspaceToken(token);
         User emailUser = userService.getUserByLogin(token.getUserEmail());
@@ -124,25 +163,45 @@ public class CreateWorkspaceRestController {
         Role ownerRole = new Role((long) 2, "ROLE_OWNER");
         WorkspaceUserRole workSpaceUserRole = new WorkspaceUserRole(workspace1, emailUser, ownerRole);
         workspaceUserRoleService.create(workSpaceUserRole);
-        request.getSession().setAttribute("token", token);
+        request.getSession(false).setAttribute("token", token);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/channelName")
+    @Operation(summary = "Set channel name",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateWorkspaceToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: channel name was set")
+            })
     public ResponseEntity channelName(@RequestBody String channelName, HttpServletRequest request) {
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         token.setChannelname(channelName);
         createWorkspaceTokenService.updateCreateWorkspaceToken(token);
         Workspace workspace = workspaceService.getWorkspaceByName(token.getWorkspaceName());
-        request.getSession().setAttribute("token", token);
+        request.getSession(false).setAttribute("token", token);
         Channel channel = new Channel(channelName, users, userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now(),workspace);
         channelService.createChannel(channel);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/invites")
+    @Operation(summary = "Send invitation page",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateWorkspaceToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: invitation pages were send")
+            })
     public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         for (int i = 0; i < invites.length; i++) {
             mailService.sendInviteMessage(
                     userService.getUserByEmail(token.getUserEmail()).getLogin(),
@@ -155,13 +214,23 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/tada")
+    @Operation(summary = "Starting page",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateWorkspaceToken.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: starting page")
+            })
     public ResponseEntity<String> tadaPage(HttpServletRequest request) {
-        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession().getAttribute("token");
+        CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         UserDetails userDetails = userDetailsService.loadUserByUsername(token.getUserEmail());
         UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         sToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(sToken);
-        return new ResponseEntity<>(token.getChannelname(),HttpStatus.OK);
+        return new ResponseEntity<>(token.getChannelname(), HttpStatus.OK);
     }
 
 }

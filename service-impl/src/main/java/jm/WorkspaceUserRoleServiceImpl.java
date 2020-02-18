@@ -3,9 +3,7 @@ package jm;
 
 import jm.api.dao.WorkspaceUserRoleDAO;
 import jm.model.Role;
-import jm.model.Workspace;
 import jm.model.WorkspaceUserRole;
-import jm.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -25,7 +23,7 @@ public class WorkspaceUserRoleServiceImpl implements WorkspaceUserRoleService {
     }
 
     @Override
-    public Set<Role> getRole(Workspace workspace, User user) {
-        return workspaceUserRoleDAO.getRole(workspace, user);
+    public Set<Role> getRole(Long workspaceId, Long userId) {
+        return workspaceUserRoleDAO.getRole(workspaceId,userId);
     }
 }
