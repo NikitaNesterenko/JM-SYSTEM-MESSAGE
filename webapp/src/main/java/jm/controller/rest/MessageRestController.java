@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -119,7 +118,6 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
-    // DTO compliant
     @PostMapping(value = "/create")
     @Operation(summary = "Create message",
             responses = {

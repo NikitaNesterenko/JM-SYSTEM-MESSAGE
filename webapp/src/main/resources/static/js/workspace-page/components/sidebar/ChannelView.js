@@ -1,10 +1,12 @@
 import {ChannelRestPaginationService, BotRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "/js/workspace-page/components/messages/ChannelMessageView.js";
+import {UserRestPaginationService} from "../../../rest/entities-rest-pagination.js";
 
 export class ChannelView {
     default_channel = null;
 
     constructor() {
+        this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.channel_message_view = new ChannelMessageView();
         this.bot_service = new BotRestPaginationService();
@@ -18,10 +20,12 @@ export class ChannelView {
     setLoggedUser(loggedUser) {
         this.loggedUser = loggedUser;
         this.channel_message_view.logged_user = loggedUser;
+        this.addCurrentUser(loggedUser);
         return this;
     }
 
     showAllChannels(workspace_id) {
+        this.addCurrentWorkspace(workspace_id);
         this.setLocalStorageSettings(0);
         //берем каналы для конкретного пользователя и конкретного воркспейса
         this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, this.loggedUser.id).then(
@@ -39,6 +43,32 @@ export class ChannelView {
         this.showBots(workspace_id);
     }
 
+    setFlaggedItems() {
+        $("#flaggedItems").append(0);
+        alert(sessionStorage.getItem("channelId"))
+    }
+
+    showPeopleInChannel(channelId) {
+        // alert(channelId);
+        // const countOfPeopleInChannel = $("#peopleInChat");
+        // this.user_service.getUsersByChannelId(channelId).then(
+        //     users => {
+        //         countOfPeopleInChannel.empty();
+        //         countOfPeopleInChannel.append(users.length);
+        //     }
+        // );
+
+        alert(sessionStorage.getItem("channelId"));
+        const member_list = $('#memberListPlaceholder');
+        this.user_service.getUsersByChannelId(sessionStorage.getItem("channelId")).then(
+            users => {
+                alert(users);
+                member_list.empty();
+                member_list.append(this.createMemberList(users));
+            }
+        );
+    }
+
     showBots(workspace_id) {
         this.bot_service.getBotByWorkspaceId(workspace_id).then(
             bots => {
@@ -54,14 +84,14 @@ export class ChannelView {
     addBot(bot) {
         $('#bot_representation').append(
             `<div class="p-channel_sidebar__direct-messages__container">
-                <div class="p-channel_sidebar__close_container">
+                <div class="p-channel_sidebar__channel">
                     <button class="p-channel_sidebar__name_button">
                         <i class="p-channel_sidebar__channel_icon_circle">●</i>
                         <span class="p-channel_sidebar__name-3">
                             <span>` + bot['nickName'] + `</span>
                         </span>
                     </button>
-                    <button class="p-channel_sidebar__close">
+                    <button class="p-channel_sidebar__close cross">
                         <i class="p-channel_sidebar__close__icon">✖</i>
                     </button>
                 </div>
@@ -79,6 +109,14 @@ export class ChannelView {
                 this.addChannelIntoSidebarChannelList(chn);
             }
         });
+    }
+
+    addCurrentWorkspace(workspace) {
+        $('#WorkspaceName').append(workspace);
+    }
+
+    addCurrentUser(user) {
+        $('#WorkspaceUsername').append(user.name);
     }
 
     addChannelIntoSidebarChannelList(channel) {
@@ -113,14 +151,14 @@ export class ChannelView {
     }
 
     setLocalStorageSettings(chn_id) {
-        sessionStorage.setItem('channelName', chn_id);
+        sessionStorage.setItem('channelId', chn_id);
         sessionStorage.setItem('conversation_id', '0');
         window.channel_id = chn_id;
     }
 
     selectChannel(id) {
         this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
-        $('.p-channel_sidebar__name_button').each((idx, btn) => {
+        $('.p-channel_sidebar__name_button').each((btn) => {
             let bg_color = {color: "rgb(188,171,188)", background: "none"};
 
             if ($(btn).filter(`[id=channel_button_${id}]`).length) {

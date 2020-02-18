@@ -32,7 +32,8 @@ window.addEventListener('load', function () {
 
     const invite_from_menu_user_workspace = document.getElementById("invite-from-menu-user-workspace");
 
-    menu_header.onclick = function () {
+    menu_header.click = function () {
+        alert("1");
         menu_modal.style.display = "inline-table";
     };
 

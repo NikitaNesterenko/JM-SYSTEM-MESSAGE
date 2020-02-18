@@ -76,21 +76,24 @@ export class MessageDialogView {
     }
 
     attachedFile() {
-        const url = "../files/" + this.message.filename;
         if (this.message.filename !== null) {
-            if (!this.message.filename.match("mp3")) {
-                const msg = $(`#message_id-${this.message.id}`);
-                msg.append(`<br>
-                <span class="c-message__attachment">
+            const msg = $(`#message_id-${this.message.id}`);
+            msg.append(`<br>
+                <span class="c-message__attachment noselect">
                     <a target="_blank"  href = "/files/${this.message.filename}">${this.message.filename}</a>
                 </span>`);
-            } else if (this.message.filename.match("mp3")) {
-                const msg = $(`#message_id-${this.message.id}`);
-                msg.append(`<br>
-                <span class="c-message__attachment">
+        }
+        return this;
+    }
+
+    attachedVoiceMessage() {
+        const url = "../files/" + this.message.voiceMessage;
+        if (this.message.voiceMessage !== null) {
+            const msg = $(`#message_id-${this.message.id}`);
+            msg.append(`<br>
+                <span class="c-message__attachment noselect">
                 <audio style="margin: 5px;" controls="" src="${url}" id="audioOutput" preload="auto"></audio>
                 </span>`);
-            }
         }
         return this;
     }

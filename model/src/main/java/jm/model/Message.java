@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -48,8 +49,7 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
-    @Column(name = "voiceMessage", length = 100000)
-    private Byte[] voiceMessage;
+    private String voiceMessage;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -137,6 +137,7 @@ public class Message {
         this.content = messageDto.getContent();
         this.dateCreate = messageDto.getDateCreate();
         this.filename = messageDto.getFilename();
+        this.voiceMessage = messageDto.getVoiceMessage();
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
     }

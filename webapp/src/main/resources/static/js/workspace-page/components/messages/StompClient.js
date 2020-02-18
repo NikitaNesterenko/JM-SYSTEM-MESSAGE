@@ -31,6 +31,7 @@ export class StompClient {
     connect() {
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
+
             this.subscribeMessage();
             this.subscribeChannel();
             this.subscribeThread();
@@ -279,6 +280,7 @@ export class StompClient {
             'botId': message.botId,
             'botNickName': message.botNickName,
             'filename': message.filename,
+            'voiceMessage': message.voiceMessage,
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
             'channelName': message.channelName

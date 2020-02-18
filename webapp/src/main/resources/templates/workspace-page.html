@@ -12,13 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     <link href="css/jquery-ui.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-            crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <link href="css/jquery-ui.css" rel="stylesheet">
 
     <script th:src="@{/js/rest/entities-rest-pagination.js}" type="module"></script>
     <script th:src="@{/js/workspace-page/workspace-page.js}" type="module"></script>
@@ -107,7 +103,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
             integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
 
-
     <!--  Tab Icon by DV -->
     <link rel="shortcut icon"
           href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAzFBMVEVKFEyScpNLFU1cK16Mao1hMmOEX4WObZBWJFiQb5FZKFtNGE97VH1QHFJOGVBsQW5jNWV2TXdsQG1aKVxdLV9WI1dwRXGObI9pPGpTIFVPG1FfL2FSH1RVIld8VX1YJlpOGlBbK12RcZJMFk5iNGSBW4JmOGhgMGF3TniLaIx9Vn5lN2eFYYaNa45eLmB5UXtkN2ZUIVaGYodkNmVtQm9YJ1pRHVOHZImCXIN1THZgMWKDXoR9V392TniMaY1nOmmKZ4tpPWtXJVlvRHFqMc1IAAABCklEQVR4Xr3RxZLEIBSG0f9C3NPuPu7u/v7vNEE6dFdRM7s+i0sFvg0EO9X0/CQFeqfeCWwyh4gmCKgSwGJOlRCuWG5gMSKBrcTch03jvwD9Z9eFNcj4gcRj1EE2H5n7OaS93+lA7uXQPKo96kDt9aH4JnDUNS+xEEsLSmKCC0zFMoWY3RmUdBKSFCYDoHPmNCCCaw6DSTC2v8bnw+E9llHrCkBUHkvJbbz1hC4Tl+khWtDaHrQjGXAxH1CSEWwGzUJMH09ktKHkRPTCdBCEdfCKteItj6EDjDuHUvnBsKkO7EywIvr8+juofMNCnnTVUsCird6Gq99o80PkRFh6VcZgFafyYDDDbv0CWLgS6JWTyyIAAAAASUVORK5CYII="
@@ -117,10 +112,10 @@
     <!--  Voice messaging feature by DV  -->
     <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
     <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
-    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-    <!--    <link rel="stylesheet" type="text/css" href="js/voice-message/style.css">-->
-    <!--  Workspace nickname by DV  -->
-    <script src="../js/vavilov/innerJs/environment.js"></script>
+
+    <!-- channel info -->
+    <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
 
 
 </head>
@@ -313,7 +308,7 @@
                         <div>
                             <div class="p-classic_nav__team_menu__blurb">
                                 <i class="p-classic_nav__team_menu__blurb__icon" aria-hidden="true"
-                                   style="height: 36px; width: 36px; min-width: 36px; font-size: 20px; line-height: 36px; white-space: nowrap; background-image: url(&quot;https://avatars.slack-edge.com/2019-04-26/608315739666_d6dcde1585520bcb3ef9_88.png&quot;);"></i>
+                                   style="height: 36px; width: 36px; min-width: 36px; font-size: 20px; line-height: 36px; white-space: nowrap;"></i>
                                 <div class="p-classic_nav__team_menu__blurb__right">
                                     <div class="p-classic_nav__team_menu__blurb__name">Java Mentoring</div>
                                     <div class="p-classic_nav__team_menu__blurb__sub">javamentor.slack.com</div>
@@ -503,28 +498,6 @@
 <button id="invitesModalClose" class="invites-modal-close" type="button">
     X
 </button>
-</div>
-
-<!-- <div class="workspace-container">
-    <div class="workspace-box">
-        <h3>Workspace Box</h3>
-        <p>-</p>
-        <p>
-            <button class="add-channel-button" id="addChannelButton">+ Add new channel</button>
-        </p>
-        <p>-</p>
-        <h3>Channels</h3>
-        <p>-</p>
-        <p><a href="/search/channel" style="color:#f2f2f2">Search Channel</a>
-        <p>-</p>
-        <div class="channel-box" id="channel-box">
-        </div>
-    </div>
-    <div class="chat-box">
-        <h3>Message Box</h3>
-        <div class = "button" onclick='showDiv("info-box")'>Member List</div>
-        <div class="message-box" id="message-box">
-            <div class="all-messages" id="all-messages"> -->
 
 <!-- Share message MODAL -->
 <div class="modal fade" id="shareMessageModal" tabindex="-1" role="dialog" aria-labelledby="shareMessageModal"
@@ -556,26 +529,23 @@
                 <div class="p-classic_nav">
                     <div class="p-classic_nav__team_header">
                         <div class="p-classic_nav__team_header__team">
-                            <span class="p-classic_nav__team_header__team__name">
-                                Some Team
-                            </span>
+                            <span class="p-classic_nav__team_header__team__name" id="WorkspaceName"></span>
                             <button class="iconsVD-sideBar">
-                                <i class="material-icons">
+                                <i class="material-icons buttons-SideBar">
                                     keyboard_arrow_down
                                 </i>
                             </button>
                             <div class="p-classic_nav__team_header__team__dnd_container">
-                                <button class="iconsVD-sideBar">
-                                    <i class="material-icons" type="bell-o">
+                                <button class="iconsVD-sideBar" id="bellButton">
+                                    <i class="material-icons buttons-SideBar" type="bell-o">
                                         notifications_none
                                     </i>
                                 </button>
                             </div>
                         </div>
                         <div class="p-classic_nav__team_header__user">
-                            <i class="material-icons" style="border-radius: 2px; font-size: 15px; color: green;">
-                                fiber_manual_record
-                            </i>
+                            <i class="p-channel_sidebar__channel_icon_circle"
+                               style="top: -5px;">●</i>
                             <span class="p-classic_nav__team_header__user__name">
                                     <span class="p-classic_nav__team_header__user__name__truncate"
                                           id="WorkspaceUsername"></span>
@@ -593,19 +563,17 @@
                             </div>
                             <div class="p-classic_nav__model__title__info">
                                 <button class="p-classic_nav__model__title__info__star">
-                                    <i class="p-classic_nav__model__title__info__star__icon">☆</i>
+                                    <i class="material-icons" style="font-size: 18px; color: orange;">star</i>
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <button class="p-classic_nav__model__title__info__members">
-                                    <i class="p-classic_nav__model__title__info__members__icon">👨</i>
-                                    &nbsp;
-                                    -<!--                                                               Members Count-->
+                                    <i class="material-icons">people</i>
+                                    <i id="peopleInChat"></i>
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <button class="p-classic_nav__model__title__info__pins">
-                                    <i class="p-classic_nav__model__title__info__pins__icon">📍</i>
-                                    &nbsp;
-                                    -<!--                                                                  Pins Count-->
+                                    <i class="material-icons">flag</i>
+                                    <i id="flaggedItems"></i>
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <div class="p-classic_nav__model__title__info__item">
@@ -614,7 +582,7 @@
                                     <!--                                    </div>-->
                                     <div id="topic_string_block" class="p-classic_nav__model__title__info__topic__text">
                                         <span id="topic_string"
-                                              class="p-classic_nav__model__title__info__topic__content">Topic content</span>
+                                              class="p-classic_nav__model__title__info__topic__content"></span>
                                         <button id="topic_button" style="display: none;"
                                                 class="p-classic_nav__model__title__info__topic__edit">Edit
                                         </button>
@@ -624,14 +592,14 @@
                             </div>
                         </div>
                         <div class="p-classic_nav__model__buttons">
-                            <button class="p-classic_nav__model__button__call">
-                                <i class="p-classic_nav__model__button__call__icon">📞</i>
+                            <button class="iconsVD-sideBar" id="phoneButton">
+                                <i class="material-icons buttons-TopBar">phone</i>
                             </button>
-                            <button class="p-classic_nav__model__button__details">
-                                <i class="p-classic_nav__model__button__details__icon">ⓘ</i>
+                            <button class="iconsVD-sideBar" id="infoButton">
+                                <i class="material-icons buttons-TopBar">info</i>
                             </button>
-                            <button class="p-classic_nav__model__button__settings" id="settingsMenuButton">
-                                <i class="p-classic_nav__model__button__settings__icon">⚙</i>
+                            <button class="iconsVD-sideBar" id="settingsMenuButton">
+                                <i class="material-icons buttons-TopBar">settings</i>
                             </button>
                         </div>
                     </div>
@@ -651,7 +619,7 @@
                             </button>
                         </div>
                         <button class="p-classic_nav__right__star__button">
-                            <i class="p-classic_nav__right__star__icon">☆</i>
+                            <i style="font-size: 18px; color: orange;">☆</i>
                         </button>
                         <button class="p-classic_nav__right__more_items">
                             <i class="p-classic_nav__right__more_items__icon">⋮</i>
@@ -679,8 +647,9 @@
                                     <div class="p-channel_sidebar__list__scrollbar__hider">
                                         <div class="p-channel_sidebar__list__scrollbar__child">
                                             <div class="p-channel_sidebar__list__presentation-1"></div>
-                                            <div class="p-channel_sidebar__list__threads">
-                                                <button class="p-channel_sidebar__list__threads__button">
+                                            <div class="p-channel_sidebar__channel">
+                                                <button class="p-channel_sidebar__list__threads__button
+                                                                p-channel_sidebar__name_button">
                                                     <i class="p-channel_sidebar__list__threads__button__icon">≛</i>
                                                     &nbsp;
                                                     <span class="p-channel_sidebar__name-1">Threads</span>
@@ -713,7 +682,9 @@
                                                         Direct Messages
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                                data-toggle="modal" data-target="#addDirectMessageModal"
+                                                                id="addDirectMessage">✚
                                                         </button>
                                                     </div>
                                                 </div>
@@ -737,11 +708,8 @@
 
                                             <div class="p-channel_sidebar__direct-messages__container"
                                                  id="direct-messages__container_id">
-
                                             </div>
 
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
-                                            <!--ЛИЧКА!!!-->
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
@@ -979,7 +947,7 @@
                             </div>
                             <form id="form_message" style="height: 100%; width: 100%; text-align: center;">
                                 <input class="ql-editor__input-field" id="form_message_input"
-                                       placeholder="Заменить на динамический контент" minlength="1" maxlength="1200"
+                                       placeholder="Динам конт" minlength="1" maxlength="1200"
                                        type="text"/>
                             </form>
                         </div>
@@ -993,17 +961,18 @@
                         <div class="p-notification_bar"
                              style="height: min-content; width: 100%; position: absolute; bottom: 0; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
                             <button id="attach_file" class="iconsVD-messageBox" style="margin-left: 10px;">
-                                <i class="material-icons">attach_file</i>
+                                <i class="material-icons buttons-MessageBox">attach_file</i>
                             </button>
                             <button id="inputEmojiButton" class="iconsVD-messageBox">
-                                <i class="material-icons">mood</i>
+                                <i class="material-icons buttons-MessageBox">mood</i>
                             </button>
                             <button id="showAssociatedUsers" class="iconsVD-messageBox">
-                                <i class="material-icons">share</i>
+                                <i class="material-icons buttons-MessageBox">share</i>
                             </button>
-                            <button id="voiceMessageBtn" class="iconsVD-messageBox VoiceMessageButton" onclick="recording()"
+                            <button id="voiceMessageBtn" class="iconsVD-messageBox VoiceMessageButton"
+                                    onclick="recording()"
                                     style="align-items: center">
-                                <i class="material-icons">mic_none</i>
+                                <i class="material-icons buttons-MessageBox">mic_none</i>
                             </button>
                         </div>
                     </div>
@@ -1480,6 +1449,7 @@
     </div>
 </div>
 
+<!-- Add channel modal -->
 <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1506,6 +1476,28 @@
             <div class="modal-footer">
                 <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add direct message modal -->
+<div class="modal fade" id="addDirectMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle2">Direct Messages</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-check-inline">
+                        <input class="directMessageModal form-control" type="text" placeholder="Find or start a conversation">
+                        <button class="directMessageFindButton btn btn-dark" type="submit">Go</button>
+                    </div>
+                    <div id="DirectMessageTo">
+                    </div>
+                </form>
             </div>
         </div>
     </div>

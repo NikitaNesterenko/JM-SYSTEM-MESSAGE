@@ -38,6 +38,7 @@ export class MessageRestPaginationService extends RestPaginationService {
         const response = await fetch('/rest/api/messages/channel/' + id);
         return response.json();
     };
+
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
         const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
         return response.json();
@@ -140,13 +141,13 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 
     getChannelsByWorkspaceId = async (id) => {
-        const response = await fetch('/rest/api/channels/workspace/' + id)
+        const response = await fetch('/rest/api/channels/workspace/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getChannelByName = async (name) => {
-        const response = await fetch('/rest/api/channels/name/' + name)
+        const response = await fetch('/rest/api/channels/name/' + name);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -157,7 +158,7 @@ export class ChannelRestPaginationService extends RestPaginationService {
     };
 
     getChannelsByUserId = async (id) => {
-        const response = await fetch('/rest/api/channels/user/' + id)
+        const response = await fetch('/rest/api/channels/user/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -197,13 +198,28 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
         return response.json()
     };
 
-    setChoosedWorkspace = async (name) => {
-        const response = await fetch('/rest/api/workspaces/choosed/' + name);
+    setChosenWorkspace = async (name) => {
+        const response = await fetch('/rest/api/workspaces/chosen/' + name);
         return await response.json()
     };
 
-    getChoosedWorkspace = async () => {
-        const response = await fetch('/rest/api/workspaces/choosed');
+    getChosenWorkspace = async () => {
+        const response = await fetch('/rest/api/workspaces/chosen');
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+        if (response.ok) {
+            return await response.json();
+        }
+    };
+
+    setChosenChannel = async (id) => {
+        const response = await fetch('/rest/api/workspaces/chosen/' + id);
+        return await response.json()
+    };
+
+    getChosenChannel = async () => {
+        const response = await fetch('/rest/api/workspaces/chosen');
         if (response.redirected) {
             window.location.href = response.url;
         }
@@ -251,12 +267,13 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 export class StorageService {
 
     uploadFile = async (file) => {
-        const response = await fetch(`/upload`, {
+        return await fetch(`/uploadFile`, {
             method: 'POST',
             body: file
-        }).then(response => {return response.text()});
-        return response;
-    }
+        }).then(response => {
+            return response.text()
+        });
+    };
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
@@ -304,6 +321,7 @@ export class ThreadChannelMessageRestPaginationService extends  RestPaginationSe
         const response = await fetch('/rest/api/threads/messages/' + id);
         return response.json();
     };
+
     createThreadMsg = async (msg,user) => {
         const response = await fetch(`/rest/api/threads/messages/create`, {
             method: 'POST',
@@ -326,6 +344,11 @@ export class ConversationRestPaginationService extends RestPaginationService {
 
     getConversationForUsers = async (id_1, id_2) => {
         const response = await fetch(`/rest/api/conversations/users/${id_1}/${id_2}`);
+        return response.json();
+    };
+
+    deleteConversation = async (id) => {
+        const response = await fetch(`/rest/api/conversations/delete/${id}`);
         return response.json();
     };
 }

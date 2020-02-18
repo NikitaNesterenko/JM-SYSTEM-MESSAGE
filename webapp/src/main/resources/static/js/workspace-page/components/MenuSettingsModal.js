@@ -1,4 +1,4 @@
-import {ChannelRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -10,6 +10,7 @@ export class MenuSettingsModal {
         this.channel_service = new ChannelRestPaginationService();
         this.users_service = new UserRestPaginationService();
         this.settingBtn = $('#settingsMenuButton, .p-classic_nav__model__button__settings__icon');
+        // this.settingBtn = $('#settingsMenuButton .buttons-TopBar');
     }
 
     onMenuSettingsBtnClick() {

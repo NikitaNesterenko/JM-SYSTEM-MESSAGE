@@ -45,6 +45,15 @@ export class SubmitMessage {
             if (!hasCommand) {
 
                 const channel_name = sessionStorage.getItem("channelName");
+                const content =  $("#form_message_input").val();
+                if (content.startsWith('/leave ')) {
+                    let channelName = content.substring(7);
+                    this.leaveChannel(channelName);
+                    $("#form_message_input").val("");
+                    return
+                }
+
+                const channel_name = sessionStorage.getItem("channelId");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_name !== '0') {
@@ -96,18 +105,27 @@ export class SubmitMessage {
             $('#attached_file').html("");
             return files.name;
         }
+        return null;
+    }
 
+    async getVoiceMessage() {
         const audioInput = $("#audioInput");
         const src = audioInput.prop('src');
-        let blob = await fetch(src).then(r => r.blob());
 
-        if (blob !== undefined) {
-            const formData = new FormData();
-            let name = 'voiceMessage_' + generateUID() + '.mp3';
-            formData.append('file', blob, name);
-            await this.storage_service.uploadFile(formData);
+        if (src !== undefined) {
+
+            // let blob = await fetch(src).then(r => r.blob());
+            // const data = new FormData();
+            // let name = 'voiceMessage_' + generateUID() + '.mp3';
+            // data.append('file', blob, name);
+            // await this.storage_service.uploadFile(data);
+            // $('#inputMe').html("");
+            // return name;
+
+            let blob = await fetch(src).then(r => r.blob());
+            let text = await blob.text();
             $('#inputMe').html("");
-            return name;
+            return text;
         }
         return null;
 
@@ -124,18 +142,24 @@ export class SubmitMessage {
         await this.setChannel(channel_name);
         await this.setUser();
 
-        const content = this.getMessageInput();
-
-        const entity = {
+        let entity = {
             id: null,
             channelId: this.channel.id,
             userId: this.user.id,
             userName: this.user.name,
-            content: content,
+            content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
-            filename: await this.getFiles(),
+            filename: await this.getFiles(), //name
+            voiceMessage: await this.getVoiceMessage() //name
             recipientUserIds: users
         };
+
+
+        if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
+            this.message_service.create(entity).then(
+                message => sendName(message)
+            );
+        }
 
         if (window.hasSlashCommand) {
             await this.sendSlashCommand(entity);
@@ -205,24 +229,24 @@ export class SubmitMessage {
         )
     }
 
-    async setChannelByName(channelName) {
-        await this.channel_service.getChannelByName(channelName).then(
+    async setChannelByName(channelId) {
+        await this.channel_service.getChannelByName(channelId).then(
             channel => this.channel = channel
         )
     }
 
     async setWorkspace() {
-        await this.workspace_service.getChoosedWorkspace().then(
+        await this.workspace_service.getChosenWorkspace().then(
             workspace => this.workspace = workspace
         )
     }
 
     async leaveChannel(channelName) {
-        await this.setUser()
-        await this.setChannelByName(channelName)
-        await this.setWorkspace()
-        const channelUsers = this.channel.userIds
-        channelUsers.splice(channelUsers.indexOf(this.user.id), 1)
+        await this.setUser();
+        await this.setChannelByName(channelName);
+        await this.setWorkspace();
+        const channelUsers = this.channel.userIds;
+        channelUsers.splice(channelUsers.indexOf(this.user.id), 1);
 
         const entity = {
             id: this.channel.id,
@@ -257,8 +281,8 @@ export class SubmitMessage {
                                   </div>`
                         );
                 });
-                pressChannelButton(firstChannelId)
-                sessionStorage.setItem("channelName", firstChannelId);
+                pressChannelButton(firstChannelId);
+                sessionStorage.setItem("channelId", firstChannelId);
                 let channel_name = document.getElementById("channel_name_" + firstChannelId).textContent;
                 $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
                 sessionStorage.setItem('conversation_id', '0');

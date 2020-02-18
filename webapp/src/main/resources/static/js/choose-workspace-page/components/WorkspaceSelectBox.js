@@ -30,7 +30,7 @@ export class WorkspaceSelectBox {
     }
 
     selectWorkspace(workspace_name) {
-        this.workspaceService.setChoosedWorkspace(workspace_name).then(
+        this.workspaceService.setChosenWorkspace(workspace_name).then(
             response => {
                 if (response === true) {
                     window.location.href = '/workspace';

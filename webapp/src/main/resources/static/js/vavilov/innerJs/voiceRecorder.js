@@ -1,4 +1,9 @@
-//webkitURL is deprecated but nevertheless
+// import {
+//     ConversationRestPaginationService,
+//     UserRestPaginationService,
+//     WorkspaceRestPaginationService
+// } from "../../rest/entities-rest-pagination";
+
 URL = window.URL || window.webkitURL;
 
 let gumStream; 						//stream from getUserMedia()
@@ -8,13 +13,11 @@ let encodingType; 					//holds selected encoding for resulting audio (file)
 let encodeAfterRecord = true;       //when to encode
 let count = 0;						//count of pressing button for start/stop recording
 
-// shim for AudioContext when it's not avb. 
 let AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioContext; //new audio context to help us record
+let audioContext;
 
 function recording() {
-    if (count % 2 == 0) { //wtf js
-
+    if (count % 2 === 0) {
         document.getElementById("voiceMessageBtn").style.color="red";
         $('#inputMe').html("");
 
@@ -23,17 +26,13 @@ function recording() {
             console.log("getUserMedia() success, stream created, initializing WebAudioRecorder...");
 
             audioContext = new AudioContext();
-
-            //assign to gumStream for later use
             gumStream = stream;
 
-            /* use the stream */
             input = audioContext.createMediaStreamSource(stream);
 
             //stop the input from playing back through the speakers
             //input.connect(audioContext.destination)
 
-            //get the encoding
             encodingType = "mp3";
 
             recorder = new WebAudioRecorder(input, {
@@ -50,7 +49,7 @@ function recording() {
 
             recorder.onComplete = function (recorder, blob) {
                 console.log("Encoding complete");
-                createDownloadLink(blob);
+                buildAudio(blob);
             };
 
             recorder.setOptions({
@@ -82,7 +81,7 @@ function recording() {
     }
 }
 
-function createDownloadLink(blob) {
+function buildAudio(blob) {
 
     let url = URL.createObjectURL(blob);
     let au = document.createElement('audio');
@@ -93,3 +92,49 @@ function createDownloadLink(blob) {
 
     inputMe.appendChild(au);
 }
+
+// function rndFunc(id) {
+//     alert(" " + id);
+//     console.log(" " + id);
+//
+//     this.user_service = new UserRestPaginationService();
+//     this.conversation_service = new ConversationRestPaginationService();
+//     this.workspace_service = new WorkspaceRestPaginationService();
+//
+//     const principal = this.user_service.getLoggedUser();
+//     this.conversation_service.deleteConversation(id);
+//     this.conversation_service.deleteById(id);
+//     const conversations = this.conversation_service.getAllConversationsByUserId(principal.id);
+//     const workspace_id = this.workspace_service.getChosenWorkspace();
+//
+//     const direct_messages_container = $("#direct-messages__container_id");
+//     direct_messages_container.empty();
+//
+//     conversations.forEach((conversation, i) => {
+//         if (conversation.workspace.id === workspace_id.id) {
+//             const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel" ' +
+//                 'style="height: min-content; width: 100%;"></div>');
+//             conversation_queue_context_container.className = "p-channel_sidebar__channel";
+//             if (conversation.openingUser.id === principal.id) {
+//                 conversation_queue_context_container.append(messageChat(conversation.associatedUser, conversation.id));
+//             } else {
+//                 conversation_queue_context_container.append(messageChat(conversation.openingUser, conversation.id));
+//             }
+//             direct_messages_container.append(conversation_queue_context_container);
+//         }
+//     });
+//
+//     function messageChat(user, conversationId) {
+//         return `
+//             <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
+//                 <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">●</i>
+//                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
+//                     <span data-user_id="${user.id}">${user.name}</span>
+//                 </span>
+//             </button>
+//             <button class="p-channel_sidebar__close cross">
+//                 <i id="deleteDmButton" data-convId="" class="p-channel_sidebar__close__icon" onclick="rndFunc(${conversationId})">✖</i>
+//             </button>
+//         `;
+//     }
+// }

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Lob;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -29,6 +31,8 @@ public class MessageDTO {
     private LocalDateTime dateCreate;
 
     private String filename;
+
+    private String voiceMessage;
 
     private Boolean isDeleted = false;
 
@@ -53,11 +57,13 @@ public class MessageDTO {
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields
+
     public MessageDTO(Message message) {
         this.id = message.getId();
         this.content = message.getContent();
         this.dateCreate = message.getDateCreate();
         this.filename = message.getFilename();
+        this.voiceMessage = message.getVoiceMessage();
         this.isDeleted = message.getIsDeleted();
         this.channelId = message.getChannelId();
     }
@@ -70,4 +76,5 @@ public class MessageDTO {
         this.dateCreate = dateCreate;
         this.channelId = channelId;
     }
+
 }

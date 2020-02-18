@@ -10,10 +10,13 @@ import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
 import jm.model.User;
 import jm.model.Workspace;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -127,10 +130,10 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
-        return new ResponseEntity<>(workspaceService.gelAllWorkspaces(),HttpStatus.OK);
+        return new ResponseEntity<>(workspaceService.getAllWorkspaces(),HttpStatus.OK);
     }
 
-    @GetMapping("/choosed")
+    @GetMapping("/chosen")
     @Operation(summary = "Get choosed workspace",
             responses = {
                     @ApiResponse(responseCode = "200",
@@ -142,7 +145,7 @@ public class WorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "308", description = "PERMANENT_REDIRECT: unable to find workspace")
             })
-    public ResponseEntity<Workspace> getChoosedWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
        if(workspace==null) {
            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
@@ -150,13 +153,13 @@ public class WorkspaceRestController {
         return new ResponseEntity<>(workspace, HttpStatus.OK);
     }
 
-    @GetMapping("/choosed/{name}")
+    @GetMapping("/chosen/{name}")
     @Operation(summary = "Set choosed workspace",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: get workspace"),
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to find workspace")
             })
-    public ResponseEntity<Boolean> choosedWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
+    public ResponseEntity<Boolean> chosenWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
         Workspace workspace = workspaceService.getWorkspaceByName(name);
         if (workspace == null) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
@@ -167,7 +170,7 @@ public class WorkspaceRestController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
-        return choosedWorkspace(name, request);
+        return chosenWorkspace(name, request);
     }
 
     @GetMapping("/byLoggedUser")

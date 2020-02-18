@@ -85,13 +85,13 @@ public class ConversationRestController {
         }
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @GetMapping(value = "/delete/{conversationID}/{userID}")
     @Operation(summary = "Delete conversation",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: conversation deleted")
             })
-    public ResponseEntity<Conversation> deleteConversation(@PathVariable Long id) {
-        conversationService.deleteConversation(id);
+    public ResponseEntity<Conversation> deleteConversation(@PathVariable Long conversationID, @PathVariable Long userID) {
+        conversationService.deleteConversation(conversationID, userID);
         return ResponseEntity.ok().build();
     }
 
@@ -137,12 +137,10 @@ public class ConversationRestController {
                     )
             })
     public ResponseEntity<Conversation> getConversationByRespondents(
-            @PathVariable Long firstId, @PathVariable Long secondId
-    ) {
+            @PathVariable Long firstId, @PathVariable Long secondId) {
         return new ResponseEntity<Conversation>(
                 conversationService.getConversationByUsers(firstId, secondId),
                 HttpStatus.OK
         );
     }
-
 }
