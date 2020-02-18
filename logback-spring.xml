@@ -34,7 +34,7 @@
         <appender-ref ref="FILE"/>
     </logger>
 
-    <logger name="org.hibernate.SQL" level="ERROR" additivity="false">
+    <logger name="org.hibernate.SQL" level="WARNING" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 
