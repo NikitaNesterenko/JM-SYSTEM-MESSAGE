@@ -39,10 +39,4 @@ public class StorageController {
         String filename = storageService.store(file);
         return new ResponseEntity<>(filename, HttpStatus.OK);
     }
-
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleFileUpload(@RequestParam MultipartFile file) throws IOException {
-        String filename = storageService.store(file);
-        return new ResponseEntity<>(filename, HttpStatus.OK);
-    }
 }
