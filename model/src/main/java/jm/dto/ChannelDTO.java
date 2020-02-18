@@ -34,5 +34,5 @@ public class ChannelDTO {
 
     private String topic;
     private Boolean isArchived;
-    private Boolean isApp;
+
 }
