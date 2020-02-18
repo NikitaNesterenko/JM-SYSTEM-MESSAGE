@@ -26,7 +26,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
         }
     }
 
-  @Override
+    @Override
     public List<Workspace> getWorkspacesByOwnerId(Long ownerId) {
             return (List<Workspace>) entityManager.createNativeQuery("select * from workspaces where owner_id=?", Workspace.class)
                     .setParameter(1, ownerId)

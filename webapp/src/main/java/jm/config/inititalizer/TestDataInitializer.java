@@ -301,7 +301,6 @@ public class TestDataInitializer {
         channelGeneral.setIsPrivate(false);
         channelGeneral.setCreatedDate(LocalDateTime.now());
         channelGeneral.setWorkspace(workspaceList.get(0));
-        channelGeneral.setIsApp(false);
 
         channelDAO.persist(channelGeneral);
         this.channels.add(channelGeneral);
@@ -313,7 +312,6 @@ public class TestDataInitializer {
         channelRandom.setIsPrivate(false);
         channelRandom.setCreatedDate(LocalDateTime.now());
         channelRandom.setWorkspace(workspaceList.get(0));
-        channelRandom.setIsApp(false);
 
         channelDAO.persist(channelRandom);
         this.channels.add(channelRandom);
@@ -325,7 +323,6 @@ public class TestDataInitializer {
         channel3.setIsPrivate(true);
         channel3.setCreatedDate(LocalDateTime.now());
         channel3.setWorkspace(workspaceList.get(1));
-        channel3.setIsApp(false);
 
         channelDAO.persist(channel3);
         this.channels.add(channel3);
@@ -401,8 +398,6 @@ public class TestDataInitializer {
         workspace1.setUser(userJohn);
         workspace1.setIsPrivate(false);
         workspace1.setCreatedDate(LocalDateTime.now());
-        workspace1.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
-        workspace1.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace1);
         this.workspaces.add(workspace1);
@@ -413,8 +408,6 @@ public class TestDataInitializer {
         workspace2.setUser(userStepan);
         workspace2.setIsPrivate(true);
         workspace2.setCreatedDate(LocalDateTime.now());
-        workspace2.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
-        workspace2.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace2);
         this.workspaces.add(workspace2);
@@ -425,8 +418,6 @@ public class TestDataInitializer {
         workspace3.setUser(userJohn);
         workspace3.setIsPrivate(false);
         workspace3.setCreatedDate(LocalDateTime.now());
-        workspace3.setGoogleClientId("");
-        workspace3.setGoogleClientSecret("");
 
         workspaceDAO.persist(workspace3);
         this.workspaces.add(workspace3);
