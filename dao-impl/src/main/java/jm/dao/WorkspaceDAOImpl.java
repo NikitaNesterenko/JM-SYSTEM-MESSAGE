@@ -1,7 +1,6 @@
 package jm.dao;
 
 import jm.api.dao.WorkspaceDAO;
-import jm.model.User;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,22 +26,22 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
         }
     }
 
-    @Override
-    public List<Workspace> getWorkspacesByOwner(User user) {
+  @Override
+    public List<Workspace> getWorkspacesByOwnerId(Long ownerId) {
             return (List<Workspace>) entityManager.createNativeQuery("select * from workspaces where owner_id=?", Workspace.class)
-                    .setParameter(1, user.getId())
+                    .setParameter(1, ownerId)
                     .getResultList();
     }
 
     @Override
-    public List<Workspace> getWorkspacesByUser(User user) {
-            String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date, ws.google_client_id, ws.google_client_secret "
+    public List<Workspace> getWorkspacesByUserId(Long userId) {
+            String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
                     + "from workspaces ws "
                     + "right join workspace_user_role wur on ws.id = wur.workspace_id "
                     + "where wur.user_id = :userid "
                     + "group by ws.id";
             return entityManager.createNativeQuery(query, Workspace.class)
-                    .setParameter("userid", user.getId())
+                    .setParameter("userid", userId)
                     .getResultList();
     }
 }

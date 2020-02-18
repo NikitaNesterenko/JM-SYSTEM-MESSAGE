@@ -2,7 +2,6 @@ package jm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.dto.DirectMessageDTO;
-import jm.dto.MessageDTO;
 import jm.dto.ThreadMessageDTO;
 import jm.model.InputMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class MessagesController {
+
 
     @MessageMapping("/message")
     @SendTo("/topic/messages")

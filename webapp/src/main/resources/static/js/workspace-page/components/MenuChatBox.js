@@ -1,19 +1,38 @@
+import {SlashCommandRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+const commandService = new SlashCommandRestPaginationService();
+const workspaceService= new WorkspaceRestPaginationService();
+
 export class MenuChatBox {
-    allActions = ['invite', 'archive', 'join', 'leave', 'who'];
-    actionsArray;
+
+    actionsArray = [];
 
     constructor() {
+        //формируем список команд, доступных в данном воркспейсе
         this.input = $('#form_message_input');
+        window.getCommandsList = async () => {
+            window.allActions = [];
+            //запоминаем id выбранного workspace
+            await workspaceService.getChoosedWorkspace().then(workspace => {
+                window.choosedWorkspace = workspace.id
+            });
+            //получаем все команды для данного workspace и сохраняем их в глобальной переменной
+            window.currentCommands = await commandService.getSlashCommandsByWorkspace(window.choosedWorkspace);
+            window.currentCommands.forEach(command => {
+                window.allActions.push(command.name)
+            });
+            window.allActions = window.allActions.sort();
+            //обновляем окно списка команд
+            this.updateActionsArray(window.allActions);
+        }
     }
 
-    updateActionsArray() {
+    updateActionsArray(actions) {
         this.actionsArray = [];
-        this.allActions.forEach(e => this.addActionIfExist(e));
-
+        window.allActions.forEach(e => this.addActionIfExist(e));
     }
 
     addActionIfExist(action_name) {
-        if (action_name.startsWith(this.input.val().substr(1))) {
+        if (action_name.startsWith(this.input.val().substr(1, this.input.val().indexOf(" ") < 0 ? this.input.val().length - 1 : this.input.val().indexOf(" ") - 1 ))) {
             this.actionsArray.push(this.createActionElement(action_name));
         }
     }
