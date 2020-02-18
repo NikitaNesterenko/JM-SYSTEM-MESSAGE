@@ -7,7 +7,7 @@ import {DirectMessageView} from "./components/messages/DirectMessageView.js";
 import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+// import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -24,7 +24,7 @@ window.addEventListener('load', async () => {
     const thread_view = new ThreadMessageView();
     const chat = new DMView(direct_message_view);
     const channel_view = new ChannelView();
-    const channel = new ChannelRestPaginationService();
+    // const channel = new ChannelRestPaginationService();
 
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
