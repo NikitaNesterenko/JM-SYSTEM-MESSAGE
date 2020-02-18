@@ -14,7 +14,6 @@ import jm.dto.BotDtoService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
-import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -59,16 +58,14 @@ public class BotRestController {
                             description = "OK: get bot"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
-    public ResponseEntity<BotDTO> getBotByWorkspace(@PathVariable("id") Long id) {
-        Workspace workspace = workspaceService.getWorkspaceById(id);
-        Bot bot = botService.GetBotByWorkspaceId(workspace);
-        if (bot == null) {
-            logger.warn("Не удалось найти бота для workspace с id = {}", id);
+    public ResponseEntity<List<BotDTO>> getBotByWorkspace(@PathVariable("id") Long id) {
+        List<Bot> bots = botService.getBotsByWorkspaceId(id);
+        if (bots.isEmpty()) {
+            logger.warn("Не удалось найти ботов для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        logger.info("Бот для workspace c id = {}", id);
-        //logger.info(bot.toString());
-        return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
+        logger.info("Боты для workspace c id = {}", id);
+        return new ResponseEntity<>(botDtoService.toDto(bots), HttpStatus.OK);
     }
 
     // DTO compliant

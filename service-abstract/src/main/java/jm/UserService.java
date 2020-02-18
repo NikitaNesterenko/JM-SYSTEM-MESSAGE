@@ -20,6 +20,8 @@ public interface UserService {
 
     User getUserByLogin(String login);
 
+    User getUserByName(String name);
+
     User getUserByEmail(String email);
 
     List<User> getAllUsersInThisChannel(Long id);
