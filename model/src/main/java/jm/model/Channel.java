@@ -84,6 +84,9 @@ public class Channel {
     @Column(name = "topic")
     private String topic;
 
+    @Column(name = "isApp")
+    private Boolean isApp;
+
     public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
         this.name = name;
         this.users = users;
