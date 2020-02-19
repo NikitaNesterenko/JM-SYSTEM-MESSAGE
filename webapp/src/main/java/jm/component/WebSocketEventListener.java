@@ -46,7 +46,9 @@ public class WebSocketEventListener {
         if (login != null) {
             logger.info("User Disconnected : " + login);
             User currentUser = userService.getUserByLogin(login);
-            currentUser.setOnline(0);
+            if (currentUser.getOnline() != 0) {
+                currentUser.setOnline(0);
+            }
             userService.updateUser(currentUser);
             messagingTemplate.convertAndSend("/topic/user.status", userDtoService.toDto(currentUser));
         }
