@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface MessageService {
 
-    List<Message> getAllMessages();
+    List<Message> getAllMessages(Boolean isDeleted);
 
-    List<Message> getMessagesByChannelId(Long id);
+    List<Message> getMessagesByChannelId(Long id, Boolean isDeleted);
 
-    List<Message> getMessagesByContent(String word);
+    List<Message> getMessagesByContent(String word, Boolean isDeleted);
 
     Message getMessageById(Long id);
 
@@ -21,11 +21,13 @@ public interface MessageService {
 
     void updateMessage(Message message);
 
-    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate);
+    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
-    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
-    List<Message> getStarredMessagesForUser(Long id);
+    List<Message> getStarredMessagesForUser(Long id, Boolean isDeleted);
 
-    List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId);
+    List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted);
+
+    List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted);
 }

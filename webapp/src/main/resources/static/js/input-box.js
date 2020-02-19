@@ -1,23 +1,27 @@
 import {
-    UserRestPaginationService,
     ChannelRestPaginationService,
-    MessageRestPaginationService
-    , StorageService
+    MessageRestPaginationService,
+    StorageService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from './rest/entities-rest-pagination.js'
+import {WorkspaceRestPaginationService} from "./rest/entities-rest-pagination";
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
 const message_service = new MessageRestPaginationService();
 const storage_service = new StorageService();
+const workspace_service = new WorkspaceRestPaginationService();
 
 class Message {
-    constructor(id, channel, user, content, dateCreate, filename) {
+    constructor(id, channel, user, content, dateCreate, filename, workspaceId) {
         this.id = id;  // id нужно для редактирования сообщений
         this.channel = channel;
         this.user = user;
         this.content = content;
         this.dateCreate = dateCreate;
         this.filename = filename;
+        this.workspaceId = workspaceId;
     }
 }
 
@@ -49,12 +53,16 @@ $('#form_message').submit(function (e) {
             $("#file_selector").val("");
             $('#attached_file').html("");
         }
+
         Promise.all([filename]).then(files => {
-            const message = new Message(null, channel, user, text_message, currentDate, files[0]);
-            message_service.create(message).then(messageWithId => {
-                // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
-                // которое вставляется в HTML (см. messages.js).
-                sendName(messageWithId);
+            workspace_service.getChoosedWorkspace().then(workspace => {
+                const workspaceId = workspace.id;
+                const message = new Message(null, channel, user, text_message, currentDate, files[0], workspaceId);
+                message_service.create(message).then(messageWithId => {
+                    // Посылаем STOMP-клиенту именно возвращенное сообщение, так как оно содержит id,
+                    // которое вставляется в HTML (см. messages.js).
+                    sendName(messageWithId);
+                });
             });
         });
     });
