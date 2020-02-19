@@ -3,6 +3,7 @@ package jm;
 import jm.api.dao.BotDAO;
 import jm.model.Bot;
 import jm.model.Channel;
+import jm.model.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,16 @@ public class BotServiceImpl implements BotService {
     public Bot getBotById(Long id) { return botDAO.getById(id); }
 
     @Override
-    public Bot GetBotByWorkspaceId(Long workspaceId) {
-       return botDAO.getBotByWorkspaceId(workspaceId);
+    public List<Bot> getBotsByWorkspaceId(Long id) {
+        return botDAO.getBotsByWorkspaceId(id);
     }
 
     @Override
     public Set<Channel> getChannels(Bot bot) { return botDAO.getChannels(bot); }
+
+    @Override
+    public Bot getBotBySlashCommandId(Long id) {
+        return botDAO.getBotByCommandId(id);
+    }
+
 }

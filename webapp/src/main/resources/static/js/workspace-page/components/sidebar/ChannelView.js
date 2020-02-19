@@ -11,6 +11,7 @@ export class ChannelView {
         window.pressChannelButton = (id) => {
             window.channel_id = id;
             this.selectChannel(id);
+            sessionStorage.setItem('conversation_id', '0');
         }
     }
 
@@ -22,7 +23,8 @@ export class ChannelView {
 
     showAllChannels(workspace_id) {
         this.setLocalStorageSettings(0);
-        this.channel_service.getChannelsByWorkspaceId(workspace_id).then(
+        //берем каналы для конкретного пользователя и конкретного воркспейса
+        this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, this.loggedUser.id).then(
             channels => {
                 if (channels.length > 0) {
                     this.addChannels(channels);
@@ -39,9 +41,11 @@ export class ChannelView {
 
     showBots(workspace_id) {
         this.bot_service.getBotByWorkspaceId(workspace_id).then(
-            bot => {
-                if (bot !== undefined) {
-                    this.addBot(bot);
+            bots => {
+                if (bots !== undefined) {
+                    bots.forEach(bot => {
+                        this.addBot(bot);
+                    });
                 }
             }
         );
@@ -66,6 +70,7 @@ export class ChannelView {
     }
 
     addChannels(channels) {
+        $('#id-channel_sidebar__channels__list').empty(); //обнулдяем список каналов перед заполнением
         $.each(channels, (idx, chn) => {
             if (!chn.isArchived && this.checkPrivacy(chn)) {
                 if (this.default_channel === null) {
@@ -78,13 +83,25 @@ export class ChannelView {
 
     addChannelIntoSidebarChannelList(channel) {
         const chn_symbol = channel.isPrivate ? "🔒" : "#";
-        $('#id-channel_sidebar__channels__list').append(`
+
+        if (!channel.isApp) {
+            $('#id-channel_sidebar__channels__list').append(`
             <div class="p-channel_sidebar__channel">
                 <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
                     <i class="p-channel_sidebar__channel_icon_prefix">${chn_symbol}</i>
                     <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
                 </button>
             </div>`);
+        } else {
+            $('#id-app_sidebar__apps__list')
+                .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
+                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
+                                    </button>
+                                  </div>`
+                );
+        }
     }
 
     setChannelBGColor(channel) {
@@ -118,3 +135,18 @@ export class ChannelView {
         return (channel.isPrivate && this.loggedUser.id === channel.ownerId) || !channel.isPrivate;
     }
 }
+
+//удаление канала из списка каналов
+export const deleteChannelFromList = (targetChannelId) => {
+    document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
+        if (id.value == targetChannelId) {
+            //удаляем канал из списка
+            id.parentElement.remove();
+            //если удаляемый канал был активен, то выбираем первый канал в списке
+            if (window.channel_id == targetChannelId) {
+                window.pressChannelButton(document.querySelectorAll("[id^=channel_button_]").item(0).value)
+            }
+        }
+    })
+};
+

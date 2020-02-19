@@ -58,6 +58,7 @@ export class DMView {
             const channel_id = sessionStorage.getItem('channelName');
             if (channel_id !== null) {
                 sessionStorage.setItem('channelName', '0');
+                window.channel_id = 0; //нужно для того, чтобы не отображались вебсокетные сообщения бота из каналов в директах
             }
         } else {
             console.log('Principal and respondent ids are equal.')
