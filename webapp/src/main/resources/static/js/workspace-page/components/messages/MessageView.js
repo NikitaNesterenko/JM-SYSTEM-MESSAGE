@@ -62,15 +62,6 @@ export class MessageView {
                 await this.createSharedMessage(message);
             }
             this.dialog.messageBoxWrapper();
-            // if (!message.isDeleted) {
-            //     getMessageStatus(message);
-            //     if (message.sharedMessageId == null) {
-            //         this.createMessage(message);
-            //     } else {
-            //         await this.createSharedMessage(message);
-            //     }
-            //     this.dialog.messageBoxWrapper();
-            // }
         }
     }
 
