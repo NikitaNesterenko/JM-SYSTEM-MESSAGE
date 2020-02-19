@@ -25,11 +25,9 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebAppConfiguration
 @RunWith(SpringRunner.class)
@@ -77,7 +75,7 @@ public class MessageRestControllerTest {
         MessageDTO messageDTO1 = new MessageDTO(message1);
         MessageDTO messageDTO2 = new MessageDTO(message2);
 
-        when(messageServiceMock.getAllMessages()).thenReturn(messages);
+        when(messageServiceMock.getAllMessages(false)).thenReturn(messages);
         when(messageDtoServiceMock.toDto(messages)).thenReturn(Arrays.asList(messageDTO1, messageDTO2));
 
         mockMvc.perform(get(URL))
@@ -93,7 +91,7 @@ public class MessageRestControllerTest {
                 .andExpect(jsonPath("$[1].dateCreate", is("13.01.2020 13:56")))
                 .andExpect(jsonPath("$[1].channelId", is(messageDTO2.getChannelId().intValue())));
 
-        verify(messageServiceMock, times(1)).getAllMessages();
+        verify(messageServiceMock, times(1)).getAllMessages(false);
         verifyNoMoreInteractions(messageServiceMock);
     }
 

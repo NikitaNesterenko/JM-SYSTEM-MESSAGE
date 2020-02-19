@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.model.message.ThreadChannelMessage;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
@@ -34,15 +36,18 @@ public class ThreadMessageDTO {
 
     private String userAvatarUrl;
 
+    private Long workspaceId;
+
     public ThreadMessageDTO(ThreadChannelMessage message) {
         this.id = message.getId();
         this.content = message.getContent();
         this.dateCreate = message.getDateCreate();
         this.filename = message.getFilename();
         this.isDeleted = message.getIsDeleted();
+        this.workspaceId = message.getWorkspaceId();
     }
 
-    public ThreadMessageDTO(Long id, Long userId, String content, LocalDateTime dateCreate, Long parentMessageId, Boolean isDeleted, String userName) {
+    public ThreadMessageDTO(Long id, Long userId, String content, LocalDateTime dateCreate, Long parentMessageId, Boolean isDeleted, String userName, Long workspaceId) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -50,5 +55,6 @@ public class ThreadMessageDTO {
         this.parentMessageId = parentMessageId;
         this.isDeleted = isDeleted;
         this.userName = userName;
+        this.workspaceId = workspaceId;
     }
 }
