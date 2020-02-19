@@ -1,19 +1,15 @@
 import {
-    WorkspaceRestPaginationService,
-    UserRestPaginationService,
     ChannelRestPaginationService,
-    ChannelTopicRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
+    SlashCommandRestPaginationService,
     StorageService,
-    DirectMessagesRestController,
-    SlashCommandRestPaginationService
     UserRestPaginationService,
     WorkspaceRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
-import {users, clearUsers} from "/js/searchUsersOnInputMessages.js";
+import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
