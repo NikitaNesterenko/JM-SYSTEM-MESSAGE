@@ -87,9 +87,25 @@ export class MessageDialogView {
     }
 
     attachedVoiceMessage() {
-        const url = "../files/" + this.message.voiceMessage;
+
         if (this.message.voiceMessage !== null) {
+            let base64 = this.message.voiceMessage;
+            let arrayBuffer = base64ToArrayBuffer(base64);
+            let blob = new Blob([arrayBuffer], { type: 'audio/mpg' });
+            let url = URL.createObjectURL(blob);
+
+            function base64ToArrayBuffer(base64) {
+                let binaryString = window.atob(base64);
+                let len = binaryString.length;
+                let bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                return bytes.buffer;
+            }
+
             const msg = $(`#message_id-${this.message.id}`);
+
             msg.append(`<br>
                 <span class="c-message__attachment noselect">
                 <audio style="margin: 5px;" controls="" src="${url}" id="audioOutput" preload="auto"></audio>

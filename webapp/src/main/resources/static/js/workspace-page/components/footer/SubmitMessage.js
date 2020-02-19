@@ -95,28 +95,14 @@ export class SubmitMessage {
 
         if (src !== undefined) {
 
-            // let blob = await fetch(src).then(r => r.blob());
-            // const data = new FormData();
-            // let name = 'voiceMessage_' + generateUID() + '.mp3';
-            // data.append('file', blob, name);
-            // await this.storage_service.uploadFile(data);
-            // $('#inputMe').html("");
-            // return name;
-
             let blob = await fetch(src).then(r => r.blob());
-            let text = await blob.text();
+            let arrayBuffer = await blob.arrayBuffer();
+            let base64 = await btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
             $('#inputMe').html("");
-            return text;
+
+            return base64;
         }
         return null;
-
-        function generateUID() {
-            let firstPart = (Math.random() * 46656) | 0;
-            let secondPart = (Math.random() * 46656) | 0;
-            firstPart = ("000" + firstPart.toString(36)).slice(-3);
-            secondPart = ("000" + secondPart.toString(36)).slice(-3);
-            return firstPart + secondPart;
-        }
     }
 
     async sendChannelMessage(channel_name) {
