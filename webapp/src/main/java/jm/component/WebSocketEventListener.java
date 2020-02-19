@@ -17,26 +17,27 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class WebSocketEventListener {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private SimpMessageSendingOperations messagingTemplate;
-
-    @Autowired
     private UserDtoService userDtoService;
 
-
+    @Autowired
+    public WebSocketEventListener(UserService userService, SimpMessageSendingOperations messagingTemplate, UserDtoService userDtoService) {
+        this.userService = userService;
+        this.messagingTemplate = messagingTemplate;
+        this.userDtoService = userDtoService;
+    }
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         String login = event.getUser().getName();
         logger.info("Received a new web socket connection from user: " + login);
-        User currentUser = userService.getUserByLogin(login);
-        currentUser.setOnline(1);
-        userService.updateUser(currentUser);
-        messagingTemplate.convertAndSend("/topic/user.status", userDtoService.toDto(currentUser));
+        if (login != null) {
+            User currentUser = userService.getUserByLogin(login);
+            currentUser.setOnline(1);
+            userService.updateUser(currentUser);
+            messagingTemplate.convertAndSend("/topic/user.status", userDtoService.toDto(currentUser));
+        }
     }
 
     @EventListener
