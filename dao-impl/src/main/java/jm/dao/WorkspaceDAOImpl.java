@@ -38,7 +38,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     public List<Workspace> getWorkspacesByUserId(Long userId) {
 //        TODO сделать одним запросом
         List workspacesIds = entityManager.createNativeQuery("" +
-                "SELECT id " +
+                "SELECT workspace_id " +
                 "FROM workspace_user_role " +
                 "WHERE user_id = :userId")
                 .setParameter("userId", userId)
