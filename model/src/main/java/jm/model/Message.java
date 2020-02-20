@@ -1,7 +1,6 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.MessageDTO;
@@ -56,6 +55,9 @@ public class Message {
 //    @JoinColumn(name = "channel_id")
     @Column(name = "channel_id")
     private Long channelId;
+
+    @Column(name = "workspace_id")
+    private Long workspaceId;
 
     // from ChannelMessage
     @ManyToOne

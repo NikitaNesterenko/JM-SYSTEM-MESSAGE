@@ -1,21 +1,24 @@
 import {
-    UserRestPaginationService,
+    ThreadChannelMessageRestPaginationService,
     ThreadChannelRestPaginationService,
-    ThreadChannelMessageRestPaginationService
-} from '../rest/entities-rest-pagination.js'
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
+} from '../rest/entities-rest-pagination.js';
 
 const threadChannel_service = new ThreadChannelRestPaginationService();
 const threadChannelMessage_service = new ThreadChannelMessageRestPaginationService();
 const user_service = new UserRestPaginationService();
+const workspace_service = new WorkspaceRestPaginationService();
 
 class ThreadChannelMessage {
-    constructor(id, userId, userName, content, dateCreate, parentMessageId) {
+    constructor(id, userId, userName, content, dateCreate, parentMessageId, workspaceId) {
         this.id = id;  // id нужно для редактирования сообщений
         this.userId = userId;
         this.userName = userName;
         this.content = content;
         this.dateCreate = dateCreate;
         this.parentMessageId = parentMessageId;
+        this.workspaceId = workspaceId;
     }
 }
 
@@ -37,12 +40,19 @@ $(document).on('submit', '#form_thread-message', function (e) {
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
 
-        const threadChannelMessage = new ThreadChannelMessage(null, user.id, user.name, text_message, currentDate, threadChannel.message.id);
+        workspace_service.getChoosedWorkspace().then(workspace => {
 
-        threadChannelMessage_service.create(threadChannelMessage).then(messageWithId => {
-            window.thread_id = messageWithId.parentMessageId;
-            sendThread(messageWithId);
+            const workspaceId = workspace.id;
+
+            const threadChannelMessage = new ThreadChannelMessage(null, user.id, user.name, text_message, currentDate, threadChannel.message.id, workspaceId);
+
+            threadChannelMessage_service.create(threadChannelMessage).then(messageWithId => {
+                window.thread_id = messageWithId.parentMessageId;
+                sendThread(messageWithId);
+            });
         });
+
+
     });
     return false;
 });

@@ -201,7 +201,7 @@ public class BotRestController {
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusHours(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
@@ -220,7 +220,7 @@ public class BotRestController {
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusDays(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
@@ -239,7 +239,7 @@ public class BotRestController {
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
@@ -258,6 +258,6 @@ public class BotRestController {
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusMonths(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 }
