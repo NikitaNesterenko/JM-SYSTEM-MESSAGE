@@ -55,9 +55,7 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
         List<User> users = userService.getAllUsers();
-        for (User user : users) {
-            logger.info(user.toString());
-        }
+        users.stream().forEach(user -> logger.info(user.toString()));
         List<UserDTO> userDTOList = userDtoService.toDto(users);
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }

@@ -13,6 +13,8 @@ public interface MailService {
             String workspace,
             String inviteLink);
 
+    void sendInviteMessagesByTokenAndInvites(CreateWorkspaceToken createWorkspaceToken, String[] invites);
+
     CreateWorkspaceToken sendConfirmationCode(String emailTo);
 
     void sendRecoveryPasswordToken(User userTo);

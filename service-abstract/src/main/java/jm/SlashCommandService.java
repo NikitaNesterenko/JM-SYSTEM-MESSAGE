@@ -12,7 +12,7 @@ public interface SlashCommandService {
 
     void deleteSlashCommand(Long id);
 
-    void updateSlashCommand(SlashCommand slashCommand);
+    boolean updateSlashCommand(SlashCommand slashCommand);
 
     SlashCommand getSlashCommandById(Long id);
 

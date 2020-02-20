@@ -46,8 +46,6 @@ public class CreateWorkspaceRestController {
 
     private MailService mailService;
 
-    private WorkspaceUserRoleService workspaceUserRoleService;
-
     private WorkspaceService workspaceService;
 
     private ChannelService channelService;
@@ -58,7 +56,6 @@ public class CreateWorkspaceRestController {
 
    private UserDetailsServiceImpl userDetailsService;
 
-
     @Autowired
     public void setUserDetailsService( UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -67,11 +64,6 @@ public class CreateWorkspaceRestController {
     @Autowired
     public void setChannelService(ChannelService channelService) {
         this.channelService = channelService;
-    }
-
-    @Autowired
-    public void setWorkspaceUserRole(WorkspaceUserRoleService workspaceUserRoleService) {
-        this.workspaceUserRoleService = workspaceUserRoleService;
     }
 
     @Autowired
@@ -107,15 +99,10 @@ public class CreateWorkspaceRestController {
             })
     public ResponseEntity sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) throws NoSuchAlgorithmException {
         CreateWorkspaceToken token = mailService.sendConfirmationCode(emailTo);
-        token.setUserEmail(emailTo);
         request.getSession(false).setAttribute("token", token);
         createWorkspaceTokenService.createCreateWorkspaceToken(token);
         User user = userService.getUserByEmail(emailTo);
-        if(user == null) {
-
-            user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
-            userService.createUser(user);
-        }
+        if(user == null) {userService.createUserByEmail(emailTo);}
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -154,15 +141,7 @@ public class CreateWorkspaceRestController {
     public ResponseEntity workspaceName(@RequestBody String workspaceName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         token.setWorkspaceName(workspaceName);
-        createWorkspaceTokenService.updateCreateWorkspaceToken(token);
-        User emailUser = userService.getUserByLogin(token.getUserEmail());
-        users.add(emailUser);
-        Workspace workspace1 = new Workspace(workspaceName,users, emailUser,false, LocalDateTime.now());
-        workspaceService.createWorkspace(workspace1);
-        workspace1 = workspaceService.getWorkspaceByName(workspaceName);
-        Role ownerRole = new Role((long) 2, "ROLE_OWNER");
-        WorkspaceUserRole workSpaceUserRole = new WorkspaceUserRole(workspace1, emailUser, ownerRole);
-        workspaceUserRoleService.create(workSpaceUserRole);
+        workspaceService.createWorkspaceByToken(token);                  //создаем неприватный WS с владельцем из токена
         request.getSession(false).setAttribute("token", token);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -181,11 +160,8 @@ public class CreateWorkspaceRestController {
     public ResponseEntity channelName(@RequestBody String channelName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         token.setChannelname(channelName);
-        createWorkspaceTokenService.updateCreateWorkspaceToken(token);
-        Workspace workspace = workspaceService.getWorkspaceByName(token.getWorkspaceName());
+        channelService.createChannelByTokenAndUsers(token,users);
         request.getSession(false).setAttribute("token", token);
-        Channel channel = new Channel(channelName, users, userService.getUserByEmail(token.getUserEmail()), false, LocalDateTime.now(),workspace);
-        channelService.createChannel(channel);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -202,14 +178,7 @@ public class CreateWorkspaceRestController {
             })
     public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
-        for (int i = 0; i < invites.length; i++) {
-            mailService.sendInviteMessage(
-                    userService.getUserByEmail(token.getUserEmail()).getLogin(),
-                    token.getUserEmail(),
-                    invites[i],
-                    token.getWorkspaceName(),
-                    "http://localhost:8080/");
-        }
+        mailService.sendInviteMessagesByTokenAndInvites(token,invites);
         return new ResponseEntity(HttpStatus.OK);
     }
 

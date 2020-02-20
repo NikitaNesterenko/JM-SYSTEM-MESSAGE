@@ -54,13 +54,7 @@ public class SlashCommandRestController {
     @PutMapping("/update")
     public ResponseEntity<?> updateSlashCommand(SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
-        SlashCommand existCommand = slashCommandService.getSlashCommandById(sc.getId());
-        if (existCommand == null) {
-            logger.warn("slashcommand not found");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        logger.info("Existing command: {}", existCommand);
-        slashCommandService.updateSlashCommand(sc);
+        if (!slashCommandService.updateSlashCommand(sc)) {return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
         logger.info("Updated command: {}", sc);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -90,10 +84,10 @@ public class SlashCommandRestController {
         SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
         sc.setBot(bot);
         List<SlashCommand> slashCommands = slashCommandService.getSlashCommandsByBotId(id);
-
         if (slashCommands.stream().anyMatch(command -> command.getName().equals(sc.getName()))) {
             logger.warn("Slash command with name = {} already exist", sc.getName());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+
         } else {
             slashCommandService.createSlashCommand(sc);
             bot.getCommands().add(sc);

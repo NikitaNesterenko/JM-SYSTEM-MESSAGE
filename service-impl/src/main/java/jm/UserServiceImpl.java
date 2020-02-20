@@ -66,6 +66,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createUserByEmail(String email) {
+        User user = new User(email, email, email, email, email);
+        createUser(user);
+        return user;
+    }
+
+    @Override
     public List<User> getAllUsersInThisChannel(Long id) {
         return userDAO.getAllUsersInThisChannel(id);
     }

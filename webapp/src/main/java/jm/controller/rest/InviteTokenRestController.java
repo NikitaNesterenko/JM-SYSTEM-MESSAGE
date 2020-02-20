@@ -58,20 +58,18 @@ public class InviteTokenRestController {
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
         invites.stream()
-                .forEach(x -> {
-                    x.setHash(tokenGenerator.generate(charactersInHash));
-                    x.setWorkspace(workspace);
+                .forEach(inviteToken -> {
+                    inviteToken.setHash(tokenGenerator.generate(charactersInHash));
+                    inviteToken.setWorkspace(workspace);
+                    inviteTokenService.createInviteToken(inviteToken);
+                    mailService.sendInviteMessage(
+                            inviteToken.getFirstName(),
+                            inviteToken.getEmail(),
+                            inviteToken.getEmail(),
+                            workspace.getName(),
+                            url + inviteToken.getHash());
+
                 });
-
-        for (InviteToken invite : invites) {
-            inviteTokenService.createInviteToken(invite);
-            mailService.sendInviteMessage(invite.getFirstName()
-                    , invite.getEmail()
-                    , invite.getEmail()
-                    , workspace.getName()
-                    , url + invite.getHash());
-        }
-
         return ResponseEntity.ok(true);
     }
 

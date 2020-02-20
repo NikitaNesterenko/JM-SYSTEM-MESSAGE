@@ -73,14 +73,7 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel created")
             })
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
-        System.out.println("ТРЕД!");
-        messageDTO.setDateCreate(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDTO);
-//        Message message = new Message(messageDTO);
-        ThreadChannel threadChannel = new ThreadChannel(message);
-        System.out.println(threadChannel);
-        threadChannelService.createThreadChannel(threadChannel);
-        logger.info("Созданный тред : {}", threadChannel);
+        ThreadChannel threadChannel = threadChannelService.createThreadChannelByMessageDTO(messageDTO);
         return new ResponseEntity<>(threadChannel, HttpStatus.CREATED);
     }
 
@@ -96,7 +89,6 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel message created")
             })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
-        System.out.println("CREATE!!! - " + threadMessageDTO);
         ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
         return new ResponseEntity<>(threadMessageDtoService.toDto(threadChannelMessage), HttpStatus.CREATED);

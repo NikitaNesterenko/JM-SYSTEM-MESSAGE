@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -81,6 +82,17 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    public void sendInviteMessagesByTokenAndInvites(CreateWorkspaceToken createWorkspaceToken, String[] invites) {
+        Arrays.stream(invites)
+                .forEach(invite -> sendInviteMessage(
+                        userService.getUserByEmail(createWorkspaceToken.getUserEmail()).getLogin(),
+                        createWorkspaceToken.getUserEmail(),
+                        invite,
+                        createWorkspaceToken.getWorkspaceName(),
+                        "http://localhost:8080/"));
+    }
+
+    @Override
     public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
         int code  = (int) (Math.random() * 999999);
         String content = mailContentService.buildConfirmationCode(code);
@@ -97,8 +109,9 @@ public class MailServiceImpl implements MailService {
             logger.error("Sending confirmation code to " + emailTo + " failed");
             e.printStackTrace();
         }
-
-        return new CreateWorkspaceToken(code);
+        CreateWorkspaceToken token = new CreateWorkspaceToken(code);
+        token.setUserEmail(emailTo);
+        return token;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package jm;
 
+import jm.model.CreateWorkspaceToken;
 import jm.model.Workspace;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface WorkspaceService {
     List<Workspace> getWorkspacesByOwnerId(Long ownerId);
 
     List<Workspace> getWorkspacesByUserId(Long userId);
+
+    void createWorkspaceByToken(CreateWorkspaceToken createWorkspaceToken);
 
 }
