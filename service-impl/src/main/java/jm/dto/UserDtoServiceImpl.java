@@ -2,8 +2,8 @@ package jm.dto;
 
 import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
-import jm.model.User;
 import jm.model.Message;
+import jm.model.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -63,7 +63,7 @@ public class UserDtoServiceImpl implements UserDtoService {
         }
 
         // setting up 'starredMessages'
-        List<Message> starredMessagesList = messageDAO.getMessagesByIds(userDTO.getStarredMessageIds());
+        List<Message> starredMessagesList = messageDAO.getMessagesByIds(userDTO.getStarredMessageIds(), false);
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
 

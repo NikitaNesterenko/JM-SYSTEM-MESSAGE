@@ -1,6 +1,8 @@
 package jm.dto;
 
-import jm.api.dao.*;
+import jm.api.dao.ChannelDAO;
+import jm.api.dao.ConversationDAO;
+import jm.api.dao.UserDAO;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
@@ -92,6 +94,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         directMessageDTO.setDateCreate(directMessage.getDateCreate());
         directMessageDTO.setIsDeleted(directMessage.getIsDeleted());
         directMessageDTO.setFilename(directMessage.getFilename());
+        directMessageDTO.setWorkspaceId(directMessage.getWorkspaceId());
 
         return directMessageDTO;
     }
@@ -122,6 +125,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
         directMessage.setRecipientUsers(new HashSet<>(recipientUsers));
         directMessage.setFilename(directMessageDTO.getFilename());
+        directMessage.setWorkspaceId(directMessageDTO.getWorkspaceId());
 
         return directMessage;
     }

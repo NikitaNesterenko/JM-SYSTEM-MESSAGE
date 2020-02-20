@@ -55,15 +55,13 @@ export class MessageView {
             if (hasPlugin) {
                 continue;
             }
-            if (!message.isDeleted) {
-                getMessageStatus(message);
-                if (message.sharedMessageId == null) {
-                    this.createMessage(message);
-                } else {
-                    await this.createSharedMessage(message);
-                }
-                this.dialog.messageBoxWrapper();
+            getMessageStatus(message);
+            if (message.sharedMessageId == null) {
+                this.createMessage(message);
+            } else {
+                await this.createSharedMessage(message);
             }
+            this.dialog.messageBoxWrapper();
         }
     }
 

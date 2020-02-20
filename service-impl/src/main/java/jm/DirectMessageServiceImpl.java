@@ -40,7 +40,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     @Override
-    public List<DirectMessage> getMessagesByConversationId(Long id) {
-        return this.directMessageDAO.getMessagesByConversationId(id);
+    public List<DirectMessage> getMessagesByConversationId(Long id, Boolean isDeleted) {
+        return this.directMessageDAO.getMessagesByConversationId(id, isDeleted);
     }
 }
