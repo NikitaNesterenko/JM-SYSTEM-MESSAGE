@@ -25,7 +25,6 @@ public class MailServiceImpl implements MailService {
 
     private JavaMailSender emailSender;
     private MailContentService mailContentService;
-    private TokenGenerator tokenGenerator;
     private InviteTokenService inviteTokenService;
     private WorkspaceService workspaceService;
     private UserService userService;
@@ -53,7 +52,6 @@ public class MailServiceImpl implements MailService {
         this.urlSiteRecoveryPassword = urlSiteRecoveryPassword;
         this.charactersInHash = charactersInHash;
         this.emailSenderValue = emailSenderValue;
-        this.tokenGenerator = new TokenGenerator.TokenGeneratorBuilder().useDigits(true).useLower(true).build();
     }
 
     @Override
@@ -107,8 +105,7 @@ public class MailServiceImpl implements MailService {
 
         InviteToken inviteToken = new InviteToken();
         inviteToken.setEmail(userTo.getEmail());
-        inviteToken.setHash(
-                tokenGenerator.generate(charactersInHash));
+        inviteToken.setHash(UuidGenerator.createStringUUID());
 
         //workspace нужен только для создания токена
         List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUserId(userTo.getId());

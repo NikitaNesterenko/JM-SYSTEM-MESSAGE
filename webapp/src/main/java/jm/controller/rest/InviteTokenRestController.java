@@ -7,8 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.InviteTokenService;
 import jm.MailService;
-import jm.TokenGenerator;
 import jm.UserService;
+import jm.UuidGenerator;
 import jm.model.InviteToken;
 import jm.model.Workspace;
 import org.slf4j.Logger;
@@ -27,7 +27,6 @@ public class InviteTokenRestController {
 
     private UserService userService;
     private InviteTokenService inviteTokenService;
-    private TokenGenerator tokenGenerator;
     private MailService mailService;
 
 
@@ -38,7 +37,6 @@ public class InviteTokenRestController {
         this.inviteTokenService = inviteTokenService;
         this.userService = userService;
         this.mailService = mailService;
-        tokenGenerator = new TokenGenerator.TokenGeneratorBuilder().useDigits(true).useLower(true).build();
     }
 
     @PostMapping("/create")
@@ -59,7 +57,7 @@ public class InviteTokenRestController {
 
         invites.stream()
                 .forEach(x -> {
-                    x.setHash(tokenGenerator.generate(charactersInHash));
+                    x.setHash(UuidGenerator.createStringUUID());
                     x.setWorkspace(workspace);
                 });
 
