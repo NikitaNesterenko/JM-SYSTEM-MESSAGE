@@ -13,9 +13,7 @@ export class ActiveChatMembers {
     }
 
     async populateDirectMessages() {
-        const principal = await this.user_service.getLoggedUser().then(user => {
-            this.conversation_service.getAllConversationsByUserId(user.id).then(this.workspace_service.getChosenWorkspace())
-        });
+        const principal = await this.user_service.getLoggedUser();
         const conversations = await this.conversation_service.getAllConversationsByUserId(principal.id);
         const workspace_id = await this.workspace_service.getChosenWorkspace();
 
