@@ -1,6 +1,7 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.WorkspaceDTO;
@@ -41,9 +42,23 @@ public class Workspace {
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels;
 
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "workspaces_apps",
+            joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "app_id"))
+    private Set<Apps> apps;
+
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
     private User user;
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "workspaces_bots", joinColumns = @JoinColumn(name = "workspace_id"),
+            inverseJoinColumns = @JoinColumn(name = "bot_id"))
+    @ToString.Exclude
+    private Set<Bot> bots;
 
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate;
@@ -54,12 +69,27 @@ public class Workspace {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
+    @Column(name = "google_client_id")
+    private String googleClientId;
+
+    @Column(name = "google_client_secret")
+    private String googleClientSecret;
+
     public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
+    }
+    public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, String googleClientId, String googleClientSecret) {
+        this.name = name;
+        this.users = users;
+        this.user = user;
+        this.isPrivate = isPrivate;
+        this.createdDate = createdDate;
+        this.googleClientId = googleClientId;
+        this.googleClientSecret = googleClientSecret;
     }
 
     // Constructor for simplify WorkspaceDTO->Workspace conversion.

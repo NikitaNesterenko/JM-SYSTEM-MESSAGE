@@ -1,5 +1,6 @@
 package jm.dto;
 
+import jm.MessageService;
 import jm.api.dao.ThreadChannelDAO;
 import jm.api.dao.UserDAO;
 import jm.model.ThreadChannel;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
     private UserDAO userDAO;
     private ThreadChannelDAO threadChannelDAO;
+    private MessageService messageService;;
 
     @Autowired
     public void setUserDAO(UserDAO userDAO) {
@@ -25,6 +27,11 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
     @Autowired
     public void setThreadChannelDAO(ThreadChannelDAO threadChannelDAO) {
         this.threadChannelDAO = threadChannelDAO;
+    }
+
+    @Autowired
+    public void setMessageService(MessageService messageService){
+        this.messageService = messageService;
     }
 
     @Override
@@ -39,7 +46,7 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         threadMessageDTO.setUserId(user.getId());
         threadMessageDTO.setUserName(user.getName());
         threadMessageDTO.setUserAvatarUrl(user.getAvatarURL());
-        threadMessageDTO.setParentMessageId(threadChannel.getMessage().getId());
+        threadMessageDTO.setWorkspaceId(threadChannel.getMessage().getWorkspaceId());
 
         return threadMessageDTO;
     }
@@ -73,6 +80,8 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         threadChannelMessage.setFilename(threadMessageDTO.getFilename());
         threadChannelMessage.setIsDeleted(threadMessageDTO.getIsDeleted());
         threadChannelMessage.setThreadChannel(threadChannel);
+        threadChannelMessage.setParentMessage(messageService.getMessageById(threadMessageDTO.getParentMessageId()));
+        threadChannelMessage.setWorkspaceId(threadMessageDTO.getWorkspaceId());
 
         return threadChannelMessage;
     }

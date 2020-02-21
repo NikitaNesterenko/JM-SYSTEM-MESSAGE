@@ -1,8 +1,14 @@
-import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 import {Command} from "/js/workspace-page/components/footer/Command.js";
 import {is_open, populateRightPaneActivity} from "/js/activities/view_activities.js";
 
+import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessage.js"
+import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
+import { showInviteModalOnWorkspace, addNewEmailLineIntoInviteModal } from "/js/invite.js";
+import { deleteChannelFromList } from "/js/workspace-page/components/sidebar/ChannelView.js";
+
 export class StompClient {
+
+
 
     constructor(channel_message_view, thread_view, direct_message_view, channel_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
@@ -10,6 +16,7 @@ export class StompClient {
         this.thread_view = thread_view;
         this.dm_view = direct_message_view;
         this.channelview = channel_view;
+        this.sm = new SubmitMessage();
 
         this.commands = new Command();
 
@@ -18,6 +25,7 @@ export class StompClient {
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
         window.sendChannelTopicChange = (id,topic) => this.sendChannelTopicChange(id,topic);
+        window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message); //вебсокет дефолтного бота
     }
 
     connect() {
@@ -28,6 +36,7 @@ export class StompClient {
             this.subscribeThread();
             this.subscribeDirectMessage();
             this.subscribeChannelChangeTopic();
+            this.subscribeSlackBot();
         });
     }
 
@@ -35,7 +44,7 @@ export class StompClient {
         this.stompClient.subscribe('/topic/messages', async (message) => {
             let result = JSON.parse(message.body);
             result['content'] = result.inputMassage;
-            if (result.userId != null && !result.isDeleted) {
+            if ((result.userId != null || result.botId != null) && !result.isDeleted) {
                 if (result.channelId === channel_id) {
                     if (result.isUpdated) {
                         this.channel_message_view.updateMessage(result);
@@ -62,10 +71,133 @@ export class StompClient {
         });
     }
 
+    subscribeSlackBot() {
+        this.stompClient.subscribe("/topic/slackbot", (data) => {
+            const slackBot = JSON.parse(data.body);
+            const {userId, channelId, status, command} = slackBot;
+            const isAuthor = userId == window.loggedUserId;
+            const isOk = status === "OK";
+            const report = JSON.parse(slackBot.report);
+            //временное сообщение о некотрректности команды
+            if (status === "ERROR" && isAuthor) {
+                this.showMessageInCurrentChannel(report);
+            }
+            if (command === "topic") {
+                //смена топика канала
+                if (isOk && isAuthor && window.channel_id == channelId) {
+                    document.querySelector("#topic_string").textContent = slackBot.topic;
+                    this.showMessageInCurrentChannel(report)
+                }
+            } else if (command === "leave"){
+                if (isAuthor) {
+                    if (isOk) {
+                        //обновление списка каналов у пользователя, покинувшего канал
+                        deleteChannelFromList(slackBot.targetChannelId);
+                    }
+                } else if (window.channel_id == report.channelId) {
+                    //сообщение в нужном канале других пользователей о том, что пользователь покинул канал
+                    this.showMessageInCurrentChannel(report);
+                }
+            } else if (command === "join" || command === "open") {
+                if (isOk) {
+                    //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
+                    if (isAuthor) {
+                        this.channelview.showAllChannels(window.choosedWorkspace);
+                        setTimeout(function() {
+                            window.pressChannelButton(slackBot.targetChannelId);
+                            },1000);
+                    } else {
+                        //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
+                        if (!(report.content === "") && (report.channelId == window.channel_id)) {
+                            this.showMessageInCurrentChannel(report);
+                        }
+                    }
+                }
+            } else if (command === "shrug") {
+                if (window.channel_id == report.channelId) {
+                    this.showMessageInCurrentChannel(report);
+                }
+            } else if (command === "invite") {
+                if (isOk) {
+                    if (JSON.parse(slackBot.targets).includes(window.loggedUserId)) { //проверка. пригласили ли нового пользователя
+                        if (!this.isChannelPresentInChannelsList(JSON.parse(slackBot.channel).id)) {
+                            this.channelview.addChannelIntoSidebarChannelList(JSON.parse(slackBot.channel));
+                            this.channel_message_view.dialog.messageBoxWrapper();
+                        }
+                    } if (JSON.parse(slackBot.channel).id == window.channel_id) {
+                        this.showMessageInCurrentChannel(report);
+                    }
+                }
+            } else if (command === "who") {
+                if (isOk && isAuthor) {
+                    this.showMessageInCurrentChannel(report);
+                }
+            } else if (command === "kick" || command === "remove") {
+                if (isOk) {
+                    if (JSON.parse(slackBot.kickedUsersIds).includes(window.loggedUserId)) {
+                        deleteChannelFromList(channelId)
+                    } else {
+                        this.showMessageInCurrentChannel(report);
+                    }
+                }
+            } else if (command === "msg") {
+                if (isOk && slackBot.targetChannelId == window.channel_id) {
+                    this.showMessageInCurrentChannel(report);
+                }
+            } else if (command === "dm") {
+                if (isOk) {
+                    if (slackBot.conversationId == parseInt(sessionStorage.getItem('conversation_id'))) {
+                        this.channel_message_view.createMessage(report);
+                    } if (isAuthor || window.loggedUserId == slackBot.targetUserId) {
+                        if (true) {
+                            const dm_chat = new ActiveChatMembers();
+                            dm_chat.populateDirectMessages();
+                        }
+                    }
+                }
+            } else if (command === "rename") {
+                if (isOk) {
+                    if (channelId == window.channel_id) {
+                        document.querySelector(".p-classic_nav__model__title__info__name").textContent = slackBot.newChannelName;
+                        this.showMessageInCurrentChannel(report);
+                    }
+                }
+                if (this.isChannelPresentInChannelsList(slackBot.targetChannelId)) {
+                    document.querySelector(`#channel_name_${slackBot.targetChannelId}`).textContent = slackBot.newChannelName;
+                }
+            } else if (command === "archive") {
+                if (isOk && channelId == window.channel_id) {
+                    this.showMessageInCurrentChannel(report);
+                }
+            } else if (command === "invite_people") {
+                if (isOk && isAuthor) {
+                    JSON.parse(slackBot.usersList).forEach((email, idx) => {
+                        if (idx > 0) {
+                            addNewEmailLineIntoInviteModal(email)
+                        } else {
+                            document.querySelectorAll('#inviteEmail_').item(0).value = email;
+                        }
+                    });
+                    showInviteModalOnWorkspace();
+                }
+            }
+        })
+    }
+
     subscribeChannel() {
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
-            this.channelview.addChannelIntoSidebarChannelList(chn);
+            if (chn.userIds.includes(window.loggedUserId)) { //проверка, является ли пользолватель членом канала
+                let isPresent = false;
+                document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
+                    if (id.value == chn.id) {
+                        isPresent = true;
+                    }
+                })
+                if (!isPresent) {
+                    this.channelview.addChannelIntoSidebarChannelList(chn);
+                }
+            }
         });
     }
 
@@ -113,6 +245,7 @@ export class StompClient {
             'isDeleted': message.isDeleted,
             'dateCreate': message.dateCreate,
             'parentMessageId': message.parentMessageId,
+            'workspaceId': message.workspaceId
         }))
     }
 
@@ -128,7 +261,9 @@ export class StompClient {
             'userAvatarUrl': message.userAvatarUrl,
             'filename': message.filename,
             'sharedMessageId': message.sharedMessageId,
-            'conversationId': message.conversationId
+            'conversationId': message.conversationId,
+            'parentMessageId': message.parentMessageId,
+            'workspaceId': message.workspaceId
         };
 
         this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
@@ -150,7 +285,8 @@ export class StompClient {
             'filename': message.filename,
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
-            'channelName': message.channelName
+            'channelName': message.channelName,
+            'workspaceId': message.workspaceId
         };
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));
@@ -170,5 +306,44 @@ export class StompClient {
             console.log(channel.body);
             document.querySelector("#topic_string").textContent = chn.topic;
         });
+
+    sendSlackBotCommand(message) {
+        let entity = {
+            'id': message.id,
+            'inputMassage': message.content,
+            'command': message.command,
+            'isDeleted': message.isDeleted,
+            'isUpdated': message.isUpdated,
+            'dateCreate': message.dateCreate,
+            'userId': message.userId,
+            'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
+            'botId': message.botId,
+            'botNickName': message.botNickName,
+            'filename': message.filename,
+            'sharedMessageId': message.sharedMessageId,
+            'channelId': message.channelId,
+            'channelName': message.channelName,
+            'name': message.name
+        };
+
+        this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
+    }
+
+    //отобразить сообщение из вебсокета в текущем канале
+    showMessageInCurrentChannel(message) {
+        this.channel_message_view.createMessage(message);
+        this.channel_message_view.dialog.messageBoxWrapper();
+    }
+
+    //проверка, присутствует ли канал в списке каналов пользователя
+    isChannelPresentInChannelsList(chn_id) {
+        let isPresent = false;
+        document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
+            if (id.value == chn_id) {
+                isPresent = true;
+            }
+        });
+        return isPresent;
     }
 }

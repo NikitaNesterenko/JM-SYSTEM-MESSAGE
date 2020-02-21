@@ -11,5 +11,5 @@ public interface DirectMessageService {
     DirectMessage updateDirectMessage(DirectMessage directMessage);
     void deleteDirectMessage(Long id);
 
-    List<DirectMessage> getMessagesByConversationId(Long id);
+    List<DirectMessage> getMessagesByConversationId(Long id, Boolean isDeleted);
 }
