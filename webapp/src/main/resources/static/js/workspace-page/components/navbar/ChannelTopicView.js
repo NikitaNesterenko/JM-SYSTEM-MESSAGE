@@ -54,9 +54,6 @@ export class ChannelTopicView {
         if (newTopic != null) {
             this.channel_topic_service.updateChannelTopic(this.channel_id, newTopic).then(chn_topic => {
                 $("#topic_string").text(this.checkTopic(chn_topic));
-                console.log(this.channel_id);
-                console.log(newTopic);
-                sendChannelTopicChange(this.channel_id,newTopic);
             });
         }
     }
