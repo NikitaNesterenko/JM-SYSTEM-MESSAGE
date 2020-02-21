@@ -1,4 +1,5 @@
 package jm.dto;
+
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DirectMessageDTO extends MessageDTO {
+
     private Long conversationId;
     private Set<User> starredByWhom;
 
@@ -18,6 +20,4 @@ public class DirectMessageDTO extends MessageDTO {
         this.conversationId = directMessage.getConversation().getId();
         this.starredByWhom = directMessage.getStarredByWhom();
     }
-
-
 }

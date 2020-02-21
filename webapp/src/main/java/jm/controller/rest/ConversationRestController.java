@@ -91,7 +91,7 @@ public class ConversationRestController {
                     @ApiResponse(responseCode = "200", description = "OK: conversation deleted")
             })
     public ResponseEntity<Conversation> deleteConversation(@PathVariable Long conversationID, @PathVariable Long userID) {
-        conversationService.deleteConversation(conversationID, userID);
+        conversationService.deleteById(conversationID, userID);
         return ResponseEntity.ok().build();
     }
 

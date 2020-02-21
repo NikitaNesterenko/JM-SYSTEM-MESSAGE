@@ -346,7 +346,7 @@ export class ConversationRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-    deleteConversation = async (conversationId, userId) => {
+    deleteById = async (conversationId, userId) => {
         const response = await fetch(`/rest/api/conversations/delete/${conversationId}/${userId}`);
         return response.json();
     };

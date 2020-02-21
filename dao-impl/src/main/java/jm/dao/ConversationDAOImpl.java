@@ -50,8 +50,8 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     }
 
     @Override
-    public void deleteById(Long conversationID, Long userID) {
-        entityManager.createNativeQuery(
+    public int deleteById(Long conversationID, Long userID) {
+         return entityManager.createNativeQuery(
                 "UPDATE conversations " +
                 "SET " +
                 "    show_for_opener = IF(opener_id = ?, false, true), " +

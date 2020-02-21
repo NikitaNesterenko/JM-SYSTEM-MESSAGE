@@ -11,7 +11,7 @@ public interface ConversationDAO {
 
     void persist(Conversation conversation);
 
-    void deleteById(Long conversationID, Long userID);
+    int deleteById(Long conversationID, Long userID);
 
     Conversation merge(Conversation conversation);
 

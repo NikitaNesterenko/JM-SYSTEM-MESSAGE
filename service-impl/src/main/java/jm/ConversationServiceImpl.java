@@ -30,8 +30,8 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public void deleteConversation(Long conversationID, Long userID) {
-        conversationDAO.deleteById(conversationID, userID);
+    public int deleteById(Long conversationID, Long userID) {
+        return conversationDAO.deleteById(conversationID, userID);
     }
 
     @Override

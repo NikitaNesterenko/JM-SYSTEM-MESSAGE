@@ -11,7 +11,7 @@ public interface ConversationService {
 
     void createConversation(Conversation conversation);
 
-    void deleteConversation(Long conversationID, Long userID);
+    int deleteById(Long conversationID, Long userID);
 
     Conversation updateConversation(Conversation conversation);
 
