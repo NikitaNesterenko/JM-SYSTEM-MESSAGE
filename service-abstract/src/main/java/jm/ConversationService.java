@@ -17,7 +17,7 @@ public interface ConversationService {
 
     Conversation getConversationById(Long id);
 
-    Conversation getConversationByUsers(Long firstUserId, Long secondUserId);
+    Conversation getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
 

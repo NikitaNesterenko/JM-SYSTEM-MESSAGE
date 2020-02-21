@@ -139,7 +139,7 @@ public class ConversationRestController {
     public ResponseEntity<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
         return new ResponseEntity<Conversation>(
-                conversationService.getConversationByUsers(firstId, secondId),
+                conversationService.getConversationByUsersId(firstId, secondId),
                 HttpStatus.OK
         );
     }
