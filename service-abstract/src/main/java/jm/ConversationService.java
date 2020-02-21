@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ConversationService {
 
-    List<Conversation> gelAllConversations();
+    List<Conversation> getAllConversations();
 
     void createConversation(Conversation conversation);
 

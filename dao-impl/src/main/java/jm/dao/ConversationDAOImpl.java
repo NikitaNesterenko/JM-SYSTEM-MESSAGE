@@ -51,12 +51,12 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public void deleteById(Long conversationID, Long userID) {
-        entityManager.createNativeQuery("" +
-                "UPDATE conversations\n" +
-                "SET\n" +
-                "    show_for_opener = IF(opener_id = ?, false, true),\n" +
-                "    show_for_associated = IF(associated_id = ?, false, true)\n" +
-                "WHERE id = ?", Conversation.class)
+        entityManager.createNativeQuery(
+                "UPDATE conversations " +
+                "SET " +
+                "    show_for_opener = IF(opener_id = ?, false, true), " +
+                "    show_for_associated = IF(associated_id = ?, false, true) " +
+                "WHERE id = ?")
                 .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
     }
 }

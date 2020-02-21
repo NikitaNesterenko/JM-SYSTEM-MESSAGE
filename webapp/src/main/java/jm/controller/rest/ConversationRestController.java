@@ -107,7 +107,7 @@ public class ConversationRestController {
                     )
             })
     public ResponseEntity<List<Conversation>> getAllConversations() {
-        return ResponseEntity.ok(conversationService.gelAllConversations());
+        return ResponseEntity.ok(conversationService.getAllConversations());
     }
 
     @GetMapping(value = "/user/{id}")

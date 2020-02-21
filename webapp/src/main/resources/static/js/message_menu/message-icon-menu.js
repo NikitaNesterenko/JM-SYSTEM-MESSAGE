@@ -45,7 +45,7 @@ $(document).on('click', '[id^=deleteDmButton]', async function (e) {
 
     let conversation_id = $(e.target).data('conversationid');
     const principal = await user_service.getLoggedUser();
-    const deleted = await conversation_service.deleteConversation(conversation_id, principal.id);
+    await conversation_service.deleteConversation(conversation_id, principal.id);
     const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
     const workspace_id = await workspace_service.getChosenWorkspace();
     const direct_messages_container = $("#direct-messages__container_id");

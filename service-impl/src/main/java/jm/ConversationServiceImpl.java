@@ -20,7 +20,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public List<Conversation> gelAllConversations() {
+    public List<Conversation> getAllConversations() {
         return conversationDAO.getAll();
     }
 

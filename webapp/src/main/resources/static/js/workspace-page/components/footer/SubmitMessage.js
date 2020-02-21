@@ -158,14 +158,14 @@ export class SubmitMessage {
             );
         }
 
-        if (window.hasSlashCommand) {
-            await this.sendSlashCommand(entity);
-        } else {
-            await this.message_service.create(entity).then(
-                msg_id => sendName(msg_id)
-            );
-        }
-        clearUsers();
+        // if (window.hasSlashCommand) {
+        //     await this.sendSlashCommand(entity);
+        // } else {
+        //     await this.message_service.create(entity).then(
+        //         msg_id => sendName(msg_id)
+        //     );
+        // }
+        // clearUsers();
     }
 
     async sendSlashCommand(entity) {

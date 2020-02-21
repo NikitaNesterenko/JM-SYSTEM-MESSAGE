@@ -54,7 +54,6 @@ export class MessageRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-        // messages from all channels where user is member
     getMessagesFromChannelsForUser = async (id) => {
         const response = await fetch(`/rest/api/messages/user/${id}`);
         return response.json();
@@ -109,7 +108,7 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify(command)
-        })
+        });
         return await response.json()
             .catch(err => console.log(err.status));
     }
@@ -342,13 +341,13 @@ export class ConversationRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-    getConversationForUsers = async (id_1, id_2) => {
-        const response = await fetch(`/rest/api/conversations/users/${id_1}/${id_2}`);
+    getConversationForUsers = async (firstId, secondId) => {
+        const response = await fetch(`/rest/api/conversations/users/${firstId}/${secondId}`);
         return response.json();
     };
 
-    deleteConversation = async (id) => {
-        const response = await fetch(`/rest/api/conversations/delete/${id}`);
+    deleteConversation = async (conversationId, userId) => {
+        const response = await fetch(`/rest/api/conversations/delete/${conversationId}/${userId}`);
         return response.json();
     };
 }
