@@ -84,7 +84,7 @@ export class MenuSettingsModal {
     onAddPeopleToChannelBtnClick() {
         $('#addBtn').click(() => {
             let name = $('#tags').val();
-            this.workspace_service.getChoosedWorkspace().then(
+            this.workspace_service.getChosenWorkspace().then(
                 workspace => {
                     this.users_service.getUsersByWorkspace(workspace.id).then(
                         usersByWorkspace => {
@@ -110,7 +110,7 @@ export class MenuSettingsModal {
         $("#tags").on("keyup", (event) => {
             let usersByWorkspaceArr = [];
             let usersByChannelArr = [];
-            this.workspace_service.getChoosedWorkspace().then(
+            this.workspace_service.getChosenWorkspace().then(
                 workspace => {
                     this.users_service.getUsersByWorkspace(workspace.id).then(
                         usersByWorkspace => {

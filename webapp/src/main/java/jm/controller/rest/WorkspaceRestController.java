@@ -134,7 +134,7 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/chosen")
-    @Operation(summary = "Get choosed workspace",
+    @Operation(summary = "Get chosen workspace",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -154,7 +154,7 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/chosen/{name}")
-    @Operation(summary = "Set choosed workspace",
+    @Operation(summary = "Set chosen workspace",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: get workspace"),
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to find workspace")

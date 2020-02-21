@@ -103,7 +103,7 @@ export class StompClient {
                 if (isOk) {
                     //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
                     if (isAuthor) {
-                        this.channelview.showAllChannels(window.choosedWorkspace);
+                        this.channelview.showAllChannels(window.chosenWorkspace);
                         setTimeout(function() {
                             window.pressChannelButton(slackBot.targetChannelId);
                             },1000);

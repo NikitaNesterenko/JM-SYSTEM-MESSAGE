@@ -159,7 +159,7 @@ window.showEvents = function showEvents(response) {
 
 $("#google-calendar-button").click(
     async function () {
-        current_wks = await workspace_service.getChoosedWorkspace();
+        current_wks = await workspace_service.getChosenWorkspace();
         if (!(current_wks.googleClientId) || !(current_wks.googleClientSecret)) {
             $("#addGoogleCalendarIdSecretModal").modal('toggle')
         } else {
@@ -171,7 +171,7 @@ $("#google-calendar-button").click(
 
 $("#addGoogleCalendarIdSecretSubmit").click(
     async function () {
-        current_wks = await workspace_service.getChoosedWorkspace();
+        current_wks = await workspace_service.getChosenWorkspace();
         let  googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
         let googleCalendarClientSecret = $("#InputGoogleCalendarClientSecret").val();
         const entity = {
