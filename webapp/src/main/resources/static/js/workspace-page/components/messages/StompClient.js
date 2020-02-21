@@ -279,7 +279,6 @@ export class StompClient {
         };
 
         this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
-
     }
 
     sendName(message) {
