@@ -36,7 +36,6 @@ export class SubmitMessage {
     }
 
     onMessageSubmit() {
-
         $("#form_message").submit(async (event) => {
             event.preventDefault();
             const hasCommand = await this.checkCommand();
@@ -112,7 +111,6 @@ export class SubmitMessage {
         const src = audioInput.prop('src');
 
         if (src !== undefined) {
-
             // let blob = await fetch(src).then(r => r.blob());
             // const data = new FormData();
             // let name = 'voiceMessage_' + generateUID() + '.mp3';
@@ -154,7 +152,6 @@ export class SubmitMessage {
             workspaceId: this.channel.workspaceId
     };
 
-
         if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
             this.message_service.create(entity).then(
                 message => sendName(message)
@@ -194,8 +191,6 @@ export class SubmitMessage {
         }
     }
 
-
-
     async sendDirectMessage(conversation_id) {
         await this.setUser();
         const workspaceId = await this.workspace_service.getChosenWorkspace().then(workspace => workspace.id);
@@ -216,7 +211,6 @@ export class SubmitMessage {
                 sendDM(msg_id);
             }
         );
-
     }
 
     async setUser() {
