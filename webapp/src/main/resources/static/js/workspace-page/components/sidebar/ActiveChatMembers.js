@@ -38,7 +38,7 @@ export class ActiveChatMembers {
     messageChat(user, conversationId) {
         return `
             <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
-                <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">●</i>
+                <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">${user.online == 1 ? "●" : "○"}</i>
                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
                     <span data-user_id="${user.id}">${user.name}</span>
                 </span>
