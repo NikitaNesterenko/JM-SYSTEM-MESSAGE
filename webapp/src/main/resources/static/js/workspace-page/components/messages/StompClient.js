@@ -37,6 +37,7 @@ export class StompClient {
             this.subscribeDirectMessage();
             this.subscribeChannelChangeTopic();
             this.subscribeSlackBot();
+            this.subscribeUserStatus();
         });
     }
 
@@ -181,6 +182,17 @@ export class StompClient {
                     showInviteModalOnWorkspace();
                 }
             }
+        })
+    }
+
+    subscribeUserStatus() {
+        this.stompClient.subscribe('/topic/user.status', (data) => {
+            const user = JSON.parse(data.body);
+            document.querySelectorAll(".p-channel_sidebar__channel_icon_circle.pb-0").forEach(item => {
+                if (item.dataset.user_id == user.id) {
+                    item.textContent = user.online == 1 ? "●" : "○";
+                }
+            })
         })
     }
 
