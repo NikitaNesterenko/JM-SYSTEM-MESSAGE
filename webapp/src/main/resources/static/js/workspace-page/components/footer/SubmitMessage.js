@@ -5,9 +5,7 @@ import {
     DirectMessagesRestController,
     MessageRestPaginationService,
     SlashCommandRestPaginationService,
-    StorageService,
-    UserRestPaginationService,
-    WorkspaceRestPaginationService
+    StorageService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
@@ -45,7 +43,7 @@ export class SubmitMessage {
             window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
 
-                const channel_name = sessionStorage.getItem("channelName");
+                // const channelName = sessionStorage.getItem("channelName");
                 const content =  $("#form_message_input").val();
                 if (content.startsWith('/leave ')) {
                     let channelName = content.substring(7);
@@ -150,8 +148,8 @@ export class SubmitMessage {
             userName: this.user.name,
             content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
-            filename: await this.getFiles(), //name
-            voiceMessage: await this.getVoiceMessage() //name
+            filename: await this.getFiles(),
+            voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
             workspaceId: this.channel.workspaceId
     };
@@ -266,8 +264,8 @@ export class SubmitMessage {
             $(".p-channel_sidebar__channels__list").html('');
             this.renewChannels(this.workspace.id,this.user.id)
         })
-
     }
+
     async renewChannels(workspace_id,user_id) {
         await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id,user_id).then(
             channels => {

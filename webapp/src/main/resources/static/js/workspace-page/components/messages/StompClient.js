@@ -308,6 +308,7 @@ export class StompClient {
             console.log(channel.body);
             document.querySelector("#topic_string").textContent = chn.topic;
         });
+    }
 
     sendSlackBotCommand(message) {
         let entity = {
