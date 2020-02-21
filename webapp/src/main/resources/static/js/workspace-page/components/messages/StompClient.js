@@ -1,4 +1,3 @@
-import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 import {Command} from "/js/workspace-page/components/footer/Command.js";
 import {is_open, populateRightPaneActivity} from "/js/activities/view_activities.js";
 
@@ -25,6 +24,7 @@ export class StompClient {
         window.sendChannel = (channel) => this.sendChannel(channel);
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
+        window.sendChannelTopicChange = (id,topic) => this.sendChannelTopicChange(id,topic);
         window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message); //вебсокет дефолтного бота
     }
 
@@ -36,6 +36,7 @@ export class StompClient {
             this.subscribeChannel();
             this.subscribeThread();
             this.subscribeDirectMessage();
+            this.subscribeChannelChangeTopic();
             this.subscribeSlackBot();
         });
     }
@@ -245,6 +246,7 @@ export class StompClient {
             'isDeleted': message.isDeleted,
             'dateCreate': message.dateCreate,
             'parentMessageId': message.parentMessageId,
+            'workspaceId': message.workspaceId
         }))
     }
 
@@ -260,7 +262,9 @@ export class StompClient {
             'userAvatarUrl': message.userAvatarUrl,
             'filename': message.filename,
             'sharedMessageId': message.sharedMessageId,
-            'conversationId': message.conversationId
+            'conversationId': message.conversationId,
+            'parentMessageId': message.parentMessageId,
+            'workspaceId': message.workspaceId
         };
 
         this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
@@ -283,11 +287,27 @@ export class StompClient {
             'voiceMessage': message.voiceMessage,
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
-            'channelName': message.channelName
+            'channelName': message.channelName,
+            'workspaceId': message.workspaceId
         };
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));
     }
+
+    //посылаем сообщение на смену канала
+    sendChannelTopicChange(id,topic){
+        this.stompClient.send('/app/channel.changeTopic', {}, JSON.stringify({
+            'id': id,
+            'topic': topic
+        }));
+    }
+    //подписка на смену топика текущего канала
+    subscribeChannelChangeTopic() {
+        this.stompClient.subscribe('/topic/channel.changeTopic', (channel) => {
+            const chn = JSON.parse(channel.body);
+            console.log(channel.body);
+            document.querySelector("#topic_string").textContent = chn.topic;
+        });
 
     sendSlackBotCommand(message) {
         let entity = {

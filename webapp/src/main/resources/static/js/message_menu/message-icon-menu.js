@@ -1,8 +1,7 @@
 import {
-    MessageRestPaginationService,
+    ChannelRestPaginationService,MessageRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService,
-    ChannelRestPaginationService
+    WorkspaceRestPaginationService
 } from "../rest/entities-rest-pagination.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 import {ConversationRestPaginationService} from "../rest/entities-rest-pagination.js";
@@ -158,16 +157,13 @@ let populateRightPane = (user) => {
             });
             user_service.getLoggedUser()
                 .then((user) => {
-                    message_service.getStarredMessagesForUser(user.id)
+                    message_service.getStarredMessagesForUser(user.id, currentWorkspaceId)
                         .then((messages) => {
                             if (messages.length !== 0) {
                                 messages.forEach((message, i) => {
                                     //в списке избранных сообщений показываем только те,
-                                    // которые соответствуют выбранному workspace
-                                    if (curWorkspaceChannels.find(id => id === message.channelId)) {
-                                        const time = message.dateCreate.split(' ')[1];
-                                        target_element.append(add_msg_to_right_panel(message));
-                                    }
+                                    // которые соответствуют текущему workspace
+                                    target_element.append(add_msg_to_right_panel(message));
                                 });
                             } else {
                                 target_element.append(add_empty_content_to_right_panel());

@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 class MessageServiceImplTest {
@@ -53,44 +55,44 @@ class MessageServiceImplTest {
     @Test
     public void getAllMessagesInList() {
         when(messageDAO.getAll()).thenReturn(messages);
-        assertEquals(messageService.getAllMessages(), messages);
+        assertEquals(messageService.getAllMessages(any()), messages);
         verify(messageDAO).getAll();
     }
 
     @Test
     public void getAllMessagesInListWasNull() {
         when(messageDAO.getAll()).thenReturn(null);
-        assertNull(messageService.getAllMessages());
+        assertNull(messageService.getAllMessages(any()));
         verify(messageDAO).getAll();
     }
 
     @Test
     public void getMessagesByChannelIdInList() {
-        when(messageDAO.getMessagesByChannelId(1L)).thenReturn(messages);
-        assertEquals(messageService.getMessagesByChannelId(1L), messages);
-        verify(messageDAO).getMessagesByChannelId(1L);
+        when(messageDAO.getMessagesByChannelId(1L, any())).thenReturn(messages);
+        assertEquals(messageService.getMessagesByChannelId(1L, any()), messages);
+        verify(messageDAO).getMessagesByChannelId(1L, any());
     }
 
     @Test
     public void getMessagesByChannelIdInListWasNull() {
-        when(messageDAO.getMessagesByChannelId(any())).thenReturn(null);
-        assertNull(messageService.getMessagesByChannelId(1L));
-        verify(messageDAO).getMessagesByChannelId(any());
+        when(messageDAO.getMessagesByChannelId(any(), any())).thenReturn(null);
+        assertNull(messageService.getMessagesByChannelId(1L, any()));
+        verify(messageDAO).getMessagesByChannelId(any(), any());
     }
 
     @Test
     public void getMessagesByContentInList() {
-        when(messageDAO.getMessageByContent("user")).thenReturn(messages);
-        assertEquals(messageService.getMessagesByContent("user"), messages);
-        verify(messageDAO).getMessageByContent("user");
+        when(messageDAO.getMessageByContent("user", any())).thenReturn(messages);
+        assertEquals(messageService.getMessagesByContent("user", any()), messages);
+        verify(messageDAO).getMessageByContent("user", any());
     }
 
     @Test
     public void getMessagesByContentInListWasNull() {
         List<Message> messages = null;
-        when(messageDAO.getMessageByContent("user")).thenReturn(null);
-        assertNull(messageService.getMessagesByContent("user"));
-        verify(messageDAO).getMessageByContent("user");
+        when(messageDAO.getMessageByContent("user", any())).thenReturn(null);
+        assertNull(messageService.getMessagesByContent("user", any()));
+        verify(messageDAO).getMessageByContent("user", any());
     }
 
     @Test
@@ -110,30 +112,30 @@ class MessageServiceImplTest {
     //
     @Test
     public void getMessagesByChannelIdForPeriodInList() {
-        when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any())).thenReturn(messages);
-        assertEquals(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now()), messages);
-        verify(messageDAO).getMessagesByChannelIdForPeriod(any(), any(), any());
+        when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any(), any())).thenReturn(messages);
+        assertEquals(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now(), any()), messages);
+        verify(messageDAO).getMessagesByChannelIdForPeriod(any(), any(), any(), any());
     }
 
     @Test
     public void getMessagesByChannelIdForPeriodInListWasNull() {
-        when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any())).thenReturn(null);
-        assertNull(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now()));
-        verify(messageDAO).getMessagesByChannelIdForPeriod(any(), any(), any());
+        when(messageDAO.getMessagesByChannelIdForPeriod(any(), any(), any(), any())).thenReturn(null);
+        assertNull(messageService.getMessagesByChannelIdForPeriod(1L, LocalDateTime.now(), LocalDateTime.now(), any()));
+        verify(messageDAO).getMessagesByChannelIdForPeriod(any(), any(), any(), any());
     }
 
     @Test
     public void getMessagesByBotIdByChannelIdForPeriod() {
-        when(messageDAO.getMessagesByBotIdByChannelIdForPeriod(any(),any(), any(), any())).thenReturn(messages);
-        assertEquals(messageService.getMessagesByBotIdByChannelIdForPeriod(1L,1L, LocalDateTime.now(), LocalDateTime.now()), messages);
-        verify(messageDAO).getMessagesByBotIdByChannelIdForPeriod(any(),any(), any(), any());
+        when(messageDAO.getMessagesByBotIdByChannelIdForPeriod(any(),any(), any(), any(), any())).thenReturn(messages);
+        assertEquals(messageService.getMessagesByBotIdByChannelIdForPeriod(1L,1L, LocalDateTime.now(), LocalDateTime.now(), any()), messages);
+        verify(messageDAO).getMessagesByBotIdByChannelIdForPeriod(any(),any(), any(), any(), any());
     }
 
     @Test
     public void getStarredMessagesForUser() {
-        when(messageDAO.getStarredMessagesForUser(any())).thenReturn(messages);
-        assertEquals(messageService.getStarredMessagesForUser(1L), messages);
-        verify(messageDAO).getStarredMessagesForUser(any());
+        when(messageDAO.getStarredMessagesForUser(any(), any())).thenReturn(messages);
+        assertEquals(messageService.getStarredMessagesForUser(1L, any()), messages);
+        verify(messageDAO).getStarredMessagesForUser(any(), any());
     }
 
     @Test

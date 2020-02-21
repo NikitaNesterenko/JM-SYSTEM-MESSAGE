@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.DirectMessageService;
 import jm.dto.BotDTO;
@@ -123,7 +122,7 @@ public class DirectMessageRestController {
                     )
             })
     public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
-        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id);
+        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
         messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
         return new ResponseEntity<>(directMessageDtoService.toDto(messages), HttpStatus.OK);
     }

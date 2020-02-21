@@ -44,8 +44,8 @@ export class MessageRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-    getStarredMessagesForUser = async (id) => {
-        const response = await fetch(`/rest/api/messages/${id}/starred`);
+    getStarredMessagesForUser = async (id, workspaceId) => {
+        const response = await fetch(`/rest/api/messages/${id}/${workspaceId}/starred`);
         return response.json();
     };
 

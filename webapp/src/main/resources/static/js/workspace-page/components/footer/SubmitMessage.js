@@ -2,15 +2,16 @@ import {
     WorkspaceRestPaginationService,
     UserRestPaginationService,
     ChannelRestPaginationService,
-    ChannelTopicRestPaginationService,
-    MessageRestPaginationService,
-    StorageService,
     DirectMessagesRestController,
-    SlashCommandRestPaginationService
+    MessageRestPaginationService,
+    SlashCommandRestPaginationService,
+    StorageService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
-import {users, clearUsers} from "/js/searchUsersOnInputMessages.js";
+import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -151,8 +152,9 @@ export class SubmitMessage {
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(), //name
             voiceMessage: await this.getVoiceMessage() //name
-            recipientUserIds: users
-        };
+            recipientUserIds: users,
+            workspaceId: this.channel.workspaceId
+    };
 
 
         if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
@@ -198,6 +200,7 @@ export class SubmitMessage {
 
     async sendDirectMessage(conversation_id) {
         await this.setUser();
+        const workspaceId = await this.workspace_service.getChosenWorkspace().then(workspace => workspace.id);
 
         const entity = {
             id: null,
@@ -206,7 +209,8 @@ export class SubmitMessage {
             content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
-            conversationId: conversation_id
+            conversationId: conversation_id,
+            workspaceId: workspaceId
         };
 
         this.direct_message_service.create(entity).then(
@@ -259,7 +263,7 @@ export class SubmitMessage {
         };
 
         await this.channel_service.update(entity).then(() => {
-            $(".p-channel_sidebar__channels__list").html('')
+            $(".p-channel_sidebar__channels__list").html('');
             this.renewChannels(this.workspace.id,this.user.id)
         })
 
@@ -282,7 +286,7 @@ export class SubmitMessage {
                         );
                 });
                 pressChannelButton(firstChannelId);
-                sessionStorage.setItem("channelId", firstChannelId);
+                sessionStorage.setItem("channelName", firstChannelId);
                 let channel_name = document.getElementById("channel_name_" + firstChannelId).textContent;
                 $(".p-classic_nav__model__title__info__name").html("").text(channel_name);
                 sessionStorage.setItem('conversation_id', '0');

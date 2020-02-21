@@ -40,6 +40,8 @@ public class MessageDTO {
 
     private Long channelId;
 
+    private Long workspaceId;
+
     private Long sharedMessageId;
 
     private Set<Long> recipientUserIds;
@@ -66,15 +68,17 @@ public class MessageDTO {
         this.voiceMessage = message.getVoiceMessage();
         this.isDeleted = message.getIsDeleted();
         this.channelId = message.getChannelId();
+        this.workspaceId = message.getWorkspaceId();
     }
 
     // For test only
-    public MessageDTO(Long id, Long channelId, Long userId, String content, LocalDateTime dateCreate) {
+    public MessageDTO(Long id, Long channelId, Long workspaceId, Long userId, String content, LocalDateTime dateCreate) {
         this.id = id;
         this.userId = userId;
         this.content = content;
         this.dateCreate = dateCreate;
         this.channelId = channelId;
+        this.workspaceId = workspaceId;
     }
 
 }

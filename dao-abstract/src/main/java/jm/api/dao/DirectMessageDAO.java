@@ -16,5 +16,5 @@ public interface DirectMessageDAO {
 
     void deleteById(Long id);
 
-    List<DirectMessage> getMessagesByConversationId(Long id);
+    List<DirectMessage> getMessagesByConversationId(Long id, Boolean isDeleted);
 }

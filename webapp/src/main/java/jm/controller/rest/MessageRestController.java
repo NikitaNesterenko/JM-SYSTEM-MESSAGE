@@ -4,19 +4,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MessageService;
-import jm.dto.BotDTO;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
 import jm.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -52,7 +48,7 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessages() {
         logger.info("Список сообщений : ");
-        List<Message> messages = messageService.getAllMessages();
+        List<Message> messages = messageService.getAllMessages(false);
         for (Message message : messages) {
             logger.info(message.toString());
         }
@@ -73,7 +69,7 @@ public class MessageRestController {
                     )
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
-        List<Message> messages = messageService.getMessagesByChannelId(id);
+        List<Message> messages = messageService.getMessagesByChannelId(id, false);
         messages.sort(Comparator.comparing(Message::getDateCreate));
         logger.info("Полученные сообщения из канала с id = {} :", id);
         for (Message message : messages) {
@@ -113,8 +109,10 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id, @PathVariable("startDate") String startDate, @PathVariable("endDate") String endDate) {
-        List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now());
+    public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id,
+                                                                            @PathVariable("startDate") String startDate,
+                                                                            @PathVariable("endDate") String endDate) {
+        List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now(), false);
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
@@ -181,7 +179,7 @@ public class MessageRestController {
     }
 
     // DTO compliant
-    @GetMapping("/{id}/starred")
+    @GetMapping("/{userId}/{workspaceId}/starred")
     @Operation(summary = "Get starred messages",
             responses = {
                     @ApiResponse(responseCode = "200",
@@ -192,8 +190,8 @@ public class MessageRestController {
                             description = "OK: get stared messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long id) {
-        List<Message> starredMessages = messageService.getStarredMessagesForUser(id);
+    public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long userId, @PathVariable Long workspaceId) {
+        List<Message> starredMessages = messageService.getStarredMessagesForUserByWorkspaceId(userId, workspaceId, false);
         logger.info("Сообщения, отмеченные пользователем.");
         return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
     }
@@ -201,9 +199,9 @@ public class MessageRestController {
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<List<Message>> getMessagesFromChannelsForUser(@PathVariable("id") Long userId) {
         logger.info("Список сообщений для юзера от всех @channel: ");
-        for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId)) {
+        for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false)) {
             logger.info(message.toString());
         }
-        return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false), HttpStatus.OK);
     }
 }
