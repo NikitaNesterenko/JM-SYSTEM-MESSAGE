@@ -82,7 +82,8 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
-        int code  = (int) (Math.random() * 999999);
+        int code = (int) (Math.random() * 999999);
+
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -90,6 +91,7 @@ public class MailServiceImpl implements MailService {
             messageHelper.setSubject("Confirmation code");
             messageHelper.setText(content, true);
         };
+
         try {
             emailSender.send(messagePreparator);
             logger.info("Sending confirmation code to " + emailTo + " was successful");
@@ -129,20 +131,20 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public boolean changePasswordUserByToken(String token, String password) {
-            String[] split = token.split("/");
+        String[] split = token.split("/");
 
-            InviteToken byHash = inviteTokenService.getByHash(split[4]);
-            LocalDateTime validDateCreate = byHash.getDateCreate().plusHours(validPasswordHours);
-            LocalDateTime now = LocalDateTime.now();
+        InviteToken byHash = inviteTokenService.getByHash(split[4]);
+        LocalDateTime validDateCreate = byHash.getDateCreate().plusHours(validPasswordHours);
+        LocalDateTime now = LocalDateTime.now();
 
-            if (validDateCreate.isAfter(now)) {
-                User userByEmail = userService.getUserByEmail(byHash.getEmail());
-                userByEmail.setPassword(password);
-                userService.updateUser(userByEmail);
-                inviteTokenService.deleteInviteToken(byHash.getId());
-                logger.info("Восстановление пароля пользователя с id = {}", userByEmail.getId());
-                return true;
-            }
+        if (validDateCreate.isAfter(now)) {
+            User userByEmail = userService.getUserByEmail(byHash.getEmail());
+            userByEmail.setPassword(password);
+            userService.updateUser(userByEmail);
+            inviteTokenService.deleteInviteToken(byHash.getId());
+            logger.info("Восстановление пароля пользователя с id = {}", userByEmail.getId());
+            return true;
+        }
 
         logger.info("Попытка восстановления пароля пользователя с помощью токена = {}", token);
         return false;
