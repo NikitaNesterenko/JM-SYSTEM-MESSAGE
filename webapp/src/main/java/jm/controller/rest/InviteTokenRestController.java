@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.InviteTokenService;
 import jm.MailService;
 import jm.UserService;
-import jm.UuidGenerator;
 import jm.model.InviteToken;
 import jm.model.Workspace;
 import org.slf4j.Logger;
@@ -19,19 +18,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/rest/api/invites")
 @Tag(name = "invite", description = "Invite token API")
 public class InviteTokenRestController {
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            InviteTokenRestController.class);
     private UserService userService;
     private InviteTokenService inviteTokenService;
     private MailService mailService;
-
-
-    private static final Logger logger = LoggerFactory.getLogger(
-            InviteTokenRestController.class);
 
     InviteTokenRestController(UserService userService, InviteTokenService inviteTokenService, MailService mailService) {
         this.inviteTokenService = inviteTokenService;
@@ -55,11 +53,10 @@ public class InviteTokenRestController {
         String url = "http://localhost:8080/rest/api/invites/";
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
-        invites.stream()
-                .forEach(x -> {
-                    x.setHash(UuidGenerator.createStringUUID());
-                    x.setWorkspace(workspace);
-                });
+        invites.forEach(x -> {
+            x.setHash(UUID.randomUUID().toString());
+            x.setWorkspace(workspace);
+        });
 
         for (InviteToken invite : invites) {
             inviteTokenService.createInviteToken(invite);
