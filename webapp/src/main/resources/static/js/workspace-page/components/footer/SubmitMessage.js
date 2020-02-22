@@ -42,7 +42,6 @@ export class SubmitMessage {
             window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
 
-                // const channelName = sessionStorage.getItem("channelName");
                 const content =  $("#form_message_input").val();
                 if (content.startsWith('/leave ')) {
                     let channelName = content.substring(7);
@@ -51,7 +50,7 @@ export class SubmitMessage {
                     return
                 }
 
-                const channel_name = sessionStorage.getItem("channelId");
+                const channel_name = sessionStorage.getItem("channelName");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_name !== '0') {
@@ -111,28 +110,15 @@ export class SubmitMessage {
         const src = audioInput.prop('src');
 
         if (src !== undefined) {
-            // let blob = await fetch(src).then(r => r.blob());
-            // const data = new FormData();
-            // let name = 'voiceMessage_' + generateUID() + '.mp3';
-            // data.append('file', blob, name);
-            // await this.storage_service.uploadFile(data);
-            // $('#inputMe').html("");
-            // return name;
 
             let blob = await fetch(src).then(r => r.blob());
-            let text = await blob.text();
+            let arrayBuffer = await blob.arrayBuffer();
+            let base64 = await btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
             $('#inputMe').html("");
-            return text;
+
+            return base64;
         }
         return null;
-
-        function generateUID() {
-            let firstPart = (Math.random() * 46656) | 0;
-            let secondPart = (Math.random() * 46656) | 0;
-            firstPart = ("000" + firstPart.toString(36)).slice(-3);
-            secondPart = ("000" + secondPart.toString(36)).slice(-3);
-            return firstPart + secondPart;
-        }
     }
 
     async sendChannelMessage(channel_name) {
@@ -225,8 +211,8 @@ export class SubmitMessage {
         )
     }
 
-    async setChannelByName(channelId) {
-        await this.channel_service.getChannelByName(channelId).then(
+    async setChannelByName(channelName) {
+        await this.channel_service.getChannelByName(channelName).then(
             channel => this.channel = channel
         )
     }
