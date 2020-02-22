@@ -54,16 +54,16 @@ export class WorkspacePageEventHandler {
 
     onSelectChannel() {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", (event) => {
-            this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text());
+            this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text()).setInfo();
 
 
-            const channel_id = parseInt($(event.currentTarget).val());
-            pressChannelButton(channel_id);
+            const channelId = parseInt($(event.currentTarget).val());
+            pressChannelButton(channelId);
 
-            sessionStorage.setItem("channelId", channel_id);
+            sessionStorage.setItem("channelName", channelId);
             sessionStorage.setItem('conversation_id', '0');
 
-            this.user_service.getUsersByChannelId(channel_id).then(users => {
+            this.user_service.getUsersByChannelId(channelId).then(users => {
                 this.wks_header.setInfo(users.length, 666);
             });
 
