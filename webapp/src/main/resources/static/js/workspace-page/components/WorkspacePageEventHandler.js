@@ -2,6 +2,7 @@ import {refreshMemberList} from "/js/member-list/member-list.js";
 import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {NavHeader} from "./navbar/NavHeader.js";
 import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class WorkspacePageEventHandler {
 
@@ -14,6 +15,7 @@ export class WorkspacePageEventHandler {
         this.channel_service = new ChannelRestPaginationService();
         this.user_service = new UserRestPaginationService();
         this.wks_header = new NavHeader();
+        this.user_service = new UserRestPaginationService();
     }
 
     onAddChannelClick() {
@@ -24,7 +26,20 @@ export class WorkspacePageEventHandler {
 
     onAddDirectMessageClick() {
         this.addDirectMessage.click(() => {
-            this.addDirectMessageModal.css('display', 'block');
+            new WorkspaceRestPaginationService().getChosenWorkspace().then(workspace => {
+                this.user_service.getUsersByWorkspace(workspace.id).then(users => {
+                        let data = "<div class=\"list-group\">\n";
+                        users.forEach(user => {
+                            data += "<a class=\"list-group-item list-group-item-action\">";
+                            data += user.name.toString();
+                            data += "</a>\n";
+                        });
+                        data += "</div>";
+                        $('#addDirectMessageModal').find('#DirectMessageTo').html(data);
+                    }
+                );
+                this.addDirectMessageModal.css('display', 'block');
+            });
         });
     }
 
@@ -66,7 +81,7 @@ export class WorkspacePageEventHandler {
             };
 
             this.channel_service.getChannelByName(entity.name).then(chn => {
-                if (typeof(chn) === 'undefined') {
+                if (typeof (chn) === 'undefined') {
                     this.channel_service.create(entity).then(chn => {
                         sendChannel(chn);
                     })

@@ -72,7 +72,7 @@ export class SubmitMessage {
 
     checkSlashCommand() {
         let message = $("#form_message_input").val();
-        let isCommand = false
+        let isCommand = false;
         if (message.startsWith('/')) {
             window.allActions.forEach(action => {
                 if (message.substr(1, message.indexOf(" ") < 0 ? message.length :  message.indexOf(" ") - 1) === action) {

@@ -22,8 +22,7 @@ public class ConversationRestController {
 
     private ConversationService conversationService;
 
-    @Autowired
-    public void setConversationService(ConversationService conversationService) {
+    public ConversationRestController(ConversationService conversationService) {
         this.conversationService = conversationService;
     }
 
@@ -138,7 +137,7 @@ public class ConversationRestController {
             })
     public ResponseEntity<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
-        return new ResponseEntity<Conversation>(
+        return new ResponseEntity<>(
                 conversationService.getConversationByUsersId(firstId, secondId),
                 HttpStatus.OK
         );

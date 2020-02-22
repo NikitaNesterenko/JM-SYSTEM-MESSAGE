@@ -16,11 +16,8 @@ import java.util.Set;
 public class MessageDTO {
 
     private Long id;
-
     private Long userId;
-
     private Long botId;
-
     private String content;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -28,21 +25,13 @@ public class MessageDTO {
     private LocalDateTime dateCreate;
 
     private String filename;
-
     private String voiceMessage;
-
     private Boolean isDeleted = false;
-
     private Boolean isUpdated = false;
-
     private Long channelId;
-
     private Long workspaceId;
-
     private Long sharedMessageId;
-
     private Set<Long> recipientUserIds;
-
     private Long parentMessageId;
 
     // Три дополнительных поля, которые очень часто используются в JavaScript коде,
@@ -56,7 +45,6 @@ public class MessageDTO {
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields
-
     public MessageDTO(Message message) {
         this.id = message.getId();
         this.content = message.getContent();
@@ -77,5 +65,4 @@ public class MessageDTO {
         this.channelId = channelId;
         this.workspaceId = workspaceId;
     }
-
 }

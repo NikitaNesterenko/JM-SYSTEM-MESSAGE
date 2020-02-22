@@ -1,8 +1,6 @@
 package jm;
 
 import jm.model.Conversation;
-import jm.model.User;
-
 import java.util.List;
 
 public interface ConversationService {
@@ -20,5 +18,4 @@ public interface ConversationService {
     Conversation getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
-
 }

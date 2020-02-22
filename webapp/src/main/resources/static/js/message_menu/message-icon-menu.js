@@ -45,25 +45,31 @@ $(document).on('click', '[id^=deleteDmButton]', async function (e) {
 
     let conversation_id = $(e.target).data('conversationid');
     const principal = await user_service.getLoggedUser();
-    await conversation_service.deleteConversation(conversation_id, principal.id);
-    const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
-    const workspace_id = await workspace_service.getChosenWorkspace();
-    const direct_messages_container = $("#direct-messages__container_id");
-    direct_messages_container.empty();
-
-    conversations.forEach((conversation, i) => {
-        if (conversation.workspace.id === workspace_id.id) {
-            const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel" ' +
-                'style="height: min-content; width: 100%;"></div>');
-            conversation_queue_context_container.className = "p-channel_sidebar__channel";
-            if (conversation.openingUser.id === principal.id) {
-                conversation_queue_context_container.append(messageChat(conversation.associatedUser, conversation.id));
-            } else {
-                conversation_queue_context_container.append(messageChat(conversation.openingUser, conversation.id));
-            }
-            direct_messages_container.append(conversation_queue_context_container);
+    await conversation_service.deleteConversation(conversation_id, principal.id).then( t => {
+        if (t === 200) {
+            updateDMList();
         }
     });
+
+    async function updateDMList() {
+        const direct_messages_container = $("#direct-messages__container_id");
+        direct_messages_container.empty();
+        const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
+        const workspace = await workspace_service.getChosenWorkspace();
+        conversations.forEach((conversation, i) => {
+            if (conversation.workspace.id === workspace.id) {
+                const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel" ' +
+                    'style="height: min-content; width: 100%;"></div>');
+                conversation_queue_context_container.className = "p-channel_sidebar__channel";
+                if (conversation.openingUser.id === principal.id) {
+                    conversation_queue_context_container.append(messageChat(conversation.associatedUser, conversation.id));
+                } else {
+                    conversation_queue_context_container.append(messageChat(conversation.openingUser, conversation.id));
+                }
+                direct_messages_container.append(conversation_queue_context_container);
+            }
+        });
+    }
 
     function messageChat(user, conversationId) {
         return `

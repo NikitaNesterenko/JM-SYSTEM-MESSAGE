@@ -348,7 +348,7 @@ export class ConversationRestPaginationService extends RestPaginationService {
 
     deleteConversation = async (conversationId, userId) => {
         const response = await fetch(`/rest/api/conversations/delete/${conversationId}/${userId}`);
-        return response.json();
+        return response.status;
     };
 }
 
@@ -361,7 +361,6 @@ export class DirectMessagesRestController extends RestPaginationService {
         const response = await fetch(`/rest/api/direct_messages/conversation/${id}`);
         return response.json();
     };
-
 }
 
 export class PluginRestPaginationService extends RestPaginationService {
