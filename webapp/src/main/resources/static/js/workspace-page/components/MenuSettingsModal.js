@@ -9,7 +9,7 @@ export class MenuSettingsModal {
         this.workspace_service = new WorkspaceRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.users_service = new UserRestPaginationService();
-        this.settingBtn = $('#settingsMenuButton .material-icons .buttons-TopBar');
+        this.settingBtn = $('#settingsMenuButton .buttons-TopBar');
     }
 
     onMenuSettingsBtnClick() {

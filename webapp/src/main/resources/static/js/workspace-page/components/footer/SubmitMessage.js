@@ -110,7 +110,6 @@ export class SubmitMessage {
         const src = audioInput.prop('src');
 
         if (src !== undefined) {
-
             let blob = await fetch(src).then(r => r.blob());
             let arrayBuffer = await blob.arrayBuffer();
             let base64 = await btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
@@ -135,7 +134,8 @@ export class SubmitMessage {
             filename: await this.getFiles(),
             voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
-            workspaceId: this.channel.workspaceId
+            // workspaceId: this.channel.workspaceId
+            workspaceId: null
     };
 
         if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
@@ -237,7 +237,8 @@ export class SubmitMessage {
             ownerId: this.channel.ownerId,
             isPrivate: this.channel.isPrivate,
             createdDate: this.channel.createdDate,
-            workspaceId: this.channel.workspaceId
+            // workspaceId: this.channel.workspaceId
+            workspaceId: null
         };
 
         await this.channel_service.update(entity).then(() => {

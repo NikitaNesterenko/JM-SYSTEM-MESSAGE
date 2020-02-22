@@ -48,6 +48,11 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "voice_message",
+//            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "name"))
+//            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
+    @Lob
     private String voiceMessage;
 
     @Column(name = "is_deleted")

@@ -117,16 +117,16 @@ public class MessageRestController {
     }
 
     @PostMapping(value = "/create")
-    @Operation(summary = "Create message",
-            responses = {
-                    @ApiResponse(
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = MessageDTO.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
-            })
+//    @Operation(summary = "Create message",
+//            responses = {
+//                    @ApiResponse(
+//                            content = @Content(
+//                                    mediaType = "application/json",
+//                                    schema = @Schema(implementation = MessageDTO.class)
+//                            )
+//                    ),
+//                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
+//            })
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
         messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
