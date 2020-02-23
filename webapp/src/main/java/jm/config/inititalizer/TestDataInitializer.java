@@ -54,7 +54,7 @@ public class TestDataInitializer {
 
     @AllArgsConstructor
     private enum UserData {
-        JOHN("John", "Doe", "1", "1", "john.doe@testmail.com"),
+        JOHN("John", "Doe", "login_1", "pass_1", "john.doe@testmail.com"),
         STEPAN("Степан", "Сидоров", "login_2", "pass_2", "sidorov@testmail.com"),
         PETR("Петр", "Петров", "login_3", "pass_3", "petrov@testmail.com"),
         FOO("foo", "bar", "login_4", "pass_4", "foobar@testmail.com"),
