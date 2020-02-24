@@ -27,13 +27,12 @@ $('.back_modal_button').click(function() {
 
 window.addEventListener('load', function () {
 
-    const menu_header = document.getElementsByClassName("p-classic_nav__team_header");
+    const menu_header = document.getElementsByClassName("p-classic_nav__team_header__content")[0];
     const menu_modal = document.getElementsByClassName("menu-user-workspace")[0];
 
     const invite_from_menu_user_workspace = document.getElementById("invite-from-menu-user-workspace");
 
-    menu_header.click = function () {
-        alert("1");
+    menu_header.onclick = function () {
         menu_modal.style.display = "inline-table";
     };
 
