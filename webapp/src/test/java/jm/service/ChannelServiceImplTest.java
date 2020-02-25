@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,7 +70,8 @@ public class ChannelServiceImplTest {
 
     @Test
     public void getChannelByNameInChannel() {
-        Mockito.when(channelDAO.getChannelByName("Channel1")).thenReturn(channel1);
+
+        Mockito.when(channelDAO.getChannelByName("Channel1")).thenReturn(Optional.of(channel1));
         assertEquals(channelService.getChannelByName("Channel1"), channel1);
         verify(channelDAO).getChannelByName("Channel1");
     }

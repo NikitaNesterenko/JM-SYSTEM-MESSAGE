@@ -48,7 +48,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public Workspace getWorkspaceByName(String name) { return workspaceDAO.getWorkspaceByName(name); }
+    public Workspace getWorkspaceByName(String name) { return workspaceDAO.getWorkspaceByName(name).orElse(null); }
 
     @Override
     public List<Workspace> getWorkspacesByOwnerId(Long ownerId) { return workspaceDAO.getWorkspacesByOwnerId(ownerId);}

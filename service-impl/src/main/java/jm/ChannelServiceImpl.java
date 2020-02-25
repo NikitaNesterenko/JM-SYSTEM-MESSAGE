@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -47,7 +48,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel getChannelByName(String name) {
-        return channelDAO.getChannelByName(name);
+            return channelDAO.getChannelByName(name).orElse(null);
     }
 
     @Override

@@ -6,30 +6,31 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 @Transactional
 public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToken> implements CreateWorkspaceTokenDAO {
 
     @Override
-    public CreateWorkspaceToken getCreateWorkspaceTokenByOwnerEmail(String email) {
+    public Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByOwnerEmail(String email) {
         try {
-            return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from createWorkspaceToken where ownerEmail=?", CreateWorkspaceToken.class)
+            return Optional.ofNullable((CreateWorkspaceToken) entityManager.createNativeQuery("select * from createWorkspaceToken where ownerEmail=?", CreateWorkspaceToken.class)
                     .setParameter(1, email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 
     @Override
-    public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
+    public Optional<CreateWorkspaceToken> getCreateWorkspaceTokenByCode(int code) {
         try {
-            return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from createWorkspaceToken where code=?", CreateWorkspaceToken.class)
+            return Optional.ofNullable((CreateWorkspaceToken) entityManager.createNativeQuery("select * from createWorkspaceToken where code=?", CreateWorkspaceToken.class)
                     .setParameter(1, code)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 }

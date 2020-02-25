@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -17,13 +18,13 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
 
     @Override
-    public Workspace getWorkspaceByName(String name) {
+    public Optional<Workspace> getWorkspaceByName(String name) {
         try {
-            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
+            return Optional.ofNullable((Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 

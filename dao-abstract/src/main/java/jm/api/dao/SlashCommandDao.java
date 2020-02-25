@@ -3,6 +3,7 @@ package jm.api.dao;
 import jm.model.SlashCommand;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SlashCommandDao {
 
@@ -16,7 +17,7 @@ public interface SlashCommandDao {
 
     SlashCommand getById(Long id);
 
-    SlashCommand getByName(String commandName);
+    Optional<SlashCommand> getByName(String commandName);
 
     List<SlashCommand> getByWorkspaceId(Long id);
 

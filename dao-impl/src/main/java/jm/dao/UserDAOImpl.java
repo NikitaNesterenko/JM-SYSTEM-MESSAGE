@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -20,50 +21,52 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @Override
-    public User getUserByLogin(String login) {
+    public Optional<User> getUserByLogin(String login) {
         try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            return Optional.ofNullable((User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 
     @Override
-    public User getUserByName(String name) {
+    public Optional<User> getUserByName(String name) {
         try {
-            return (User) entityManager.createQuery("from User where name  = :name").setParameter("name", name)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            return Optional.ofNullable((User) entityManager.createQuery("from User where name  = :name").setParameter("name", name)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            return Optional.ofNullable((User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 
     @Override
-    public void addRoleForUser(User user, String role) { }
+    public void addRoleForUser(User user, String role) {
+    }
 
     @Override
-    public void updateUserRole(User user, String role) { }
+    public void updateUserRole(User user, String role) {
+    }
 
     @Override
     public List<User> getAllUsersInThisChannel(Long id) {
-            TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
-                    .setParameter(1, id);
-            List<User> userList = query.getResultList();
-            for (User user : userList) {
-                System.out.println(user);
-            }
-            return userList;
+        TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
+                .setParameter(1, id);
+        List<User> userList = query.getResultList();
+        for (User user : userList) {
+            System.out.println(user);
+        }
+        return userList;
     }
 
 //    @Override

@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -15,35 +17,33 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     @Override
     public void persist(Conversation conversation) {
         if (
-                getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
-                        || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
+                getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()).isPresent()
+                        || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()).isPresent()
         ) {
             entityManager.merge(conversation);
         }
     }
 
     @Override
-    public Conversation getConversationByUsersId(Long firstUserId, Long secondUserId) {
+    public Optional<Conversation> getConversationByUsersId(Long firstUserId, Long secondUserId) {
         try {
-            return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
-                    .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult();
+            return Optional.ofNullable((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
+                    .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult());
         } catch (NoResultException e1) {
             try {
-                return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
-                        .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult();
+                return Optional.ofNullable((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
+                        .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult());
             } catch (NoResultException e2) {
-                return null;
+                return Optional.empty();
             }
         }
+
     }
 
     @Override
     public List<Conversation> getConversationsByUserId(Long userId) {
-        try {
-            return (List<Conversation>) entityManager.createNativeQuery("select * from conversations where opener_id=? or associated_id=?", Conversation.class)
-                    .setParameter(1, userId).setParameter(2, userId).getResultList();
-        } catch (NoResultException e1) {
-            return null;
-        }
+        return (List<Conversation>) entityManager.createNativeQuery("select * from conversations where opener_id=? or associated_id=?", Conversation.class)
+                .setParameter(1, userId).setParameter(2, userId).getResultList();
+
     }
 }

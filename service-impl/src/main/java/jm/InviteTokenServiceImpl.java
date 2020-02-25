@@ -38,6 +38,6 @@ public class InviteTokenServiceImpl implements InviteTokenService {
 
     @Override
     public InviteToken getByHash(String hash) {
-        return inviteTokenDAO.getByHash(hash);
+        return inviteTokenDAO.getByHash(hash).orElse(null);
     }
 }

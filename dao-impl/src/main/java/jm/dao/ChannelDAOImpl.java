@@ -10,10 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -21,25 +18,21 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     private static final Logger logger = LoggerFactory.getLogger(ChannelDAOImpl.class);
 
     @Override
-    public Channel getChannelByName(String name) {
+    public Optional<Channel> getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
+            return Optional.ofNullable((Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
                     .setParameter(1, name)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
         }
     }
 
     @Override
     public List<Channel> getChannelsByOwnerId(Long ownerId) {
-        try {
-            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
-                    .setParameter(1, ownerId)
-                    .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
+                .setParameter(1, ownerId)
+                .getResultList();
     }
 
     @Override

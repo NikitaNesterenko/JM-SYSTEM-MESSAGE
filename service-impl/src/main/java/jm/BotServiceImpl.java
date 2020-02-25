@@ -34,7 +34,8 @@ public class BotServiceImpl implements BotService {
     public void deleteBot(Long id) { botDAO.deleteById(id); }
 
     @Override
-    public void updateBot(Bot bot) { botDAO.merge(bot);
+    public void updateBot(Bot bot) {
+        botDAO.merge(bot);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Bot getBotBySlashCommandId(Long id) {
-        return botDAO.getBotByCommandId(id);
+        return botDAO.getBotByCommandId(id).orElse(null);
     }
 
 }
