@@ -99,6 +99,7 @@ ul.confirm-navbar li.right {
     width: 55px;
     height: 33px;
     border: 1px solid rgba(29, 28, 29, .5);
+    text-align: center;
 }
 
 .small_desc {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Create a Workspace</title>
@@ -21,7 +21,8 @@
     <form class="email_confirmation_form">
         <h1 style="margin-bottom: 20px">Check your email!</h1>
         <p class="desc margin_bottom_200" style="margin-bottom: 32px">We've sent a 6-digit confirmation code to
-            <strong>example@mail.com</strong>. It will expire shortly, so enter it soon.</p>
+            <strong id="sentEmail" th:text="${email}"></strong>.
+            It will expire shortly, so enter it soon.</p>
         <div class="confirmation_code_container">
             <div class="confirmation_code_group display_flex">
                 <div class="split_input_item input_wrapper">
