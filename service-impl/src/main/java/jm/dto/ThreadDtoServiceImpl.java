@@ -1,6 +1,5 @@
 package jm.dto;
 
-
 import jm.model.Message;
 import jm.model.ThreadChannel;
 import jm.model.User;

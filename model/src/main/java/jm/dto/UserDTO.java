@@ -1,13 +1,11 @@
 package jm.dto;
 
-import jm.model.Message;
 import jm.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +21,6 @@ public class UserDTO {
     private String title;
     private String displayName;
     private String phoneNumber;
-    //    private Set<Long> roleIds;
     private String timeZone;
     private Set<Long> starredMessageIds;
     private Set<Long> directMessagesToUserIds;
@@ -39,8 +36,6 @@ public class UserDTO {
         this.displayName = displayName;
     }
 
-    // Constructor for simplify User->UserDTO conversion.
-    // copying simple fields
     public UserDTO(User user) {
         this.id = user.getId();
         this.name = user.getName();

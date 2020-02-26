@@ -10,14 +10,13 @@ import java.io.File;
 public class MailContentService {
 
     private final String DIR = "mail" + File.separator;
-
     private TemplateEngine templateEngine;
 
     public MailContentService(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 
-    public String build (
+    public String build(
             String nameFrom,
             String emailFrom,
             String workspace,
@@ -27,12 +26,12 @@ public class MailContentService {
         context.setVariable("emailFrom", emailFrom);
         context.setVariable("workspace", workspace);
         context.setVariable("inviteLink", inviteLink);
-        return templateEngine.process(DIR +"invite-template", context);
+        return templateEngine.process(DIR + "invite-template", context);
     }
 
-    public String buildConfirmationCode (Integer code) {
+    public String buildConfirmationCode(Integer code) {
         Context context = new Context();
         context.setVariable("code", code);
-        return templateEngine.process(DIR +"confirm-code-workspace", context);
+        return templateEngine.process(DIR + "confirm-code-workspace", context);
     }
 }

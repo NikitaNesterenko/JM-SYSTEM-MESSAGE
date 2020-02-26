@@ -14,7 +14,7 @@ public class ThreadChannelDAOImpl extends AbstractDao<ThreadChannel> implements 
     @Override
     public ThreadChannel getByChannelMessageId(Long id) {
         try {
-            return entityManager.createQuery("select m from ThreadChannel m where m.message.id =:id", ThreadChannel.class)
+            return entityManager.createQuery("SELECT m FROM ThreadChannel m WHERE m.message.id =:id", ThreadChannel.class)
                     .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException e) {

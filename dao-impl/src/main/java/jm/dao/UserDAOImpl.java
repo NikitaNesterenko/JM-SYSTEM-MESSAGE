@@ -22,7 +22,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByLogin(String login) {
         try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+            return (User) entityManager.createQuery("SELECT u FROM User u WHERE u.login  = :login").setParameter("login", login)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -32,7 +32,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByEmail(String email) {
         try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+            return (User) entityManager.createQuery("SELECT u FROM User u WHERE u.email  = :email").setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -47,26 +47,11 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public List<User> getAllUsersInThisChannel(Long id) {
-            TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
-                    .setParameter(1, id);
+            TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = :id")
+                    .setParameter("id", id);
             List<User> userList = query.getResultList();
-            for (User user : userList) {
-                System.out.println(user);
-            }
             return userList;
     }
-
-//    @Override
-//    public List<User> getAllUsersInThisChannel(Long id) {
-//        return entityManager.createQuery("from User u join Channel ch where ch.user.id = u.id").getResultList();
-//            TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
-//                    .setParameter(1, id);
-//            List<User> userList = query.getResultList();
-//            for (User user : userList) {
-//                System.out.println(user);
-//            }
-//            return userList;
-//    }
 
     @Override
     public List<UserDTO> getUsersInWorkspace(Long id) {
@@ -88,7 +73,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("select o from User o where o.id in :ids", User.class)
+                .createQuery("SELECT u FROM User u WHERE u.id in :ids", User.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }

@@ -14,7 +14,7 @@ public class InviteTokenDAOImpl extends AbstractDao<InviteToken> implements Invi
     @Override
     public InviteToken getByHash(String hash) {
         try {
-            return (InviteToken) entityManager.createQuery("from InviteToken where hash  = :hash").setParameter("hash", hash)
+            return (InviteToken) entityManager.createQuery("SELECT i FROM InviteToken i WHERE i.hash  = :hash").setParameter("hash", hash)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

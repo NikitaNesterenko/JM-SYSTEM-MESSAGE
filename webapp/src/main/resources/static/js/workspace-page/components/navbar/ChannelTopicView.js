@@ -46,7 +46,7 @@ export class ChannelTopicView {
     }
 
     checkTopic(topic) {
-        return topic === "" || topic === "null" ? "Enter channel topic here." : topic.replace(/"/g, '');
+        return topic === "" || topic === "null" ? "Enter channel topic here." : topic.replace( /''/g, '' );
     }
 
     updateTopic() {

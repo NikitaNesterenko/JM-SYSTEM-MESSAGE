@@ -69,5 +69,4 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsersInWorkspace(Long id) {
         return userDAO.getUsersInWorkspace(id);
     }
-
 }

@@ -52,6 +52,6 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
 
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
-       return createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code);
+        return createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code);
     }
 }

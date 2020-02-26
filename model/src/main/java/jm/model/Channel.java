@@ -35,7 +35,6 @@ import java.util.Set;
 )
 
 public class Channel {
-
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,4 +92,14 @@ public class Channel {
         this.workspace = workspace;
     }
 
+    public Channel(Long id, String name, Set<User> users, User user, Boolean isPrivate, Boolean archived, LocalDateTime createdDate, Workspace workspace) {
+        this.id = id;
+        this.name = name;
+        this.users = users;
+        this.user = user;
+        this.isPrivate = isPrivate;
+        this.archived = archived;
+        this.createdDate = createdDate;
+        this.workspace = workspace;
+    }
 }

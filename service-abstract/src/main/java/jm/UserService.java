@@ -17,7 +17,6 @@ public interface UserService {
 
     User getUserById(Long id);
 
-
     User getUserByLogin(String login);
 
     User getUserByEmail(String email);
@@ -25,5 +24,4 @@ public interface UserService {
     List<User> getAllUsersInThisChannel(Long id);
 
     List<UserDTO> getAllUsersInWorkspace(Long id);
-
 }

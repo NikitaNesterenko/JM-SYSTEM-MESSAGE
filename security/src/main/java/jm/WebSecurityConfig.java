@@ -72,8 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/rest/api/workspaces/name/**", "/rest/api/users/is-exist-email/**", "/rest/api/users/password-recovery").permitAll();
 
         http.authorizeRequests()
-                .antMatchers("/email/**", "/js/**" , "/image/**" , "/api/create/**").permitAll();
-                // отрыл доступ для регистрации воркспейса без авторизации
+                .antMatchers("/email/**", "/js/**", "/image/**", "/api/create/**").permitAll();
+        // отрыл доступ для регистрации воркспейса без авторизации
 
         // Anyone not authenticated. Avoid double signin
         http

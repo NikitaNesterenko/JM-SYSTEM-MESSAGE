@@ -11,6 +11,10 @@ public interface ChannelDAO {
 
     List<Channel> getAll();
 
+    List<Channel> getArchivedChannels();
+
+    List<Channel> getPrivateChannels();
+
     void persist(Channel channel);
 
     void deleteById(Long id);
@@ -30,5 +34,4 @@ public interface ChannelDAO {
     List<Channel> getChannelsByUserId(Long userId);
 
     List<Channel> getChannelsByIds(Set<Long> ids);
-
 }

@@ -8,6 +8,8 @@ import jm.model.User;
 import java.util.Set;
 
 public interface WorkspaceUserRoleService {
+
     void create(WorkspaceUserRole workspaceUserRole);
+
     Set<Role> getRole(Workspace workspace, User user);
 }

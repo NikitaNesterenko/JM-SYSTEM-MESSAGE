@@ -20,8 +20,6 @@ public class BotDTO {
     private Set<Long> channelIds;
     private LocalDateTime dateCreate;
 
-    // Constructor for simplify Bot->BotDTO conversion.
-    // copying simple fields
     public BotDTO(Bot bot) {
         this.id = bot.getId();
         this.name = bot.getName();

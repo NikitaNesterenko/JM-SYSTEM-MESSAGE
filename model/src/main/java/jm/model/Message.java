@@ -54,36 +54,19 @@ public class Message {
     @JoinColumn(name = "channel_id")
     private Long channelId;
 
-    // from ChannelMessage
     @ManyToOne
     @JoinColumn(name = "shared_message_id", referencedColumnName = "id")
     private Message sharedMessage;
 
-//    @Column(name = "shared_message_id")
-//    private Long sharedMessageId;
-
-
-//    @ManyToMany(cascade = CascadeType.REFRESH)
-//    @JoinTable(
-//            name = "starred_message_user",
-//            joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-//    private Set<User> starredByWhom;
-
-    // from DirectMessage
     @ManyToMany
     @JoinTable(name = "messages_recipient_users",
             joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
     private Set<User> recipientUsers;
 
-    // from ThreadChannelMessage and ThreadDirectMessage
     @ManyToOne
     private Message parentMessage;
 
-    // ===================================
-    // Construct
-    // ===================================
     public Message(Long channelId, User user, String content, LocalDateTime dateCreate) {
         this.channelId = channelId;
         this.user = user;
@@ -106,7 +89,6 @@ public class Message {
         this.dateCreate = dateCreate;
     }
 
-    // two constructors for sharing messages
     public Message(Long channelId, User user, String content, LocalDateTime dateCreate, Message sharedMessage) {
         this.channelId = channelId;
         this.user = user;
@@ -123,8 +105,6 @@ public class Message {
         this.sharedMessage = sharedMessage;
     }
 
-    // Constructor for simplify MessageDTO->Message conversion.
-    // copying simple fields
     public Message(MessageDTO messageDto) {
         this.id = messageDto.getId();
         this.content = messageDto.getContent();
@@ -133,21 +113,4 @@ public class Message {
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
     }
-
-    //    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
-//        this.channel = channel;
-//        this.user = user;
-//        this.content = content;
-//        this.dateCreate = dateCreate;
-//        this.sharedMessageId = sharedMessageId;
-//    }
-//
-//    public Message(Channel channel, Bot bot, String content, LocalDateTime dateCreate, Long sharedMessageId) {
-//        this.channel = channel;
-//        this.bot = bot;
-//        this.content = content;
-//        this.dateCreate = dateCreate;
-//        this.sharedMessageId = sharedMessageId;
-//    }
-
 }

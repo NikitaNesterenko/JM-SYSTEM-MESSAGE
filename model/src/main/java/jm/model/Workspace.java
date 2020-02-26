@@ -62,8 +62,6 @@ public class Workspace {
         this.createdDate = createdDate;
     }
 
-    // Constructor for simplify WorkspaceDTO->Workspace conversion.
-    // copying simple fields
     public Workspace(WorkspaceDTO workspaceDto) {
         this.id = workspaceDto.getId();
         this.name = workspaceDto.getName();

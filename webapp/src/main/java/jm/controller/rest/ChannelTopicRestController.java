@@ -33,5 +33,4 @@ public class ChannelTopicRestController {
         channel.setTopic(topic);
         return ResponseEntity.ok(channelService.getChannelById(id).getTopic());
     }
-
 }

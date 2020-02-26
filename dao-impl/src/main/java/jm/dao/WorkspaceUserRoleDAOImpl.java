@@ -19,7 +19,7 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @SuppressWarnings("unchecked")
     public Set<Role> getRole(Workspace workspace, User user) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where workspace = :workspace and user=:user")
+                .createQuery("SELECT w FROM WorkspaceUserRole w where w.workspace = :workspace and w.user=:user")
                 .setParameter("workspace", workspace)
                 .setParameter("user", user)
                 .getResultList();
@@ -34,7 +34,7 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @SuppressWarnings("unchecked")
     public Set<User> getUsersByWorkspace(Workspace workspace) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where workspace = :workspace")
+                .createQuery("SELECT w FROM WorkspaceUserRole w where w.workspace = :workspace")
                 .setParameter("workspace", workspace)
                 .getResultList();
         Set<User> users = new HashSet<>();
@@ -48,7 +48,7 @@ public class WorkspaceUserRoleDAOImpl extends AbstractDao<WorkspaceUserRole> imp
     @SuppressWarnings("unchecked")
     public Set<Workspace> getWorkspacesByUsers(User user) {
         List<WorkspaceUserRole> workspaceUserRoles = entityManager
-                .createQuery("from WorkspaceUserRole where user=:user")
+                .createQuery("SELECT w FROM WorkspaceUserRole w where w.user=:user")
                 .setParameter("user", user)
                 .getResultList();
         Set<Workspace> workspaces = new HashSet<>();

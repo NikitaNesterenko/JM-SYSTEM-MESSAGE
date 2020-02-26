@@ -20,6 +20,10 @@ public class Role implements GrantedAuthority {
     @Column(name = "role", nullable = false)
     private String role;
 
+    public Role(String role) {
+        this.role = role;
+    }
+
     public Role(Long id, String role) {
         this.id = id;
         this.role = role;
@@ -29,9 +33,5 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return this.role;
-    }
-
-    public Role(String role) {
-        this.role = role;
     }
 }

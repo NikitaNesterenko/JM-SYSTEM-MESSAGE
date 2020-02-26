@@ -51,8 +51,6 @@ public class MessageDTO {
     private String userAvatarUrl;
     private String pluginName;
 
-    // Constructor for simplify Message->MessageDTO conversion.
-    // copying simple fields
     public MessageDTO(Message message) {
         this.id = message.getId();
         this.content = message.getContent();
@@ -62,7 +60,6 @@ public class MessageDTO {
         this.channelId = message.getChannelId();
     }
 
-    // For test only
     public MessageDTO(Long id, Long channelId, Long userId, String content, LocalDateTime dateCreate) {
         this.id = id;
         this.userId = userId;

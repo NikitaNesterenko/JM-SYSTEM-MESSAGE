@@ -57,8 +57,6 @@ public class Bot {
         this.dateCreate = dateCreate;
     }
 
-    // Constructor for simplify BotDTO->Bot conversion.
-    // copying simple fields
     public Bot(BotDTO botDto) {
         this.id = botDto.getId();
         this.name = botDto.getName();

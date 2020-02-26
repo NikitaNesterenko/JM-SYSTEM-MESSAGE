@@ -23,7 +23,7 @@ public abstract class AbstractDao<T> {
     }
 
     public List getAll() {
-        return entityManager.createQuery("from " + persistentClass.getName()).getResultList();
+        return entityManager.createQuery("FROM " + persistentClass.getName()).getResultList();
     }
 
     public void persist(T t) {

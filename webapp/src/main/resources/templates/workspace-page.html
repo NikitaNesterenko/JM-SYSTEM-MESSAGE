@@ -74,6 +74,9 @@
 
     <script src="/js/helper_functions.js"></script>
 
+    <script defer th:src="@{/js/channel_browse_modal/modal.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/css/channelModal.css}"/>
+
     <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
         <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
         <link rel="stylesheet" th:href="@{/css/button.css}"/>
@@ -97,6 +100,53 @@
 </head>
 
 <body class="supports_custom_scrollbar">
+
+<!-- Channel modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="channelModal">
+    <button type="button"  id="close_modal_channel" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times</span>
+    </button>
+    <div class="modal-dialog modal-lg" role="document">
+<!--        <button type="button"  id="close_modal_channel" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--            <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Browse Channels</h1>
+            </div>
+            <div class="modal-body">
+                <div class="p-channel-browser-control">
+                    <div class="input-group mb-3">
+                        <span class="icon"><i class="fa fa-search"></i></span>
+                        <input id="input-in" type="text" class="form-control">
+                    </div>
+                    <div class="dropdown-show-inline">
+                        <div class="dropdown show">
+                            <strong>Show:</strong>
+                            <select class="selectpicker" id="selectedChannels">
+                                <option class="all-channels active" value="all" selected>All channels</option>
+                                <option value="private">Private channels</option>
+                                <option value="archive">Archive channels</option>
+                            </select>
+                        </div>
+                        <div class="dropdown show">
+                            <strong>Sort:</strong>
+                            <select class="selectpicker" id="selectedSort">
+                                <option value="name" selected>Channel name</option>
+                                <option value="date">Creation date(newest first)</option>
+                                <option value="most">Members (most to fewest)</option>
+                                <option value="fewest">Members (fewest to most)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="channel-list"><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Small modal -->
 <div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
@@ -621,7 +671,7 @@
                         <button class="p-classic_nav__right__star__button">
                             <i class="p-classic_nav__right__star__icon">☆</i>
                         </button>
-                        <button class="p-classic_nav__right__more_items">
+                        <button class="p-classic_nav__right__more_items" id="rightNavBtn">
                             <i class="p-classic_nav__right__more_items__icon">⋮</i>
                         </button>
                     </div>
@@ -656,7 +706,7 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__list__channels">
                                                 <div class="p-channel_sidebar__section_heading">
-                                                    <button class="p-channel_sidebar__channels__button">Channels
+                                                    <button class="p-channel_sidebar__channels__button" id="btnChannel" data-toggle="modal" data-target="#channelModal">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
                                                         <button class="p-channel_sidebar__section_heading_plus"
@@ -1067,15 +1117,21 @@
     </div>
     <br>
     <br>
-    <div class="col-md-4 justify-content-center mx-auto">
+    <div class="col-md-6 justify-content-center mx-auto">
         <div>
             <div class="formButton">
                 <button class="additionalOptionsButton" id="exampleLink1"><span><b>Archive this channel</b>
                 <br>If you don’t think it will be used anymore and you want to clean up, archive it. The channel can be unarchived later (but everyone will have been removed).</span>
                 </button>
             </div>
-            <div>
-                <button class="additionalOptionsButton" id="exampleLink2"><span><b>Set the channel description</b>
+            <div class="formButton">
+                <button class="additionalOptionsButton" id="exampleLink2"><span><b>Rename this channel</b>
+                <br>Rename this channel
+                        You can rename a channel at any time. But, use it sparingly: it might confuse or disorient your colleagues!</span>
+                </button>
+            </div>
+            <div class="formButton">
+                <button class="additionalOptionsButton" id="exampleLink3"><span><b>Set the channel description</b>
                 <br>Channel descriptions are especially useful to new members choosing which conversations to join.</span>
                 </button>
             </div>
@@ -1467,6 +1523,10 @@
                         <label for="exampleInputChannelName">Название канала</label>
                         <input type="email" class="form-control" id="exampleInputChannelName"
                                placeholder="Введите название канала">
+                    </div>
+                    <div class="form-group">
+                        <label for="topicChannel">Описание канала</label>
+                        <textarea class="form-control" id="topicChannel"></textarea>
                     </div>
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">

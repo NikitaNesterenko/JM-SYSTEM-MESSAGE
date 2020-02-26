@@ -21,8 +21,6 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
     private ChannelDAO channelDAO;
     private ConversationDAO conversationDAO;
 
-
-
     @Autowired
     public void setDirectMessageDtoServiceImpl(UserDAO userDAO, ChannelDAO channelDAO, ConversationDAO conversationDAO) {
         this.userDAO = userDAO;
@@ -37,7 +35,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         }
 
         List<DirectMessageDTO> directMessageDTOList = new ArrayList<>();
-        for (DirectMessage directMessage: directMessages) {
+        for (DirectMessage directMessage : directMessages) {
             directMessageDTOList.add(toDto(directMessage));
         }
 
@@ -65,24 +63,20 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
             directMessageDTO.setBotNickName(bot.getNickName());
         }
 
-        // setting up 'channelName'
         Long channelId = directMessage.getChannelId();
         if (channelId != null) {
             Channel channel = channelDAO.getById(channelId);
             directMessageDTO.setChannelName(channel.getName());
         }
 
-        // setting up 'sharedMessageId'
         Message sharedMessage = directMessage.getSharedMessage();
         if (sharedMessage != null) {
             directMessageDTO.setSharedMessageId(sharedMessage.getId());
         }
 
-        // setting up 'recipientUserIds'
         Set<Long> recipientUserIds = directMessage.getRecipientUsers().stream().map(User::getId).collect(Collectors.toSet());
         directMessageDTO.setRecipientUserIds(recipientUserIds);
 
-        // setting up 'parentMessageId'
         Message parentMessage = directMessage.getParentMessage();
         if (parentMessage != null) {
             directMessageDTO.setParentMessageId(parentMessage.getId());

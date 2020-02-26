@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -17,12 +18,11 @@ import java.util.Set;
 public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
-
     @Override
     public Bot getBotByWorkspaceId(Workspace workspace) {
         try {
-            return (Bot) entityManager.createNativeQuery("select * from bots where workspace_id=?", Bot.class)
-                    .setParameter(1, workspace)
+            return entityManager.createQuery("SELECT b FROM Bot b WHERE b.workspace = :id", Bot.class)
+                    .setParameter("id", workspace)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -30,5 +30,12 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Set<Channel> getChannels(Bot bot) { return bot.getChannels(); }
+    public Set<Channel> getChannels(Bot bot) {
+        return bot.getChannels();
+    }
+
+    @Override
+    public List getAll() {
+        return entityManager.createQuery("SELECT b FROM Bot b", Bot.class).getResultList();
+    }
 }

@@ -1,6 +1,7 @@
 package jm.dto;
 
 import jm.BotService;
+import jm.MessageService;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.model.Bot;
@@ -18,14 +19,18 @@ import java.util.stream.Collectors;
 @Service
 public class ChannelDTOServiceImpl implements ChannelDtoService {
 
-    @Autowired
-    UserService userService;
+    final UserService userService;
+    final BotService botService;
+    final WorkspaceService workspaceService;
+    final MessageService messageService;
 
     @Autowired
-    BotService botService;
-
-    @Autowired
-    WorkspaceService workspaceService;
+    public ChannelDTOServiceImpl(UserService userService, BotService botService, WorkspaceService workspaceService, MessageService messageService) {
+        this.userService = userService;
+        this.botService = botService;
+        this.workspaceService = workspaceService;
+        this.messageService = messageService;
+    }
 
     @Override
     public ChannelDTO toDto(Channel channel) {
@@ -45,6 +50,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channelDTO.setName(channel.getName());
         channelDTO.setWorkspaceId(channel.getWorkspace().getId());
         channelDTO.setOwnerId(channel.getUser().getId());
+        channelDTO.setUserName(channel.getUser().getName());
         channelDTO.setIsPrivate(channel.getIsPrivate());
         channelDTO.setTopic(channel.getTopic());
         channelDTO.setCreatedDate(channel.getCreatedDate());
@@ -56,7 +62,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
 
     @Override
     public List<ChannelDTO> toDto(List<Channel> channels) {
-        if (channels==null) {
+        if (channels == null) {
             return null;
         }
 
@@ -69,13 +75,13 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
 
     @Override
     public Channel toEntity(ChannelDTO channelDTO) {
-        if (channelDTO==null) {
+        if (channelDTO == null) {
             return null;
         }
 
         Channel channel = new Channel();
 
-        if (channelDTO.getUserIds()!=null) {
+        if (channelDTO.getUserIds() != null) {
             Set<User> userSet = new HashSet<>();
             for (Long id : channelDTO.getUserIds()) {
                 userSet.add(userService.getUserById(id));
@@ -83,7 +89,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
             channel.setUsers(userSet);
         }
 
-        if (channelDTO.getBotIds()!=null) {
+        if (channelDTO.getBotIds() != null) {
             Set<Bot> botSet = new HashSet<>();
             for (Long id : channelDTO.getBotIds()) {
                 botSet.add(botService.getBotById(id));
@@ -91,12 +97,11 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
             channel.setBots(botSet);
         }
 
-        if (channelDTO.getWorkspaceId()!=null) {
+        if (channelDTO.getWorkspaceId() != null) {
             channel.setWorkspace(
                     workspaceService.getWorkspaceById(channelDTO.getWorkspaceId()));
         }
         User userOwner = userService.getUserById(channelDTO.getOwnerId());
-
 
         channel.setId(channelDTO.getId());
         channel.setName(channelDTO.getName());
@@ -105,10 +110,9 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channel.setArchived(false);
         channel.setCreatedDate(channelDTO.getCreatedDate());
 
-        if (channelDTO.getTopic()!=null) {
+        if (channelDTO.getTopic() != null) {
             channel.setTopic(channelDTO.getTopic());
         }
-
         return channel;
     }
 }

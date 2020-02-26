@@ -14,8 +14,8 @@ public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToke
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenByOwnerEmail(String email) {
         try {
-            return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from createWorkspaceToken where ownerEmail=?", CreateWorkspaceToken.class)
-                    .setParameter(1, email)
+            return (CreateWorkspaceToken) entityManager.createNativeQuery("SELECT cwt FROM createWorkspaceToken cwt WHERE cwt.ownerEmail = :email", CreateWorkspaceToken.class)
+                    .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -25,8 +25,8 @@ public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToke
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
         try {
-            return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from createWorkspaceToken where code=?", CreateWorkspaceToken.class)
-                    .setParameter(1, code)
+            return (CreateWorkspaceToken) entityManager.createNativeQuery("SELECT cwt FROM createWorkspaceToken cwt WHERE cwt.code = :code", CreateWorkspaceToken.class)
+                    .setParameter("code", code)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

@@ -6,6 +6,7 @@ import jm.model.User;
 import java.security.NoSuchAlgorithmException;
 
 public interface MailService {
+
     void sendInviteMessage(
             String nameFrom,
             String emailFrom,

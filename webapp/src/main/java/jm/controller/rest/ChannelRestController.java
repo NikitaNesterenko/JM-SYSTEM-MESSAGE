@@ -8,6 +8,7 @@ import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
+
 import org.mockito.internal.util.collections.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,21 +20,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/rest/api/channels")
 public class ChannelRestController {
+    private static final Logger logger = LoggerFactory.getLogger(ChannelRestController.class);
 
     private ChannelService channelService;
     private UserService userService;
     private ChannelDtoService channelDTOService;
     private MessageDAOImpl messageDAO;
-
-    private static final Logger logger = LoggerFactory.getLogger(
-            ChannelRestController.class);
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
@@ -46,7 +44,7 @@ public class ChannelRestController {
     }
 
     @Autowired
-    public void  setChannelDTOService(ChannelDtoService channelDTOService) {
+    public void setChannelDTOService(ChannelDtoService channelDTOService) {
         this.channelDTOService = channelDTOService;
     }
 
@@ -66,7 +64,6 @@ public class ChannelRestController {
             System.out.println(channel);
         }
         List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
-
         return ResponseEntity.ok(channelDTOList);
     }
 
@@ -111,7 +108,6 @@ public class ChannelRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok().build();
     }
 
@@ -122,7 +118,7 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping(value = "/all")
     public ResponseEntity<List<ChannelDTO>> getAllChannels() {
         logger.info("Список channel: ");
         List<Channel> channels = channelService.gelAllChannels();
@@ -130,7 +126,6 @@ public class ChannelRestController {
             logger.info(channel.toString());
         }
         List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
-
         return ResponseEntity.ok(channelDTOList);
     }
 
@@ -171,4 +166,35 @@ public class ChannelRestController {
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/private")
+    public ResponseEntity<List<ChannelDTO>> getPrivateChannels() {
+        logger.info("Список приватных каналов: ");
+        List<Channel> channels = channelService.getPrivateChannels();
+        for (Channel channel : channels) {
+            logger.info(channel.toString());
+        }
+        List<ChannelDTO> channelsDTOList = channelDTOService.toDto(channels);
+        return ResponseEntity.ok(channelsDTOList);
+    }
+
+    @GetMapping(value = "/all_archive")
+    public ResponseEntity<List<ChannelDTO>> getAllArchiveChannels() {
+        logger.info("Список архивных каналов: ");
+        List<Channel> channels = channelService.getAllArchiveChannels();
+        for (Channel channel : channels) {
+            logger.info(channel.toString());
+        }
+        List<ChannelDTO> channelsDTO = channelDTOService.toDto(channels);
+        return ResponseEntity.ok(channelsDTO);
+    }
+
+    @PostMapping(value = "/unzip/{id}")
+    public ResponseEntity<ChannelDTO> unzipChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(false);
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelDTOService.toDto(channel);
+        logger.info("Канал с id = {} разархивирован", id);
+        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+    }
 }

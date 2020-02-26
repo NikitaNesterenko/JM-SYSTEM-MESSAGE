@@ -19,8 +19,8 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Workspace getWorkspaceByName(String name) {
         try {
-            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
-                    .setParameter(1, name)
+            return (Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces  WHERE name = :name", Workspace.class)
+                    .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -29,18 +29,18 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public List<Workspace> getWorkspacesByOwner(User user) {
-            return (List<Workspace>) entityManager.createNativeQuery("select * from workspace where owner_id = ?", Workspace.class)
-                    .setParameter(1, user.getId())
+            return (List<Workspace>) entityManager.createNativeQuery("SELECT * FROM workspace WHERE owner_id = :id", Workspace.class)
+                    .setParameter("id", user.getId())
                     .getResultList();
     }
 
     @Override
     public List<Workspace> getWorkspacesByUser(User user) {
-        String query = "select ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
-                + "from workspaces ws "
-                + "right join workspace_user_role wur on ws.id = wur.workspace_id "
-                + "where wur.user_id = :userid "
-                + "group by ws.id";
+        String query = "SELECT ws.id, ws.name, ws.owner_id, ws.is_private, ws.created_date "
+                + "FROM workspaces ws "
+                + "RIGHT JOIN workspace_user_role wur ON ws.id = wur.workspace_id "
+                + "WHERE wur.user_id = :userid "
+                + "GROUP BY ws.id";
         return entityManager.createNativeQuery(query, Workspace.class)
                 .setParameter("userid", user.getId())
                 .getResultList();

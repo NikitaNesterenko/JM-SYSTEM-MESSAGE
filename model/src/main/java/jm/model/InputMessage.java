@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @ToString
 public class InputMessage {
 
-    private Long id;  // нужно для редактирования сообщений
+    private Long id;
 
-    private Long channelId;  // нужно чтобы новые и измененные сообщения не попадали сначала в любой открытый ченнел
+    private Long channelId;
 
     private String channelName;
 

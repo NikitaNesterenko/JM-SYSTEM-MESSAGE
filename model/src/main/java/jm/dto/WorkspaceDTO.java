@@ -27,8 +27,6 @@ public class WorkspaceDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
-    // Constructor for simplify Workspace->WorkspaceDTO conversion.
-    // copying simple fields
     public WorkspaceDTO(Workspace workspace) {
         this.id = workspace.getId();
         this.name = workspace.getName();

@@ -7,7 +7,12 @@ import jm.model.User;
 import java.util.List;
 
 public interface ChannelService {
+
     List<Channel> gelAllChannels();
+
+    List<Channel> getAllArchiveChannels();
+
+    void unzipChannel(Channel channel);
 
     void createChannel(Channel channel);
 
@@ -27,4 +32,5 @@ public interface ChannelService {
 
     List<Channel> getChannelsByUserId(Long userId);
 
+    List<Channel> getPrivateChannels();
 }

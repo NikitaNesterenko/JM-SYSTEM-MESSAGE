@@ -1,9 +1,6 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -34,7 +31,6 @@ import java.util.Set;
         )
 )
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -70,11 +66,9 @@ public class User {
 //    @JoinColumn(name = "", referencedColumnName = "id")
 //    private Status currentStatus;
 
-    // User title - What I do (occupation)?
     @Column(name = "title")
     private String title;
 
-    // a name, that other users can see
     @Column(name = "display_name")
     private String displayName;
 
@@ -102,8 +96,6 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private Set<UserFile> userFiles;
 
-    //    @JsonSerialize(using = CustomUserSerializer.class)
-//    @JsonDeserialize(using = CustomUserDeserializer.class)
     @JsonIgnore
     @ToString.Exclude
     @ManyToMany(cascade = CascadeType.REFRESH)
@@ -113,7 +105,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "starred_messages_id", referencedColumnName = "id"))
     private Set<Message> starredMessages;
 
-    // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
     @ToString.Exclude
     private Set<User> directMessagesToUsers;
@@ -127,17 +118,6 @@ public class User {
     @Column(name = "zoom_expire_date")
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime expireDateZoomToken;
-
-    // TODO каналы пользователя, исправить маппинг в Channel
-    // юзер может создавать каналы, либо быть участником (member) в чужих каналах
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_channels",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "channel_id")
-//    )
-//    private Set<Channel> userChannels;
-
 
 //    TODO двухсторонняя связь - исправить мапинг в Workspace
 //    @OneToOne
@@ -198,25 +178,4 @@ public class User {
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
     }
-
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        User user = (User) o;
-//        return id.equals(user.id) &&
-//                email.equals(user.email) &&
-//                password.equals(user.password);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, email, password);
-//    }
-
-
 }

@@ -1,8 +1,8 @@
 package jm.dao;
 
 import jm.api.dao.ChannelDAO;
-import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     @Override
     public Channel getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
-                    .setParameter(1, name)
+            return (Channel) entityManager.createQuery("SELECT c FROM Channel c WHERE c.name = :id", Channel.class)
+                    .setParameter("id", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -35,8 +35,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     @Override
     public List<Channel> getChannelsByOwner(User user) {
         try {
-            return (List<Channel>) entityManager.createNativeQuery("select * from channels where owner_id=?", Channel.class)
-                    .setParameter(1, user.getId())
+            return (List<Channel>) entityManager.createQuery("SELECT c FROM Channel c WHERE c.user = :id", Channel.class)
+                    .setParameter("id", user.getId())
                     .getResultList();
         } catch (NoResultException e) {
             return null;
@@ -44,7 +44,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
+    public List getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
         String query = "SELECT ch.id, ch.name, ch.is_private " +
                 "FROM channels ch " +
                 "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
@@ -61,14 +61,14 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
-        return (List<Channel>) entityManager.createNativeQuery("select * from channels where workspace_id=?", Channel.class)
-                .setParameter(1, id)
+        return (List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE workspace_id = :id", Channel.class)
+                .setParameter("id", id)
                 .getResultList();
     }
 
     public List<Channel> getChannelsByUserId(Long userId) {
-        List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("select channel_id from channels_users where user_id=?")
-                .setParameter(1, userId)
+        List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("SELECT cu.channel_id FROM channels_users cu WHERE cu.user_id = :id")
+                .setParameter("id", userId)
                 .getResultList();
         List<BigInteger> channelsIdentityNumbersArrayList = new ArrayList<>(channelsIdentityNumbers);
         List<Channel> channels = new ArrayList<>();
@@ -87,9 +87,39 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("select o from Channel o where o.id in :ids", Channel.class)
+                .createQuery("SELECT o FROM Channel o WHERE o.id IN :ids", Channel.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }
 
+    @Override
+    public void deleteById(Long id) {
+        entityManager.createNativeQuery("DELETE FROM messages m WHERE m.channel_Id = :Id")
+                .setParameter("Id", id)
+                .executeUpdate();
+    }
+
+    @Override
+    public Channel merge(Channel channel) {
+        if (channel.getArchived()) {
+            entityManager.createNativeQuery("UPDATE messages m SET m.is_deleted = TRUE WHERE m.channel_id = :id")
+                    .setParameter("id", channel.getId())
+                    .executeUpdate();
+        }
+        return entityManager.merge(channel);
+    }
+
+    @Override
+    public List<Channel> getArchivedChannels() {
+        return entityManager.createQuery("SELECT c FROM Channel  c LEFT JOIN FETCH c.user WHERE c.archived = TRUE ", Channel.class).getResultList();
+    }
+
+    @Override
+    public List<Channel> getPrivateChannels() {
+        try {
+            return entityManager.createQuery("SELECT c FROM Channel c WHERE c.isPrivate = TRUE ", Channel.class).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

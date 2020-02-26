@@ -31,21 +31,17 @@ public class BotDtoServiceImpl implements BotDtoService {
             return null;
         }
 
-        // creating new BotDTO with simple fields copied from Bot
         BotDTO botDTO = new BotDTO(bot);
 
-        // setting up 'workspaceId'
         Workspace workspace = bot.getWorkspace();
         if (workspace != null) {
             botDTO.setWorkspaceId(workspace.getId());
         }
 
-        // setting up 'channelIds'
         if (bot.getChannels() != null) {
             Set<Long> channelIds = bot.getChannels().stream().map(Channel::getId).collect(Collectors.toSet());
             botDTO.setChannelIds(channelIds);
         }
-
         return botDTO;
     }
 
@@ -57,19 +53,14 @@ public class BotDtoServiceImpl implements BotDtoService {
             return null;
         }
 
-        // creating new Bot with simple fields copied from BotDTO
         Bot bot = new Bot(botDto);
-
-        // setting up 'workspace'
         if (botDto.getWorkspaceId() != null) {
             bot.setWorkspace(workspaceDAO.getById(botDto.getWorkspaceId()));
         }
 
-        // setting up 'channels'
         Set<Long> channelIds = botDto.getChannelIds();
         List<Channel> channels = channelDAO.getChannelsByIds(channelIds);
         bot.setChannels(new HashSet<>(channels));
-
         return bot;
     }
 }

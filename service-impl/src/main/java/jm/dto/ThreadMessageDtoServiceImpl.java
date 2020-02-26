@@ -51,7 +51,7 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         }
 
         List<ThreadMessageDTO> threadMessageDTOList = new ArrayList<>();
-        for (ThreadChannelMessage message: threadChannelMessages) {
+        for (ThreadChannelMessage message : threadChannelMessages) {
             threadMessageDTOList.add(toDto(message));
         }
 

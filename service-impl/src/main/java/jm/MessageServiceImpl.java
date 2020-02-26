@@ -50,10 +50,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void deleteMessage(Long id) { messageDAO.deleteById(id); }
+    public void deleteMessage(Long id) {
+        messageDAO.deleteById(id);
+    }
 
     @Override
-    public void updateMessage(Message message) { messageDAO.merge(message); }
+    public void updateMessage(Message message) {
+        messageDAO.merge(message);
+    }
 
     @Override
     public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {

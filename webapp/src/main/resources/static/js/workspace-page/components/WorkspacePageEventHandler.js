@@ -46,7 +46,8 @@ export class WorkspacePageEventHandler {
                 name: $('#exampleInputChannelName').val(),
                 isPrivate: $('#exampleCheck1').is(':checked'),
                 createdDate: this.getFormattedCreateDate(),
-                ownerId: this.logged_user.id
+                ownerId: this.logged_user.id,
+                topic: $('#topicChannel').val()
             };
 
             this.channel_service.create(entity).then(chn => {

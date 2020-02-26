@@ -59,7 +59,6 @@ public class BotRestController {
     @GetMapping("/{id}")
     public ResponseEntity<BotDTO> getBotById(@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
-        //logger.info(botService.getBotById(id).toString());
         Bot bot = botService.getBotById(id);
         return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
     }

@@ -39,10 +39,8 @@ public class MessageDtoServiceImpl implements MessageDtoService {
             return null;
         }
 
-        // creating new MessageDTO with simple fields copied from Message
         MessageDTO messageDto = new MessageDTO(message);
 
-        // setting up 'userId', 'userName' or 'botId', 'botNickName' fields
         User user = message.getUser();
         Bot bot = message.getBot();
         if (user != null) {
@@ -55,24 +53,20 @@ public class MessageDtoServiceImpl implements MessageDtoService {
             messageDto.setPluginName(bot.getName());
         }
 
-        // setting up 'channelName'
         Long channelId = message.getChannelId();
         if (channelId != null) {
             Channel channel = channelDAO.getById(channelId);
             messageDto.setChannelName(channel.getName());
         }
 
-        // setting up 'sharedMessageId'
         Message sharedMessage = message.getSharedMessage();
         if (sharedMessage != null) {
             messageDto.setSharedMessageId(sharedMessage.getId());
         }
 
-        // setting up 'recipientUserIds'
         Set<Long> recipientUserIds = message.getRecipientUsers().stream().map(User::getId).collect(Collectors.toSet());
         messageDto.setRecipientUserIds(recipientUserIds);
 
-        // setting up 'parentMessageId'
         Message parentMessage = message.getParentMessage();
         if (parentMessage != null) {
             messageDto.setParentMessageId(parentMessage.getId());
@@ -88,33 +82,27 @@ public class MessageDtoServiceImpl implements MessageDtoService {
             return null;
         }
 
-        // creating new Message with simple fields copied from MessageDTO
         Message message = new Message(messageDto);
 
-        // setting up 'user' or 'bot'
         if (messageDto.getUserId() != null) {
             message.setUser(userDAO.getById(messageDto.getUserId()));
         } else if (messageDto.getBotId() != null) {
             message.setBot(botDAO.getById(messageDto.getBotId()));
         }
 
-        // setting up 'sharedMessage'
         Long sharedMessageId = messageDto.getSharedMessageId();
         if (sharedMessageId != null) {
             message.setSharedMessage(messageDAO.getById(sharedMessageId));
         }
 
-        // setting up 'recipientUsers'
         Set<Long> recipientUserIds = messageDto.getRecipientUserIds();
         List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
         message.setRecipientUsers(new HashSet<>(recipientUsers));
 
-        // parentMessageId
         Long parentMessageId = messageDto.getParentMessageId();
         if (parentMessageId != null) {
             message.setParentMessage(messageDAO.getById(parentMessageId));
         }
-
         return message;
     }
 }

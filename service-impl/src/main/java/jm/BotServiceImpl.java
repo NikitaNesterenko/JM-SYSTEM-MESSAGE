@@ -22,29 +22,42 @@ public class BotServiceImpl implements BotService {
     private BotDAO botDAO;
 
     @Autowired
-    public void setBotDAO(BotDAO botDAO) { this.botDAO = botDAO; }
-
-    @Override
-    public List<Bot> getAllBots() { return botDAO.getAll(); }
-
-    @Override
-    public void createBot(Bot bot) { botDAO.persist(bot); }
-
-    @Override
-    public void deleteBot(Long id) { botDAO.deleteById(id); }
-
-    @Override
-    public void updateBot(Bot bot) { botDAO.merge(bot);
+    public void setBotDAO(BotDAO botDAO) {
+        this.botDAO = botDAO;
     }
 
     @Override
-    public Bot getBotById(Long id) { return botDAO.getById(id); }
+    public List<Bot> getAllBots() {
+        return botDAO.getAll();
+    }
+
+    @Override
+    public void createBot(Bot bot) {
+        botDAO.persist(bot);
+    }
+
+    @Override
+    public void deleteBot(Long id) {
+        botDAO.deleteById(id);
+    }
+
+    @Override
+    public void updateBot(Bot bot) {
+        botDAO.merge(bot);
+    }
+
+    @Override
+    public Bot getBotById(Long id) {
+        return botDAO.getById(id);
+    }
 
     @Override
     public Bot getBotByWorkspaceId(Workspace workspace) {
-       return botDAO.getBotByWorkspaceId(workspace);
+        return botDAO.getBotByWorkspaceId(workspace);
     }
 
     @Override
-    public Set<Channel> getChannels(Bot bot) { return botDAO.getChannels(bot); }
+    public Set<Channel> getChannels(Bot bot) {
+        return botDAO.getChannels(bot);
+    }
 }

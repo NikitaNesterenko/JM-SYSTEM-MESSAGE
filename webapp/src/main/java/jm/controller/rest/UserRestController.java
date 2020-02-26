@@ -90,9 +90,6 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         logger.info("Список пользователей канала с id = {}", id);
         List<User> users = userService.getAllUsersInThisChannel(id);
-        for (User user : users) {
-            logger.info(user.toString());
-        }
         List<UserDTO> userDTOList = userDtoService.toDto(users);
         return ResponseEntity.ok(userDTOList);
     }

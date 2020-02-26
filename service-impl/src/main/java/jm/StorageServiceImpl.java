@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class StorageServiceImpl  implements StorageService {
+public class StorageServiceImpl implements StorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageServiceImpl.class);
 
@@ -46,8 +46,7 @@ public class StorageServiceImpl  implements StorageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return null;
