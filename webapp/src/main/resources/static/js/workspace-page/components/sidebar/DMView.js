@@ -48,7 +48,7 @@ export class DMView {
             if (conversation != null) {
                 await this.showDialog(conversation.id);
             } else {
-                await this.createConversation(this.logged_user, respondent, workspace);
+                await this.createOrShowConversation(this.logged_user, respondent, workspace);
                 conversation = await this.conversation_service.getConversationForUsers(this.logged_user.id, respondent.id);
                 await this.dm_chat.populateDirectMessages();
             }
@@ -69,7 +69,7 @@ export class DMView {
         await this.direct_message_view.showAllMessages(messages);
     }
 
-    async createConversation(principal, respondent, workspace) {
+    async createOrShowConversation(principal, respondent, workspace) {
         const entity = {
             openingUser: principal,
             associatedUser: respondent,

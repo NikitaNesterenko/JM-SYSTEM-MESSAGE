@@ -15,6 +15,16 @@ import java.util.List;
 public class ConversationDAOImpl extends AbstractDao<Conversation> implements ConversationDAO {
 
     @Override
+    public void showConversation(Long conversationID, Long userID) {
+        entityManager.createNativeQuery(
+                "UPDATE conversations\n" +
+                        "SET show_for_opener     = IF(opener_id = ?, true, show_for_opener),\n" +
+                        "    show_for_associated = IF(associated_id = ?, true, show_for_associated)\n" +
+                        "WHERE id = ?")
+                .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
+    }
+
+    @Override
     public void persist(Conversation conversation) {
         if (
                 getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
@@ -27,11 +37,11 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     @Override
     public Conversation getConversationByUsersId(Long firstUserId, Long secondUserId) {
         try {
-            return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
+            return (Conversation) entityManager.createNativeQuery("select * from conversations where opener_id=? and associated_id=?", Conversation.class)
                     .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult();
         } catch (NoResultException e1) {
             try {
-                return (Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
+                return (Conversation) entityManager.createNativeQuery("select * from conversations where opener_id=? and associated_id=?", Conversation.class)
                         .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult();
             } catch (NoResultException e2) {
                 return null;

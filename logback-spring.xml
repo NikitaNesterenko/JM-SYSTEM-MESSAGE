@@ -22,13 +22,13 @@
         </encoder>
     </appender>
 
-<!--    <logger name="org.springframework.web" level="trace">-->
-<!--        <appender-ref ref="CONSOLE"/>-->
-<!--    </logger>-->
+    <logger name="org.springframework.web" level="trace">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
-<!--    <logger name="org.springframework" level="INFO" additivity="false">-->
-<!--        <appender-ref ref="CONSOLE"/>-->
-<!--    </logger>-->
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
     <logger name="jm.controller.rest" level="INFO" additivity="false">
         <appender-ref ref="FILE"/>
@@ -38,9 +38,9 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">-->
-<!--        <appender-ref ref="CONSOLE"/>-->
-<!--    </logger>-->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
     <logger name="jm" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -70,11 +69,9 @@ public class User {
 //    @JoinColumn(name = "", referencedColumnName = "id")
 //    private Status currentStatus;
 
-    // User title - What I do (occupation)?
     @Column(name = "title")
     private String title;
 
-    // a name, that other users can see
     @Column(name = "display_name")
     private String displayName;
 
@@ -217,6 +214,4 @@ public class User {
 //    public int hashCode() {
 //        return Objects.hash(id, email, password);
 //    }
-
-
 }

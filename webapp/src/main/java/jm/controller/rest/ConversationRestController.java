@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ConversationService;
 import jm.model.Conversation;
+import jm.model.User;
+import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,7 @@ public class ConversationRestController {
         return ResponseEntity.ok(conversationService.getConversationById(id));
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/createOrShow")
     @Operation(summary = "Create conversation",
             responses = {
                     @ApiResponse(
@@ -53,13 +55,12 @@ public class ConversationRestController {
                     @ApiResponse(responseCode = "200", description = "OK: conversation created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to create conversation")
             })
-    public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
+    public ResponseEntity<Conversation> createOrShowConversation(@RequestBody Conversation conversation) {
         try {
-            conversationService.createConversation(conversation);
+            conversationService.createOrShowConversation(conversation);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
-
         return new ResponseEntity<>(conversation, HttpStatus.OK);
     }
 

@@ -25,8 +25,13 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public void createConversation(Conversation conversation) {
-        conversationDAO.persist(conversation);
+    public void createOrShowConversation(Conversation conversation) {
+        Conversation conversationCheck = conversationDAO.getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId());
+        if (conversationCheck == null) {
+            conversationDAO.persist(conversation);
+        } else {
+            conversationDAO.showConversation(conversationCheck.getId(), conversation.getOpeningUser().getId());
+        }
     }
 
     @Override

@@ -93,12 +93,11 @@ public class UserRestController {
                             description = "OK: get user"
                     )
             })
-    public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         logger.info("Польщователь с id = {}", id);
         User user = userService.getUserById(id);
         logger.info(user.toString());
-        UserDTO userDTO = userDtoService.toDto(user);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     // DTO compliant
@@ -167,16 +166,16 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDTO.class)
+                                    schema = @Schema(implementation = User.class)
                             ),
                             description = "OK: get logged user"
                     )
             })
-    public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
+    public ResponseEntity<User> getLoggedUserId(Principal principal) {
         User user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
-        UserDTO userDTO = userDtoService.toDto(user);
-        return ResponseEntity.ok(userDTO);
+//        UserDTO userDTO = userDtoService.toDto(user);
+        return ResponseEntity.ok(user);
     }
 
     // DTO compliant

@@ -7,7 +7,7 @@ public interface ConversationService {
 
     List<Conversation> getAllConversations();
 
-    void createConversation(Conversation conversation);
+    void createOrShowConversation(Conversation conversation);
 
     void deleteConversation(Long conversationID, Long userID);
 

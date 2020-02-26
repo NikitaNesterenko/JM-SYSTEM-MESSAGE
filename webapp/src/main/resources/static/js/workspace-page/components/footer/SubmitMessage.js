@@ -51,7 +51,6 @@ export class SubmitMessage {
                 }
 
                 const channel_name = sessionStorage.getItem("channelName");
-                const channel_name2 = sessionStorage.getItem("channelname");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_name !== '0') {

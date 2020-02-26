@@ -48,17 +48,12 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(name = "voice_message",
-//            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "name"))
-//            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
     @Lob
     private String voiceMessage;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
-    // from ChannelMessage
 //    @ManyToOne
 //    @JoinColumn(name = "channel_id")
     @Column(name = "channel_id")
@@ -67,7 +62,6 @@ public class Message {
     @Column(name = "workspace_id")
     private Long workspaceId;
 
-    // from ChannelMessage
     @ManyToOne
     @JoinColumn(name = "shared_message_id", referencedColumnName = "id")
     private Message sharedMessage;
@@ -164,5 +158,4 @@ public class Message {
 //        this.dateCreate = dateCreate;
 //        this.sharedMessageId = sharedMessageId;
 //    }
-
 }

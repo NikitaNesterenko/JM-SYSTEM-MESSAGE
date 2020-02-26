@@ -20,4 +20,6 @@ public interface ConversationDAO {
     Conversation getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
+
+    void showConversation(Long ConversationID, Long userID);
 }

@@ -30,7 +30,10 @@ export class WorkspacePageEventHandler {
                 this.user_service.getUsersByWorkspace(workspace.id).then(users => {
                         let data = "<div class=\"list-group\">\n";
                         users.forEach(user => {
-                            data += "<a class=\"list-group-item list-group-item-action\">";
+                            data += "<a id=\"createOrShowConversation\" class=\"list-group-item list-group-item-action\" " +
+                                "data-associated_user_id=\"";
+                            data += user.id;
+                            data += "\" >";
                             data += user.name.toString();
                             data += "</a>\n";
                         });

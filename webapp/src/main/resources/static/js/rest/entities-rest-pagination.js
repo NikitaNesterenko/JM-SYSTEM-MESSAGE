@@ -336,6 +336,15 @@ export class ConversationRestPaginationService extends RestPaginationService {
         super('/rest/api/conversations');
     }
 
+    createOrShowConversation = async (conversation) => {
+        const response = await fetch(`/rest/api/conversations/createOrShow`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(conversation)
+        });
+        return response.status;
+    };
+
     getAllConversationsByUserId = async (id) => {
         const response = await fetch(`/rest/api/conversations/user/${id}`);
         return response.json();
