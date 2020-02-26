@@ -15,7 +15,7 @@ export class WorkspacePageEventHandler {
         this.channel_service = new ChannelRestPaginationService();
         this.user_service = new UserRestPaginationService();
         this.wks_header = new NavHeader();
-        this.user_service = new UserRestPaginationService();
+        this.workspace_service = new WorkspaceRestPaginationService();
     }
 
     onAddChannelClick() {
@@ -26,8 +26,8 @@ export class WorkspacePageEventHandler {
 
     onAddDirectMessageClick() {
         this.addDirectMessage.click(() => {
-            new WorkspaceRestPaginationService().getChosenWorkspace().then(workspace => {
-                this.user_service.getUsersByWorkspace(workspace.id).then(users => {
+            this.workspace_service.getChosenWorkspace().then(workspace => {
+                this.user_service.getAllUsersForDirectMessageList(workspace.id, this.logged_user.id).then(users => {
                         let data = "<div class=\"list-group\">\n";
                         users.forEach(user => {
                             data += "<a id=\"createOrShowConversation\" class=\"list-group-item list-group-item-action\" " +

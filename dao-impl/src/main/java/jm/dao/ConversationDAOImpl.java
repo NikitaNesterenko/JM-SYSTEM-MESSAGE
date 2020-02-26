@@ -25,6 +25,13 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     }
 
     @Override
+    public List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID) {
+         return (List<Conversation>) entityManager.createNativeQuery(
+                "SELECT * FROM conversations WHERE opener_id=? AND show_for_opener=true OR associated_id=? AND show_for_associated=true AND workspace_id=?", Conversation.class)
+                .setParameter(1, loggedUserID).setParameter(2, loggedUserID).setParameter(3, workspaceID).getResultList();
+    }
+
+    @Override
     public void persist(Conversation conversation) {
         if (
                 getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null

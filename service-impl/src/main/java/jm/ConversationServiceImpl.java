@@ -4,7 +4,6 @@ import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -22,6 +21,11 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public List<Conversation> getAllConversations() {
         return conversationDAO.getAll();
+    }
+
+    @Override
+    public List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID) {
+        return conversationDAO.getAllShownConversations(workspaceID, workspaceID);
     }
 
     @Override

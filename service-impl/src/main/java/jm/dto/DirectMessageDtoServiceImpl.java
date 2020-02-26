@@ -121,7 +121,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         directMessage.setIsDeleted(directMessageDTO.getIsDeleted());
 
         Set<Long> recipientUserIds = directMessageDTO.getRecipientUserIds();
-        List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
+        List<User> recipientUsers = userDAO.getUsersByIDs(recipientUserIds);
         directMessage.setRecipientUsers(new HashSet<>(recipientUsers));
         directMessage.setFilename(directMessageDTO.getFilename());
         directMessage.setWorkspaceId(directMessageDTO.getWorkspaceId());

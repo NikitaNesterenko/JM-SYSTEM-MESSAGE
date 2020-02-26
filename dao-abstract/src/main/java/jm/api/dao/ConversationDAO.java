@@ -9,6 +9,8 @@ public interface ConversationDAO {
 
     List<Conversation> getAll();
 
+    List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID);
+
     void persist(Conversation conversation);
 
     void deleteById(Long conversationID, Long userID);

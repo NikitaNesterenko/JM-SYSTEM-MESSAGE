@@ -112,7 +112,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
         // setting up 'recipientUsers'
         Set<Long> recipientUserIds = messageDto.getRecipientUserIds();
-        List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
+        List<User> recipientUsers = userDAO.getUsersByIDs(recipientUserIds);
         message.setRecipientUsers(new HashSet<>(recipientUsers));
 
         // parentMessageId

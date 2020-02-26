@@ -26,7 +26,12 @@ export class UserRestPaginationService extends RestPaginationService {
     getUserById = async (id) => {
         const user = await fetch(`/rest/api/users/${id}`);
         return await user.json();
-    }
+    };
+
+    getAllUsersForDirectMessageList = async (workspaceID, loggedUserID) => {
+        const user = await fetch(`/rest/api/users/getAllForDM/${workspaceID}/${loggedUserID}`);
+        return await user.json();
+    };
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -276,7 +281,7 @@ export class StorageService {
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/invites');
     }
 
@@ -289,10 +294,11 @@ export class InviteRestPaginationService extends RestPaginationService {
     }
 }
 
-export class ThreadChannelRestPaginationService extends  RestPaginationService{
-    constructor(){
+export class ThreadChannelRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/threads');
     }
+
     getThreadChannelByChannelMessageId = async (id) => {
         const response = await fetch('/rest/api/threads/' + id);
         return response.json();
@@ -312,27 +318,28 @@ export class ThreadChannelRestPaginationService extends  RestPaginationService{
     };
 }
 
-export class ThreadChannelMessageRestPaginationService extends  RestPaginationService{
-    constructor(){
+export class ThreadChannelMessageRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/threads/messages');
     }
+
     getThreadChannelMessagesByThreadChannelId = async (id) => {
         const response = await fetch('/rest/api/threads/messages/' + id);
         return response.json();
     };
 
-    createThreadMsg = async (msg,user) => {
+    createThreadMsg = async (msg, user) => {
         const response = await fetch(`/rest/api/threads/messages/create`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(msg,user)
+            body: JSON.stringify(msg, user)
         });
         return response.json();
     }
 }
 
 export class ConversationRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/conversations');
     }
 

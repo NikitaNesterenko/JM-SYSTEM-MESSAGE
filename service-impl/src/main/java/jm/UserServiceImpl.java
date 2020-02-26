@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user) {
         userDAO.persist(user);
     }
-
 
     @Override
     public void deleteUser(Long id) {
@@ -66,13 +65,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsersInThisChannel(Long id) {
-        return userDAO.getAllUsersInThisChannel(id);
+    public List<User> getAllUsersByChannel(Long channelID) {
+        return userDAO.getAllUsersByChannel(channelID);
     }
 
     @Override
-    public List<UserDTO> getAllUsersInWorkspace(Long id) {
-        return userDAO.getUsersInWorkspace(id);
+    public List<User> getAllUsersByWorkspace(Long workspaceID) {
+        return userDAO.getAllUsersByWorkspace(workspaceID);
     }
 
+    @Override
+    public List<User> getUsersByIDs(Set<Long> userIDs) {
+        return userDAO.getUsersByIDs(userIDs);
+    }
 }

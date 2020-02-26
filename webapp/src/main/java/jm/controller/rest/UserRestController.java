@@ -4,13 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jm.ConversationService;
 import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
-import jm.model.Message;
+import jm.model.Conversation;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/rest/api/users")
@@ -28,19 +31,20 @@ import java.util.List;
 public class UserRestController {
 
     private UserService userService;
+    private ConversationService conversationService;
     private UserDtoService userDtoService;
     private MailService mailService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             UserRestController.class);
 
-    UserRestController(UserService userService, UserDtoService userDtoService, MailService mailService) {
+    UserRestController(UserService userService, ConversationService conversationService, UserDtoService userDtoService, MailService mailService) {
         this.userService = userService;
+        this.conversationService = conversationService;
         this.userDtoService = userDtoService;
         this.mailService = mailService;
     }
 
-    // DTO compliant
     @GetMapping
     @Operation(summary = "Get all users",
             responses = {
@@ -62,7 +66,6 @@ public class UserRestController {
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
 
-    // DTO compliant
     @PostMapping(value = "/create")
     @Operation(summary = "Create user",
             responses = {
@@ -81,26 +84,52 @@ public class UserRestController {
         return new ResponseEntity<>(userDtoService.toDto(user), HttpStatus.OK);
     }
 
-    // DTO compliant
     @GetMapping("/{id}")
     @Operation(summary = "Get user by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDTO.class)
+                                    schema = @Schema(implementation = User.class)
                             ),
                             description = "OK: get user"
                     )
             })
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-        logger.info("Польщователь с id = {}", id);
+        logger.info("Пользователь с id = {}", id);
         User user = userService.getUserById(id);
         logger.info(user.toString());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    // DTO compliant
+    @GetMapping("/getAllForDM/{workspaceID}/{loggedUserID}")
+    @Operation(summary = "Get user by id",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class)
+                            ),
+                            description = "OK: get user"
+                    )
+            })
+    public ResponseEntity<List<User>> getAllForDM(@PathVariable("workspaceID") Long workspaceID,
+                                            @PathVariable("loggedUserID") Long loggedUserID) {
+        Set<Long> userIDs = new LinkedHashSet<>();
+        conversationService.getAllShownConversations(workspaceID, loggedUserID)
+                .forEach(conversation -> {
+                    userIDs.add(conversation.getOpeningUser().getId());
+                    userIDs.add(conversation.getAssociatedUser().getId());
+                });
+
+        Set<Long> allUserIDs = new LinkedHashSet<>();
+        userService.getAllUsersByWorkspace(workspaceID).forEach(user -> allUserIDs.add(user.getId()));
+        allUserIDs.removeAll(userIDs);   //remove already defined conversations form dm list
+        allUserIDs.remove(loggedUserID); //remove myself from dm list
+        List<User> users = userService.getUsersByIDs(allUserIDs);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @PutMapping(value = "/update")
     @Operation(summary = "Update user",
             responses = {
@@ -149,9 +178,8 @@ public class UserRestController {
                             description = "OK: get all users by channel"
                     )
             })
-    public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
-        logger.info("Список пользователей канала с id = {}", id);
-        List<User> users = userService.getAllUsersInThisChannel(id);
+    public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long channelID) {
+        List<User> users = userService.getAllUsersByChannel(channelID);
         for (User user : users) {
             logger.info(user.toString());
         }
@@ -185,18 +213,18 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(type = "array", implementation = UserDTO.class)
+                                    schema = @Schema(type = "array", implementation = User.class)
                             ),
                             description = "OK: get all users"
                     )
             })
-    public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id) {
-        logger.info("Список пользователей Workspace с id = {}", id);
-        List<UserDTO> userDTOsList = userService.getAllUsersInWorkspace(id);
-        for (UserDTO user : userDTOsList) {
+    public ResponseEntity<List<User>> getAllUsers(@PathVariable("id") Long workspaceID) {
+        logger.info("Список пользователей Workspace с id = {}", workspaceID);
+        List<User> userList = userService.getAllUsersByWorkspace(workspaceID);
+        for (User user : userList) {
             logger.info(user.toString());
         }
-        return ResponseEntity.ok(userDTOsList);
+        return ResponseEntity.ok(userList);
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
