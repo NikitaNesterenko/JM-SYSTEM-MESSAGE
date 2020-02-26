@@ -256,9 +256,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                                                                             alt=""></span>
+                                         src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                         srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                         alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -297,7 +297,7 @@
                         <div>
                             <div class="p-classic_nav__team_menu__blurb">
                                 <i class="p-classic_nav__team_menu__blurb__icon" aria-hidden="true"
-                                   style="height: 36px; width: 36px; min-width: 36px; font-size: 20px; line-height: 36px; white-space: nowrap;"></i>
+                                   style="height: 36px; width: 36px; min-width: 36px; font-size: 20px; line-height: 36px; white-space: nowrap; background-image: url(&quot;https://avatars.slack-edge.com/2019-04-26/608315739666_d6dcde1585520bcb3ef9_88.png&quot;);"></i>
                                 <div class="p-classic_nav__team_menu__blurb__right">
                                     <div class="p-classic_nav__team_menu__blurb__name">Java Mentoring</div>
                                     <div class="p-classic_nav__team_menu__blurb__sub">javamentor.slack.com</div>
@@ -323,14 +323,14 @@
                         </div>
                         <div class="c-menu_item__li" data-qa="sign-out-wrapper">
                             <a href="/logout">
-                                <button class="c-button-unstyled c-menu_item__button" type="button">
-                                    <div class="c-menu_item__label">
-                                        Sign out of
-                                        <strong>
-                                            Java Mentoring
-                                        </strong>
-                                    </div>
-                                </button>
+                            <button class="c-button-unstyled c-menu_item__button" type="button">
+                                <div class="c-menu_item__label">
+                                    Sign out of
+                                    <strong>
+                                        Java Mentoring
+                                    </strong>
+                                </div>
+                            </button>
                             </a>
                         </div>
                         <div aria-hidden="true"
@@ -460,8 +460,7 @@
                                 </tr>
                             </table>
                         </form>
-                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back
-                        </button>
+                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back</button>
                     </div>
                 </div>
             </div>
@@ -517,28 +516,32 @@
             <div class="p-workspace__top_nav">
                 <div class="p-classic_nav">
                     <div class="p-classic_nav__team_header">
-                        <div class="p-classic_nav__team_header__team">
-                            <span class="p-classic_nav__team_header__team__name" id="WorkspaceName"></span>
-                            <button class="iconsVD-sideBar">
-                                <i class="material-icons buttons-SideBar">
-                                    keyboard_arrow_down
-                                </i>
-                            </button>
-                            <div class="p-classic_nav__team_header__team__dnd_container">
-                                <button class="iconsVD-sideBar" id="bellButton">
-                                    <i class="material-icons buttons-SideBar" type="bell-o">
-                                        notifications_none
+                        <div class="p-classic_nav__team_header__content">
+                            <div class="p-classic_nav__team_header__team">
+                                <div class="p-classic_nav__team_header__team__name">
+                                    Some Team<!--                                                           Team Name-->
+                                </div>
+                                <button class="p-classic_nav__team_header__team__icon_button">
+                                    <i class="p-classic_nav__team_header__team__icon">
+                                        ˅
                                     </i>
                                 </button>
+                                <div class="p-classic_nav__team_header__team__dnd_container">
+                                    <button class="p-classic_nav__team_header__team__dnd">
+                                        <i class="p-classic_nav__team_header__team__dnd__bell_icon">
+                                            🔔
+                                        </i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="p-classic_nav__team_header__user">
-                            <i class="p-channel_sidebar__channel_icon_circle"
-                               style="top: -5px;">●</i>
-                            <span class="p-classic_nav__team_header__user__name">
-                                    <span class="p-classic_nav__team_header__user__name__truncate"
-                                          id="WorkspaceUsername"></span>
-                            </span>
+                            <div class="p-classic_nav__team_header__user">
+                                <i class="p-classic_nav__team_header__user__presence">
+                                    ●
+                                </i>
+                                <span class="p-classic_nav__team_header__user__name">
+                                    <span class="p-classic_nav__team_header__user__name__truncate">Some Username</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="p-classic_nav__channel_header">
