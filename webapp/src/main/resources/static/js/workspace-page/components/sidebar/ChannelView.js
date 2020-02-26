@@ -40,6 +40,7 @@ export class ChannelView {
     }
 
     showBots(workspace_id) {
+        $('#bot_representation').empty(); //чтоб не добавлялись лишние боты
         this.bot_service.getBotByWorkspaceId(workspace_id).then(
             bots => {
                 if (bots !== undefined) {

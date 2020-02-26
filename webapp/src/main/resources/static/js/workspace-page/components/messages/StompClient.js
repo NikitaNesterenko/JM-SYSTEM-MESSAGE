@@ -57,6 +57,8 @@ export class StompClient {
                         }
                     }
                     this.channel_message_view.dialog.messageBoxWrapper();
+                } else {
+                    document.querySelector(`#channel_button_` + result.channelId).style = "color: red";
                 }
             } else {
                 if (result.isDeleted) {
@@ -105,7 +107,7 @@ export class StompClient {
                     if (isAuthor) {
                         this.channelview.showAllChannels(window.choosedWorkspace);
                         setTimeout(function() {
-                            window.pressChannelButton(slackBot.targetChannelId);
+                            window.pressChannelButton(parseInt(slackBot.targetChannelId));
                             },1000);
                     } else {
                         //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
@@ -232,6 +234,8 @@ export class StompClient {
                 } else {
                     if (response.conversationId === current_conversation) {
                         this.dm_view.createMessage(response);
+                    } else {
+                        document.querySelector(`button[data-user_id='${response.userId}']`).style = "color: red";
                     }
                 }
             } else {
