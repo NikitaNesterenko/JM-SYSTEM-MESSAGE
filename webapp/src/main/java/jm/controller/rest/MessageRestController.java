@@ -34,7 +34,6 @@ public class MessageRestController {
         this.messageDtoService = messageDtoService;
     }
 
-    // DTO compliant
     @GetMapping
     @Operation(summary = "Get all messages",
             responses = {
