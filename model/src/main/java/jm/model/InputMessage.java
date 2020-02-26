@@ -50,4 +50,6 @@ public class InputMessage {
 
     private String pluginName;
 
+    private String voiceMessage;
+
 }

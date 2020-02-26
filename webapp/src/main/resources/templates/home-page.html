@@ -1,22 +1,77 @@
-<html>
+<html lang="en">
 
 <head>
     <title>Home Page</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../js/vavilov/css/HomePageStyle.css">
+    <link rel="stylesheet" type="text/css" href="../js/vavilov/css/Loader.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-<h2>Home page</h2>
+<div class="loader hidden" onmousedown="loaderClose()">
+    <img src="/js/vavilov/static/gif.gif"/>
+</div>
 
-<p><a href="/signin">To sign in page</a>
+<a href="/signin" onmouseover="play(1)" onmousedown="play(2)">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    Sign in
+</a>
+<a href="/admin" onmouseover="play(1)" onmousedown="play(2)">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    Admin page
+</a>
+<a href="/chooseWorkspace" onmouseover="play(1)" onmousedown="play(2)">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    Choose workspace
+</a>
+<a href="/email/create" onmouseover="play(1)" onmousedown="play(2)">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    Create workspace
+</a>
 
-<p><a href="/chooseWorkspace">To workspace page</a>
 
-<p><a href="/admin">To admin page</a>
+<!--Button click sounds and loader shutdown script-->
+<script>
+    let click = new Audio();
+    let click2 = new Audio();
+    let welcome = new Audio();
+    click.src = "js/vavilov/static/menu1.wav";
+    click2.src = "js/vavilov/static/menu2.wav";
+    welcome.src = "js/vavilov/static/welcome.wav";
 
-<p><a href="/email/create">Create workspace by email</a>
 
+    function play(num) {
+        switch (num) {
+            case 1:
+                click.play().then(r => r);
+                break;
+            case 2:
+                click2.play().then(r => r);
+                break;
+        }
+    }
+
+    function loaderClose() {
+        $(".loader").fadeOut("slow");
+    }
+</script>
 </body>
-
 </html>

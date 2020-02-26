@@ -6,6 +6,7 @@ $(document).ready(() => {
     submit_message.onAttachFileClick();
     submit_message.onMessageSubmit();
 });
+
 // import {
 //     UserRestPaginationService,
 //     ChannelRestPaginationService,
