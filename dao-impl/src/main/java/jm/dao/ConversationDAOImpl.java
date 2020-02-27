@@ -2,6 +2,8 @@ package jm.dao;
 
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
+import jm.model.User;
+import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -44,6 +46,16 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     public List<Conversation> getConversationsByUserId(Long userId) {
         return (List<Conversation>) entityManager.createNativeQuery("select * from conversations where opener_id=? or associated_id=?", Conversation.class)
                 .setParameter(1, userId).setParameter(2, userId).getResultList();
+    }
 
+    @Override
+    public void deleteById(Long conversationID, Long userID) {
+        entityManager.createNativeQuery(
+                "UPDATE conversations " +
+                "SET " +
+                "    show_for_opener = IF(opener_id = ?, false, true), " +
+                "    show_for_associated = IF(associated_id = ?, false, true) " +
+                "WHERE id = ?")
+                .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
     }
 }

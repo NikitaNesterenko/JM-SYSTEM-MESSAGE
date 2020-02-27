@@ -205,7 +205,7 @@ public class SlackBotController {
                 response.put("report", sendDirectMessage(command.getUserId(), targetUser,
                         commandBody.substring(commandBody.indexOf(targetUserName) + targetUserName.length()), command.getChannelId()));
                 response.put("targetUserId", targetUser.getId().toString());
-                response.put("conversationId", conversationService.getConversationByUsers(command.getUserId(), targetUser.getId()).getId().toString());
+                response.put("conversationId", conversationService.getConversationByUsersId(command.getUserId(), targetUser.getId()).getId().toString());
             } else {
                 response.put("status", "ERROR");
                 response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "User @" + targetUserName + " not found"));
@@ -263,7 +263,7 @@ public class SlackBotController {
         Workspace workspace = channel.getWorkspace();
 
         //Получаем conversation двух пользователей, если существовала
-        Conversation conv = conversationService.getConversationByUsers(fromId, toUser.getId());
+        Conversation conv = conversationService.getConversationByUsersId(fromId, toUser.getId());
         //создаем новый conversation для пользователей
         if (conv == null) {
             conv = new Conversation();
@@ -273,7 +273,7 @@ public class SlackBotController {
             conv.setShowForAssociated(true);
             conv.setShowForOpener(true);
             conversationService.createConversation(conv);
-            conv = conversationService.getConversationByUsers(fromId, toUser.getId());
+            conv = conversationService.getConversationByUsersId(fromId, toUser.getId());
         }
 
         //создаем DirectMessage

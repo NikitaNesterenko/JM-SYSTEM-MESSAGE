@@ -1,4 +1,4 @@
-import {ChannelRestPaginationService, UserRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {UserRestPaginationService, WorkspaceRestPaginationService, ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -9,7 +9,7 @@ export class MenuSettingsModal {
         this.workspace_service = new WorkspaceRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.users_service = new UserRestPaginationService();
-        this.settingBtn = $('#settingsMenuButton, .p-classic_nav__model__button__settings__icon');
+        this.settingBtn = $('#settingsMenuButton .buttons-TopBar');
     }
 
     onMenuSettingsBtnClick() {
@@ -83,7 +83,7 @@ export class MenuSettingsModal {
     onAddPeopleToChannelBtnClick() {
         $('#addBtn').click(() => {
             let name = $('#tags').val();
-            this.workspace_service.getChoosedWorkspace().then(
+            this.workspace_service.getChosenWorkspace().then(
                 workspace => {
                     this.users_service.getUsersByWorkspace(workspace.id).then(
                         usersByWorkspace => {
@@ -109,7 +109,7 @@ export class MenuSettingsModal {
         $("#tags").on("keyup", (event) => {
             let usersByWorkspaceArr = [];
             let usersByChannelArr = [];
-            this.workspace_service.getChoosedWorkspace().then(
+            this.workspace_service.getChosenWorkspace().then(
                 workspace => {
                     this.users_service.getUsersByWorkspace(workspace.id).then(
                         usersByWorkspace => {

@@ -23,8 +23,6 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
     private ChannelDAO channelDAO;
     private ConversationDAO conversationDAO;
 
-
-
     @Autowired
     public void setDirectMessageDtoServiceImpl(UserDAO userDAO, ChannelDAO channelDAO, ConversationDAO conversationDAO) {
         this.userDAO = userDAO;

@@ -20,7 +20,7 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public List<Conversation> gelAllConversations() {
+    public List<Conversation> getAllConversations() {
         return conversationDAO.getAll();
     }
 
@@ -30,8 +30,8 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public void deleteConversation(Long id) {
-        conversationDAO.deleteById(id);
+    public void deleteConversation(Long conversationID, Long userID) {
+        conversationDAO.deleteById(conversationID, userID);
     }
 
     @Override
