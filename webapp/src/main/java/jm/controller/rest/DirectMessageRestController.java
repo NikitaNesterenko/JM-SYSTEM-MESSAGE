@@ -152,4 +152,24 @@ public class DirectMessageRestController {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
         return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
+    public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
+        User user = userService.getUserById(usrId);
+        List<DirectMessage> unreadMessages = new ArrayList<>();
+        user.getUnreadDirectMessages().forEach(msg -> {
+            if (msg.getConversation().getId().equals(convId)) {
+                unreadMessages.add(msg);
+            }
+        });
+        return ResponseEntity.ok(directMessageDtoService.toDto(unreadMessages));
+    }
+
+    @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
+    public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
+        User user = userService.getUserById(usrId);
+        user.getUnreadDirectMessages().add(directMessageService.getDirectMessageById(msgId));
+        userService.updateUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

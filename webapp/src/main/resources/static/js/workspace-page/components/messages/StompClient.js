@@ -5,7 +5,7 @@ import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessag
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
 import { showInviteModalOnWorkspace, addNewEmailLineIntoInviteModal } from "/js/invite.js";
 import { deleteChannelFromList } from "/js/workspace-page/components/sidebar/ChannelView.js";
-import { MessageRestPaginationService } from "/js/rest/entities-rest-pagination.js";
+import { MessageRestPaginationService, DirectMessagesRestController } from "/js/rest/entities-rest-pagination.js";
 
 export class StompClient {
 
@@ -19,6 +19,8 @@ export class StompClient {
         this.channelview = channel_view;
         this.sm = new SubmitMessage();
         this.message_service = new MessageRestPaginationService();
+        this.directMessage_service = new DirectMessagesRestController();
+        this.dm_chat = new ActiveChatMembers();
 
         this.commands = new Command();
 
@@ -158,8 +160,7 @@ export class StompClient {
                         this.channel_message_view.createMessage(report);
                     } if (isAuthor || window.loggedUserId == slackBot.targetUserId) {
                         if (true) {
-                            const dm_chat = new ActiveChatMembers();
-                            dm_chat.populateDirectMessages();
+                            this.dm_chat.populateDirectMessages();
                         }
                     }
                 }
@@ -240,7 +241,10 @@ export class StompClient {
                     if (response.conversationId === current_conversation) {
                         this.dm_view.createMessage(response);
                     } else {
-                        document.querySelector(`button[data-user_id='${response.userId}']`).style = "color: red";
+                        if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
+                            this.dm_chat.enableDirectHasUnreadMessage(response.conversationId);
+                            this.directMessage_service.addUnreadMessageForUser(response.id, window.loggedUserId)
+                        }
                     }
                 }
             } else {
@@ -366,5 +370,9 @@ export class StompClient {
             }
         });
         return isPresent;
+    }
+
+    isConversationPresentInList(convId) {
+        return document.querySelector(`button[conv_id='${convId}']`)
     }
 }

@@ -14,7 +14,7 @@ export class ChannelMessageView extends MessageView {
         await this.showAllMessages(messages);
 
         //удаляем у пользователя все сообщения для данного канала из непрочитанных
-        this.logged_user = await this.message_service.deleteAllChannelMessageForUserFromUnread(channel_id, this.logged_user.id)
+        await this.message_service.deleteAllChannelMessageForUserFromUnread(channel_id, this.logged_user.id)
     }
 
     async getAllMessagesFourMonthsAgo(channel_id) {

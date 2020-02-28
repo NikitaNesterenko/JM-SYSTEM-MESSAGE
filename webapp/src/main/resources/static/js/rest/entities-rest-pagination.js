@@ -70,7 +70,7 @@ export class MessageRestPaginationService extends RestPaginationService {
 
     deleteAllChannelMessageForUserFromUnread = async (chnId, usrId) => {
         const response = await fetch (`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
-        return response.json();
+        return response.status;
     }
 }
 
@@ -354,9 +354,18 @@ export class DirectMessagesRestController extends RestPaginationService {
         return response.json();
     };
 
+    addUnreadMessageForUser = async (msgId, usrId) => {
+        await fetch (`/rest/api/direct_messages/unread/add/message/${msgId}/user/${usrId}`);
+    };
+
+    getUnreadDMessagesInConversationForUser = async (convId, usrId) => {
+        const response = await fetch (`/rest/api/direct_messages/unread/conversation/${convId}/user/${usrId}`);
+        return response.json();
+    };
+
     deleteAllConversationDMForUserFromUnread = async (convId, usrId) => {
         const response = await fetch (`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
-        return response.json();
+        return response.status;
     }
 
 }
