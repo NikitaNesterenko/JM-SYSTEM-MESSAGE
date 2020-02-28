@@ -58,6 +58,20 @@ export class MessageRestPaginationService extends RestPaginationService {
         const response = await fetch(`/rest/api/messages/user/${id}`);
         return response.json();
     };
+
+    addUnreadMessageForUser = async (msgId, usrId) => {
+        await fetch (`/rest/api/messages/unread/add/message/${msgId}/user/${usrId}`);
+    };
+
+    getUnreadMessageInChannelForUser = async (chnId, usrId) => {
+        const response = await fetch (`/rest/api/messages/unread/channel/${chnId}/user/${usrId}`);
+        return response.json();
+    };
+
+    deleteAllChannelMessageForUserFromUnread = async (chnId, usrId) => {
+        const response = await fetch (`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
+        return response.json();
+    }
 }
 
 export class BotRestPaginationService extends RestPaginationService {

@@ -230,6 +230,7 @@ public class TestDataInitializer {
         userJohn.setPassword(UserData.JOHN.password);
         userJohn.setDisplayName(UserData.JOHN.name + " " + UserData.JOHN.lastName);
         userJohn.setRoles(ownerRoleSet);
+        userJohn.setOnline(0);
 
         userService.createUser(userJohn);
         this.users.add(userJohn);
@@ -243,6 +244,7 @@ public class TestDataInitializer {
         userStepan.setPassword(UserData.STEPAN.password);
         userStepan.setDisplayName(UserData.STEPAN.name + " " + UserData.STEPAN.lastName);
         userStepan.setRoles(userRoleSet);
+        userStepan.setOnline(0);
 
         userService.createUser(userStepan);
         this.users.add(userStepan);
@@ -256,6 +258,7 @@ public class TestDataInitializer {
         userPetr.setPassword(UserData.PETR.password);
         userPetr.setDisplayName(UserData.PETR.name + " " + UserData.PETR.lastName);
         userPetr.setRoles(userRoleSet);
+        userPetr.setOnline(0);
 
         userService.createUser(userPetr);
         this.users.add(userPetr);
@@ -269,6 +272,7 @@ public class TestDataInitializer {
         userFoo.setPassword(UserData.FOO.password);
         userFoo.setDisplayName(UserData.FOO.name + " " + UserData.FOO.lastName);
         userFoo.setRoles(userRoleSet);
+        userFoo.setOnline(0);
 
         userService.createUser(userFoo);
         this.users.add(userFoo);
@@ -282,6 +286,7 @@ public class TestDataInitializer {
         userJames.setPassword(UserData.JAMES.password);
         userJames.setDisplayName(UserData.JAMES.name + " " + UserData.JAMES.lastName);
         userJames.setRoles(userRoleSet);
+        userJames.setOnline(0);
 
         userService.createUser(userJames);
         this.users.add(userJames);

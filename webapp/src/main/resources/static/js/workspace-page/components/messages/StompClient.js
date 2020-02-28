@@ -5,6 +5,7 @@ import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessag
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
 import { showInviteModalOnWorkspace, addNewEmailLineIntoInviteModal } from "/js/invite.js";
 import { deleteChannelFromList } from "/js/workspace-page/components/sidebar/ChannelView.js";
+import { MessageRestPaginationService } from "/js/rest/entities-rest-pagination.js";
 
 export class StompClient {
 
@@ -17,6 +18,7 @@ export class StompClient {
         this.dm_view = direct_message_view;
         this.channelview = channel_view;
         this.sm = new SubmitMessage();
+        this.message_service = new MessageRestPaginationService();
 
         this.commands = new Command();
 
@@ -58,7 +60,10 @@ export class StompClient {
                     }
                     this.channel_message_view.dialog.messageBoxWrapper();
                 } else {
-                    document.querySelector(`#channel_button_` + result.channelId).style = "color: red";
+                    if (result.userId != window.loggedUserId && this.isChannelPresentInChannelsList(result.channelId)) {
+                        this.channelview.enableChannelHasUnreadMessage(result.channelId);
+                        this.message_service.addUnreadMessageForUser(result.id, window.loggedUserId);
+                    }
                 }
             } else {
                 if (result.isDeleted) {

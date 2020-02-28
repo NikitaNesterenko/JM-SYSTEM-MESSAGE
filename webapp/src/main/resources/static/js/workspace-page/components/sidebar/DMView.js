@@ -92,4 +92,14 @@ export class DMView {
                <span class="p-classic_nav__model__title__info__sep">|</span>
                <span class="p-classic_nav__model__title__info_respondent">${respondent.displayName}</span>`);
     }
+
+    enableDirectHasUnreadMessage = (userId) => {
+        document.querySelector(`span[data-user_id='${userId}']`).classList.add("font-weight-bold");
+        document.querySelector(`span[data-user_id='${userId}']`).classList.add("text-white");
+    };
+
+    disableDirectHasUnreadMessage = (userId) => {
+        document.querySelector(`span[data-user_id='${userId}']`).classList.remove("font-weight-bold");
+        document.querySelector(`span[data-user_id='${userId}']`).classList.remove("text-white");
+    }
 }
