@@ -4,7 +4,6 @@ import jm.model.Conversation;
 import jm.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ConversationDAO {
 
@@ -18,7 +17,7 @@ public interface ConversationDAO {
 
     Conversation getById(Long id);
 
-    Optional<Conversation> getConversationByUsersId(Long firstUserId, Long secondUserId);
+    Conversation getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
 }

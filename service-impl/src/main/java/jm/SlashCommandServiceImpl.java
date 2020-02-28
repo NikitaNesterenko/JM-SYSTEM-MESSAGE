@@ -49,7 +49,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public SlashCommand getSlashCommandByName(String name) {
-        return slashCommandDao.getByName(name).orElse(null);
+        return slashCommandDao.getByName(name);
     }
 
     @Override

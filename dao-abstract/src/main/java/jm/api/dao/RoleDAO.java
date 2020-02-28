@@ -3,7 +3,6 @@ package jm.api.dao;
 import jm.model.Role;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RoleDAO {
 
@@ -17,6 +16,6 @@ public interface RoleDAO {
 
     Role getById(Long id);
 
-    Optional<Role> getRoleByRolename(String role);
+    Role getRoleByRolename(String role);
 
 }

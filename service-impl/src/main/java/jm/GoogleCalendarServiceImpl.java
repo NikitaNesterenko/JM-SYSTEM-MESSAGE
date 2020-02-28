@@ -240,7 +240,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
     @Override
     public String loadGoogleCalendarClientAccessToken(String principalName) {
-        return calendarDAO.loadToken(principalName).orElse(null);
+        return calendarDAO.loadToken(principalName);
     }
 
     @Override

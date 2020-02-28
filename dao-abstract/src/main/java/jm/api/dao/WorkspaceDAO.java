@@ -3,7 +3,6 @@ package jm.api.dao;
 import jm.model.Workspace;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface WorkspaceDAO {
 
@@ -17,7 +16,7 @@ public interface WorkspaceDAO {
 
     Workspace getById(Long id);
 
-    Optional<Workspace> getWorkspaceByName(String name);
+    Workspace getWorkspaceByName(String name);
 
     List<Workspace> getWorkspacesByOwnerId(Long ownerId);
 

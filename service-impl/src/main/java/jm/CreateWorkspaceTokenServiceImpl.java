@@ -47,11 +47,11 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
 
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenByName(String email) {
-        return createWorkspaceTokenDAO.getCreateWorkspaceTokenByOwnerEmail(email).orElse(null);
+        return createWorkspaceTokenDAO.getCreateWorkspaceTokenByOwnerEmail(email);
     }
 
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
-       return createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code).orElse(null);
+       return createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code);
     }
 }

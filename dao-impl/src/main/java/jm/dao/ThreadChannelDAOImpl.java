@@ -6,21 +6,19 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Repository
 @Transactional
 public class ThreadChannelDAOImpl extends AbstractDao<ThreadChannel> implements ThreadChannelDAO {
 
     @Override
-    public Optional<ThreadChannel> getByChannelMessageId(Long id) {
+    public ThreadChannel getByChannelMessageId(Long id) {
         try {
-            return Optional.ofNullable(entityManager.createQuery("select m from ThreadChannel m where m.message.id =:id", ThreadChannel.class)
+            return entityManager.createQuery("select m from ThreadChannel m where m.message.id =:id", ThreadChannel.class)
                     .setParameter("id", id)
-                    .getSingleResult());
-        } catch (NoResultException ex) {
-            return Optional.empty();
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         }
     }
-
 }
