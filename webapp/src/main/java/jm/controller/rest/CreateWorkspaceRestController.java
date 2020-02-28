@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -66,16 +67,21 @@ public class CreateWorkspaceRestController {
                     @ApiResponse(responseCode = "200", description = "OK: email code was send")
             })
     public ResponseEntity sendEmailCode(@RequestBody String emailTo) {
-        CreateWorkspaceToken token = mailService.sendConfirmationCode(emailTo);
-        token.setUserEmail(emailTo);
-        createWorkspaceTokenService.createCreateWorkspaceToken(token);
-        User user = userService.getUserByEmail(emailTo);
-        if (user == null) {
+        Optional<CreateWorkspaceToken> createWorkspaceToken = mailService.sendConfirmationCode(emailTo);
 
-            user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
-            userService.createUser(user);
+        if (createWorkspaceToken.isPresent()) {
+            CreateWorkspaceToken token = createWorkspaceToken.get();
+            token.setUserEmail(emailTo);
+            createWorkspaceTokenService.createCreateWorkspaceToken(token);
+            User user = userService.getUserByEmail(emailTo);
+
+            if (user == null) {
+                user = new User(emailTo, emailTo, emailTo, emailTo, emailTo);
+                userService.createUser(user);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/confirmEmail")
