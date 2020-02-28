@@ -1,7 +1,6 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.MessageDTO;
@@ -9,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class Message {
     @JoinColumn(name = "bot_id")
     private Bot bot;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     @EqualsAndHashCode.Include
     private String content;
 
@@ -48,6 +48,13 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "voice_message",
+//            joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "name"))
+//            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
+    @Lob
+    private String voiceMessage;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
 
@@ -56,6 +63,9 @@ public class Message {
 //    @JoinColumn(name = "channel_id")
     @Column(name = "channel_id")
     private Long channelId;
+
+    @Column(name = "workspace_id")
+    private Long workspaceId;
 
     // from ChannelMessage
     @ManyToOne
@@ -87,6 +97,7 @@ public class Message {
     // ===================================
     // Construct
     // ===================================
+
     public Message(Long channelId, User user, String content, LocalDateTime dateCreate) {
         this.channelId = channelId;
         this.user = user;
@@ -133,6 +144,7 @@ public class Message {
         this.content = messageDto.getContent();
         this.dateCreate = messageDto.getDateCreate();
         this.filename = messageDto.getFilename();
+        this.voiceMessage = messageDto.getVoiceMessage();
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
     }

@@ -1,6 +1,5 @@
 package jm.config;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,6 +27,7 @@ import javax.annotation.PostConstruct;
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 public class JMSystemMessageApplication {
+
     private static final Logger logger = LoggerFactory.getLogger(JMSystemMessageApplication.class);
 
     @Bean
@@ -51,5 +51,7 @@ public class JMSystemMessageApplication {
 //        return new TestDataSecurityInitializer();
 //    }
 
-    public static void main(String[] args) { SpringApplication.run(JMSystemMessageApplication.class); }
+    public static void main(String[] args) {
+        SpringApplication.run(JMSystemMessageApplication.class);
+    }
 }

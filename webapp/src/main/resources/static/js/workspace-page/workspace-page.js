@@ -7,11 +7,14 @@ import {DirectMessageView} from "./components/messages/DirectMessageView.js";
 import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
+// import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+// const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
-let current_wks = workspace_service.getChoosedWorkspace();
+const current_wks = workspace_service.getChosenWorkspace();
+// const current_chn = channel_service.getChosenChannel();
 
 
 window.addEventListener('load', async () => {
@@ -21,9 +24,12 @@ window.addEventListener('load', async () => {
     const thread_view = new ThreadMessageView();
     const chat = new DMView(direct_message_view);
     const channel_view = new ChannelView();
+    // const channel = new ChannelRestPaginationService();
 
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
+    // channel_view.setFlaggedItems();
+    // channel_view.showPeopleInChannel();
 
     const stomp_client = new StompClient(channel_message_view, thread_view, direct_message_view, channel_view);
     stomp_client.connect();
@@ -39,6 +45,7 @@ window.addEventListener('load', async () => {
     direct_message_view.onClickDeleteMessage(".btnDelete_DM");
 
     workspace_event.onAddChannelClick();
+    workspace_event.onAddDirectMessageClick();
     workspace_event.onWindowClick();
     workspace_event.onSelectChannel();
     workspace_event.onAddChannelSubmit();
@@ -152,7 +159,7 @@ window.showEvents = function showEvents(response) {
 
 $("#google-calendar-button").click(
     async function () {
-        current_wks = await workspace_service.getChoosedWorkspace();
+        current_wks = await workspace_service.getChosenWorkspace();
         if (!(current_wks.googleClientId) || !(current_wks.googleClientSecret)) {
             $("#addGoogleCalendarIdSecretModal").modal('toggle')
         } else {
@@ -164,7 +171,7 @@ $("#google-calendar-button").click(
 
 $("#addGoogleCalendarIdSecretSubmit").click(
     async function () {
-        current_wks = await workspace_service.getChoosedWorkspace();
+        current_wks = await workspace_service.getChosenWorkspace();
         let  googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
         let googleCalendarClientSecret = $("#InputGoogleCalendarClientSecret").val();
         const entity = {

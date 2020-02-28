@@ -2,15 +2,14 @@ import {
     WorkspaceRestPaginationService,
     UserRestPaginationService,
     ChannelRestPaginationService,
-    ChannelTopicRestPaginationService,
-    MessageRestPaginationService,
-    StorageService,
     DirectMessagesRestController,
-    SlashCommandRestPaginationService
+    MessageRestPaginationService,
+    SlashCommandRestPaginationService,
+    StorageService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
-import {users, clearUsers} from "/js/searchUsersOnInputMessages.js";
+import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -37,14 +36,22 @@ export class SubmitMessage {
     }
 
     onMessageSubmit() {
-
         $("#form_message").submit(async (event) => {
             event.preventDefault();
             const hasCommand = await this.checkCommand();
             window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
 
+                const content =  $("#form_message_input").val();
+                if (content.startsWith('/leave ')) {
+                    let channelName = content.substring(7);
+                    this.leaveChannel(channelName);
+                    $("#form_message_input").val("");
+                    return
+                }
+
                 const channel_name = sessionStorage.getItem("channelName");
+                const channel_name2 = sessionStorage.getItem("channelname");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_name !== '0') {
@@ -66,7 +73,7 @@ export class SubmitMessage {
 
     checkSlashCommand() {
         let message = $("#form_message_input").val();
-        let isCommand = false
+        let isCommand = false;
         if (message.startsWith('/')) {
             window.allActions.forEach(action => {
                 if (message.substr(1, message.indexOf(" ") < 0 ? message.length :  message.indexOf(" ") - 1) === action) {
@@ -99,31 +106,53 @@ export class SubmitMessage {
         return null;
     }
 
+    async getVoiceMessage() {
+        const audioInput = $("#audioInput");
+        const src = audioInput.prop('src');
+
+        if (src !== undefined) {
+            let blob = await fetch(src).then(r => r.blob());
+            let arrayBuffer = await blob.arrayBuffer();
+            let base64 = await btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+            $('#inputMe').html("");
+
+            return base64;
+        }
+        return null;
+    }
+
     async sendChannelMessage(channel_name) {
         await this.setChannel(channel_name);
         await this.setUser();
 
-        const content = this.getMessageInput();
-
-        const entity = {
+        let entity = {
             id: null,
             channelId: this.channel.id,
             userId: this.user.id,
             userName: this.user.name,
-            content: content,
+            content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
-            recipientUserIds: users
-        };
+            voiceMessage: await this.getVoiceMessage(),
+            recipientUserIds: users,
+            // workspaceId: this.channel.workspaceId
+            workspaceId: null
+    };
 
-        if (window.hasSlashCommand) {
-            await this.sendSlashCommand(entity);
-        } else {
-            await this.message_service.create(entity).then(
-                msg_id => sendName(msg_id)
+        if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
+            this.message_service.create(entity).then(
+                message => sendName(message)
             );
         }
-        clearUsers();
+
+        // if (window.hasSlashCommand) {
+        //     await this.sendSlashCommand(entity);
+        // } else {
+        //     await this.message_service.create(entity).then(
+        //         msg_id => sendName(msg_id)
+        //     );
+        // }
+        // clearUsers();
     }
 
     async sendSlashCommand(entity) {
@@ -149,10 +178,9 @@ export class SubmitMessage {
         }
     }
 
-
-
     async sendDirectMessage(conversation_id) {
         await this.setUser();
+        const workspaceId = await this.workspace_service.getChosenWorkspace().then(workspace => workspace.id);
 
         const entity = {
             id: null,
@@ -161,7 +189,8 @@ export class SubmitMessage {
             content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
-            conversationId: conversation_id
+            conversationId: conversation_id,
+            workspaceId: workspaceId
         };
 
         this.direct_message_service.create(entity).then(
@@ -169,7 +198,6 @@ export class SubmitMessage {
                 sendDM(msg_id);
             }
         );
-
     }
 
     async setUser() {
@@ -191,17 +219,17 @@ export class SubmitMessage {
     }
 
     async setWorkspace() {
-        await this.workspace_service.getChoosedWorkspace().then(
+        await this.workspace_service.getChosenWorkspace().then(
             workspace => this.workspace = workspace
         )
     }
 
     async leaveChannel(channelName) {
-        await this.setUser()
-        await this.setChannelByName(channelName)
-        await this.setWorkspace()
-        const channelUsers = this.channel.userIds
-        channelUsers.splice(channelUsers.indexOf(this.user.id), 1)
+        await this.setUser();
+        await this.setChannelByName(channelName);
+        await this.setWorkspace();
+        const channelUsers = this.channel.userIds;
+        channelUsers.splice(channelUsers.indexOf(this.user.id), 1);
 
         const entity = {
             id: this.channel.id,
@@ -210,15 +238,16 @@ export class SubmitMessage {
             ownerId: this.channel.ownerId,
             isPrivate: this.channel.isPrivate,
             createdDate: this.channel.createdDate,
-            workspaceId: this.channel.workspaceId
+            // workspaceId: this.channel.workspaceId
+            workspaceId: null
         };
 
         await this.channel_service.update(entity).then(() => {
-            $(".p-channel_sidebar__channels__list").html('')
+            $(".p-channel_sidebar__channels__list").html('');
             this.renewChannels(this.workspace.id,this.user.id)
         })
-
     }
+
     async renewChannels(workspace_id,user_id) {
         await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id,user_id).then(
             channels => {
@@ -236,7 +265,7 @@ export class SubmitMessage {
                                   </div>`
                         );
                 });
-                pressChannelButton(firstChannelId)
+                pressChannelButton(firstChannelId);
                 sessionStorage.setItem("channelName", firstChannelId);
                 let channel_name = document.getElementById("channel_name_" + firstChannelId).textContent;
                 $(".p-classic_nav__model__title__info__name").html("").text(channel_name);

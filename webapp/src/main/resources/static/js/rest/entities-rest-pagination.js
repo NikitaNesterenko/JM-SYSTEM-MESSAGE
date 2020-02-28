@@ -38,13 +38,14 @@ export class MessageRestPaginationService extends RestPaginationService {
         const response = await fetch('/rest/api/messages/channel/' + id);
         return response.json();
     };
+
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
         const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
         return response.json();
     };
 
-    getStarredMessagesForUser = async (id) => {
-        const response = await fetch(`/rest/api/messages/${id}/starred`);
+    getStarredMessagesForUser = async (id, workspaceId) => {
+        const response = await fetch(`/rest/api/messages/${id}/${workspaceId}/starred`);
         return response.json();
     };
 
@@ -53,7 +54,6 @@ export class MessageRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-        // messages from all channels where user is member
     getMessagesFromChannelsForUser = async (id) => {
         const response = await fetch(`/rest/api/messages/user/${id}`);
         return response.json();
@@ -108,7 +108,7 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify(command)
-        })
+        });
         return await response.json()
             .catch(err => console.log(err.status));
     }
@@ -140,13 +140,13 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 
     getChannelsByWorkspaceId = async (id) => {
-        const response = await fetch('/rest/api/channels/workspace/' + id)
+        const response = await fetch('/rest/api/channels/workspace/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getChannelByName = async (name) => {
-        const response = await fetch('/rest/api/channels/name/' + name)
+        const response = await fetch('/rest/api/channels/name/' + name);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -157,7 +157,7 @@ export class ChannelRestPaginationService extends RestPaginationService {
     };
 
     getChannelsByUserId = async (id) => {
-        const response = await fetch('/rest/api/channels/user/' + id)
+        const response = await fetch('/rest/api/channels/user/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -197,13 +197,28 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
         return response.json()
     };
 
-    setChoosedWorkspace = async (name) => {
-        const response = await fetch('/rest/api/workspaces/choosed/' + name);
+    setChosenWorkspace = async (name) => {
+        const response = await fetch('/rest/api/workspaces/chosen/' + name);
         return await response.json()
     };
 
-    getChoosedWorkspace = async () => {
-        const response = await fetch('/rest/api/workspaces/choosed');
+    getChosenWorkspace = async () => {
+        const response = await fetch('/rest/api/workspaces/chosen');
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+        if (response.ok) {
+            return await response.json();
+        }
+    };
+
+    setChosenChannel = async (id) => {
+        const response = await fetch('/rest/api/workspaces/chosen/' + id);
+        return await response.json()
+    };
+
+    getChosenChannel = async () => {
+        const response = await fetch('/rest/api/workspaces/chosen');
         if (response.redirected) {
             window.location.href = response.url;
         }
@@ -251,12 +266,13 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 export class StorageService {
 
     uploadFile = async (file) => {
-        const response = await fetch(`/upload`, {
+        return await fetch(`/uploadFile`, {
             method: 'POST',
             body: file
-        }).then(response => {return response.text()});
-        return response;
-    }
+        }).then(response => {
+            return response.text()
+        });
+    };
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
@@ -304,6 +320,7 @@ export class ThreadChannelMessageRestPaginationService extends  RestPaginationSe
         const response = await fetch('/rest/api/threads/messages/' + id);
         return response.json();
     };
+
     createThreadMsg = async (msg,user) => {
         const response = await fetch(`/rest/api/threads/messages/create`, {
             method: 'POST',
@@ -324,9 +341,14 @@ export class ConversationRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
-    getConversationForUsers = async (id_1, id_2) => {
-        const response = await fetch(`/rest/api/conversations/users/${id_1}/${id_2}`);
+    getConversationForUsers = async (firstId, secondId) => {
+        const response = await fetch(`/rest/api/conversations/users/${firstId}/${secondId}`);
         return response.json();
+    };
+
+    deleteConversation = async (conversationId, userId) => {
+        const response = await fetch(`/rest/api/conversations/delete/${conversationId}/${userId}`);
+        return response.status;
     };
 }
 
@@ -339,7 +361,6 @@ export class DirectMessagesRestController extends RestPaginationService {
         const response = await fetch(`/rest/api/direct_messages/conversation/${id}`);
         return response.json();
     };
-
 }
 
 export class PluginRestPaginationService extends RestPaginationService {

@@ -6,8 +6,8 @@ import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
 import jm.model.Bot;
 import jm.model.Channel;
-import jm.model.User;
 import jm.model.Message;
+import jm.model.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -78,6 +78,12 @@ public class MessageDtoServiceImpl implements MessageDtoService {
             messageDto.setParentMessageId(parentMessage.getId());
         }
 
+        // setting up 'workspaceId'
+        Long workspaceId = message.getWorkspaceId();
+        if (workspaceId != null) {
+            messageDto.setWorkspaceId(message.getWorkspaceId());
+        }
+
         return messageDto;
     }
 
@@ -113,6 +119,12 @@ public class MessageDtoServiceImpl implements MessageDtoService {
         Long parentMessageId = messageDto.getParentMessageId();
         if (parentMessageId != null) {
             message.setParentMessage(messageDAO.getById(parentMessageId));
+        }
+
+        // setting up 'workspaceId'
+        Long workspaceId = messageDto.getWorkspaceId();
+        if (workspaceId != null) {
+            message.setWorkspaceId(messageDto.getWorkspaceId());
         }
 
         return message;

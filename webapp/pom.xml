@@ -18,20 +18,16 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>groupId</groupId>
             <artifactId>model</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>groupId</groupId>
             <artifactId>service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
@@ -48,7 +44,6 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -91,12 +86,10 @@
             <version>1.18.8</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator-core</artifactId>
@@ -127,8 +120,11 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.vaadin.external.google</groupId>
+            <artifactId>android-json</artifactId>
+            <version>0.0.20131108.vaadin1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-
 </project>

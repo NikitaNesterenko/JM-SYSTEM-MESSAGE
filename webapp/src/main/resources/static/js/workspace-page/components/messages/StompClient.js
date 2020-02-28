@@ -1,4 +1,3 @@
-import {setOnClickEdit} from "/js/messagesInlineEdit.js";
 import {Command} from "/js/workspace-page/components/footer/Command.js";
 import {is_open, populateRightPaneActivity} from "/js/activities/view_activities.js";
 
@@ -25,17 +24,21 @@ export class StompClient {
         window.sendChannel = (channel) => this.sendChannel(channel);
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
+        window.sendChannelTopicChange = (id,topic) => this.sendChannelTopicChange(id,topic);
         window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message); //вебсокет дефолтного бота
     }
 
     connect() {
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
+
             this.subscribeMessage();
             this.subscribeChannel();
             this.subscribeThread();
             this.subscribeDirectMessage();
+            this.subscribeChannelChangeTopic();
             this.subscribeSlackBot();
+            this.subscribeUserStatus();
         });
     }
 
@@ -101,7 +104,7 @@ export class StompClient {
                 if (isOk) {
                     //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
                     if (isAuthor) {
-                        this.channelview.showAllChannels(window.choosedWorkspace);
+                        this.channelview.showAllChannels(window.chosenWorkspace);
                         setTimeout(function() {
                             window.pressChannelButton(slackBot.targetChannelId);
                             },1000);
@@ -183,6 +186,17 @@ export class StompClient {
         })
     }
 
+    subscribeUserStatus() {
+        this.stompClient.subscribe('/topic/user.status', (data) => {
+            const user = JSON.parse(data.body);
+            document.querySelectorAll(".p-channel_sidebar__channel_icon_circle.pb-0").forEach(item => {
+                if (item.dataset.user_id == user.id) {
+                    item.textContent = user.online == 1 ? "●" : "○";
+                }
+            })
+        })
+    }
+
     subscribeChannel() {
         this.stompClient.subscribe('/topic/channel', (channel) => {
             const chn = JSON.parse(channel.body);
@@ -244,6 +258,7 @@ export class StompClient {
             'isDeleted': message.isDeleted,
             'dateCreate': message.dateCreate,
             'parentMessageId': message.parentMessageId,
+            'workspaceId': message.workspaceId
         }))
     }
 
@@ -259,11 +274,12 @@ export class StompClient {
             'userAvatarUrl': message.userAvatarUrl,
             'filename': message.filename,
             'sharedMessageId': message.sharedMessageId,
-            'conversationId': message.conversationId
+            'conversationId': message.conversationId,
+            'parentMessageId': message.parentMessageId,
+            'workspaceId': message.workspaceId
         };
 
         this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
-
     }
 
     sendName(message) {
@@ -279,12 +295,30 @@ export class StompClient {
             'botId': message.botId,
             'botNickName': message.botNickName,
             'filename': message.filename,
+            'voiceMessage': message.voiceMessage,
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
-            'channelName': message.channelName
+            'channelName': message.channelName,
+            'workspaceId': message.workspaceId
         };
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));
+    }
+
+    //посылаем сообщение на смену канала
+    sendChannelTopicChange(id,topic){
+        this.stompClient.send('/app/channel.changeTopic', {}, JSON.stringify({
+            'id': id,
+            'topic': topic
+        }));
+    }
+    //подписка на смену топика текущего канала
+    subscribeChannelChangeTopic() {
+        this.stompClient.subscribe('/topic/channel.changeTopic', (channel) => {
+            const chn = JSON.parse(channel.body);
+            console.log(channel.body);
+            document.querySelector("#topic_string").textContent = chn.topic;
+        });
     }
 
     sendSlackBotCommand(message) {

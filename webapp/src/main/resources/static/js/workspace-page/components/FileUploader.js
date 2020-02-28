@@ -17,14 +17,29 @@ export class FileUploader {
 
     onAttachFileUpload() {
         this.selected_file = $("#file_selector");
-        this.selected_file.change(function () {
-            const fileName = $(this).val().split('\\')[$(this).val().split('\\').length - 1];
-            let attachedFile = "";
-            if (fileName.length > 0) {
-                attachedFile = "<b>Attached file: </b>" + fileName;
-            }
-            $('#attached_file').html(attachedFile);
-        });
+        console.log("VavilovTests file_seletor" + this.selected_file);
+        if (this.selected_file !== undefined) {
+            this.selected_file.change(function () {
+                const fileName = $(this).val().split('\\')[$(this).val().split('\\').length - 1];
+                let attachedFile = "";
+                if (fileName.length > 0) {
+                    attachedFile = "<b>Attached file: </b>" + fileName;
+                }
+                $('#attached_file').html(attachedFile);
+            });
+        }
+
+        // this.selected_file = $("#vm_selector");
+        // if (this.selected_file !== undefined) {
+        //     this.selected_file.change(function () {
+        //         const fileName = $(this).val().split('\\')[$(this).val().split('\\').length - 1];
+        //         let attachedFile = "";
+        //         if (fileName.length > 0) {
+        //             attachedFile = "<b>Attached file: </b>" + fileName;
+        //         }
+        //         $('#attached_voiceMessage').html(attachedFile);
+        //     });
+        // }
     }
 
     async saveFile(file) {

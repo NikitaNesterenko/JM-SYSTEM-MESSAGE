@@ -25,18 +25,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getAllMessages() {
-        return messageDAO.getAll();
+    public List<Message> getAllMessages(Boolean isDeleted) {
+        return messageDAO.getAll(isDeleted);
     }
 
     @Override
-    public List<Message> getMessagesByChannelId(Long id) {
-        return messageDAO.getMessagesByChannelId(id);
+    public List<Message> getMessagesByChannelId(Long id, Boolean isDeleted) {
+        return messageDAO.getMessagesByChannelId(id, isDeleted);
     }
 
     @Override
-    public List<Message> getMessagesByContent(String word) {
-        return messageDAO.getMessageByContent(word);
+    public List<Message> getMessagesByContent(String word, Boolean isDeleted) {
+        return messageDAO.getMessageByContent(word, isDeleted);
     }
 
     @Override
@@ -56,20 +56,25 @@ public class MessageServiceImpl implements MessageService {
     public void updateMessage(Message message) { messageDAO.merge(message); }
 
     @Override
-    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate) {
-        return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate);
+    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+        return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate, isDeleted);
     }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate) {
-        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate);
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate, isDeleted);
     }
 
     @Override
-    public List<Message> getStarredMessagesForUser(Long id) {
-        return messageDAO.getStarredMessagesForUser(id);
+    public List<Message> getStarredMessagesForUser(Long id, Boolean isDeleted) {
+        return messageDAO.getStarredMessagesForUser(id, isDeleted);
     }
 
     @Override
-    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId) { return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId); }
+    public List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
+        return messageDAO.getStarredMessagesForUserByWorkspaceId(userId, workspaceId, isDeleted);
+    }
+
+    @Override
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted) { return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId, isDeleted); }
 }
