@@ -8,5 +8,6 @@ window.addEventListener('load', function () {
 
 $(document).ready(() => {
    get_topic_channel.setTopic();
+
 });
 
