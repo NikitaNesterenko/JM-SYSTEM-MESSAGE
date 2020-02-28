@@ -5,7 +5,7 @@ export class ChannelTopicView {
     channel_id;
 
     constructor() {
-        this.channel_id = sessionStorage.getItem("channelName");
+        this.channel_id = sessionStorage.getItem("channelId");
         this.channel_topic_service = new ChannelTopicRestPaginationService();
     }
 
@@ -17,7 +17,7 @@ export class ChannelTopicView {
 
     onClickChannelSelection() {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", () => {
-            this.channel_id = sessionStorage.getItem("channelName");
+            this.channel_id = sessionStorage.getItem("channelId");
             this.setTopic();
         })
     }
@@ -35,7 +35,7 @@ export class ChannelTopicView {
     }
 
     setTopic() {
-        if (this.channel_id != 0 && this.channel_id != null) {
+        if (this.channel_id !== 0 && this.channel_id != null) {
             this.channel_topic_service.getChannelTopic(this.channel_id).then(chn_topic => {
                 if (chn_topic !== null && chn_topic !== undefined) {
                     this.channel_topic = this.checkTopic(chn_topic);
@@ -54,6 +54,9 @@ export class ChannelTopicView {
         if (newTopic != null) {
             this.channel_topic_service.updateChannelTopic(this.channel_id, newTopic).then(chn_topic => {
                 $("#topic_string").text(this.checkTopic(chn_topic));
+                console.log(this.channel_id);
+                console.log(newTopic);
+                sendChannelTopicChange(this.channel_id,newTopic);
             });
         }
     }

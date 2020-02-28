@@ -1,9 +1,10 @@
 package jm.config.inititalizer;
 
-import jm.*;
+import jm.ConversationService;
+import jm.DirectMessageService;
+import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
-import jm.model.Message;
 import jm.model.message.DirectMessage;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -359,6 +360,7 @@ public class TestDataInitializer {
         message1.setUser(userList.get(0));
         message1.setContent("Hello from " + userList.get(0).getDisplayName());
         message1.setDateCreate(LocalDateTime.now());
+        message1.setWorkspaceId(1L);
 
         messageDAO.persist(message1);
         this.messages.add(message1);
@@ -368,6 +370,7 @@ public class TestDataInitializer {
         message2.setUser(userList.get(1));
         message2.setContent("Hello from " + userList.get(1).getDisplayName());
         message2.setDateCreate(LocalDateTime.now());
+        message2.setWorkspaceId(2L);
 
         messageDAO.persist(message2);
         this.messages.add(message2);
@@ -377,6 +380,7 @@ public class TestDataInitializer {
         message3.setUser(userList.get(2));
         message3.setContent("Hello from " + userList.get(2).getDisplayName());
         message3.setDateCreate(LocalDateTime.now());
+        message3.setWorkspaceId(1L);
 
         messageDAO.persist(message3);
         this.messages.add(message3);
@@ -386,6 +390,7 @@ public class TestDataInitializer {
         message4.setBot(bots.get(0));
         message4.setContent("Hello from BOT!");
         message4.setDateCreate(LocalDateTime.now());
+        message4.setWorkspaceId(2L);
 
         messageDAO.persist(message4);
         this.messages.add(message4);
@@ -396,6 +401,7 @@ public class TestDataInitializer {
         message5.setContent("@John hello everybody!");
         message5.setDateCreate(LocalDateTime.now());
         message5.setRecipientUsers(Collections.singleton(userService.getUserById(1L)));
+        message5.setWorkspaceId(1L);
 
         messageDAO.persist(message5);
         this.messages.add(message5);
@@ -522,6 +528,7 @@ public class TestDataInitializer {
         dm1.setUser(user1);
         dm1.setContent("Direct message #1");
         dm1.setDateCreate(LocalDateTime.now());
+        dm1.setWorkspaceId(1L);
         this.directMessageService.saveDirectMessage(dm1);
         this.directMessages.add(dm1);
 
@@ -530,6 +537,7 @@ public class TestDataInitializer {
         dm2.setUser(user2);
         dm2.setContent("Direct message #2");
         dm2.setDateCreate(LocalDateTime.now());
+        dm2.setWorkspaceId(1L);
         this.directMessageService.saveDirectMessage(dm2);
         this.directMessages.add(dm2);
 
@@ -538,6 +546,7 @@ public class TestDataInitializer {
         dm3.setUser(user1);
         dm3.setContent("Direct message #3");
         dm3.setDateCreate(LocalDateTime.now());
+        dm3.setWorkspaceId(1L);
         this.directMessageService.saveDirectMessage(dm3);
         this.directMessages.add(dm3);
 

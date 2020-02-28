@@ -72,10 +72,10 @@ export class ThreadMessageView {
                                 </div>
                                 <div class="p-message_thread_input_field">
                                     <div class="ql-buttons">
-                                        <button class="c-texty_input__button--emoji" id="inputEmojiButton">
+                                        <button class="workspace-input_bar-button" id="inputEmojiButton">
                                             <i class="c-icon--smile-o">😊</i>
                                         </button>
-                                        <button class="c-texty_input__button" id="showAssociatedUsers">
+                                        <button class="workspace-input_bar-button" id="showAssociatedUsers">
                                             <i class="c-icon--mentions">@</i>
                                         </button>
                                     </div>

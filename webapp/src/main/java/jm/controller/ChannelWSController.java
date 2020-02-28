@@ -10,6 +10,7 @@ import jm.dto.ChannelDTOServiceImpl;
 import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.ChannelWS;
+import jm.model.ChannelWSTopic;
 import jm.views.ChannelViews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -34,6 +35,19 @@ public class ChannelWSController {
             throws JsonProcessingException {
 
         Channel channel = channelService.getChannelByName(channelWS.getName());
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
+    }
+
+    // id -айди канала на котором изменить топик
+    // topic - на что изменить
+    @MessageMapping("/channel.changeTopic")
+    @SendTo("/topic/channel.changeTopic")
+    public String changeChannelTopic(ChannelWSTopic zapros)
+            throws JsonProcessingException {
+        Long channel_id=Long.parseLong(zapros.getId());
+        Channel channel = channelService.getChannelById(channel_id);
+        channel.setTopic(zapros.getTopic());
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
     }

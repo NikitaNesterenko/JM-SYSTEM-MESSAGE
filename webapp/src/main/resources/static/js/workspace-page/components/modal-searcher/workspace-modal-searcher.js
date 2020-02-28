@@ -28,7 +28,7 @@ window.addEventListener('load', function () {
     function showSearchBlock() {
         $("#modalSearcher").modal("show");
 
-        const work = workspace_service.getChoosedWorkspace();
+        const work = workspace_service.getChosenWorkspace();
         const user = user_service.getLoggedUser();
         const message = message_service.getAll();
 
@@ -149,7 +149,7 @@ $("#idSearchContent").on("click", "li.search-field-li", function () {
 
     if (type === "channel") {
         pressChannelButton(id);
-        sessionStorage.setItem("channelName", id);
+        sessionStorage.setItem("channelId", id);
     } else if (type === "user") {
         //TODO redirect to direct message
         console.log("Открытие личной переписки с User с id=" + id);
