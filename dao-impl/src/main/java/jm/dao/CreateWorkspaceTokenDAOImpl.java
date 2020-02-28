@@ -19,7 +19,8 @@ public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToke
                     .setParameter(1, email)
                     .getSingleResult());
         } catch (NoResultException ex) {
-            return Optional.empty();
+            return Optional.empty();        
+                    
         }
     }
 
@@ -30,7 +31,7 @@ public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToke
                     .setParameter(1, code)
                     .getSingleResult());
         } catch (NoResultException ex) {
-            return Optional.empty();
+            return Optional.empty();          
         }
     }
 }
