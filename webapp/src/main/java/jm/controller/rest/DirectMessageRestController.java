@@ -6,9 +6,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.DirectMessageService;
+import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
 import jm.dto.DirectMessageDtoService;
+import jm.dto.UserDtoService;
+import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,11 +34,16 @@ public class DirectMessageRestController {
 
     private DirectMessageService directMessageService;
     private DirectMessageDtoService directMessageDtoService;
+    private UserService userService;
+    private UserDtoService userDtoService;
 
     @Autowired
-    public void setDirectMessageService(DirectMessageService directMessageService, DirectMessageDtoService directMessageDtoService) {
+    public void setDirectMessageService(DirectMessageService directMessageService, DirectMessageDtoService directMessageDtoService,
+                                        UserService userService, UserDtoService userDtoService) {
         this.directMessageService = directMessageService;
         this.directMessageDtoService = directMessageDtoService;
+        this.userService = userService;
+        this.userDtoService = userDtoService;
     }
 
     @GetMapping(value = "/{id}")
@@ -72,6 +81,17 @@ public class DirectMessageRestController {
         System.out.println(directMessage);
         directMessageService.saveDirectMessage(directMessage);
         logger.info("Созданное сообщение : {}", directMessage);
+
+        List<User> users = new ArrayList<>();
+        users.add(directMessage.getConversation().getAssociatedUser());
+        users.add(directMessage.getConversation().getOpeningUser());
+        users.forEach(user -> {
+            if (user.getOnline().equals(0)) {
+                user.getUnreadDirectMessages().add(directMessage);
+                userService.updateUser(user);
+            }
+        });
+
         return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
     }
 
@@ -125,5 +145,11 @@ public class DirectMessageRestController {
         List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
         messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
         return new ResponseEntity<>(directMessageDtoService.toDto(messages), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
+    public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long convId, @PathVariable Long usrId) {
+        userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
+        return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
     }
 }

@@ -25,21 +25,21 @@ export class ActiveChatMembers {
                 const conversation_queue_context_container = $('<div></div>');
                 conversation_queue_context_container.className = "p-channel_sidebar__close_container";
                 if (conversation.openingUser.id === principal.id) {
-                    conversation_queue_context_container.append(this.messageChat(conversation.associatedUser));
+                    conversation_queue_context_container.append(this.messageChat(conversation.associatedUser, conversation.id));
                 } else {
-                    conversation_queue_context_container.append(this.messageChat(conversation.openingUser));
+                    conversation_queue_context_container.append(this.messageChat(conversation.openingUser, conversation.id));
                 }
                 direct_messages_container.append(conversation_queue_context_container);
             }
         });
     }
 
-    messageChat(user) {
+    messageChat(user, convId) {
         return `
             <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
                 <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">${user.online == 1 ? "●" : "○"}</i>
                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
-                    <span data-user_id="${user.id}">${user.name}</span>
+                    <span data-user_id="${user.id}" conv_id="${convId}">${user.name}</span>
                 </span>
             </button>
             <button class="p-channel_sidebar__close">

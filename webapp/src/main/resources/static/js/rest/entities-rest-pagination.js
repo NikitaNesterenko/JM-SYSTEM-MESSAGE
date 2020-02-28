@@ -354,6 +354,11 @@ export class DirectMessagesRestController extends RestPaginationService {
         return response.json();
     };
 
+    deleteAllConversationDMForUserFromUnread = async (convId, usrId) => {
+        const response = await fetch (`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
+        return response.json();
+    }
+
 }
 
 export class PluginRestPaginationService extends RestPaginationService {

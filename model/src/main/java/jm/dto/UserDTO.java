@@ -27,6 +27,7 @@ public class UserDTO {
     private String timeZone;
     private Set<Long> starredMessageIds;
     private Set<Long> unreadMessageIds;
+    private Set<Long> unreadDirectMessageIds;
     private Set<Long> directMessagesToUserIds;
     private Integer online;
     private String userSkype;

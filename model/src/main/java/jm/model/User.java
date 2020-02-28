@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
+import jm.model.message.DirectMessage;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -121,6 +122,15 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "unread_messages_id", referencedColumnName = "id"))
     private Set<Message> unreadMessages;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "users_unread_direct_messages",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "unread_direct_message_id", referencedColumnName = "id"))
+    private Set<DirectMessage> unreadDirectMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany

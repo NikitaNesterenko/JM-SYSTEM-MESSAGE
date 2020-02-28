@@ -32,7 +32,9 @@ export class DMView {
             });
             $(event.currentTarget).css({color: "white", background: "royalblue"});
             const userId = event.currentTarget.getAttribute('data-user_id');
+            const convId = event.currentTarget.getAttribute('conv_id');
             if (userId) {
+                this.direct_message_service.deleteAllConversationDMForUserFromUnread(convId, window.loggedUserId);
                 await this.show(userId);
             }
         });
