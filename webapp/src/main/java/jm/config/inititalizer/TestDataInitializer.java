@@ -79,8 +79,8 @@ public class TestDataInitializer {
         createSlashCommands();
 
         createWorkspaces();
-        createBots();
         createChannels();
+        createBots();
         createMessages();
         createLinkRoles();
 
@@ -200,6 +200,14 @@ public class TestDataInitializer {
         invitePeopleCommand.setHints("Invite_people Hints");
         slashCommandDao.persist(invitePeopleCommand);
         sc.add(invitePeopleCommand);
+
+        // команда для кастомного бота
+        SlashCommand sendMsgCommand = new SlashCommand();
+        sendMsgCommand.setName("send-to-channel");
+        sendMsgCommand.setUrl("/app/bot/slackbot");
+        sendMsgCommand.setDescription("send message description");
+        sendMsgCommand.setHints("send message");
+        slashCommandDao.persist(sendMsgCommand);
     }
 
     private void createRoles() {
@@ -449,17 +457,27 @@ public class TestDataInitializer {
             slackBot.getCommands().add(command);
         });
 
+        Bot customBot = new Bot("custom_bot_1", "CustomBot", LocalDateTime.now());
+        customBot.getWorkspaces().add(workspaceDAO.getById(1L));
+        // токен указал вручную для удобства тестирования,
+        // генерация токена: UUID.randomUUID().toString()
+        customBot.setToken("3ccc9bb5-c5d1-4df9-a37d-a2e24321e1eb");
+        customBot.getChannels().add(channelDAO.getChannelByName("general"));
+        customBot.getCommands().add(slashCommandDao.getByName("send-to-channel"));
 
         this.bots.add(slackBot);
         this.bots.add(zoom);
+        this.bots.add(customBot);
 
         botDAO.persist(slackBot);
         botDAO.persist(zoom);
+        botDAO.persist(customBot);
 
         sc.forEach(command -> {
             command.setBot(slackBot);
             slashCommandDao.merge(command);
         });
+        System.out.println("customBot: " + customBot);
 
     }
 

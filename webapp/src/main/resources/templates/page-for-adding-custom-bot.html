@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add bot</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script th:src="@{/js/admin-page/components/loadBots.js}" type="module"></script>
+    </head>
+    <body>
+        <div id="new-custom-bot" class="modal fade"><!--bd-example-modal-lg-->
+            <div class="modal-content">
+                <label>Name: </label><input id="custom-bot"><br><br>
+                <button id="save-custom-bot">Add bot</button>
+            </div>
+        </div>
+        <div id="edit-custom-bot" class="modal fade"><!--bd-example-modal-sm-->
+            <div class="modal-content">
+                <input hidden="hidden" id="bot-id">
+                <label>Nick name: </label><input id="nick-custom-bot"><br><br>
+                <label>Name: </label><input id="name-custom-bot"><br><br>
+                <label>API Token: </label><input id="token-custom-bot" size="60"> <a id="new-token-generate" style="cursor: pointer">Regenerate</a><br><br>
+                <button id="update-custom-bot">Save</button>
+            </div>
+        </div>
+        <h2>Add custom bot</h2>
+        <div>
+            Созданные боты
+            <ul>
+                <th:block th:each="bot : ${bots}">
+                    <li th:text="${bot.nickName}" th:onclick="'editBot(' + ${bot.id} + ')'"></li>
+                </th:block>
+            </ul>
+        </div>
+        <div id="form-add-custom-bot">
+            <button id="add-custom-bot">Add new bot</button>
+        </div>
+    <div>
+        <a id="send-test-message" style="cursor: pointer">Send test message</a><br><br>
+    </div>
+    </body>
+</html>

@@ -2,6 +2,7 @@ package jm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +23,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @ComponentScan(basePackages = {"jm"})
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private UserDetailsService userDetailsServiceImpl;
+    @Autowired
+    private CustomAuthFilter customAuthFilter;
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
@@ -51,8 +55,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JmAccessDeniedHandler();
     }
 
+    @Bean
+    public FilterRegistrationBean<CustomAuthFilter> authFilter() {
+        FilterRegistrationBean<CustomAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(customAuthFilter);
+        registrationBean.addUrlPatterns("/jmsm/api/*");
+        return registrationBean;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .csrf().disable();
 
@@ -62,6 +75,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(PathRequest.toStaticResources()
                         .atCommonLocations())
                 .permitAll();
+
+        // For API
+        http.authorizeRequests()
+                .antMatchers("/jmsm/api/**").permitAll();
 
         // Anyone can access homepage.
         http

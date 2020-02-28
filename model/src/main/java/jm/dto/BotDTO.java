@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,6 +20,7 @@ public class BotDTO {
     private Set<Long> channelIds;
     private Set<Long> slashCommandsIds;
     private LocalDateTime dateCreate;
+    private String token;
 
     // Constructor for simplify Bot->BotDTO conversion.
     // copying simple fields
@@ -29,5 +29,6 @@ public class BotDTO {
         this.name = bot.getName();
         this.nickName = bot.getNickName();
         this.dateCreate = bot.getDateCreate();
+        this.token = bot.getToken();
     }
 }

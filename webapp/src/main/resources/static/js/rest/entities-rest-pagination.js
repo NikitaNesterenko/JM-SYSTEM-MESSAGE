@@ -70,6 +70,50 @@ export class BotRestPaginationService extends RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     };
+
+    createBot = async (bot) => {
+        const response = await fetch('/rest/api/bot/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(bot)
+        });
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    generateToken = async () => {
+        const response = await fetch('/rest/api/bot/generate.token', {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    updateBot = async (bot) => {
+        const response = await fetch('/rest/api/bot/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(bot)
+        });
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    // TODO тестовая отправка сообщения
+    sendTestMessage = async () => {
+        await fetch('/rest/api/bot/test.send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+    }
 }
 
 export class SlashCommandRestPaginationService extends RestPaginationService {

@@ -22,7 +22,7 @@ public abstract class AbstractDao<T> {
                 this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    public List getAll() {
+    public List<T> getAll() {
         return entityManager.createQuery("from " + persistentClass.getName()).getResultList();
     }
 
