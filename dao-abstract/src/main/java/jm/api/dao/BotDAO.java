@@ -5,7 +5,6 @@ import jm.model.Channel;
 import jm.model.SlashCommand;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface BotDAO {
@@ -24,5 +23,5 @@ public interface BotDAO {
 
     Set<Channel> getChannels(Bot bot);
 
-    Optional<Bot> getBotByCommandId(Long id);
+    Bot getBotByCommandId(Long id);
 }

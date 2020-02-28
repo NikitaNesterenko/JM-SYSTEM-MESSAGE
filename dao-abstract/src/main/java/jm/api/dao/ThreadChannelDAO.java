@@ -4,7 +4,6 @@ import jm.model.ThreadChannel;
 import jm.model.message.ThreadChannelMessage;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ThreadChannelDAO {
 
@@ -12,5 +11,5 @@ public interface ThreadChannelDAO {
 
     ThreadChannel getById(Long id);
 
-    Optional<ThreadChannel> getByChannelMessageId(Long id);
+    ThreadChannel getByChannelMessageId(Long id);
 }

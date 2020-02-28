@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -22,9 +20,13 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
     @Override
     public List<Bot> getBotsByWorkspaceId(Long id) {
-        return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
-                .setParameter(1, id)
-                .getResultList();
+        try {
+            return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
+                    .setParameter(1, id)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -33,9 +35,13 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Optional<Bot> getBotByCommandId(Long id) {
-        return Optional.ofNullable((Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
-                .setParameter(1, id)
-                .getSingleResult());
+    public Bot getBotByCommandId(Long id) {
+        try {
+            return (Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
+                    .setParameter(1, id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
