@@ -10,7 +10,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "apps")
 public class App {
+
+    public static final String JAVA_MENTOR_BOT = "Java Mentor Bot";
+    public static final String GOOGLE_DRIVE = "Google Drive";
+    public static final String GITHUB = "GitHub";
+    public static final String CODE_STREAM = "CodeStream";
     public static final String GOOGLE_CALENDAR = "Google calendar";
+    public static final String ZOOM = "Zoom";
+    public static final String SOCOCO = "Sococo";
+    public static final String GITHUB_ENTERPRISE_SERVER = "GitHub Enterprise Server";
+    public static final String GOOGLE_HANGOUTS = "Google+ Hangouts";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
