@@ -75,4 +75,9 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUsersInWorkspace(id);
     }
 
+    @Override
+    public boolean isEmailInThisWorkspace(String email, Long id) {
+        return userDAO.isEmailInThisWorkspace(email,id);
+    }
+
 }
