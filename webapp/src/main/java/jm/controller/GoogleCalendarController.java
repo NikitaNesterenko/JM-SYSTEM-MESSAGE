@@ -34,10 +34,10 @@ public class GoogleCalendarController {
     @GetMapping
     public RedirectView googleConnection(HttpServletRequest request, Principal principal) throws Exception {
         Workspace workspace = getWorkspaceFromSession(request);
-        if(workspace==null) {
-            return  new RedirectView("/chooseWorkspace");
+        if (workspace == null) {
+            return new RedirectView("/chooseWorkspace");
         }
-        String authorize = googleCalendarService.authorize(workspace,principal.getName());
+        String authorize = googleCalendarService.authorize(workspace, principal.getName());
         return new RedirectView(authorize);
     }
 
@@ -77,7 +77,7 @@ public class GoogleCalendarController {
         return "redirect:/workspace";
     }
 
-    private Workspace getWorkspaceFromSession (HttpServletRequest request) {
+    private Workspace getWorkspaceFromSession(HttpServletRequest request) {
         return (Workspace) request.getSession(false).getAttribute("WorkspaceID");
     }
 }

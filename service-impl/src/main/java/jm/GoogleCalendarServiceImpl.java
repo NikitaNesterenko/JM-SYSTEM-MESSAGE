@@ -17,17 +17,12 @@ import com.google.api.services.calendar.Calendar.Events;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import jm.api.dao.GoogleCalendarDAO;
-import jm.model.Channel;
-import jm.model.Message;
-import jm.model.User;
-import jm.model.Workspace;
+import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -38,9 +33,9 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     @Autowired
     private GoogleCalendarDAO calendarDAO;
 
+    private AppsService appsService;
     private ChannelService channelService;
     private UserService userService;
-    private WorkspaceService workspaceService;
     private MessageService messageService;
     private String pathApplicationFiles;
     private String nameChannelStartWth = "Google Calendar ";
@@ -55,16 +50,16 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     private HttpTransport httpTransport = new NetHttpTransport();
     private JsonFactory jsonFactory = new JacksonFactory();
 
-    public GoogleCalendarServiceImpl(ChannelService channelService, UserService userService,
-                                     WorkspaceService workspaceService, MessageService messageService,
+    @Autowired
+    public GoogleCalendarServiceImpl(AppsService appsService, ChannelService channelService, UserService userService, MessageService messageService,
                                      @Value("${file.upload-dir.application}") String pathApplicationFiles,
                                      @Value("${google.client.redirectUri}") String redirectURI,
                                      @Value("${application.name}") String applicationName,
                                      @Value("${google.calendar.event.warningBeforeEvent.hour}") int warningBeforeEvent,
                                      @Value("${google.calendar.event.update.day.period}") int updatePeriod) {
+        this.appsService = appsService;
         this.channelService = channelService;
         this.userService = userService;
-        this.workspaceService = workspaceService;
         this.messageService = messageService;
         this.pathApplicationFiles = pathApplicationFiles;
         this.redirectURI = redirectURI;
@@ -261,9 +256,11 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         }
         return null;
     }
-    public void setGoogleClientIdAndSecret(Workspace workspace,String principalName) {
-        User user = userService.getUserByLogin(principalName);
-        clientId = workspace.getGoogleClientId();
-        clientSecret = workspace.getGoogleClientSecret();
+
+    public void setGoogleClientIdAndSecret(Workspace workspace, String principalName) {
+//        User user = userService.getUserByLogin(principalName);
+        App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), App.GOOGLE_CALENDAR);
+        clientId = app.getClientId();
+        clientSecret = app.getClientSecret();
     }
 }

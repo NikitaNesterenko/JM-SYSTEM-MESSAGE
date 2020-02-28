@@ -9,30 +9,27 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "apps")
-public class Apps {
-    private final static String GOOGLE_CALENDAR = "Google calendar";
+public class App {
+    public static final String GOOGLE_CALENDAR = "Google calendar";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "app_name")
     private String name;
 
-    @Column(name = "token")
-    private String token;
+    @Column(name = "client_id")
+    private String clientId;
+
+    @Column(name = "client_secret")
+    private String clientSecret;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    public Apps(String name, String token, Workspace workspace) {
-        this.name = name;
-        this.token = token;
-        this.workspace = workspace;
-    }
-
-    public Apps() {
+    public App() {
     }
 }
