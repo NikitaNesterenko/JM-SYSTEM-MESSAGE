@@ -2,6 +2,8 @@ package jm.api.dao;
 
 import jm.model.InviteToken;
 
+import java.util.Optional;
+
 public interface InviteTokenDAO {
 
     void persist(InviteToken inviteToken);
@@ -10,5 +12,5 @@ public interface InviteTokenDAO {
 
     void deleteById(Long id);
 
-    InviteToken getByHash(String hash);
+    Optional<InviteToken> getByHash(String hash);
 }

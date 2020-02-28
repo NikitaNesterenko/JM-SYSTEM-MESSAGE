@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -17,25 +19,21 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
 
 
     @Override
-    public SlashCommand getByName(String commandName) {
-       try {
-           return (SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
-                   .setParameter(1, commandName)
-                   .getSingleResult();
-       } catch (NoResultException e){
-           return null;
-       }
+    public Optional<SlashCommand> getByName(String commandName) {
+        try {
+            return Optional.ofNullable((SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
+                    .setParameter(1, commandName)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<SlashCommand> getByWorkspaceId(Long id) {
-        try {
-            return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM jm_message_system.bots_slash_commands bc JOIN slash_commands sc JOIN workspaces_bots wb ON sc.id = bc.slash_command_id AND bc.bot_id = wb.bot_id WHERE wb.workspace_id=?", SlashCommand.class)
-                    .setParameter(1, id)
-                    .getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return (List<SlashCommand>) entityManager.createNativeQuery("SELECT sc.* FROM jm_message_system.bots_slash_commands bc JOIN slash_commands sc JOIN workspaces_bots wb ON sc.id = bc.slash_command_id AND bc.bot_id = wb.bot_id WHERE wb.workspace_id=?", SlashCommand.class)
+                .setParameter(1, id)
+                .getResultList();
     }
 
     @Override
@@ -45,7 +43,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .setParameter(1, id)
                     .getResultList();
         } catch (NullPointerException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 }

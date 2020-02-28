@@ -103,7 +103,7 @@ public class ThreadMessageDtoServiceImplTest {
   @Test
   public void toEntity_Should_Return_ThreadChannelMessage() {
     when(userDAO.getById(2L)).thenReturn(user2);
-    when(threadChannelDAO.getByChannelMessageId(3L)).thenReturn(threadChannel);
+    when(threadChannelDAO.getByChannelMessageId(3L).get()).thenReturn(threadChannel);
 
     ThreadMessageDTO threadMessageDTO = new ThreadMessageDTO();
     threadMessageDTO.setContent("Thread DTO to Entity");

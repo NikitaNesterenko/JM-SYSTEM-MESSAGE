@@ -24,7 +24,7 @@ public class ThreadChannelServiceImpl implements ThreadChannelService{
 
     @Override
     public ThreadChannel findByChannelMessageId(Long id) {
-        return threadChannelDao.getByChannelMessageId(id);
+        return threadChannelDao.getByChannelMessageId(id).orElse(null);
     }
 
 }
