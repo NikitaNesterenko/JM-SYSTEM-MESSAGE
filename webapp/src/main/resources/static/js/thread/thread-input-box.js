@@ -40,7 +40,7 @@ $(document).on('submit', '#form_thread-message', function (e) {
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
 
-        workspace_service.getChoosedWorkspace().then(workspace => {
+        workspace_service.getChosenWorkspace().then(workspace => {
 
             const workspaceId = workspace.id;
 

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -83,8 +84,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
-        int code  = (int) (Math.random() * 999999);
+    public Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo) {
+        int code = (int) (Math.random() * 999999);
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -92,15 +93,18 @@ public class MailServiceImpl implements MailService {
             messageHelper.setSubject("Confirmation code");
             messageHelper.setText(content, true);
         };
+
+        CreateWorkspaceToken createWorkspaceToken = null;
         try {
             emailSender.send(messagePreparator);
             logger.info("Sending confirmation code to " + emailTo + " was successful");
+            createWorkspaceToken = new CreateWorkspaceToken(code);
         } catch (MailException e) {
             logger.error("Sending confirmation code to " + emailTo + " failed");
             e.printStackTrace();
         }
 
-        return new CreateWorkspaceToken(code);
+        return Optional.ofNullable(createWorkspaceToken);
     }
 
     @Override
