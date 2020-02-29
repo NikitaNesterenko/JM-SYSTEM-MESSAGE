@@ -4,7 +4,6 @@ import jm.dto.UserDTO;
 import jm.model.User;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface UserDAO {
@@ -19,11 +18,11 @@ public interface UserDAO {
 
     User getById(Long id);
 
-    Optional<User> getUserByLogin(String login);
+    User getUserByLogin(String login);
 
-    Optional<User> getUserByName(String name);
+    User getUserByName(String name);
 
-    Optional<User> getUserByEmail(String email);
+    User getUserByEmail(String email);
 
     void addRoleForUser(User user, String role);
 

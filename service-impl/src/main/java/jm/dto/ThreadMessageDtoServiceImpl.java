@@ -72,7 +72,7 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         }
 
         User user = userDAO.getById(threadMessageDTO.getUserId());
-        ThreadChannel threadChannel = threadChannelDAO.getByChannelMessageId(threadMessageDTO.getParentMessageId()).orElse(null);
+        ThreadChannel threadChannel = threadChannelDAO.getByChannelMessageId(threadMessageDTO.getParentMessageId());
         ThreadChannelMessage threadChannelMessage = new ThreadChannelMessage();
         threadChannelMessage.setUser(user);
         threadChannelMessage.setContent(threadMessageDTO.getContent());

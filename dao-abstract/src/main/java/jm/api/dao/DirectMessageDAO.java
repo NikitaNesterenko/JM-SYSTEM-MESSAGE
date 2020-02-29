@@ -3,7 +3,6 @@ package jm.api.dao;
 import jm.model.message.DirectMessage;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DirectMessageDAO {
 

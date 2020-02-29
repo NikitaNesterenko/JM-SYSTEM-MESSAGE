@@ -52,17 +52,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLogin(String login) {
-        return userDAO.getUserByLogin(login).orElse(null);
+        return userDAO.getUserByLogin(login);
     }
 
     @Override
     public User getUserByName(String name) {
-        return userDAO.getUserByName(name).orElse(null);
+        return userDAO.getUserByName(name);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userDAO.getUserByEmail(email).orElse(null);
+        return userDAO.getUserByEmail(email);
     }
 
     @Override

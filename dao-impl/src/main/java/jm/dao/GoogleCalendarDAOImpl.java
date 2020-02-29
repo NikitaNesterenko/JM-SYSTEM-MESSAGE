@@ -13,7 +13,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -41,16 +44,17 @@ public class GoogleCalendarDAOImpl extends AbstractDao<GoogleCalendarToken> impl
     }
 
     @Override
-    public Optional<String> loadToken(String userName) {
+    public String loadToken(String userName) {
         try {
             GoogleCalendarToken googleCalendarToken = (GoogleCalendarToken) entityManager.createNativeQuery("select * from google_calendar_token where user_id = :user_id", GoogleCalendarToken.class)
                     .setParameter("user_id", entityManager.createNativeQuery("select * from users where login = :login", User.class)
                             .setParameter("login", userName)
                             .getSingleResult())
                     .getSingleResult();
-            return Optional.ofNullable(googleCalendarToken.getToken());
-        } catch (NoResultException ex) {
-            return Optional.empty();
+
+            return googleCalendarToken.getToken();
+        } catch (NoResultException e) {
+            return null;
         }
     }
 }
