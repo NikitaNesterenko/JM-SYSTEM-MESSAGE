@@ -2,7 +2,6 @@ package jm.dao;
 
 import jm.api.dao.AppsDAO;
 import jm.model.App;
-import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -23,7 +22,6 @@ public class AppsDAOImpl extends AbstractDao<App> implements AppsDAO {
                     .setParameter("app_name", appName)
                     .getSingleResult();
         } catch (NoResultException | NullPointerException e) {
-            e.getMessage();
             return null;
         }
     }

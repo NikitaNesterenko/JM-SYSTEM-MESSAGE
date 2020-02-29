@@ -89,20 +89,19 @@ public class TestDataInitializer {
 
         createConversations();
         createDirectMessages();
-        createApps();
+//        createApps();
     }
 
-    private void createApps() {
-        List<Workspace> workspaces = new ArrayList<>(this.workspaces);
-        App app = new App();
-        app.setName(App.GOOGLE_CALENDAR);
-//        app.setUser(userService.getUserByLogin("login_1"));
-        app.setClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
-        app.setClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
-        app.setWorkspace(workspaces.get(0));
-        appsDAO.persist(app);
-        apps.add(app);
-    }
+//    private void createApps() {
+//        List<Workspace> workspaces = new ArrayList<>(this.workspaces);
+//        App app = new App();
+//        app.setName(App.GOOGLE_CALENDAR);
+//        app.setClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
+//        app.setClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
+//        app.setWorkspace(workspaces.get(0));
+//        appsDAO.persist(app);
+//        apps.add(app);
+//    }
 
     private void createSlashCommands(){
         SlashCommand topicChangeCommand = new SlashCommand();

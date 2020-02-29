@@ -16,13 +16,12 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.Calendar.Events;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
-import jm.api.dao.GoogleCalendarDAO;
 import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -30,8 +29,6 @@ import java.util.List;
 
 @Service
 public class GoogleCalendarServiceImpl implements GoogleCalendarService {
-    @Autowired
-    private GoogleCalendarDAO calendarDAO;
 
     private AppsService appsService;
     private ChannelService channelService;
@@ -80,13 +77,13 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         DateTime dateStart = DateTime.parseRfc3339(now.toString()); //TODO: use date without +3 hours
         DateTime dateEnd = DateTime.parseRfc3339(now.plusDays(updatePeriod).toString());
 
-        Calendar calendarByCallbackCode = getCalendarByCallbackCode(code, principalName);
+        Calendar calendarByCallbackCode = getCalendarByCallbackCode(workspace.getId(), code, principalName);
         getGoogleCalendarEvent(calendarByCallbackCode, dateStart, dateEnd, principalName);
     }
 
     @Override
-    public void secondStart(String principalName, DateTime dataStart, DateTime dataEnd) {
-        Calendar calendarByAccessToken = getCalendarByAccessToken(principalName);
+    public void secondStart(Long workspaceId, String principalName, DateTime dataStart, DateTime dataEnd) {
+        Calendar calendarByAccessToken = getCalendarByAccessToken(workspaceId);
         getGoogleCalendarEvent(calendarByAccessToken, dataStart, dataEnd, principalName);
     }
 
@@ -94,7 +91,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     public String authorize(Workspace workspace,String principalName) throws GeneralSecurityException, IOException {
 
         AuthorizationCodeRequestUrl authorizationUrl;
-        setGoogleClientIdAndSecret(workspace,principalName);
+        setGoogleClientIdAndSecret(workspace);
         if (flow == null) {
             GoogleClientSecrets.Details web = new GoogleClientSecrets.Details();
             web.setClientId(clientId);
@@ -149,7 +146,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public Calendar getCalendarByCallbackCode(String code, String principalName) {
+    public Calendar getCalendarByCallbackCode(Long workspaceId, String code, String principalName) {
 
         try {
             TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectURI).execute();
@@ -157,7 +154,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
             Calendar clientCalendar = new com.google.api.services.calendar.Calendar.Builder(httpTransport, jsonFactory, credential)
                     .setApplicationName(applicationName).build();
 
-            saveGoogleCalendarClientAccessToken(credential.getAccessToken(), principalName);
+            appsService.saveAppToken(workspaceId, App.GOOGLE_CALENDAR, credential.getAccessToken());
             return clientCalendar;
 
         } catch (IOException e) {
@@ -203,8 +200,8 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public List<Event> getEvents(String principalName, DateTime dataStart, DateTime dataEnd) {
-        Calendar calendarByAccessToken = getCalendarByAccessToken(principalName);
+    public List<Event> getEvents(Long workspaceId, DateTime dataStart, DateTime dataEnd) {
+        Calendar calendarByAccessToken = getCalendarByAccessToken(workspaceId);
         return getEvents(calendarByAccessToken, dataStart, dataEnd);
     }
 
@@ -226,39 +223,22 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public void saveGoogleCalendarClientAccessToken(String accessToken, String principalName) {
+    public Calendar getCalendarByAccessToken(Long workspaceId) {
 
-        if (!accessToken.isEmpty() && !principalName.isEmpty()) {
-            calendarDAO.saveToken(principalName, accessToken);
-        }
+        String accessToken = appsService.loadAppToken(workspaceId, App.GOOGLE_CALENDAR);
+
+        Credential credential = new GoogleCredential
+                                    .Builder()
+                                    .setTransport(httpTransport)
+                                    .setJsonFactory(jsonFactory).setClientSecrets(clientId, clientSecret).build();
+
+        credential.setAccessToken(accessToken);
+
+        return new Calendar.Builder(httpTransport, jsonFactory, credential)
+                .setApplicationName(applicationName).build();
     }
 
-    @Override
-    public String loadGoogleCalendarClientAccessToken(String principalName) {
-        return calendarDAO.loadToken(principalName);
-    }
-
-    @Override
-    public Calendar getCalendarByAccessToken(String principalName) {
-
-        if (!principalName.isEmpty()) {
-            String accessToken = loadGoogleCalendarClientAccessToken(principalName);
-
-            Credential credential = new GoogleCredential
-                                        .Builder()
-                                        .setTransport(httpTransport)
-                                        .setJsonFactory(jsonFactory).setClientSecrets(clientId, clientSecret).build();
-
-            credential.setAccessToken(accessToken);
-
-            return new Calendar.Builder(httpTransport, jsonFactory, credential)
-                    .setApplicationName(applicationName).build();
-        }
-        return null;
-    }
-
-    public void setGoogleClientIdAndSecret(Workspace workspace, String principalName) {
-//        User user = userService.getUserByLogin(principalName);
+    public void setGoogleClientIdAndSecret(Workspace workspace) {
         App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), App.GOOGLE_CALENDAR);
         clientId = app.getClientId();
         clientSecret = app.getClientSecret();

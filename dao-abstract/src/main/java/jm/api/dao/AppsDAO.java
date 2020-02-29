@@ -6,5 +6,7 @@ public interface AppsDAO {
 
     void persist(App app);
 
+    App merge(App app);
+
     App getAppByWorkspaceIdAndAppName(Long id, String appName);
 }

@@ -12,7 +12,7 @@ const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const app_service = new AppRestPaginationService();
 const logged_user = user_service.getLoggedUser();
-let current_wks = workspace_service.getChoosedWorkspace();
+let current_wks = workspace_service.getChosenWorkspace();
 
 
 window.addEventListener('load', async () => {
@@ -168,7 +168,8 @@ $("#addGoogleCalendarIdSecretSubmit").click(
     async function () {
         const app_name = "Google calendar";
         let google_calendar_app = await app_service.getAppByName(app_name);
-        let  googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
+
+        let googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
         let googleCalendarClientSecret = $("#InputGoogleCalendarClientSecret").val();
         const entity = {
             id: (google_calendar_app).id,
@@ -178,8 +179,8 @@ $("#addGoogleCalendarIdSecretSubmit").click(
             clientSecret: googleCalendarClientSecret
         };
         await app_service.update(entity).then(()=>{
-            $("#addGoogleCalendarIdSecretModal").modal('toggle')
-            $('#appsModal').modal('toggle')
+            $("#addGoogleCalendarIdSecretModal").modal('toggle');
+            $('#appsModal').modal('toggle');
             location.href = "/application/google/calendar";
             return false;
         });

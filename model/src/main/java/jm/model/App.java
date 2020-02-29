@@ -35,6 +35,9 @@ public class App {
     @Column(name = "client_secret")
     private String clientSecret;
 
+    @Column(name = "token")
+    private String token;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
