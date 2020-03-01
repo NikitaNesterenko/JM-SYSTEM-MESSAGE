@@ -73,7 +73,7 @@ function onEditSubmit(ev) {
     activeEdit = false;
 
     const user_promise = user_service.getLoggedUser();
-    const channel_promise = channel_service.getById(sessionStorage.getItem("channelName"));
+    const channel_promise = channel_service.getById(sessionStorage.getItem("channelId"));
     Promise.all([user_promise, channel_promise]).then(value => {
         const user = value[0];
         const channel = value[1];

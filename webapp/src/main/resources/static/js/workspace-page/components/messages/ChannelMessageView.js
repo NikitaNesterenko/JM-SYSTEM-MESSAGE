@@ -31,7 +31,7 @@ export class ChannelMessageView extends MessageView {
             "id": message_id,
             "userId": this.logged_user.id,
             "userName": this.logged_user.name,
-            "channelId": parseInt(sessionStorage.getItem("channelName")),
+            "channelId": parseInt(sessionStorage.getItem("channelId")),
             "content": msg,
             "dateCreate": convert_date_to_format_Json(new Date()),
             "filename": filename,

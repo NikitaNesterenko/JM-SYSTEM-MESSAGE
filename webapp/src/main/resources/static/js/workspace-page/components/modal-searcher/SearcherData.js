@@ -15,7 +15,7 @@ export class SearcherData {
 
     async setWorkspaceId() {
         const workspace_service = new WorkspaceRestPaginationService();
-        this.workspace = await workspace_service.getChoosedWorkspace();
+        this.workspace = await workspace_service.getChosenWorkspace();
     }
 
     async setAvailableChannels() {

@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -117,18 +116,17 @@ public class MessageRestController {
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
-    // DTO compliant
     @PostMapping(value = "/create")
-    @Operation(summary = "Create message",
-            responses = {
-                    @ApiResponse(
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = MessageDTO.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
-            })
+//    @Operation(summary = "Create message",
+//            responses = {
+//                    @ApiResponse(
+//                            content = @Content(
+//                                    mediaType = "application/json",
+//                                    schema = @Schema(implementation = MessageDTO.class)
+//                            )
+//                    ),
+//                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
+//            })
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
         messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
