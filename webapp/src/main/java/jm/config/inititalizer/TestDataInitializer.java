@@ -43,7 +43,6 @@ public class TestDataInitializer {
 
     private Set<Role> roles = new HashSet<>();
     private Set<User> users = new HashSet<>();
-    private Set<User> newUsers = new HashSet<>();
     private Set<Channel> channels = new HashSet<>();
     private Set<Message> messages = new HashSet<>();
     private Set<Workspace> workspaces = new HashSet<>();
@@ -59,8 +58,7 @@ public class TestDataInitializer {
         STEPAN("Степан", "Сидоров", "login_2", "pass_2", "sidorov@testmail.com"),
         PETR("Петр", "Петров", "login_3", "pass_3", "petrov@testmail.com"),
         FOO("foo", "bar", "login_4", "pass_4", "foobar@testmail.com"),
-        JAMES("James", "Smith", "login_5", "pass_5", "smith@testmail.com"),
-        ANTON("ANTON", "Иванов", "login_6", "pass_6", "anton@testmail.com");
+        JAMES("James", "Smith", "login_5", "pass_5", "smith@testmail.com");
 
         private final String name;
         private final String lastName;
@@ -274,7 +272,6 @@ public class TestDataInitializer {
 
         userService.createUser(userFoo);
         this.users.add(userFoo);
-        this.newUsers.add(userFoo);
 
         User userJames = new User();
 
@@ -288,19 +285,6 @@ public class TestDataInitializer {
 
         userService.createUser(userJames);
         this.users.add(userJames);
-
-        User userAnton = new User();
-
-        userAnton.setName(UserData.ANTON.name);
-        userAnton.setLastName(UserData.ANTON.lastName);
-        userAnton.setLogin(UserData.ANTON.login);
-        userAnton.setEmail(UserData.ANTON.email);
-        userAnton.setPassword(UserData.ANTON.password);
-        userAnton.setDisplayName(UserData.ANTON.name + " " + UserData.ANTON.lastName);
-        userAnton.setRoles(userRoleSet);
-
-        userService.createUser(userAnton);
-        this.newUsers.add(userAnton);
     }
 
     private void createChannels() {
@@ -417,11 +401,6 @@ public class TestDataInitializer {
                 .findFirst()
                 .orElse(this.users.iterator().next());
 
-        User userAnton = this.newUsers.stream()
-                .filter(user -> UserData.ANTON.name.equals(user.getName()))
-                .findFirst()
-                .orElse(this.users.iterator().next());
-
         Workspace workspace1 = new Workspace();
         workspace1.setName("workspace-0");
         workspace1.setUsers(this.users);
@@ -457,18 +436,6 @@ public class TestDataInitializer {
 
         workspaceDAO.persist(workspace3);
         this.workspaces.add(workspace3);
-
-        Workspace workspace4 = new Workspace();
-        workspace4.setName("test_workspace");
-        workspace4.setUsers(this.newUsers);
-        workspace4.setUser(userAnton);
-        workspace4.setIsPrivate(true);
-        workspace4.setCreatedDate(LocalDateTime.now());
-        workspace4.setGoogleClientId("");
-        workspace4.setGoogleClientSecret("");
-
-        workspaceDAO.persist(workspace4);
-        this.workspaces.add(workspace4);
     }
 
     private void createBots() {
@@ -511,17 +478,6 @@ public class TestDataInitializer {
         }
 
         for (User user : this.users) {
-            for (Workspace workspace : this.workspaces) {
-                if (workspace.getUsers().contains(user)) {
-                    if (user.getId().equals(workspace.getUser().getId())) {
-                        createWorkspaceUserRole(workspace, user, ownerRole);
-                    } else {
-                        createWorkspaceUserRole(workspace, user, userRole);
-                    }
-                }
-            }
-        }
-        for (User user : this.newUsers) {
             for (Workspace workspace : this.workspaces) {
                 if (workspace.getUsers().contains(user)) {
                     if (user.getId().equals(workspace.getUser().getId())) {

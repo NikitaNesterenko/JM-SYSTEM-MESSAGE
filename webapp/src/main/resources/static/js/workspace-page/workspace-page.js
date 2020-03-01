@@ -7,10 +7,12 @@ import {DirectMessageView} from "./components/messages/DirectMessageView.js";
 import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
+import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const logged_user = user_service.getLoggedUser();
+const switch_workspace_window = new SwitchWorkspaceWindow();
 let current_wks = workspace_service.getChoosedWorkspace();
 
 
@@ -22,6 +24,7 @@ window.addEventListener('load', async () => {
     const chat = new DMView(direct_message_view);
     const channel_view = new ChannelView();
 
+    switch_workspace_window.buildEvents();
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
 
