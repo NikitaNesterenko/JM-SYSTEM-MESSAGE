@@ -27,6 +27,7 @@ public class SlashCommandDto {
                 this.url = sc.getUrl();
                 this.description = sc.getDescription();
                 this.hints = sc.getHints();
+                this.botId = sc.getBot().getId();
         }
 
 }

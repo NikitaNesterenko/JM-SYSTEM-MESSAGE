@@ -36,10 +36,11 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public void createSlashCommand(SlashCommand slashCommand) {
-        slashCommand.setUrl("/app/bot/" + slashCommand.getName().replaceAll(" ", "-"));
+        Bot bot = botDAO.getById(slashCommand.getBot().getId());
+
+        slashCommand.setUrl("/app/bot/" + bot.getName().toLowerCase());
         slashCommandDao.persist(slashCommand);
 
-        Bot bot = botDAO.getById(slashCommand.getBot().getId());
         bot.getCommands().add(slashCommand);
         botDAO.merge(bot);
     }
@@ -55,7 +56,6 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public void updateSlashCommand(SlashCommand slashCommand) {
-        slashCommand.setUrl("/app/bot/" + slashCommand.getName().replaceAll(" ", "-"));
         slashCommandDao.merge(slashCommand);
     }
 

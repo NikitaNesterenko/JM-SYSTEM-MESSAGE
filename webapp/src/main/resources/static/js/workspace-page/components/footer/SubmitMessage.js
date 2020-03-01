@@ -50,12 +50,12 @@ export class SubmitMessage {
                     return
                 }
 
-                const channel_name = sessionStorage.getItem("channelName");
+                const channel_id = sessionStorage.getItem("channelId");
                 const channel_name2 = sessionStorage.getItem("channelname");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
-                if (channel_name !== '0') {
-                    this.sendChannelMessage(channel_name);
+                if (channel_id !== '0') {
+                    this.sendChannelMessage(channel_id);
                 }
 
                 if (conversation_id !== '0') {
@@ -121,13 +121,13 @@ export class SubmitMessage {
         return null;
     }
 
-    async sendChannelMessage(channel_name) {
-        await this.setChannel(channel_name);
+    async sendChannelMessage(channel_id) {
+        await this.setChannel(channel_id);
         await this.setUser();
 
         let entity = {
             id: null,
-            channelId: this.channel.id,
+            channelId: channel_id,
             userId: this.user.id,
             userName: this.user.name,
             content: this.getMessageInput(),
@@ -163,9 +163,10 @@ export class SubmitMessage {
                         channelId: entity.channelId,
                         userId: entity.userId,
                         command: entity.content,
-                        name: inputCommand
+                        name: inputCommand,
+                        botId: command.botId
                     };
-                    if (command.botId == 1) {
+                    if (command.botId === 1) {
                         //если это команда от слакБота, то отправляем через вебсокет.
                         sendSlackBotCommand(sendCommand);
                     } else {

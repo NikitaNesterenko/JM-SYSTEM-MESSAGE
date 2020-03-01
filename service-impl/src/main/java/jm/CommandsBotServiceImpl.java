@@ -63,17 +63,24 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         response.put("channelId", command.getChannelId().toString()); //добавляем Id канала, в котором отправлена команда
         response.put("report", "{}");
 
+        System.out.println("command: " + command);
+        System.out.println("currentUser: " + currentUser);
+        System.out.println("currentChannel: " + currentChannel);
+        System.out.println("commandName: " + commandName);
+        System.out.println("commandBody: " + commandBody);
+        System.out.println("response: " + response);
+
         ObjectMapper mapper = new ObjectMapper();
         switch (commandName) {
             case "topic":
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                 } else {
                     setTopic(command.getChannelId(), commandBody);
                     response.put("topic", commandBody);
                     response.put("status", "OK");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Topic was changed"));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), "Topic was changed"));
                 }
                 break;
             case "leave": {
@@ -88,7 +95,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                         response.put("targetChannelId", channel.getId().toString());
                     } else {
                         response.put("status", "ERROR");
-                        response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                        response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                     }
                 } else {
                     response.put("report", leaveChannel(channel, command.getUserId()));
@@ -109,7 +116,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                     response.put("targetChannelId", channel.getId().toString());
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                 }
 
                 break;
@@ -145,17 +152,17 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                     response.put("channel", mapper.writeValueAsString(channelToInvite)); //канал, куда добавляли пользователей
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), channelToInvite == null ?
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), channelToInvite == null ?
                             "Channel not found" : "Users list is empty or all users are already in channel"));
                 }
                 break;
             case "who":
                 if (commandBody.replaceAll("\\s+", "").trim().equals("")) { //проверяем, есть ли текст после /who
-                    response.put("report", whoAreInChannel(currentChannel, command.getUserId()));
+                    response.put("report", whoAreInChannel(currentChannel, command.getUserId(), command.getBotId()));
                     response.put("status", "OK");
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                 }
                 break;
             case "remove":
@@ -168,11 +175,11 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 });
                 if (kickedUser.size() > 0) {
                     response.put("status", "OK");
-                    response.put("report", kickUsers(kickedUser, currentChannel, command.getUserId()));
+                    response.put("report", kickUsers(kickedUser, currentChannel, command.getUserId(), command.getBotId()));
                     response.put("kickedUsersIds", mapper.writeValueAsString(kickedUser.stream().map(User::getId).toArray()));
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(currentChannel.getId(), getBot(), "Users not found"));
+                    response.put("report", sendTempRequestMessage(currentChannel.getId(), getBot(command.getBotId()), "Users not found"));
                 }
                 break;
             case "msg":
@@ -185,7 +192,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                     response.put("targetChannelId", targetChannel.getId().toString());
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                 }
                 break;
             case "dm":
@@ -199,7 +206,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                     response.put("conversationId", conversationService.getConversationByUsersId(command.getUserId(), targetUser.getId()).getId().toString());
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "User @" + targetUserName + " not found"));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), "User @" + targetUserName + " not found"));
                 }
                 break;
             case "rename":
@@ -211,7 +218,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                     response.put("targetChannelId", channelToRename.getId().toString());
                 } else {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                 }
                 break;
             case "archive":
@@ -228,7 +235,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 });
                 if (emailsList.size() == 0) {
                     response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Emails not found"));
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), "Emails not found"));
                 } else {
                     response.put("status", "OK");
                     response.put("usersList", mapper.writeValueAsString(emailsList));
@@ -317,7 +324,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         return sendPermRequestMessage(targetChannel.getId(), invitingUser, sb.toString());
     }
 
-    private String whoAreInChannel(Channel targetChannel, Long targetUserId) throws JsonProcessingException {
+    private String whoAreInChannel(Channel targetChannel, Long targetUserId, Long botId) throws JsonProcessingException {
         StringBuffer sb = new StringBuffer("Users here:");
         Set<User> usersOnChannel = targetChannel.getUsers();
         User targetUser = userService.getUserById(targetUserId);
@@ -334,7 +341,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             });
             sb.append(targetUserIsOnChannel ? " and you." : ".");
         }
-        return sendTempRequestMessage(targetChannel.getId(), getBot(), sb.toString());
+        return sendTempRequestMessage(targetChannel.getId(), getBot(botId), sb.toString());
     }
 
     private List<User> getUsersFromMessage(String msg) {
@@ -363,7 +370,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         return channelsNames;
     }
 
-    private String kickUsers(List<User> usersToKick, Channel targetChannel, Long userId) throws JsonProcessingException {
+    private String kickUsers(List<User> usersToKick, Channel targetChannel, Long userId, Long botId) throws JsonProcessingException {
         User currentUser = userService.getUserById(userId);
         targetChannel.getUsers().removeAll(usersToKick);
         channelService.updateChannel(targetChannel);
@@ -372,7 +379,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         msg.append(usersToKick.size() > 1 ? " were" : " was");
         msg.append(" kicked from channel");
         msg.append(" by @").append(currentUser.getName());
-        return sendPermRequestMessage(targetChannel.getId(), getBot(), msg.toString());
+        return sendPermRequestMessage(targetChannel.getId(), getBot(botId), msg.toString());
     }
 
     private String renameChannel(String newChannelName, Channel targetChannel, User user) throws JsonProcessingException {
@@ -416,9 +423,9 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         return mapper.writeValueAsString(messageDtoService.toDto(newMessage));
     }
 
-    private Bot getBot() {
+    private Bot getBot(Long botId) {
         if (bot == null) {
-            bot = botService.getBotById(1L);
+            bot = botService.getBotById(botId);
         }
         return bot;
     }

@@ -21,7 +21,7 @@ public class SlashCommand {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     @EqualsAndHashCode.Include
     private String name;
 

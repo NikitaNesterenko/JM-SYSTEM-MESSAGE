@@ -204,7 +204,7 @@ public class TestDataInitializer {
         // команда для кастомного бота
         SlashCommand sendMsgCommand = new SlashCommand();
         sendMsgCommand.setName("send-to-channel");
-        sendMsgCommand.setUrl("/app/bot/slackbot");
+        sendMsgCommand.setUrl("/app/bot/custombot");
         sendMsgCommand.setDescription("send message description");
         sendMsgCommand.setHints("send message");
         slashCommandDao.persist(sendMsgCommand);
