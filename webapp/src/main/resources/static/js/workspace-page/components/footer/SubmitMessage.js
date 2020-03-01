@@ -164,15 +164,17 @@ export class SubmitMessage {
                         userId: entity.userId,
                         command: entity.content,
                         name: inputCommand,
-                        botId: command.botId
+                        botId: command.botId,
+                        url: command.url
                     };
-                    if (command.botId === 1) {
-                        //если это команда от слакБота, то отправляем через вебсокет.
-                        sendSlackBotCommand(sendCommand);
-                    } else {
-                        //иначе просто отправляем пост запрос по урлу
-                        this.slashCommandService.sendSlashCommand(command.url, sendCommand);
-                    }
+                    sendSlackBotCommand(sendCommand);
+                    // if (command.botId === 1) {
+                    //     //если это команда от слакБота, то отправляем через вебсокет.
+                    //     sendSlackBotCommand(sendCommand);
+                    // } else {
+                    //     //иначе просто отправляем пост запрос по урлу
+                    //     this.slashCommandService.sendSlashCommand(command.url, sendCommand);
+                    // }
                 }
             });
         }

@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,17 +24,16 @@ public class SlackBotController {
         this.commandsBotService = commandsBotService;
     }
 
-    @PostMapping("/app/bot/{botname}")
+    @PostMapping("/app/bot/slackbot")
     // обработка команд для бота, которые реализованы не через вебсокет (их на данный момент нет).
-    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command, @PathVariable String botname) {
+    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) {
         String currentCommand = command.getCommand();
-        System.out.println("currentCommand: " + currentCommand);
         ResponseEntity<?> resp = null;
 
         return resp == null ? new ResponseEntity<>(HttpStatus.OK) : resp;
     }
 
-    @MessageMapping("/slackbot") //обработка команд, реализованных на вебсокете
+    @MessageMapping("/bot/*") //обработка команд, реализованных на вебсокете
     @SendTo("/topic/slackbot")
     public String getWsCommand(@RequestBody SlashCommandDto command) throws JsonProcessingException {
         return commandsBotService.getWsCommand(command);

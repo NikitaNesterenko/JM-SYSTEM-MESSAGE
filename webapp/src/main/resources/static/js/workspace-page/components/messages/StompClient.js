@@ -341,7 +341,8 @@ export class StompClient {
             'name': message.name
         };
 
-        this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
+        this.stompClient.send(message.url, {}, JSON.stringify(entity));
+        // this.stompClient.send("/app/bot/slackbot", {}, JSON.stringify(entity));
     }
 
     //отобразить сообщение из вебсокета в текущем канале
