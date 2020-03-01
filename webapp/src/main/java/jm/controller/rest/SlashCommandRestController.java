@@ -60,8 +60,11 @@ public class SlashCommandRestController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         logger.info("Existing command: {}", existCommand);
-        slashCommandService.updateSlashCommand(sc);
-        logger.info("Updated command: {}", sc);
+        existCommand.setName(sc.getName());
+        existCommand.setDescription(sc.getDescription());
+        existCommand.setHints(sc.getHints());
+        slashCommandService.updateSlashCommand(existCommand);
+        logger.info("Updated command: {}", existCommand);
         return new ResponseEntity(HttpStatus.OK);
     }
 
