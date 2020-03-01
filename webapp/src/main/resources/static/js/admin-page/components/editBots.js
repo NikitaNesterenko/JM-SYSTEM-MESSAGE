@@ -1,22 +1,34 @@
 import {BotRestPaginationService} from '/js/rest/entities-rest-pagination.js';
-// import {UserRestPaginationService} from "../../rest/entities-rest-pagination";
 
 const bot_service = new BotRestPaginationService();
 
+export class Bot {
+    constructor(id, nickName, name, token, workspacesId) {
+        this.id = id;
+        this.nickName = nickName;
+        this.name = name;
+        this.token = token;
+        this.workspacesId = workspacesId;
+    }
+}
+
 $('#add-custom-bot').click(function () {
+    document.getElementById('custom-bot').value = '';
     $('#new-custom-bot').modal('show');
 });
 
 $('#save-custom-bot').click(function () {
     let input_name = document.getElementById('custom-bot');
     let name = input_name.value;
-    let customBot = new Bot(null, null, name, null);
-
+    let workspaceId = document.getElementById('workspace-custom-bot').value;
+    let workspacesId = [];
+    workspacesId.push(workspaceId);
+    let customBot = new Bot(null, null, name, null, workspacesId);
     bot_service.createBot(customBot)
-        .then(request => editCustomBot(request));
+        .then(request => editBot(request));
 });
 
-async function editCustomBot(bot) {
+async function editBot(bot) {
     $('#new-custom-bot').modal('hide');
     $('#edit-custom-bot').modal('show');
 
@@ -33,12 +45,6 @@ $('#new-token-generate').click(function () {
         })
 });
 
-
-$('#send-test-message').click(function () {
-    bot_service.sendTestMessage();
-});
-
-
 $('#update-custom-bot').on('click', function () {
     let id = document.getElementById('bot-id').value;
     let nick = document.getElementById('nick-custom-bot').value;
@@ -46,15 +52,8 @@ $('#update-custom-bot').on('click', function () {
     let token = document.getElementById('token-custom-bot').value;
     let customBot = new Bot(id, nick, name, token);
     bot_service.updateBot(customBot)
-        .then(() => $('#edit-custom-bot').modal('hide'));
+        .then(() => {
+            $('#edit-custom-bot').modal('hide');
+            location.reload();
+        });
 });
-
-export class Bot {
-    constructor(id, nickName, name, token) {
-        this.id = id;
-        this.nickName = nickName;
-        this.name = name;
-        this.token = token;
-    }
-
-}

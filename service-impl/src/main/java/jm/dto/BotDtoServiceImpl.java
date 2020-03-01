@@ -65,6 +65,8 @@ public class BotDtoServiceImpl implements BotDtoService {
     @Transactional
     public Bot toEntity(BotDTO botDto) {
 
+        System.out.println("botDto in toEntity: " + botDto);
+
         if (botDto == null) {
             return null;
         }

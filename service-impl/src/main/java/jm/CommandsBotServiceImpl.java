@@ -64,159 +64,176 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         response.put("report", "{}");
 
         ObjectMapper mapper = new ObjectMapper();
-        if (commandName.equals("topic")) {
-            if (commandBody.trim().isEmpty()) {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
-            } else {
-                setTopic(command.getChannelId(), commandBody);
-                response.put("topic", commandBody);
-                response.put("status", "OK");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Topic was changed"));
-            }
-        } else if (commandName.equals("leave")) {
-            String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
-                    getChannelsNamesFromMsg(commandBody).get(0);
-            Channel channel = channelService.getChannelByName(channelName);
-            if (channel == null) {
-                if (commandBody.equals("")) {
-                    channel = channelService.getChannelById(command.getChannelId());
+        switch (commandName) {
+            case "topic":
+                if (commandBody.trim().isEmpty()) {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                } else {
+                    setTopic(command.getChannelId(), commandBody);
+                    response.put("topic", commandBody);
+                    response.put("status", "OK");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Topic was changed"));
+                }
+                break;
+            case "leave": {
+                String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
+                        getChannelsNamesFromMsg(commandBody).get(0);
+                Channel channel = channelService.getChannelByName(channelName);
+                if (channel == null) {
+                    if (commandBody.equals("")) {
+                        channel = channelService.getChannelById(command.getChannelId());
+                        response.put("report", leaveChannel(channel, command.getUserId()));
+                        response.put("status", "OK");
+                        response.put("targetChannelId", channel.getId().toString());
+                    } else {
+                        response.put("status", "ERROR");
+                        response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                    }
+                } else {
                     response.put("report", leaveChannel(channel, command.getUserId()));
                     response.put("status", "OK");
+                    response.put("targetChannelId", channel.getId().toString());
+                }
+                break;
+            }
+            case "join":
+            case "open": {
+                String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
+                        getChannelsNamesFromMsg(commandBody).get(0);
+                Channel channel = channelService.getChannelByName(channelName);
+                if (channel != null) {
+                    response.put("report", joinChannel(channel, command.getUserId()));
+                    response.put("status", "OK");
+                    response.put("channel", mapper.writeValueAsString(channelDtoService.toDto(channel)));
                     response.put("targetChannelId", channel.getId().toString());
                 } else {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
                 }
-            } else {
-                response.put("report", leaveChannel(channel, command.getUserId()));
-                response.put("status", "OK");
-                response.put("targetChannelId", channel.getId().toString());
-            }
-        } else if (commandName.equals("join") || commandName.equals("open")) {
-            String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
-                    getChannelsNamesFromMsg(commandBody).get(0);
-            Channel channel = channelService.getChannelByName(channelName);
-            if (channel != null) {
-                response.put("report", joinChannel(channel, command.getUserId()));
-                response.put("status", "OK");
-                response.put("channel", mapper.writeValueAsString(channelDtoService.toDto(channel)));
-                response.put("targetChannelId", channel.getId().toString());
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
-            }
 
-        } else if (commandName.equals("shrug")) {
-            response.put("report", sendPermRequestMessage(command.getChannelId(),
-                    userService.getUserById(command.getUserId()), commandBody + " ¯\\_(ツ)_/¯"));
-            response.put("status", "OK");
-        } else if (commandName.equals("invite")) {
-            List<User> invitedUsers = getUsersFromMessage(commandBody); //список пользователей, которыхприглашаем
-            List<String> channelsName = getChannelsNamesFromMsg(commandBody); //список каналов, куда приглашаем, выбираем только первый (пока что?)
-            Channel channelToInvite = channelService.getChannelByName(channelsName.get(0));
+                break;
+            }
+            case "shrug":
+                response.put("report", sendPermRequestMessage(command.getChannelId(),
+                        userService.getUserById(command.getUserId()), commandBody + " ¯\\_(ツ)_/¯"));
+                response.put("status", "OK");
+                break;
+            case "invite":
+                List<User> invitedUsers = getUsersFromMessage(commandBody); //список пользователей, которых приглашаем
 
-            //если канал не указан, то выбираем канал, в который отправлена команда, иначе выбираем первый упомянутый канал
-            if (channelToInvite == null && channelsName.get(0).equals("")) {
-                channelToInvite = channelService.getChannelById(command.getChannelId());
-            }
-            //убираем всех существующих на канале пользователей
-            if (channelToInvite != null) {
-                invitedUsers.removeAll(channelToInvite.getUsers());
-            }
-            invitedUsers.remove(null);
-            //если список пользователей пуст или указанный канал не найден отправляем ошибку
-            if (channelToInvite != null && !invitedUsers.isEmpty()) {
-                response.put("report", inviteUsersToChannel(invitedUsers, channelToInvite, command.getUserId()));
-                response.put("status", "OK");
-                List<Long> finalUserIds = new ArrayList<>();
-                invitedUsers.forEach(user -> finalUserIds.add(user.getId()));
-                response.put("targets", mapper.writeValueAsString(finalUserIds)); //id добавленный пользователей
-                response.put("channel", mapper.writeValueAsString(channelToInvite)); //канал, куда добавляли пользователей
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), channelToInvite == null ?
-                        "Channel not found" : "Users list is empty or all users are already in channel"));
-            }
-        } else if (commandName.equals("who")) {
-            if (commandBody.replaceAll("\\s+", "").trim().equals("")) { //проверяем, есть ли текст после /who
-                response.put("report", whoAreInChannel(currentChannel, command.getUserId()));
-                response.put("status", "OK");
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
-            }
-        } else if (commandName.equals("remove") || commandName.equals("kick")) {
-            List<User> kickedUser = new ArrayList<>();
-            getUsersFromMessage(commandBody).forEach(user -> {
-                if (currentChannel.getUsers().contains(user)) {
-                    kickedUser.add(user);
+                List<String> channelsName = getChannelsNamesFromMsg(commandBody); //список каналов, куда приглашаем, выбираем только первый (пока что?)
+
+                Channel channelToInvite = channelService.getChannelByName(channelsName.get(0));
+
+                //если канал не указан, то выбираем канал, в который отправлена команда, иначе выбираем первый упомянутый канал
+                if (channelToInvite == null && channelsName.get(0).equals("")) {
+                    channelToInvite = channelService.getChannelById(command.getChannelId());
                 }
-            });
-            if (kickedUser.size() > 0) {
-                response.put("status", "OK");
-                response.put("report", kickUsers(kickedUser, currentChannel, command.getUserId()));
-                response.put("kickedUsersIds", mapper.writeValueAsString(kickedUser.stream().map(User::getId).toArray()));
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(currentChannel.getId(), getBot(), "Users not found"));
-            }
-        } else if (commandName.equals("msg")) {
-//            String targetChannelName = getChannelsNamesFromMsg(commandBody).get(0);
-//            Channel targetChannel = channelService.getChannelByName(targetChannelName);
-            Channel targetChannel = currentChannel;
-            if (targetChannel != null) {
-                response.put("status", "OK");
-                response.put("report", sendPermRequestMessage(targetChannel.getId(), userService.getUserById(command.getUserId()),
-                        commandBody));
-                // commandBody.substring(commandBody.indexOf(targetChannelName) + targetChannelName.length())
-                response.put("targetChannelId", targetChannel.getId().toString());
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
-            }
-        } else if (commandName.equals("dm")) {
-            User targetUser = getUsersFromMessage(commandBody).get(0);
-            String targetUserName = targetUser.getName();
-            if (targetUser != null) {
-                response.put("status", "OK");
-                response.put("report", sendDirectMessage(command.getUserId(), targetUser,
-                        commandBody.substring(commandBody.indexOf(targetUserName) + targetUserName.length()), command.getChannelId()));
-                response.put("targetUserId", targetUser.getId().toString());
-                response.put("conversationId", conversationService.getConversationByUsers(command.getUserId(), targetUser.getId()).getId().toString());
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "User @" + targetUserName + " not found"));
-            }
-        } else if (commandName.equals("rename")) {
-            Channel channelToRename = channelService.getChannelById(command.getChannelId());
-            if (channelToRename != null && !commandBody.replaceAll("\\s+", " ").trim().equals("")) {
-                response.put("status", "OK");
-                response.put("report", renameChannel(commandBody, channelToRename, currentUser));
-                response.put("newChannelName", commandBody);
-                response.put("targetChannelId", channelToRename.getId().toString());
-            } else {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
-            }
-        } else if (commandName.equals("archive")) {
-            response.put("status", "OK");
-            response.put("report", archiveChannel(currentChannel, currentUser));
-        } else if (commandName.equals("invite_people")) {
-            //boolean isEMailFirst;
-            List<String> emailsList = new ArrayList<>();
-            Arrays.asList(commandBody.replaceAll("\\s+", " ").split(" ")).forEach(word -> {
-                if (word.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
-                    emailsList.add(word);
+                //убираем всех существующих на канале пользователей
+                if (channelToInvite != null) {
+                    invitedUsers.removeAll(channelToInvite.getUsers());
                 }
-            });
-            if (emailsList.size() == 0) {
-                response.put("status", "ERROR");
-                response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Emails not found"));
-            } else {
+                invitedUsers.remove(null);
+                //если список пользователей пуст или указанный канал не найден отправляем ошибку
+                if (channelToInvite != null && !invitedUsers.isEmpty()) {
+                    response.put("report", inviteUsersToChannel(invitedUsers, channelToInvite, command.getUserId()));
+                    response.put("status", "OK");
+                    List<Long> finalUserIds = new ArrayList<>();
+                    invitedUsers.forEach(user -> finalUserIds.add(user.getId()));
+                    response.put("targets", mapper.writeValueAsString(finalUserIds)); //id добавленный пользователей
+                    response.put("channel", mapper.writeValueAsString(channelToInvite)); //канал, куда добавляли пользователей
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), channelToInvite == null ?
+                            "Channel not found" : "Users list is empty or all users are already in channel"));
+                }
+                break;
+            case "who":
+                if (commandBody.replaceAll("\\s+", "").trim().equals("")) { //проверяем, есть ли текст после /who
+                    response.put("report", whoAreInChannel(currentChannel, command.getUserId()));
+                    response.put("status", "OK");
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                }
+                break;
+            case "remove":
+            case "kick":
+                List<User> kickedUser = new ArrayList<>();
+                getUsersFromMessage(commandBody).forEach(user -> {
+                    if (currentChannel.getUsers().contains(user)) {
+                        kickedUser.add(user);
+                    }
+                });
+                if (kickedUser.size() > 0) {
+                    response.put("status", "OK");
+                    response.put("report", kickUsers(kickedUser, currentChannel, command.getUserId()));
+                    response.put("kickedUsersIds", mapper.writeValueAsString(kickedUser.stream().map(User::getId).toArray()));
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(currentChannel.getId(), getBot(), "Users not found"));
+                }
+                break;
+            case "msg":
+                String targetChannelName = getChannelsNamesFromMsg(commandBody).get(0);
+                Channel targetChannel = channelService.getChannelByName(targetChannelName);
+                if (targetChannel != null) {
+                    response.put("status", "OK");
+                    response.put("report", sendPermRequestMessage(targetChannel.getId(), userService.getUserById(command.getUserId()),
+                            commandBody.substring(commandBody.indexOf(targetChannelName) + targetChannelName.length())));
+                    response.put("targetChannelId", targetChannel.getId().toString());
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                }
+                break;
+            case "dm":
+                User targetUser = getUsersFromMessage(commandBody).get(0);
+                String targetUserName = targetUser.getName();
+                if (targetUser != null) {
+                    response.put("status", "OK");
+                    response.put("report", sendDirectMessage(command.getUserId(), targetUser,
+                            commandBody.substring(commandBody.indexOf(targetUserName) + targetUserName.length()), command.getChannelId()));
+                    response.put("targetUserId", targetUser.getId().toString());
+                    response.put("conversationId", conversationService.getConversationByUsersId(command.getUserId(), targetUser.getId()).getId().toString());
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "User @" + targetUserName + " not found"));
+                }
+                break;
+            case "rename":
+                Channel channelToRename = channelService.getChannelById(command.getChannelId());
+                if (channelToRename != null && !commandBody.replaceAll("\\s+", " ").trim().equals("")) {
+                    response.put("status", "OK");
+                    response.put("report", renameChannel(commandBody, channelToRename, currentUser));
+                    response.put("newChannelName", commandBody);
+                    response.put("targetChannelId", channelToRename.getId().toString());
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
+                }
+                break;
+            case "archive":
                 response.put("status", "OK");
-                response.put("usersList", mapper.writeValueAsString(emailsList));
-            }
+                response.put("report", archiveChannel(currentChannel, currentUser));
+                break;
+            case "invite_people":
+                //boolean isEMailFirst;
+                List<String> emailsList = new ArrayList<>();
+                Arrays.asList(commandBody.replaceAll("\\s+", " ").split(" ")).forEach(word -> {
+                    if (word.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
+                        emailsList.add(word);
+                    }
+                });
+                if (emailsList.size() == 0) {
+                    response.put("status", "ERROR");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), "Emails not found"));
+                } else {
+                    response.put("status", "OK");
+                    response.put("usersList", mapper.writeValueAsString(emailsList));
+                }
+                break;
         }
         return mapper.writeValueAsString(response);
     }
@@ -241,7 +258,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         Workspace workspace = channel.getWorkspace();
 
         //Получаем conversation двух пользователей, если существовала
-        Conversation conv = conversationService.getConversationByUsers(fromId, toUser.getId());
+        Conversation conv = conversationService.getConversationByUsersId(fromId, toUser.getId());
         //создаем новый conversation для пользователей
         if (conv == null) {
             conv = new Conversation();
@@ -251,7 +268,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             conv.setShowForAssociated(true);
             conv.setShowForOpener(true);
             conversationService.createConversation(conv);
-            conv = conversationService.getConversationByUsers(fromId, toUser.getId());
+            conv = conversationService.getConversationByUsersId(fromId, toUser.getId());
         }
 
         //создаем DirectMessage

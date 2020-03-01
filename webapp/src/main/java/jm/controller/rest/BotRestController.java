@@ -152,8 +152,6 @@ public class BotRestController {
     public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
-        System.out.println("bot: " + bot);
-        System.out.println("existingBot: " + existingBot);
         existingBot.setName(bot.getName());
         existingBot.setNickName(bot.getNickName());
         existingBot.setToken(bot.getToken());

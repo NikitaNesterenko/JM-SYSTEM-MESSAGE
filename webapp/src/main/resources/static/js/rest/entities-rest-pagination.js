@@ -122,25 +122,31 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
     }
 
     getSlashCommandsByBotId = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/bot/' + id)
+        const response = await fetch('/rest/api/slashcommand/bot/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getAllSlashCommands = async () => {
-        const response = await fetch('/rest/api/slashcommand/all')
+        const response = await fetch('/rest/api/slashcommand/all');
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandsByWorkspace = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id)
+        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandByName = async (name) => {
-        const response = await fetch('/rest/api/slashcommand/name/' + name)
+        const response = await fetch('/rest/api/slashcommand/name/' + name);
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    getSlashCommandById = async (id) => {
+        const response = await fetch('/rest/api/slashcommand/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };

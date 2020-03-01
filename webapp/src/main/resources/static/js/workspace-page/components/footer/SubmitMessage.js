@@ -1,15 +1,15 @@
 import {
-    WorkspaceRestPaginationService,
-    UserRestPaginationService,
     ChannelRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
     SlashCommandRestPaginationService,
-    StorageService
+    StorageService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
-import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
+import {users} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -135,23 +135,22 @@ export class SubmitMessage {
             filename: await this.getFiles(),
             voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
-            // workspaceId: this.channel.workspaceId
-            workspaceId: null
+            workspaceId: this.channel.workspaceId
     };
 
-        if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
-            this.message_service.create(entity).then(
-                message => sendName(message)
-            );
-        }
-
-        // if (window.hasSlashCommand) {
-        //     await this.sendSlashCommand(entity);
-        // } else {
-        //     await this.message_service.create(entity).then(
-        //         msg_id => sendName(msg_id)
+        // if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
+        //     this.message_service.create(entity).then(
+        //         message => sendName(message)
         //     );
         // }
+
+        if (window.hasSlashCommand) {
+            await this.sendSlashCommand(entity);
+        } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
+            await this.message_service.create(entity).then(
+                msg_id => sendName(msg_id)
+            );
+        }
         // clearUsers();
     }
 
@@ -238,8 +237,7 @@ export class SubmitMessage {
             ownerId: this.channel.ownerId,
             isPrivate: this.channel.isPrivate,
             createdDate: this.channel.createdDate,
-            // workspaceId: this.channel.workspaceId
-            workspaceId: null
+            workspaceId: this.channel.workspaceId
         };
 
         await this.channel_service.update(entity).then(() => {

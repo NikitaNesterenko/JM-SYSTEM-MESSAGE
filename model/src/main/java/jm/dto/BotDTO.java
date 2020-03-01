@@ -30,5 +30,10 @@ public class BotDTO {
         this.nickName = bot.getNickName();
         this.dateCreate = bot.getDateCreate();
         this.token = bot.getToken();
+//        Set<Long> workspaceIds = new HashSet<>();
+//        for (Workspace workspace : bot.getWorkspaces()){
+//            workspaceIds.add(workspace.getId());
+//        }
+//        this.workspacesId = workspaceIds;
     }
 }
