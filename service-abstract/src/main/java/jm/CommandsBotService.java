@@ -6,4 +6,6 @@ import jm.dto.SlashCommandDto;
 public interface CommandsBotService {
 
     String getWsCommand(SlashCommandDto command) throws JsonProcessingException;
+
+    String sendMsg(SlashCommandDto command) throws JsonProcessingException;
 }

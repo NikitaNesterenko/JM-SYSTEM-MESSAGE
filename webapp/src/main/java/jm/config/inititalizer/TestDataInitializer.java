@@ -481,8 +481,6 @@ public class TestDataInitializer {
         sendMsgCommand.setBot(customBot);
         slashCommandDao.merge(sendMsgCommand);
 
-        System.out.println("customBot: " + customBot);
-
     }
 
     private void createLinkRoles() {

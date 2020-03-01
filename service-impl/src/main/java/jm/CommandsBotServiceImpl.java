@@ -28,6 +28,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     private DirectMessageService directMessageService;
     private MessageDtoService messageDtoService;
     private MessageService messageService;
+    private SlashCommandService slashCommandService;
     private UserService userService;
 
     private final String INCORRECT_COMMAND = "Command is incorrect";
@@ -38,7 +39,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     public CommandsBotServiceImpl(BotService botService, ChannelDtoService channelDtoService, ChannelService channelService,
                                   ConversationService conversationService, DirectMessageDtoService directMessageDtoService,
                                   DirectMessageService directMessageService, MessageDtoService messageDtoService,
-                                  MessageService messageService, UserService userService) {
+                                  MessageService messageService, SlashCommandService slashCommandService, UserService userService) {
         this.botService = botService;
         this.channelDtoService = channelDtoService;
         this.channelService = channelService;
@@ -47,6 +48,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         this.directMessageService = directMessageService;
         this.messageDtoService = messageDtoService;
         this.messageService = messageService;
+        this.slashCommandService = slashCommandService;
         this.userService = userService;
     }
 
@@ -62,13 +64,6 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         response.put("command", commandName); //добавляем название команды в ответ
         response.put("channelId", command.getChannelId().toString()); //добавляем Id канала, в котором отправлена команда
         response.put("report", "{}");
-
-        System.out.println("command: " + command);
-        System.out.println("currentUser: " + currentUser);
-        System.out.println("currentChannel: " + currentChannel);
-        System.out.println("commandName: " + commandName);
-        System.out.println("commandBody: " + commandBody);
-        System.out.println("response: " + response);
 
         ObjectMapper mapper = new ObjectMapper();
         switch (commandName) {
@@ -243,6 +238,12 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 break;
         }
         return mapper.writeValueAsString(response);
+    }
+
+    @Override
+    public String sendMsg(SlashCommandDto command) throws JsonProcessingException {
+        String msg = slashCommandService.getSlashCommandByName(command.getName()).getHints();
+        return sendPermRequestMessage(command.getChannelId(), getBot(command.getBotId()), msg);
     }
 
     private void setTopic(Long ChannelId, String topic) {

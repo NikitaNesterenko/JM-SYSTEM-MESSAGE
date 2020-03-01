@@ -29,7 +29,6 @@ public class CustomAuthFilter extends GenericFilterBean {
 
         String token= request.getHeader(AUTHORIZATION);
         token= StringUtils.removeStart(token, "Bearer").trim();
-        System.out.println("token: " + token);
 
         boolean isPresent = botService.findByToken(token).isPresent();
         if (isPresent){
