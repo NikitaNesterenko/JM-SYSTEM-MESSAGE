@@ -20,5 +20,4 @@ public interface ConversationService {
     List<Conversation> getConversationsByUserId(Long userId);
 
     List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID);
-
 }

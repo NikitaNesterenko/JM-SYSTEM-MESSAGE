@@ -51,7 +51,6 @@ public class DirectMessageRestController {
     public ResponseEntity<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
         logger.info("Сообщение с id = {}", id);
         DirectMessage directMessage = directMessageService.getDirectMessageById(id);
-        logger.info(directMessage.toString());
         return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
     }
 
@@ -61,18 +60,15 @@ public class DirectMessageRestController {
                     @ApiResponse(
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DirectMessageDTO.class)
+                                    schema = @Schema(implementation = DirectMessage.class)
                             )
                     ),
                     @ApiResponse(responseCode = "201", description = "CREATED: direct message created")
             })
-    public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
-        directMessageDTO.setDateCreate(LocalDateTime.now());
-        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-        System.out.println(directMessage);
+    public ResponseEntity<DirectMessage> createDirectMessage(@RequestBody DirectMessage directMessage) {
         directMessageService.saveDirectMessage(directMessage);
         logger.info("Созданное сообщение : {}", directMessage);
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
+        return new ResponseEntity<>(directMessage, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
@@ -81,22 +77,15 @@ public class DirectMessageRestController {
                     @ApiResponse(
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DirectMessageDTO.class)
+                                    schema = @Schema(implementation = DirectMessage.class)
                             )
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: direct message updated"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to update direct message")
             })
-    public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
-        DirectMessage message = directMessageDtoService.toEntity(messageDTO);
-        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
-        if (isCreated == null) {
-            logger.warn("Сообщение не найдено");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        message.setDateCreate(isCreated.getDateCreate());
-        DirectMessage directMessage = directMessageService.updateDirectMessage(message);
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
+    public ResponseEntity<DirectMessage> updateMessage(@RequestBody DirectMessage directMessage) {
+        directMessageService.updateDirectMessage(directMessage);
+        return new ResponseEntity<>(directMessage, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")

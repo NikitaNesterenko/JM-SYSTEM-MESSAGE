@@ -63,14 +63,25 @@ export class WorkspacePageEventHandler {
             const channelId = parseInt($(event.currentTarget).val());
             pressChannelButton(channelId);
 
-            sessionStorage.setItem("channelName", channelId);
+            sessionStorage.setItem("channelName", channelId.toString());
             sessionStorage.setItem('conversation_id', '0');
 
             this.user_service.getUsersByChannelId(channelId).then(users => {
-                this.wks_header.setInfo(users.length, 666);
+                this.wks_header.setInfo(users.length, 0);
             });
 
             refreshMemberList();
+        });
+    }
+
+    onSelectDirectMessage() {
+        $(".p-channel_sidebar__direct-messages__container").on("click", "button.p-channel_sidebar__name_button", (event) => {
+
+            const conversationId = parseInt($(event.currentTarget).val());
+            pressDirectMessageButton(conversationId);
+
+            sessionStorage.setItem("channelName", '0');
+            sessionStorage.setItem('conversation_id', conversationId.toString());
         });
     }
 

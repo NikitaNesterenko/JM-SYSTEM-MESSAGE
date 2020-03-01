@@ -116,25 +116,22 @@ public class MessageRestController {
     }
 
     @PostMapping(value = "/create")
-//    @Operation(summary = "Create message",
-//            responses = {
-//                    @ApiResponse(
-//                            content = @Content(
-//                                    mediaType = "application/json",
-//                                    schema = @Schema(implementation = MessageDTO.class)
-//                            )
-//                    ),
-//                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
-//            })
-    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
-        messageDto.setDateCreate(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDto);
+    @Operation(summary = "Create message",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Message.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
+            })
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
-        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
+        return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
-    // DTO compliant
     @PutMapping(value = "/update")
     @Operation(summary = "Update message",
             responses = {

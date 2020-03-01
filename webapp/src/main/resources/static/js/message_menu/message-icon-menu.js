@@ -52,7 +52,9 @@ $(document).on('click', '[id^=createOrShowConversation]', async function (e) {
         associatedUser: await user_service.getUserById(associated_user_id),
         workspace: await workspace_service.getChosenWorkspace(),
         showForOpener: true,
-        showForAssociated: true
+        showForAssociated: true,
+        starredByOpener: false,
+        starredByAssociated: false
     };
     await conversation_service.createOrShowConversation(conversation).then(status => {
         if (status === 200) {
@@ -84,10 +86,7 @@ $(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
     message_service.getById(msg_id).then(message => {
         const {channelId, userId, id} = message;
-        //смена номера активного канала
         window.pressChannelButton(channelId);
-        //сделал задержку перед скроллом к конкретному сообщению.
-        // Надо попробовать отловить событие завершения отрисовки всех сообщений в канале и скролл к концу
         setTimeout(function () {
             let myElement = document.getElementById(`message_${id}_user_${userId}_content`);
             let topPos = myElement.offsetTop;
@@ -136,8 +135,6 @@ let populateRightPane = (user) => {
                         .then((messages) => {
                             if (messages.length !== 0) {
                                 messages.forEach((message, i) => {
-                                    //в списке избранных сообщений показываем только те,
-                                    // которые соответствуют текущему workspace
                                     target_element.append(add_msg_to_right_panel(message));
                                 });
                             } else {
@@ -185,8 +182,8 @@ const starred_message_menu = (message) => {
     const {id} = message;
     return `<div class="message-icons-menu-class" id="message-icons-menu">` +
         `<div class="btn-group" role="group" aria-label="Basic example">` +
-        `<button id="msg-icons-menu__back_to_msg_${id}" data-msg_id="${id}" type="button" class="btn btn-light">${back_to_msg}</button>` + // back
-        `<button id="msg-icons-menu__starred_msg_${id}" data-msg_id="${id}" type="button" class="btn btn-light">${star_button_filled}</button>` + // star
+        `<button id="msg-icons-menu__back_to_msg_${id}" data-msg_id="${id}" type="button" class="btn btn-light">${back_to_msg}</button>` +
+        `<button id="msg-icons-menu__starred_msg_${id}" data-msg_id="${id}" type="button" class="btn btn-light">${star_button_filled}</button>` +
         `</div>` +
         `</div>`;
 };

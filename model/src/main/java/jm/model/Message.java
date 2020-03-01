@@ -6,9 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.MessageDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -66,10 +64,6 @@ public class Message {
     @JoinColumn(name = "shared_message_id", referencedColumnName = "id")
     private Message sharedMessage;
 
-//    @Column(name = "shared_message_id")
-//    private Long sharedMessageId;
-
-
 //    @ManyToMany(cascade = CascadeType.REFRESH)
 //    @JoinTable(
 //            name = "starred_message_user",
@@ -77,7 +71,6 @@ public class Message {
 //            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 //    private Set<User> starredByWhom;
 
-    // from DirectMessage
     @ManyToMany
     @JoinTable(name = "messages_recipient_users",
             joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "id"),
@@ -143,7 +136,7 @@ public class Message {
         this.channelId = messageDto.getChannelId();
     }
 
-    //    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
+//        public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
 //        this.channel = channel;
 //        this.user = user;
 //        this.content = content;

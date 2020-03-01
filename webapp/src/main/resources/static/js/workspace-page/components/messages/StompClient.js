@@ -1,6 +1,6 @@
+
 import {Command} from "/js/workspace-page/components/footer/Command.js";
 import {is_open, populateRightPaneActivity} from "/js/activities/view_activities.js";
-
 import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
 import { showInviteModalOnWorkspace, addNewEmailLineIntoInviteModal } from "/js/invite.js";
@@ -8,16 +8,12 @@ import { deleteChannelFromList } from "/js/workspace-page/components/sidebar/Cha
 
 export class StompClient {
 
-
-
     constructor(channel_message_view, thread_view, direct_message_view, channel_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
         this.channel_message_view = channel_message_view;
         this.thread_view = thread_view;
         this.dm_view = direct_message_view;
         this.channelview = channel_view;
-        this.sm = new SubmitMessage();
-
         this.commands = new Command();
 
         window.sendName = (message) => this.sendName(message);
@@ -203,10 +199,10 @@ export class StompClient {
             if (chn.userIds.includes(window.loggedUserId)) { //проверка, является ли пользолватель членом канала
                 let isPresent = false;
                 document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
-                    if (id.value == chn.id) {
+                    if (id.value === chn.id) {
                         isPresent = true;
                     }
-                })
+                });
                 if (!isPresent) {
                     this.channelview.addChannelIntoSidebarChannelList(chn);
                 }
@@ -263,85 +259,37 @@ export class StompClient {
     }
 
     sendDM(message) {
-        const entity = {
-            'id': message.id,
-            'content': message.content,
-            'isDeleted': message.isDeleted,
-            'isUpdated': message.isUpdated,
-            'dateCreate': message.dateCreate,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'filename': message.filename,
-            'sharedMessageId': message.sharedMessageId,
-            'conversationId': message.conversationId,
-            'parentMessageId': message.parentMessageId,
-            'workspaceId': message.workspaceId
-        };
-
-        this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
+        this.createEntity(message).then(entity => {
+            this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
+        });
     }
 
     sendName(message) {
-        let entity = {
-            'id': message.id,
-            'inputMassage': message.content,
-            'isDeleted': message.isDeleted,
-            'isUpdated': message.isUpdated,
-            'dateCreate': message.dateCreate,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'botId': message.botId,
-            'botNickName': message.botNickName,
-            'filename': message.filename,
-            'voiceMessage': message.voiceMessage,
-            'sharedMessageId': message.sharedMessageId,
-            'channelId': message.channelId,
-            'channelName': message.channelName,
-            'workspaceId': message.workspaceId
-        };
-
-        this.stompClient.send("/app/message", {}, JSON.stringify(entity));
+        this.createEntity(message).then(entity => {
+            this.stompClient.send("/app/message", {}, JSON.stringify(entity));
+        });
     }
 
     //посылаем сообщение на смену канала
-    sendChannelTopicChange(id,topic){
+    sendChannelTopicChange(id, topic){
         this.stompClient.send('/app/channel.changeTopic', {}, JSON.stringify({
             'id': id,
             'topic': topic
         }));
     }
+
     //подписка на смену топика текущего канала
     subscribeChannelChangeTopic() {
         this.stompClient.subscribe('/topic/channel.changeTopic', (channel) => {
             const chn = JSON.parse(channel.body);
-            console.log(channel.body);
             document.querySelector("#topic_string").textContent = chn.topic;
         });
     }
 
     sendSlackBotCommand(message) {
-        let entity = {
-            'id': message.id,
-            'inputMassage': message.content,
-            'command': message.command,
-            'isDeleted': message.isDeleted,
-            'isUpdated': message.isUpdated,
-            'dateCreate': message.dateCreate,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'botId': message.botId,
-            'botNickName': message.botNickName,
-            'filename': message.filename,
-            'sharedMessageId': message.sharedMessageId,
-            'channelId': message.channelId,
-            'channelName': message.channelName,
-            'name': message.name
-        };
-
-        this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
+        this.createEntity(message).then(entity => {
+            this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
+        });
     }
 
     //отобразить сообщение из вебсокета в текущем канале
@@ -359,5 +307,26 @@ export class StompClient {
             }
         });
         return isPresent;
+    }
+
+    async createEntity(message) {
+        return {
+            'id': message.id,
+            'inputMassage': message.content,
+            'isDeleted': message.isDeleted,
+            'isUpdated': message.isUpdated,
+            'dateCreate': message.dateCreate,
+            'userId': message.userId,
+            'userName': message.userName,
+            'userAvatarUrl': message.userAvatarUrl,
+            'botId': message.botId,
+            'botNickName': message.botNickName,
+            'filename': message.filename,
+            'voiceMessage': message.voiceMessage,
+            'sharedMessageId': message.sharedMessageId,
+            'channelId': message.channelId,
+            'channelName': message.channelName,
+            'workspaceId': message.workspaceId
+        }
     }
 }

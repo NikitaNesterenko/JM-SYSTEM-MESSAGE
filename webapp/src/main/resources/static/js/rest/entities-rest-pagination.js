@@ -34,6 +34,7 @@ export class UserRestPaginationService extends RestPaginationService {
     };
 }
 
+// =======================================================================
 export class MessageRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/messages');
@@ -65,6 +66,7 @@ export class MessageRestPaginationService extends RestPaginationService {
     };
 }
 
+// =======================================================================
 export class BotRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/bot');
@@ -77,6 +79,7 @@ export class BotRestPaginationService extends RestPaginationService {
     };
 }
 
+// =======================================================================
 export class SlashCommandRestPaginationService extends RestPaginationService {
     constructor() {
         super("/rest/api/slashcommand");
@@ -119,6 +122,7 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class ChannelTopicRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels/');
@@ -139,6 +143,7 @@ export class ChannelTopicRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class ChannelRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels');
@@ -184,6 +189,7 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class WorkspaceRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/workspaces');
@@ -268,6 +274,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class StorageService {
 
     uploadFile = async (file) => {
@@ -280,6 +287,7 @@ export class StorageService {
     };
 }
 
+// =======================================================================
 export class InviteRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/invites');
@@ -294,6 +302,7 @@ export class InviteRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class ThreadChannelRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/threads');
@@ -318,6 +327,7 @@ export class ThreadChannelRestPaginationService extends RestPaginationService {
     };
 }
 
+// =======================================================================
 export class ThreadChannelMessageRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/threads/messages');
@@ -338,6 +348,7 @@ export class ThreadChannelMessageRestPaginationService extends RestPaginationSer
     }
 }
 
+// =======================================================================
 export class ConversationRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/conversations');
@@ -368,6 +379,7 @@ export class ConversationRestPaginationService extends RestPaginationService {
     };
 }
 
+// =======================================================================
 export class DirectMessagesRestController extends RestPaginationService {
     constructor() {
         super('/rest/api/direct_messages');

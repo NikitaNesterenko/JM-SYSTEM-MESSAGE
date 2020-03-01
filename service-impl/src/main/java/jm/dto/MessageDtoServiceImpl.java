@@ -90,43 +90,44 @@ public class MessageDtoServiceImpl implements MessageDtoService {
     @Override
     public Message toEntity(MessageDTO messageDto) {
 
-        if (messageDto == null) {
-            return null;
-        }
-
-        // creating new Message with simple fields copied from MessageDTO
-        Message message = new Message(messageDto);
-
-        // setting up 'user' or 'bot'
-        if (messageDto.getUserId() != null) {
-            message.setUser(userDAO.getById(messageDto.getUserId()));
-        } else if (messageDto.getBotId() != null) {
-            message.setBot(botDAO.getById(messageDto.getBotId()));
-        }
-
-        // setting up 'sharedMessage'
-        Long sharedMessageId = messageDto.getSharedMessageId();
-        if (sharedMessageId != null) {
-            message.setSharedMessage(messageDAO.getById(sharedMessageId));
-        }
-
-        // setting up 'recipientUsers'
-        Set<Long> recipientUserIds = messageDto.getRecipientUserIds();
-        List<User> recipientUsers = userDAO.getUsersByIDs(recipientUserIds);
-        message.setRecipientUsers(new HashSet<>(recipientUsers));
-
-        // parentMessageId
-        Long parentMessageId = messageDto.getParentMessageId();
-        if (parentMessageId != null) {
-            message.setParentMessage(messageDAO.getById(parentMessageId));
-        }
-
-        // setting up 'workspaceId'
-        Long workspaceId = messageDto.getWorkspaceId();
-        if (workspaceId != null) {
-            message.setWorkspaceId(messageDto.getWorkspaceId());
-        }
-
-        return message;
+//        if (messageDto == null) {
+//            return null;
+//        }
+//
+//        // creating new Message with simple fields copied from MessageDTO
+//        Message message = new Message(messageDto);
+//
+//        // setting up 'user' or 'bot'
+//        if (messageDto.getUserId() != null) {
+//            message.setUser(userDAO.getById(messageDto.getUserId()));
+//        } else if (messageDto.getBotId() != null) {
+//            message.setBot(botDAO.getById(messageDto.getBotId()));
+//        }
+//
+//        // setting up 'sharedMessage'
+//        Long sharedMessageId = messageDto.getSharedMessageId();
+//        if (sharedMessageId != null) {
+//            message.setSharedMessage(messageDAO.getById(sharedMessageId));
+//        }
+//
+//        // setting up 'recipientUsers'
+//        Set<Long> recipientUserIds = messageDto.getRecipientUserIds();
+//        List<User> recipientUsers = userDAO.getUsersByIDs(recipientUserIds);
+//        message.setRecipientUsers(new HashSet<>(recipientUsers));
+//
+//        // parentMessageId
+//        Long parentMessageId = messageDto.getParentMessageId();
+//        if (parentMessageId != null) {
+//            message.setParentMessage(messageDAO.getById(parentMessageId));
+//        }
+//
+//        // setting up 'workspaceId'
+//        Long workspaceId = messageDto.getWorkspaceId();
+//        if (workspaceId != null) {
+//            message.setWorkspaceId(messageDto.getWorkspaceId());
+//        }
+//
+//        return message;
+        return null;
     }
 }

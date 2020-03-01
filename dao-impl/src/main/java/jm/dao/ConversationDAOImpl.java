@@ -1,11 +1,9 @@
 package jm.dao;
 
+import javassist.NotFoundException;
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
-import jm.model.User;
-import lombok.NonNull;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -26,17 +24,15 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID) {
-         return (List<Conversation>) entityManager.createNativeQuery(
+        return (List<Conversation>) entityManager.createNativeQuery(
                 "SELECT * FROM conversations WHERE opener_id=? AND show_for_opener=true OR associated_id=? AND show_for_associated=true AND workspace_id=?", Conversation.class)
                 .setParameter(1, loggedUserID).setParameter(2, loggedUserID).setParameter(3, workspaceID).getResultList();
     }
 
     @Override
     public void persist(Conversation conversation) {
-        if (
-                getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
-                        || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
-        ) {
+        if (getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
+                || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null) {
             entityManager.merge(conversation);
         }
     }
@@ -61,8 +57,8 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
         try {
             return (List<Conversation>) entityManager.createNativeQuery(
                     "select * from conversations " +
-                    "where opener_id=? and show_for_opener=true " +
-                    "   or associated_id=? and show_for_associated=true", Conversation.class)
+                            "where opener_id=? and show_for_opener=true " +
+                            "   or associated_id=? and show_for_associated=true", Conversation.class)
                     .setParameter(1, userId).setParameter(2, userId).getResultList();
         } catch (NoResultException e1) {
             return null;
@@ -73,10 +69,10 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     public void deleteById(Long conversationID, Long userID) {
         entityManager.createNativeQuery(
                 "UPDATE conversations " +
-                "SET " +
-                "    show_for_opener = IF(opener_id = ?, false, true), " +
-                "    show_for_associated = IF(associated_id = ?, false, true) " +
-                "WHERE id = ?")
+                        "SET " +
+                        "    show_for_opener = IF(opener_id = ?, false, true), " +
+                        "    show_for_associated = IF(associated_id = ?, false, true) " +
+                        "WHERE id = ?")
                 .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
     }
 }

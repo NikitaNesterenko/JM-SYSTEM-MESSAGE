@@ -2462,6 +2462,7 @@ button:focus {
     right: -50px;
     bottom: 0;
     height: 100%;
+    width: min-content;
     transform: translateZ(0);
 }
 
