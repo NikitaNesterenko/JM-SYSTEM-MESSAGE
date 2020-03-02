@@ -11,7 +11,7 @@ export class SwitchWorkspaceWindow {
     }
 
     getCurrentWorkspaceId() {
-        this.workspaceService.getChoosedWorkspace().then(
+        this.workspaceService.getChosenWorkspace().then(
             workspace => {
                 this.current_workspace_id = workspace.id
             });
@@ -79,7 +79,7 @@ export class SwitchWorkspaceWindow {
     }
 
     goToWorkspace(workspace_name) {
-        this.workspaceService.setChoosedWorkspace(workspace_name).then(
+        this.workspaceService.setChosenWorkspace(workspace_name).then(
             response => {
                 if (response === true) {
                     window.location.href = '/workspace';

@@ -15,8 +15,7 @@ const workspace_service = new WorkspaceRestPaginationService();
 // const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
 const switch_workspace_window = new SwitchWorkspaceWindow();
-let current_wks = workspace_service.getChoosedWorkspace();
-const current_wks = workspace_service.getChosenWorkspace();
+let current_wks = workspace_service.getChosenWorkspace();
 // const current_chn = channel_service.getChosenChannel();
 
 
