@@ -56,7 +56,12 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public void updateSlashCommand(SlashCommand slashCommand) {
-        slashCommandDao.merge(slashCommand);
+        SlashCommand existCommand = slashCommandDao.getById(slashCommand.getId());
+        existCommand.setName(slashCommand.getName());
+        existCommand.setDescription(slashCommand.getDescription());
+        existCommand.setHints(slashCommand.getHints());
+        existCommand.setType(slashCommand.getType());
+        slashCommandDao.merge(existCommand);
     }
 
     @Override

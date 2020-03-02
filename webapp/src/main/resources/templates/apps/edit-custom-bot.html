@@ -24,6 +24,8 @@
                 <input id="bot-id" hidden="hidden" th:value="${bot.id}">
                 <input id="command-id" hidden="hidden">
                 <label>Command name: </label><input id="name-for-bot" placeholder="Command name"><br>
+                <label>Type command: </label><select id="type-command-id">
+                    <option th:each="type : ${types}" th:text="${type.name}" th:value="${type.id}"></option></select><br>
                 <label>Description: </label><input id="description-for-custom-bot" placeholder="Description"><br>
                 <label>Hint: </label><input id="hint-for-custom-bot" placeholder="Hint"><br>
                 <button id="save-command-for-bot">Save</button>

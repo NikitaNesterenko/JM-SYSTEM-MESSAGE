@@ -38,15 +38,19 @@ public class SlashCommand {
     private String hints;
 
     @ManyToOne
+    private TypeSlashCommand type;
+
+    @ManyToOne
     //@JsonIgnore
     private Bot bot;
 
-    public SlashCommand(String name, String url, String description, String hints, Bot bot) {
+    public SlashCommand(String name, String url, String description, String hints, Bot bot, TypeSlashCommand type) {
         this.name = name;
         this.url = url;
         this.description = description;
         this.hints = hints;
         this.bot = bot;
+        this.type = type;
     }
 
     public SlashCommand(String name, String url, String description, String hints) {

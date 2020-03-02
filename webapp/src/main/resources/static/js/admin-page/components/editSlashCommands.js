@@ -3,12 +3,13 @@ import {SlashCommandRestPaginationService} from '/js/rest/entities-rest-paginati
 const slash_command_service = new SlashCommandRestPaginationService();
 
 export class SlashCommand {
-    constructor(id, name, description, hints, botId) {
+    constructor(id, name, description, hints, botId, typeId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.hints = hints;
         this.botId = botId;
+        this.typeId = typeId;
     }
 }
 
@@ -27,15 +28,20 @@ $('#save-command-for-bot').click(function () {
     let description = document.getElementById('description-for-custom-bot').value;
     let hints = document.getElementById('hint-for-custom-bot').value;
     let botId = document.getElementById('bot-id').value;
+    let typeId = document.getElementById('type-command-id').value;
 
-    let slashCommand = new SlashCommand(id, name, description, hints, botId);
-
-    if (id === null){
-        slash_command_service.create(slashCommand)
-            .then(() => location.reload());
+    if (name === '' || description === '' || hints === ''){
+        alert('Заполните все поля');
     } else {
-        slash_command_service.update(slashCommand)
-            .then(() => location.reload());
+        let slashCommand = new SlashCommand(id, name, description, hints, botId, typeId);
+
+        if (id === null){
+            slash_command_service.create(slashCommand)
+                .then(() => location.reload());
+        } else {
+            slash_command_service.update(slashCommand)
+                .then(() => location.reload());
+        }
     }
 });
 
@@ -47,6 +53,7 @@ $('.btn-edit-command').click(function (e) {
             $('#name-for-bot').val(slashCommand.name);
             $('#description-for-custom-bot').val(slashCommand.description);
             $('#hint-for-custom-bot').val(slashCommand.hints);
+            $('#type-command-id').val(slashCommand.typeId);
             $('#edit-command-for-custom-bot').modal('show');
         });
 });

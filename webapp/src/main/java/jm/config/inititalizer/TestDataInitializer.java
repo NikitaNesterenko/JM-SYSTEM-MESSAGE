@@ -2,6 +2,7 @@ package jm.config.inititalizer;
 
 import jm.ConversationService;
 import jm.DirectMessageService;
+import jm.TypeSlashCommandService;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
@@ -35,6 +36,8 @@ public class TestDataInitializer {
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
     @Autowired
     private SlashCommandDao slashCommandDao;
+    @Autowired
+    private TypeSlashCommandService typeSlashCommandService;
 
     @Autowired
     private ConversationService conversationService;
@@ -76,6 +79,7 @@ public class TestDataInitializer {
     private void dataInit() {
         createRoles();
         createUsers();
+        createTypeSlashCommands();
         createSlashCommands();
 
         createWorkspaces();
@@ -88,12 +92,30 @@ public class TestDataInitializer {
         createDirectMessages();
     }
 
+    private void createTypeSlashCommands() {
+        TypeSlashCommand all = new TypeSlashCommand();
+        all.setName("all");
+        typeSlashCommandService.createTypeSlashCommand(all);
+
+        TypeSlashCommand send = new TypeSlashCommand();
+        send.setName("send");
+        typeSlashCommandService.createTypeSlashCommand(send);
+
+        TypeSlashCommand get = new TypeSlashCommand();
+        get.setName("get");
+        typeSlashCommandService.createTypeSlashCommand(get);
+    }
+
     private void createSlashCommands(){
+
+        TypeSlashCommand typeAll = typeSlashCommandService.getTypeSlashCommandByName("all");
+
         SlashCommand topicChangeCommand = new SlashCommand();
         topicChangeCommand.setName("topic");
         topicChangeCommand.setUrl("/app/bot/slackbot/");
         topicChangeCommand.setDescription("test description");
         topicChangeCommand.setHints("test Hints");
+        topicChangeCommand.setType(typeAll);
         slashCommandDao.persist(topicChangeCommand);
         sc.add(topicChangeCommand);
 
@@ -102,6 +124,7 @@ public class TestDataInitializer {
         directMessageCommand.setUrl("/app/bot/slackbot");
         directMessageCommand.setDescription("DM description");
         directMessageCommand.setHints("DM Hints");
+        directMessageCommand.setType(typeAll);
         slashCommandDao.persist(directMessageCommand);
         sc.add(directMessageCommand);
 
@@ -110,6 +133,7 @@ public class TestDataInitializer {
         leaveCommand.setUrl("/app/bot/slackbot");
         leaveCommand.setDescription("Leave description");
         leaveCommand.setHints("Leave Hints");
+        leaveCommand.setType(typeAll);
         slashCommandDao.persist(leaveCommand);
         sc.add(leaveCommand);
 
@@ -118,6 +142,7 @@ public class TestDataInitializer {
         joinCommand.setUrl("/app/bot/slackbot");
         joinCommand.setDescription("Join description");
         joinCommand.setHints("Join Hints");
+        joinCommand.setType(typeAll);
         slashCommandDao.persist(joinCommand);
         sc.add(joinCommand);
 
@@ -126,6 +151,7 @@ public class TestDataInitializer {
         openCommand.setUrl("/app/bot/slackbot");
         openCommand.setDescription("Open description");
         openCommand.setHints("Open Hints");
+        openCommand.setType(typeAll);
         slashCommandDao.persist(openCommand);
         sc.add(openCommand);
 
@@ -134,6 +160,7 @@ public class TestDataInitializer {
         shrugCommand.setUrl("/app/bot/slackbot");
         shrugCommand.setDescription("Shrug description");
         shrugCommand.setHints("Shrug Hints");
+        shrugCommand.setType(typeAll);
         slashCommandDao.persist(shrugCommand);
         sc.add(shrugCommand);
 
@@ -142,6 +169,7 @@ public class TestDataInitializer {
         inviteCommand.setUrl("/app/bot/slackbot");
         inviteCommand.setDescription("Invite description");
         inviteCommand.setHints("Invite Hints");
+        inviteCommand.setType(typeAll);
         slashCommandDao.persist(inviteCommand);
         sc.add(inviteCommand);
 
@@ -150,6 +178,7 @@ public class TestDataInitializer {
         whoCommand.setUrl("/app/bot/slackbot");
         whoCommand.setDescription("Who description");
         whoCommand.setHints("Who Hints");
+        whoCommand.setType(typeAll);
         slashCommandDao.persist(whoCommand);
         sc.add(whoCommand);
 
@@ -158,6 +187,7 @@ public class TestDataInitializer {
         kickCommand.setUrl("/app/bot/slackbot");
         kickCommand.setDescription("Kick description");
         kickCommand.setHints("Kick Hints");
+        kickCommand.setType(typeAll);
         slashCommandDao.persist(kickCommand);
         sc.add(kickCommand);
 
@@ -166,6 +196,7 @@ public class TestDataInitializer {
         removeCommand.setUrl("/app/bot/slackbot");
         removeCommand.setDescription("Remove description");
         removeCommand.setHints("Remove Hints");
+        removeCommand.setType(typeAll);
         slashCommandDao.persist(removeCommand);
         sc.add(removeCommand);
 
@@ -174,6 +205,7 @@ public class TestDataInitializer {
         msgCommand.setUrl("/app/bot/slackbot");
         msgCommand.setDescription("Msg description");
         msgCommand.setHints("Msg Hints");
+        msgCommand.setType(typeAll);
         slashCommandDao.persist(msgCommand);
         sc.add(msgCommand);
 
@@ -182,6 +214,7 @@ public class TestDataInitializer {
         renameCommand.setUrl("/app/bot/slackbot");
         renameCommand.setDescription("Rename description");
         renameCommand.setHints("Rename Hints");
+        renameCommand.setType(typeAll);
         slashCommandDao.persist(renameCommand);
         sc.add(renameCommand);
 
@@ -190,6 +223,7 @@ public class TestDataInitializer {
         archiveCommand.setUrl("/app/bot/slackbot");
         archiveCommand.setDescription("Rename description");
         archiveCommand.setHints("Rename Hints");
+        archiveCommand.setType(typeAll);
         slashCommandDao.persist(archiveCommand);
         sc.add(archiveCommand);
 
@@ -198,6 +232,7 @@ public class TestDataInitializer {
         invitePeopleCommand.setUrl("/app/bot/slackbot");
         invitePeopleCommand.setDescription("Invite_people description");
         invitePeopleCommand.setHints("Invite_people Hints");
+        invitePeopleCommand.setType(typeAll);
         slashCommandDao.persist(invitePeopleCommand);
         sc.add(invitePeopleCommand);
 
@@ -205,8 +240,9 @@ public class TestDataInitializer {
         SlashCommand sendMsgCommand = new SlashCommand();
         sendMsgCommand.setName("send-to-channel");
         sendMsgCommand.setUrl("/app/bot/custombot");
-        sendMsgCommand.setDescription("send message description");
-        sendMsgCommand.setHints("send message");
+        sendMsgCommand.setDescription("Hello, it's my message!");
+        sendMsgCommand.setHints("Send message in channel");
+        sendMsgCommand.setType(typeSlashCommandService.getTypeSlashCommandByName("send"));
         slashCommandDao.persist(sendMsgCommand);
     }
 

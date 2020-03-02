@@ -23,9 +23,13 @@ $('#save-custom-bot').click(function () {
     let workspaceId = document.getElementById('workspace-custom-bot').value;
     let workspacesId = [];
     workspacesId.push(workspaceId);
-    let customBot = new Bot(null, null, name, null, workspacesId);
-    bot_service.createBot(customBot)
-        .then(request => editBot(request));
+    if (name === ''){
+        alert('Введите имя бота');
+    } else {
+        let customBot = new Bot(null, null, name, null, workspacesId);
+        bot_service.createBot(customBot)
+            .then(request => editBot(request));
+    }
 });
 
 async function editBot(bot) {
@@ -51,9 +55,14 @@ $('#update-custom-bot').on('click', function () {
     let name = document.getElementById('name-custom-bot').value;
     let token = document.getElementById('token-custom-bot').value;
     let customBot = new Bot(id, nick, name, token);
-    bot_service.updateBot(customBot)
-        .then(() => {
-            $('#edit-custom-bot').modal('hide');
-            location.reload();
-        });
+
+    if (nick === '' || name === ''){
+        alert('Заполните все поля');
+    } else {
+        bot_service.updateBot(customBot)
+            .then(() => {
+                $('#edit-custom-bot').modal('hide');
+                location.reload();
+            });
+    }
 });

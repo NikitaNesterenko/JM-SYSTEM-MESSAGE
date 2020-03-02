@@ -32,6 +32,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     private UserService userService;
 
     private final String INCORRECT_COMMAND = "Command is incorrect";
+    private final String COMMAND_DENIED = "Command only for ";
 
     private Bot bot;
 
@@ -66,6 +67,41 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         response.put("report", "{}");
 
         ObjectMapper mapper = new ObjectMapper();
+
+        boolean isDefaultBot = slashCommandService.getSlashCommandByName(commandName).getBot().getId() == 1L;
+
+        if (isDefaultBot){
+            response = createReportByDefaultBot(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
+        } else {
+            response = createReport(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
+        }
+
+        return mapper.writeValueAsString(response);
+    }
+
+    private Map<String, String> createReport(SlashCommandDto command, User currentUser, Channel currentChannel,
+                                             String commandName, String commandBody, Map<String, String> response,
+                                             ObjectMapper mapper) throws JsonProcessingException {
+
+        SlashCommand slashCommand = slashCommandService.getSlashCommandByName(commandName);
+
+        switch (slashCommand.getType().getName()) {
+            case "get":
+                break;
+            case "send":
+                response.put("status", "OK");
+                response.put("command", "msg");
+                response.put("targetChannelId", currentChannel.getId().toString());
+                response.put("report", sendPermRequestMessage(currentChannel.getId(), currentUser, slashCommand.getDescription()));
+                break;
+        }
+        return response;
+    }
+
+    private Map<String, String> createReportByDefaultBot(SlashCommandDto command, User currentUser, Channel currentChannel,
+                                             String commandName, String commandBody, Map<String, String> response,
+                                             ObjectMapper mapper) throws JsonProcessingException {
+
         switch (commandName) {
             case "topic":
                 if (commandBody.trim().isEmpty()) {
@@ -237,7 +273,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 }
                 break;
         }
-        return mapper.writeValueAsString(response);
+        return response;
     }
 
     @Override
