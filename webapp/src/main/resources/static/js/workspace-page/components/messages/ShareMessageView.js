@@ -21,7 +21,7 @@ export class ShareMessageView {
     }
 
     async setChannel() {
-        this.channel = await this.channel_service.getById(sessionStorage.getItem("channelName"));
+        this.channel = await this.channel_service.getById(sessionStorage.getItem("channelId"));
         return this;
     }
 

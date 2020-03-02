@@ -8,6 +8,7 @@ window.addEventListener('load', function () {
     profile.onShowEditUserProfile();
     profile.onSave();
 });
+
 // import {UserRestPaginationService, WorkspaceRestPaginationService, BotRestPaginationService} from "../rest/entities-rest-pagination.js";
 //
 //

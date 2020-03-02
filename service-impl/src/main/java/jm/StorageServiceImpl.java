@@ -8,8 +8,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +20,7 @@ import java.nio.file.Paths;
 public class StorageServiceImpl  implements StorageService {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageServiceImpl.class);
+    private long count;
 
     @Value("${upload.directory}")
     String uploadPath;
@@ -25,6 +28,19 @@ public class StorageServiceImpl  implements StorageService {
     @Override
     public String store(MultipartFile file) throws IOException {
         Path uploadDir = Paths.get(uploadPath);
+
+        //Костыльное удаление папки при первом сохранении с рестарта
+        if (count++ < 1) {
+            File dir = new File(uploadPath);
+            String[] entries = dir.list();
+            assert entries != null;
+            for(String s: entries){
+                File currentFile = new File(dir.getPath(),s);
+                currentFile.delete();
+            }
+            Files.deleteIfExists(uploadDir);
+        }
+
         if (!Files.exists(uploadDir)) {
             Files.createDirectory(uploadDir);
         }
