@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
+import jm.dto.WorkspaceDTO;
 import jm.model.User;
 import jm.model.Workspace;
 import org.apache.kafka.common.protocol.types.Field;
@@ -185,6 +186,7 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
+        WorkspaceDTO test = workspaceService.getWorkspaceDTOById(1L).get();
         String name = principal.getName();
         User user = userService.getUserByLogin(name);
         List<Workspace> list = workspaceService.getWorkspacesByUserId(user.getId());

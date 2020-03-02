@@ -1,9 +1,6 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -175,7 +172,8 @@ public class User {
         this.password = password;
 
     }
-    public User(String name, String lastName, String login, String email, String password,Set<Role> roles) {
+
+    public User(String name, String lastName, String login, String email, String password, Set<Role> roles) {
         this.name = name;
         this.lastName = lastName;
         this.login = login;

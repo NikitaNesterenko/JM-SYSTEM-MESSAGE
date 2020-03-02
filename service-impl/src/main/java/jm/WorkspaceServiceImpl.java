@@ -1,6 +1,7 @@
 package jm;
 
 import jm.api.dao.WorkspaceDAO;
+import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,7 +27,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public List<Workspace> getAllWorkspaces() {
         return workspaceDAO.getAll();
-    }
+    } //+
 
     @Override
     public void createWorkspace(Workspace workspace) {
@@ -45,7 +47,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public Workspace getWorkspaceById(Long id) {
         return workspaceDAO.getById(id);
-    }
+    } //+
 
     @Override
     public Workspace getWorkspaceByName(String name) { return workspaceDAO.getWorkspaceByName(name); }
@@ -56,6 +58,25 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public List<Workspace> getWorkspacesByUserId(Long userId) {
         return workspaceDAO.getWorkspacesByUserId(userId);
-    }
+    } //+
+
+    @Override
+    public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
+        return null;
+    } //+
+
+    @Override
+    public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
+        return workspaceDAO.getWorkspaceDTOById(id);
+    } //+
+
+    @Override
+    public Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId) {
+        return null;
+    } //+
+
+
+
+
 
 }
