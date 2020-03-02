@@ -50,10 +50,10 @@ public class InviteTokenRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: invites were send")
             })
-    public ResponseEntity<List<Boolean>> invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
+    public ResponseEntity<List<String>> invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
-        List<Boolean> responseList = new ArrayList<>();
+        List<String> responseList = new ArrayList<>();
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
         invites.forEach(x -> {
@@ -62,7 +62,10 @@ public class InviteTokenRestController {
         });
 
         for (InviteToken invite : invites) {
-            responseList.add(userService.isEmailInThisWorkspace(invite.getEmail(),workspace.getId()));
+            if (userService.isEmailInThisWorkspace(invite.getEmail(),workspace.getId())) {
+                responseList.add(invite.getEmail());
+                continue;
+            }
             inviteTokenService.createInviteToken(invite);
             mailService.sendInviteMessage(invite.getFirstName()
                     , invite.getEmail()
