@@ -1,6 +1,9 @@
 package jm.mailservice;
 
-import jm.*;
+import jm.InviteTokenService;
+import jm.MailService;
+import jm.UserService;
+import jm.WorkspaceService;
 import jm.model.CreateWorkspaceToken;
 import jm.model.InviteToken;
 import jm.model.User;
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -26,7 +31,6 @@ public class MailServiceImpl implements MailService {
 
     private JavaMailSender emailSender;
     private MailContentService mailContentService;
-    private TokenGenerator tokenGenerator;
     private InviteTokenService inviteTokenService;
     private WorkspaceService workspaceService;
     private UserService userService;
@@ -54,7 +58,6 @@ public class MailServiceImpl implements MailService {
         this.urlSiteRecoveryPassword = urlSiteRecoveryPassword;
         this.charactersInHash = charactersInHash;
         this.emailSenderValue = emailSenderValue;
-        this.tokenGenerator = new TokenGenerator.TokenGeneratorBuilder().useDigits(true).useLower(true).build();
     }
 
     @Override
@@ -93,8 +96,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public CreateWorkspaceToken sendConfirmationCode(String emailTo) {
-        int code  = (int) (Math.random() * 999999);
+    public Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo) {
+        int code = (int) (Math.random() * 999999);
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -102,16 +105,18 @@ public class MailServiceImpl implements MailService {
             messageHelper.setSubject("Confirmation code");
             messageHelper.setText(content, true);
         };
+
+        CreateWorkspaceToken createWorkspaceToken = null;
         try {
             emailSender.send(messagePreparator);
             logger.info("Sending confirmation code to " + emailTo + " was successful");
+            createWorkspaceToken = new CreateWorkspaceToken(code);
         } catch (MailException e) {
             logger.error("Sending confirmation code to " + emailTo + " failed");
             e.printStackTrace();
         }
-        CreateWorkspaceToken token = new CreateWorkspaceToken(code);
-        token.setUserEmail(emailTo);
-        return token;
+        createWorkspaceToken.setUserEmail(emailTo);
+        return Optional.ofNullable(createWorkspaceToken);
     }
 
     @Override
@@ -120,8 +125,7 @@ public class MailServiceImpl implements MailService {
 
         InviteToken inviteToken = new InviteToken();
         inviteToken.setEmail(userTo.getEmail());
-        inviteToken.setHash(
-                tokenGenerator.generate(charactersInHash));
+        inviteToken.setHash(UUID.randomUUID().toString());
 
         //workspace нужен только для создания токена
         List<Workspace> workspacesByUser = workspaceService.getWorkspacesByUserId(userTo.getId());

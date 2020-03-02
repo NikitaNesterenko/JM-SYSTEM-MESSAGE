@@ -66,7 +66,7 @@
 
     <script>
         $(document).ready(async () => {
-            const response = await fetch('/rest/api/workspaces/choosed');
+            const response = await fetch('/rest/api/workspaces/chosen');
             if (response.ok) {
                 const wks = await response.json();
                $('#workspace_name').text(wks.name);

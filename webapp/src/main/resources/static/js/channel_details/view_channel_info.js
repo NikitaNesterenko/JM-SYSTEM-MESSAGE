@@ -1,10 +1,9 @@
 import {close_right_panel, open_right_panel, is_open} from "../right_slide_panel/right_panel.js";
 import {close_right_thread_panel} from "../right_slide_panel/right_thread_panel.js";
-
 import {attachMemberListBtnClickHandler} from "/js/member-list/member-list.js";
 
-let toggle_right_menu = () => {
 
+let toggle_right_menu = () => {
     if (is_open) {
         close_right_panel();
     } else {
@@ -15,7 +14,7 @@ let toggle_right_menu = () => {
     }
 };
 
-$('.p-classic_nav__model__button__details').on('click', () => {
+$('#infoButton').on('click', () => {
     toggle_right_menu();
 });
 

@@ -46,7 +46,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public List<Workspace> gelAllWorkspaces() {
+    public List<Workspace> getAllWorkspaces() {
         return workspaceDAO.getAll();
     }
 

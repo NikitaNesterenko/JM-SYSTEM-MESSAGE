@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.InviteTokenService;
 import jm.MailService;
-import jm.TokenGenerator;
 import jm.UserService;
 import jm.model.InviteToken;
 import jm.model.Workspace;
@@ -19,26 +18,23 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/rest/api/invites")
 @Tag(name = "invite", description = "Invite token API")
 public class InviteTokenRestController {
 
-    private UserService userService;
-    private InviteTokenService inviteTokenService;
-    private TokenGenerator tokenGenerator;
-    private MailService mailService;
-
-
     private static final Logger logger = LoggerFactory.getLogger(
             InviteTokenRestController.class);
+    private UserService userService;
+    private InviteTokenService inviteTokenService;
+    private MailService mailService;
 
     InviteTokenRestController(UserService userService, InviteTokenService inviteTokenService, MailService mailService) {
         this.inviteTokenService = inviteTokenService;
         this.userService = userService;
         this.mailService = mailService;
-        tokenGenerator = new TokenGenerator.TokenGeneratorBuilder().useDigits(true).useLower(true).build();
     }
 
     @PostMapping("/create")
@@ -57,19 +53,20 @@ public class InviteTokenRestController {
         String url = "http://localhost:8080/rest/api/invites/";
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
-        invites.stream()
-                .forEach(inviteToken -> {
-                    inviteToken.setHash(tokenGenerator.generate(charactersInHash));
-                    inviteToken.setWorkspace(workspace);
-                    inviteTokenService.createInviteToken(inviteToken);
-                    mailService.sendInviteMessage(
-                            inviteToken.getFirstName(),
-                            inviteToken.getEmail(),
-                            inviteToken.getEmail(),
-                            workspace.getName(),
-                            url + inviteToken.getHash());
+        invites.forEach(x -> {
+            x.setHash(UUID.randomUUID().toString());
+            x.setWorkspace(workspace);
+        });
 
-                });
+        for (InviteToken invite : invites) {
+            inviteTokenService.createInviteToken(invite);
+            mailService.sendInviteMessage(invite.getFirstName()
+                    , invite.getEmail()
+                    , invite.getEmail()
+                    , workspace.getName()
+                    , url + invite.getHash());
+        }
+
         return ResponseEntity.ok(true);
     }
 

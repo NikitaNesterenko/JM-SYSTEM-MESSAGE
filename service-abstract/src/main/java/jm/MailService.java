@@ -3,7 +3,7 @@ package jm;
 import jm.model.CreateWorkspaceToken;
 import jm.model.User;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 public interface MailService {
     void sendInviteMessage(
@@ -15,7 +15,7 @@ public interface MailService {
 
     void sendInviteMessagesByTokenAndInvites(CreateWorkspaceToken createWorkspaceToken, String[] invites);
 
-    CreateWorkspaceToken sendConfirmationCode(String emailTo);
+    Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo);
 
     void sendRecoveryPasswordToken(User userTo);
 

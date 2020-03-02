@@ -12,11 +12,11 @@ export class MenuChatBox {
         window.getCommandsList = async () => {
             window.allActions = [];
             //запоминаем id выбранного workspace
-            await workspaceService.getChoosedWorkspace().then(workspace => {
-                window.choosedWorkspace = workspace.id
+            await workspaceService.getChosenWorkspace().then(workspace => {
+                window.chosenWorkspace = workspace.id
             });
             //получаем все команды для данного workspace и сохраняем их в глобальной переменной
-            window.currentCommands = await commandService.getSlashCommandsByWorkspace(window.choosedWorkspace);
+            window.currentCommands = await commandService.getSlashCommandsByWorkspace(window.chosenWorkspace);
             window.currentCommands.forEach(command => {
                 window.allActions.push(command.name)
             });
