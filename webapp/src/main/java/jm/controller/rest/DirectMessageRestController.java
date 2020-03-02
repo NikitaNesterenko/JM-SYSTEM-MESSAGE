@@ -69,7 +69,6 @@ public class DirectMessageRestController {
     public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
         directMessageDTO.setDateCreate(LocalDateTime.now());
         DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-        System.out.println(directMessage);
         directMessageService.saveDirectMessage(directMessage);
         logger.info("Созданное сообщение : {}", directMessage);
         return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);

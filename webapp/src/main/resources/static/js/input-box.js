@@ -4,8 +4,7 @@ import {
     StorageService,
     UserRestPaginationService,
     WorkspaceRestPaginationService
-} from './rest/entities-rest-pagination.js'
-import {WorkspaceRestPaginationService} from "./rest/entities-rest-pagination";
+} from './rest/entities-rest-pagination.js';
 
 const user_service = new UserRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
