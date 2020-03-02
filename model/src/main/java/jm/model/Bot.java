@@ -1,7 +1,6 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -17,8 +16,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@ToString()
 @Entity
 @Table(name = "bots")
 public class Bot {
@@ -45,10 +45,11 @@ public class Bot {
     @JsonIgnoreProperties
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
-    private Set<Channel> channels;
+    private Set<Channel> channels = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bots_slashCommands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slashCommand_id"))
+    @JoinTable(name = "bots_slash_commands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slash_command_id"))
+    @ToString.Exclude
     private Set<SlashCommand> commands = new HashSet<>();
 
     @Column(name = "date_create", nullable = false)
@@ -56,6 +57,10 @@ public class Bot {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
+
+    @Column(name = "auth_token", unique = true)
+    @EqualsAndHashCode.Include
+    private String token;
 
     public Bot(String name, String nickName, LocalDateTime dateCreate) {
         this.name = name;
@@ -78,5 +83,6 @@ public class Bot {
         this.name = botDto.getName();
         this.nickName = botDto.getNickName();
         this.dateCreate = botDto.getDateCreate();
+        this.token = botDto.getToken();
     }
 }

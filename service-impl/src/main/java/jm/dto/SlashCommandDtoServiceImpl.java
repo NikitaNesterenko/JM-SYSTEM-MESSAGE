@@ -1,6 +1,7 @@
 package jm.dto;
 
 import jm.BotService;
+import jm.TypeSlashCommandService;
 import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SlashCommandDtoServiceImpl implements SlashCommandDtoService{
     private final BotService botService;
+    private final TypeSlashCommandService typeSlashCommandService;
 
     @Autowired
-    public SlashCommandDtoServiceImpl(BotService botService) {
+    public SlashCommandDtoServiceImpl(BotService botService, TypeSlashCommandService typeSlashCommandService) {
         this.botService = botService;
+        this.typeSlashCommandService = typeSlashCommandService;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService{
         }
 
         SlashCommand sc = new SlashCommand(slashCommandDto);
+        sc.setType(typeSlashCommandService.getTypeSlashCommandById(slashCommandDto.getTypeId()));
         Bot bot = botService.getBotById(slashCommandDto.getBotId());
 
         if (bot != null){

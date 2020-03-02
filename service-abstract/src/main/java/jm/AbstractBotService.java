@@ -4,14 +4,13 @@ import jm.model.Bot;
 import jm.model.Channel;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-public interface BotService {
+public interface AbstractBotService {
 
     List<Bot> gelAllBots();
 
-    Bot createBot(Bot bot);
+    void createBot(Bot bot);
 
     void deleteBot(Long id);
 
@@ -24,6 +23,4 @@ public interface BotService {
     Set<Channel> getChannels(Bot bot);
 
     Bot getBotBySlashCommandId(Long id);
-
-    Optional<Bot> findByToken(String token);
 }

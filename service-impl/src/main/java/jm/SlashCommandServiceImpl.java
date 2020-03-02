@@ -1,6 +1,8 @@
 package jm;
 
+import jm.api.dao.BotDAO;
 import jm.api.dao.SlashCommandDao;
+import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +18,15 @@ public class SlashCommandServiceImpl implements SlashCommandService {
     private static final Logger logger = LoggerFactory.getLogger(SlashCommand.class);
 
     private SlashCommandDao slashCommandDao;
+    private BotDAO botDAO;
 
     @Autowired
     public void setSlashCommandDAO(SlashCommandDao slashCommandDAO) {
         this.slashCommandDao = slashCommandDAO;
+    }
+    @Autowired
+    public void setBotDAO(BotDAO botDAO) {
+        this.botDAO = botDAO;
     }
 
     @Override
@@ -29,17 +36,32 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public void createSlashCommand(SlashCommand slashCommand) {
+        Bot bot = botDAO.getById(slashCommand.getBot().getId());
+
+        slashCommand.setUrl("/app/bot/" + bot.getName().toLowerCase());
         slashCommandDao.persist(slashCommand);
+
+        bot.getCommands().add(slashCommand);
+        botDAO.merge(bot);
     }
 
     @Override
     public void deleteSlashCommand(Long id) {
+        SlashCommand slashCommand = slashCommandDao.getById(id);
+        Bot bot = botDAO.getBotByCommandId(id);
+        bot.getCommands().remove(slashCommand);
+        botDAO.merge(bot);
         slashCommandDao.deleteById(id);
     }
 
     @Override
     public void updateSlashCommand(SlashCommand slashCommand) {
-        slashCommandDao.merge(slashCommand);
+        SlashCommand existCommand = slashCommandDao.getById(slashCommand.getId());
+        existCommand.setName(slashCommand.getName());
+        existCommand.setDescription(slashCommand.getDescription());
+        existCommand.setHints(slashCommand.getHints());
+        existCommand.setType(slashCommand.getType());
+        slashCommandDao.merge(existCommand);
     }
 
     @Override

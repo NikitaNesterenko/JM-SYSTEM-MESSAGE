@@ -74,7 +74,6 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         for (BigInteger channelId : channelsIdentityNumbersArrayList) {
             Long channelLongId = channelId.longValue();
             Channel channel = getById(channelLongId);
-            System.out.println(channel);
             channels.add(channel);
         }
         return channels;

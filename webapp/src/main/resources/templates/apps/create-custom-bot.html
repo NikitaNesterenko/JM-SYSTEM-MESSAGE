@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add bot</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script th:src="@{/js/admin-page/components/editBots.js}" type="module"></script>
+        <style>
+            .div{
+                width: 50%;
+                margin: auto;
+            }
+            .form-add-custom-bot{
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="new-custom-bot" class="modal">
+            <div class="modal-content div">
+                <label>Name: </label><input id="custom-bot"><br>
+                <label>Workspace: </label>
+                <select id="workspace-custom-bot">
+                    <option th:each="workspace : ${workspaces}" th:text="${workspace.name}" th:value="${workspace.id}">
+                    </option>
+                </select><br><br>
+                <button id="save-custom-bot">Add bot</button>
+            </div>
+        </div>
+        <div id="edit-custom-bot" class="modal">
+            <div class="modal-content div">
+                <input hidden="hidden" id="bot-id">
+                <label>Nick name: </label><input id="nick-custom-bot"><br><br>
+                <label>Name: </label><input id="name-custom-bot"><br><br>
+                <label>API Token: </label><input id="token-custom-bot" size="60"> <a id="new-token-generate" style="cursor: pointer">Regenerate</a><br><br>
+                <button id="update-custom-bot">Save</button>
+            </div>
+        </div>
+        <div class="div">
+            <h2>Add custom bot</h2>
+            <div class="form-add-custom-bot">
+                <button id="add-custom-bot">Create new bot</button>
+            </div>
+            <table class="table">
+                <thead>
+                    <th>App Name</th>
+                    <th>Workspace</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <th:block th:each="bot : ${bots}">
+<!--                        th:onclick="'editBot(' + ${bot.id} + ')'" style="cursor: pointer"-->
+                        <tr>
+                            <td th:text="${bot.nickName}" ></td>
+                            <td>
+                                <th:block th:each="workspace : ${bot.workspaces}">
+                                    [[${workspace.name} + ' ']]
+                                </th:block>
+                            </td>
+                            <td>
+                                <a th:href="'/admin/apps/bots/' + ${bot.id}">Create command</a>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
