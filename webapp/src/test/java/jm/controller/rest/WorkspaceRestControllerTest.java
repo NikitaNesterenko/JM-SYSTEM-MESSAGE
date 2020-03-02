@@ -173,6 +173,6 @@ public class WorkspaceRestControllerTest {
         final String getAllUrl = URL;
         mockMvc.perform(get(URL))
                 .andExpect(status().isOk());
-        verify(workspaceService, times(1)).gelAllWorkspaces();
+        verify(workspaceService, times(1)).getAllWorkspaces();
     }
 }

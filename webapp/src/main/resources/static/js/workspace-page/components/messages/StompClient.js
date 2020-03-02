@@ -1,11 +1,11 @@
 import {Command} from "/js/workspace-page/components/footer/Command.js";
 import {is_open, populateRightPaneActivity} from "/js/activities/view_activities.js";
 
-import { SubmitMessage } from "/js/workspace-page/components/footer/SubmitMessage.js"
+import {SubmitMessage} from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
-import { showInviteModalOnWorkspace, addNewEmailLineIntoInviteModal } from "/js/invite.js";
-import { deleteChannelFromList } from "/js/workspace-page/components/sidebar/ChannelView.js";
-import { MessageRestPaginationService, DirectMessagesRestController } from "/js/rest/entities-rest-pagination.js";
+import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace} from "/js/invite.js";
+import {deleteChannelFromList} from "/js/workspace-page/components/sidebar/ChannelView.js";
+import {MessageRestPaginationService, DirectMessagesRestController} from "/js/rest/entities-rest-pagination.js";
 
 export class StompClient {
 
@@ -35,6 +35,7 @@ export class StompClient {
     connect() {
         this.stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
+
             this.subscribeMessage();
             this.subscribeChannel();
             this.subscribeThread();
@@ -112,10 +113,10 @@ export class StompClient {
                 if (isOk) {
                     //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
                     if (isAuthor) {
-                        this.channelview.showAllChannels(window.choosedWorkspace);
+                        this.channelview.showAllChannels(window.chosenWorkspace);
                         setTimeout(function() {
                             window.pressChannelButton(parseInt(slackBot.targetChannelId));
-                            },1000);
+                        },1000);
                     } else {
                         //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
                         if (!(report.content === "") && (report.channelId == window.channel_id)) {
@@ -307,6 +308,7 @@ export class StompClient {
             'botId': message.botId,
             'botNickName': message.botNickName,
             'filename': message.filename,
+            'voiceMessage': message.voiceMessage,
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
             'channelName': message.channelName,
@@ -352,7 +354,8 @@ export class StompClient {
             'name': message.name
         };
 
-        this.stompClient.send("/app/slackbot", {}, JSON.stringify(entity));
+        this.stompClient.send(message.url, {}, JSON.stringify(entity));
+        // this.stompClient.send("/app/bot/slackbot", {}, JSON.stringify(entity));
     }
 
     //отобразить сообщение из вебсокета в текущем канале

@@ -20,6 +20,7 @@ public class SlashCommandDto {
         private Long channelId;
         private Long userId;
         private Long botId;
+        private Long typeId;
 
         public SlashCommandDto(SlashCommand sc){
                 this.id = sc.getId();
@@ -27,6 +28,8 @@ public class SlashCommandDto {
                 this.url = sc.getUrl();
                 this.description = sc.getDescription();
                 this.hints = sc.getHints();
+                this.botId = sc.getBot().getId();
+                this.typeId = sc.getType().getId();
         }
 
 }

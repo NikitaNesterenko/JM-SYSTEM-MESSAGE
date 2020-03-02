@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
@@ -20,7 +21,7 @@ public class SlashCommand {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     @EqualsAndHashCode.Include
     private String name;
 
@@ -37,15 +38,19 @@ public class SlashCommand {
     private String hints;
 
     @ManyToOne
+    private TypeSlashCommand type;
+
+    @ManyToOne
     //@JsonIgnore
     private Bot bot;
 
-    public SlashCommand(String name, String url, String description, String hints, Bot bot) {
+    public SlashCommand(String name, String url, String description, String hints, Bot bot, TypeSlashCommand type) {
         this.name = name;
         this.url = url;
         this.description = description;
         this.hints = hints;
         this.bot = bot;
+        this.type = type;
     }
 
     public SlashCommand(String name, String url, String description, String hints) {

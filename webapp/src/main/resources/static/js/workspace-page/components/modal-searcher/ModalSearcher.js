@@ -22,7 +22,7 @@ export class ModalSearcher {
             const type = $(this).data("type");
             if (type === "channel") {
                 pressChannelButton(id);
-                sessionStorage.setItem("channelName", id);
+                sessionStorage.setItem("channelId", id);
             } else {
                 console.log("Открытие личной переписки с User с id=" + id);
             }
