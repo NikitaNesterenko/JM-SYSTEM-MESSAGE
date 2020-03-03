@@ -132,9 +132,9 @@ export class SubmitMessage {
             }
 
             if (window.hasSlashCommand) {
-                await this.sendSlashCommand(entity);
+                await this.sendSlashCommand(this.createEntityForChannelMessage());
             } else {
-                await this.message_service.create(entity).then(
+                await this.message_service.create(this.createEntityForChannelMessage()).then(
                     msg_id => sendName(msg_id)
                 );
             }
