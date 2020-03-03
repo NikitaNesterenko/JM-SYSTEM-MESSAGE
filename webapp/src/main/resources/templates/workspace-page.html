@@ -110,8 +110,8 @@
     <!--  Icon Library by DV  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--  Voice messaging feature by DV  -->
-    <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
-    <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
+    <script src="../js/voiceMessage/innerJs/WebAudioRecorder.min.js"></script>
+    <script src="../js/voiceMessage/innerJs/voiceRecorder.js"></script>
 
     <!-- channel info -->
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
@@ -265,9 +265,9 @@
                         <div class="p-classic_nav__team_menu__blurb">
                             <span class="p-classic_nav__team_menu__blurb__icon c-avatar"
                                   style="height: 36px; line-height: 36px; width: 36px;"><img class="c-avatar__image"
-                                                                                             src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
-                                                                                             srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
-                                                                                             alt=""></span>
+                                         src="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-48"
+                                         srcset="https://ca.slack-edge.com/T2AEH901M-ULBABL4UU-g9d0172b2897-72 2x"
+                                         alt=""></span>
                             <div class="p-classic_nav__team_menu__blurb__right">
                                 <div class="p-classic_nav__team_menu__blurb__name">Решетько Константин</div>
                                 <div class="p-classic_nav__team_menu__blurb__sub">Решетько Константин</div>
@@ -789,6 +789,7 @@
 
             <div class="p-workspace__footer">
                 <footer class="p-workspace__primary_view_footer">
+                    <div class="menu" id="menu"></div>
                     <div style="margin: 5px 10px 5px 10px; height: 90%; border: 1px solid gray; border-radius: 8px;
                         position: relative;">
                         <div class="p-message_pane_input p-message_input_field" style="padding-top: 10px; bottom: 0;
@@ -806,8 +807,8 @@
                             </div>
                             <form id="form_message" style="height: 100%; width: 100%; text-align: center;">
                                 <input class="ql-editor__input-field" id="form_message_input"
-                                       placeholder="Динам конт" type="text"/>
-                                <!--                                       minlength="1" maxlength="1200"-->
+                                       placeholder="Динам конт" minlength="1" maxlength="1200"
+                                       type="text" autocomplete="off"/>
                             </form>
                         </div>
                         <div name="attachedFiles">

@@ -1,15 +1,15 @@
 import {
-    WorkspaceRestPaginationService,
-    UserRestPaginationService,
     ChannelRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
     SlashCommandRestPaginationService,
-    StorageService
+    StorageService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
-// import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
+import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -131,14 +131,14 @@ export class SubmitMessage {
                 );
             }
 
-            // if (window.hasSlashCommand) {
-            //     await this.sendSlashCommand(entity);
-            // } else {
-            //     await this.message_service.create(entity).then(
-            //         msg_id => sendName(msg_id)
-            //     );
-            // }
-            // clearUsers();
+            if (window.hasSlashCommand) {
+                await this.sendSlashCommand(entity);
+            } else {
+                await this.message_service.create(entity).then(
+                    msg_id => sendName(msg_id)
+                );
+            }
+            clearUsers();
         });
     }
 
@@ -165,15 +165,18 @@ export class SubmitMessage {
                         channelId: entity.channelId,
                         userId: entity.userId,
                         command: entity.content,
-                        name: inputCommand
+                        name: inputCommand,
+                        botId: command.botId,
+                        url: command.url
                     };
-                    if (command.botId === 1) {
-                        //если это команда от слакБота, то отправляем через вебсокет.
-                        sendSlackBotCommand(sendCommand);
-                    } else {
-                        //иначе просто отправляем пост запрос по урлу
-                        this.slashCommandService.sendSlashCommand(command.url, sendCommand);
-                    }
+                    sendSlackBotCommand(sendCommand);
+                    // if (command.botId === 1) {
+                    //     //если это команда от слакБота, то отправляем через вебсокет.
+                    //     sendSlackBotCommand(sendCommand);
+                    // } else {
+                    //     //иначе просто отправляем пост запрос по урлу
+                    //     this.slashCommandService.sendSlashCommand(command.url, sendCommand);
+                    // }
                 }
             });
         }
