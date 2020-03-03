@@ -559,7 +559,7 @@ public class TestDataInitializer {
         conversation1.setShowForAssociated(true);
         conversation1.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation1);
+        conversationService.createOrShowConversation(conversation1);
         this.conversations.add(conversation1);
 
         //this conversation must not created because already exists
@@ -570,7 +570,7 @@ public class TestDataInitializer {
         conversation2.setShowForAssociated(false);
         conversation2.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation2);
+        conversationService.createOrShowConversation(conversation2);
         this.conversations.add(conversation2);
 
         Conversation conversation3 = new Conversation();
@@ -580,7 +580,7 @@ public class TestDataInitializer {
         conversation3.setShowForAssociated(true);
         conversation3.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation3);
+        conversationService.createOrShowConversation(conversation3);
         this.conversations.add(conversation3);
 
         Conversation conversation4 = new Conversation();
@@ -590,7 +590,7 @@ public class TestDataInitializer {
         conversation4.setShowForAssociated(true);
         conversation4.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation4);
+        conversationService.createOrShowConversation(conversation4);
         this.conversations.add(conversation4);
     }
 }
