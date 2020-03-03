@@ -44,6 +44,8 @@ window.addEventListener('load', async () => {
     workspace_event.onSelectChannel();
     workspace_event.onSelectDirectMessage();
     workspace_event.onAddChannelSubmit();
+
+    channel_view.selectFirstSidebarButton();
 });
 
 $(document).ready(async () => {

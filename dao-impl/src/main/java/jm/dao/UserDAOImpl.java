@@ -4,7 +4,6 @@ import jm.api.dao.UserDAO;
 import jm.model.User;
 import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +43,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         }
     }
 
-    //TODO wtf
     @Override
     public void addRoleForUser(User user, String role) { }
 

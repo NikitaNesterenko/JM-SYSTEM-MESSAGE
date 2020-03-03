@@ -197,10 +197,11 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
                     if (contentEvent.length() > 255) {
                         contentEvent = contentEvent.substring(0, 254);
                     }
-                    Message message = new Message(googleChannel.getId(),
-                            googleUser,
-                            contentEvent,
-                            start.minusHours(warningBeforeEvent));
+                    Message message = new Message();
+                            message.setId(googleChannel.getId());
+                            message.setUser(googleUser);
+                            message.setContent(contentEvent);
+                            message.setDateCreate(start.minusHours(warningBeforeEvent));
                     messageService.createMessage(message);
                 }
             }

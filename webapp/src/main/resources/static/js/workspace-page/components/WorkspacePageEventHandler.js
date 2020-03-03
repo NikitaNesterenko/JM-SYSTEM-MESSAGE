@@ -57,8 +57,7 @@ export class WorkspacePageEventHandler {
 
     onSelectChannel() {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", (event) => {
-            this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text()).setInfo();
-
+            this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text());
 
             const channelId = parseInt($(event.currentTarget).val());
             pressChannelButton(channelId);

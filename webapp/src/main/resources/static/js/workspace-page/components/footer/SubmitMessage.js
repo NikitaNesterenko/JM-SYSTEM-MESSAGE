@@ -13,9 +13,8 @@ import {Command} from "./Command.js";
 
 export class SubmitMessage {
     user;
-    // channel = null;
-    channelID = null;
-    conversationID = null;
+    channelID = 0;
+    conversationID = 0;
     workspace;
 
     constructor() {
@@ -121,12 +120,11 @@ export class SubmitMessage {
     }
 
     async sendChannelMessage(channelID) {
-        // await this.setChannel(channelID);
         this.channelID = channelID;
         await this.setUser();
         await this.setWorkspace();
 
-        this.createEntity().then(entity => {
+        this.createEntityForChannelMessage().then(entity => {
             if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
                 this.message_service.create(entity).then(
                     message => sendName(message)
@@ -145,12 +143,11 @@ export class SubmitMessage {
     }
 
     async sendDirectMessage(conversation_id) {
-        // await this.setConversation(conversation_id);
         this.conversationID = conversation_id;
         await this.setUser();
         await this.setWorkspace();
 
-        this.createEntityDM().then(entity => {
+        this.createEntityForDirectMessage().then(entity => {
             if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
                 this.direct_message_service.create(entity).then(
                     message => sendDM(message)
@@ -188,12 +185,6 @@ export class SubmitMessage {
         );
     }
 
-    // async setChannel(id) {
-    //     await this.channel_service.getById(id).then(
-    //         channel => this.channel = channel
-    //     )
-    // }
-
     async setChannelByName(channelName) {
         await this.channel_service.getChannelByName(channelName).then(
             channel => this.channel = channel
@@ -213,7 +204,7 @@ export class SubmitMessage {
         const channelUsers = this.channel.userIds;
         channelUsers.splice(channelUsers.indexOf(this.user.id), 1);
 
-        const entity = this.createEntity();
+        const entity = this.createEntityForChannelMessage();
 
         await this.channel_service.update(entity).then(() => {
             $(".p-channel_sidebar__channels__list").html('');
@@ -247,7 +238,7 @@ export class SubmitMessage {
         )
     }
 
-    async createEntity() {
+    async createEntityForChannelMessage() {
         return {
             id: null,
             channelId: this.channelID,
@@ -263,10 +254,10 @@ export class SubmitMessage {
         };
     }
 
-    async createEntityDM() {
+    async createEntityForDirectMessage() {
         return {
             id: null,
-            // channelId: this.channelID,
+            channelId: this.channelID,
             user: {
                 id: this.user.id,
                 name: this.user.name

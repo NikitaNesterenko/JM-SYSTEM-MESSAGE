@@ -30,16 +30,17 @@ export class ChannelView {
             channels => {
                 if (channels.length > 0) {
                     this.addChannels(channels);
-                    // if (this.default_channel !== null) {
-                    //     $(".p-channel_sidebar__channels__list button.p-channel_sidebar__name_button").click();
-                        // this.setLocalStorageSettings(this.default_channel.id);
-                        // this.setChannelBGColor(this.default_channel);
-                        // this.channel_message_view.update();
-                    // }
                 }
             }
         );
         this.showBots(workspace_id);
+    }
+
+    selectFirstSidebarButton() {
+        $('.p-channel_sidebar__channel')
+            .first()
+            .find('button')
+            .click();
     }
 
     showBots(workspace_id) {
@@ -114,14 +115,6 @@ export class ChannelView {
                 );
         }
     }
-
-    // setChannelBGColor(channel) {
-    //     $(`#channel_button_${channel.id}`).css({
-    //         color: 'white',
-    //         background: 'royalblue'
-    //     });
-    //     $(".p-classic_nav__model__title__info__name").html("").text(channel.name);
-    // }
 
     setLocalStorageSettings(chn_id) {
         sessionStorage.setItem('channelId', chn_id);

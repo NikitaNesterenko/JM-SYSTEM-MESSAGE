@@ -41,13 +41,12 @@ export class StompClient {
     subscribeMessage() {
         this.stompClient.subscribe('/topic/messages', async (message) => {
             let result = JSON.parse(message.body);
-            result['content'] = result.inputMassage;
-            if ((result.userId != null || result.botId != null) && !result.isDeleted) {
+            if ((result.user.id != null || result.botId != null) && !result.isDeleted) {
                 if (result.channelId === channel_id) {
                     if (result.isUpdated) {
                         this.channel_message_view.updateMessage(result);
                     } else {
-                        if (result.sharedMessageId === null) {
+                        if (result.sharedMessage === null) {
                             this.channel_message_view.createMessage(result);
                         } else {
                             await this.channel_message_view.createSharedMessage(result);
@@ -73,7 +72,7 @@ export class StompClient {
         this.stompClient.subscribe("/topic/slackbot", (data) => {
             const slackBot = JSON.parse(data.body);
             const {userId, channelId, status, command} = slackBot;
-            const isAuthor = userId == window.loggedUserId;
+            const isAuthor = userId === window.loggedUserId;
             const isOk = status === "OK";
             const report = JSON.parse(slackBot.report);
             //временное сообщение о некотрректности команды
@@ -82,7 +81,7 @@ export class StompClient {
             }
             if (command === "topic") {
                 //смена топика канала
-                if (isOk && isAuthor && window.channel_id == channelId) {
+                if (isOk && isAuthor && window.channel_id === channelId) {
                     document.querySelector("#topic_string").textContent = slackBot.topic;
                     this.showMessageInCurrentChannel(report)
                 }
@@ -92,7 +91,7 @@ export class StompClient {
                         //обновление списка каналов у пользователя, покинувшего канал
                         deleteChannelFromList(slackBot.targetChannelId);
                     }
-                } else if (window.channel_id == report.channelId) {
+                } else if (window.channel_id === report.channelId) {
                     //сообщение в нужном канале других пользователей о том, что пользователь покинул канал
                     this.showMessageInCurrentChannel(report);
                 }
@@ -106,13 +105,13 @@ export class StompClient {
                             },1000);
                     } else {
                         //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
-                        if (!(report.content === "") && (report.channelId == window.channel_id)) {
+                        if (!(report.content === "") && (report.channelId === window.channel_id)) {
                             this.showMessageInCurrentChannel(report);
                         }
                     }
                 }
             } else if (command === "shrug") {
-                if (window.channel_id == report.channelId) {
+                if (window.channel_id === report.channelId) {
                     this.showMessageInCurrentChannel(report);
                 }
             } else if (command === "invite") {
@@ -122,7 +121,7 @@ export class StompClient {
                             this.channelview.addChannelIntoSidebarChannelList(JSON.parse(slackBot.channel));
                             this.channel_message_view.dialog.messageBoxWrapper();
                         }
-                    } if (JSON.parse(slackBot.channel).id == window.channel_id) {
+                    } if (JSON.parse(slackBot.channel).id === window.channel_id) {
                         this.showMessageInCurrentChannel(report);
                     }
                 }
@@ -139,14 +138,14 @@ export class StompClient {
                     }
                 }
             } else if (command === "msg") {
-                if (isOk && slackBot.targetChannelId == window.channel_id) {
+                if (isOk && slackBot.targetChannelId === window.channel_id) {
                     this.showMessageInCurrentChannel(report);
                 }
             } else if (command === "dm") {
                 if (isOk) {
-                    if (slackBot.conversationId == parseInt(sessionStorage.getItem('conversation_id'))) {
+                    if (slackBot.conversationId === parseInt(sessionStorage.getItem('conversation_id'))) {
                         this.channel_message_view.createMessage(report);
-                    } if (isAuthor || window.loggedUserId == slackBot.targetUserId) {
+                    } if (isAuthor || window.loggedUserId === slackBot.targetUserId) {
                         if (true) {
                             const dm_chat = new ActiveChatMembers();
                             dm_chat.populateDirectMessages();
@@ -155,7 +154,7 @@ export class StompClient {
                 }
             } else if (command === "rename") {
                 if (isOk) {
-                    if (channelId == window.channel_id) {
+                    if (channelId === window.channel_id) {
                         document.querySelector(".p-classic_nav__model__title__info__name").textContent = slackBot.newChannelName;
                         this.showMessageInCurrentChannel(report);
                     }
@@ -164,7 +163,7 @@ export class StompClient {
                     document.querySelector(`#channel_name_${slackBot.targetChannelId}`).textContent = slackBot.newChannelName;
                 }
             } else if (command === "archive") {
-                if (isOk && channelId == window.channel_id) {
+                if (isOk && channelId === window.channel_id) {
                     this.showMessageInCurrentChannel(report);
                 }
             } else if (command === "invite_people") {
@@ -186,8 +185,8 @@ export class StompClient {
         this.stompClient.subscribe('/topic/user.status', (data) => {
             const user = JSON.parse(data.body);
             document.querySelectorAll(".p-channel_sidebar__channel_icon_circle.pb-0").forEach(item => {
-                if (item.dataset.user_id == user.id) {
-                    item.textContent = user.online == 1 ? "●" : "○";
+                if (item.dataset.user_id === user.id) {
+                    item.textContent = user.online === 1 ? "●" : "○";
                 }
             })
         })
@@ -222,12 +221,12 @@ export class StompClient {
     subscribeDirectMessage() {
         this.stompClient.subscribe('/topic/dm', (message) => {
             const response = JSON.parse(message.body);
-            const current_conversation = parseInt(sessionStorage.getItem('conversation_id'));
+            const conversationID = parseInt(sessionStorage.getItem('conversation_id'));
             if (!response.isDeleted) {
                 if (response.isUpdated) {
                     this.dm_view.updateMessage(response);
                 } else {
-                    if (response.conversationId === current_conversation) {
+                    if (response.conversation.id === conversationID) {
                         this.dm_view.createMessage(response);
                     }
                 }
@@ -302,7 +301,7 @@ export class StompClient {
     isChannelPresentInChannelsList(chn_id) {
         let isPresent = false;
         document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
-            if (id.value == chn_id) {
+            if (id.value === chn_id) {
                 isPresent = true;
             }
         });
@@ -312,21 +311,23 @@ export class StompClient {
     async createEntity(message) {
         return {
             'id': message.id,
-            'inputMassage': message.content,
-            'isDeleted': message.isDeleted,
-            'isUpdated': message.isUpdated,
+            'channelId': message.channelId,
+            'user': message.user,
+            'conversation': message.conversation,
+            'content': message.content,
             'dateCreate': message.dateCreate,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'botId': message.botId,
-            'botNickName': message.botNickName,
             'filename': message.filename,
             'voiceMessage': message.voiceMessage,
-            'sharedMessageId': message.sharedMessageId,
-            'channelId': message.channelId,
-            'channelName': message.channelName,
-            'workspaceId': message.workspaceId
+            'workspaceId': message.workspaceId,
+            'isDeleted': message.isDeleted,
+            //TODO sync with Message.java
+            //
+            // 'isUpdated': message.isUpdated,
+            // 'userAvatarUrl': message.userAvatarUrl,
+            // 'botId': message.botId,
+            // 'botNickName': message.botNickName,
+            // 'sharedMessageId': message.sharedMessageId,
+            // 'channelName': message.channelName
         }
     }
 }

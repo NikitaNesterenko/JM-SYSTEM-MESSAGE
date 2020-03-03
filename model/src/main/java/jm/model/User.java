@@ -108,7 +108,7 @@ public class User {
     private Set<Message> starredMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<User> directMessagesToUsers;
 
@@ -160,6 +160,9 @@ public class User {
     @Column(name = "skype")
     private String userSkype;
 
+    // ===================================
+    // TODO: CONSTRUCTORS ONLY FOR TESTS!!! better delete them in future
+    // ===================================
 
     public User(String name, String lastName, String login, String email, String password) {
         this.name = name;
@@ -192,23 +195,4 @@ public class User {
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
     }
-
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        User user = (User) o;
-//        return id.equals(user.id) &&
-//                email.equals(user.email) &&
-//                password.equals(user.password);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, email, password);
-//    }
 }

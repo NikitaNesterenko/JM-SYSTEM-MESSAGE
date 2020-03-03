@@ -23,19 +23,18 @@ $(document).on('click', '[id^=msg-icons-menu__starred_msg_]', function (e) {
         let user = user_and_msg[0];
         let message = user_and_msg[1];
 
-        let principalStarredMessageIds = user["starredMessageIds"];
-
-        if (principalStarredMessageIds.find(id => id === message.id)) {
-            principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message.id), 1);
-            user["starredMessageIds"] = principalStarredMessageIds;
-            user_service.update(user).then(() => {
-                $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
-                $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
-                reopen_right_menu();
-            });
+        let principalStarredMessageArray = user["starredMessages"];
+        if (principalStarredMessageArray.length > 0) {
+            if (principalStarredMessageArray.find(id => id === message.id)) {
+                principalStarredMessageArray.splice(principalStarredMessageArray.indexOf(message.id), 1);
+                user_service.update(user).then(() => {
+                    $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
+                    $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
+                    reopen_right_menu();
+                });
+            }
         } else {
-            principalStarredMessageIds.push(message.id);
-            user["starredMessageIds"] = principalStarredMessageIds;
+            user["starredMessages"].push({id: message.id});
             user_service.update(user).then(() => {
                 add_msg_starred_attr(message);
                 reopen_right_menu();
@@ -52,9 +51,7 @@ $(document).on('click', '[id^=createOrShowConversation]', async function (e) {
         associatedUser: await user_service.getUserById(associated_user_id),
         workspace: await workspace_service.getChosenWorkspace(),
         showForOpener: true,
-        showForAssociated: true,
-        starredByOpener: false,
-        starredByAssociated: false
+        showForAssociated: true
     };
     await conversation_service.createOrShowConversation(conversation).then(status => {
         if (status === 200) {
@@ -68,13 +65,14 @@ $(document).on('click', '[id^=createOrShowConversation]', async function (e) {
 $(document).on('click', '[id^=deleteDmButton]', async function (e) {
     let conversation_id = $(e.target).data('conversationid');
     const principal = await user_service.getLoggedUser();
-    await conversation_service.deleteConversation(conversation_id, principal.id).then( t => {
+    await conversation_service.deleteConversation(conversation_id, principal.id).then(t => {
         if (t === 200) {
-            activeChatMembers.populateDirectMessages();
-            $('.p-channel_sidebar__channel_direct')
-                .first()
-                .find('button')
-                .click();
+            activeChatMembers.populateDirectMessages().then(() => {
+                $('.p-channel_sidebar__channel_direct')
+                    .first()
+                    .find('button')
+                    .click();
+            });
         } else {
             console.log("Error occurred while deleting direct message conversation")
         }
@@ -109,7 +107,7 @@ const getUser = async () => {
 export const getMessageStatus = (message) => {
     getUser().then(res => {
         let user = res[0];
-        let principalStarredMessageIds = user["starredMessageIds"];
+        let principalStarredMessageIds = user["directMessagesToUsers"];
         if (principalStarredMessageIds.find(id => id === message.id)) {
             add_msg_starred_attr(message);
         }
@@ -122,16 +120,14 @@ let populateRightPane = (user) => {
     const target_element = $('.p-flexpane__inside_body-scrollbar__child');
     target_element.empty();
     workspace_service.getChosenWorkspace().then(workspace => {
-        let currentWorkspaceId = workspace.id; //получаем id выбранного workspace
-        channel_service.getChannelsByWorkspaceId(currentWorkspaceId).then(channels => {
-            // получаем массив каналов для выбранного workspace
-            let curWorkspaceChannels = [];
-            channels.forEach((channel, i) => {
-                curWorkspaceChannels.push(channel.id)
-            });
+        channel_service.getChannelsByWorkspaceId(workspace.id).then(channels => {
+            // let curWorkspaceChannels = [];
+            // channels.forEach((channel, i) => {
+            //     curWorkspaceChannels.push(channel.id)
+            // });
             user_service.getLoggedUser()
                 .then((user) => {
-                    message_service.getStarredMessagesForUser(user.id, currentWorkspaceId)
+                    message_service.getStarredMessagesForUser(user.id, workspace.id)
                         .then((messages) => {
                             if (messages.length !== 0) {
                                 messages.forEach((message, i) => {

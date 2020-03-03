@@ -10,19 +10,17 @@ function notify (title, message){
     sound.play();
 }
 
-// Парсер для сообщения типа "{inputMassage: "@asdas", dateCreate: "14.11.2019 18:07", user: {…}, bot: null}"
-// user {id: 2, name: "name_2", lastName: "last-name_2", login: "login_2", email: "mymail_2@testmail.com", …}
-const notifyParseMessage =(message)=> {
-    const messageFrom = message.userName;
-    const messageContent = message.inputMassage;
+const notifyParseMessage = (message) => {
+    const messageFrom = message.user.name;
+    const messageContent = message.content;
     if (messageContent.includes("@",0)) {
         const indexToStart = messageContent.indexOf("@");
         let indexToEnd = messageContent.indexOf(" ",indexToStart);
-        if (indexToEnd == -1) {
+        if (indexToEnd === -1) {
             indexToEnd = messageContent.length;
         }
         const messageTo = messageContent.substring(indexToStart, indexToEnd);
         notify("Message to " + messageTo, messageFrom.name + ": " + messageContent);
     }
-}
+};
 
