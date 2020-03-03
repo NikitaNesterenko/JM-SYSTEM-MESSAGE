@@ -83,10 +83,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeDirectMessagesForConversationFromUnreadForUser(Long convId, Long userId) {
+    public void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId) {
         User user = this.getUserById(userId);
-        user.getUnreadDirectMessages().removeIf(dmsg -> dmsg.getConversation().getId().equals(convId));
+        user.getUnreadDirectMessages().removeIf(dmsg -> dmsg.getConversation().getId().equals(conversationId));
         this.updateUser(user);
     }
-
 }

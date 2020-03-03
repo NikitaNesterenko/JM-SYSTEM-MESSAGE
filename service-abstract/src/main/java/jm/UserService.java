@@ -30,6 +30,6 @@ public interface UserService {
 
     void removeChannelMessageFromUnreadForUser(Long channelId, Long userId);
 
-    void removeDirectMessagesForConversationFromUnreadForUser(Long convId, Long userId);
+    void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId);
 
 }
