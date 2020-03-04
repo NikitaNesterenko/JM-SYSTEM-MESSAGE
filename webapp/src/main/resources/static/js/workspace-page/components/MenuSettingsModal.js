@@ -1,4 +1,8 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService, ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {
+    UserRestPaginationService,
+    WorkspaceRestPaginationService,
+    ChannelRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -68,6 +72,17 @@ export class MenuSettingsModal {
         });
     }
 
+    // Повесится на кнопку #archivingForm, кнопка временно висит в #settingsList
+    onUnArchiveSubmit() {
+        $('#unArchivingBtn').click((e) => {
+            e.preventDefault();
+            this.channel_service.unArchivingChannel(this.channel_id).then(
+                chn => {
+                    this.closeAllModals()
+                });
+        });
+    }
+
     onJumpToDateBtnClick() {
         $('#jumpToDate').click(() => {
             alert('jumpToDate');
@@ -88,7 +103,7 @@ export class MenuSettingsModal {
                     this.users_service.getUsersByWorkspace(workspace.id).then(
                         usersByWorkspace => {
                             usersByWorkspace.forEach((userByWorkspace) => {
-                                if(userByWorkspace.name === name) {
+                                if (userByWorkspace.name === name) {
                                     let id = userByWorkspace.id;
                                     this.users_service.getUserById(id).then(
                                         user => {
@@ -124,10 +139,10 @@ export class MenuSettingsModal {
                                     let difference = usersByWorkspaceArr.filter(x => !usersByChannelArr.includes(x));
                                     let name = $("#tags").autocomplete({
                                         source: difference,
-                                        appendTo : '.ui-widget',
+                                        appendTo: '.ui-widget',
                                         minLength: 1
                                     });
-                                    if(name.length != 0) {
+                                    if (name.length != 0) {
                                         $('#addBtn').removeAttr('disabled');
                                     } else {
                                         $('#addBtn').attr('disabled', 'disabled');
@@ -209,6 +224,7 @@ export class MenuSettingsModal {
         this.onArchiveCloseBtnClick();
         this.onArchiveCancel();
         this.onArchiveSubmit();
+        this.onUnArchiveSubmit();
         this.onJumpToDateBtnClick();
         this.onAddPeopleToChannelKeyUp();
         this.onCopyChannelNameBtnClick();

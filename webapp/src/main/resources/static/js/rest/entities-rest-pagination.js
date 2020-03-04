@@ -229,6 +229,13 @@ export class ChannelRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
+    unArchivingChannel = async (id) => {
+        const response = await fetch(`/rest/api/channels/un-archiving/${id}`, {
+            method: 'POST'
+        });
+        return response.json();
+    };
+
     updateChannel = async (channel) => {
         const response = await fetch(`/rest/api/channels/update`, {
             method: 'PUT',
