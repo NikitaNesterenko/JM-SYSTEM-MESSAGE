@@ -10,9 +10,7 @@ import jm.UserService;
 import jm.dto.ChannelDTO;
 import jm.dto.ChannelDtoService;
 import jm.model.Channel;
-import jm.model.User;
 import jm.model.Workspace;
-import org.mockito.internal.util.collections.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/rest/api/channels")
@@ -128,28 +125,30 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create channel")
             })
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-        Channel channel = channelService.getChannelByName(channelDTO.getName());
-        if (channel == null) {
-            channel = channelDTOService.toEntity(channelDTO);
-            User owner = userService.getUserByLogin(principal.getName());
-            Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
-            channel.setUser(owner);
-            channel.setWorkspace(workspace);
-            channel.setUsers(Sets.newSet(owner));
-            try {
-                channelService.createChannel(channel);
-                logger.info("Cозданный channel: {}", channel);
-            } catch (IllegalArgumentException | EntityNotFoundException e) {
-                logger.warn("Не удалось создать channel");
-                return ResponseEntity.badRequest().build();
-            }
-        } else {
-            Set<User> users = channel.getUsers();
-            users.add(userService.getUserByLogin(principal.getName()));
-            channelService.updateChannel(channel);
-            channelDTO = channelDTOService.toDto(channel);
-        }
+        //TODO: раскоментировать
+//        Channel channel = channelService.getChannelByName(channelDTO.getName());
+//        if (channel == null) {
+//            channel = channelDTOService.toEntity(channelDTO);
+//            User owner = userService.getUserByLogin(principal.getName());
+//            Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+//
+//            channel.setUser(owner);
+//            channel.setWorkspace(workspace);
+//            channel.setUsers(Sets.newSet(owner));
+//            try {
+//                channelService.createChannel(channel);
+//                logger.info("Cозданный channel: {}", channel);
+//            } catch (IllegalArgumentException | EntityNotFoundException e) {
+//                logger.warn("Не удалось создать channel");
+//                return ResponseEntity.badRequest().build();
+//            }
+//        } else {
+//            Set<User> users = channel.getUsers();
+//            users.add(userService.getUserByLogin(principal.getName()));
+//            channelService.updateChannel(channel);
+//            channelDTO = channelDTOService.toDto(channel);
+//        }
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
@@ -267,9 +266,19 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<ChannelDTO> getChannelByName(@PathVariable("name") String name) {
-        Channel channelByName = channelService.getChannelByName(name);
-        ChannelDTO channelDTO = channelDTOService.toDto(channelByName);
-        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+        System.out.println("Работает тут!!!");
+        // api/channels/name
+//        Channel channelByName = channelService.getChannelByName(name);
+        Optional<ChannelDTO> channelByName = channelService.getChannelDTOByName(name);
+        if (channelByName.isPresent()) {
+            //        ChannelDTO channelDTO = channelDTOService.toDto(channelByName);
+            System.out.println("ChannelDTO: " + channelByName.toString());
+            return new ResponseEntity<>(channelByName.get(), HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest()
+                           .build();
+        }
+
     }
 
     @PostMapping(value = "/archiving/{id}")

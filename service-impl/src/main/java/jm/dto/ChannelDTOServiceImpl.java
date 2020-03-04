@@ -48,7 +48,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channelDTO.setIsPrivate(channel.getIsPrivate());
         channelDTO.setTopic(channel.getTopic());
         channelDTO.setIsApp(channel.getIsApp());
-        channelDTO.setCreatedDate(channel.getCreatedDate());
+//        channelDTO.setCreatedDate(channel.getCreatedDate());
 
         channelDTO.setIsArchived(channel.getArchived());
         channelDTO.setIsApp(channel.getIsApp());
@@ -56,6 +56,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         return channelDTO;
     }
 
+    //TODO: подумать как получить все сразу все сущности в ДТО из базы
     @Override
     public List<ChannelDTO> toDto(List<Channel> channels) {
         if (channels==null) {

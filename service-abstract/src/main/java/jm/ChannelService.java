@@ -4,26 +4,31 @@ import jm.dto.ChannelDTO;
 import jm.model.Channel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChannelService {
-    List<Channel> gelAllChannels();
+    List<Channel> gelAllChannels ();
 
-    void createChannel(Channel channel);
+    void createChannel (Channel channel);
 
-    void deleteChannel(Long id);
+    void deleteChannel (Long id);
 
-    void updateChannel(Channel channel);
+    void updateChannel (Channel channel);
 
-    Channel getChannelById(Long id);
+    Channel getChannelById (Long id);
 
-    Channel getChannelByName(String name);
+    Optional<ChannelDTO> getChannelDTOById (Long id);
 
-    List<Channel> getChannelsByOwnerId(Long ownerId);
+    Channel getChannelByName (String name);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+    Optional<ChannelDTO> getChannelDTOByName (String name);
 
-    List<Channel> getChannelsByWorkspaceId(Long id);
+    List<Channel> getChannelsByOwnerId (Long ownerId);
 
-    List<Channel> getChannelsByUserId(Long userId);
+    List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
+
+    List<Channel> getChannelsByWorkspaceId (Long id);
+
+    List<Channel> getChannelsByUserId (Long userId);
 
 }

@@ -1,7 +1,6 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -44,11 +43,14 @@ public class Bot {
 
     @JsonIgnoreProperties
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    @JoinTable(
+            name = "channels_bots",
+            joinColumns = @JoinColumn(name = "bot_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "bots_slashCommands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slashCommand_id"))
+    @JoinTable(name = "bots_slash_Commands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slash_Command_id"))
     private Set<SlashCommand> commands = new HashSet<>();
 
     @Column(name = "date_create", nullable = false)

@@ -1,33 +1,45 @@
 package jm.api.dao;
 
-import jm.model.Channel;
 import jm.dto.ChannelDTO;
+import jm.model.Channel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ChannelDAO {
 
-    List<Channel> getAll();
+    List<Channel> getAll ();
 
-    void persist(Channel channel);
+    void persist (Channel channel);
 
-    void deleteById(Long id);
+    void deleteById (Long id);
 
-    Channel merge(Channel channel);
+    Channel merge (Channel channel);
 
-    Channel getById(Long id);
+    Channel getById (Long id);
 
-    Channel getChannelByName(String name);
+    Channel getChannelByName (String name);
 
-    List<Channel> getChannelsByOwnerId(Long ownerId);
+    Set<Long> getSetUserIdsByName (String name);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+    Set<Long> getSetBotIdsByName (String name);
 
-    List<Channel> getChannelsByWorkspaceId(Long id);
+    List<Channel> getChannelsByOwnerId (Long ownerId);
 
-    List<Channel> getChannelsByUserId(Long userId);
+    List<Channel> getChannelsByWorkspaceId (Long id);
 
-    List<Channel> getChannelsByIds(Set<Long> ids);
+    List<Channel> getChannelsByUserId (Long userId);
+
+    List<Channel> getChannelsByIds (Set<Long> ids);
+
+    Optional<ChannelDTO> getIdByName (String name);
+
+    Optional<ChannelDTO> getChannelDTOByNameWithoutFieldsUserIdsAndBotIds (String name);
+
+    Optional<ChannelDTO> getChannelDTOByIdWithoutFieldsUserIdsAndBotIds (Long id);
+
+    List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
+
 
 }

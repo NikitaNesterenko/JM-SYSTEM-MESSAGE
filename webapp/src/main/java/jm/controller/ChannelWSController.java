@@ -1,21 +1,19 @@
 package jm.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import jm.ChannelService;
-import jm.dto.ChannelDTOServiceImpl;
+import jm.dto.ChannelDTO;
 import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.ChannelWS;
 import jm.model.ChannelWSTopic;
-import jm.views.ChannelViews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+
+import java.util.Optional;
 
 @Controller
 public class ChannelWSController {
@@ -45,10 +43,19 @@ public class ChannelWSController {
     @SendTo("/topic/channel.changeTopic")
     public String changeChannelTopic(ChannelWSTopic zapros)
             throws JsonProcessingException {
-        Long channel_id=Long.parseLong(zapros.getId());
-        Channel channel = channelService.getChannelById(channel_id);
-        channel.setTopic(zapros.getTopic());
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
+        Long channel_id = Long.parseLong(zapros.getId());
+        //TODO: удалить закомментированное
+//        Channel channel = channelService.getChannelById(channel_id);
+//        channel.setTopic(zapros.getTopic());
+        Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(channel_id);
+        if (channelDTO.isPresent()) {
+            channelDTO.get()
+                    .setTopic(zapros.getTopic());
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(channelDTO.get());
+        } else {
+            //TODO: Что вернуть если такого id нет?
+            return "Not find Channel by id";
+        }
     }
 }
