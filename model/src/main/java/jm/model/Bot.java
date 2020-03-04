@@ -62,24 +62,18 @@ public class Bot {
     @EqualsAndHashCode.Include
     private String token;
 
-    @Column(name = "is_default", nullable = false)
-    @EqualsAndHashCode.Include
-    private Boolean isDefault;
-
-    public Bot(String name, String nickName, LocalDateTime dateCreate, Boolean isDefault) {
+    public Bot(String name, String nickName, LocalDateTime dateCreate) {
         this.name = name;
         this.nickName = nickName;
         this.dateCreate = dateCreate;
-        this.isDefault = isDefault;
         this.commands = new HashSet<>();
     }
 
-    public Bot(String name, String nickName, Set<SlashCommand> commands, LocalDateTime dateCreate, Boolean isDefault) {
+    public Bot(String name, String nickName, Set<SlashCommand> commands, LocalDateTime dateCreate) {
         this.name = name;
         this.nickName = nickName;
         this.commands = commands;
         this.dateCreate = dateCreate;
-        this.isDefault = isDefault;
     }
 
     // Constructor for simplify BotDTO->Bot conversion.

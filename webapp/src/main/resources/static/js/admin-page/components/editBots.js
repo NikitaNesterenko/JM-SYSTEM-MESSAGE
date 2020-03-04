@@ -49,11 +49,6 @@ $('#new-token-generate').click(function () {
         })
 });
 
-$('.link-edit-bot').on('click', function (e) {
-    bot_service.getById(e.target.id)
-        .then(bot => editBot(bot));
-});
-
 $('#update-custom-bot').on('click', function () {
     let id = document.getElementById('bot-id').value;
     let nick = document.getElementById('nick-custom-bot').value;

@@ -1,7 +1,7 @@
 package jm;
 
-import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
+import jm.api.dao.ChannelDAO;
 import jm.model.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,11 +66,6 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public  List<Channel> getChannelsByUserId(Long userId) {
         return channelDAO.getChannelsByUserId(userId);
-    }
-
-    @Override
-    public Long getWorkspaceIdByChannelId(Long channelId) {
-        return channelDAO.getWorkspaceIdByChannelId(channelId);
     }
 
 }

@@ -40,7 +40,6 @@ public class BotServiceImpl implements BotService {
         bot.setToken(UUID.randomUUID().toString());
         bot.setDateCreate(LocalDateTime.now());
         bot.setToken(UUID.randomUUID().toString());
-        bot.setIsDefault(false);
 
         return botDAO.save(bot);
     }
@@ -50,11 +49,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public void updateBot(Bot bot) {
-        Bot existingBot = botDAO.getById(bot.getId());
-        existingBot.setName(bot.getName());
-        existingBot.setNickName(bot.getNickName());
-        existingBot.setToken(bot.getToken());
-        botDAO.merge(existingBot);
+        botDAO.merge(bot);
     }
 
     @Override
