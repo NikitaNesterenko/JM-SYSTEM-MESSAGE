@@ -8,16 +8,12 @@ import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
 import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
-// import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
-// const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
 const switch_workspace_window = new SwitchWorkspaceWindow();
 let current_wks = workspace_service.getChosenWorkspace();
-// const current_chn = channel_service.getChosenChannel();
-
 
 window.addEventListener('load', async () => {
     const workspace_event = new WorkspacePageEventHandler(await logged_user);
@@ -26,19 +22,16 @@ window.addEventListener('load', async () => {
     const thread_view = new ThreadMessageView();
     const chat = new DMView(direct_message_view);
     const channel_view = new ChannelView();
-    // const channel = new ChannelRestPaginationService();
 
     switch_workspace_window.buildEvents();
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
-    // channel_view.setFlaggedItems();
-    // channel_view.showPeopleInChannel();
 
     const stomp_client = new StompClient(channel_message_view, thread_view, direct_message_view, channel_view);
     stomp_client.connect();
 
     chat.setLoggedUser(await logged_user);
-    chat.onClickDirectMessageChat();
+    chat.changeColorOnPressedButton();
     chat.onClickModalMessage();
 
     channel_message_view.onClickEditMessage(".btnEdit_ChannelMessage");
@@ -51,8 +44,11 @@ window.addEventListener('load', async () => {
     workspace_event.onAddDirectMessageClick();
     workspace_event.onWindowClick();
     workspace_event.onSelectChannel();
+    workspace_event.onSelectDirectMessage();
     workspace_event.onAddChannelSubmit();
     workspace_event.onHideChannelModal();
+
+    channel_view.selectFirstSidebarButton();
 });
 
 $(document).ready(async () => {
@@ -87,14 +83,13 @@ window.homeAction = function homeAction() {
             getCalendarEvents(dateText);
         }
     });
-}
+};
 
 window.messageAction = function messageAction() {
-    alert("TO DO");
     $(".p-workspace__primary_view_bodyMessage").html(`<div>
          <span id="dayInfo">Message</span>
      </div>`);
-}
+};
 
 function showCalendarWorkspace() {
     $(".p-workspace__primary_view_body").html(`<div class="ml-2 mr-2">
@@ -188,10 +183,10 @@ $("#addGoogleCalendarIdSecretSubmit").click(
             createdDate: (current_wks).createdDate,
             googleClientId: googleCalendarClientId,
             googleClientSecret: googleCalendarClientSecret
-        }
+        };
         await workspace_service.update(entity).then(()=>{
-            $("#addGoogleCalendarIdSecretModal").modal('toggle')
-            $('#appsModal').modal('toggle')
+            $("#addGoogleCalendarIdSecretModal").modal('toggle');
+            $('#appsModal').modal('toggle');
             location.href = "/application/google/calendar";
             return false;
         });

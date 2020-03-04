@@ -10,7 +10,6 @@ import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,11 +31,13 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
     @Override
     public List<DirectMessageDTO> toDto(List<DirectMessage> directMessages) {
+
         if (directMessages == null || directMessages.isEmpty()) {
             return Collections.emptyList();
         }
 
         List<DirectMessageDTO> directMessageDTOList = new ArrayList<>();
+
         for (DirectMessage directMessage: directMessages) {
             directMessageDTOList.add(toDto(directMessage));
         }
@@ -120,7 +121,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         directMessage.setIsDeleted(directMessageDTO.getIsDeleted());
 
         Set<Long> recipientUserIds = directMessageDTO.getRecipientUserIds();
-        List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
+        List<User> recipientUsers = userDAO.getUsersByIDs(recipientUserIds);
         directMessage.setRecipientUsers(new HashSet<>(recipientUsers));
         directMessage.setFilename(directMessageDTO.getFilename());
         directMessage.setWorkspaceId(directMessageDTO.getWorkspaceId());

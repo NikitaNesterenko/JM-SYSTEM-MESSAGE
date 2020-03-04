@@ -36,6 +36,9 @@ public class ChannelTopicRestController {
                     )
             })
     public ResponseEntity<String> getChannelTopic(@PathVariable Long id) {
+        if (id == 0) {
+            return null;
+        }
         return ResponseEntity.ok(channelService.getChannelById(id).getTopic());
     }
 

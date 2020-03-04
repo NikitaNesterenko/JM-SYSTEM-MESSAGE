@@ -38,8 +38,7 @@ public class ChannelRestController {
     private UserService userService;
     private ChannelDtoService channelDTOService;
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            ChannelRestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChannelRestController.class);
 
     @Autowired
     public void setChannelService(ChannelService channelService) {
@@ -76,16 +75,6 @@ public class ChannelRestController {
     }
 
     @GetMapping(value = "/{id}")
-    @Operation(summary = "Get channel by id",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ChannelDTO.class)
-                            ),
-                            description = "OK: get channel"
-                    )
-            })
     public ResponseEntity<ChannelDTO> getChannelById(@PathVariable("id") Long id) {
         logger.info("Channel с id = {}", id);
         Channel channel = channelService.getChannelById(id);
@@ -95,16 +84,6 @@ public class ChannelRestController {
     }
 
     @GetMapping(value = "/user/{id}")
-    @Operation(summary = "Get channel by user id",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(type = "array", implementation = ChannelDTO.class)
-                            ),
-                            description = "OK: get channel"
-                    )
-            })
     public ResponseEntity<List<ChannelDTO>> getChannelsByUserId(@PathVariable("id") Long id) {
         List<Channel> channels = channelService.getChannelsByUserId(id);
         for (Channel channel : channels) {
@@ -116,17 +95,6 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/create")
-    @Operation(summary = "Create channel",
-            responses = {
-                    @ApiResponse(
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ChannelDTO.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "200", description = "OK: channel created"),
-                    @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create channel")
-            })
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
         Channel channel = channelService.getChannelByName(channelDTO.getName());
         if (channel == null) {
@@ -154,18 +122,7 @@ public class ChannelRestController {
     }
 
     @PutMapping(value = "/update")
-    @Operation(summary = "Update channel",
-            responses = {
-                    @ApiResponse(
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ChannelDTO.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "200", description = "OK: channel updated"),
-                    @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to update channel")
-            })
-    public ResponseEntity updateChannel(@RequestBody ChannelDTO channelDTO) {
+    public ResponseEntity<?> updateChannel(@RequestBody ChannelDTO channelDTO) {
         Channel existingChannel = channelService.getChannelById(channelDTO.getId());
         try {
             if (existingChannel == null) {
@@ -183,27 +140,13 @@ public class ChannelRestController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    @Operation(summary = "Delete channel",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK: channel deleted")
-            })
-    public ResponseEntity deleteChannel(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteChannel(@PathVariable("id") Long id) {
         channelService.deleteChannel(id);
         logger.info("Удален channel c id = {}", id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    @Operation(summary = "Get all channels",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(type = "array", implementation = ChannelDTO.class)
-                            ),
-                            description = "OK: get all channels"
-                    )
-            })
     public ResponseEntity<List<ChannelDTO>> getAllChannels() {
         logger.info("Список channel: ");
         List<Channel> channels = channelService.gelAllChannels();
@@ -216,16 +159,6 @@ public class ChannelRestController {
     }
 
     @GetMapping("/workspace/{workspace_id}/user/{user_id}")
-    @Operation(summary = "Gat channels by workspace & user",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(type = "array", implementation = ChannelDTO.class)
-                            ),
-                            description = "OK: get channels"
-                    )
-            })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser(
             @PathVariable("user_id") Long userId,
             @PathVariable("workspace_id") Long workspaceId
@@ -239,16 +172,6 @@ public class ChannelRestController {
     }
 
     @GetMapping("/workspace/{id}")
-    @Operation(summary = "Get channels by workspace",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(type = "array", implementation = ChannelDTO.class)
-                            ),
-                            description = "OK: get channels"
-                    )
-            })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceId(@PathVariable("id") Long id) {
         List<Channel> channelsByWorkspaceId = channelService.getChannelsByWorkspaceId(id);
         List<ChannelDTO> channelDTOList = channelDTOService.toDto(channelsByWorkspaceId);
@@ -256,16 +179,6 @@ public class ChannelRestController {
     }
 
     @GetMapping("/name/{name}")
-    @Operation(summary = "Get channel by name",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ChannelDTO.class)
-                            ),
-                            description = "OK: get channel by name"
-                    )
-            })
     public ResponseEntity<ChannelDTO> getChannelByName(@PathVariable("name") String name) {
         Channel channelByName = channelService.getChannelByName(name);
         ChannelDTO channelDTO = channelDTOService.toDto(channelByName);
@@ -273,16 +186,6 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/archiving/{id}")
-    @Operation(summary = "Archive channel",
-            responses = {
-                    @ApiResponse(
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ChannelDTO.class)
-                            )
-                    ),
-                    @ApiResponse(responseCode = "200", description = "OK: channel archived")
-            })
     public ResponseEntity<ChannelDTO> archivingChannel(@PathVariable("id") Long id) {
         Channel channel = channelService.getChannelById(id);
         channel.setArchived(true);

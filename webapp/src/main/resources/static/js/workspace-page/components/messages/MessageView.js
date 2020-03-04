@@ -66,10 +66,10 @@ export class MessageView {
     }
 
     createMessage(message) {
-        const user = message.userId === null ? {id: message.botId, name: message.botNickName} : {
-            id: message.userId,
-            name: message.userName
-        };
+        const user = message.user.id === null ?
+            {id: message.botId, name: message.botNickName} :
+            {id: message.user.id, name: message.user.name};
+
         this.dialog.setUser(user.id, user.name)
             .setDateHeader(message.dateCreate)
             .container(message)
@@ -94,9 +94,6 @@ export class MessageView {
                     .setMenuIcons(this.logged_user.id);
             }
         )
-    }
-
-    modify() {
     }
 
     updateMessage(message) {

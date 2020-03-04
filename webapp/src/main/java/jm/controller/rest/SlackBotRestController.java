@@ -1,4 +1,4 @@
-package jm.controller;
+package jm.controller.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jm.CommandsBotService;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class SlackBotController {
-    private Logger logger = LoggerFactory.getLogger(SlackBotController.class);
+public class SlackBotRestController {
+    private Logger logger = LoggerFactory.getLogger(SlackBotRestController.class);
     private CommandsBotService commandsBotService;
 
     @Autowired
-    public SlackBotController(CommandsBotService commandsBotService) {
+    public SlackBotRestController(CommandsBotService commandsBotService) {
         this.commandsBotService = commandsBotService;
     }
 

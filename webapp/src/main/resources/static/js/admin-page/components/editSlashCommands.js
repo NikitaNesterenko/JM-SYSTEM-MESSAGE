@@ -14,6 +14,7 @@ export class SlashCommand {
 }
 
 $('#add-command').click(function () {
+    $('#theme-form-edit-command').text('Create New Command');
     $('#command-id').val('');
     $('#name-for-bot').val('');
     $('#description-for-custom-bot').val('');
@@ -30,7 +31,7 @@ $('#save-command-for-bot').click(function () {
     let botId = document.getElementById('bot-id').value;
     let typeId = document.getElementById('type-command-id').value;
 
-    if (name === '' || description === '' || hints === ''){
+    if (name === '' || description === '' || hints === '' || typeId === ''){
         alert('Заполните все поля');
     } else {
         let slashCommand = new SlashCommand(id, name, description, hints, botId, typeId);
@@ -48,6 +49,7 @@ $('#save-command-for-bot').click(function () {
 $('.btn-edit-command').click(function (e) {
     slash_command_service.getSlashCommandById(e.target.id)
         .then(slashCommand => {
+            $('#theme-form-edit-command').text('Edit New Command');
             $('#bot-id').val(slashCommand.botId);
             $('#command-id').val(slashCommand.id);
             $('#name-for-bot').val(slashCommand.name);

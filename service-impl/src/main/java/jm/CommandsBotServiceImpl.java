@@ -68,10 +68,10 @@ public class CommandsBotServiceImpl implements CommandsBotService {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        boolean isDefaultBot = slashCommandService.getSlashCommandByName(commandName).getBot().getId() == 1L;
+        boolean isDefaultBot = slashCommandService.getSlashCommandByName(commandName).getBot().getIsDefault();
 
         if (isDefaultBot){
-            response = createReportByDefaultBot(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
+                response = createReportByDefaultBot(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
         } else {
             response = createReport(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
         }
@@ -79,6 +79,10 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         return mapper.writeValueAsString(response);
     }
 
+    /*
+    Обработка команд недефолтных ботов
+    Для команд типа "send" сообщение (записано в Description) будет отправлено в текущий канал.
+     */
     private Map<String, String> createReport(SlashCommandDto command, User currentUser, Channel currentChannel,
                                              String commandName, String commandBody, Map<String, String> response,
                                              ObjectMapper mapper) throws JsonProcessingException {
@@ -86,6 +90,8 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         SlashCommand slashCommand = slashCommandService.getSlashCommandByName(commandName);
 
         switch (slashCommand.getType().getName()) {
+            case "all":
+                break;
             case "get":
                 break;
             case "send":
@@ -98,6 +104,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         return response;
     }
 
+    // Обработка команд дефольного бота
     private Map<String, String> createReportByDefaultBot(SlashCommandDto command, User currentUser, Channel currentChannel,
                                              String commandName, String commandBody, Map<String, String> response,
                                              ObjectMapper mapper) throws JsonProcessingException {
@@ -311,7 +318,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             conv.setAssociatedUser(toUser);
             conv.setShowForAssociated(true);
             conv.setShowForOpener(true);
-            conversationService.createConversation(conv);
+            conversationService.createOrShowConversation(conv);
             conv = conversationService.getConversationByUsersId(fromId, toUser.getId());
         }
 
@@ -323,6 +330,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         dm.setContent(message);
         dm.setIsDeleted(false);
         dm.setRecipientUsers(new HashSet<>());
+        dm.setWorkspaceId(workspace.getId());
         directMessageService.saveDirectMessage(dm);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -453,6 +461,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         newMessage.setContent(reportMsg);
         newMessage.setChannelId(channelId);
         newMessage.setRecipientUsers(new HashSet<>());
+        newMessage.setWorkspaceId(channelService.getWorkspaceIdByChannelId(channelId));
         if (saveToBase) {
             messageService.createMessage(newMessage);
         }

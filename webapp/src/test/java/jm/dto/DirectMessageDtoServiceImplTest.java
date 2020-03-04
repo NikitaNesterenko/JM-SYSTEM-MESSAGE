@@ -87,7 +87,7 @@ public class DirectMessageDtoServiceImplTest {
   @Test
   public void toEntity_Should_Return_Direct_Message() {
     when(userDAO.getById(1L)).thenReturn(user1);
-    when(userDAO.getUsersByIds(null)).thenReturn(Collections.emptyList());
+    when(userDAO.getUsersByIDs(null)).thenReturn(Collections.emptyList());
     when(conversationDAO.getById(4L)).thenReturn(conversation);
 
     DirectMessageDTO directMessageDTO = new DirectMessageDTO();
