@@ -3,7 +3,6 @@ package jm.dao;
 import jm.api.dao.BotDAO;
 import jm.model.Bot;
 import jm.model.Channel;
-import jm.model.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -11,12 +10,18 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 @Transactional
 public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
+
+    @Override
+    public Bot save(Bot bot) {
+        return entityManager.merge(bot);
+    }
 
     @Override
     public List<Bot> getBotsByWorkspaceId(Long id) {
@@ -42,6 +47,18 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    @Override
+    public Optional<Bot> findByToken(String token) {
+        try {
+            Bot bot = entityManager.createQuery("SELECT b FROM Bot b WHERE b.token = :token", Bot.class)
+                    .setParameter("token", token)
+                    .getSingleResult();
+            return Optional.of(bot);
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 }

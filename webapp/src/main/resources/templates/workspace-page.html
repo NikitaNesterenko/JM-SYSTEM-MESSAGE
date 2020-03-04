@@ -86,17 +86,8 @@
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
-    <!-- direct message -->
-    <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>
-
     <script src="/js/helper_functions.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!--     <link rel="stylesheet" th:href="@{/css/workspacePage.css}"/>
-        <link rel="stylesheet" th:href="@{/css/workspaceAddChannelModal.css}"/>
-        <link rel="stylesheet" th:href="@{/css/button.css}"/>
-        <script src="/js/displayDiv.js"></script> -->
-
 
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page.css}"/>
     <link rel="stylesheet" th:href="@{/js/workspace-page/workspace-page-old.css}"/>
@@ -119,14 +110,12 @@
     <!--  Icon Library by DV  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--  Voice messaging feature by DV  -->
-    <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
-    <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
+    <script src="../js/voiceMessage/innerJs/WebAudioRecorder.min.js"></script>
+    <script src="../js/voiceMessage/innerJs/voiceRecorder.js"></script>
 
     <!-- channel info -->
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
-
-
 </head>
 
 <body class="supports_custom_scrollbar">
@@ -731,22 +720,6 @@
                                                 </div>
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
-                                            <!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
-                                            <!--                                                <div class="p-channel_sidebar__close_container">-->
-                                            <!--                                                    <button class="p-channel_sidebar__name_button">-->
-                                            <!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
-                                            <!--                                                        <span class="p-channel_sidebar__name-3">-->
-                                            <!--                                                            <span>Some username</span>-->
-                                            <!--                                                        </span>-->
-                                            <!--                                                    </button>-->
-                                            <!--                                                    <button class="p-channel_sidebar__close">-->
-                                            <!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
-                                            <!--                                                    </button>-->
-                                            <!--                                                </div>-->
-                                            <!--                                            </div>-->
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
-                                            <!--ЛИЧКА!!!-->
-
                                             <div class="p-channel_sidebar__direct-messages__container"
                                                  id="direct-messages__container_id">
                                             </div>
@@ -803,41 +776,6 @@
                 <div class="p-workspace__primary_view_contents" id="workspaceContent">
                     <div class="p-workspace__primary_view_body">
                         <div class="p-message_pane--classic-nav" id="all-messages">
-
-                            <!--MESSAGE CONTENT EXAMPLE
-                            <div class="p-message_pane&#45;&#45;classic-nav__app">
-                                <div class="c-virtual_list__container">
-                                    <div class="c-virtual_list__item">
-
-                                        <div class="c-message&#45;&#45;light">
-                                            <div class="c-message__gutter&#45;&#45;feature_sonic_inputs">
-                                                <button class="c-message__avatar__button">
-                                                    <img class="c-avatar__image">
-                                                </button>
-                                            </div>
-                                            <div class="c-message__content&#45;&#45;feature_sonic_inputs">
-                                                <div class="c-message__content_header">
-                                                    <span class="c-message__sender">
-                                                        <button class="c-message__sender_link">
-                                                            Some user
-                                                        </button>
-                                                    </span>
-                                                    <a class="c-timestamp&#45;&#45;static">
-                                                        <span class="c-timestamp__label">
-                                                            11:04 PM
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                                <span class="c-message__body">
-                                                    some message
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>-->
-
                             <div class="resize-triggers">
                                 <div class="expand-trigger">
                                     <div style="width: 1056px; height: 747px;"></div>
@@ -846,87 +784,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--                    <footer class="p-workspace__primary_view_footer">-->
-                    <!--                        <div class="p-message_pane_input">-->
-                    <!--                            <div class="p-message_pane_input_inner">-->
-                    <!--                                <div class="p-workspace__input">-->
-                    <!--                                    <div class="menu" id="menu">-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="p-message_input_field">-->
-                    <!--                                        <div class="ql-buttons">-->
-                    <!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
-                    <!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
-                    <!--                                            </button>-->
-                    <!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
-                    <!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
-                    <!--                                            </button>-->
-                    <!--                                            <div class="associatedUserList" id="associatedUserList">-->
-                    <!--                                                <form>-->
-                    <!--                                                    <select class="associatedUserListSelect"-->
-                    <!--                                                            id="associatedUserListSelect" multiple-->
-                    <!--                                                            name="usersList"></select>-->
-                    <!--                                                </form>-->
-                    <!--                                            </div>-->
-                    <!--                                        </div>-->
-                    <!--                                        <div class="ql-editor">-->
-                    <!--                                            <form id="form_message">-->
-                    <!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
-                    <!--                                            </form>-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-
-                    <!--<<<<<<< HEAD-->
-                    <!--                    <footer class="p-workspace__primary_view_footer">-->
-                    <!--                        <div class="p-message_pane_input">-->
-                    <!--                            <div class="p-message_pane_input_inner">-->
-                    <!--                                <div class="p-workspace__input">-->
-                    <!--                                    <div class="menu" id="menu">-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="p-message_input_field">-->
-                    <!--                                        <div class="ql-buttons">-->
-                    <!--                                            <button class="c-texty_input__button&#45;&#45;emoji">-->
-                    <!--                                                <i class="c-icon&#45;&#45;smile-o">😊</i>-->
-                    <!--                                            </button>-->
-                    <!--                                            <button class="c-texty_input__button" id="showAssociatedUsers">-->
-                    <!--                                                <i class="c-icon&#45;&#45;mentions">@</i>-->
-                    <!--                                            </button>-->
-                    <!--                                            <div class="associatedUserList" id="associatedUserList">-->
-                    <!--                                                <form>-->
-                    <!--                                                    <select class="associatedUserListSelect"-->
-                    <!--                                                            id="associatedUserListSelect" multiple-->
-                    <!--                                                            name="usersList"></select>-->
-                    <!--                                                </form>-->
-                    <!--                                            </div>-->
-                    <!--                                        </div>-->
-                    <!--                                        <div class="ql-editor">-->
-                    <!--                                            <form id="form_message">-->
-                    <!--                                                <input class="ql-editor__input-field" id="form_message_input" placeholder="Message #p_some-channel" type="text"/>-->
-                    <!--                                            </form>-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-                    <!--                                    <button class="p-message_input_file_button">-->
-                    <!--                                        <i class="c-icon&#45;&#45;paperclip">📎</i>-->
-                    <!--                                        <input type="file" style="display:none" id="fileDialog"/>-->
-                    <!--                                    </button>-->
-                    <!--=======-->
-                    <!--&lt;!&ndash;                                    <button class="p-message_input_file_button">&ndash;&gt;-->
-                    <!--&lt;!&ndash;                                        <i class="c-icon&#45;&#45;paperclip">📎</i>&ndash;&gt;-->
-                    <!--&lt;!&ndash;                                    </button>&ndash;&gt;-->
-                    <!--&gt;>>>>>> dev-->
-
-                    <!--                                </div>-->
-
-                    <!--                                <div class="p-notification_bar">-->
-                    <!--                                    <div class="p-notification_bar__section&#45;&#45;left"></div>-->
-                    <!--                                    <div class="p-notification_bar__section&#45;&#45;right">-->
-                    <!--                                        <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </footer>-->
-
                 </div>
             </div>
 
@@ -960,6 +817,7 @@
 
             <div class="p-workspace__footer">
                 <footer class="p-workspace__primary_view_footer">
+                    <div class="menu" id="menu"></div>
                     <div style="margin: 5px 10px 5px 10px; height: 90%; border: 1px solid gray; border-radius: 8px;
                         position: relative;">
                         <div class="p-message_pane_input p-message_input_field" style="padding-top: 10px; bottom: 0;
@@ -978,7 +836,7 @@
                             <form id="form_message" style="height: 100%; width: 100%; text-align: center;">
                                 <input class="ql-editor__input-field" id="form_message_input"
                                        placeholder="Динам конт" minlength="1" maxlength="1200"
-                                       type="text"/>
+                                       type="text" autocomplete="off"/>
                             </form>
                         </div>
                         <div name="attachedFiles">
@@ -1534,19 +1392,11 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class=" form-check-inline pb-3">
-                        <div class="col-md-10 px-0">
-                            <input class="directMessageModal form-control" type="text"
-                                   placeholder="Find or start a conversation">
-                        </div>
-                        <div class="col-lg-2">
-                            <button class="directMessageFindButton btn btn-dark" type="submit">Go</button>
-                        </div>
+                    <div class="col-md-10 px-0 pb-3">
+                        <input class="directMessageModal form-control lg" type="text"
+                               placeholder="Find or start a conversation">
                     </div>
-                    <!--                    <div class="">-->
-                    <!--                        <input class="directMessageModal form-control" type="text" placeholder="Find or start a conversation">-->
-                    <!--                        <button class="directMessageFindButton btn btn-dark" type="submit">Go</button>-->
-                    <!--                    </div>-->
+
                     <div id="DirectMessageTo">
                     </div>
                 </form>
@@ -1575,9 +1425,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div id="idSearchContent">
-                Что-то пошло не так
-            </div>
+            <div id="idSearchContent"></div>
         </div>
     </div>
 </div>

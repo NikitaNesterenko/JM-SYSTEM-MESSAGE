@@ -1,8 +1,6 @@
 package jm.api.dao;
 
-import jm.dto.UserDTO;
 import jm.model.User;
-
 import java.util.List;
 import java.util.Set;
 
@@ -28,11 +26,12 @@ public interface UserDAO {
 
     void updateUserRole(User user, String role);
 
-    List<User> getAllUsersInThisChannel(Long id);
+    List<User> getAllUsersByChannel(Long channelID);
 
-    List<UserDTO> getUsersInWorkspace(Long id);
-
-    List<User> getUsersByIds(Set<Long> ids);
+    List<User> getAllUsersByWorkspace(Long workspaceID);
 
     boolean isEmailInThisWorkspace(String email, Long id);
+
+    List<User> getUsersByIDs(Set<Long> userIDs);
+
 }

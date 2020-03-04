@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,9 +41,6 @@ public class UserRestControllerTest {
     @InjectMocks
     private UserRestController userRestController;
     private MockMvc mockMvc;
-
-
-
 
     @Before
     public void setUp() {
@@ -129,7 +125,7 @@ public class UserRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        verify(userService, times(1)).getAllUsersInThisChannel(channelTestId);
+        verify(userService, times(1)).getAllUsersByChannel(channelTestId);
     }
 
     /*  This method is impossible to test just now, because method now only give 200 status on success.
@@ -159,7 +155,7 @@ public class UserRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        verify(userService, times(1)).getAllUsersInWorkspace(workspaceTestId);
+        verify(userService, times(1)).getAllUsersByWorkspace(workspaceTestId);
     }
 }
 

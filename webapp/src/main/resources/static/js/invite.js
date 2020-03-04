@@ -88,7 +88,7 @@ window.addEventListener('load', function () {
     });
 
     $('#all-message-wrapper').on('click', function (event) {
-        if (menu_modal.style.display == "inline-table") {
+        if (menu_modal.style.display === "inline-table") {
             menu_modal.style.display = "none";
         }
     });

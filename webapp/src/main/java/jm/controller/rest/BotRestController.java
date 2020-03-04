@@ -5,17 +5,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jm.BotService;
-import jm.ChannelService;
-import jm.MessageService;
-import jm.WorkspaceService;
+import jm.*;
 import jm.dto.BotDTO;
 import jm.dto.BotDtoService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/rest/api/bot")
@@ -44,6 +44,31 @@ public class BotRestController {
         this.messageService = messageService;
         this.channelService = channelService;
         this.botDtoService = botDtoService;
+    }
+
+    @GetMapping("/generate.token")
+    public ResponseEntity<String> generateApiToken(){
+        String token = "{\"token\":\"" + UUID.randomUUID().toString() + "\"}";
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/test.send")
+    public ResponseEntity<String> testingSend(){
+        User user = userService.getUserById(1L);
+        Message message = new Message();
+        message.setChannelId(1L);
+        message.setUser(user);
+        message.setContent("Hello, it's testing message from " + user.getName());
+        message.setDateCreate(LocalDateTime.now());
+        message.setWorkspaceId(1L);
+
+        messageService.createMessage(message);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // DTO compliant
@@ -99,16 +124,16 @@ public class BotRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: bot created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create bot")
             })
-    public ResponseEntity createBot(@RequestBody BotDTO botDto) {
+    public ResponseEntity<BotDTO> createBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         try {
-            botService.createBot(bot);
+            bot = botService.createBot(bot);
             logger.info("Cозданный bot: {}", bot);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             logger.warn("Не удалось создать бота");
             ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.CREATED);
     }
 
     // DTO compliant
@@ -124,16 +149,19 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: bot updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
-    public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
+    public ResponseEntity<?> updateBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
+        existingBot.setName(bot.getName());
+        existingBot.setNickName(bot.getNickName());
+        existingBot.setToken(bot.getToken());
         if (existingBot == null) {
             logger.warn("Бот не найден");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            botService.updateBot(bot);
+            botService.updateBot(existingBot);
             logger.info("Обновлнный бот: {}", bot);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -142,10 +170,10 @@ public class BotRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: bot deleted")
             })
-    public ResponseEntity deleteBot(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteBot(@PathVariable("id") Long id) {
         botService.deleteBot(id);
         logger.info("Удален бот с id = {}", id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/{id}/channels/{name}/messages")
@@ -159,14 +187,14 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "201", description = "CREATED: bot message created")
             })
-    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
+    public ResponseEntity<?> createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
         Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
         message.setChannelId(channel.getId());
         message.setBot(bot);
         message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/channels")

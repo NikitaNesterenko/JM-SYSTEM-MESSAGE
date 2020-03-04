@@ -15,16 +15,16 @@ export class ActiveChatMembers {
     async populateDirectMessages() {
         const principal = await this.user_service.getLoggedUser();
         const conversations = await this.conversation_service.getAllConversationsByUserId(principal.id);
-        const workspace_id = await this.workspace_service.getChosenWorkspace();
+        const currentWorkspace = await this.workspace_service.getChosenWorkspace();
 
         const direct_messages_container = $("#direct-messages__container_id");
         direct_messages_container.empty();
 
         conversations.forEach((conversation, i) => {
-            if (conversation.workspace.id === workspace_id.id) {
-                const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel" ' +
+            if (conversation.workspace.id === currentWorkspace.id) {
+                const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel_direct" ' +
                     'style="height: min-content; width: 100%;"></div>');
-                conversation_queue_context_container.className = "p-channel_sidebar__channel";
+                conversation_queue_context_container.className = "p-channel_sidebar__channel_direct";
                 if (conversation.openingUser.id === principal.id) {
                     conversation_queue_context_container.append(this.messageChat(conversation.associatedUser, conversation.id));
                 } else {
@@ -37,8 +37,8 @@ export class ActiveChatMembers {
 
     messageChat(user, conversationId) {
         return `
-            <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
-                <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">${user.online == 1 ? "●" : "○"}</i>
+            <button class="p-channel_sidebar__name_button" data-user_id="${user.id}" value="${user.id}">
+                <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">${user.online === 1 ? "●" : "○"}</i>
                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
                     <span data-user_id="${user.id}">${user.name}</span>
                 </span>

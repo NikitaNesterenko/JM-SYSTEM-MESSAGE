@@ -63,7 +63,7 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
         // setting up 'users'
         Set<Long> userIds = workspaceDto.getUserIds();
         if (userIds != null) {
-            List<User> users = userDAO.getUsersByIds(userIds);
+            List<User> users = userDAO.getUsersByIDs(userIds);
             workspace.setUsers(new HashSet<>(users));
         }
 
