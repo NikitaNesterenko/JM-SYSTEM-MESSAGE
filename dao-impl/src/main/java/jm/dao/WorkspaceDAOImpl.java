@@ -12,7 +12,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,15 +77,37 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
         WorkspaceDTO test = null;
+        Tuple ttt;
         try {
-            TypedQuery<Tuple> ttt = (TypedQuery<Tuple>) entityManager.createNativeQuery("select ws.id, ws.name, ws.bots " +
-                    "from workspaces ws " +
-                    "where ws.id=:id", Tuple.class).setParameter("id", id);
-            test = (WorkspaceDTO) entityManager.createNativeQuery("select ws.id as \"id\", ws.name as \"name\" " +
-                    "from workspaces ws where ws.id=:id").setParameter("id", id)
-                    .unwrap(org.hibernate.query.NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
-                    .getSingleResult();
+            List<Long> botIds = entityManager.createNativeQuery("SELECT wb.bot_id " +
+                    "FROM workspaces_bots wb WHERE wb.workspace_id =:id")
+                    .setParameter("id", id)
+                    .getResultList();
+
+            List<Long> channelIds = entityManager.createNativeQuery("SELECT c.id " +
+                    "FROM channels c WHERE c.workspace_id =:id")
+                    .setParameter("id", id)
+                    .getResultList();
+
+            List<Long> userIds = entityManager.createNativeQuery("SELECT wu.user_id " +
+                    "FROM workspaces_users wu WHERE wu.workspace_id =:id")
+                    .setParameter("id", id)
+                    .getResultList();
+
+            List<Long> appId = entityManager.createNativeQuery("SELECT a.id " +
+                    "FROM apps a WHERE a.workspace_id =:id")
+                    .setParameter("id", id)
+                    .getResultList();
+
+            ttt = (Tuple) entityManager.createNativeQuery("select ws.id, ws.name, ws.created_date, " +
+                    "ws.google_client_id, ws.google_client_secret, ws.is_private, owner_id" +
+                    " from workspaces ws " +
+                    "where ws.id=:id", Tuple.class).setParameter("id", id).getResultList().get(0);
+            test = new WorkspaceDTO.Builder().setId(((BigInteger) ttt.get("id")).longValue()).setName((String) ttt.get("name"))
+                    .setCreatedDate((LocalDateTime) ttt.get("created_date")).setOwnerId((Long) ttt.get("owner_id"))
+                    .setPrivate((Boolean) ttt.get("is_private")).setUserIds(new HashSet<>(userIds))
+                    .setChannelIds(new HashSet<>(channelIds)).setBotsIds(new HashSet<>(botIds)).setAppsIds(new HashSet<>(appId)).build();
+            System.out.println("");
         } catch (Exception e) {
             e.printStackTrace();
         }

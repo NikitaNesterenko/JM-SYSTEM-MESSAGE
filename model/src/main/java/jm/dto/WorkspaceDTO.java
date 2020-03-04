@@ -59,4 +59,65 @@ public class WorkspaceDTO {
             this.setBotsIds(botsIds);
         }
     }
+
+    public static class Builder {
+        private Long id;
+        private String name;
+        private Set<Long> userIds;
+        private Set<Long> channelIds;
+        private Set<Long> appsIds;
+        private Set<Long> botsIds;
+        private Long ownerId;
+        private Boolean isPrivate;
+        private LocalDateTime createdDate;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setUserIds(Set<Long> userIds) {
+            this.userIds = userIds;
+            return this;
+        }
+
+        public Builder setChannelIds(Set<Long> channelIds) {
+            this.channelIds = channelIds;
+            return this;
+        }
+
+        public Builder setAppsIds(Set<Long> appsIds) {
+            this.appsIds = appsIds;
+            return this;
+        }
+
+        public Builder setBotsIds(Set<Long> botsIds) {
+            this.botsIds = botsIds;
+            return this;
+        }
+
+        public Builder setOwnerId(Long ownerId) {
+            this.ownerId = ownerId;
+            return this;
+        }
+
+        public Builder setPrivate(Boolean aPrivate) {
+            isPrivate = aPrivate;
+            return this;
+        }
+
+        public Builder setCreatedDate(LocalDateTime createdDate) {
+            this.createdDate = createdDate;
+            return this;
+        }
+
+        public WorkspaceDTO build() {
+            return new WorkspaceDTO(this.id, this.name, this.userIds, this.channelIds, this.appsIds, this.botsIds, this.ownerId,this.isPrivate, this.createdDate);
+        }
+    }
 }
