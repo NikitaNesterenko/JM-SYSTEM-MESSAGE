@@ -461,7 +461,6 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         newMessage.setContent(reportMsg);
         newMessage.setChannelId(channelId);
         newMessage.setRecipientUsers(new HashSet<>());
-//        newMessage.setWorkspaceId(channelService.getChannelById(channelId).getWorkspace().getId());
         newMessage.setWorkspaceId(channelService.getWorkspaceIdByChannelId(channelId));
         if (saveToBase) {
             messageService.createMessage(newMessage);
