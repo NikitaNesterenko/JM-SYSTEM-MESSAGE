@@ -26,7 +26,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
 
     @Autowired
     WorkspaceService workspaceService;
-
+    //channelDTOServiceImpl.toDto
     @Override
     public ChannelDTO toDto(Channel channel) {
         if (channel == null) {

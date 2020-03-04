@@ -37,39 +37,40 @@ public class ChannelDTO {
     private Boolean isArchived;
     private Boolean isApp;
 
-    public ChannelDTO (Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public ChannelDTO (Long id, String name, Set<Bot> bots) {
-        this.id = id;
-        this.name = name;
-        this.botIds = bots.stream()
-                              .map(Bot::getId)
-                              .collect(Collectors.toSet());
-    }
-
+    //TODO: удалить лишнее
+//    public ChannelDTO (Long id, String name) {
+//        this.id = id;
+//        this.name = name;
+//    }
+//
+//    public ChannelDTO (Long id, String name, Set<Bot> bots) {
+//        this.id = id;
+//        this.name = name;
+//        this.botIds = bots.stream()
+//                              .map(Bot::getId)
+//                              .collect(Collectors.toSet());
+//    }
 
     public ChannelDTO (Long id, String name, Boolean isPrivate) {
-        this(id, name);
+        this.id = id;
+        this.name = name;
         this.isPrivate = isPrivate;
     }
 
-    public ChannelDTO (Set<User> users, Set<Bot> bots) {
-        this.userIds = users.stream()
-                               .map(User::getId)
-                               .collect(Collectors.toSet());
-        this.botIds = bots.stream()
-                              .map(Bot::getId)
-                              .collect(Collectors.toSet());
-    }
-
-    public ChannelDTO (Set<Bot> bots) {
-        this.botIds = bots.stream()
-                              .map(Bot::getId)
-                              .collect(Collectors.toSet());
-    }
+//    public ChannelDTO (Set<User> users, Set<Bot> bots) {
+//        this.userIds = users.stream()
+//                               .map(User::getId)
+//                               .collect(Collectors.toSet());
+//        this.botIds = bots.stream()
+//                              .map(Bot::getId)
+//                              .collect(Collectors.toSet());
+//    }
+//
+//    public ChannelDTO (Set<Bot> bots) {
+//        this.botIds = bots.stream()
+//                              .map(Bot::getId)
+//                              .collect(Collectors.toSet());
+//    }
 
     public ChannelDTO (Channel channel) {
         this.id = channel.getId();
@@ -95,23 +96,23 @@ public class ChannelDTO {
         this.isApp = channel.getIsApp();
     }
 
-    public ChannelDTO (Long id, String name, Set<User> users, Set<Bot> bots, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate, String topic, Boolean isApp) {
-        this.id = id;
-        this.name = name;
-        this.userIds = users.stream()
-                               .map(User::getId)
-                               .collect(Collectors.toSet());
-        this.botIds = bots.stream()
-                              .map(Bot::getId)
-                              .collect(Collectors.toSet());
-        this.workspaceId = workspaceId;
-        this.ownerId = ownerId;
-        this.isPrivate = isPrivate;
-        this.createdDate = createdDate;
-        this.topic = topic;
-        this.isArchived = isArchived;
-        this.isApp = isApp;
-    }
+//    public ChannelDTO (Long id, String name, Set<User> users, Set<Bot> bots, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate, String topic, Boolean isApp) {
+//        this.id = id;
+//        this.name = name;
+//        this.userIds = users.stream()
+//                               .map(User::getId)
+//                               .collect(Collectors.toSet());
+//        this.botIds = bots.stream()
+//                              .map(Bot::getId)
+//                              .collect(Collectors.toSet());
+//        this.workspaceId = workspaceId;
+//        this.ownerId = ownerId;
+//        this.isPrivate = isPrivate;
+//        this.createdDate = createdDate;
+//        this.topic = topic;
+//        this.isArchived = isArchived;
+//        this.isApp = isApp;
+//    }
 
     public ChannelDTO (Long id, String name, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate, String topic, Boolean isApp) {
         this.id = id;

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.ChannelService;
 import jm.dto.ChannelDTO;
 import jm.dto.ChannelDtoService;
-import jm.model.Channel;
 import jm.model.ChannelWS;
 import jm.model.ChannelWSTopic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +30,17 @@ public class ChannelWSController {
     @SendTo("/topic/channel")
     public String createChannel(ChannelWS channelWS)
             throws JsonProcessingException {
+        //TODO: удалить лишнее
+//        Channel channel = channelService.getChannelByName(channelWS.getName());
+        Optional<ChannelDTO> channelDTO = channelService.getChannelDTOByName(channelWS.getName());
+        if (channelDTO.isPresent()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(channelDTO.get());
+        } else {
+            //TODO: Что вернуть если channel с таким Name нет?
+            return "Not find Channel by name";
+        }
 
-        Channel channel = channelService.getChannelByName(channelWS.getName());
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
     }
 
     // id -айди канала на котором изменить топик
@@ -54,7 +60,7 @@ public class ChannelWSController {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(channelDTO.get());
         } else {
-            //TODO: Что вернуть если channel с таким id нет?
+            //TODO: Что вернуть если channel с таким Id нет?
             return "Not find Channel by id";
         }
     }
