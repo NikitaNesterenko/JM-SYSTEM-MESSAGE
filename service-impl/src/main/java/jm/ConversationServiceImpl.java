@@ -4,7 +4,6 @@ import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -25,8 +24,18 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
-    public void createConversation(Conversation conversation) {
-        conversationDAO.persist(conversation);
+    public List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID) {
+        return conversationDAO.getAllShownConversations(workspaceID, workspaceID);
+    }
+
+    @Override
+    public void createOrShowConversation(Conversation conversation) {
+        Conversation conversationCheck = conversationDAO.getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId());
+        if (conversationCheck == null) {
+            conversationDAO.persist(conversation);
+        } else {
+            conversationDAO.showConversation(conversationCheck.getId(), conversation.getOpeningUser().getId());
+        }
     }
 
     @Override

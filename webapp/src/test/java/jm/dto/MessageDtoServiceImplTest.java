@@ -89,7 +89,7 @@ public class MessageDtoServiceImplTest {
   public void toEntity_Should_Return_Message() {
     when(userDAO.getById(1L)).thenReturn(user1);
     when(messageDAO.getById(2L)).thenReturn(sharedMessage);
-    when(userDAO.getUsersByIds(new HashSet<>(Arrays.asList(1L, 2L))))
+    when(userDAO.getUsersByIDs(new HashSet<>(Arrays.asList(1L, 2L))))
         .thenReturn(Arrays.asList(user1, user2));
     MessageDTO messageDTO = new MessageDTO(message);
     messageDTO.setUserId(1L);

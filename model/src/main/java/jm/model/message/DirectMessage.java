@@ -1,11 +1,9 @@
 package jm.model.message;
 
-import jm.dto.DirectMessageDTO;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.Set;
 
