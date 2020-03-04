@@ -5,7 +5,6 @@ import jm.api.dao.UserDAO;
 import jm.model.Message;
 import jm.model.User;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +49,6 @@ public class UserDtoServiceImpl implements UserDtoService {
             return null;
         }
 
-        // creating new User with simple fields copied from UserDTO
         User user = new User(userDTO);
 
         // setting up 'password'
@@ -66,8 +64,6 @@ public class UserDtoServiceImpl implements UserDtoService {
         List<Message> starredMessagesList = messageDAO.getMessagesByIds(userDTO.getStarredMessageIds(), false);
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
-
         return user;
     }
-
 }

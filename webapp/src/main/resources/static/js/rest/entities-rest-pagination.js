@@ -26,9 +26,15 @@ export class UserRestPaginationService extends RestPaginationService {
     getUserById = async (id) => {
         const user = await fetch(`/rest/api/users/${id}`);
         return await user.json();
-    }
+    };
+
+    getAllUsersForDirectMessageList = async (workspaceID, loggedUserID) => {
+        const user = await fetch(`/rest/api/users/getAllForDM/${workspaceID}/${loggedUserID}`);
+        return await user.json();
+    };
 }
 
+// =======================================================================
 export class MessageRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/messages');
@@ -74,6 +80,7 @@ export class MessageRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class BotRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/bot');
@@ -130,6 +137,7 @@ export class BotRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class SlashCommandRestPaginationService extends RestPaginationService {
     constructor() {
         super("/rest/api/slashcommand");
@@ -178,6 +186,7 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class ChannelTopicRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels/');
@@ -198,6 +207,7 @@ export class ChannelTopicRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class ChannelRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/channels');
@@ -243,6 +253,7 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class WorkspaceRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/workspaces');
@@ -327,6 +338,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     }
 }
 
+// =======================================================================
 export class StorageService {
 
     uploadFile = async (file) => {
@@ -339,8 +351,9 @@ export class StorageService {
     };
 }
 
+// =======================================================================
 export class InviteRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/invites');
     }
 
@@ -353,10 +366,12 @@ export class InviteRestPaginationService extends RestPaginationService {
     }
 }
 
-export class ThreadChannelRestPaginationService extends  RestPaginationService{
-    constructor(){
+// =======================================================================
+export class ThreadChannelRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/threads');
     }
+
     getThreadChannelByChannelMessageId = async (id) => {
         const response = await fetch('/rest/api/threads/' + id);
         return response.json();
@@ -376,29 +391,41 @@ export class ThreadChannelRestPaginationService extends  RestPaginationService{
     };
 }
 
-export class ThreadChannelMessageRestPaginationService extends  RestPaginationService{
-    constructor(){
+// =======================================================================
+export class ThreadChannelMessageRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/threads/messages');
     }
+
     getThreadChannelMessagesByThreadChannelId = async (id) => {
         const response = await fetch('/rest/api/threads/messages/' + id);
         return response.json();
     };
 
-    createThreadMsg = async (msg,user) => {
+    createThreadMsg = async (msg, user) => {
         const response = await fetch(`/rest/api/threads/messages/create`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(msg,user)
+            body: JSON.stringify(msg, user)
         });
         return response.json();
     }
 }
 
+// =======================================================================
 export class ConversationRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/conversations');
     }
+
+    createOrShowConversation = async (conversation) => {
+        const response = await fetch(`/rest/api/conversations/createOrShow`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(conversation)
+        });
+        return response.status;
+    };
 
     getAllConversationsByUserId = async (id) => {
         const response = await fetch(`/rest/api/conversations/user/${id}`);
@@ -416,6 +443,7 @@ export class ConversationRestPaginationService extends RestPaginationService {
     };
 }
 
+// =======================================================================
 export class DirectMessagesRestController extends RestPaginationService {
     constructor() {
         super('/rest/api/direct_messages');

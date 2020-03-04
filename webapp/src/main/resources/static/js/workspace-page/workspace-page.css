@@ -1532,7 +1532,16 @@ button:focus {
     position: relative;
     line-height: 1.46668;
     font-weight: 400;
-    /*font-variant-ligatures: common-ligatures;*/
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-size: 15px;
+    height: 26px;
+}
+
+.p-channel_sidebar__channel_direct {
+    position: relative;
+    line-height: 1.46668;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-size: 15px;
@@ -1543,7 +1552,15 @@ button:focus {
     background: #461643;
 }
 
+.p-channel_sidebar__channel_direct:hover {
+    background: #461643;
+}
+
 .p-channel_sidebar__channel:hover .cross {
+    display: inline-block;
+}
+
+.p-channel_sidebar__channel_direct:hover .cross {
     display: inline-block;
 }
 
@@ -2445,6 +2462,7 @@ button:focus {
     right: -50px;
     bottom: 0;
     height: 100%;
+    width: min-content;
     transform: translateZ(0);
 }
 

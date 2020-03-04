@@ -7,7 +7,7 @@ public interface ConversationService {
 
     List<Conversation> getAllConversations();
 
-    void createConversation(Conversation conversation);
+    void createOrShowConversation(Conversation conversation);
 
     void deleteConversation(Long conversationID, Long userID);
 
@@ -18,4 +18,6 @@ public interface ConversationService {
     Conversation getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
+
+    List<Conversation> getAllShownConversations(Long workspaceID, Long loggedUserID);
 }

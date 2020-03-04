@@ -1,7 +1,6 @@
 export class RestPaginationService {
     constructor(url) {
-        this.url
-            = url;
+        this.url = url;
     }
 
     getPage = async (numberPage, size, sort) => {
@@ -20,7 +19,6 @@ export class RestPaginationService {
     };
 
     create = async (entity) => {
-
         const response = await fetch(`${this.url}/create`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
