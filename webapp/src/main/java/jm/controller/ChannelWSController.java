@@ -54,7 +54,7 @@ public class ChannelWSController {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(channelDTO.get());
         } else {
-            //TODO: Что вернуть если такого id нет?
+            //TODO: Что вернуть если channel с таким id нет?
             return "Not find Channel by id";
         }
     }

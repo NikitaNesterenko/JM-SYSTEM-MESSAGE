@@ -85,10 +85,17 @@ public class ChannelRestController {
             })
     public ResponseEntity<ChannelDTO> getChannelById(@PathVariable("id") Long id) {
         logger.info("Channel с id = {}", id);
-        Channel channel = channelService.getChannelById(id);
-        logger.info(channel.toString());
-        ChannelDTO channelDTO = channelDTOService.toDto(channel);
-        return ResponseEntity.ok(channelDTO);
+        //TODO: удалить лишнее
+//        Channel channel = channelService.getChannelById(id);
+        Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(id);
+        if (channelDTO.isPresent()) {
+            logger.info(channelDTO.toString());
+            return ResponseEntity.ok(channelDTO.get());
+        }
+        {
+            return ResponseEntity.badRequest()
+                           .build();
+        }
     }
 
     @GetMapping(value = "/user/{id}")
