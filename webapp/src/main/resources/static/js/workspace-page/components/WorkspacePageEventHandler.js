@@ -1,8 +1,10 @@
 import {refreshMemberList} from "/js/member-list/member-list.js";
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {
+    ChannelRestPaginationService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 import {NavHeader} from "./navbar/NavHeader.js";
-import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class WorkspacePageEventHandler {
 
@@ -88,6 +90,15 @@ export class WorkspacePageEventHandler {
                 } else {
                     alert('That name is already taken by a channel, username, or user group.');
                 }
+            });
+        });
+    }
+
+    onHideChannelModal() {
+        $("#addChannelModal").on('hide.bs.modal', function () {
+            $(":input", $('#addChannelModal')).val("");
+            $('input[type=checkbox]').each(function () {
+                this.checked = false;
             });
         });
     }
