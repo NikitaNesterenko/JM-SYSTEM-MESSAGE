@@ -273,7 +273,7 @@ public class ChannelRestController {
     }
 
     @PostMapping(value = "/archiving/{id}")
-    @Operation(summary = "Archive channel",
+    @Operation(summary = "Un-archive channel",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -291,6 +291,28 @@ public class ChannelRestController {
 
 
         logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/un-archiving/{id}")
+    @Operation(summary = "Un-archive channel",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ChannelDTO.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: channel un-archived")
+            })
+    public ResponseEntity<ChannelDTO> unArchivingChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(false);
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelDTOService.toDto(channel);
+
+
+        logger.info("Канал с id = {} разархивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
