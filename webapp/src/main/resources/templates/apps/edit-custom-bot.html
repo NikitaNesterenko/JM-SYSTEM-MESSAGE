@@ -20,13 +20,16 @@
     <body>
         <div id="edit-command-for-custom-bot" class="modal">
             <div class="modal-content div">
-                <h2>Create New Command</h2>
+                <h2 id="theme-form-edit-command"></h2>
                 <input id="bot-id" hidden="hidden" th:value="${bot.id}">
                 <input id="command-id" hidden="hidden">
                 <label>Command name: </label><input id="name-for-bot" placeholder="Command name"><br>
-                <label>Type command: </label><select id="type-command-id">
-                    <option th:each="type : ${types}" th:text="${type.name}" th:value="${type.id}"></option></select><br>
-                <label>Description: </label><input id="description-for-custom-bot" placeholder="Description"><br>
+                <label>Type command: </label>
+                    <select id="type-command-id">
+                        <option value=""> -- </option>
+                        <option th:each="type : ${types}" th:text="${type.name}" th:value="${type.id}"></option>
+                    </select><br>
+                <label>Description: <span id="prompt-for-command"></span></label><input id="description-for-custom-bot" placeholder="Description"><br>
                 <label>Hint: </label><input id="hint-for-custom-bot" placeholder="Hint"><br>
                 <button id="save-command-for-bot">Save</button>
             </div>

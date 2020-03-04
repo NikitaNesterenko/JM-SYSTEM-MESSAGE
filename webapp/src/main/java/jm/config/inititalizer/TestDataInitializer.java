@@ -97,25 +97,27 @@ public class TestDataInitializer {
         all.setName("all");
         typeSlashCommandService.createTypeSlashCommand(all);
 
-        TypeSlashCommand send = new TypeSlashCommand();
-        send.setName("send");
-        typeSlashCommandService.createTypeSlashCommand(send);
-
         TypeSlashCommand get = new TypeSlashCommand();
         get.setName("get");
         typeSlashCommandService.createTypeSlashCommand(get);
+
+        TypeSlashCommand send = new TypeSlashCommand();
+        send.setName("send");
+        typeSlashCommandService.createTypeSlashCommand(send);
     }
 
     private void createSlashCommands(){
 
         TypeSlashCommand typeAll = typeSlashCommandService.getTypeSlashCommandByName("all");
+        TypeSlashCommand typeGet = typeSlashCommandService.getTypeSlashCommandByName("get");
+        TypeSlashCommand typeSend = typeSlashCommandService.getTypeSlashCommandByName("send");
 
         SlashCommand topicChangeCommand = new SlashCommand();
         topicChangeCommand.setName("topic");
         topicChangeCommand.setUrl("/app/bot/slackbot/");
         topicChangeCommand.setDescription("test description");
         topicChangeCommand.setHints("test Hints");
-        topicChangeCommand.setType(typeAll);
+        topicChangeCommand.setType(typeSend);
         slashCommandDao.persist(topicChangeCommand);
         sc.add(topicChangeCommand);
 
@@ -124,7 +126,7 @@ public class TestDataInitializer {
         directMessageCommand.setUrl("/app/bot/slackbot");
         directMessageCommand.setDescription("DM description");
         directMessageCommand.setHints("DM Hints");
-        directMessageCommand.setType(typeAll);
+        directMessageCommand.setType(typeSend);
         slashCommandDao.persist(directMessageCommand);
         sc.add(directMessageCommand);
 
@@ -160,7 +162,7 @@ public class TestDataInitializer {
         shrugCommand.setUrl("/app/bot/slackbot");
         shrugCommand.setDescription("Shrug description");
         shrugCommand.setHints("Shrug Hints");
-        shrugCommand.setType(typeAll);
+        shrugCommand.setType(typeSend);
         slashCommandDao.persist(shrugCommand);
         sc.add(shrugCommand);
 
@@ -178,7 +180,7 @@ public class TestDataInitializer {
         whoCommand.setUrl("/app/bot/slackbot");
         whoCommand.setDescription("Who description");
         whoCommand.setHints("Who Hints");
-        whoCommand.setType(typeAll);
+        whoCommand.setType(typeGet);
         slashCommandDao.persist(whoCommand);
         sc.add(whoCommand);
 
@@ -205,7 +207,7 @@ public class TestDataInitializer {
         msgCommand.setUrl("/app/bot/slackbot");
         msgCommand.setDescription("Msg description");
         msgCommand.setHints("Msg Hints");
-        msgCommand.setType(typeAll);
+        msgCommand.setType(typeSend);
         slashCommandDao.persist(msgCommand);
         sc.add(msgCommand);
 
@@ -242,7 +244,7 @@ public class TestDataInitializer {
         sendMsgCommand.setUrl("/app/bot/custombot");
         sendMsgCommand.setDescription("Hello, it's my message!");
         sendMsgCommand.setHints("Send message in channel");
-        sendMsgCommand.setType(typeSlashCommandService.getTypeSlashCommandByName("send"));
+        sendMsgCommand.setType(typeSend);
         slashCommandDao.persist(sendMsgCommand);
     }
 
@@ -483,17 +485,17 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now());
+        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
         zoom.getWorkspaces().add(workspaceDAO.getById(1L));
 
 
-        Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now());
+        Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now(), true);
         slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
         sc.forEach(command -> {
             slackBot.getCommands().add(command);
         });
 
-        Bot customBot = new Bot("custom_bot_1", "CustomBot", LocalDateTime.now());
+        Bot customBot = new Bot("custom_bot_1", "CustomBot", LocalDateTime.now(), false);
         customBot.getWorkspaces().add(workspaceDAO.getById(1L));
         // токен указал вручную для удобства тестирования,
         // генерация токена: UUID.randomUUID().toString()
