@@ -312,9 +312,7 @@ public class ChannelRestController {
         Channel channel = channelService.getChannelById(id);
         channel.setArchived(true);
         channelService.updateChannel(channel);
-        ChannelDTO channelDTO = channelDTOService.toDto(channel);
-
-
+        ChannelDTO channelDTO = new ChannelDTO(channel);
         logger.info("Канал с id = {} архивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
