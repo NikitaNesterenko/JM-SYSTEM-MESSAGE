@@ -189,5 +189,6 @@ public class WorkspaceRestController {
         User user = userService.getUserByLogin(name);
         List<Workspace> list = workspaceService.getWorkspacesByUserId(user.getId());
         return new ResponseEntity<>(list, HttpStatus.OK);
+
     }
 }
