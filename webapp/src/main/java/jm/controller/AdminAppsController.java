@@ -1,7 +1,6 @@
 package jm.controller;
 
 import jm.*;
-import jm.model.TypeSlashCommand;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin/apps")
@@ -45,11 +42,8 @@ public class AdminAppsController {
 
     @GetMapping(value = "/bots/{botId}")
     public ModelAndView editCustomBot(@PathVariable Long botId, Model model) {
-        List<TypeSlashCommand> types = typeSlashCommandService.getAllTypesSlashCommands();
-        // удаляю первый в списке тип ("all"), т.к. на данный момент он задуман только для команд дефолтного бота
-        types.remove(0);
         model.addAttribute("bot", botService.getBotById(botId));
-        model.addAttribute("types", types);
+        model.addAttribute("types", typeSlashCommandService.getAllTypesSlashCommands());
         model.addAttribute("commands", slashCommandService.getSlashCommandsByBotId(botId));
         return new ModelAndView("apps/edit-custom-bot");
     }
