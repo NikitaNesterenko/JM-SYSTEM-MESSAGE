@@ -13,7 +13,6 @@ export class ChannelView {
         window.pressChannelButton = (id) => {
             window.channel_id = id;
             this.selectChannel(id);
-            sessionStorage.setItem('conversation_id', '0');
         }
     }
 
@@ -27,46 +26,21 @@ export class ChannelView {
     showAllChannels(workspace_id) {
         this.addCurrentWorkspace(workspace_id);
         this.setLocalStorageSettings(0);
-        //берем каналы для конкретного пользователя и конкретного воркспейса
         this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, this.loggedUser.id).then(
             channels => {
                 if (channels.length > 0) {
                     this.addChannels(channels);
-                    if (this.default_channel !== null) {
-                        this.setLocalStorageSettings(this.default_channel.id);
-                        this.setChannelBGColor(this.default_channel);
-                        this.channel_message_view.update();
-                    }
                 }
             }
         );
         this.showBots(workspace_id);
     }
 
-    setFlaggedItems() {
-        $("#flaggedItems").append(0);
-        alert(sessionStorage.getItem("channelId"))
-    }
-
-    showPeopleInChannel(channelId) {
-        // alert(channelId);
-        // const countOfPeopleInChannel = $("#peopleInChat");
-        // this.user_service.getUsersByChannelId(channelId).then(
-        //     users => {
-        //         countOfPeopleInChannel.empty();
-        //         countOfPeopleInChannel.append(users.length);
-        //     }
-        // );
-
-        alert(sessionStorage.getItem("channelId"));
-        const member_list = $('#memberListPlaceholder');
-        this.user_service.getUsersByChannelId(sessionStorage.getItem("channelId")).then(
-            users => {
-                alert(users);
-                member_list.empty();
-                member_list.append(this.createMemberList(users));
-            }
-        );
+    selectFirstSidebarButton() {
+        $('.p-channel_sidebar__channel')
+            .first()
+            .find('button')
+            .click();
     }
 
     showBots(workspace_id) {
@@ -100,7 +74,7 @@ export class ChannelView {
     }
 
     addChannels(channels) {
-        $('#id-channel_sidebar__channels__list').empty(); //обнулдяем список каналов перед заполнением
+        $('#id-channel_sidebar__channels__list').empty();
         $.each(channels, (idx, chn) => {
             if (!chn.isArchived && this.checkPrivacy(chn)) {
                 if (this.default_channel === null) {
@@ -142,14 +116,6 @@ export class ChannelView {
         }
     }
 
-    setChannelBGColor(channel) {
-        $(`#channel_button_${channel.id}`).css({
-            color: 'white',
-            background: 'royalblue'
-        });
-        $(".p-classic_nav__model__title__info__name").html("").text(channel.name);
-    }
-
     setLocalStorageSettings(chn_id) {
         sessionStorage.setItem('channelId', chn_id);
         sessionStorage.setItem('conversation_id', '0');
@@ -158,15 +124,6 @@ export class ChannelView {
 
     selectChannel(id) {
         this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
-        $('.p-channel_sidebar__name_button').each((btn) => {
-            let bg_color = {color: "rgb(188,171,188)", background: "none"};
-
-            if ($(btn).filter(`[id=channel_button_${id}]`).length) {
-                bg_color = {color: "white", background: "royalblue"};
-            }
-
-            $(btn).css(bg_color);
-        });
     }
 
     checkPrivacy(channel) {
@@ -174,14 +131,11 @@ export class ChannelView {
     }
 }
 
-//удаление канала из списка каналов
 export const deleteChannelFromList = (targetChannelId) => {
-    document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
-        if (id.value == targetChannelId) {
-            //удаляем канал из списка
+    document.querySelectorAll("[id^=channel_button_]").forEach(id => {
+        if (id.value === targetChannelId) {
             id.parentElement.remove();
-            //если удаляемый канал был активен, то выбираем первый канал в списке
-            if (window.channel_id == targetChannelId) {
+            if (window.channel_id === targetChannelId) {
                 window.pressChannelButton(document.querySelectorAll("[id^=channel_button_]").item(0).value)
             }
         }

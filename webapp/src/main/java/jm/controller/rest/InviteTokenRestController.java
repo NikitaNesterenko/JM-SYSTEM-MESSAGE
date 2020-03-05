@@ -12,11 +12,13 @@ import jm.model.InviteToken;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,9 +50,10 @@ public class InviteTokenRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: invites were send")
             })
-    public ResponseEntity invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
+    public ResponseEntity<List<String>> invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
+        List<String> responseList = new ArrayList<>();
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
         invites.forEach(x -> {
@@ -59,6 +62,10 @@ public class InviteTokenRestController {
         });
 
         for (InviteToken invite : invites) {
+            if (userService.isEmailInThisWorkspace(invite.getEmail(),workspace.getId())) {
+                responseList.add(invite.getEmail());
+                continue;
+            }
             inviteTokenService.createInviteToken(invite);
             mailService.sendInviteMessage(invite.getFirstName()
                     , invite.getEmail()
@@ -67,7 +74,7 @@ public class InviteTokenRestController {
                     , url + invite.getHash());
         }
 
-        return ResponseEntity.ok(true);
+        return new ResponseEntity<>(responseList,HttpStatus.OK);
     }
 
     @GetMapping("/{hash}")

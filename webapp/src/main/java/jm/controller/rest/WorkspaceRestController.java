@@ -75,7 +75,7 @@ public class WorkspaceRestController {
                     @ApiResponse(responseCode = "200", description = "OK: workspace created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to create workspace")
             })
-    public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
+    public ResponseEntity<?> createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
@@ -145,9 +145,9 @@ public class WorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "308", description = "PERMANENT_REDIRECT: unable to find workspace")
             })
-    public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request) {
        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
-       if(workspace==null) {
+       if (workspace==null) {
            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
        }
         return new ResponseEntity<>(workspace, HttpStatus.OK);

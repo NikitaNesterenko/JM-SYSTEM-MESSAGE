@@ -341,3 +341,20 @@ strong {
     color: #616061;
     text-decoration: underline!important;
 }
+
+#invitesAnswerModalHeader {
+    border-bottom: 0px;
+}
+
+#invitesAnswerModalFooter {
+    border-top: 0px;
+}
+
+#invitesModalTableTh1, #invitesModalTableTh2 {
+    border-bottom: 2px solid #e76f2d;
+}
+
+#invitesAnswerModal {
+    border-radius: .9rem;
+}
+

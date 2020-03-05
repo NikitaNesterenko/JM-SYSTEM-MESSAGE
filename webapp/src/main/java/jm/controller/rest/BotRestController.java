@@ -149,16 +149,16 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: bot updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
-    public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
+    public ResponseEntity<?> updateBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
         if (existingBot == null) {
             logger.warn("Бот не найден");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             botService.updateBot(bot);
             logger.info("Обновлнный бот: {}", bot);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -167,10 +167,10 @@ public class BotRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: bot deleted")
             })
-    public ResponseEntity deleteBot(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteBot(@PathVariable("id") Long id) {
         botService.deleteBot(id);
         logger.info("Удален бот с id = {}", id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/{id}/channels/{name}/messages")
@@ -184,14 +184,14 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "201", description = "CREATED: bot message created")
             })
-    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
+    public ResponseEntity<?> createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
         Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
         message.setChannelId(channel.getId());
         message.setBot(bot);
         message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/channels")

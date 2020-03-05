@@ -15,7 +15,7 @@ export class WorkspacePageEventHandler {
         this.channel_service = new ChannelRestPaginationService();
         this.user_service = new UserRestPaginationService();
         this.wks_header = new NavHeader();
-        this.user_service = new UserRestPaginationService();
+        this.workspace_service = new WorkspaceRestPaginationService();
     }
 
     onAddChannelClick() {
@@ -26,11 +26,14 @@ export class WorkspacePageEventHandler {
 
     onAddDirectMessageClick() {
         this.addDirectMessage.click(() => {
-            new WorkspaceRestPaginationService().getChosenWorkspace().then(workspace => {
-                this.user_service.getUsersByWorkspace(workspace.id).then(users => {
+            this.workspace_service.getChosenWorkspace().then(workspace => {
+                this.user_service.getAllUsersForDirectMessageList(workspace.id, this.logged_user.id).then(users => {
                         let data = "<div class=\"list-group\">\n";
                         users.forEach(user => {
-                            data += "<a class=\"list-group-item list-group-item-action\">";
+                            data += "<a id=\"createOrShowConversation\" class=\"list-group-item list-group-item-action\" " +
+                                "data-associated_user_id=\"";
+                            data += user.id;
+                            data += "\" >";
                             data += user.name.toString();
                             data += "</a>\n";
                         });
@@ -54,20 +57,30 @@ export class WorkspacePageEventHandler {
 
     onSelectChannel() {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", (event) => {
-            this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text()).setInfo();
-
+            this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text());
 
             const channelId = parseInt($(event.currentTarget).val());
             pressChannelButton(channelId);
 
-            sessionStorage.setItem("channelName", channelId);
+            sessionStorage.setItem("channelName", channelId.toString());
             sessionStorage.setItem('conversation_id', '0');
 
             this.user_service.getUsersByChannelId(channelId).then(users => {
-                this.wks_header.setInfo(users.length, 666);
+                this.wks_header.setInfo(users.length, 0);
             });
 
             refreshMemberList();
+        });
+    }
+
+    onSelectDirectMessage() {
+        $(".p-channel_sidebar__direct-messages__container").on("click", "button.p-channel_sidebar__name_button", (event) => {
+
+            const conversationId = parseInt($(event.currentTarget).val());
+            pressDirectMessageButton(conversationId);
+
+            sessionStorage.setItem("channelName", '0');
+            sessionStorage.setItem('conversation_id', conversationId.toString());
         });
     }
 

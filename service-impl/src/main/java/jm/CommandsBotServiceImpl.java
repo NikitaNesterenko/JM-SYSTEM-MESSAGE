@@ -318,7 +318,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             conv.setAssociatedUser(toUser);
             conv.setShowForAssociated(true);
             conv.setShowForOpener(true);
-            conversationService.createConversation(conv);
+            conversationService.createOrShowConversation(conv);
             conv = conversationService.getConversationByUsersId(fromId, toUser.getId());
         }
 

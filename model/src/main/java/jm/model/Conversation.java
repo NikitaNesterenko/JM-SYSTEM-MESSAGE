@@ -1,6 +1,5 @@
 package jm.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,6 @@ import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "conversations")
 public class Conversation {
@@ -35,7 +33,8 @@ public class Conversation {
     @Column(name = "show_for_associated", nullable = false)
     private Boolean showForAssociated;
 
-    public Conversation(User openingUser, User associatedUser, Workspace workspace, Boolean showForOpener, Boolean showForAssociated) {
+    public Conversation(User openingUser, User associatedUser, Workspace workspace, Boolean showForOpener,
+                        Boolean showForAssociated) {
         this.openingUser = openingUser;
         this.associatedUser = associatedUser;
         this.workspace = workspace;
