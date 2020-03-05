@@ -20,9 +20,11 @@ public interface BotDAO {
 
     Bot getById (Long id);
 
-    Optional<BotDTO> getBotDTOByIdWithoutFields_WorkspacesId_ChannelIds_SlashCommandsIds (Long id);
+    Optional<BotDTO> getBotDTOById (Long id);
 
     List<Bot> getBotsByWorkspaceId (Long id);
+
+    List<BotDTO> getBotDtoListByWorkspaceId (Long workspaceId);
 
     Set<Channel> getChannels (Bot bot);
 

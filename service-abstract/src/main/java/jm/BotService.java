@@ -22,7 +22,9 @@ public interface BotService {
 
     Optional<BotDTO> getBotDTOById (Long id);
 
-    List<Bot> getBotsByWorkspaceId (Long id);
+    List<Bot> getBotsByWorkspaceId (Long workspaceId);
+
+    List<BotDTO> getBotDtoListByWorkspaceId (Long id);
 
     Set<Channel> getChannels (Bot bot);
 

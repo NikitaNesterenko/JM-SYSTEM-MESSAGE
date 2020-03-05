@@ -48,16 +48,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Optional<BotDTO> getBotDTOById (Long id) {
-        System.out.println("Зашли сюда");
-        /*
-        private Set<Long> workspacesId;
-        private Set<Long> channelIds;
-        private Set<Long> slashCommandsIds;
-         */
-        Optional<BotDTO> botDTO = botDAO.getBotDTOByIdWithoutFields_WorkspacesId_ChannelIds_SlashCommandsIds(id);
-        System.out.println("Optional<BotDTO> botDTO: " + botDTO.toString());
-
-        return botDTO;
+        return botDAO.getBotDTOById(id);
     }
 
     @Override
@@ -66,12 +57,17 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
+    public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
+        return null;
+    }
+
+    @Override
     public Set<Channel> getChannels (Bot bot) {
         return botDAO.getChannels(bot);
     }
 
     @Override
-    public Bot getBotBySlashCommandId(Long id) {
+    public Bot getBotBySlashCommandId (Long id) {
         return botDAO.getBotByCommandId(id);
     }
 

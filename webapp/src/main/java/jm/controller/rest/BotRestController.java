@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -30,15 +31,14 @@ import java.util.Set;
 @Tag(name = "bot", description = "Bot API")
 public class BotRestController {
 
+    private static final Logger logger = LoggerFactory.getLogger(BotRestController.class);
     private final BotService botService;
     private final WorkspaceService workspaceService;
     private final MessageService messageService;
     private final ChannelService channelService;
     private final BotDtoService botDtoService;
 
-    private static final Logger logger = LoggerFactory.getLogger(BotRestController.class);
-
-    public BotRestController(BotService botService, WorkspaceService workspaceService, MessageService messageService, ChannelService channelService, BotDtoService botDtoService) {
+    public BotRestController (BotService botService, WorkspaceService workspaceService, MessageService messageService, ChannelService channelService, BotDtoService botDtoService) {
         this.botService = botService;
         this.workspaceService = workspaceService;
         this.messageService = messageService;
@@ -58,15 +58,16 @@ public class BotRestController {
                             description = "OK: get bot"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
-    public ResponseEntity<List<BotDTO>> getBotByWorkspace(@PathVariable("id") Long id) {
-        //TODO: Переделать на получение list Bot DTO
-        List<Bot> bots = botService.getBotsByWorkspaceId(id);
-        if (bots.isEmpty()) {
+    public ResponseEntity<List<BotDTO>> getBotByWorkspace (@PathVariable("id") Long id) {
+        //TODO: удалить лишнее
+//        List<Bot> bots = botService.getBotsByWorkspaceId(id);
+        List<BotDTO> botDTOList = botService.getBotDtoListByWorkspaceId(id);
+        if (botDTOList.isEmpty()) {
             logger.warn("Не удалось найти ботов для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         logger.info("Боты для workspace c id = {}", id);
-        return new ResponseEntity<>(botDtoService.toDto(bots), HttpStatus.OK);
+        return new ResponseEntity<>(botDTOList, HttpStatus.OK);
     }
 
     // DTO compliant
@@ -80,12 +81,16 @@ public class BotRestController {
                             ),
                             description = "OK: get bot")
             })
-    public ResponseEntity<BotDTO> getBotById(@PathVariable("id") Long id) {
+    public ResponseEntity<BotDTO> getBotById (@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
         //TODO: Переделать на получение BotDTO из базы
         //logger.info(botService.getBotById(id).toString());
-        Bot bot = botService.getBotById(id);
-        return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);
+        // botDtoService.toDto
+        Optional<BotDTO> botDTO = botService.getBotDTOById(id);
+        return botDTO.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                       .orElseGet(() -> ResponseEntity.notFound()
+                                                .build());
+
     }
 
     // DTO compliant
@@ -101,14 +106,15 @@ public class BotRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: bot created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create bot")
             })
-    public ResponseEntity createBot(@RequestBody BotDTO botDto) {
+    public ResponseEntity createBot (@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         try {
             botService.createBot(bot);
             logger.info("Cозданный bot: {}", bot);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             logger.warn("Не удалось создать бота");
-            ResponseEntity.badRequest().build();
+            ResponseEntity.badRequest()
+                    .build();
         }
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -126,7 +132,7 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: bot updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
-    public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
+    public ResponseEntity updateBot (@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
         if (existingBot == null) {
@@ -144,7 +150,7 @@ public class BotRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: bot deleted")
             })
-    public ResponseEntity deleteBot(@PathVariable("id") Long id) {
+    public ResponseEntity deleteBot (@PathVariable("id") Long id) {
         botService.deleteBot(id);
         logger.info("Удален бот с id = {}", id);
         return new ResponseEntity(HttpStatus.OK);
@@ -161,7 +167,7 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "201", description = "CREATED: bot message created")
             })
-    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
+    public ResponseEntity createMessage (@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
         Channel channel = channelService.getChannelByName(name);
         Bot bot = botService.getBotById(id);
         message.setChannelId(channel.getId());
@@ -182,7 +188,7 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get channels by bot")
             })
-    public ResponseEntity<Set<Channel>> getChannels(@PathVariable("id") Long id) {
+    public ResponseEntity<Set<Channel>> getChannels (@PathVariable("id") Long id) {
         Bot bot = botService.getBotById(id);
         return new ResponseEntity<>(botService.getChannels(bot), HttpStatus.OK);
     }
@@ -198,11 +204,12 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per hour")
             })
-    public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<Message>> getMessagesPerHour (@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusHours(1);
+        LocalDateTime startDate = LocalDateTime.now()
+                                          .minusHours(1);
         return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 
@@ -217,11 +224,12 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per day")
             })
-    public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<Message>> getMessagesPerDay (@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusDays(1);
+        LocalDateTime startDate = LocalDateTime.now()
+                                          .minusDays(1);
         return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 
@@ -236,11 +244,12 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per week")
             })
-    public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<Message>> getMessagesPerWeek (@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime startDate = LocalDateTime.now()
+                                          .minusWeeks(1);
         return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 
@@ -255,11 +264,12 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per month")
             })
-    public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
+    public ResponseEntity<List<Message>> getMessagesPerMonth (@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
         Channel channel = channelService.getChannelByName(channelName);
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now().minusMonths(1);
+        LocalDateTime startDate = LocalDateTime.now()
+                                          .minusMonths(1);
         return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
     }
 }

@@ -53,8 +53,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                                               .getResultList()
                                               .get(0);
 
-            channelDTO.setUserIds(getSetUserIdsByName(name));
-            channelDTO.setBotIds(getSetBotIdsByName(name));
+            channelDTO.setUserIds(getListUserIdsByName(name));
+            channelDTO.setBotIds(getListBotIdsByName(name));
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -83,8 +83,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                                               .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
                                               .getResultList()
                                               .get(0);
-            channelDTO.setUserIds(getSetUserIdsByName(channelDTO.getName()));
-            channelDTO.setBotIds(getSetBotIdsByName(channelDTO.getName()));
+            channelDTO.setUserIds(getListUserIdsByName(channelDTO.getName()));
+            channelDTO.setBotIds(getListBotIdsByName(channelDTO.getName()));
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -92,8 +92,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return Optional.ofNullable(channelDTO);
     }
 
-
-    private List<Number> getSetUserIdsByName (String name) {
+    private List<Number> getListUserIdsByName (String name) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT cu.user_id  FROM channels_users cu LEFT JOIN channels c on cu.channel_id = c.id WHERE name=:name")
@@ -105,7 +104,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return list;
     }
 
-    private List<Number> getSetBotIdsByName (String name) {
+    private List<Number> getListBotIdsByName (String name) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT cb.bot_id  FROM channels_bots cb LEFT JOIN channels c on cb.channel_id = c.id WHERE name=:name")

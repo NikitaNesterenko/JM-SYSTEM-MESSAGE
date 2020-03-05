@@ -13,9 +13,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -24,7 +26,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
     //TODO: переделать этот метод для практики
     @Override
-    public List<Bot> getBotsByWorkspaceId(Long id) {
+    public List<Bot> getBotsByWorkspaceId (Long id) {
         try {
             return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
                                        .setParameter(1, id)
@@ -34,8 +36,31 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
         }
     }
 
+    private List<Number> getAllBotIdByWorkspaceId (Long workspaceId) {
+        List<Number> list = new ArrayList<>();
+        try {
+            list = entityManager
+                           .createNativeQuery("SELECT wb.bot_id FROM workspaces_bots wb WHERE wb.workspace_id=:workspaceId")
+                           .setParameter("workspaceId", workspaceId)
+                           .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     @Override
-    public Set<Channel> getChannels(Bot bot) {
+    public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
+        return getAllBotIdByWorkspaceId(id).stream()
+                       .map(Number::longValue)
+                       .map(this::getBotDTOById)
+                       .map(Optional::get)
+                       .collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<Channel> getChannels (Bot bot) {
         return bot.getChannels();
     }
 
@@ -50,8 +75,45 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
         }
     }
 
+
+    private List<Number> getListWorkspacesIdByBotId (Long botId) {
+        List<Number> list = new ArrayList<>();
+        try {
+            list = entityManager.createNativeQuery("SELECT wb.workspace_id FROM workspaces_bots wb WHERE wb.bot_id=:botId")
+                           .setParameter("botId", botId)
+                           .getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    private List<Number> getListChannelIdsIdByBotId (Long botId) {
+        List<Number> list = new ArrayList<>();
+        try {
+            list = entityManager.createNativeQuery("SELECT cb.channel_id FROM channels_bots cb WHERE cb.bot_id=:botId")
+                           .setParameter("botId", botId)
+                           .getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    private List<Number> getListSlashCommandsIdsByBotId (Long botId) {
+        List<Number> list = new ArrayList<>();
+        try {
+            list = entityManager.createNativeQuery("SELECT bsc.slash_command_id FROM bots_slash_commands bsc WHERE bsc.bot_id=:botId")
+                           .setParameter("botId", botId)
+                           .getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     @Override
-    public Optional<BotDTO> getBotDTOByIdWithoutFields_WorkspacesId_ChannelIds_SlashCommandsIds (Long id) {
+    public Optional<BotDTO> getBotDTOById (Long id) {
         BotDTO botDTO = null;
 
         try {
@@ -62,6 +124,11 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
                                       .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
                                       .getResultList()
                                       .get(0);
+
+            botDTO.setWorkspacesId(getListWorkspacesIdByBotId(id));
+            botDTO.setChannelIds(getListChannelIdsIdByBotId(id));
+            botDTO.setSlashCommandsIds(getListSlashCommandsIdsByBotId(id));
+
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

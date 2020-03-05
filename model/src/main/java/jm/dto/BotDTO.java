@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,5 +64,24 @@ public class BotDTO {
 
     public void setCreatedDate (Timestamp dateCreate) {
         this.dateCreate = dateCreate.toLocalDateTime();
+    }
+
+    public void setWorkspacesId (List<Number> workspacesId) {
+        this.workspacesId = workspacesId.stream()
+                                    .map(Number::longValue)
+                                    .collect(Collectors.toSet());
+    }
+
+    public void setChannelIds (List<Number> channelIds) {
+        this.channelIds = channelIds.stream()
+                                  .map(Number::longValue)
+                                  .collect(Collectors.toSet());
+        ;
+    }
+
+    public void setSlashCommandsIds (List<Number> slashCommandsIds) {
+        this.slashCommandsIds = slashCommandsIds.stream()
+                                        .map(Number::longValue)
+                                        .collect(Collectors.toSet());
     }
 }
