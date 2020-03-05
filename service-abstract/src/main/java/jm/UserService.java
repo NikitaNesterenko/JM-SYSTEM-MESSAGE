@@ -2,8 +2,8 @@ package jm;
 
 import jm.dto.UserDTO;
 import jm.model.User;
-
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -17,15 +17,19 @@ public interface UserService {
 
     User getUserById(Long id);
 
-
     User getUserByLogin(String login);
 
     User getUserByName(String name);
 
     User getUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannel(Long id);
+    List<User> getAllUsersByChannel(Long channelID);
 
-    List<UserDTO> getAllUsersInWorkspace(Long id);
+    List<User> getAllUsersByWorkspace(Long workspaceID);
 
+    List<User> getUsersByIDs(Set<Long> userIDs);
+
+    void removeChannelMessageFromUnreadForUser(Long channelId, Long userId);
+
+    void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId);
 }

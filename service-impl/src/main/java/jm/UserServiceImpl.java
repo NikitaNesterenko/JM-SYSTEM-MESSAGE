@@ -1,15 +1,14 @@
 package jm;
 
 import jm.api.dao.UserDAO;
-import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -33,7 +32,6 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user) {
         userDAO.persist(user);
     }
-
 
     @Override
     public void deleteUser(Long id) {
@@ -66,13 +64,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsersInThisChannel(Long id) {
-        return userDAO.getAllUsersInThisChannel(id);
+    public List<User> getAllUsersByChannel(Long channelID) {
+        return userDAO.getAllUsersByChannel(channelID);
     }
 
     @Override
-    public List<UserDTO> getAllUsersInWorkspace(Long id) {
-        return userDAO.getUsersInWorkspace(id);
+    public List<User> getAllUsersByWorkspace(Long workspaceID) {
+        return userDAO.getAllUsersByWorkspace(workspaceID);
     }
 
+    @Override
+    public List<User> getUsersByIDs(Set<Long> userIDs) {
+        return userDAO.getUsersByIDs(userIDs);
+    }
+
+    @Override
+    public void removeChannelMessageFromUnreadForUser(Long channelId, Long userId) {
+        User user =  userDAO.getById(userId);
+        user.getUnreadMessages().removeIf(msg -> msg.getChannelId().equals(channelId));
+        this.updateUser(user);
+    }
+
+    @Override
+    public void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId) {
+        User user = this.getUserById(userId);
+        user.getUnreadDirectMessages().removeIf(dmsg -> dmsg.getConversation().getId().equals(conversationId));
+        this.updateUser(user);
+    }
 }

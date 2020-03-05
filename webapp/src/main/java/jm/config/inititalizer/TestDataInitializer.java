@@ -276,6 +276,7 @@ public class TestDataInitializer {
         userJohn.setPassword(UserData.JOHN.password);
         userJohn.setDisplayName(UserData.JOHN.name + " " + UserData.JOHN.lastName);
         userJohn.setRoles(ownerRoleSet);
+        userJohn.setOnline(0);
 
         userService.createUser(userJohn);
         this.users.add(userJohn);
@@ -289,6 +290,7 @@ public class TestDataInitializer {
         userStepan.setPassword(UserData.STEPAN.password);
         userStepan.setDisplayName(UserData.STEPAN.name + " " + UserData.STEPAN.lastName);
         userStepan.setRoles(userRoleSet);
+        userStepan.setOnline(0);
 
         userService.createUser(userStepan);
         this.users.add(userStepan);
@@ -302,6 +304,7 @@ public class TestDataInitializer {
         userPetr.setPassword(UserData.PETR.password);
         userPetr.setDisplayName(UserData.PETR.name + " " + UserData.PETR.lastName);
         userPetr.setRoles(userRoleSet);
+        userPetr.setOnline(0);
 
         userService.createUser(userPetr);
         this.users.add(userPetr);
@@ -315,6 +318,7 @@ public class TestDataInitializer {
         userFoo.setPassword(UserData.FOO.password);
         userFoo.setDisplayName(UserData.FOO.name + " " + UserData.FOO.lastName);
         userFoo.setRoles(userRoleSet);
+        userFoo.setOnline(0);
 
         userService.createUser(userFoo);
         this.users.add(userFoo);
@@ -328,6 +332,7 @@ public class TestDataInitializer {
         userJames.setPassword(UserData.JAMES.password);
         userJames.setDisplayName(UserData.JAMES.name + " " + UserData.JAMES.lastName);
         userJames.setRoles(userRoleSet);
+        userJames.setOnline(0);
 
         userService.createUser(userJames);
         this.users.add(userJames);
@@ -617,7 +622,7 @@ public class TestDataInitializer {
         conversation1.setShowForAssociated(true);
         conversation1.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation1);
+        conversationService.createOrShowConversation(conversation1);
         this.conversations.add(conversation1);
 
         //this conversation must not created because already exists
@@ -628,7 +633,7 @@ public class TestDataInitializer {
         conversation2.setShowForAssociated(false);
         conversation2.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation2);
+        conversationService.createOrShowConversation(conversation2);
         this.conversations.add(conversation2);
 
         Conversation conversation3 = new Conversation();
@@ -638,7 +643,7 @@ public class TestDataInitializer {
         conversation3.setShowForAssociated(true);
         conversation3.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation3);
+        conversationService.createOrShowConversation(conversation3);
         this.conversations.add(conversation3);
 
         Conversation conversation4 = new Conversation();
@@ -648,7 +653,7 @@ public class TestDataInitializer {
         conversation4.setShowForAssociated(true);
         conversation4.setWorkspace(workspace);
 
-        conversationService.createConversation(conversation4);
+        conversationService.createOrShowConversation(conversation4);
         this.conversations.add(conversation4);
     }
 }

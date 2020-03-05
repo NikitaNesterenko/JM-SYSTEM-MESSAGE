@@ -1,13 +1,10 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
+import jm.model.message.DirectMessage;
 import lombok.*;
 import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -70,11 +67,9 @@ public class User {
 //    @JoinColumn(name = "", referencedColumnName = "id")
 //    private Status currentStatus;
 
-    // User title - What I do (occupation)?
     @Column(name = "title")
     private String title;
 
-    // a name, that other users can see
     @Column(name = "display_name")
     private String displayName;
 
@@ -113,8 +108,26 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "starred_messages_id", referencedColumnName = "id"))
     private Set<Message> starredMessages;
 
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "users_unread_messages",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "unread_messages_id", referencedColumnName = "id"))
+    private Set<Message> unreadMessages;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @JoinTable(
+            name = "users_unread_direct_messages",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "unread_direct_message_id", referencedColumnName = "id"))
+    private Set<DirectMessage> unreadDirectMessages;
+
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     private Set<User> directMessagesToUsers;
 
@@ -166,6 +179,9 @@ public class User {
     @Column(name = "skype")
     private String userSkype;
 
+    // ===================================
+    // TODO: CONSTRUCTORS ONLY FOR TESTS!!! better delete them in future
+    // ===================================
 
     public User(String name, String lastName, String login, String email, String password) {
         this.name = name;
@@ -198,25 +214,4 @@ public class User {
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
     }
-
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        User user = (User) o;
-//        return id.equals(user.id) &&
-//                email.equals(user.email) &&
-//                password.equals(user.password);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, email, password);
-//    }
-
-
 }
