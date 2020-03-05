@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,40 +38,11 @@ public class ChannelDTO {
     private Boolean isArchived;
     private Boolean isApp;
 
-    //TODO: удалить лишнее
-//    public ChannelDTO (Long id, String name) {
-//        this.id = id;
-//        this.name = name;
-//    }
-//
-//    public ChannelDTO (Long id, String name, Set<Bot> bots) {
-//        this.id = id;
-//        this.name = name;
-//        this.botIds = bots.stream()
-//                              .map(Bot::getId)
-//                              .collect(Collectors.toSet());
-//    }
-
     public ChannelDTO (Long id, String name, Boolean isPrivate) {
         this.id = id;
         this.name = name;
         this.isPrivate = isPrivate;
     }
-
-//    public ChannelDTO (Set<User> users, Set<Bot> bots) {
-//        this.userIds = users.stream()
-//                               .map(User::getId)
-//                               .collect(Collectors.toSet());
-//        this.botIds = bots.stream()
-//                              .map(Bot::getId)
-//                              .collect(Collectors.toSet());
-//    }
-//
-//    public ChannelDTO (Set<Bot> bots) {
-//        this.botIds = bots.stream()
-//                              .map(Bot::getId)
-//                              .collect(Collectors.toSet());
-//    }
 
     public ChannelDTO (Channel channel) {
         this.id = channel.getId();
@@ -95,24 +67,6 @@ public class ChannelDTO {
         this.isArchived = channel.getArchived();
         this.isApp = channel.getIsApp();
     }
-
-//    public ChannelDTO (Long id, String name, Set<User> users, Set<Bot> bots, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate, String topic, Boolean isApp) {
-//        this.id = id;
-//        this.name = name;
-//        this.userIds = users.stream()
-//                               .map(User::getId)
-//                               .collect(Collectors.toSet());
-//        this.botIds = bots.stream()
-//                              .map(Bot::getId)
-//                              .collect(Collectors.toSet());
-//        this.workspaceId = workspaceId;
-//        this.ownerId = ownerId;
-//        this.isPrivate = isPrivate;
-//        this.createdDate = createdDate;
-//        this.topic = topic;
-//        this.isArchived = isArchived;
-//        this.isApp = isApp;
-//    }
 
     public ChannelDTO (Long id, String name, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate, String topic, Boolean isApp) {
         this.id = id;
@@ -140,5 +94,19 @@ public class ChannelDTO {
 
     public void setCreatedDate (Timestamp createdDate) {
         this.createdDate = createdDate.toLocalDateTime();
+    }
+
+    public void setUserIds (List<Number> userIds) {
+        System.out.println("setUserIds получили: " + userIds);
+        this.userIds = userIds.stream()
+                               .map(Number::longValue)
+                               .collect(Collectors.toSet());
+    }
+
+    public void setBotIds (List<Number> botIds) {
+        System.out.println("setBotIds получили: " + botIds);
+        this.botIds = botIds.stream()
+                              .map(Number::longValue)
+                              .collect(Collectors.toSet());
     }
 }

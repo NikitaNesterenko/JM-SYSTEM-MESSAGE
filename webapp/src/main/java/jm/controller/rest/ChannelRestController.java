@@ -115,11 +115,13 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByUserId (@PathVariable("id") Long id) {
-        List<Channel> channels = channelService.getChannelsByUserId(id);
-        for (Channel channel : channels) {
-            System.out.println(channel);
-        }
-        List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
+        //TODO: удалить лишнее
+//        List<Channel> channels = channelService.getChannelsByUserId(id);
+//        for (Channel channel : channels) {
+//            System.out.println(channel);
+//        }
+        // channelDTOService.toDto(channels);
+        List<ChannelDTO> channelDTOList = channelService.getChannelDtoListByUserId(id);
 
         return ResponseEntity.ok(channelDTOList);
     }
@@ -160,7 +162,7 @@ public class ChannelRestController {
             Set<User> users = channel.getUsers();
             users.add(userService.getUserByLogin(principal.getName()));
             channelService.updateChannel(channel);
-            channelDTO = new ChannelDTO(channel); // channelDTOService.toDto(channel);
+            channelDTO = new ChannelDTO(channel);
         }
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
@@ -221,12 +223,13 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getAllChannels () {
         logger.info("Список channel: ");
-        List<Channel> channels = channelService.gelAllChannels();
-        for (Channel channel : channels) {
-            logger.info(channel.toString());
-        }
-        List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
-
+//        List<Channel> channels = channelService.gelAllChannels();
+//        for (Channel channel : channels) {
+//            logger.info(channel.toString());
+//        }
+//        channelDTOService.toDto(channels);
+        List<ChannelDTO> channelDTOList = channelService.getAllChanelDTO();
+        channelDTOList.forEach(channelDTO -> logger.info(channelDTO.toString()));
         return ResponseEntity.ok(channelDTOList);
     }
 
@@ -265,8 +268,10 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceId (@PathVariable("id") Long id) {
-        List<Channel> channelsByWorkspaceId = channelService.getChannelsByWorkspaceId(id);
-        List<ChannelDTO> channelDTOList = channelDTOService.toDto(channelsByWorkspaceId);
+        // TODO: удалить лишнее
+//        List<Channel> channelsByWorkspaceId = channelService.getChannelsByWorkspaceId(id);
+        //channelDTOService.toDto(channelsByWorkspaceId);
+        List<ChannelDTO> channelDTOList = channelService.getChannelDtoListByWorkspaceId(id);
         return new ResponseEntity<>(channelDTOList, HttpStatus.OK);
     }
 

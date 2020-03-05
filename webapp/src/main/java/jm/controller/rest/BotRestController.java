@@ -59,6 +59,7 @@ public class BotRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
     public ResponseEntity<List<BotDTO>> getBotByWorkspace(@PathVariable("id") Long id) {
+        //TODO: Переделать на получение list Bot DTO
         List<Bot> bots = botService.getBotsByWorkspaceId(id);
         if (bots.isEmpty()) {
             logger.warn("Не удалось найти ботов для workspace с id = {}", id);
@@ -81,6 +82,7 @@ public class BotRestController {
             })
     public ResponseEntity<BotDTO> getBotById(@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
+        //TODO: Переделать на получение BotDTO из базы
         //logger.info(botService.getBotById(id).toString());
         Bot bot = botService.getBotById(id);
         return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.OK);

@@ -27,6 +27,11 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public List<ChannelDTO> getAllChanelDTO () {
+        return channelDAO.getAllChanelDTO();
+    }
+
+    @Override
     public void createChannel (Channel channel) {
         channelDAO.persist(channel);
     }
@@ -48,20 +53,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Optional<ChannelDTO> getChannelDTOById (Long id) {
-        //TODO: Удалить sout
-//        System.out.println("Получить DTO по ID");
-        Optional<ChannelDTO> channelDTO = channelDAO.getChannelDTOByIdWithoutFieldsUserIdsAndBotIds(id);
-//        System.out.println("channelDTO без сетов: " + channelDTO.get().toString());
-        if (channelDTO.isPresent()) {
-            String name = channelDTO.get()
-                                  .getName();
-            channelDTO.get()
-                    .setBotIds(channelDAO.getSetBotIdsByName(name));
-            channelDTO.get()
-                    .setUserIds(channelDAO.getSetUserIdsByName(name));
-        }
-//        System.out.println("С сетами " + channelDTO.get().toString());
-        return channelDTO;
+        return channelDAO.getChannelDTOById(id);
     }
 
     @Override
@@ -72,30 +64,26 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public Optional<ChannelDTO> getChannelDTOByName (String name) {
         //TODO: удалить лишнее
-        Optional<ChannelDTO> channelDTOByName = channelDAO.getChannelDTOByNameWithoutFieldsUserIdsAndBotIds(name);
-        System.out.println("channelDTOByName: " + channelDTOByName.toString());
-//        Optional<ChannelDTO> channelDTOById = channelDAO.getChannelDTOByIdWithoutFieldsUserIdsAndBotIds(1L);
-//        System.out.println("channelDTOById: " + channelDTOById.toString());
-//        Set<Long> userIds = channelDAO.getSetUserIdsByName(name);
-//        System.out.println("userIds: " + userIds);
-//        Set<Long> botIds = channelDAO.getSetBotIdsByName(name);
-//        System.out.println("botIds: " + botIds);
-//        Optional<ChannelDTO> id = channelDAO.getIdByName(name);
-//        System.out.println("id: " + id.get().getId());
+        Optional<ChannelDTO> channelDTOByName = channelDAO.getChannelDTOByName(name);
+        System.out.println("channelDTOByName: " + channelDTOByName.get()
+                                                          .toString());
+        Optional<ChannelDTO> channelDTOById = channelDAO.getChannelDTOById(channelDTOByName.get()
+                                                                                   .getId());
+        System.out.println("channelDTOById: " + channelDTOById.toString());
+        List<ChannelDTO> allChanelDTO = channelDAO.getAllChanelDTO();
+        System.out.println("allChanelDTO: ");
+        allChanelDTO.forEach(channelDTO -> System.out.println(channelDTO.toString()));
+
+        List<ChannelDTO> channelDtoListByUserId = channelDAO.getChannelDtoListByUserId(1L);
+        System.out.println("channelDtoListByUserId: ");
+        channelDtoListByUserId.forEach(channelDTO -> System.out.println(channelDTO.toString()));
+
+        List<ChannelDTO> channelDtoListByWorkspaceId = channelDAO.getChannelDtoListByWorkspaceId(1L);
+        System.out.println("channelDtoListByWorkspaceId: ");
+        channelDtoListByWorkspaceId.forEach(channelDTO -> System.out.println(channelDTO.toString()));
 
 
-        getChannelDTOById(channelDTOByName.get()
-                                  .getId());
-        Optional<ChannelDTO> channelDTO = channelDAO.getChannelDTOByNameWithoutFieldsUserIdsAndBotIds(name);
-//        System.out.println("channelDTO без сетов: " + channelDTO.get().toString());
-        if (channelDTO.isPresent()) {
-            channelDTO.get()
-                    .setBotIds(channelDAO.getSetBotIdsByName(name));
-            channelDTO.get()
-                    .setUserIds(channelDAO.getSetUserIdsByName(name));
-        }
-
-        return channelDAO.getChannelDTOByNameWithoutFieldsUserIdsAndBotIds(name);
+        return channelDAO.getChannelDTOByName(name);
     }
 
     @Override
@@ -114,9 +102,18 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public List<ChannelDTO> getChannelDtoListByWorkspaceId (Long workspaceId) {
+        return channelDAO.getChannelDtoListByWorkspaceId(workspaceId);
+    }
+
+    @Override
     public List<Channel> getChannelsByUserId (Long userId) {
         return channelDAO.getChannelsByUserId(userId);
     }
 
+    @Override
+    public List<ChannelDTO> getChannelDtoListByUserId (Long userId) {
+        return channelDAO.getChannelDtoListByUserId(userId);
+    }
 }
 

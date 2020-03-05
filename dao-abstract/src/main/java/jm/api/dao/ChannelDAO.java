@@ -11,6 +11,8 @@ public interface ChannelDAO {
 
     List<Channel> getAll ();
 
+    List<ChannelDTO> getAllChanelDTO ();
+
     void persist (Channel channel);
 
     void deleteById (Long id);
@@ -21,23 +23,23 @@ public interface ChannelDAO {
 
     Channel getChannelByName (String name);
 
-    Set<Long> getSetUserIdsByName (String name);
-
-    Set<Long> getSetBotIdsByName (String name);
-
     List<Channel> getChannelsByOwnerId (Long ownerId);
 
     List<Channel> getChannelsByWorkspaceId (Long id);
 
+    List<ChannelDTO> getChannelDtoListByWorkspaceId (Long workspaceId);
+
     List<Channel> getChannelsByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByUserId (Long userId);
 
     List<Channel> getChannelsByIds (Set<Long> ids);
 
     Optional<ChannelDTO> getIdByName (String name);
 
-    Optional<ChannelDTO> getChannelDTOByNameWithoutFieldsUserIdsAndBotIds (String name);
+    Optional<ChannelDTO> getChannelDTOByName (String name);
 
-    Optional<ChannelDTO> getChannelDTOByIdWithoutFieldsUserIdsAndBotIds (Long id);
+    Optional<ChannelDTO> getChannelDTOById (Long id);
 
     List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
 

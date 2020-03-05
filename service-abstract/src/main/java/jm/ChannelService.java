@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface ChannelService {
     List<Channel> gelAllChannels ();
 
+    List<ChannelDTO> getAllChanelDTO ();
+
     void createChannel (Channel channel);
 
     void deleteChannel (Long id);
@@ -27,8 +29,12 @@ public interface ChannelService {
 
     List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
 
-    List<Channel> getChannelsByWorkspaceId (Long id);
+    List<Channel> getChannelsByWorkspaceId (Long workspaceId);
+
+    List<ChannelDTO> getChannelDtoListByWorkspaceId (Long id);
 
     List<Channel> getChannelsByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByUserId (Long userId);
 
 }

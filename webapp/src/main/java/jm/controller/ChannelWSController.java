@@ -21,14 +21,14 @@ public class ChannelWSController {
     private ChannelDtoService channelDTOService;
 
     @Autowired
-    public void setChannelService(ChannelService channelService, ChannelDtoService channelDTOService) {
+    public void setChannelService (ChannelService channelService, ChannelDtoService channelDTOService) {
         this.channelService = channelService;
         this.channelDTOService = channelDTOService;
     }
 
     @MessageMapping("/channel")
     @SendTo("/topic/channel")
-    public String createChannel(ChannelWS channelWS)
+    public String createChannel (ChannelWS channelWS)
             throws JsonProcessingException {
         //TODO: удалить лишнее
 //        Channel channel = channelService.getChannelByName(channelWS.getName());
@@ -47,7 +47,7 @@ public class ChannelWSController {
     // topic - на что изменить
     @MessageMapping("/channel.changeTopic")
     @SendTo("/topic/channel.changeTopic")
-    public String changeChannelTopic(ChannelWSTopic zapros)
+    public String changeChannelTopic (ChannelWSTopic zapros)
             throws JsonProcessingException {
         Long channel_id = Long.parseLong(zapros.getId());
         //TODO: удалить закомментированное

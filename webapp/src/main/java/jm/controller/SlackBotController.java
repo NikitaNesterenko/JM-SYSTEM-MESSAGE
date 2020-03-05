@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jm.*;
-import jm.dto.ChannelDtoService;
-import jm.dto.DirectMessageDtoService;
-import jm.dto.MessageDtoService;
-import jm.dto.SlashCommandDto;
+import jm.dto.*;
 import jm.model.*;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
@@ -87,6 +84,7 @@ public class SlackBotController {
         response.put("channelId", command.getChannelId().toString()); //добавляем Id канала, в котором отправлена команда
         response.put("report", "{}");
 
+        //Todo: упростить
         ObjectMapper mapper = new ObjectMapper();
         if (commandName.equals("topic")) {
             if (commandBody.trim().isEmpty()) {
@@ -124,8 +122,10 @@ public class SlackBotController {
             if (channel != null) {
                 response.put("report", joinChannel(channel, command.getUserId()));
                 response.put("status", "OK");
-                response.put("channel", mapper.writeValueAsString(channelDtoService.toDto(channel)));
-                response.put("targetChannelId", channel.getId().toString());
+                // channelDtoService.toDto(channel)
+                response.put("channel", mapper.writeValueAsString(new ChannelDTO(channel)));
+                response.put("targetChannelId", channel.getId()
+                                                        .toString());
             } else {
                 response.put("status", "ERROR");
                 response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(), INCORRECT_COMMAND));
