@@ -19,6 +19,7 @@ import java.util.Set;
 public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
+
     @Override
     public User getUserByLogin(String login) {
         try {

@@ -28,4 +28,8 @@ public interface UserService {
 
     List<UserDTO> getAllUsersInWorkspace(Long id);
 
+    void removeChannelMessageFromUnreadForUser(Long channelId, Long userId);
+
+    void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId);
+
 }
