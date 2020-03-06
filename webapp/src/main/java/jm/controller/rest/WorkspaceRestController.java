@@ -10,13 +10,10 @@ import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
 import jm.model.User;
 import jm.model.Workspace;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -164,7 +161,7 @@ public class WorkspaceRestController {
         if (workspace == null) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-        request.getSession(false).setAttribute("WorkspaceID", workspace);
+        request.getSession(true).setAttribute("WorkspaceID", workspace);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
