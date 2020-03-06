@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -53,6 +54,7 @@ public class MessageRestController {
             logger.info(message.toString());
         }
         logger.info("-----------------------");
+        // messageDtoService.toDto 123456 NOT OK
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
@@ -75,6 +77,7 @@ public class MessageRestController {
         for (Message message : messages) {
             logger.info(message.toString());
         }
+        // messageDtoService.toDto 123456 NOT OK
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
@@ -94,6 +97,7 @@ public class MessageRestController {
         Message message = messageService.getMessageById(id);
         logger.info("Сообщение с id = {}", id);
         logger.info(message.toString());
+        // messageDtoService.toDto 123456 NOT OK
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.OK);
     }
 
@@ -113,6 +117,7 @@ public class MessageRestController {
                                                                             @PathVariable("startDate") String startDate,
                                                                             @PathVariable("endDate") String endDate) {
         List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now(), false);
+        // messageDtoService.toDto 123456 NOT OK
         return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
@@ -132,6 +137,7 @@ public class MessageRestController {
         Message message = messageDtoService.toEntity(messageDto);
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
+        // messageDtoService.toDto 123456 NOT OK
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
 
@@ -193,6 +199,7 @@ public class MessageRestController {
     public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long userId, @PathVariable Long workspaceId) {
         List<Message> starredMessages = messageService.getStarredMessagesForUserByWorkspaceId(userId, workspaceId, false);
         logger.info("Сообщения, отмеченные пользователем.");
+        // messageDtoService.toDto 123456 NOT OK
         return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
     }
 

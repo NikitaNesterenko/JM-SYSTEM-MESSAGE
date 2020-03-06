@@ -59,12 +59,14 @@ public class MessageDtoServiceImplTest {
 
   @Test
   public void toDto_Should_Return_Null_If_Message_Is_Null() {
+    // messageDtoService.toDto 123456 OK
     assertNull(messageDtoService.toDto((Message) null));
   }
 
   @Test
   public void toDto_Should_Return_MessageDTO() {
     when(channelDAO.getById(1L)).thenReturn(channel);
+      // messageDtoService.toDto 123456 NOT OK
     MessageDTO messageDTO = messageDtoService.toDto(message);
 
     assertEquals(3L, (long) messageDTO.getId());

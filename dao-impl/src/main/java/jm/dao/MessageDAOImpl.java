@@ -1,77 +1,136 @@
 package jm.dao;
 
 import jm.api.dao.MessageDAO;
+import jm.dto.MessageDTO;
 import jm.model.Message;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 @Transactional
 public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     private static final Logger logger = LoggerFactory.getLogger(MessageDAOImpl.class);
 
+    private List<Long> getListRecipientUserIds () {
+
+        List<Long> listIds = new ArrayList<>();
+
+
+        return listIds;
+    }
+
+
     @Override
-    public List<Message> getMessageByContent(String word, Boolean isDeleted) {
+    public Optional<MessageDTO> getMessageDtoById (Long id) {
+
+        MessageDTO messageDTO = null;
+
+        try {
+            /*
+            private Set<Long> recipientUserIds;
+
+            private String userName;
+            private String botNickName;
+            private String channelName;
+            private String userAvatarUrl;
+            private String pluginName;
+             */
+            messageDTO = (MessageDTO) entityManager.createNativeQuery("SELECT " +
+                                                                              "id AS \"id\", " +
+                                                                              "channel_id AS \"channelId\", " +
+                                                                              "content AS \"content\", " +
+                                                                              "date_create AS \"dateCreate\", " +
+                                                                              "filename AS \"filename\", " +
+                                                                              "is_deleted AS \"isDeleted\", " +
+                                                                              "voice_message \"voiceMessage\", " +
+                                                                              "workspace_id AS \"workspaceId\", " +
+                                                                              "bot_id AS \"botId\", " +
+                                                                              "parent_message_id AS \"parentMessageId\", " +
+                                                                              "shared_message_id AS \"sharedMessageId\", " +
+                                                                              "user_id AS \"userId\" " +
+                                                                              "FROM messages m WHERE id=:id")
+                                              .setParameter("id", id)
+                                              .unwrap(NativeQuery.class)
+                                              .setResultTransformer(Transformers.aliasToBean(MessageDTO.class))
+                                              .getSingleResult();
+
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(messageDTO);
+
+
+        return null;
+    }
+
+    @Override
+    public List<Message> getMessageByContent (String word, Boolean isDeleted) {
         return entityManager.createQuery("select m from Message m where m.content =:content and m.isDeleted = :is_deleted", Message.class)
-                .setParameter("content", word)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .setParameter("content", word)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getAll(Boolean isDeleted) {
+    public List<Message> getAll (Boolean isDeleted) {
         return entityManager.createQuery("select m from Message m where m.isDeleted = :is_deleted", Message.class)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getMessagesByChannelId(Long id, Boolean isDeleted) {
+    public List<MessageDTO> getAllMessageDto (Boolean isDeleted) {
+        return null;
+    }
+
+    @Override
+    public List<Message> getMessagesByChannelId (Long id, Boolean isDeleted) {
         return entityManager.createQuery("select m from Message m where m.channelId =:channel_id and m.isDeleted = :is_deleted", Message.class)
-                .setParameter("channel_id", id)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .setParameter("channel_id", id)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
-        return entityManager
-                .createQuery("select m from Message m where m.channelId =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate and m.isDeleted = :is_deleted order by m.dateCreate", Message.class)
-                .setParameter("channel_id", id)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+    public List<MessageDTO> getMessageDtoListByChannelId (Long id, Boolean isDeleted) {
+        return null;
     }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+    public List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return entityManager
-                .createQuery("select m from Message m where m.bot.id = :bot_id and m.channelId = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate and m.isDeleted = :is_deleted order by m.dateCreate", Message.class)
-                .setParameter("bot_id", botId)
-                .setParameter("channel_id", channelId)
-                .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .createQuery("select m from Message m where m.channelId =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate and m.isDeleted = :is_deleted order by m.dateCreate", Message.class)
+                       .setParameter("channel_id", id)
+                       .setParameter("startDate", startDate)
+                       .setParameter("endDate", endDate)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
-//    @Override
-//    public List<ChannelMessage> getStarredMessagesForUser(Long id) {
-//            return entityManager.createQuery(
-//                    "select m from Message m join m.starredByWhom as sm where sm.id = :id",
-//                    ChannelMessage.class
-//            )
-//                    .setParameter("id", id)
-//                    .getResultList();
-//    }
+    @Override
+    public List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+        return null;
+    }
+
+    @Override
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod (Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+        return entityManager
+                       .createQuery("select m from Message m where m.bot.id = :bot_id and m.channelId = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate and m.isDeleted = :is_deleted order by m.dateCreate", Message.class)
+                       .setParameter("bot_id", botId)
+                       .setParameter("channel_id", channelId)
+                       .setParameter("startDate", startDate)
+                       .setParameter("endDate", endDate)
+                       .setParameter("is_deleted", isDeleted)
+                .getResultList();
+    }
 
     @Override
     public List<Message> getStarredMessagesForUser(Long userId, Boolean isDeleted) {
@@ -96,16 +155,6 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
     }
-
-//    @Override
-//    public List<Message> getStarredMessagesForUser(Long id) {
-//        try {
-//            return (List<Message>) entityManager.createNativeQuery("SELECT * FROM messages WHERE id IN (SELECT starred_messages_id FROM users_starred_messages WHERE user_id = ?);", Message.class)
-//                    .setParameter(1, id).getResultList();
-//        } catch (NoResultException e) {
-//            return null;
-//        }
-//    }
 
     @Override
     public List<Message> getMessagesByIds(Set<Long> ids, Boolean isDeleted) {

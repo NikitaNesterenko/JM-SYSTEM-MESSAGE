@@ -1,6 +1,8 @@
 package jm.dto;
 
-import jm.api.dao.*;
+import jm.api.dao.ChannelDAO;
+import jm.api.dao.ConversationDAO;
+import jm.api.dao.UserDAO;
 import jm.model.Conversation;
 import jm.model.User;
 import jm.model.Workspace;
@@ -56,6 +58,7 @@ public class DirectMessageDtoServiceImplTest {
 
   @Test
   public void toDto_Should_Return_Null_If_DM_Is_Null() {
+      // TODO: переделать без использования toDTO. Сделать в DirectMessageDTO конструктор, который принимает DirectMessage
     assertNull(directMessageDtoService.toDto((DirectMessage) null));
   }
 

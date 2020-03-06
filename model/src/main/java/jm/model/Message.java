@@ -8,7 +8,6 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -139,7 +138,7 @@ public class Message {
 
     // Constructor for simplify MessageDTO->Message conversion.
     // copying simple fields
-    public Message(MessageDTO messageDto) {
+    public Message (@NonNull MessageDTO messageDto) {
         this.id = messageDto.getId();
         this.content = messageDto.getContent();
         this.dateCreate = messageDto.getDateCreate();
@@ -147,6 +146,8 @@ public class Message {
         this.voiceMessage = messageDto.getVoiceMessage();
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
+
+
     }
 
     //    public Message(Channel channel, User user, String content, LocalDateTime dateCreate, Long sharedMessageId) {
@@ -164,5 +165,6 @@ public class Message {
 //        this.dateCreate = dateCreate;
 //        this.sharedMessageId = sharedMessageId;
 //    }
+
 
 }

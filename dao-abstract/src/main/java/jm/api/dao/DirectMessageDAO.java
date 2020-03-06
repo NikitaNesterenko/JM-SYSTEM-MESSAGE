@@ -10,6 +10,7 @@ public interface DirectMessageDAO {
 
     DirectMessage getById(Long id);
 
+
     void persist(DirectMessage directMessage);
 
     DirectMessage merge(DirectMessage directMessage);

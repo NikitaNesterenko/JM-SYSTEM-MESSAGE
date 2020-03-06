@@ -1,6 +1,8 @@
 package jm;
 
+import jm.dto.MessageDTO;
 import jm.model.Message;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,13 +23,17 @@ public interface MessageService {
 
     void updateMessage(Message message);
 
-    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
+    List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
-    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
+    List<Message> getMessagesByBotIdByChannelIdForPeriod (Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
-    List<Message> getStarredMessagesForUser(Long id, Boolean isDeleted);
+    List<Message> getStarredMessagesForUser (Long id, Boolean isDeleted);
 
-    List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted);
+    List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);
 
-    List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted);
+    List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted);
+
+    MessageDTO getMessageDtoByMessage (@NonNull Message message);
+
+    Message getMessageByMessageDTO (@NonNull MessageDTO messageDTO);
 }
