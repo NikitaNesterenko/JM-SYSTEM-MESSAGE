@@ -69,16 +69,16 @@ public class ChannelServiceImplTest {
 
     @Test
     public void getChannelByNameInChannel() {
-        Mockito.when(channelDAO.getChannelByName("Channel1")).thenReturn(channel1);
-        assertEquals(channelService.getChannelByName("Channel1"), channel1);
-        verify(channelDAO).getChannelByName("Channel1");
+        Mockito.when(channelDAO.getChannelByName("Channel1",1L)).thenReturn(channel1);
+        assertEquals(channelService.getChannelByName("Channel1",1L), channel1);
+        verify(channelDAO).getChannelByName("Channel1",1L);
     }
 
     @Test
     public void getChannelByNameInChannelWasNull() {
-        Mockito.when(channelDAO.getChannelByName("Channel1")).thenReturn(null);
-        assertEquals(channelService.getChannelByName("Channel1"), null);
-        verify(channelDAO).getChannelByName("Channel1");
+        Mockito.when(channelDAO.getChannelByName("Channel1",1L)).thenReturn(null);
+        assertEquals(channelService.getChannelByName("Channel1",1L), null);
+        verify(channelDAO).getChannelByName("Channel1",1L);
     }
 
     @Test

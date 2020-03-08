@@ -257,7 +257,8 @@ export class StompClient {
     sendChannel(channel) {
         this.stompClient.send('/app/channel', {}, JSON.stringify({
             'name': channel.name,
-            'isPrivate': channel.isPrivate
+            'isPrivate': channel.isPrivate,
+            'workspaceId': channel.workspaceId
         }));
     }
 

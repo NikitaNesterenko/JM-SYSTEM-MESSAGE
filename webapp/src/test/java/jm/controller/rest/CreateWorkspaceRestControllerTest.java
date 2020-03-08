@@ -114,7 +114,8 @@ public class CreateWorkspaceRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonCode))
                 .andExpect(status().isOk());
-        verify(channelService, times(1)).getChannelByName(channelName);
+        Workspace workspace = workspaceService.getWorkspaceByName(workspaceName);
+        verify(channelService, times(1)).getChannelByName(channelName,workspace.getId());
     }
 
     public void invites() throws Exception {

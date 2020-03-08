@@ -16,7 +16,7 @@ public interface ChannelService {
 
     Channel getChannelById(Long id);
 
-    Channel getChannelByName(String name);
+    Channel getChannelByName(String name, Long workspaceId);
 
     List<Channel> getChannelsByOwnerId(Long ownerId);
 

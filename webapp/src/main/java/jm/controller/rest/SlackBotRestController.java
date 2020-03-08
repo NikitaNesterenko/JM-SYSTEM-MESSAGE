@@ -3,6 +3,7 @@ package jm.controller.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jm.CommandsBotService;
 import jm.dto.SlashCommandDto;
+import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class SlackBotRestController {
@@ -35,8 +38,9 @@ public class SlackBotRestController {
 
     @MessageMapping("/bot/*") //обработка команд, реализованных на вебсокете
     @SendTo("/topic/slackbot")
-    public String getWsCommand(@RequestBody SlashCommandDto command) throws JsonProcessingException {
-        return commandsBotService.getWsCommand(command);
+    public String getWsCommand(@RequestBody SlashCommandDto command, HttpServletRequest request) throws JsonProcessingException {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        return commandsBotService.getWsCommand(command, workspace);
     }
 
 }
