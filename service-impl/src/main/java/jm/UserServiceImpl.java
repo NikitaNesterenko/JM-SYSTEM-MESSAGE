@@ -75,4 +75,17 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUsersInWorkspace(id);
     }
 
+    @Override
+    public void removeChannelMessageFromUnreadForUser(Long channelId, Long userId) {
+        User user =  userDAO.getById(userId);
+        user.getUnreadMessages().removeIf(msg -> msg.getChannelId().equals(channelId));
+        this.updateUser(user);
+    }
+
+    @Override
+    public void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId) {
+        User user = this.getUserById(userId);
+        user.getUnreadDirectMessages().removeIf(dmsg -> dmsg.getConversation().getId().equals(conversationId));
+        this.updateUser(user);
+    }
 }

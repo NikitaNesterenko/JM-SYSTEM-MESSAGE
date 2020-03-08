@@ -20,8 +20,6 @@ public interface UserDAO {
 
     User getUserByLogin(String login);
 
-    User getUserByName(String name);
-
     User getUserByEmail(String email);
 
     void addRoleForUser(User user, String role);
@@ -31,6 +29,8 @@ public interface UserDAO {
     List<User> getAllUsersInThisChannel(Long id);
 
     List<UserDTO> getUsersInWorkspace(Long id);
+
+    User getUserByName(String name);
 
     List<User> getUsersByIds(Set<Long> ids);
 }
