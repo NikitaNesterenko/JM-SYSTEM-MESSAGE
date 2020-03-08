@@ -30,6 +30,88 @@ public class UserDTO {
     private Integer online;
     private String userSkype;
 
+    private static class Builder {
+        private UserDTO userDTO;
+
+        public Builder () {
+            userDTO = new UserDTO();
+        }
+
+        public Builder setId(Long id) {
+            userDTO.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            userDTO.name = name;
+            return this;
+        }
+
+        public Builder setLastName(String lastName) {
+            userDTO.lastName = lastName;
+            return this;
+        }
+
+        public Builder setLogin(String login) {
+            userDTO.login = login;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            userDTO.email = email;
+            return this;
+        }
+
+        public Builder setAvatarURL(String avatarURL) {
+            userDTO.avatarURL = avatarURL;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            userDTO.title = title;
+            return this;
+        }
+
+        public Builder setDisplayName(String displayName) {
+            userDTO.displayName = displayName;
+            return this;
+        }
+
+        public Builder setPhoneNumber(String phoneNumber) {
+            userDTO.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder setTimeZone(String timeZone) {
+            userDTO.timeZone = timeZone;
+            return this;
+        }
+
+        public Builder setStarredMessageIds(Set<Long> starredMessageIds) {
+            userDTO.starredMessageIds = starredMessageIds;
+            return this;
+        }
+
+        public Builder setDirectMessageToUserIds(Set<Long> directMessageToUserIds) {
+            userDTO.directMessagesToUserIds = directMessageToUserIds;
+            return this;
+        }
+
+        public Builder setOnline(Integer online) {
+            userDTO.online = online;
+            return this;
+        }
+
+        public Builder setUserSkype(String userSkype) {
+            userDTO.userSkype = userSkype;
+            return this;
+        }
+
+        public UserDTO build() {
+            return userDTO;
+        }
+    }
+
 
     public UserDTO(Long id, String name, String lastName, String avatarURL, String displayName) {
         this.id = id;

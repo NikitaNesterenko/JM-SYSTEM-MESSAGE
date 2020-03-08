@@ -116,11 +116,60 @@
     <!-- channel info -->
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
     <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
+    <!-- channel-model -->
+    <script defer th:src="@{/js/channel_browse_modal/modal.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/css/channelModal.css}"/>
 
 
 </head>
 
 <body class="supports_custom_scrollbar">
+
+<!-- Channel modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="channelModal">
+    <button type="button"  id="close_modal_channel" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times</span>
+    </button>
+    <div class="modal-dialog modal-lg" role="document">
+        <!--        <button type="button"  id="close_modal_channel" class="close" data-dismiss="modal" aria-label="Close">-->
+        <!--            <span aria-hidden="true">&times;</span>-->
+        <!--        </button>-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Browse Channels</h1>
+            </div>
+            <div class="modal-body">
+                <div class="p-channel-browser-control">
+                    <div class="input-group mb-3">
+                        <span class="icon"><i class="fa fa-search"></i></span>
+                        <input id="input-in" type="text" class="form-control">
+                    </div>
+                    <div class="dropdown-show-inline">
+                        <div class="dropdown show">
+                            <strong>Show:</strong>
+                            <select class="selectpicker" id="selectedChannels">
+                                <option class="all-channels active" value="all" selected>All channels</option>
+                                <option value="private">Private channels</option>
+                                <option value="archive">Archive channels</option>
+                            </select>
+                        </div>
+                        <div class="dropdown show">
+                            <strong>Sort:</strong>
+                            <select class="selectpicker" id="selectedSort">
+                                <option value="name" selected>Channel name</option>
+                                <option value="date">Creation date(newest first)</option>
+                                <option value="most">Members (most to fewest)</option>
+                                <option value="fewest">Members (fewest to most)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="channel-list"><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Small modal -->
 <div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
@@ -662,7 +711,7 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__list__channels">
                                                 <div class="p-channel_sidebar__section_heading">
-                                                    <button class="p-channel_sidebar__channels__button">Channels
+                                                    <button class="p-channel_sidebar__channels__button" id="btnChannel-info_1" data-toggle="modal" data-target="#channelModal">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
                                                         <button class="p-channel_sidebar__section_heading_plus"

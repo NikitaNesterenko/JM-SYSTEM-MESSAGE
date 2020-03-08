@@ -31,4 +31,8 @@ public interface ChannelDAO {
     List<Channel> getChannelsByIds(Set<Long> ids);
 
     Long getWorkspaceIdByChannelId(Long channelId);
+
+    List<Channel> getArchivedChannels();
+
+    List<Channel> getPrivateChannels();
 }

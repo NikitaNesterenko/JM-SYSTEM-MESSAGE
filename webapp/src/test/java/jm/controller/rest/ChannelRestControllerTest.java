@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -275,7 +276,7 @@ public class ChannelRestControllerTest {
         ChannelDTO channelDTO2 = new ChannelDTO(channel2.getId(), channel2.getName(), channel2.getIsPrivate());
 
 
-        when(channelServiceMock.gelAllChannels()).thenReturn(Arrays.asList(channel1, channel2));
+        when(channelServiceMock.getAllChannels()).thenReturn((List<ChannelDTO>) Arrays.asList(channelDTO1, channelDTO2));
         when(channelDtoServiceMock.toDto(Arrays.asList(channel1, channel2))).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
 
         mockMvc.perform(get(URL))
@@ -289,7 +290,7 @@ public class ChannelRestControllerTest {
                 .andExpect(jsonPath("$[1].name", is("test_2")))
                 .andExpect(jsonPath("$[1].isPrivate", is(Boolean.FALSE)));
 
-        verify(channelServiceMock, times(1)).gelAllChannels();
+        verify(channelServiceMock, times(1)).getAllChannels();
         verifyNoMoreInteractions(channelServiceMock);
     }
 }

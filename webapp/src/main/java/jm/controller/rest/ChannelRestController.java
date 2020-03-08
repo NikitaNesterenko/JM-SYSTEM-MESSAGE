@@ -193,7 +193,7 @@ public class ChannelRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping(value = "/all")
     @Operation(summary = "Get all channels",
             responses = {
                     @ApiResponse(responseCode = "200",
@@ -206,13 +206,7 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getAllChannels() {
         logger.info("Список channel: ");
-        List<Channel> channels = channelService.gelAllChannels();
-        for (Channel channel : channels) {
-            logger.info(channel.toString());
-        }
-        List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
-
-        return ResponseEntity.ok(channelDTOList);
+        return ResponseEntity.ok(channelService.getAllChannels());
     }
 
     @GetMapping("/workspace/{workspace_id}/user/{user_id}")
@@ -291,6 +285,38 @@ public class ChannelRestController {
 
 
         logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/private")
+    public ResponseEntity<List<ChannelDTO>> getPrivateChannels() {
+        logger.info("Список приватных каналов: ");
+        List<Channel> channels = channelService.getPrivateChannels();
+        for (Channel channel : channels) {
+            logger.info(channel.toString());
+        }
+        List<ChannelDTO> channelsDTOList = channelDTOService.toDto(channels);
+        return ResponseEntity.ok(channelsDTOList);
+    }
+
+    @GetMapping(value = "/all_archive")
+    public ResponseEntity<List<ChannelDTO>> getAllArchiveChannels() {
+        logger.info("Список архивных каналов: ");
+        List<Channel> channels = channelService.getAllArchiveChannels();
+        for (Channel channel : channels) {
+            logger.info(channel.toString());
+        }
+        List<ChannelDTO> channelsDTO = channelDTOService.toDto(channels);
+        return ResponseEntity.ok(channelsDTO);
+    }
+
+    @PostMapping(value = "/unzip/{id}")
+    public ResponseEntity<ChannelDTO> unzipChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(false);
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelDTOService.toDto(channel);
+        logger.info("Канал с id = {} разархивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
