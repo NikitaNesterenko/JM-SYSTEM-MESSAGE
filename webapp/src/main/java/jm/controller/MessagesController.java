@@ -18,6 +18,12 @@ public class MessagesController {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(message);
     }
+//
+//    @MessageMapping("/message")
+//    @SendToUser("/queue/reply")
+//    public String processMessageFromClient(@Payload String message, Principal principal) throws Exception {
+//        return gson.fromJson(message, Map.class).get("name").toString();
+//    }
 
     @MessageMapping("/thread")
     @SendTo("/topic/threads")

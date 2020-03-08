@@ -449,7 +449,15 @@ public class TestDataInitializer {
 
         Workspace workspace1 = new Workspace();
         workspace1.setName("workspace-0");
-        workspace1.setUsers(this.users);
+//        workspace1.setUsers(this.users);
+
+        // для настройки вэбсоккетов. начало
+        List<User> usersList = userService.getAllUsers();
+        usersList.remove(1);
+        Set<User> usersSet = new HashSet<>(usersList);
+        workspace1.setUsers(usersSet);
+        // для настройки вэбсоккетов. конец
+
         workspace1.setUser(userJohn);
         workspace1.setIsPrivate(false);
         workspace1.setCreatedDate(LocalDateTime.now());
