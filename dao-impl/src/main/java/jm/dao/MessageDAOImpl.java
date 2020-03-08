@@ -18,57 +18,70 @@ import java.util.*;
 public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     private static final Logger logger = LoggerFactory.getLogger(MessageDAOImpl.class);
 
-    private List<Long> getListRecipientUserIds () {
+    private List<Number> getListRecipientUserIds (Long messageId) {
 
-        List<Long> listIds = new ArrayList<>();
-
-
-        return listIds;
+        List<Number> list = new ArrayList<>();
+        try {
+            list = entityManager.createNativeQuery("SELECT recipient_user_id FROM messages_recipient_users mru WHERE direct_message_id=:messageId")
+                           .setParameter("messageId", messageId)
+                           .getResultList();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 
     @Override
     public Optional<MessageDTO> getMessageDtoById (Long id) {
-
+        //TODO: Проверить как работает
         MessageDTO messageDTO = null;
 
         try {
             /*
-            private Set<Long> recipientUserIds;
+            private String userName; **
+            private String userAvatarUrl;**
 
-            private String userName;
-            private String botNickName;
+            private String pluginName; **
+            private String botNickName; **
+
             private String channelName;
-            private String userAvatarUrl;
-            private String pluginName;
+
              */
             messageDTO = (MessageDTO) entityManager.createNativeQuery("SELECT " +
-                                                                              "id AS \"id\", " +
-                                                                              "channel_id AS \"channelId\", " +
-                                                                              "content AS \"content\", " +
-                                                                              "date_create AS \"dateCreate\", " +
-                                                                              "filename AS \"filename\", " +
-                                                                              "is_deleted AS \"isDeleted\", " +
-                                                                              "voice_message \"voiceMessage\", " +
-                                                                              "workspace_id AS \"workspaceId\", " +
-                                                                              "bot_id AS \"botId\", " +
-                                                                              "parent_message_id AS \"parentMessageId\", " +
-                                                                              "shared_message_id AS \"sharedMessageId\", " +
-                                                                              "user_id AS \"userId\" " +
-                                                                              "FROM messages m WHERE id=:id")
+                                                                              "m.id AS \"id\", " +
+                                                                              "m.channel_id AS \"channelId\", " +
+                                                                              "m.content AS \"content\", " +
+                                                                              "m.date_create AS \"dateCreate\", " +
+                                                                              "m.filename AS \"filename\", " +
+                                                                              "m.is_deleted AS \"isDeleted\", " +
+                                                                              "m.voice_message \"voiceMessage\", " +
+                                                                              "m.workspace_id AS \"workspaceId\", " +
+                                                                              "m.bot_id AS \"botId\", " +
+                                                                              "m.parent_message_id AS \"parentMessageId\", " +
+                                                                              "m.shared_message_id AS \"sharedMessageId\", " +
+                                                                              "m.user_id AS \"userId\" " +
+//                                                                              ", u.name AS \"userName\"," +
+//                                                                              "u.avatar_url AS \"userAvatarUrl\", " +
+//                                                                              "b.nick_name AS \"botNickName\", " +
+//                                                                              "b.name AS \"pluginName\", " +
+//                                                                              "c.name AS \"channelName\" " +
+                                                                              "FROM messages m " +
+                                                                              "WHERE m.id=:id ")
+//                                 + , users u, bots b, channels c
+//                                                                              "AND u.id = m.user_id AND b.id = m.bot_id AND c.id = m.channel_id")
                                               .setParameter("id", id)
                                               .unwrap(NativeQuery.class)
                                               .setResultTransformer(Transformers.aliasToBean(MessageDTO.class))
                                               .getSingleResult();
+
+            messageDTO.setRecipientUserIds(getListRecipientUserIds(id));
 
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(messageDTO);
-
-
-        return null;
     }
 
     @Override

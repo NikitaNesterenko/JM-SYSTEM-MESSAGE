@@ -60,6 +60,7 @@ public class BotRestController {
             })
     public ResponseEntity<List<BotDTO>> getBotByWorkspace (@PathVariable("id") Long id) {
         //TODO: удалить лишнее
+        System.out.println("TYT getBotByWorkspace id: " + id);
 //        List<Bot> bots = botService.getBotsByWorkspaceId(id);
         List<BotDTO> botDTOList = botService.getBotDtoListByWorkspaceId(id);
         if (botDTOList.isEmpty()) {

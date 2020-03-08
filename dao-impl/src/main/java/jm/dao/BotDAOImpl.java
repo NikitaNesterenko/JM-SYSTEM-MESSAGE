@@ -2,7 +2,6 @@ package jm.dao;
 
 import jm.api.dao.BotDAO;
 import jm.dto.BotDTO;
-import jm.dto.ChannelDTO;
 import jm.model.Bot;
 import jm.model.Channel;
 import org.hibernate.query.NativeQuery;
@@ -52,6 +51,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
     @Override
     public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
+        //TODO: переделать на IN
         return getAllBotIdByWorkspaceId(id).stream()
                        .map(Number::longValue)
                        .map(this::getBotDTOById)
@@ -117,11 +117,11 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
         BotDTO botDTO = null;
 
         try {
-            botDTO = (BotDTO) entityManager.createNativeQuery("SELECT b.id AS \"id\", b.name AS \"name\", b.nick_name AS \"nickName\", b.date_create  " +
+            botDTO = (BotDTO) entityManager.createNativeQuery("SELECT b.id AS \"id\", b.name AS \"name\", b.nick_name AS \"nickName\", b.date_create AS \"dateCreate\" " +
                                                                       "FROM bots b WHERE id=:id")
                                       .setParameter("id", id)
                                       .unwrap(NativeQuery.class)
-                                      .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                                      .setResultTransformer(Transformers.aliasToBean(BotDTO.class))
                                       .getResultList()
                                       .get(0);
 

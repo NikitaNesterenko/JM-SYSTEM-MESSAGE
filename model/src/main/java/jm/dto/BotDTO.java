@@ -62,7 +62,7 @@ public class BotDTO {
         this.id = id.longValue();
     }
 
-    public void setCreatedDate (Timestamp dateCreate) {
+    public void setDateCreate (Timestamp dateCreate) {
         this.dateCreate = dateCreate.toLocalDateTime();
     }
 

@@ -287,7 +287,7 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<ChannelDTO> getChannelByName (@PathVariable("name") String name) {
-        System.out.println("Работает тут!!!");
+        System.out.println("Работает TYT!!!");
         // api/channels/name
 //        Channel channelByName = channelService.getChannelByName(name);
         Optional<ChannelDTO> channelByName = channelService.getChannelDTOByName(name);

@@ -71,7 +71,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
         // setting up 'recipientUserIds'
         Set<Long> recipientUserIds = message.getRecipientUsers().stream().map(User::getId).collect(Collectors.toSet());
-        messageDto.setRecipientUserIds(recipientUserIds);
+//        messageDto.setRecipientUserIds(recipientUserIds);
 
         // setting up 'parentMessageId'
         Message parentMessage = message.getParentMessage();

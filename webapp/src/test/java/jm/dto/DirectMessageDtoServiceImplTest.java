@@ -98,7 +98,7 @@ public class DirectMessageDtoServiceImplTest {
     directMessageDTO.setConversationId(conversation.getId());
     directMessageDTO.setContent("test dm entity");
     directMessageDTO.setUserId(1L);
-    directMessageDTO.setDateCreate(localDateTime);
+//    directMessageDTO.setDateCreate(localDateTime);
     directMessageDTO.setIsDeleted(true);
     directMessageDTO.setFilename("file.txt");
 

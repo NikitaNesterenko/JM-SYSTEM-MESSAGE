@@ -58,7 +58,12 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
-        return null;
+        // TODO: Удалить лишнее
+        System.out.println("TYT SERVICE getBotDtoListByWorkspaceId ID: " + id);
+        List<BotDTO> botDTOList = botDAO.getBotDtoListByWorkspaceId(id);
+        System.out.println("Результат getBotDtoListByWorkspaceId");
+        botDTOList.forEach(el -> System.out.println(el.toString()));
+        return botDAO.getBotDtoListByWorkspaceId(id);
     }
 
     @Override

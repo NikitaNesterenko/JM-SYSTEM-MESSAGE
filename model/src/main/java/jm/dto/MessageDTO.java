@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,6 +40,7 @@ public class MessageDTO {
     private Long sharedMessageId;
     private Set<Long> recipientUserIds;
     private Long parentMessageId;
+
 
     // Три дополнительных поля, которые очень часто используются в JavaScript коде,
     // поэтому их добавление позволит избежать лишних запросов и сильно упростить JavaScript код.
@@ -99,8 +102,59 @@ public class MessageDTO {
         this.workspaceId = workspaceId;
     }
 
-    public boolean setSharedMessageId (Long sharedMessageId) {
-        this.sharedMessageId = sharedMessageId;
-        return true;
+      /*
+      "m.id AS \"id\", " +
+      "m.user_id AS \"userId\" "
+      "m.bot_id AS \"botId\", " +
+      "m.channel_id AS \"channelId\", " +
+      "m.workspace_id AS \"workspaceId\", " +
+      "m.shared_message_id AS \"sharedMessageId\", " +
+      "m.parent_message_id AS \"parentMessageId\", " +
+
+      "m.date_create AS \"dateCreate\", " +
+     */
+
+    public void setId (@NonNull Number id) {
+        System.out.println("Получено значчение");
+        System.out.println("Number == " + id);
+        this.id = id.longValue();
+    }
+
+    public void setUserId (Number userId) {
+        this.userId = userId.longValue();
+    }
+
+    public void setBotId (Number botId) {
+        this.botId = botId.longValue();
+    }
+
+    public void setDateCreate (Timestamp dateCreate) {
+        this.dateCreate = dateCreate.toLocalDateTime();
+    }
+
+//    public void setDateCreate (LocalDateTime dateCreate) {
+//        this.dateCreate = dateCreate;
+//    }
+
+    public void setChannelId (Number channelId) {
+        this.channelId = channelId.longValue();
+    }
+
+    public void setWorkspaceId (Number workspaceId) {
+        this.workspaceId = workspaceId.longValue();
+    }
+
+    public void setSharedMessageId (Number sharedMessageId) {
+        this.sharedMessageId = sharedMessageId.longValue();
+    }
+
+    public void setParentMessageId (Number parentMessageId) {
+        this.parentMessageId = parentMessageId.longValue();
+    }
+
+    public void setRecipientUserIds (List<Number> recipientUserIds) {
+        this.recipientUserIds = recipientUserIds.stream()
+                                        .map(Number::longValue)
+                                        .collect(Collectors.toSet());
     }
 }

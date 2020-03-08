@@ -9,19 +9,21 @@ import java.util.List;
 
 public interface MessageService {
 
-    List<Message> getAllMessages(Boolean isDeleted);
+    List<Message> getAllMessages (Boolean isDeleted);
 
-    List<Message> getMessagesByChannelId(Long id, Boolean isDeleted);
+    List<Message> getMessagesByChannelId (Long id, Boolean isDeleted);
 
-    List<Message> getMessagesByContent(String word, Boolean isDeleted);
+    List<Message> getMessagesByContent (String word, Boolean isDeleted);
 
-    Message getMessageById(Long id);
+    Message getMessageById (Long id);
 
-    void createMessage(Message message);
+//    Optional<MessageDTO> getMessageDtoById (Long id);
 
-    void deleteMessage(Long id);
+    void createMessage (Message message);
 
-    void updateMessage(Message message);
+    void deleteMessage (Long id);
+
+    void updateMessage (Message message);
 
     List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 

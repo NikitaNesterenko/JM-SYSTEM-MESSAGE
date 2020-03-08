@@ -10,3 +10,5 @@ Message message = messageService.getMessageById(id);
 List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now(), false);
 
 Message message = messageDtoService.toEntity(messageDto);
+
+TYT

@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
@@ -73,9 +72,11 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel created")
             })
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
-        System.out.println("ТРЕД!");
-        messageDTO.setDateCreate(LocalDateTime.now());
+        //TODO: убрать лишнее
+        System.out.println("TYT createThreadChannel");
+//        messageDTO.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDTO);
+        message.setDateCreate(LocalDateTime.now());
 //        Message message = new Message(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
         System.out.println(threadChannel);

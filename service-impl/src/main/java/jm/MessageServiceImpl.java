@@ -54,6 +54,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message getMessageById (Long id) {
+        Optional<MessageDTO> messageDTO = messageDAO.getMessageDtoById(id);
+        messageDTO.ifPresent(messageDTO1 -> System.out.println("messageDTO getMessageDtoById: " + messageDTO1.toString()));
+
         return messageDAO.getById(id);
     }
 

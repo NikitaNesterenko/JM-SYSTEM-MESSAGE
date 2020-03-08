@@ -71,6 +71,7 @@ public class MessageRestController {
                     )
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
+        System.out.println("Работает TYT getMessagesByChannelId");
         List<Message> messages = messageService.getMessagesByChannelId(id, false);
         messages.sort(Comparator.comparing(Message::getDateCreate));
         logger.info("Полученные сообщения из канала с id = {} :", id);
@@ -133,8 +134,10 @@ public class MessageRestController {
 //                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
 //            })
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
-        messageDto.setDateCreate(LocalDateTime.now());
+        //TODO: убрать лишнее
+//        messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
+        message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
         // messageDtoService.toDto 123456 NOT OK
@@ -158,6 +161,7 @@ public class MessageRestController {
 //    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
         Message message = messageDtoService.toEntity(messageDto);
+        System.out.println("Работает TYT updateMessage");
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
