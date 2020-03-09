@@ -67,7 +67,7 @@ public class MessagesController {
 
         logger.info("Созданное сообщение : {}", message);
         simpMessagingTemplate
-                .convertAndSend("/topic/messages/channel-" + message.getChannelId(), messageDtoService.toDto(message));
+                .convertAndSend("/queue/messages/channel-" + message.getChannelId(), messageDtoService.toDto(message));
     }
 
     @MessageMapping("/thread")
@@ -80,7 +80,7 @@ public class MessagesController {
         threadMessageDTO = threadMessageDtoService.toDto(threadChannelMessage);
 
         simpMessagingTemplate
-                .convertAndSend("/topic/threads/channel-" + channelId, threadMessageDTO);
+                .convertAndSend("/queue/threads/channel-" + channelId, threadMessageDTO);
     }
 
     @MessageMapping("/direct_message")
@@ -101,6 +101,6 @@ public class MessagesController {
         });
 
         simpMessagingTemplate
-                .convertAndSend("/topic/dm/" + directMessage.getConversation().getId(), directMessageDtoService.toDto(directMessage));
+                .convertAndSend("/queue/dm/" + directMessage.getConversation().getId(), directMessageDtoService.toDto(directMessage));
     }
 }

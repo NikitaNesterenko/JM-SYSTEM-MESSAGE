@@ -61,7 +61,7 @@ export class StompClient {
         this.channel_service.getChannelsByWorkspaceAndUser(workspace.id, userId)
             .then(channels => {
                 channels.forEach(channel =>
-                    this.stompClient.subscribe('/topic/messages/channel-' + channel.id, async (message) => {
+                    this.stompClient.subscribe('/queue/messages/channel-' + channel.id, async (message) => {
                         let result = JSON.parse(message.body);
                         // result['content'] = result.content;
                         if ((result.userId != null || result.botId != null) && !result.isDeleted) {
@@ -247,7 +247,7 @@ export class StompClient {
         this.channel_service.getChannelsByWorkspaceAndUser(workspace.id, userId)
             .then(channels => {
                 channels.forEach(channel =>
-                    this.stompClient.subscribe('/topic/threads/channel-' + channel.id, (message) => {
+                    this.stompClient.subscribe('/queue/threads/channel-' + channel.id, (message) => {
                         let result = JSON.parse(message.body);
                         if (result.parentMessageId === thread_id) {
                             this.thread_view.setMessage(result);
@@ -260,13 +260,15 @@ export class StompClient {
     subscribeDirectMessage() {
         this.conversation_service.getAllConversationsByUserId(window.loggedUserId).then(conversations => {
             conversations.forEach(conversation =>
-                this.stompClient.subscribe('/topic/dm/' + conversation.id, (message) => {
+                this.stompClient.subscribe('/queue/dm/' + conversation.id, (message) => {
                     const response = JSON.parse(message.body);
+                    let current_conversation_id = sessionStorage.getItem('conversation_id');
+
                     if (!response.isDeleted) {
                         if (response.isUpdated) {
                             this.dm_view.updateMessage(response);
                         } else {
-                            if (response.conversationId === conversation.id) {
+                            if (response.conversationId == current_conversation_id) {
                                 this.dm_view.createMessage(response);
                             } else {
                                 if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
