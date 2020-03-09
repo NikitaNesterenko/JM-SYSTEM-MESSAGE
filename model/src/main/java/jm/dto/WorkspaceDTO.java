@@ -7,8 +7,10 @@ import jm.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,8 +23,8 @@ public class WorkspaceDTO {
     private String name;
     private Set<Long> userIds;
     private Set<Long> channelIds;
-    private Set<Long> appsIds;
-    private Set<Long> botsIds;
+    private Set<Long> appIds;
+    private Set<Long> botIds;
     private Long ownerId;
     private Boolean isPrivate;
 
@@ -46,21 +48,69 @@ public class WorkspaceDTO {
 
         if (workspace.getChannels() != null) {
             Set<Long> channelIds = workspace.getChannels().stream().map(Channel::getId).collect(Collectors.toSet());
-            this.setUserIds(channelIds);
+            this.setChannelIds(channelIds);
         }
 
         if (workspace.getApps() != null) {
             Set<Long> appsIds = workspace.getApps().stream().map(Apps::getId).collect(Collectors.toSet());
-            this.setAppsIds(appsIds);
+            this.setAppIds(appsIds);
         }
 
         if (workspace.getBots() != null) {
             Set<Long> botsIds = workspace.getBots().stream().map(Bot::getId).collect(Collectors.toSet());
-            this.setBotsIds(botsIds);
+            this.setBotIds(botsIds);
         }
     }
 
-    public static class Builder {
+    public void setId (Number id) {
+        this.id = id.longValue();
+    }
+
+    public void setOwnerId (BigInteger ownerId) {
+        this.ownerId = ownerId.longValue();
+    }
+
+    public void setCreatedDate (Timestamp createdDate) {
+        this.createdDate = createdDate.toLocalDateTime();
+    }
+
+/*    public void setUserIds (List<Number> userIds) {
+        System.out.println("setUserIds получили: " + userIds);
+        this.userIds = userIds.stream()
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
+    }
+
+    public void setBotIds (List<Number> botIds) {
+        System.out.println("setBotIds получили: " + botIds);
+        this.botIds = botIds.stream()
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
+    }
+
+    public void setChannelIds (List<Number> channelIds) {
+        System.out.println("channelIds получили: " + channelIds);
+        this.channelIds = channelIds.stream()
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
+    }
+
+    public void setAppIds(List<Number> appIds) {
+        System.out.println("appsIds получили: " + appIds);
+        this.appIds = appIds.stream()
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
+    }*/
+
+    public WorkspaceDTO(Long id, String name, Long ownerId, Boolean isPrivate, LocalDateTime createdDate) {
+        this.id = id;
+        this.name = name;
+        this.ownerId = ownerId;
+        this.isPrivate = isPrivate;
+        this.createdDate = createdDate;
+    }
+
+    /*public static class Builder {
         private Long id;
         private String name;
         private Set<Long> userIds;
@@ -117,7 +167,7 @@ public class WorkspaceDTO {
         }
 
         public WorkspaceDTO build() {
-            return new WorkspaceDTO(this.id, this.name, this.userIds, this.channelIds, this.appsIds, this.botsIds, this.ownerId,this.isPrivate, this.createdDate);
+            return new WorkspaceDTO(this.id, this.name, this.userIds, this.channelIds, this.appsIds, this.botsIds, this.ownerId, this.isPrivate, this.createdDate);
         }
-    }
+    }*/
 }

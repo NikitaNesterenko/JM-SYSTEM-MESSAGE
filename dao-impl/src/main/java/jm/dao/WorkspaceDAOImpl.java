@@ -3,6 +3,8 @@ package jm.dao;
 import jm.api.dao.WorkspaceDAO;
 import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -74,8 +76,30 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
      */
     @Override
     public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
-        WorkspaceDTO result = null;
-        Tuple tuple;
+        WorkspaceDTO workspaceDTO = null;
+        try {
+            workspaceDTO = (WorkspaceDTO) entityManager
+                    .createNativeQuery("SELECT " +
+                            "ws.id as \"id\", " +
+                            "ws.name as \"name\", " +
+                            "ws.created_date as \"createdDate\", " +
+                            "ws.is_private as \"isPrivate\", " +
+                            "owner_id as \"ownerId\" " +
+                            "from workspaces ws where ws.id=:id", WorkspaceDTO.class)
+                    .setParameter("id", id)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
+                    .getSingleResult();
+            workspaceDTO.setAppIds(getAppIds(id));
+            workspaceDTO.setBotIds(getBotIds(id));
+            workspaceDTO.setChannelIds(getChannelIds(id));
+            workspaceDTO.setUserIds(getUserIds(id));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+
+        /*Tuple tuple;
         tuple = (Tuple) entityManager.createNativeQuery("select ws.id, ws.name, ws.created_date, " +
                 "ws.google_client_id, ws.google_client_secret, ws.is_private, owner_id" +
                 " from workspaces ws " +
@@ -84,7 +108,8 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                 .setCreatedDate(((Timestamp) tuple.get("created_date")).toLocalDateTime()).setOwnerId(((BigInteger) tuple.get("owner_id")).longValue())
                 .setPrivate((Boolean) tuple.get("is_private")).setUserIds(getUserIds(id))
                 .setChannelIds(getChannelIds(id)).setBotsIds(getBotIds(id)).setAppsIds(getAppIds(id)).build();
-        return Optional.ofNullable(result);
+        return Optional.ofNullable(result);*/
+        return Optional.ofNullable(workspaceDTO);
     }
 
     private Set<Long> getBotIds(Long workspaceId) {
