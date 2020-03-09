@@ -18,12 +18,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "/queue");
         config.setApplicationDestinationPrefixes("/app");
-
-//        config.enableSimpleBroker("/secured/user/queue/specific-user");
-//        config.setApplicationDestinationPrefixes("/spring-security-mvc-socket");
-//        config.setUserDestinationPrefix("/secured/user");
     }
 
     @Override

@@ -1,8 +1,8 @@
 import {
-    MessageRestPaginationService,
     ChannelRestPaginationService,
-    UserRestPaginationService,
-    DirectMessagesRestController
+    DirectMessagesRestController,
+    MessageRestPaginationService,
+    UserRestPaginationService
 } from './rest/entities-rest-pagination.js'
 
 let activeEdit = false;
@@ -89,15 +89,11 @@ function onEditSubmit(ev) {
             "filename": messageAttachment
         };
         if (message.channelId !== undefined) {
-            message_service.update(message).then(() => {
-                sendName(message);
-            });
+            sendName(message);
         } else {
             message["conversationId"] = parseInt(sessionStorage.getItem("conversation_id"));
             message["isUpdated"] = true;
-            dm_service.update(message).then(() => {
-                sendDM(message);
-            })
+            sendDM(message);
         }
     });
 }
@@ -110,15 +106,11 @@ function onDeleteButtonClick(event) {
         delete message.inputMassage;
         message.isDeleted = true;
         if (message.channelId !== null) {
-            message_service.update(message).then(() => {
-                sendName(message);
-            });
+            sendName(message);
         }
 
         if (message.conversationId !== null) {
-            dm_service.update(message).then(() => {
-                sendDM(message);
-            })
+            sendDM(message);
         }
     }
 }

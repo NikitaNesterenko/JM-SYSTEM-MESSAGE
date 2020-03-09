@@ -5,11 +5,16 @@ import {SubmitMessage} from "/js/workspace-page/components/footer/SubmitMessage.
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
 import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace} from "/js/invite.js";
 import {deleteChannelFromList} from "/js/workspace-page/components/sidebar/ChannelView.js";
-import {MessageRestPaginationService, DirectMessagesRestController} from "/js/rest/entities-rest-pagination.js";
+import {
+    ChannelRestPaginationService,
+    ConversationRestPaginationService,
+    DirectMessagesRestController,
+    MessageRestPaginationService,
+    ThreadChannelMessageRestPaginationService,
+    WorkspaceRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 
 export class StompClient {
-
-
 
     constructor(channel_message_view, thread_view, direct_message_view, channel_view) {
         this.stompClient = Stomp.over(new SockJS('/websocket'));
@@ -21,6 +26,10 @@ export class StompClient {
         this.message_service = new MessageRestPaginationService();
         this.directMessage_service = new DirectMessagesRestController();
         this.dm_chat = new ActiveChatMembers();
+        this.conversation_service = new ConversationRestPaginationService();
+        this.channel_service = new ChannelRestPaginationService();
+        this.workspace_service = new WorkspaceRestPaginationService();
+        this.thread_msg_service = new ThreadChannelMessageRestPaginationService();
 
         this.commands = new Command();
 
@@ -46,40 +55,47 @@ export class StompClient {
         });
     }
 
-    subscribeMessage() {
-        this.stompClient.subscribe('/topic/messages', async (message) => {
-            let result = JSON.parse(message.body);
-            result['content'] = result.inputMassage;
-            if ((result.userId != null || result.botId != null) && !result.isDeleted) {
-                if (result.channelId === channel_id) {
-                    if (result.isUpdated) {
-                        this.channel_message_view.updateMessage(result);
-                    } else {
-                        if (result.sharedMessageId === null) {
-                            this.channel_message_view.createMessage(result);
+    async subscribeMessage() {
+        const workspace = await this.workspace_service.getChosenWorkspace();
+        let userId = window.loggedUserId;
+        this.channel_service.getChannelsByWorkspaceAndUser(workspace.id, userId)
+            .then(channels => {
+                channels.forEach(channel =>
+                    this.stompClient.subscribe('/topic/messages/channel-' + channel.id, async (message) => {
+                        let result = JSON.parse(message.body);
+                        // result['content'] = result.content;
+                        if ((result.userId != null || result.botId != null) && !result.isDeleted) {
+                            if (result.channelId === channel_id) {
+                                if (result.isUpdated) {
+                                    this.channel_message_view.updateMessage(result);
+                                } else {
+                                    if (result.sharedMessageId === null) {
+                                        this.channel_message_view.createMessage(result);
+                                    } else {
+                                        await this.channel_message_view.createSharedMessage(result);
+                                    }
+                                }
+                                this.channel_message_view.dialog.messageBoxWrapper();
+                            } else {
+                                if (result.userId != window.loggedUserId && this.isChannelPresentInChannelsList(result.channelId)) {
+                                    this.channelview.enableChannelHasUnreadMessage(result.channelId);
+                                    this.message_service.addUnreadMessageForUser(result.id, window.loggedUserId);
+                                }
+                            }
                         } else {
-                            await this.channel_message_view.createSharedMessage(result);
+                            if (result.isDeleted) {
+                                this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
+                            } else {
+                                this.commands.checkMessage(result);
+                            }
                         }
-                    }
-                    this.channel_message_view.dialog.messageBoxWrapper();
-                } else {
-                    if (result.userId != window.loggedUserId && this.isChannelPresentInChannelsList(result.channelId)) {
-                        this.channelview.enableChannelHasUnreadMessage(result.channelId);
-                        this.message_service.addUnreadMessageForUser(result.id, window.loggedUserId);
-                    }
-                }
-            } else {
-                if (result.isDeleted) {
-                    this.channel_message_view.dialog.deleteMessage(result.id, result.userId);
-                } else {
-                    this.commands.checkMessage(result);
-                }
-            }
-            notifyParseMessage(result);
-            if (is_open) {
-                populateRightPaneActivity();
-            }
-        });
+                        notifyParseMessageDTO(result);
+                        if (is_open) {
+                            populateRightPaneActivity();
+                        }
+                    })
+                )
+            });
     }
 
     subscribeSlackBot() {
@@ -214,44 +230,57 @@ export class StompClient {
                     if (id.value == chn.id) {
                         isPresent = true;
                     }
-                })
+                });
                 if (!isPresent) {
                     this.channelview.addChannelIntoSidebarChannelList(chn);
+                    // обновление подписок на каналы и треды этого канала при добавлении нового для пользователя канала
+                    this.subscribeMessage();
+                    this.subscribeThread();
                 }
             }
         });
     }
 
-    subscribeThread() {
-        this.stompClient.subscribe('/topic/threads', (message) => {
-            let result = JSON.parse(message.body);
-            if (result.parentMessageId === thread_id) {
-                this.thread_view.setMessage(result);
-            }
-        })
+    async subscribeThread() {
+        const workspace = await this.workspace_service.getChosenWorkspace();
+        let userId = window.loggedUserId;
+        this.channel_service.getChannelsByWorkspaceAndUser(workspace.id, userId)
+            .then(channels => {
+                channels.forEach(channel =>
+                    this.stompClient.subscribe('/topic/threads/channel-' + channel.id, (message) => {
+                        let result = JSON.parse(message.body);
+                        if (result.parentMessageId === thread_id) {
+                            this.thread_view.setMessage(result);
+                        }
+                    })
+                )
+            });
     }
 
     subscribeDirectMessage() {
-        this.stompClient.subscribe('/topic/dm', (message) => {
-            const response = JSON.parse(message.body);
-            const current_conversation = parseInt(sessionStorage.getItem('conversation_id'));
-            if (!response.isDeleted) {
-                if (response.isUpdated) {
-                    this.dm_view.updateMessage(response);
-                } else {
-                    if (response.conversationId === current_conversation) {
-                        this.dm_view.createMessage(response);
-                    } else {
-                        if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
-                            this.dm_chat.enableDirectHasUnreadMessage(response.conversationId);
-                            this.directMessage_service.addUnreadMessageForUser(response.id, window.loggedUserId)
+        this.conversation_service.getAllConversationsByUserId(window.loggedUserId).then(conversations => {
+            conversations.forEach(conversation =>
+                this.stompClient.subscribe('/topic/dm/' + conversation.id, (message) => {
+                    const response = JSON.parse(message.body);
+                    if (!response.isDeleted) {
+                        if (response.isUpdated) {
+                            this.dm_view.updateMessage(response);
+                        } else {
+                            if (response.conversationId === conversation.id) {
+                                this.dm_view.createMessage(response);
+                            } else {
+                                if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
+                                    this.dm_chat.enableDirectHasUnreadMessage(response.conversationId);
+                                    this.directMessage_service.addUnreadMessageForUser(response.id, window.loggedUserId)
+                                }
+                            }
                         }
+                    } else {
+                        this.dm_view.dialog.deleteMessage(response.id, response.userId);
                     }
-                }
-            } else {
-                this.dm_view.dialog.deleteMessage(response.id, response.userId);
-            }
-        })
+                })
+            )
+        });
     }
 
     sendChannel(channel) {
@@ -298,7 +327,7 @@ export class StompClient {
     sendName(message) {
         let entity = {
             'id': message.id,
-            'inputMassage': message.content,
+            'content': message.content,
             'isDeleted': message.isDeleted,
             'isUpdated': message.isUpdated,
             'dateCreate': message.dateCreate,

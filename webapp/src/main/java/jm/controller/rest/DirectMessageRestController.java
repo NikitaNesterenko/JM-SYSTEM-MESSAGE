@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -76,22 +75,25 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: direct message created")
             })
     public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
-        directMessageDTO.setDateCreate(LocalDateTime.now());
-        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-        directMessageService.saveDirectMessage(directMessage);
-        logger.info("Созданное сообщение : {}", directMessage);
+//        System.out.println("DirectMessageDTO in createDirectMessage: " + directMessageDTO);
+//
+//        directMessageDTO.setDateCreate(LocalDateTime.now());
+//        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
+//        directMessageService.saveDirectMessage(directMessage);
+//        logger.info("Созданное сообщение : {}", directMessage);
+//
+//        List<User> users = new ArrayList<>();
+//        users.add(directMessage.getConversation().getAssociatedUser());
+//        users.add(directMessage.getConversation().getOpeningUser());
+//        users.forEach(user -> {
+//            if (user.getOnline().equals(0)) {
+//                user.getUnreadDirectMessages().add(directMessage);
+//                userService.updateUser(user);
+//            }
+//        });
 
-        List<User> users = new ArrayList<>();
-        users.add(directMessage.getConversation().getAssociatedUser());
-        users.add(directMessage.getConversation().getOpeningUser());
-        users.forEach(user -> {
-            if (user.getOnline().equals(0)) {
-                user.getUnreadDirectMessages().add(directMessage);
-                userService.updateUser(user);
-            }
-        });
-
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
+//        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")

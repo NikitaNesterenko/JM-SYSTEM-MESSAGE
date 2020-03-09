@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
@@ -96,10 +95,11 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel message created")
             })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
-        System.out.println("CREATE!!! - " + threadMessageDTO);
-        ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
-        threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
-        return new ResponseEntity<>(threadMessageDtoService.toDto(threadChannelMessage), HttpStatus.CREATED);
+
+//        ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
+//        threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
+//        return new ResponseEntity<>(threadMessageDtoService.toDto(threadChannelMessage), HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 //    @GetMapping("/messages/{id}")
