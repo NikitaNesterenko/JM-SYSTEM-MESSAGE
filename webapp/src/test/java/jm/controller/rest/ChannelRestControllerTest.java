@@ -276,7 +276,7 @@ public class ChannelRestControllerTest {
         ChannelDTO channelDTO2 = new ChannelDTO(channel2.getId(), channel2.getName(), channel2.getIsPrivate());
 
 
-        when(channelServiceMock.getAllChannels()).thenReturn((List<ChannelDTO>) Arrays.asList(channelDTO1, channelDTO2));
+        when(channelServiceMock.getAllChannels()).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
         when(channelDtoServiceMock.toDto(Arrays.asList(channel1, channel2))).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
 
         mockMvc.perform(get(URL))

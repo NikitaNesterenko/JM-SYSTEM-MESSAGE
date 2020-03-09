@@ -1,7 +1,10 @@
 package jm.dao;
 
 import jm.api.dao.ChannelDAO;
+import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.User;
+import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -21,9 +24,10 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public Channel getChannelByName(String name) {
+//        String query = "SELECT c.id, c.created_date, c.name, c.workspace_id, c.topic, u.username FROM channels c JOIN users u ON u.id = c.owner_id WHERE c.name = :name";
         try {
-            return (Channel) entityManager.createNativeQuery("SELECT * FROM channels WHERE name = ?", Channel.class)
-                    .setParameter(1, name)
+            return (Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
+                    .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -59,14 +63,14 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public List<Channel> getChannelsByWorkspaceId(Long id) {
-        return (List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE workspace_id = ?", Channel.class)
-                .setParameter(1, id)
+        return (List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE workspace_id = :id", Channel.class)
+                .setParameter("id", id)
                 .getResultList();
     }
 
     public List<Channel> getChannelsByUserId(Long userId) {
-        List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("SELECT cu.channel_id FROM channels_users cu WHERE cu.user_id = ?")
-                .setParameter(1, userId)
+        List<BigInteger> channelsIdentityNumbers = (List<BigInteger>) entityManager.createNativeQuery("SELECT cu.channel_id FROM channels_users cu WHERE cu.user_id = :id")
+                .setParameter("id", userId)
                 .getResultList();
         List<BigInteger> channelsIdentityNumbersArrayList = new ArrayList<>(channelsIdentityNumbers);
         List<Channel> channels = new ArrayList<>();
@@ -84,35 +88,47 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("SELECT o FROM Channel o WHERE o.id IN :ids", Channel.class)
+                .createQuery("SELECT c FROM Channel c WHERE c.id IN :ids", Channel.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }
 
     @Override
     public Long getWorkspaceIdByChannelId(Long channelId) {
-        BigInteger id = (BigInteger) entityManager.createNativeQuery("SELECT c.workspace_id FROM channels c WHERE c.id = ?", Channel.class)
+        BigInteger id = (BigInteger) entityManager.createNativeQuery("SELECT c.workspace_id as  FROM channels c WHERE c.id = ?", Channel.class)
                 .setParameter(1, channelId)
                 .getSingleResult();
         return id.longValue();
     }
 
     @Override
-    public List<Channel> getArchivedChannels() {
-        return entityManager.createQuery("SELECT c FROM Channel  c LEFT JOIN FETCH c.user WHERE c.archived = TRUE ", Channel.class).getResultList();
+    public List<ChannelDTO> getArchivedChannels() {
+        return entityManager.createQuery("SELECT c.id as id, c.name as name, c.createdDate as createdDate, u.username as username FROM Channel c LEFT JOIN c.user u  WHERE c.archived = TRUE ORDER BY u.id")
+                .unwrap(org.hibernate.query.Query.class)
+                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                .getResultList();
     }
 
     @Override
-    public List<Channel> getPrivateChannels() {
-        try {
-            return entityManager.createQuery("SELECT c FROM Channel c WHERE c.isPrivate = TRUE ", Channel.class).getResultList();
-        } catch (NoResultException e) {
-            return null;
-        }
+    public List<ChannelDTO> getPrivateChannels() {
+        return entityManager.createQuery("SELECT c.id as id, c.name as name, c.createdDate as createdDate, u.username as username FROM Channel c LEFT JOIN c.user u  WHERE c.isPrivate = TRUE ORDER BY u.id")
+                .unwrap(org.hibernate.query.Query.class)
+                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                .getResultList();
     }
 
     @Override
-    public List<Channel> getAll() {
-        return entityManager.createQuery("SELECT c.id, c.name, c.createdDate, c.archived, u.name FROM  Channel  c LEFT JOIN c.user u ORDER BY u.name").getResultList();
+    public List<ChannelDTO> getAllChannel() {
+        return entityManager.createQuery("SELECT c.id as id, c.name as name, c.createdDate as createdDate, u.username as username FROM  Channel c LEFT JOIN c.user u ORDER BY u.id")
+                .unwrap(org.hibernate.query.Query.class)
+                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                .getResultList();
+    }
+
+    @Override
+    public Channel unzipChannel(Long id) {
+        return (Channel) entityManager.createNativeQuery("UPDATE channels c SET c.archived = false WHERE c.id = :id")
+                .setParameter("id", id)
+                .getSingleResult();
     }
 }

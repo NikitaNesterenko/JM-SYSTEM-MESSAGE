@@ -52,7 +52,7 @@ function htmlChannelList (data) {
                        <div class="col-lg-10 align-items-center">
                        <div hidden id="channel_id">${data[key].id}</div>
                        <p><b>#${data[key].name}</b></p>
-                       <p>Created  by <strong>${data[key].userName}</strong> on <strong>${data[key].createdDate}</strong></p>
+                       <p>Created  by <strong>${data[key].username}</strong> on <strong>${data[key].createdDate}</strong></p>
                        </div>
                        <div class="col-lg-2">
                        <button id="button-channel" type="button" class="btn btn-primary" onclick="clickButton(this)">Click</button>
@@ -90,12 +90,11 @@ function selectCh (data) {
 
                 html += `<div class="channel-list row align-items-center" id="ch-list"><hr>
                        <div class="col-lg-10 align-items-center">
-                       <div hidden id="channel_id">${idChannel}</div>
                        <p>#${data[key].name}</p>
-                       <p>Created  by <strong>${data[ key ].userName}</strong> on <strong>${data[ key ].createdDate}</strong></p>
+                       <p>Created  by <strong>${data[ key ].username}</strong> on <strong>${data[ key ].createdDate}</strong></p>
                        </div>
                        <div class="col-lg-2">
-                       <button id="button-channel1" type="button" class="btn btn-primary" onclick="unzipChannel()">Click</button>
+                       <button id="button-channel1" type="button" class="btn btn-primary">Click</button>
                        </div>
                        </div>`;
             }
@@ -105,15 +104,13 @@ function selectCh (data) {
     } );
 }
 
-// $('#button-channel1').on('click', unzip());
-//
-// async function unzip () {
-//     let response = await fetch( `/rest/api/channels/unzip/${idChannel}`, {
-//         method : 'POST',
-//         headers : {
-//             'Content-Type' : 'application/json'
-//         }
-//     });
-//     let json = await response.json();
-//     console.log(json);
-// }
+$( function () {
+    let button = document.getElementById( "button-channel1" );
+    button.onclick = function unzipChannel()  {
+        const response = fetch(`/rest/api/channels/archiving/${id}`, {
+            method: 'POST'
+        });
+        return response.json();
+    };
+});
+

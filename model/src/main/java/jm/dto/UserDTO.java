@@ -125,7 +125,7 @@ public class UserDTO {
     // copying simple fields
     public UserDTO(User user) {
         this.id = user.getId();
-        this.name = user.getName();
+        this.name = user.getUsername();
         this.lastName = user.getLastName();
         this.login = user.getLogin();
         this.email = user.getEmail();

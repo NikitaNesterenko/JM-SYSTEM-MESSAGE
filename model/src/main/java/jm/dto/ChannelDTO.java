@@ -21,7 +21,7 @@ public class ChannelDTO {
     private Set<Long> botIds;
     private Long workspaceId;
     private Long ownerId;
-    private String userName;
+    private String username;
     private Boolean isPrivate;
     private String topic;
     private Boolean isArchived;
@@ -68,8 +68,8 @@ public class ChannelDTO {
             return this;
         }
 
-        public Builder setUserName(String userName) {
-            channelDTO.userName = userName;
+        public Builder setUserName(String username) {
+            channelDTO.username = username;
             return this;
         }
 
@@ -93,6 +93,11 @@ public class ChannelDTO {
             return this;
         }
 
+        public Builder setCreatedDate(LocalDateTime createdDate) {
+            channelDTO.createdDate = createdDate;
+            return this;
+        }
+
         public ChannelDTO build() {
             return channelDTO;
         }
@@ -111,10 +116,10 @@ public class ChannelDTO {
         this.createdDate = createdDate;
     }
 
-    public ChannelDTO(Long id, String name, String userName, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate) {
+    public ChannelDTO(Long id, String name, String username, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate) {
         this.id = id;
         this.name = name;
-        this.userName = userName;
+        this.username = username;
         this.isPrivate = isPrivate;
         this.isArchived = isArchived;
         this.createdDate = createdDate;

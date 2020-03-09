@@ -28,9 +28,9 @@ public interface ChannelService {
 
     Long getWorkspaceIdByChannelId(Long channelId);
 
-    List<Channel> getAllArchiveChannels();
+    List<ChannelDTO> getAllArchiveChannels();
 
-    List<Channel> getPrivateChannels();
+    List<ChannelDTO> getPrivateChannels();
 
     void unzipChannel(Channel channel);
 }
