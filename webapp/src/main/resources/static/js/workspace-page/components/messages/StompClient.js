@@ -62,10 +62,11 @@ export class StompClient {
             .then(channels => {
                 channels.forEach(channel =>
                     this.stompClient.subscribe('/queue/messages/channel-' + channel.id, async (message) => {
+                        let current_channel_id = sessionStorage.getItem('channelId');
                         let result = JSON.parse(message.body);
                         // result['content'] = result.content;
                         if ((result.userId != null || result.botId != null) && !result.isDeleted) {
-                            if (result.channelId === channel_id) {
+                            if (result.channelId == current_channel_id) {
                                 if (result.isUpdated) {
                                     this.channel_message_view.updateMessage(result);
                                 } else {
