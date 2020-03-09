@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.*;
 import jm.dto.BotDTO;
 import jm.dto.BotDtoService;
-import jm.model.Bot;
-import jm.model.Channel;
-import jm.model.Message;
-import jm.model.User;
+import jm.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +45,7 @@ public class BotRestController {
     }
 
     @GetMapping("/generate.token")
-    public ResponseEntity<String> generateApiToken(){
+    public ResponseEntity<String> generateApiToken() {
         String token = "{\"token\":\"" + UUID.randomUUID().toString() + "\"}";
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
@@ -57,7 +55,7 @@ public class BotRestController {
     private UserService userService;
 
     @PostMapping("/test.send")
-    public ResponseEntity<String> testingSend(){
+    public ResponseEntity<String> testingSend() {
         User user = userService.getUserById(1L);
         Message message = new Message();
         message.setChannelId(1L);
@@ -184,8 +182,9 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "201", description = "CREATED: bot message created")
             })
-    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message) {
-        Channel channel = channelService.getChannelByName(name);
+    public ResponseEntity createMessage(@PathVariable("id") Long id, @PathVariable("name") String name, @RequestBody Message message, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channel = channelService.getChannelByName(name, workspace.getId());
         Bot bot = botService.getBotById(id);
         message.setChannelId(channel.getId());
         message.setBot(bot);
@@ -221,8 +220,9 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per hour")
             })
-    public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
+    public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channel = channelService.getChannelByName(channelName, workspace.getId());
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusHours(1);
@@ -240,8 +240,9 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per day")
             })
-    public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
+    public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channel = channelService.getChannelByName(channelName, workspace.getId());
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusDays(1);
@@ -259,8 +260,9 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per week")
             })
-    public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
+    public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channel = channelService.getChannelByName(channelName, workspace.getId());
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
@@ -278,8 +280,9 @@ public class BotRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per month")
             })
-    public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        Channel channel = channelService.getChannelByName(channelName);
+    public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channel = channelService.getChannelByName(channelName, workspace.getId());
         Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now().minusMonths(1);

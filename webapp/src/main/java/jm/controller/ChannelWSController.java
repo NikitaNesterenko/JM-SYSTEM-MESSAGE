@@ -34,7 +34,7 @@ public class ChannelWSController {
     public String createChannel(ChannelWS channelWS)
             throws JsonProcessingException {
 
-        Channel channel = channelService.getChannelByName(channelWS.getName());
+        Channel channel = channelService.getChannelByName(channelWS.getName(), channelWS.getWorkspaceId());
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(channelDTOService.toDto(channel));
     }

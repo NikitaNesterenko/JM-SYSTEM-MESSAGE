@@ -21,10 +21,11 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     private static final Logger logger = LoggerFactory.getLogger(ChannelDAOImpl.class);
 
     @Override
-    public Channel getChannelByName(String name) {
+    public Channel getChannelByName(String name, Long workspaceId) {
         try {
-            return (Channel) entityManager.createNativeQuery("select * from channels where name=?", Channel.class)
+            return (Channel) entityManager.createNativeQuery("select * from channels where name=? and workspace_id=?", Channel.class)
                     .setParameter(1, name)
+                    .setParameter(2,workspaceId)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

@@ -13,7 +13,7 @@ public interface GoogleCalendarService {
 
     void firstStartClientAuthorization(String code, Workspace workspace, String principalName);
 
-    void secondStart(String principalName, DateTime dataStart, DateTime dataEnd);
+    void secondStart(String principalName, DateTime dataStart, DateTime dataEnd, Workspace workspace);
 
     List<Event> getEvents(String principalName, DateTime dataStart, DateTime dataEnd);
 
@@ -25,7 +25,7 @@ public interface GoogleCalendarService {
 
     Calendar getCalendarByCallbackCode(String code, String principalName);
 
-    void getGoogleCalendarEvent(Calendar clientCalendar, DateTime dateStart, DateTime dateEnd, String principalName);
+    void getGoogleCalendarEvent(Calendar clientCalendar, DateTime dateStart, DateTime dateEnd, String principalName, Workspace workspace);
 
     void saveGoogleCalendarClientAccessToken(String accessToken, String principalName);
 

@@ -7,4 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChannelWS {
     private String name;
+    private Long workspaceId;
 }

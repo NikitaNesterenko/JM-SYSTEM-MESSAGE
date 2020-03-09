@@ -505,7 +505,7 @@ public class TestDataInitializer {
         // токен указал вручную для удобства тестирования,
         // генерация токена: UUID.randomUUID().toString()
         customBot.setToken("3ccc9bb5-c5d1-4df9-a37d-a2e24321e1eb");
-        customBot.getChannels().add(channelDAO.getChannelByName("general"));
+        customBot.getChannels().add(channelDAO.getChannelByName("general", 1L));
         SlashCommand sendMsgCommand = slashCommandDao.getByName("send-to-channel");
         customBot.getCommands().add(sendMsgCommand);
 

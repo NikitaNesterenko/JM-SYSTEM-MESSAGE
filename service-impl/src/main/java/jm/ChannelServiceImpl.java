@@ -46,8 +46,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Channel getChannelByName(String name) {
-        return channelDAO.getChannelByName(name);
+    public Channel getChannelByName(String name, Long workspaceId) {
+        return channelDAO.getChannelByName(name, workspaceId);
     }
 
     @Override
@@ -61,10 +61,12 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Channel> getChannelsByWorkspaceId(Long id) { return channelDAO.getChannelsByWorkspaceId(id); }
+    public List<Channel> getChannelsByWorkspaceId(Long id) {
+        return channelDAO.getChannelsByWorkspaceId(id);
+    }
 
     @Override
-    public  List<Channel> getChannelsByUserId(Long userId) {
+    public List<Channel> getChannelsByUserId(Long userId) {
         return channelDAO.getChannelsByUserId(userId);
     }
 

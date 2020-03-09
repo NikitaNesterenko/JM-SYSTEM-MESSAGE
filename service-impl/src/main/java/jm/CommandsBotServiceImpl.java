@@ -54,7 +54,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     }
 
     @Override
-    public String getWsCommand(SlashCommandDto command) throws JsonProcessingException {
+    public String getWsCommand(SlashCommandDto command, Workspace workspace) throws JsonProcessingException {
         User currentUser = userService.getUserById(command.getUserId());//пользователь, отправивший команду
         Channel currentChannel = channelService.getChannelById(command.getChannelId()); //канал, куда отправлена команда
         String commandName = command.getName(); //название пришедшей команды
@@ -71,7 +71,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         boolean isDefaultBot = slashCommandService.getSlashCommandByName(commandName).getBot().getIsDefault();
 
         if (isDefaultBot){
-                response = createReportByDefaultBot(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
+                response = createReportByDefaultBot(command, currentUser, currentChannel, commandName, commandBody, response, mapper,workspace);
         } else {
             response = createReport(command, currentUser, currentChannel, commandName, commandBody, response, mapper);
         }
@@ -107,7 +107,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     // Обработка команд дефольного бота
     private Map<String, String> createReportByDefaultBot(SlashCommandDto command, User currentUser, Channel currentChannel,
                                              String commandName, String commandBody, Map<String, String> response,
-                                             ObjectMapper mapper) throws JsonProcessingException {
+                                             ObjectMapper mapper,Workspace workspace) throws JsonProcessingException {
 
         switch (commandName) {
             case "topic":
@@ -124,7 +124,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             case "leave": {
                 String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
                         getChannelsNamesFromMsg(commandBody).get(0);
-                Channel channel = channelService.getChannelByName(channelName);
+                Channel channel = channelService.getChannelByName(channelName,workspace.getId());
                 if (channel == null) {
                     if (commandBody.equals("")) {
                         channel = channelService.getChannelById(command.getChannelId());
@@ -146,7 +146,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             case "open": {
                 String channelName = getChannelsNamesFromMsg(commandBody).size() > 1 ? "" :
                         getChannelsNamesFromMsg(commandBody).get(0);
-                Channel channel = channelService.getChannelByName(channelName);
+                Channel channel = channelService.getChannelByName(channelName,workspace.getId());
                 if (channel != null) {
                     response.put("report", joinChannel(channel, command.getUserId()));
                     response.put("status", "OK");
@@ -169,7 +169,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
 
                 List<String> channelsName = getChannelsNamesFromMsg(commandBody); //список каналов, куда приглашаем, выбираем только первый (пока что?)
 
-                Channel channelToInvite = channelService.getChannelByName(channelsName.get(0));
+                Channel channelToInvite = channelService.getChannelByName(channelsName.get(0),workspace.getId());
 
                 //если канал не указан, то выбираем канал, в который отправлена команда, иначе выбираем первый упомянутый канал
                 if (channelToInvite == null && channelsName.get(0).equals("")) {
@@ -222,7 +222,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 break;
             case "msg":
                 String targetChannelName = getChannelsNamesFromMsg(commandBody).get(0);
-                Channel targetChannel = channelService.getChannelByName(targetChannelName);
+                Channel targetChannel = channelService.getChannelByName(targetChannelName,workspace.getId());
                 if (targetChannel != null) {
                     response.put("status", "OK");
                     response.put("report", sendPermRequestMessage(targetChannel.getId(), userService.getUserById(command.getUserId()),

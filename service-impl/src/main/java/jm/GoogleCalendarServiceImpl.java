@@ -86,13 +86,13 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         DateTime dateEnd = DateTime.parseRfc3339(now.plusDays(updatePeriod).toString());
 
         Calendar calendarByCallbackCode = getCalendarByCallbackCode(code, principalName);
-        getGoogleCalendarEvent(calendarByCallbackCode, dateStart, dateEnd, principalName);
+        getGoogleCalendarEvent(calendarByCallbackCode, dateStart, dateEnd, principalName, workspace);
     }
 
     @Override
-    public void secondStart(String principalName, DateTime dataStart, DateTime dataEnd) {
+    public void secondStart(String principalName, DateTime dataStart, DateTime dataEnd, Workspace workspace) {
         Calendar calendarByAccessToken = getCalendarByAccessToken(principalName);
-        getGoogleCalendarEvent(calendarByAccessToken, dataStart, dataEnd, principalName);
+        getGoogleCalendarEvent(calendarByAccessToken, dataStart, dataEnd, principalName, workspace);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
         User user = userService.getUserByLogin(principalName);
         String nameChannel = nameChannelStartWth + user.getId();
-        Channel channelByName = channelService.getChannelByName(nameChannel);
+        Channel channelByName = channelService.getChannelByName(nameChannel, workspace.getId());
 
         if (channelByName==null) {
             LocalDateTime createDate = LocalDateTime.now();
@@ -173,14 +173,14 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
     @Override
     public void getGoogleCalendarEvent(Calendar clientCalendar, DateTime dateStart, DateTime dateEnd,
-                                       String principalName) {
+                                       String principalName, Workspace workspace) {
 
         List<Event> items = getEvents(clientCalendar, dateStart, dateEnd);
 
         if (principalName != null) {
             User userByLogin = userService.getUserByLogin(principalName);
             String desiredNameGoogleChannel = nameChannelStartWth + userByLogin.getId();
-            Channel googleChannel = channelService.getChannelByName(desiredNameGoogleChannel);
+            Channel googleChannel = channelService.getChannelByName(desiredNameGoogleChannel, workspace.getId());
             User googleUser = userService.getUserByLogin(nameGoogleBot);
 
             for (Event event : items) {

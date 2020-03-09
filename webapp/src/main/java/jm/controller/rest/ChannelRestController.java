@@ -128,15 +128,17 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create channel")
             })
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-        Channel channel = channelService.getChannelByName(channelDTO.getName());
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channel = channelService.getChannelByName(channelDTO.getName(), workspace.getId());
         if (channel == null) {
             channel = channelDTOService.toEntity(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
-            Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
             channel.setUser(owner);
             channel.setWorkspace(workspace);
             channel.setUsers(Sets.newSet(owner));
+
+            channelDTO.setWorkspaceId(workspace.getId());
             try {
                 channelService.createChannel(channel);
                 logger.info("Cозданный channel: {}", channel);
@@ -266,8 +268,9 @@ public class ChannelRestController {
                             description = "OK: get channel by name"
                     )
             })
-    public ResponseEntity<ChannelDTO> getChannelByName(@PathVariable("name") String name) {
-        Channel channelByName = channelService.getChannelByName(name);
+    public ResponseEntity<ChannelDTO> getChannelByName(@PathVariable("name") String name, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        Channel channelByName = channelService.getChannelByName(name, workspace.getId());
         ChannelDTO channelDTO = channelDTOService.toDto(channelByName);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }

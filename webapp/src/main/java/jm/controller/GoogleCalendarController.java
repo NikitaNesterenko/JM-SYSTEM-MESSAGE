@@ -64,7 +64,8 @@ public class GoogleCalendarController {
     }
 
     @GetMapping(value = "/test")
-    public String test(Principal principal) {
+    public String test(Principal principal, HttpServletRequest request) {
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
 
         LocalDateTime now = LocalDateTime.now();
         now.withHour(0);
@@ -72,7 +73,7 @@ public class GoogleCalendarController {
 
         DateTime dateStart = DateTime.parseRfc3339(now.minusDays(7).toString());
         DateTime dateEnd = DateTime.parseRfc3339(now.toString());
-        googleCalendarService.secondStart(principal.getName(), dateStart, dateEnd);
+        googleCalendarService.secondStart(principal.getName(), dateStart, dateEnd, workspace);
 
         return "redirect:/workspace";
     }
