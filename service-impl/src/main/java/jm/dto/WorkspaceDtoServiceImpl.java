@@ -27,7 +27,7 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
 
     @Override
     public WorkspaceDTO toDto(Workspace workspace) {
-
+/*
         if (workspace == null) {
             return null;
         }
@@ -47,12 +47,13 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
             workspaceDto.setUserIds(channelIds);
         }
 
-        return workspaceDto;
+        return workspaceDto;*/
+        return null;
     }
 
     @Override
     public Workspace toEntity(WorkspaceDTO workspaceDto) {
-
+/*
         if (workspaceDto == null) {
             return null;
         }
@@ -76,7 +77,7 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
 
         // setting up 'user'
         User owner = userDAO.getById(workspaceDto.getOwnerId());
-        workspace.setUser(owner);
+        workspace.setUser(owner);*/
 
         return null;
     }

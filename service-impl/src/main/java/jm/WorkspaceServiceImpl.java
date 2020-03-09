@@ -62,18 +62,18 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Override
     public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
-        return null;
-    } //+
+        return workspaceDAO.getAllWorkspacesDTO();
+    }
 
     @Override
     public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
         return workspaceDAO.getWorkspaceDTOById(id);
-    } //+
+    }
 
     @Override
     public Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId) {
-        return null;
-    } //+
+        return workspaceDAO.getWorkspacesDTOByUserId(userId);
+    }
 
 
 

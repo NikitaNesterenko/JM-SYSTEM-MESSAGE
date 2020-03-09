@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Tuple;
 import javax.transaction.Transactional;
-import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -50,30 +47,26 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
-        List<WorkspaceDTO> test = null;
+        List<WorkspaceDTO> workspaceDTOList = null;
         try {
-            test = (List<WorkspaceDTO>) entityManager
-                    .createQuery("select new jm.dto.WorkspaceDTO(ws) from Workspace ws", WorkspaceDTO.class).getResultList();
-        } catch (Exception e) {
+            workspaceDTOList = (List<WorkspaceDTO>) entityManager
+                    .createNativeQuery("SELECT " +
+                            "ws.id AS \"id\", " +
+                            "ws.name AS \"name\", " +
+                            "ws.created_date AS \"createdDate\", " +
+                            "ws.is_private AS \"isPrivate\", " +
+                            "owner_id AS \"ownerId\" " +
+                            "FROM workspaces ws")
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
+                    .getResultList();
+            workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        return Optional.ofNullable(test);
+        return Optional.ofNullable(workspaceDTOList);
     }
 
-    /*    @Override
-        public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
-            WorkspaceDTO test = null;
-            try {
-                test = (WorkspaceDTO) entityManager.createQuery("select new jm.dto.WorkspaceDTO(ws) " +
-                        "from Workspace ws where ws.id=:id", WorkspaceDTO.class).setParameter("id", id).getSingleResult();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return Optional.ofNullable(test);
-        }    */
-    /* TODO доделать Tuple
-
-     */
     @Override
     public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
         WorkspaceDTO workspaceDTO = null;
@@ -85,32 +78,43 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                             "ws.created_date as \"createdDate\", " +
                             "ws.is_private as \"isPrivate\", " +
                             "owner_id as \"ownerId\" " +
-                            "from workspaces ws where ws.id=:id", WorkspaceDTO.class)
+                            "from workspaces ws where ws.id=:id")
                     .setParameter("id", id)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getSingleResult();
-            workspaceDTO.setAppIds(getAppIds(id));
-            workspaceDTO.setBotIds(getBotIds(id));
-            workspaceDTO.setChannelIds(getChannelIds(id));
-            workspaceDTO.setUserIds(getUserIds(id));
+            setWorkspaceDTOCollections(workspaceDTO);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-
-
-        /*Tuple tuple;
-        tuple = (Tuple) entityManager.createNativeQuery("select ws.id, ws.name, ws.created_date, " +
-                "ws.google_client_id, ws.google_client_secret, ws.is_private, owner_id" +
-                " from workspaces ws " +
-                "where ws.id=:id", Tuple.class).setParameter("id", id).getResultList().get(0);
-        result = new WorkspaceDTO.Builder().setId(((BigInteger) tuple.get("id")).longValue()).setName((String) tuple.get("name"))
-                .setCreatedDate(((Timestamp) tuple.get("created_date")).toLocalDateTime()).setOwnerId(((BigInteger) tuple.get("owner_id")).longValue())
-                .setPrivate((Boolean) tuple.get("is_private")).setUserIds(getUserIds(id))
-                .setChannelIds(getChannelIds(id)).setBotsIds(getBotIds(id)).setAppsIds(getAppIds(id)).build();
-        return Optional.ofNullable(result);*/
         return Optional.ofNullable(workspaceDTO);
     }
+
+    @Override
+    public Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId) {
+        List<WorkspaceDTO> workspaceDTOList = null;
+        try {
+            workspaceDTOList = (List<WorkspaceDTO>) entityManager
+                    .createNativeQuery("SELECT " +
+                            "ws.id AS \"id\", " +
+                            "ws.name AS \"name\", " +
+                            "ws.created_date AS \"createdDate\", " +
+                            "ws.is_private AS \"isPrivate\", " +
+                            "owner_id AS \"ownerId\" " +
+                            "FROM workspaces_users wu " +
+                            "JOIN workspaces ws ON ws.id = wu.workspace_id " +
+                            "WHERE wu.user_id=:userId")
+                    .setParameter("userId", userId)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
+                    .getResultList();
+            workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(workspaceDTOList);
+    }
+
 
     private Set<Long> getBotIds(Long workspaceId) {
         return new HashSet<>(entityManager.createNativeQuery("SELECT wb.bot_id " +
@@ -140,8 +144,10 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                 .getResultList());
     }
 
-    @Override
-    public Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId) {
-        return Optional.empty();
+    private void setWorkspaceDTOCollections(WorkspaceDTO workspaceDTO) {
+        workspaceDTO.setAppIds(getAppIds(workspaceDTO.getId()));
+        workspaceDTO.setBotIds(getBotIds(workspaceDTO.getId()));
+        workspaceDTO.setChannelIds(getChannelIds(workspaceDTO.getId()));
+        workspaceDTO.setUserIds(getUserIds(workspaceDTO.getId()));
     }
 }
