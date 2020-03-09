@@ -88,4 +88,9 @@ public class UserServiceImpl implements UserService {
         user.getUnreadDirectMessages().removeIf(dmsg -> dmsg.getConversation().getId().equals(conversationId));
         this.updateUser(user);
     }
+
+    @Override
+    public boolean isEmailInThisWorkspace(String email, Long workspaceId) {
+        return userDAO.isEmailInThisWorkspace(email, workspaceId);
+    }
 }
