@@ -3,6 +3,7 @@ package jm;
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,6 +30,7 @@ public class ConversationServiceImpl implements ConversationService {
         conversationDAO.persist(conversation);
     }
 
+    @Async
     @Override
     public void deleteConversation(Long conversationID, Long userID) {
         conversationDAO.deleteById(conversationID, userID);

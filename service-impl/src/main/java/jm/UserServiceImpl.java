@@ -6,6 +6,7 @@ import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
         userDAO.persist(user);
     }
 
-
+    @Async
     @Override
     public void deleteUser(Long id) {
         userDAO.deleteById(id);

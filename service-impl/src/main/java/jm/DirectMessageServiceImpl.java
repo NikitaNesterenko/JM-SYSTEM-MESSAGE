@@ -3,6 +3,7 @@ package jm;
 import jm.api.dao.DirectMessageDAO;
 import jm.model.message.DirectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -34,6 +35,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         return this.directMessageDAO.merge(directMessage);
     }
 
+    @Async
     @Override
     public void deleteDirectMessage(Long id) {
         this.directMessageDAO.deleteById(id);

@@ -4,6 +4,7 @@ import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class ChannelServiceImpl implements ChannelService {
         channelDAO.persist(channel);
     }
 
+    @Async
     @Override
     public void deleteChannel(Long id) {
         channelDAO.deleteById(id);
