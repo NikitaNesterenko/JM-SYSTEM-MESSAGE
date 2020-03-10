@@ -125,7 +125,8 @@ public class ThreadChannelRestController {
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
         System.out.println("GET-THREADCHANNEL - " + temp);
-        return new ResponseEntity<>(threadDtoService.toDto(temp), HttpStatus.OK);
+        ThreadDTO threadDTO = new ThreadDTO(temp);
+        return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);
     }
 
     @GetMapping("/messages/{id}")
