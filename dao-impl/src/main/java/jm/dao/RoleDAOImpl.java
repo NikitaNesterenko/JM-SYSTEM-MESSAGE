@@ -17,7 +17,7 @@ public class RoleDAOImpl extends AbstractDao<Role> implements RoleDAO {
     @Override
     public Role getRoleByRolename(String role) {
         try {
-            return (Role) entityManager.createQuery("from Role where role  = :role").setParameter("role", role)
+            return (Role) entityManager.createQuery("SELECT r FROM Role r WHERE r.role  = :role").setParameter("role", role)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;

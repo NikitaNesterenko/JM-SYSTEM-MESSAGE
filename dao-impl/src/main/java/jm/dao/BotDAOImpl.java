@@ -42,8 +42,8 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     @Override
     public Bot getBotByCommandId(Long id) {
         try {
-            return (Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
-                    .setParameter(1, id)
+            return (Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id = :id", Bot.class)
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
