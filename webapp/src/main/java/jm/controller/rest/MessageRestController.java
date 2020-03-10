@@ -225,7 +225,8 @@ public class MessageRestController {
     @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
     public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long chnId, @PathVariable Long usrId) {
         userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
-        return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
+        return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/rest/api/users")
@@ -54,12 +55,14 @@ public class UserRestController {
             })
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
-        List<User> users = userService.getAllUsers();
+        /*List<User> users = userService.getAllUsers();
         for (User user : users) {
             logger.info(user.toString());
         }
         List<UserDTO> userDTOList = userDtoService.toDto(users);
-        return new ResponseEntity<>(userDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(userDTOList, HttpStatus.OK);*/
+        return userService.getAllUsersDTO().map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     // DTO compliant
@@ -78,7 +81,7 @@ public class UserRestController {
         User user = userDtoService.toEntity(userDto);
         userService.createUser(user);
         logger.info("Созданный пользователь : {}", user);
-        return new ResponseEntity<>(userDtoService.toDto(user), HttpStatus.OK);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 
     // DTO compliant
@@ -94,11 +97,12 @@ public class UserRestController {
                     )
             })
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
-        logger.info("Польщователь с id = {}", id);
-        User user = userService.getUserById(id);
+        logger.info("Пользователь с id = {}", id);
+        /*User user = userService.getUserById(id);
         logger.info(user.toString());
-        UserDTO userDTO = userDtoService.toDto(user);
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        UserDTO userDTO = userDtoService.toDto(user);*/
+        return userService.getUserDTOById(id).map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // DTO compliant
@@ -151,13 +155,17 @@ public class UserRestController {
                     )
             })
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
-        logger.info("Список пользователей канала с id = {}", id);
+        /* TODO доделать логгирование*/
+        /*logger.info("Список пользователей канала с id = {}", id);
         List<User> users = userService.getAllUsersInThisChannel(id);
         for (User user : users) {
             logger.info(user.toString());
         }
         List<UserDTO> userDTOList = userDtoService.toDto(users);
-        return ResponseEntity.ok(userDTOList);
+        return ResponseEntity.ok(userDTOList);*/
+
+        return userService.getAllUsersDTOInThisChannel(id).map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     // DTO compliant
@@ -173,10 +181,12 @@ public class UserRestController {
                     )
             })
     public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
-        User user = userService.getUserByLogin(principal.getName());
+        /*User user = userService.getUserByLogin(principal.getName());
         logger.info("Залогированный пользователь : {}", user);
         UserDTO userDTO = userDtoService.toDto(user);
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(userDTO);*/
+        Optional<UserDTO> userDTO = userService.getUserDTOByLogin(principal.getName());
+        return userDTO.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     // DTO compliant

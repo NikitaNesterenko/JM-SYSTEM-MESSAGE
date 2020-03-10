@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -82,7 +83,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setParameter("id", id)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
-                    .getSingleResult();
+                    .getResultList().get(0);
             setWorkspaceDTOCollections(workspaceDTO);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -138,10 +139,10 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     }
 
     private Set<Long> getAppIds(Long workspaceId) {
-        return new HashSet<>(entityManager.createNativeQuery("SELECT a.id " +
+        return (Set<Long>) entityManager.createNativeQuery("SELECT a.id " +
                 "FROM apps a WHERE a.workspace_id =:id")
                 .setParameter("id", workspaceId)
-                .getResultList());
+                .getResultList().stream().collect(Collectors.toSet());
     }
 
     private void setWorkspaceDTOCollections(WorkspaceDTO workspaceDTO) {

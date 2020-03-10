@@ -1,6 +1,7 @@
 package jm.component;
 
 import jm.UserService;
+import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class WebSocketEventListener {
             User currentUser = userService.getUserByLogin(login);
             currentUser.setOnline(1);
             userService.updateUser(currentUser);
-            messagingTemplate.convertAndSend("/topic/user.status", userDtoService.toDto(currentUser));
+            messagingTemplate.convertAndSend("/topic/user.status", new UserDTO(currentUser));
         }
     }
 
@@ -48,9 +49,9 @@ public class WebSocketEventListener {
             User currentUser = userService.getUserByLogin(login);
             if (currentUser.getOnline() != 0) {
                 currentUser.setOnline(0);
+                userService.updateUser(currentUser);
             }
-            userService.updateUser(currentUser);
-            messagingTemplate.convertAndSend("/topic/user.status", userDtoService.toDto(currentUser));
+            messagingTemplate.convertAndSend("/topic/user.status", new UserDTO(currentUser));
         }
     }
 }

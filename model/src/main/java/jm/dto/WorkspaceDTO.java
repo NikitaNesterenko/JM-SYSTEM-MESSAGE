@@ -74,34 +74,6 @@ public class WorkspaceDTO {
         this.createdDate = createdDate.toLocalDateTime();
     }
 
-/*    public void setUserIds (List<Number> userIds) {
-        System.out.println("setUserIds получили: " + userIds);
-        this.userIds = userIds.stream()
-                .map(Number::longValue)
-                .collect(Collectors.toSet());
-    }
-
-    public void setBotIds (List<Number> botIds) {
-        System.out.println("setBotIds получили: " + botIds);
-        this.botIds = botIds.stream()
-                .map(Number::longValue)
-                .collect(Collectors.toSet());
-    }
-
-    public void setChannelIds (List<Number> channelIds) {
-        System.out.println("channelIds получили: " + channelIds);
-        this.channelIds = channelIds.stream()
-                .map(Number::longValue)
-                .collect(Collectors.toSet());
-    }
-
-    public void setAppIds(List<Number> appIds) {
-        System.out.println("appsIds получили: " + appIds);
-        this.appIds = appIds.stream()
-                .map(Number::longValue)
-                .collect(Collectors.toSet());
-    }*/
-
     public WorkspaceDTO(Long id, String name, Long ownerId, Boolean isPrivate, LocalDateTime createdDate) {
         this.id = id;
         this.name = name;
@@ -109,65 +81,4 @@ public class WorkspaceDTO {
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
     }
-
-    /*public static class Builder {
-        private Long id;
-        private String name;
-        private Set<Long> userIds;
-        private Set<Long> channelIds;
-        private Set<Long> appsIds;
-        private Set<Long> botsIds;
-        private Long ownerId;
-        private Boolean isPrivate;
-        private LocalDateTime createdDate;
-
-        public Builder setId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder setUserIds(Set<Long> userIds) {
-            this.userIds = userIds;
-            return this;
-        }
-
-        public Builder setChannelIds(Set<Long> channelIds) {
-            this.channelIds = channelIds;
-            return this;
-        }
-
-        public Builder setAppsIds(Set<Long> appsIds) {
-            this.appsIds = appsIds;
-            return this;
-        }
-
-        public Builder setBotsIds(Set<Long> botsIds) {
-            this.botsIds = botsIds;
-            return this;
-        }
-
-        public Builder setOwnerId(Long ownerId) {
-            this.ownerId = ownerId;
-            return this;
-        }
-
-        public Builder setPrivate(Boolean aPrivate) {
-            isPrivate = aPrivate;
-            return this;
-        }
-
-        public Builder setCreatedDate(LocalDateTime createdDate) {
-            this.createdDate = createdDate;
-            return this;
-        }
-
-        public WorkspaceDTO build() {
-            return new WorkspaceDTO(this.id, this.name, this.userIds, this.channelIds, this.appsIds, this.botsIds, this.ownerId, this.isPrivate, this.createdDate);
-        }
-    }*/
 }

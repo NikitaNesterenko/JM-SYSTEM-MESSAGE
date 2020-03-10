@@ -149,7 +149,8 @@ public class DirectMessageRestController {
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
     public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long convId, @PathVariable Long usrId) {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
-        return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
+        return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")

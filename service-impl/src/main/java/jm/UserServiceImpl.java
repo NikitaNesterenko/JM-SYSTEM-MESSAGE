@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -92,5 +93,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isEmailInThisWorkspace(String email, Long workspaceId) {
         return userDAO.isEmailInThisWorkspace(email, workspaceId);
+    }
+
+    @Override
+    public Optional<List<UserDTO>> getAllUsersDTO() {
+        return userDAO.getAllUsersDTO();
+    }
+
+    @Override
+    public Optional<UserDTO> getUserDTOById(Long id) {
+        return userDAO.getUserDTOById(id);
+    }
+
+    @Override
+    public Optional<UserDTO> getUserDTOByLogin(String login) {
+        return userDAO.getUserDTOByLogin(login);
+    }
+
+    @Override
+    public Optional<UserDTO> getUserDTOByEmail(String email) {
+        return userDAO.getUserDTOByEmail(email);
+    }
+
+    @Override
+    public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id) {
+        return userDAO.getAllUsersDTOInThisChannel(id);
     }
 }
