@@ -269,7 +269,7 @@ public class TestDataInitializer {
 
         User userJohn = new User();
 
-        userJohn.setName(UserData.JOHN.name);
+        userJohn.setUsername(UserData.JOHN.name);
         userJohn.setLastName(UserData.JOHN.lastName);
         userJohn.setLogin(UserData.JOHN.login);
         userJohn.setEmail(UserData.JOHN.email);
@@ -283,7 +283,7 @@ public class TestDataInitializer {
 
         User userStepan = new User();
 
-        userStepan.setName(UserData.STEPAN.name);
+        userStepan.setUsername(UserData.STEPAN.name);
         userStepan.setLastName(UserData.STEPAN.lastName);
         userStepan.setLogin(UserData.STEPAN.login);
         userStepan.setEmail(UserData.STEPAN.email);
@@ -297,7 +297,7 @@ public class TestDataInitializer {
 
         User userPetr = new User();
 
-        userPetr.setName(UserData.PETR.name);
+        userPetr.setUsername(UserData.PETR.name);
         userPetr.setLastName(UserData.PETR.lastName);
         userPetr.setLogin(UserData.PETR.login);
         userPetr.setEmail(UserData.PETR.email);
@@ -311,7 +311,7 @@ public class TestDataInitializer {
 
         User userFoo = new User();
 
-        userFoo.setName(UserData.FOO.name);
+        userFoo.setUsername(UserData.FOO.name);
         userFoo.setLastName(UserData.FOO.lastName);
         userFoo.setLogin(UserData.FOO.login);
         userFoo.setEmail(UserData.FOO.email);
@@ -325,7 +325,7 @@ public class TestDataInitializer {
 
         User userJames = new User();
 
-        userJames.setName(UserData.JAMES.name);
+        userJames.setUsername(UserData.JAMES.name);
         userJames.setLastName(UserData.JAMES.lastName);
         userJames.setLogin(UserData.JAMES.login);
         userJames.setEmail(UserData.JAMES.email);
@@ -444,11 +444,11 @@ public class TestDataInitializer {
 
     private void createWorkspaces() {
         User userJohn = this.users.stream()
-                .filter(user -> UserData.JOHN.name.equals(user.getName()))
+                .filter(user -> UserData.JOHN.name.equals(user.getUsername()))
                 .findFirst()
                 .orElse(this.users.iterator().next());
         User userStepan = this.users.stream()
-                .filter(user -> UserData.STEPAN.name.equals(user.getName()))
+                .filter(user -> UserData.STEPAN.name.equals(user.getUsername()))
                 .findFirst()
                 .orElse(this.users.iterator().next());
 

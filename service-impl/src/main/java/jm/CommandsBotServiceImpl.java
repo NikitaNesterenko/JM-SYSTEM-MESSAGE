@@ -235,7 +235,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 break;
             case "dm":
                 User targetUser = getUsersFromMessage(commandBody).get(0);
-                String targetUserName = targetUser.getName();
+                String targetUserName = targetUser.getUsername();
                 if (targetUser != null) {
                     response.put("status", "OK");
                     response.put("report", sendDirectMessage(command.getUserId(), targetUser,
@@ -363,7 +363,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         channelService.updateChannel(targetChannel);
         User invitingUser = userService.getUserById(inviterId);
         StringBuffer sb = new StringBuffer("Invite ");
-        newUsersInChannel.forEach(user -> sb.append("@").append(user.getName()).append(" "));
+        newUsersInChannel.forEach(user -> sb.append("@").append(user.getUsername()).append(" "));
         sb.append("to this channel");
         invitedUsers.removeAll(existUsers); //убираем существующих пользователей, оставляем только вновь приглашенных.
         return sendPermRequestMessage(targetChannel.getId(), invitingUser, sb.toString());
@@ -381,7 +381,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         } else {
             targetChannel.getUsers().forEach(user -> {
                 if (!user.equals(targetUser)) {
-                    sb.append(" @").append(user.getName());
+                    sb.append(" @").append(user.getUsername());
                 }
             });
             sb.append(targetUserIsOnChannel ? " and you." : ".");
@@ -420,10 +420,10 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         targetChannel.getUsers().removeAll(usersToKick);
         channelService.updateChannel(targetChannel);
         StringBuffer msg = new StringBuffer("Users:");
-        usersToKick.forEach(user -> msg.append(" @").append(user.getName()));
+        usersToKick.forEach(user -> msg.append(" @").append(user.getUsername()));
         msg.append(usersToKick.size() > 1 ? " were" : " was");
         msg.append(" kicked from channel");
-        msg.append(" by @").append(currentUser.getName());
+        msg.append(" by @").append(currentUser.getUsername());
         return sendPermRequestMessage(targetChannel.getId(), getBot(botId), msg.toString());
     }
 
