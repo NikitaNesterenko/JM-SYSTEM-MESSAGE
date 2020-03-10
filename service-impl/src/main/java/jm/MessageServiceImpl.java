@@ -50,7 +50,7 @@ public class MessageServiceImpl implements MessageService {
         messageDAO.persist(message);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteMessage(Long id) { messageDAO.deleteById(id); }
 

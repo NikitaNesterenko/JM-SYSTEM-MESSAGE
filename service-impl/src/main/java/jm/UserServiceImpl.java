@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         userDAO.persist(user);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteUser(Long id) {
         userDAO.deleteById(id);

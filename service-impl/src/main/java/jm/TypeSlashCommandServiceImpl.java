@@ -21,7 +21,7 @@ public class TypeSlashCommandServiceImpl implements TypeSlashCommandService {
         typeSlashCommandDAO.persist(type);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteTypeSlashCommand(Long id) {
         typeSlashCommandDAO.deleteById(id);

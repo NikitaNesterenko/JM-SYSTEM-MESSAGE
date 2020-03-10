@@ -46,7 +46,7 @@ public class BotServiceImpl implements BotService {
         return botDAO.save(bot);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteBot(Long id) {botDAO.deleteById(id); }
 

@@ -31,7 +31,7 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
         createWorkspaceTokenDAO.persist(createWorkspaceToken);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteCreateWorkspaceTokenById(Long id) {
         createWorkspaceTokenDAO.deleteById(id);

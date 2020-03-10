@@ -32,7 +32,7 @@ public class InviteTokenServiceImpl implements InviteTokenService {
         inviteTokenDAO.persist(inviteToken);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteInviteToken(Long id) {
         inviteTokenDAO.deleteById(id);

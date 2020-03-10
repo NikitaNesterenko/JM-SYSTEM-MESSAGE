@@ -30,7 +30,7 @@ public class ConversationServiceImpl implements ConversationService {
         conversationDAO.persist(conversation);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteConversation(Long conversationID, Long userID) {
         conversationDAO.deleteById(conversationID, userID);

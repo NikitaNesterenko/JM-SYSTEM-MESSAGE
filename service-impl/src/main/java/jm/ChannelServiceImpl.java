@@ -31,7 +31,7 @@ public class ChannelServiceImpl implements ChannelService {
         channelDAO.persist(channel);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteChannel(Long id) {
         channelDAO.deleteById(id);

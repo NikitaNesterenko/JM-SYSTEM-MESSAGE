@@ -33,7 +33,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         workspaceDAO.persist(workspace);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteWorkspace(Long id) {
         workspaceDAO.deleteById(id);

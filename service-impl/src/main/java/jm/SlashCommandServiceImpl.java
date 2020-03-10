@@ -46,7 +46,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
         botDAO.merge(bot);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteSlashCommand(Long id) {
         SlashCommand slashCommand = slashCommandDao.getById(id);

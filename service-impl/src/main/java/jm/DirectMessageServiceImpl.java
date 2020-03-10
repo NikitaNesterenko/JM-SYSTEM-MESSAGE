@@ -35,7 +35,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         return this.directMessageDAO.merge(directMessage);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteDirectMessage(Long id) {
         this.directMessageDAO.deleteById(id);
