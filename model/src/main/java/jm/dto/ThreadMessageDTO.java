@@ -15,28 +15,78 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThreadMessageDTO {
+
     private Long id;
-
     private Long userId;
-
     private String content;
+    private Long parentMessageId;
+    private String filename;
+    private Boolean isDeleted = false;
+    private String userName;
+    private String userAvatarUrl;
+    private Long workspaceId;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
 
-    private Long parentMessageId;
+    private static class Builder {
+        private ThreadMessageDTO threadMessageDTO;
 
-    private String filename;
+        public Builder () {
+            threadMessageDTO = new ThreadMessageDTO();
+        }
 
-    private Boolean isDeleted = false;
+        public Builder setId(Long id) {
+            threadMessageDTO.id = id;
+            return this;
+        }
 
-    private String userName;
+        public Builder setUserId(Long userId) {
+            threadMessageDTO.userId = userId;
+            return this;
+        }
 
-    private String userAvatarUrl;
+        public Builder setContent(String content) {
+            threadMessageDTO.content = content;
+            return this;
+        }
 
-    private Long workspaceId;
+        public Builder setParentMessageId(Long parentMessageId) {
+            threadMessageDTO.parentMessageId = parentMessageId;
+            return this;
+        }
+
+        public Builder setFilename(String filename) {
+            threadMessageDTO.filename = filename;
+            return this;
+        }
+
+        public Builder setIsDeleted(Boolean isDeleted) {
+            threadMessageDTO.isDeleted = isDeleted;
+            return this;
+        }
+
+        public Builder setUserName(String userName) {
+            threadMessageDTO.userName = userName;
+            return this;
+        }
+
+        public Builder setUserAvatarUrl(String userAvatarUrl) {
+            threadMessageDTO.userAvatarUrl = userAvatarUrl;
+            return this;
+        }
+
+        public Builder setWorkspaceId(Long workspaceId) {
+            threadMessageDTO.workspaceId = workspaceId;
+            return this;
+        }
+
+        public ThreadMessageDTO build() {
+            return threadMessageDTO;
+        }
+    }
 
     public ThreadMessageDTO(ThreadChannelMessage message) {
         this.id = message.getId();
