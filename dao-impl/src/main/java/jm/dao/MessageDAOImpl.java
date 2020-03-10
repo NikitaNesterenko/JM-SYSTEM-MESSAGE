@@ -9,9 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
+import javax.persistence.Tuple;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -31,23 +34,39 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         return list;
     }
 
+    private Optional<Tuple> getUserNameAndAvatarUrlByUserId (Long userId) {
+        Tuple tuple = null;
+        try {
+            tuple = (Tuple) entityManager.createNativeQuery("SELECT u.name AS \"userName\", u.avatar_url AS \"userAvatarUrl\" " +
+                                                                    "FROM users u WHERE u.id=:userId", Tuple.class)
+                                    .setParameter("userId", userId)
+                                    .getSingleResult();
+        } catch (NoResultException ignored) {
+        }
+        return Optional.ofNullable(tuple);
+    }
+
+    private Optional<Tuple> getPluginNameAndBotNickNameByBotId (Long botId) {
+        Tuple tuple = null;
+        try {
+            tuple = (Tuple) entityManager.createNativeQuery("SELECT " +
+                                                                    "b.name AS \"pluginName\", " +
+                                                                    "b.nick_name AS \"botNickName\" " +
+                                                                    "FROM bots b WHERE b.id=:botId", Tuple.class)
+                                    .setParameter("botId", botId)
+                                    .getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+        return Optional.ofNullable(tuple);
+    }
 
     @Override
     public Optional<MessageDTO> getMessageDtoById (Long id) {
-        //TODO: Проверить как работает
+
         MessageDTO messageDTO = null;
 
         try {
-            /*
-            private String userName; **
-            private String userAvatarUrl;**
-
-            private String pluginName; **
-            private String botNickName; **
-
-            private String channelName;
-
-             */
             messageDTO = (MessageDTO) entityManager.createNativeQuery("SELECT " +
                                                                               "m.id AS \"id\", " +
                                                                               "m.channel_id AS \"channelId\", " +
@@ -60,16 +79,10 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                                                                               "m.bot_id AS \"botId\", " +
                                                                               "m.parent_message_id AS \"parentMessageId\", " +
                                                                               "m.shared_message_id AS \"sharedMessageId\", " +
-                                                                              "m.user_id AS \"userId\" " +
-//                                                                              ", u.name AS \"userName\"," +
-//                                                                              "u.avatar_url AS \"userAvatarUrl\", " +
-//                                                                              "b.nick_name AS \"botNickName\", " +
-//                                                                              "b.name AS \"pluginName\", " +
-//                                                                              "c.name AS \"channelName\" " +
-                                                                              "FROM messages m " +
-                                                                              "WHERE m.id=:id ")
-//                                 + , users u, bots b, channels c
-//                                                                              "AND u.id = m.user_id AND b.id = m.bot_id AND c.id = m.channel_id")
+                                                                              "m.user_id AS \"userId\", " +
+                                                                              "c.name AS \"channelName\" " +
+                                                                              "FROM messages m, channels c " +
+                                                                              "WHERE m.id=:id AND c.id = m.channel_id")
                                               .setParameter("id", id)
                                               .unwrap(NativeQuery.class)
                                               .setResultTransformer(Transformers.aliasToBean(MessageDTO.class))
@@ -78,10 +91,57 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
             messageDTO.setRecipientUserIds(getListRecipientUserIds(id));
 
 
+            Optional<Tuple> userData = getUserNameAndAvatarUrlByUserId(messageDTO.getUserId());
+            if (userData.isPresent()) {
+                messageDTO.setUserName((String) userData.get()
+                                                        .get("userName"));
+                messageDTO.setUserAvatarUrl((String) userData.get()
+                                                             .get("userAvatarUrl"));
+            }
+
+            Optional<Tuple> botData = getPluginNameAndBotNickNameByBotId(messageDTO.getBotId());
+            if (botData.isPresent()) {
+                messageDTO.setPluginName((String) botData.get()
+                                                          .get("pluginName"));
+                messageDTO.setBotNickName((String) botData.get()
+                                                           .get("botNickName"));
+            }
+
+
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(messageDTO);
+    }
+
+    @Override
+    public Optional<Long> getMessageIdByContent (String content) {
+        Long id = null;
+
+        try {
+            id = (Long) entityManager.createNativeQuery("SELECT id FROM messages WHERE content= :content")
+                                .setParameter("content", content)
+                                .getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+
+        return Optional.ofNullable(id);
+    }
+
+    @Override
+    public Optional<String> getMessageContentById (Long id) {
+        String content = null;
+
+        try {
+            content = (String) entityManager.createNativeQuery("SELECT content FROM messages WHERE id= :id")
+                                       .setParameter("id", id)
+                                       .getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+
+        return Optional.ofNullable(content);
     }
 
     @Override
@@ -99,9 +159,27 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .getResultList();
     }
 
+    private List<Number> getAllMessageId (Boolean isDeleted) {
+        List list = new ArrayList<>();
+        try {
+            list = entityManager
+                           .createNativeQuery("SELECT m.id FROM messages m WHERE m.is_deleted= :isDeleted")
+                           .setParameter("isDeleted", isDeleted)
+                           .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     @Override
-    public List<MessageDTO> getAllMessageDto (Boolean isDeleted) {
-        return null;
+    public List<MessageDTO> getAllMessageDtoByIsDeleted (Boolean isDeleted) {
+        return getAllMessageId(isDeleted).stream()
+                       .map(Number::longValue)
+                       .map(this::getMessageDtoById)
+                       .map(Optional::get)
+                       .collect(Collectors.toList());
     }
 
     @Override
@@ -112,9 +190,27 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .getResultList();
     }
 
+    private List<Number> getAllMessageIdByChannelIdAndIsDeleted (Long channelId, Boolean isDeleted) {
+        List list = new ArrayList<>();
+        try {
+            list = entityManager
+                           .createNativeQuery("SELECT m.id FROM messages m where m.channel_id =: channelId AND m.is_deleted=:isDeleted")
+                           .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     @Override
     public List<MessageDTO> getMessageDtoListByChannelId (Long id, Boolean isDeleted) {
-        return null;
+        return getAllMessageIdByChannelIdAndIsDeleted(id, isDeleted).stream()
+                       .map(Number::longValue)
+                       .map(this::getMessageDtoById)
+                       .map(Optional::get)
+                       .sorted(Comparator.comparing(MessageDTO::getDateCreate))
+                       .collect(Collectors.toList());
     }
 
     @Override
@@ -128,9 +224,36 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .getResultList();
     }
 
+    private List<Number> getAllMessageIdByChannelIdForPeriod (Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+        List list = new ArrayList<>();
+        try {
+            list = entityManager.createNativeQuery("SELECT m.id FROM messages m " +
+                                                           "WHERE m.channel_id = :channelId " +
+                                                           "AND m.is_deleted= :isDeleted " +
+                                                           "AND m.date_create >= :startDate " +
+                                                           "AND m.date_create <= :endDate " +
+                                                           "AND m.is_deleted= :isDeleted " +
+                                                           "ORDER BY m.date_create")
+                           .setParameter("channelId", channelId)
+                           .setParameter("isDeleted", isDeleted)
+                           .setParameter("startDate", startDate)
+                           .setParameter("endDate", endDate)
+                           .setParameter("isDeleted", isDeleted)
+                           .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     @Override
     public List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
-        return null;
+        return getAllMessageIdByChannelIdForPeriod(id, startDate, endDate, isDeleted).stream()
+                       .map(Number::longValue)
+                       .map(this::getMessageDtoById)
+                       .map(Optional::get)
+                       .collect(Collectors.toList());
     }
 
     @Override
@@ -142,20 +265,20 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .setParameter("startDate", startDate)
                        .setParameter("endDate", endDate)
                        .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getStarredMessagesForUser(Long userId, Boolean isDeleted) {
+    public List<Message> getStarredMessagesForUser (Long userId, Boolean isDeleted) {
         return entityManager.createQuery(
                 "select sm from User u join u.starredMessages as sm where u.id = :user_id and sm.isDeleted = :is_deleted", Message.class)
-                .setParameter("user_id", userId)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .setParameter("user_id", userId)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
+    public List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted) {
         return entityManager.createQuery(
                 "select sm from User u " +
                         "join u.starredMessages as sm " +
@@ -163,29 +286,29 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                         "and sm.workspaceId = :workspace_id " +
                         "and sm.isDeleted = :is_deleted",
                 Message.class)
-                .setParameter("user_id", userId)
-                .setParameter("workspace_id", workspaceId)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .setParameter("user_id", userId)
+                       .setParameter("workspace_id", workspaceId)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getMessagesByIds(Set<Long> ids, Boolean isDeleted) {
+    public List<Message> getMessagesByIds (Set<Long> ids, Boolean isDeleted) {
         if (ids == null || ids.isEmpty()) {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("select m from Message m where m.id in :ids and m.isDeleted = :is_deleted", Message.class)
-                .setParameter("ids", ids)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .createQuery("select m from Message m where m.id in :ids and m.isDeleted = :is_deleted", Message.class)
+                       .setParameter("ids", ids)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 
     @Override
-    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted) {
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted) {
         return entityManager.createQuery("select m from Message m join  m.recipientUsers u where u.id =:userId and m.isDeleted = :is_deleted", Message.class)
-                .setParameter("userId", userId)
-                .setParameter("is_deleted", isDeleted)
-                .getResultList();
+                       .setParameter("userId", userId)
+                       .setParameter("is_deleted", isDeleted)
+                       .getResultList();
     }
 }

@@ -12,7 +12,7 @@ public interface MessageDAO {
 
     List<Message> getAll (Boolean isDeleted);
 
-    List<MessageDTO> getAllMessageDto (Boolean isDeleted);
+    List<MessageDTO> getAllMessageDtoByIsDeleted (Boolean isDeleted);
 
     List<Message> getMessagesByChannelId (Long id, Boolean isDeleted);
 
@@ -43,5 +43,9 @@ public interface MessageDAO {
     List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);
 
     List<Message> getMessagesByIds (Set<Long> ids, Boolean isDeleted);
+
+    Optional<Long> getMessageIdByContent (String content);
+
+    Optional<String> getMessageContentById (Long id);
 
 }

@@ -43,8 +43,18 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<MessageDTO> getAllMessageDtoByIsDeleted (Boolean isDeleted) {
+        return messageDAO.getAllMessageDtoByIsDeleted(isDeleted);
+    }
+
+    @Override
     public List<Message> getMessagesByChannelId (Long id, Boolean isDeleted) {
         return messageDAO.getMessagesByChannelId(id, isDeleted);
+    }
+
+    @Override
+    public List<MessageDTO> getMessageDtoListByChannelId (Long id, Boolean isDeleted) {
+        return messageDAO.getMessageDtoListByChannelId(id, isDeleted);
     }
 
     @Override
@@ -58,6 +68,11 @@ public class MessageServiceImpl implements MessageService {
         messageDTO.ifPresent(messageDTO1 -> System.out.println("messageDTO getMessageDtoById: " + messageDTO1.toString()));
 
         return messageDAO.getById(id);
+    }
+
+    @Override
+    public Optional<MessageDTO> getMessageDtoById (Long id) {
+        return messageDAO.getMessageDtoById(id);
     }
 
     @Override
@@ -78,6 +93,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate, isDeleted);
+    }
+
+    @Override
+    public List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+        return messageDAO.getMessagesDtoByChannelIdForPeriod(id, startDate, endDate, isDeleted);
     }
 
     @Override
@@ -122,59 +142,37 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message getMessageByMessageDTO (@NonNull MessageDTO messageDTO) {
-        //TODO: delete unused
-        // messageDtoService.toDto 123456 ПЕРЕДЕЛАТЬ!!!
-
         Message message = new Message(messageDTO);
 
-        // setting up 'user' or 'bot'
-        if (messageDTO.getUserId() != null) {
-            message.setUser(userDAO.getById(messageDTO.getUserId()));
-        } else if (messageDTO.getBotId() != null) {
-            message.setBot(botDAO.getById(messageDTO.getBotId()));
-        }
+        Optional.ofNullable(messageDTO.getUserId())
+                .ifPresent(userId -> message.setUser(userDAO.getById(userId)));
 
-//        // setting up 'sharedMessage'
-//        Long sharedMessageId = messageDTO.getSharedMessageId();
-//        if (sharedMessageId != null) {
-//            message.setSharedMessage(messageDAO.getById(sharedMessageId));
-//        }
+        Optional.ofNullable(messageDTO.getBotId())
+                .ifPresent(botId -> message.setBot(botDAO.getById(botId)));
 
-//        // setting up 'sharedMessage'
-        message.setSharedMessage(Optional.ofNullable(messageDTO.getSharedMessageId())
-                                         .map(messageDAO::getById)
-                                         .orElse(null));
+        Optional.ofNullable(messageDTO.getSharedMessageId())
+                .ifPresent(sharedMessageId -> message.setSharedMessage(messageDAO.getById(sharedMessageId)));
 
-        // setting up 'recipientUsers'
-//        Set<Long> recipientUserIds = messageDTO.getRecipientUserIds();
-//        List<User> recipientUsers = userDAO.getUsersByIds(recipientUserIds);
-//        message.setRecipientUsers(new HashSet<>(recipientUsers));
+        Optional.ofNullable(messageDTO.getParentMessageId())
+                .ifPresent(parentMessageId -> message.setParentMessage(messageDAO.getById(parentMessageId)));
+
+        Optional.ofNullable(messageDTO.getWorkspaceId())
+                .ifPresent(message::setWorkspaceId);
 
         message.setRecipientUsers(Optional.ofNullable(messageDTO.getRecipientUserIds())
                                           .map(userDAO::getUsersByIds)
                                           .map(HashSet::new)
                                           .orElse(new HashSet<>()));
-
-        // parentMessageId
-//        Long parentMessageId = messageDTO.getParentMessageId();
-//        if (parentMessageId != null) {
-//            message.setParentMessage(messageDAO.getById(parentMessageId));
-//        }
-
-        message.setParentMessage(Optional.ofNullable(messageDTO.getParentMessageId())
-                                         .map(messageDAO::getById)
-                                         .orElse(null));
-
-        // setting up 'workspaceId'
-//        Long workspaceId = messageDTO.getWorkspaceId();
-//        if (workspaceId != null) {
-//            message.setWorkspaceId(messageDTO.getWorkspaceId());
-//        }
-
-        message.setWorkspaceId(Optional.ofNullable(messageDTO.getWorkspaceId())
-                                       .orElse(null));
-
-        System.out.println("ПРОВЕРИТЬ МЕТОД!!! Message" + message.toString());
         return message;
+    }
+
+    @Override
+    public Optional<Long> getMessageIdByContent (@NonNull String content) {
+        return messageDAO.getMessageIdByContent(content);
+    }
+
+    @Override
+    public Optional<String> getMessageContentById (@NonNull Long id) {
+        return messageDAO.getMessageContentById(id);
     }
 }

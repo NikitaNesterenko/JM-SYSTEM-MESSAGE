@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class MessageDtoServiceImpl implements MessageDtoService {
+public class MessageDtoServiceImpl implements MessageDtoService { // implements MessageDtoService
 
     private UserDAO userDAO;
     private BotDAO botDAO;
     private ChannelDAO channelDAO;
     private MessageDAO messageDAO;
 
-    public MessageDtoServiceImpl(UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
+    public MessageDtoServiceImpl (UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
         this.userDAO = userDAO;
         this.botDAO = botDAO;
         this.channelDAO = channelDAO;
@@ -35,7 +35,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
     @Override
     // messageDtoService.toDto messageDtoService.toDto 123465
     public MessageDTO toDto(Message message) {
-
+        System.out.println("КЕМ ТО ИСПОЛЬЗУЕТСЯ MessageDtoServiceImpl toDto ");
         if (message == null) {
             return null;
         }
@@ -90,7 +90,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
     @Override
     public Message toEntity(MessageDTO messageDto) {
-
+        System.out.println("КЕМ ТО ИСПОЛЬЗУЕТСЯ MessageDtoServiceImpl toEntity ");
         if (messageDto == null) {
             return null;
         }

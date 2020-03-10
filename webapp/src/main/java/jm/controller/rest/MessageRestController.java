@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -30,7 +29,7 @@ public class MessageRestController {
     private final MessageService messageService;
     private final MessageDtoService messageDtoService;
 
-    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService) {
+    public MessageRestController (MessageService messageService, MessageDtoService messageDtoService) {
         this.messageService = messageService;
         this.messageDtoService = messageDtoService;
     }
@@ -47,15 +46,26 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessages() {
-        logger.info("Список сообщений : ");
-        List<Message> messages = messageService.getAllMessages(false);
-        for (Message message : messages) {
-            logger.info(message.toString());
+    public ResponseEntity<List<MessageDTO>> getMessages () {
+        //TODO: удалить лишнее
+
+        // messageDtoService.toDto 123456 NOT
+
+//        List<Message> messages = messageService.getAllMessages(false);
+        List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
+        if (!messageDTOList.isEmpty()) {
+            logger.info("Список сообщений : ");
+            messageDTOList.forEach(messageDTO -> logger.info(messageDTO.toString()));
+            logger.info("-----------------------");
+            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest()
+                           .build();
         }
-        logger.info("-----------------------");
-        // messageDtoService.toDto 123456 NOT OK
-        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
+//        for (Message message : messages) {
+//            logger.info(message.toString());
+//        }
+//        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
     // DTO compliant
@@ -70,16 +80,30 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<MessageDTO>> getMessagesByChannelId (@PathVariable("id") Long id) {
+        //TODO: удалить лишнее
         System.out.println("Работает TYT getMessagesByChannelId");
-        List<Message> messages = messageService.getMessagesByChannelId(id, false);
-        messages.sort(Comparator.comparing(Message::getDateCreate));
-        logger.info("Полученные сообщения из канала с id = {} :", id);
-        for (Message message : messages) {
-            logger.info(message.toString());
+        // messageDtoService.toDto 123456 OK
+
+//        List<Message> messages = messageService.getMessagesByChannelId(id, false);
+//        messages.sort(Comparator.comparing(Message::getDateCreate)); Отсортировано в дао
+        List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
+        if (!messageDTOList.isEmpty()) {
+            logger.info("Полученные сообщения из канала с id = {} :", id);
+            messageDTOList.forEach(messageDTO -> logger.info(messageDTO.toString()));
+            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
+        } else {
+            logger.info("Сообщения из канала с id = {} не получены", id);
+            return ResponseEntity.badRequest()
+                           .build();
         }
-        // messageDtoService.toDto 123456 NOT OK
-        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
+
+//        logger.info("Полученные сообщения из канала с id = {} :", id);
+//        for (Message message : messages) {
+//            logger.info(message.toString());
+//        }
+
+//        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
     // DTO compliant
@@ -94,12 +118,20 @@ public class MessageRestController {
                             description = "OK: get message"
                     )
             })
-    public ResponseEntity<MessageDTO> getMessageById(@PathVariable("id") Long id) {
-        Message message = messageService.getMessageById(id);
-        logger.info("Сообщение с id = {}", id);
-        logger.info(message.toString());
+    public ResponseEntity<MessageDTO> getMessageById (@PathVariable("id") Long id) {
+        //TODO: Удалить лишнее ПРОВЕРИТЬ РАБОТУ!!!
+
         // messageDtoService.toDto 123456 NOT OK
-        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.OK);
+//        Message message = messageService.getMessageById(id);
+//        logger.info("Сообщение с id = {}", id);
+//        logger.info(message.toString());
+//        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.OK);
+//        Optional<MessageDTO> messageDtoById = messageService.getMessageDtoById(id);
+
+        return messageService.getMessageDtoById(id)
+                       .map(messageDTO -> new ResponseEntity<>(messageDTO, HttpStatus.OK))
+                       .orElse(ResponseEntity.badRequest()
+                                       .build());
     }
 
     // DTO compliant
@@ -114,12 +146,24 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id,
-                                                                            @PathVariable("startDate") String startDate,
-                                                                            @PathVariable("endDate") String endDate) {
-        List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now(), false);
+    public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod (@PathVariable("id") Long id,
+                                                                             @PathVariable("startDate") String startDate,
+                                                                             @PathVariable("endDate") String endDate) {
+        //TODO: убрать лишнее
+
         // messageDtoService.toDto 123456 NOT OK
-        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
+//        List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now()
+//                                                                                            .minusMonths(3), LocalDateTime.now(), false);
+//        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
+        List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
+                                                                                                        .minusMonths(3), LocalDateTime.now(), false);
+
+        if (!messageDTOList.isEmpty()) {
+            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest()
+                           .build();
+        }
     }
 
     @PostMapping(value = "/create")
@@ -133,14 +177,17 @@ public class MessageRestController {
 //                    ),
 //                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
 //            })
-    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
+    public ResponseEntity<MessageDTO> createMessage (@RequestBody MessageDTO messageDto) {
         //TODO: убрать лишнее
+
+        // messageDtoService.toDto 123456 NOT OK
 //        messageDto.setDateCreate(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDto);
+//        Message message = messageDtoService.toEntity(messageDto);
+        Message message = messageService.getMessageByMessageDTO(messageDto);
         message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
-        // messageDtoService.toDto 123456 NOT OK
+
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
 
@@ -159,15 +206,22 @@ public class MessageRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to find message")
             })
 //    @PreAuthorize("#message.user.login == authentication.principal.username")
-    public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
-        Message message = messageDtoService.toEntity(messageDto);
+    public ResponseEntity updateMessage (@RequestBody MessageDTO messageDto, Principal principal) {
+        // TODO: убрать лишнее
+
+        System.out.println("TYT updateMessage");
         System.out.println("Работает TYT updateMessage");
+//        Message message = messageDtoService.toEntity(messageDto);
+        Message message = messageService.getMessageByMessageDTO(messageDto);
+
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        if (principal.getName().equals(existingMessage.getUser().getLogin())) {
+        if (principal.getName()
+                    .equals(existingMessage.getUser()
+                                    .getLogin())) {
             logger.info("Существующее сообщение: {}", existingMessage);
             message.setDateCreate(existingMessage.getDateCreate());
             messageService.updateMessage(message);
@@ -182,7 +236,7 @@ public class MessageRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: message deleted")
             })
-    public ResponseEntity deleteMessage(@PathVariable("id") Long id) {
+    public ResponseEntity deleteMessage (@PathVariable("id") Long id) {
         messageService.deleteMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
         return new ResponseEntity(HttpStatus.OK);
@@ -200,15 +254,15 @@ public class MessageRestController {
                             description = "OK: get stared messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long userId, @PathVariable Long workspaceId) {
+    public ResponseEntity<List<MessageDTO>> getStarredMessages (@PathVariable Long userId, @PathVariable Long workspaceId) {
         List<Message> starredMessages = messageService.getStarredMessagesForUserByWorkspaceId(userId, workspaceId, false);
         logger.info("Сообщения, отмеченные пользователем.");
-        // messageDtoService.toDto 123456 NOT OK
+        // messageDtoService.toDto 123456 NOT OK ПЕРЕДЕЛАТЬ
         return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
     }
 
     @GetMapping(value = "/user/{id}")
-    public ResponseEntity<List<Message>> getMessagesFromChannelsForUser(@PathVariable("id") Long userId) {
+    public ResponseEntity<List<Message>> getMessagesFromChannelsForUser (@PathVariable("id") Long userId) {
         logger.info("Список сообщений для юзера от всех @channel: ");
         for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false)) {
             logger.info(message.toString());

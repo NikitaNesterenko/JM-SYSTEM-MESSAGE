@@ -102,30 +102,26 @@ public class MessageDTO {
         this.workspaceId = workspaceId;
     }
 
-      /*
-      "m.id AS \"id\", " +
-      "m.user_id AS \"userId\" "
-      "m.bot_id AS \"botId\", " +
-      "m.channel_id AS \"channelId\", " +
-      "m.workspace_id AS \"workspaceId\", " +
-      "m.shared_message_id AS \"sharedMessageId\", " +
-      "m.parent_message_id AS \"parentMessageId\", " +
 
-      "m.date_create AS \"dateCreate\", " +
-     */
-
-    public void setId (@NonNull Number id) {
-        System.out.println("Получено значчение");
+    public void setId (Number id) {
+        //TODO: delete
+        System.out.println("MessageDTO Получено значчение");
         System.out.println("Number == " + id);
-        this.id = id.longValue();
+        this.id = Optional.ofNullable(id)
+                          .map(Number::longValue)
+                          .orElse(null);
     }
 
     public void setUserId (Number userId) {
-        this.userId = userId.longValue();
+        this.userId = Optional.ofNullable(userId)
+                              .map(Number::longValue)
+                              .orElse(null);
     }
 
     public void setBotId (Number botId) {
-        this.botId = botId.longValue();
+        this.botId = Optional.ofNullable(botId)
+                             .map(Number::longValue)
+                             .orElse(null);
     }
 
     public void setDateCreate (Timestamp dateCreate) {
@@ -137,24 +133,40 @@ public class MessageDTO {
 //    }
 
     public void setChannelId (Number channelId) {
-        this.channelId = channelId.longValue();
+        this.channelId = Optional.ofNullable(channelId)
+                                 .map(Number::longValue)
+                                 .orElse(null);
     }
 
     public void setWorkspaceId (Number workspaceId) {
-        this.workspaceId = workspaceId.longValue();
+        this.workspaceId = Optional.ofNullable(workspaceId)
+                                   .map(Number::longValue)
+                                   .orElse(null);
     }
 
     public void setSharedMessageId (Number sharedMessageId) {
-        this.sharedMessageId = sharedMessageId.longValue();
+        this.sharedMessageId = Optional.ofNullable(sharedMessageId)
+                                       .map(Number::longValue)
+                                       .orElse(null);
     }
 
     public void setParentMessageId (Number parentMessageId) {
-        this.parentMessageId = parentMessageId.longValue();
+        this.parentMessageId = Optional.ofNullable(parentMessageId)
+                                       .map(Number::longValue)
+                                       .orElse(null);
     }
 
     public void setRecipientUserIds (List<Number> recipientUserIds) {
         this.recipientUserIds = recipientUserIds.stream()
                                         .map(Number::longValue)
                                         .collect(Collectors.toSet());
+    }
+
+    public void setUserName (String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserAvatarUrl (String userAvatarUrl) {
+        this.userAvatarUrl = userAvatarUrl;
     }
 }
