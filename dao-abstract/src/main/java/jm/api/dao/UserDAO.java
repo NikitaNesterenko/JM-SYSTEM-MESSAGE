@@ -33,4 +33,6 @@ public interface UserDAO {
     User getUserByName(String name);
 
     List<User> getUsersByIds(Set<Long> ids);
+
+    boolean isEmailInThisWorkspace(String email, Long workspaceId);
 }
