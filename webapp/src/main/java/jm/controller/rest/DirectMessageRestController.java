@@ -75,24 +75,7 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: direct message created")
             })
     public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
-//        System.out.println("DirectMessageDTO in createDirectMessage: " + directMessageDTO);
-//
-//        directMessageDTO.setDateCreate(LocalDateTime.now());
-//        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-//        directMessageService.saveDirectMessage(directMessage);
-//        logger.info("Созданное сообщение : {}", directMessage);
-//
-//        List<User> users = new ArrayList<>();
-//        users.add(directMessage.getConversation().getAssociatedUser());
-//        users.add(directMessage.getConversation().getOpeningUser());
-//        users.forEach(user -> {
-//            if (user.getOnline().equals(0)) {
-//                user.getUnreadDirectMessages().add(directMessage);
-//                userService.updateUser(user);
-//            }
-//        });
-
-//        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
+//        Сохранение личного сообщения выполняется в MessagesController сразу из websocket
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -109,15 +92,8 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to update direct message")
             })
     public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
-        DirectMessage message = directMessageDtoService.toEntity(messageDTO);
-        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
-        if (isCreated == null) {
-            logger.warn("Сообщение не найдено");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        message.setDateCreate(isCreated.getDateCreate());
-        DirectMessage directMessage = directMessageService.updateDirectMessage(message);
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
+//        Обновление личного сообщения выполняется в MessagesController сразу из websocket
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")

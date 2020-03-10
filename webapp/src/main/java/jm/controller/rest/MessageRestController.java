@@ -160,20 +160,8 @@ public class MessageRestController {
             })
 //    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
-        Message message = messageDtoService.toEntity(messageDto);
-        Message existingMessage = messageService.getMessageById(message.getId());
-        if (existingMessage == null) {
-            logger.warn("Сообщение не найдено");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        if (principal.getName().equals(existingMessage.getUser().getLogin())) {
-            logger.info("Существующее сообщение: {}", existingMessage);
-            message.setDateCreate(existingMessage.getDateCreate());
-            messageService.updateMessage(message);
-            logger.info("Обновленное сообщение: {}", message);
-            return new ResponseEntity(HttpStatus.OK);
-        }
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+//        Обновление сообщения выполняется в MessagesController сразу из websocket
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")

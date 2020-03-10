@@ -6,6 +6,7 @@ import jm.model.Channel;
 import java.util.List;
 
 public interface ChannelService {
+
     List<Channel> gelAllChannels();
 
     void createChannel(Channel channel);
@@ -26,6 +27,7 @@ public interface ChannelService {
 
     List<Channel> getChannelsByUserId(Long userId);
 
-    Long getWorkspaceIdByChannelId(Long channelId);
+    String getTopicChannelByChannelId(Long id);
 
+    Long getWorkspaceIdByChannelId(Long channelId);
 }

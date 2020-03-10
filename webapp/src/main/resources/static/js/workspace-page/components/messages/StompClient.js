@@ -10,7 +10,6 @@ import {
     ConversationRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
-    ThreadChannelMessageRestPaginationService,
     WorkspaceRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
 
@@ -29,7 +28,6 @@ export class StompClient {
         this.conversation_service = new ConversationRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.workspace_service = new WorkspaceRestPaginationService();
-        this.thread_msg_service = new ThreadChannelMessageRestPaginationService();
 
         this.commands = new Command();
 
@@ -37,7 +35,7 @@ export class StompClient {
         window.sendChannel = (channel) => this.sendChannel(channel);
         window.sendThread = (message) => this.sendThread(message);
         window.sendDM = (message) => this.sendDM(message);
-        window.sendChannelTopicChange = (id,topic) => this.sendChannelTopicChange(id,topic);
+        window.sendChannelTopicChange = (id, topic) => this.sendChannelTopicChange(id, topic);
         window.sendSlackBotCommand = (message) => this.sendSlackBotCommand(message); //вебсокет дефолтного бота
     }
 
@@ -49,7 +47,6 @@ export class StompClient {
             this.subscribeChannel();
             this.subscribeThread();
             this.subscribeDirectMessage();
-            this.subscribeChannelChangeTopic();
             this.subscribeSlackBot();
             this.subscribeUserStatus();
         });
@@ -64,7 +61,6 @@ export class StompClient {
                     this.stompClient.subscribe('/queue/messages/channel-' + channel.id, async (message) => {
                         let current_channel_id = sessionStorage.getItem('channelId');
                         let result = JSON.parse(message.body);
-                        // result['content'] = result.content;
                         if ((result.userId != null || result.botId != null) && !result.isDeleted) {
                             if (result.channelId == current_channel_id) {
                                 if (result.isUpdated) {
@@ -112,11 +108,11 @@ export class StompClient {
             }
             if (command === "topic") {
                 //смена топика канала
-                if (isOk && isAuthor && window.channel_id == channelId) {
+                if (isOk && window.channel_id == channelId) {
                     document.querySelector("#topic_string").textContent = slackBot.topic;
                     this.showMessageInCurrentChannel(report)
                 }
-            } else if (command === "leave"){
+            } else if (command === "leave") {
                 if (isAuthor) {
                     if (isOk) {
                         //обновление списка каналов у пользователя, покинувшего канал
@@ -131,9 +127,9 @@ export class StompClient {
                     //после успешной команды join у пользователя, отправившего эту команду добавляется и переключается канал
                     if (isAuthor) {
                         this.channelview.showAllChannels(window.chosenWorkspace);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             window.pressChannelButton(parseInt(slackBot.targetChannelId));
-                        },1000);
+                        }, 1000);
                     } else {
                         //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
                         if (!(report.content === "") && (report.channelId == window.channel_id)) {
@@ -152,7 +148,8 @@ export class StompClient {
                             this.channelview.addChannelIntoSidebarChannelList(JSON.parse(slackBot.channel));
                             this.channel_message_view.dialog.messageBoxWrapper();
                         }
-                    } if (JSON.parse(slackBot.channel).id == window.channel_id) {
+                    }
+                    if (JSON.parse(slackBot.channel).id == window.channel_id) {
                         this.showMessageInCurrentChannel(report);
                     }
                 }
@@ -176,7 +173,8 @@ export class StompClient {
                 if (isOk) {
                     if (slackBot.conversationId == parseInt(sessionStorage.getItem('conversation_id'))) {
                         this.channel_message_view.createMessage(report);
-                    } if (isAuthor || window.loggedUserId == slackBot.targetUserId) {
+                    }
+                    if (isAuthor || window.loggedUserId == slackBot.targetUserId) {
                         if (true) {
                             this.dm_chat.populateDirectMessages();
                         }
@@ -351,19 +349,11 @@ export class StompClient {
     }
 
     //посылаем сообщение на смену канала
-    sendChannelTopicChange(id,topic){
+    sendChannelTopicChange(id, topic) {
         this.stompClient.send('/app/channel.changeTopic', {}, JSON.stringify({
             'id': id,
             'topic': topic
         }));
-    }
-    //подписка на смену топика текущего канала
-    subscribeChannelChangeTopic() {
-        this.stompClient.subscribe('/topic/channel.changeTopic', (channel) => {
-            const chn = JSON.parse(channel.body);
-            console.log(channel.body);
-            document.querySelector("#topic_string").textContent = chn.topic;
-        });
     }
 
     sendSlackBotCommand(message) {
@@ -387,7 +377,6 @@ export class StompClient {
         };
 
         this.stompClient.send(message.url, {}, JSON.stringify(entity));
-        // this.stompClient.send("/app/bot/slackbot", {}, JSON.stringify(entity));
     }
 
     //отобразить сообщение из вебсокета в текущем канале

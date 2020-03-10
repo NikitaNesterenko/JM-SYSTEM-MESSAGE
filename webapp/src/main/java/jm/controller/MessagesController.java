@@ -11,13 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO сейчас в этом контроллере реализовано только сохранение новых сообщений, надо добавить обновление сообщений
 
 @Controller
 public class MessagesController {
@@ -53,9 +52,24 @@ public class MessagesController {
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
-        messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
-        messageService.createMessage(message);
+        if (message.getId() == null){
+            message.setDateCreate(LocalDateTime.now());
+            messageService.createMessage(message);
+            logger.info("Созданное сообщение: {}", message);
+        } else {
+            Message existingMessage = messageService.getMessageById(message.getId());
+            String editedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+            boolean editingAllowed = existingMessage != null && editedUserName.equals(existingMessage.getUser().getLogin());
+            if (editingAllowed) {
+                logger.info("Существующее сообщение: {}", existingMessage);
+                message.setDateCreate(existingMessage.getDateCreate());
+                messageService.updateMessage(message);
+                logger.info("Обновленное сообщение: {}", message);
+            } else {
+                logger.warn("Сообщение не найдено");
+            }
+        }
 
         //добавление сообщения в список непрочтенных для пользователей, которые оффлайн
         channelService.getChannelById(message.getChannelId()).getUsers().forEach(user -> {
@@ -65,7 +79,6 @@ public class MessagesController {
             }
         });
 
-        logger.info("Созданное сообщение: {}", message);
         simpMessagingTemplate
                 .convertAndSend("/queue/messages/channel-" + message.getChannelId(), messageDtoService.toDto(message));
     }
@@ -86,9 +99,20 @@ public class MessagesController {
     @MessageMapping("/direct_message")
     public void directMessageCreation(DirectMessageDTO directMessageDTO) {
 
-        directMessageDTO.setDateCreate(LocalDateTime.now());
         DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-        directMessageService.saveDirectMessage(directMessage);
+        if (directMessage.getId() == null){
+            directMessage.setDateCreate(LocalDateTime.now());
+            directMessageService.saveDirectMessage(directMessage);
+            logger.info("Созданное личное сообщение: {}", directMessage);
+        } else {
+            DirectMessage isCreated = directMessageService.getDirectMessageById(directMessageDTO.getId());
+            if (isCreated == null) {
+                logger.warn("Сообщение не найдено");
+            }
+            directMessage.setDateCreate(isCreated.getDateCreate());
+            directMessageService.updateDirectMessage(directMessage);
+            logger.info("Обновленное личное сообщение: {}", directMessage);
+        }
 
         List<User> users = new ArrayList<>();
         users.add(directMessage.getConversation().getAssociatedUser());
