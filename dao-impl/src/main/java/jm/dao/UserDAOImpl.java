@@ -23,7 +23,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByLogin(String login) {
         try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+            return entityManager.createQuery("SELECT u FROM User u WHERE u.login  = :login", User.class).setParameter("login", login)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -33,7 +33,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByName(String name) {
         try {
-            return (User) entityManager.createQuery("from User where name  = :name").setParameter("name", name)
+            return entityManager.createQuery("SELECT  u FROM User u WHERE u.username  = :name", User.class).setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -43,7 +43,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByEmail(String email) {
         try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+            return entityManager.createQuery("SELECT u FROM User u WHERE u.email  = :email", User.class).setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -101,7 +101,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("select o from User o where o.id in :ids", User.class)
+                .createQuery("SELECT u FROM User u WHERE u.id in :ids", User.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }
@@ -110,7 +110,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     public boolean isEmailInThisWorkspace(String email, Long workspaceId) {
         try {
             User user = getUserByEmail(email);
-            entityManager.createNativeQuery("select * from workspaces_users where user_id =? and workspace_id =?")
+            entityManager.createNativeQuery("SELECT * FROM workspaces_users WHERE user_id = ? AND workspace_id = ?")
                     .setParameter(1, user.getId())
                     .setParameter(2, workspaceId)
                     .getSingleResult();

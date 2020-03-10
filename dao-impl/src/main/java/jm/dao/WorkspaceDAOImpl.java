@@ -19,8 +19,8 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Workspace getWorkspaceByName(String name) {
         try {
-            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
-                    .setParameter(1, name)
+            return (Workspace) entityManager.createNativeQuery("SELECT w.* FROM workspaces w WHERE  w.name = :name", Workspace.class)
+                    .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -29,14 +29,15 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public List<Workspace> getWorkspacesByOwnerId(Long ownerId) {
-        return (List<Workspace>) entityManager.createNativeQuery("select * from workspaces where owner_id=?", Workspace.class)
-                .setParameter(1, ownerId)
+        return (List<Workspace>) entityManager.createNativeQuery("SELECT w.* FROM workspaces w WHERE w.owner_id = :id", Workspace.class)
+                .setParameter("id", ownerId)
                 .getResultList();
     }
 
     @Override
     public List<Workspace> getWorkspacesByUserId(Long userId) {
-        return (List<Workspace>) entityManager.createNativeQuery("SELECT w.* FROM workspaces_users wu JOIN workspaces w ON wu.workspace_id = w.id WHERE wu.user_id =?", Workspace.class)
-                .setParameter(1, userId).getResultList();
+        return (List<Workspace>) entityManager.createNativeQuery("SELECT w.* FROM workspaces_users wu JOIN workspaces w ON wu.workspace_id = w.id WHERE wu.user_id = :id", Workspace.class)
+                .setParameter("id", userId)
+                .getResultList();
     }
 }

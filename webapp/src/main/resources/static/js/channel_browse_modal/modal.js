@@ -104,13 +104,27 @@ function selectCh (data) {
     } );
 }
 
-$( function () {
-    let button = document.getElementById( "button-channel1" );
-    button.onclick = function unzipChannel()  {
-        const response = fetch(`/rest/api/channels/archiving/${id}`, {
-            method: 'POST'
-        });
-        return response.json();
-    };
-});
+function unzipChannel() {
+    const response = fetch(`/rest/api/channels/archiving/${idChannel}`, {
+        method: 'POST'
+    });
+    return response.json();
+}
+
+let button = document.getElementById("button-channel1");
+button.addEventListener('onclick', unzipChannel);
+
+
+// $('#button-channel1').on('click', unzip());
+//
+// async function unzip () {
+//     let response = await fetch( `/rest/api/channels/unzip/${idChannel}`, {
+//         method : 'POST',
+//         headers : {
+//             'Content-Type' : 'application/json'
+//         }
+//     });
+//     let json = await response.json();
+//     console.log(json);
+// }
 
