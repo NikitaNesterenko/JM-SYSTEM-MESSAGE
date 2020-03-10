@@ -77,7 +77,10 @@ window.addEventListener('load', function () {
             if (emails[i].value !== '') { invites.push(new Invite(emails[i].value, names[i].value));}
         });
 
-        invite_service.create(invites);
+        invite_service.create(invites).then(answer => {
+            if (!jQuery.isEmptyObject(answer))
+                openInviteAnswerModal(answer)
+        });
         document.getElementById('inviteEmails_').value = '';
         $('.invites-modal-close').click();
     });
@@ -109,3 +112,29 @@ export const addNewEmailLineIntoInviteModal = (email) => {
         </tr>`
     )
 };
+
+function openInviteAnswerModal(answer) {
+    $.each(answer, function (i, item) {
+        addNewLineIntoResultInvite(item);
+    });
+    $('#invitesAnswerModal').modal('show');
+    jQuery(function ($) {
+        $(document).mouseup(function (e) {
+            let div = $("#invitesAnswerModal");
+            if (!div.is(e.target)
+                && div.has(e.target).length === 0) {
+                div.hide();
+                $('#invitesAnswerTable > tr').remove();
+            }
+        });
+
+    });
+}
+
+function addNewLineIntoResultInvite(email) {
+    let line = `<tr>
+                <td>${email}</td>
+                <td>Email is already in your workspace.</td>
+                </tr>`;
+    $('#invitesAnswerTable').append(line)
+}

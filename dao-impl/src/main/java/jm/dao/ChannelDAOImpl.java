@@ -90,4 +90,12 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 .getResultList();
     }
 
+    @Override
+    public Long getWorkspaceIdByChannelId(Long channelId) {
+        BigInteger id = (BigInteger) entityManager.createNativeQuery("select ch.workspace_id from channels ch where ch.id=?")
+                .setParameter(1, channelId)
+                .getSingleResult();
+        return id.longValue();
+    }
+
 }

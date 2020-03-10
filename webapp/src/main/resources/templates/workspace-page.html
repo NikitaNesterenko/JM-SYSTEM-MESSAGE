@@ -77,8 +77,8 @@
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
-    <!-- direct message -->
-    <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>
+   <!--  direct message
+    <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>-->
 
     <script src="/js/helper_functions.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -497,6 +497,32 @@
 <button id="invitesModalClose" class="invites-modal-close" type="button">
     X
 </button>
+
+<!--Invite answer modal-->
+<div class="modal" id="invitesAnswerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header" id="invitesAnswerModalHeader">
+                <h1>Couldn’t send request</h1>
+            </div>
+
+            <div class="modal-body text-center" id="invitesAnswerModalBody">
+                <table class="table table-striped" id="invitesAnswerTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="invitesModalTableTh1">Email</th>
+                        <th scope="col" id="invitesModalTableTh2">What was wrong</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer" id="invitesAnswerModalFooter">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Share message MODAL -->
 <div class="modal fade" id="shareMessageModal" tabindex="-1" role="dialog" aria-labelledby="shareMessageModal"

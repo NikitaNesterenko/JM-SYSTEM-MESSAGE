@@ -152,14 +152,11 @@ public class BotRestController {
     public ResponseEntity updateBot(@RequestBody BotDTO botDto) {
         Bot bot = botDtoService.toEntity(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
-        existingBot.setName(bot.getName());
-        existingBot.setNickName(bot.getNickName());
-        existingBot.setToken(bot.getToken());
         if (existingBot == null) {
             logger.warn("Бот не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         } else {
-            botService.updateBot(existingBot);
+            botService.updateBot(bot);
             logger.info("Обновлнный бот: {}", bot);
             return new ResponseEntity(HttpStatus.OK);
         }

@@ -56,7 +56,11 @@
                     <th:block th:each="bot : ${bots}">
 <!--                        th:onclick="'editBot(' + ${bot.id} + ')'" style="cursor: pointer"-->
                         <tr>
-                            <td th:text="${bot.nickName}" ></td>
+                            <td>
+                                <a style="cursor: pointer; color: #003eff">
+                                    <u th:text="${bot.nickName}" th:id="${bot.id}" class="link-edit-bot"></u>
+                                </a>
+                            </td>
                             <td>
                                 <th:block th:each="workspace : ${bot.workspaces}">
                                     [[${workspace.name} + ' ']]

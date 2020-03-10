@@ -5,6 +5,7 @@ import {SubmitMessage} from "/js/workspace-page/components/footer/SubmitMessage.
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
 import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace} from "/js/invite.js";
 import {deleteChannelFromList} from "/js/workspace-page/components/sidebar/ChannelView.js";
+import {MessageRestPaginationService, DirectMessagesRestController} from "/js/rest/entities-rest-pagination.js";
 
 export class StompClient {
 
@@ -17,6 +18,9 @@ export class StompClient {
         this.dm_view = direct_message_view;
         this.channelview = channel_view;
         this.sm = new SubmitMessage();
+        this.message_service = new MessageRestPaginationService();
+        this.directMessage_service = new DirectMessagesRestController();
+        this.dm_chat = new ActiveChatMembers();
 
         this.commands = new Command();
 
@@ -58,6 +62,11 @@ export class StompClient {
                         }
                     }
                     this.channel_message_view.dialog.messageBoxWrapper();
+                } else {
+                    if (result.userId != window.loggedUserId && this.isChannelPresentInChannelsList(result.channelId)) {
+                        this.channelview.enableChannelHasUnreadMessage(result.channelId);
+                        this.message_service.addUnreadMessageForUser(result.id, window.loggedUserId);
+                    }
                 }
             } else {
                 if (result.isDeleted) {
@@ -106,7 +115,7 @@ export class StompClient {
                     if (isAuthor) {
                         this.channelview.showAllChannels(window.chosenWorkspace);
                         setTimeout(function() {
-                            window.pressChannelButton(slackBot.targetChannelId);
+                            window.pressChannelButton(parseInt(slackBot.targetChannelId));
                         },1000);
                     } else {
                         //у остальных пользователей в соответствующем канале отображается сообщение о том, что user joined to channel
@@ -152,8 +161,7 @@ export class StompClient {
                         this.channel_message_view.createMessage(report);
                     } if (isAuthor || window.loggedUserId == slackBot.targetUserId) {
                         if (true) {
-                            const dm_chat = new ActiveChatMembers();
-                            dm_chat.populateDirectMessages();
+                            this.dm_chat.populateDirectMessages();
                         }
                     }
                 }
@@ -233,6 +241,11 @@ export class StompClient {
                 } else {
                     if (response.conversationId === current_conversation) {
                         this.dm_view.createMessage(response);
+                    } else {
+                        if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
+                            this.dm_chat.enableDirectHasUnreadMessage(response.conversationId);
+                            this.directMessage_service.addUnreadMessageForUser(response.id, window.loggedUserId)
+                        }
                     }
                 }
             } else {
@@ -360,5 +373,9 @@ export class StompClient {
             }
         });
         return isPresent;
+    }
+
+    isConversationPresentInList(convId) {
+        return document.querySelector(`button[conv_id='${convId}']`)
     }
 }
