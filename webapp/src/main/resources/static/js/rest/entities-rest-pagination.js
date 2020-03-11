@@ -58,6 +58,20 @@ export class MessageRestPaginationService extends RestPaginationService {
         const response = await fetch(`/rest/api/messages/user/${id}`);
         return response.json();
     };
+
+    addUnreadMessageForUser = async (msgId, usrId) => {
+        await fetch (`/rest/api/messages/unread/add/message/${msgId}/user/${usrId}`);
+    };
+
+    getUnreadMessageInChannelForUser = async (chnId, usrId) => {
+        const response = await fetch (`/rest/api/messages/unread/channel/${chnId}/user/${usrId}`);
+        return response.json();
+    };
+
+    deleteAllChannelMessageForUserFromUnread = async (chnId, usrId) => {
+        const response = await fetch (`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
+        return response.status;
+    }
 }
 
 export class BotRestPaginationService extends RestPaginationService {
@@ -70,6 +84,50 @@ export class BotRestPaginationService extends RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     };
+
+    createBot = async (bot) => {
+        const response = await fetch('/rest/api/bot/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(bot)
+        });
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    generateToken = async () => {
+        const response = await fetch('/rest/api/bot/generate.token', {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    updateBot = async (bot) => {
+        const response = await fetch('/rest/api/bot/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(bot)
+        });
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    // TODO тестовая отправка сообщения
+    sendTestMessage = async () => {
+        await fetch('/rest/api/bot/test.send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+    }
 }
 
 export class SlashCommandRestPaginationService extends RestPaginationService {
@@ -78,25 +136,31 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
     }
 
     getSlashCommandsByBotId = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/bot/' + id)
+        const response = await fetch('/rest/api/slashcommand/bot/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getAllSlashCommands = async () => {
-        const response = await fetch('/rest/api/slashcommand/all')
+        const response = await fetch('/rest/api/slashcommand/all');
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandsByWorkspace = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id)
+        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandByName = async (name) => {
-        const response = await fetch('/rest/api/slashcommand/name/' + name)
+        const response = await fetch('/rest/api/slashcommand/name/' + name);
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+
+    getSlashCommandById = async (id) => {
+        const response = await fetch('/rest/api/slashcommand/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -372,6 +436,21 @@ export class DirectMessagesRestController extends RestPaginationService {
         const response = await fetch(`/rest/api/direct_messages/conversation/${id}`);
         return response.json();
     };
+
+    addUnreadMessageForUser = async (msgId, usrId) => {
+        await fetch (`/rest/api/direct_messages/unread/add/message/${msgId}/user/${usrId}`);
+    };
+
+    getUnreadDMessagesInConversationForUser = async (convId, usrId) => {
+        const response = await fetch (`/rest/api/direct_messages/unread/conversation/${convId}/user/${usrId}`);
+        return response.json();
+    };
+
+    deleteAllConversationDMForUserFromUnread = async (convId, usrId) => {
+        const response = await fetch (`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
+        return response.status;
+    }
+
 }
 
 export class PluginRestPaginationService extends RestPaginationService {
