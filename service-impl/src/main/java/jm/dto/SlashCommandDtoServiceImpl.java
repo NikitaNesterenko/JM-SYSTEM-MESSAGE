@@ -19,23 +19,24 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService{
     }
 
     @Override
-    public SlashCommandDto toDto(SlashCommand slashCommand) {
-        if (slashCommand == null) {
+    public SlashCommandDTO toDto(SlashCommand slashCommand) {
+/*        if (slashCommand == null) {
             return null;
         }
-        SlashCommandDto dto = new SlashCommandDto(slashCommand);
+        SlashCommandDTO dto = new SlashCommandDTO(slashCommand);
 
         Bot bot = slashCommand.getBot();
 
         if (bot != null) {
             dto.setBotId(bot.getId());
         }
-         return dto;
+         return dto;*/
+        return null;
     }
 
     @Override
-    public SlashCommand toEntity(SlashCommandDto slashCommandDto) {
-        if (slashCommandDto == null){
+    public SlashCommand toEntity(SlashCommandDTO slashCommandDto) {
+ /*       if (slashCommandDto == null){
             return null;
         }
 
@@ -47,6 +48,7 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService{
             sc.setBot(bot);
         }
 
-        return sc;
+        return sc;*/
+        return null;
     }
 }

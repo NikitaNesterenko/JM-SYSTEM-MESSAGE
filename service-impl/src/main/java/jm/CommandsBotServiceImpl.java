@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import jm.dto.ChannelDtoService;
 import jm.dto.DirectMessageDtoService;
 import jm.dto.MessageDtoService;
-import jm.dto.SlashCommandDto;
+import jm.dto.SlashCommandDTO;
 import jm.model.*;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
@@ -54,7 +54,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     }
 
     @Override
-    public String getWsCommand(SlashCommandDto command) throws JsonProcessingException {
+    public String getWsCommand(SlashCommandDTO command) throws JsonProcessingException {
         User currentUser = userService.getUserById(command.getUserId());//пользователь, отправивший команду
         Channel currentChannel = channelService.getChannelById(command.getChannelId()); //канал, куда отправлена команда
         String commandName = command.getName(); //название пришедшей команды
@@ -83,7 +83,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     Обработка команд недефолтных ботов
     Для команд типа "send" сообщение (записано в Description) будет отправлено в текущий канал.
      */
-    private Map<String, String> createReport(SlashCommandDto command, User currentUser, Channel currentChannel,
+    private Map<String, String> createReport(SlashCommandDTO command, User currentUser, Channel currentChannel,
                                              String commandName, String commandBody, Map<String, String> response,
                                              ObjectMapper mapper) throws JsonProcessingException {
 
@@ -105,9 +105,9 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     }
 
     // Обработка команд дефольного бота
-    private Map<String, String> createReportByDefaultBot(SlashCommandDto command, User currentUser, Channel currentChannel,
-                                             String commandName, String commandBody, Map<String, String> response,
-                                             ObjectMapper mapper) throws JsonProcessingException {
+    private Map<String, String> createReportByDefaultBot(SlashCommandDTO command, User currentUser, Channel currentChannel,
+                                                         String commandName, String commandBody, Map<String, String> response,
+                                                         ObjectMapper mapper) throws JsonProcessingException {
 
         switch (commandName) {
             case "topic":
@@ -284,7 +284,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     }
 
     @Override
-    public String sendMsg(SlashCommandDto command) throws JsonProcessingException {
+    public String sendMsg(SlashCommandDTO command) throws JsonProcessingException {
         String msg = slashCommandService.getSlashCommandByName(command.getName()).getHints();
         return sendPermRequestMessage(command.getChannelId(), getBot(command.getBotId()), msg);
     }

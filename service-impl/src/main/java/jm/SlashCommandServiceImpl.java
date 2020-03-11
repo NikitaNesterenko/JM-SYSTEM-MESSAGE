@@ -2,6 +2,8 @@ package jm;
 
 import jm.api.dao.BotDAO;
 import jm.api.dao.SlashCommandDao;
+import jm.api.dao.TypeSlashCommandDAO;
+import jm.dto.SlashCommandDTO;
 import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,15 +22,15 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     private SlashCommandDao slashCommandDao;
     private BotDAO botDAO;
+    private final TypeSlashCommandDAO typeSlashCommandDAO;
 
     @Autowired
-    public void setSlashCommandDAO(SlashCommandDao slashCommandDAO) {
-        this.slashCommandDao = slashCommandDAO;
-    }
-    @Autowired
-    public void setBotDAO(BotDAO botDAO) {
+    public SlashCommandServiceImpl(SlashCommandDao slashCommandDao, BotDAO botDAO, TypeSlashCommandDAO typeSlashCommandDAO) {
+        this.slashCommandDao = slashCommandDao;
         this.botDAO = botDAO;
+        this.typeSlashCommandDAO = typeSlashCommandDAO;
     }
+
 
     @Override
     public List<SlashCommand> getAllSlashCommands() {
@@ -82,6 +85,48 @@ public class SlashCommandServiceImpl implements SlashCommandService {
     @Override
     public List<SlashCommand> getSlashCommandsByWorkspaceId(Long id) {
         return slashCommandDao.getByWorkspaceId(id);
+    }
+
+    @Override
+    public Optional<List<SlashCommandDTO>> getAllSlashCommandDTO() {
+        return slashCommandDao.getAllSlashCommandDTO();
+    }
+
+    @Override
+    public Optional<SlashCommandDTO> getSlashCommandDTOById(Long id) {
+        return slashCommandDao.getSlashCommandDTOById(id);
+    }
+
+    @Override
+    public Optional<SlashCommandDTO> getSlashCommandDTOByName(String name) {
+        return slashCommandDao.getSlashCommandDTOByName(name);
+    }
+
+    @Override
+    public Optional<List<SlashCommandDTO>> getSlashCommandDTOByBotId(Long id) {
+        return slashCommandDao.getSlashCommandDTOByBotId(id);
+    }
+
+    @Override
+    public Optional<List<SlashCommandDTO>> getSlashCommandDTOByWorkspaceId(Long id) {
+        return slashCommandDao.getSlashCommandDTOByWorkspaceId(id);
+    }
+
+    @Override
+    public SlashCommand getEntityFromDTO(SlashCommandDTO slashCommandDTO) {
+        if (slashCommandDTO == null){
+            return null;
+        }
+
+        SlashCommand sc = new SlashCommand(slashCommandDTO);
+        sc.setType(typeSlashCommandDAO.getById(slashCommandDTO.getTypeId()));
+        Bot bot = botDAO.getById(slashCommandDTO.getBotId());
+
+        if (bot != null){
+            sc.setBot(bot);
+        }
+
+        return sc;
     }
 
 
