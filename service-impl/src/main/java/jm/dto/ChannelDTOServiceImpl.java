@@ -56,7 +56,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         return channelDTO;
     }
 
-    //TODO: подумать как получить все сразу все сущности в ДТО из базы
+
     @Override
     public List<ChannelDTO> toDto(List<Channel> channels) {
         if (channels==null) {

@@ -132,4 +132,20 @@ public class Message {
 
 
     }
+
+    public Message ( Message message) {
+        this.id = message.id;
+        this.user = message.user;
+        this.bot = message.bot;
+        this.content = message.content;
+        this.dateCreate = message.dateCreate;
+        this.filename = message.filename;
+        this.voiceMessage = message.voiceMessage;
+        this.isDeleted = message.isDeleted;
+        this.channelId = message.channelId;
+        this.workspaceId = message.workspaceId;
+        this.sharedMessage = message.sharedMessage;
+        this.recipientUsers = message.recipientUsers;
+        this.parentMessage = message.parentMessage;
+    }
 }

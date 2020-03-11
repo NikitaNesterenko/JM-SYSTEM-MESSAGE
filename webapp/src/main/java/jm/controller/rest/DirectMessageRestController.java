@@ -10,6 +10,7 @@ import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
 import jm.dto.DirectMessageDtoService;
 import jm.model.message.DirectMessage;
+import org.hibernate.dialect.RDMSOS2200Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,11 @@ public class DirectMessageRestController {
                     )
             })
     public ResponseEntity<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
-        logger.info("Сообщение с id = {}", id);
+        //TODO ПЕРЕДЕЛАТЬ сразу получать ДТО
         DirectMessage directMessage = directMessageService.getDirectMessageById(id);
         logger.info(directMessage.toString());
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
+        DirectMessageDTO directMessageDTO = directMessageService.getDirectMessageDtoByDirectMessage(directMessage);
+        return new ResponseEntity<>(directMessageDTO, HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
@@ -67,14 +69,12 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: direct message created")
             })
     public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
-        //TODO: Убрать лишнее
-//        directMessageDTO.setDateCreate(LocalDateTime.now());
-        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
+        DirectMessage directMessage = directMessageService.getDirectMessageByDirectMessageDto(directMessageDTO);
         directMessage.setDateCreate(LocalDateTime.now());
-        System.out.println(directMessage);
+
         directMessageService.saveDirectMessage(directMessage);
         logger.info("Созданное сообщение : {}", directMessage);
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.CREATED);
+        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
@@ -90,7 +90,7 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to update direct message")
             })
     public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
-        DirectMessage message = directMessageDtoService.toEntity(messageDTO);
+        DirectMessage message = directMessageService.getDirectMessageByDirectMessageDto(messageDTO);
         DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
         if (isCreated == null) {
             logger.warn("Сообщение не найдено");
@@ -98,7 +98,7 @@ public class DirectMessageRestController {
         }
         message.setDateCreate(isCreated.getDateCreate());
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
+        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -126,6 +126,7 @@ public class DirectMessageRestController {
     public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
         List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
         messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(directMessageDtoService.toDto(messages), HttpStatus.OK);
+
+        return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
     }
 }

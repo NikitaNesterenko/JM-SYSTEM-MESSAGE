@@ -59,16 +59,15 @@ public class BotRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
     public ResponseEntity<List<BotDTO>> getBotByWorkspace (@PathVariable("id") Long id) {
-        //TODO: удалить лишнее
-        System.out.println("TYT getBotByWorkspace id: " + id);
-//        List<Bot> bots = botService.getBotsByWorkspaceId(id);
         List<BotDTO> botDTOList = botService.getBotDtoListByWorkspaceId(id);
         if (botDTOList.isEmpty()) {
             logger.warn("Не удалось найти ботов для workspace с id = {}", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            logger.info("Боты для workspace c id = {}", id);
+            return new ResponseEntity<>(botDTOList, HttpStatus.OK);
         }
-        logger.info("Боты для workspace c id = {}", id);
-        return new ResponseEntity<>(botDTOList, HttpStatus.OK);
+
     }
 
     // DTO compliant
@@ -84,9 +83,6 @@ public class BotRestController {
             })
     public ResponseEntity<BotDTO> getBotById (@PathVariable("id") Long id) {
         logger.info("Бот с id = {}", id);
-        //TODO: Переделать на получение BotDTO из базы
-        //logger.info(botService.getBotById(id).toString());
-        // botDtoService.toDto
         Optional<BotDTO> botDTO = botService.getBotDTOById(id);
         return botDTO.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                        .orElseGet(() -> ResponseEntity.notFound()

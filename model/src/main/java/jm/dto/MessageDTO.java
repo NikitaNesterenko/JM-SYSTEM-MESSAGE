@@ -54,7 +54,6 @@ public class MessageDTO {
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields
     public MessageDTO (@NonNull Message message) {
-        // TODO: удалить лишнее
         this.id = message.getId();
         this.content = message.getContent();
         this.dateCreate = message.getDateCreate();
@@ -73,7 +72,6 @@ public class MessageDTO {
                                         .collect(Collectors.toSet());
         Optional.ofNullable(message.getParentMessage())
                 .map(parentMessage -> this.parentMessageId = parentMessage.getId());
-//        private String channelName;*
 
         Optional.ofNullable(message.getUser())
                 .map(user -> {
@@ -90,6 +88,29 @@ public class MessageDTO {
                     this.pluginName = bot.getName();
                     return null;
                 });
+    }
+
+    public MessageDTO (@NonNull MessageDTO messageDTO) {
+        this.id = messageDTO.getId();
+        this.userId = messageDTO.getUserId();
+        this.botId = messageDTO.getBotId();
+        this.content = messageDTO.getContent();
+        this.dateCreate = messageDTO.getDateCreate();
+
+        this.filename = messageDTO.getFilename();
+        this.voiceMessage = messageDTO.getVoiceMessage();
+        this.isDeleted = messageDTO.getIsDeleted();
+        this.isUpdated = messageDTO.getIsUpdated();
+        this.channelId = messageDTO.getChannelId();
+        this.workspaceId = messageDTO.getWorkspaceId();
+        this.sharedMessageId = messageDTO.getSharedMessageId();
+        this.recipientUserIds = messageDTO.getRecipientUserIds();
+        this.parentMessageId = messageDTO.getParentMessageId();
+        this.userName = messageDTO.getUserName();
+        this.botNickName = messageDTO.getBotNickName();
+        this.channelName = messageDTO.getChannelName();
+        this.userAvatarUrl = messageDTO.getUserAvatarUrl();
+        this.pluginName = messageDTO.getPluginName();
     }
 
     // For test only

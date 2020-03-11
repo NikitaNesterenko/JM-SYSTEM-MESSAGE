@@ -30,14 +30,11 @@ public class ChannelWSController {
     @SendTo("/topic/channel")
     public String createChannel (ChannelWS channelWS)
             throws JsonProcessingException {
-        //TODO: удалить лишнее
-//        Channel channel = channelService.getChannelByName(channelWS.getName());
         Optional<ChannelDTO> channelDTO = channelService.getChannelDTOByName(channelWS.getName());
         if (channelDTO.isPresent()) {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(channelDTO.get());
         } else {
-            //TODO: Что вернуть если channel с таким Name нет?
             return "Not find Channel by name";
         }
 
@@ -50,9 +47,6 @@ public class ChannelWSController {
     public String changeChannelTopic (ChannelWSTopic zapros)
             throws JsonProcessingException {
         Long channel_id = Long.parseLong(zapros.getId());
-        //TODO: удалить закомментированное
-//        Channel channel = channelService.getChannelById(channel_id);
-//        channel.setTopic(zapros.getTopic());
         Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(channel_id);
         if (channelDTO.isPresent()) {
             channelDTO.get()
@@ -60,7 +54,6 @@ public class ChannelWSController {
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(channelDTO.get());
         } else {
-            //TODO: Что вернуть если channel с таким Id нет?
             return "Not find Channel by id";
         }
     }

@@ -84,7 +84,6 @@ public class SlackBotController {
         response.put("channelId", command.getChannelId().toString()); //добавляем Id канала, в котором отправлена команда
         response.put("report", "{}");
 
-        //Todo: упростить
         ObjectMapper mapper = new ObjectMapper();
         if (commandName.equals("topic")) {
             if (commandBody.trim().isEmpty()) {
@@ -258,7 +257,6 @@ public class SlackBotController {
     }
 
     private String sendDirectMessage(Long fromId, User toUser, String message, Long channelId) throws JsonProcessingException {
-
         Channel channel = channelService.getChannelById(channelId);
         Workspace workspace = channel.getWorkspace();
 
@@ -288,7 +286,7 @@ public class SlackBotController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        return mapper.writeValueAsString(directMessageDtoService.toDto(dm));
+        return mapper.writeValueAsString(directMessageService.getDirectMessageDtoByDirectMessage(dm));
     }
 
     private String sendPermRequestMessage(Long channelId, Object author, String reportMsg) throws JsonProcessingException {

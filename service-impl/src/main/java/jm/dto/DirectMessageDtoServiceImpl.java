@@ -46,7 +46,6 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
     }
 
     @Override
-    // directMessageDtoService.toDto
     public DirectMessageDTO toDto(DirectMessage directMessage) {
 
         if (directMessage == null) {

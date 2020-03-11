@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
-    //TODO: переделать этот метод для практики
     @Override
     public List<Bot> getBotsByWorkspaceId (Long id) {
         try {
@@ -51,7 +50,6 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
     @Override
     public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
-        //TODO: переделать на IN
         return getAllBotIdByWorkspaceId(id).stream()
                        .map(Number::longValue)
                        .map(this::getBotDTOById)

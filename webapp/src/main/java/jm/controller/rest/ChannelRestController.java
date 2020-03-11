@@ -91,8 +91,7 @@ public class ChannelRestController {
             })
     public ResponseEntity<ChannelDTO> getChannelById (@PathVariable("id") Long id) {
         logger.info("Channel с id = {}", id);
-        //TODO: удалить лишнее
-//        Channel channel = channelService.getChannelById(id);
+
         Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(id);
         if (channelDTO.isPresent()) {
             logger.info(channelDTO.toString());
@@ -115,15 +114,13 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByUserId (@PathVariable("id") Long id) {
-        //TODO: удалить лишнее
-//        List<Channel> channels = channelService.getChannelsByUserId(id);
-//        for (Channel channel : channels) {
-//            System.out.println(channel);
-//        }
-        // channelDTOService.toDto(channels);
         List<ChannelDTO> channelDTOList = channelService.getChannelDtoListByUserId(id);
+        if (!channelDTOList.isEmpty()) {
+            return ResponseEntity.ok(channelDTOList);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.ok(channelDTOList);
     }
 
     @PostMapping(value = "/create")
@@ -142,6 +139,7 @@ public class ChannelRestController {
         //TODO: Удалить лишнее
         Channel channel = channelService.getChannelByName(channelDTO.getName());
         if (channel == null) {
+            // TODO: ПЕРЕДЕЛАТЬ
             channel = channelDTOService.toEntity(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
             Workspace workspace = (Workspace) request.getSession(false)
@@ -268,11 +266,7 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceId (@PathVariable("id") Long id) {
-        // TODO: удалить лишнее
-//        List<Channel> channelsByWorkspaceId = channelService.getChannelsByWorkspaceId(id);
-        //channelDTOService.toDto(channelsByWorkspaceId);
-        List<ChannelDTO> channelDTOList = channelService.getChannelDtoListByWorkspaceId(id);
-        return new ResponseEntity<>(channelDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(channelService.getChannelDtoListByWorkspaceId(id), HttpStatus.OK);
     }
 
     @GetMapping("/name/{name}")

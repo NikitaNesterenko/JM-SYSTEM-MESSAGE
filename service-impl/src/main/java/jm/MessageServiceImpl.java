@@ -72,6 +72,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Optional<MessageDTO> getMessageDtoById (Long id) {
+        System.out.println("getMessageDtoById id: " + id);
         return messageDAO.getMessageDtoById(id);
     }
 
@@ -127,15 +128,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageDTO getMessageDtoByMessage (@NonNull Message message) {
-        // TODO: удалить лишнее
         MessageDTO messageDTO = new MessageDTO(message);
-        /*
-        Long channelId = message.getChannelId();
-        if (channelId != null) {
-            Channel channel = channelDAO.getById(channelId);
-            messageDto.setChannelName(channel.getName());
-        }
-         */
         Optional.ofNullable(message.getChannelId())
                 .map(channelId -> {
                     Channel channel = channelDAO.getById(channelId);

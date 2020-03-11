@@ -47,28 +47,16 @@ public class MessageRestController {
                     )
             })
     public ResponseEntity<List<MessageDTO>> getMessages () {
-        //TODO: удалить лишнее
-        System.out.println("CHECKING getMessages");
-
-        // messageDtoService.toDto 123456 ПРОВЕРИТЬ
-
-//        List<Message> messages = messageService.getAllMessages(false);
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
         if (!messageDTOList.isEmpty()) {
-            System.out.println("WORKING getMessages");
             logger.info("Список сообщений : ");
             messageDTOList.forEach(messageDTO -> logger.info(messageDTO.toString()));
             logger.info("-----------------------");
             return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
         } else {
-            System.out.println("WORKING getMessages not messages");
             return ResponseEntity.badRequest()
                            .build();
         }
-//        for (Message message : messages) {
-//            logger.info(message.toString());
-//        }
-//        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
     // DTO compliant
@@ -84,9 +72,6 @@ public class MessageRestController {
                     )
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId (@PathVariable("id") Long id) {
-        //TODO: удалить лишнее
-        System.out.println("CHECKING Работает TYT getMessagesByChannelId");
-        // messageDtoService.toDto 123456 ПРОВЕРИТЬ
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
         if (!messageDTOList.isEmpty()) {
             logger.info("Полученные сообщения из канала с id = {} :", id);
@@ -97,13 +82,6 @@ public class MessageRestController {
             return ResponseEntity.badRequest()
                            .build();
         }
-
-//        logger.info("Полученные сообщения из канала с id = {} :", id);
-//        for (Message message : messages) {
-//            logger.info(message.toString());
-//        }
-
-//        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
     }
 
     // DTO compliant
