@@ -129,25 +129,13 @@ export class ChannelView {
 
     addChannelIntoSidebarChannelList(channel) {
         const chn_symbol = channel.isPrivate ? "🔒" : "#";
-
-        if (!channel.isApp) {
-            $('#id-channel_sidebar__channels__list').append(`
+        $('#id-channel_sidebar__channels__list').append(`
             <div class="p-channel_sidebar__channel">
                 <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
                     <i class="p-channel_sidebar__channel_icon_prefix">${chn_symbol}</i>
                     <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
                 </button>
             </div>`);
-        } else {
-            $('#id-app_sidebar__apps__list')
-                .append(`<div class="p-channel_sidebar__channel">
-                                    <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
-                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
-                                        <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
-                                    </button>
-                                  </div>`
-                );
-        }
     }
 
     setChannelBGColor(channel) {

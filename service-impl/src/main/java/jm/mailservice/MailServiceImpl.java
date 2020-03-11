@@ -84,8 +84,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo) {
-        int code = (int) (Math.random() * 999999);
+    public Optional<CreateWorkspaceToken> sendConfirmationCode(String emailTo) {
+        int code  = (int)((Math.random() * 900000) + 100000);
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -103,7 +103,7 @@ public class MailServiceImpl implements MailService {
             logger.error("Sending confirmation code to " + emailTo + " failed");
             e.printStackTrace();
         }
-
+        createWorkspaceToken.setUserEmail(emailTo);
         return Optional.ofNullable(createWorkspaceToken);
     }
 
