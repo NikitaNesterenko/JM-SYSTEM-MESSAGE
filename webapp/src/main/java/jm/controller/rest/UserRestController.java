@@ -4,13 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
-import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +61,7 @@ public class UserRestController {
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);*/
         /*return userService.getAllUsersDTO().map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));*/
-        return new ResponseEntity<>(userService.getAllUsersDTO().get(), HttpStatus.OK);
+        return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // DTO compliant
@@ -220,7 +218,7 @@ public class UserRestController {
     public ResponseEntity isExistUserWithEmail(@PathVariable("email") String email) {
         User userByEmail = userService.getUserByEmail(email);
 
-        if (userByEmail!=null) {
+        if (userByEmail != null) {
             logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
             mailService.sendRecoveryPasswordToken(userByEmail);
             return new ResponseEntity(HttpStatus.OK);

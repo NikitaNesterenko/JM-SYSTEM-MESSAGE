@@ -114,7 +114,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public SlashCommand getEntityFromDTO(SlashCommandDTO slashCommandDTO) {
-        if (slashCommandDTO == null){
+        if (slashCommandDTO == null) {
             return null;
         }
 
@@ -122,7 +122,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
         sc.setType(typeSlashCommandDAO.getById(slashCommandDTO.getTypeId()));
         Bot bot = botDAO.getById(slashCommandDTO.getBotId());
 
-        if (bot != null){
+        if (bot != null) {
             sc.setBot(bot);
         }
 

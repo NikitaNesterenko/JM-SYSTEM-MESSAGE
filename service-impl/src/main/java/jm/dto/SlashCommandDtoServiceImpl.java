@@ -2,13 +2,12 @@ package jm.dto;
 
 import jm.BotService;
 import jm.TypeSlashCommandService;
-import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SlashCommandDtoServiceImpl implements SlashCommandDtoService{
+public class SlashCommandDtoServiceImpl implements SlashCommandDtoService {
     private final BotService botService;
     private final TypeSlashCommandService typeSlashCommandService;
 

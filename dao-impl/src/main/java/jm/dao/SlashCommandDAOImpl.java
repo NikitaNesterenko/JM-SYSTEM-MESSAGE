@@ -2,7 +2,6 @@ package jm.dao;
 
 import jm.api.dao.SlashCommandDao;
 import jm.dto.SlashCommandDTO;
-import jm.dto.UserDTO;
 import jm.model.SlashCommand;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
@@ -23,13 +22,13 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
 
     @Override
     public SlashCommand getByName(String commandName) {
-       try {
-           return (SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
-                   .setParameter(1, commandName)
-                   .getSingleResult();
-       } catch (NoResultException e){
-           return null;
-       }
+        try {
+            return (SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
+                    .setParameter(1, commandName)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -73,7 +72,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
                     .getResultList();
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.of(slashCommandsDTO);
@@ -97,7 +96,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
                     .getResultList().get(0);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(slashCommandDTO);
@@ -121,7 +120,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
                     .getResultList().get(0);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(slashCommandDTO);
@@ -145,7 +144,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
                     .getResultList();
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.of(slashCommandsDTO);
@@ -170,7 +169,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
                     .getResultList();
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.of(slashCommandsDTO);

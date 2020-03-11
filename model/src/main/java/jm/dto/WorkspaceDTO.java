@@ -7,10 +7,10 @@ import jm.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,15 +62,15 @@ public class WorkspaceDTO {
         }
     }
 
-    public void setId (Number id) {
+    public void setId(Number id) {
         this.id = id.longValue();
     }
 
-    public void setOwnerId (BigInteger ownerId) {
+    public void setOwnerId(BigInteger ownerId) {
         this.ownerId = ownerId.longValue();
     }
 
-    public void setCreatedDate (Timestamp createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate.toLocalDateTime();
     }
 

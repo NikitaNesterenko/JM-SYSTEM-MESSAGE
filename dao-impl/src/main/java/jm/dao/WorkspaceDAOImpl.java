@@ -11,10 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -62,7 +59,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList();
             workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(workspaceDTOList);
@@ -85,7 +82,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList().get(0);
             setWorkspaceDTOCollections(workspaceDTO);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(workspaceDTO);
@@ -110,7 +107,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList();
             workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(workspaceDTOList);
@@ -118,31 +115,39 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
 
     private Set<Long> getBotIds(Long workspaceId) {
-        return new HashSet<>(entityManager.createNativeQuery("SELECT wb.bot_id " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT wb.bot_id " +
                 "FROM workspaces_bots wb WHERE wb.workspace_id =:id")
                 .setParameter("id", workspaceId)
-                .getResultList());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private Set<Long> getChannelIds(Long workspaceId) {
-        return new HashSet<>(entityManager.createNativeQuery("SELECT c.id " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT c.id " +
                 "FROM channels c WHERE c.workspace_id =:id")
                 .setParameter("id", workspaceId)
-                .getResultList());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private Set<Long> getUserIds(Long workspaceId) {
-        return new HashSet<>(entityManager.createNativeQuery("SELECT wu.user_id " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT wu.user_id " +
                 "FROM workspaces_users wu WHERE wu.workspace_id =:id")
                 .setParameter("id", workspaceId)
-                .getResultList());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private Set<Long> getAppIds(Long workspaceId) {
-        return (Set<Long>) entityManager.createNativeQuery("SELECT a.id " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT a.id " +
                 "FROM apps a WHERE a.workspace_id =:id")
                 .setParameter("id", workspaceId)
-                .getResultList().stream().collect(Collectors.toSet());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private void setWorkspaceDTOCollections(WorkspaceDTO workspaceDTO) {

@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeChannelMessageFromUnreadForUser(Long channelId, Long userId) {
-        User user =  userDAO.getById(userId);
+        User user = userDAO.getById(userId);
         user.getUnreadMessages().removeIf(msg -> msg.getChannelId().equals(channelId));
         this.updateUser(user);
     }

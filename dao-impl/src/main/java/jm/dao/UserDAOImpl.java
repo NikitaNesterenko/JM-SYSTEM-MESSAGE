@@ -2,7 +2,6 @@ package jm.dao;
 
 import jm.api.dao.UserDAO;
 import jm.dto.UserDTO;
-import jm.dto.WorkspaceDTO;
 import jm.model.User;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
@@ -13,10 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -136,7 +132,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
@@ -166,7 +162,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
@@ -196,7 +192,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
@@ -226,7 +222,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
@@ -259,44 +255,52 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
     }
 
     private Set<Long> getStarredMessageIds(Long userId) {
-        return (Set<Long>) entityManager.createNativeQuery("SELECT " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "sm.starred_messages_id FROM users_starred_messages sm WHERE sm.user_id = :id")
                 .setParameter("id", userId)
-                .getResultList().stream().collect(Collectors.toSet());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private Set<Long> getDirectMessagesToUserIds(Long userId) {
-        return (Set<Long>) entityManager.createNativeQuery("SELECT " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "msg.direct_messages_to_users_id " +
                 "FROM users_direct_messages_to_users msg " +
                 "WHERE msg.user_id = :id")
                 .setParameter("id", userId)
-                .getResultList().stream().collect(Collectors.toSet());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private Set<Long> getUnreadMessageIds(Long userId) {
-        return (Set<Long>) entityManager.createNativeQuery("SELECT " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "um.unread_message_id " +
                 "FROM users_unread_messages um " +
                 "WHERE um.user_id = :id")
                 .setParameter("id", userId)
-                .getResultList().stream().collect(Collectors.toSet());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private Set<Long> getUnreadDirectMessageIds(Long userId) {
-        return (Set<Long>) entityManager.createNativeQuery("SELECT " +
+        List<Number> list = new ArrayList<>();
+        list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "udm.unread_direct_message_id " +
                 "FROM users_unread_direct_messages udm " +
                 "WHERE udm.user_id = :id")
                 .setParameter("id", userId)
-                .getResultList().stream().collect(Collectors.toSet());
+                .getResultList();
+        return list.stream().map(Number::longValue).collect(Collectors.toSet());
     }
 
     private void setCollections(UserDTO userDTO) {
