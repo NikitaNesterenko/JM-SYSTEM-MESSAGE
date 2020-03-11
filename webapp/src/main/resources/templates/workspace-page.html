@@ -77,8 +77,8 @@
     <script th:src="@{/js/push/push.js}"></script>
     <script th:src="@{/js/push/push_notification.js}"></script>
 
-    <!-- direct message -->
-    <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>
+   <!--  direct message
+    <script defer th:src="@{/js/workspace-page/components/primary-view/direct-message.js}" type="module"></script>-->
 
     <script src="/js/helper_functions.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -103,9 +103,73 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
             integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
 
+    <!--  Tab Icon by DV -->
+    <link rel="shortcut icon"
+          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAzFBMVEVKFEyScpNLFU1cK16Mao1hMmOEX4WObZBWJFiQb5FZKFtNGE97VH1QHFJOGVBsQW5jNWV2TXdsQG1aKVxdLV9WI1dwRXGObI9pPGpTIFVPG1FfL2FSH1RVIld8VX1YJlpOGlBbK12RcZJMFk5iNGSBW4JmOGhgMGF3TniLaIx9Vn5lN2eFYYaNa45eLmB5UXtkN2ZUIVaGYodkNmVtQm9YJ1pRHVOHZImCXIN1THZgMWKDXoR9V392TniMaY1nOmmKZ4tpPWtXJVlvRHFqMc1IAAABCklEQVR4Xr3RxZLEIBSG0f9C3NPuPu7u/v7vNEE6dFdRM7s+i0sFvg0EO9X0/CQFeqfeCWwyh4gmCKgSwGJOlRCuWG5gMSKBrcTch03jvwD9Z9eFNcj4gcRj1EE2H5n7OaS93+lA7uXQPKo96kDt9aH4JnDUNS+xEEsLSmKCC0zFMoWY3RmUdBKSFCYDoHPmNCCCaw6DSTC2v8bnw+E9llHrCkBUHkvJbbz1hC4Tl+khWtDaHrQjGXAxH1CSEWwGzUJMH09ktKHkRPTCdBCEdfCKteItj6EDjDuHUvnBsKkO7EywIvr8+juofMNCnnTVUsCird6Gq99o80PkRFh6VcZgFafyYDDDbv0CWLgS6JWTyyIAAAAASUVORK5CYII="
+          sizes="16x16 32x32 48x48" type="image/png">
+    <!--  Icon Library by DV  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--  Voice messaging feature by DV  -->
+    <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
+    <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
+
+    <!-- channel info -->
+    <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/js/channel_details/view_channel_info.css}"/>
+    <!-- channel-model -->
+    <script defer th:src="@{/js/channel_browse_modal/modal.js}" type="module"></script>
+    <link rel="stylesheet" th:href="@{/css/channelModal.css}"/>
+
+
 </head>
 
 <body class="supports_custom_scrollbar">
+
+<!-- Channel modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="channelModal">
+    <button type="button"  id="close_modal_channel" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times</span>
+    </button>
+    <div class="modal-dialog modal-lg" role="document">
+        <!--        <button type="button"  id="close_modal_channel" class="close" data-dismiss="modal" aria-label="Close">-->
+        <!--            <span aria-hidden="true">&times;</span>-->
+        <!--        </button>-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Browse Channels</h1>
+            </div>
+            <div class="modal-body">
+                <div class="p-channel-browser-control">
+                    <div class="input-group mb-3">
+                        <span class="icon"><i class="fa fa-search"></i></span>
+                        <input id="input-in" type="text" class="form-control">
+                    </div>
+                    <div class="dropdown-show-inline">
+                        <div class="dropdown show">
+                            <strong>Show:</strong>
+                            <select class="selectpicker" id="selectedChannels">
+                                <option class="all-channels active" value="all" selected>All channels</option>
+                                <option value="private">Private channels</option>
+                                <option value="archive">Archive channels</option>
+                            </select>
+                        </div>
+                        <div class="dropdown show">
+                            <strong>Sort:</strong>
+                            <select class="selectpicker" id="selectedSort">
+                                <option value="name" selected>Channel name</option>
+                                <option value="date">Creation date(newest first)</option>
+                                <option value="most">Members (most to fewest)</option>
+                                <option value="fewest">Members (fewest to most)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="channel-list"><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Small modal -->
 <div class="modal fade bd-example-modal-sm" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
@@ -404,8 +468,10 @@
                                 <table class="table_invite">
                                     <tr><td>Email Address</td><td>Name (optional)</td><td></td></tr>
                                     <tr class="content-form-">
-                                        <td><input type="text" id="inviteEmail_" class="confirm_input" placeholder="name@example.com" value=""></td>
-                                        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name" placeholder="name" value=""></td>
+                                        <td><input type="text" id="inviteEmail_" class="confirm_input"
+                                                   placeholder="name@example.com" value=""></td>
+                                        <td><input type="text" id="inviteName_" class="confirm_input confirm_input_name"
+                                                   placeholder="name" value=""></td>
                                         <td style="visibility: hidden"><span class="btn delete">X</span></td>
                                     </tr>
                                     <tr class="table_invite_modal">
@@ -417,7 +483,8 @@
                             </span>
 
                             <span class="add_row_invites">
-                                <button class="plus link_button" id="addInviteModal" type="button">&#8853 Add another</button>
+                                <button class="plus link_button" id="addInviteModal"
+                                        type="button">&#8853 Add another</button>
                                     or
                                 <button class="link_button many_at_once" type="button">and many at once</button>
                             </span>
@@ -479,31 +546,36 @@
 <button id="invitesModalClose" class="invites-modal-close" type="button">
     X
 </button>
-</div>
 
-<!-- <div class="workspace-container">
-    <div class="workspace-box">
-        <h3>Workspace Box</h3>
-        <p>-</p>
-        <p>
-            <button class="add-channel-button" id="addChannelButton">+ Add new channel</button>
-        </p>
-        <p>-</p>
-        <h3>Channels</h3>
-        <p>-</p>
-        <p><a href="/search/channel" style="color:#f2f2f2">Search Channel</a>
-        <p>-</p>
-        <div class="channel-box" id="channel-box">
+<!--Invite answer modal-->
+<div class="modal" id="invitesAnswerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header" id="invitesAnswerModalHeader">
+                <h1>Couldn’t send request</h1>
+            </div>
+
+            <div class="modal-body text-center" id="invitesAnswerModalBody">
+                <table class="table table-striped" id="invitesAnswerTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="invitesModalTableTh1">Email</th>
+                        <th scope="col" id="invitesModalTableTh2">What was wrong</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer" id="invitesAnswerModalFooter">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
-    <div class="chat-box">
-        <h3>Message Box</h3>
-        <div class = "button" onclick='showDiv("info-box")'>Member List</div>
-        <div class="message-box" id="message-box">
-            <div class="all-messages" id="all-messages"> -->
+</div>
 
 <!-- Share message MODAL -->
-<div class="modal fade" id="shareMessageModal" tabindex="-1" role="dialog" aria-labelledby="shareMessageModal" aria-hidden="true">
+<div class="modal fade" id="shareMessageModal" tabindex="-1" role="dialog" aria-labelledby="shareMessageModal"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -560,29 +632,26 @@
                     </div>
                     <div class="p-classic_nav__channel_header">
                         <div class="p-classic_nav__model__title">
-                            <div id="channelName" class="p-classic_nav__model__title__name">
+                            <div class="p-classic_nav__model__title__name">
                                 <button class="p-classic_nav__model__title__name__button">
                                     <i class="p-classic_nav__model__title__name__hash_icon">
                                         #</i>
                                     <span class="p-classic_nav__model__title__info__name"></span>
-                                    <!--                                                   Channel Name-->
                                 </button>
                             </div>
                             <div class="p-classic_nav__model__title__info">
                                 <button class="p-classic_nav__model__title__info__star">
-                                    <i class="p-classic_nav__model__title__info__star__icon">☆</i>
+                                    <i class="material-icons" style="font-size: 18px; color: orange;">star</i>
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <button class="p-classic_nav__model__title__info__members">
-                                    <i class="p-classic_nav__model__title__info__members__icon">👨</i>
-                                    &nbsp;
-                                    -<!--                                                               Members Count-->
+                                    <i class="material-icons">people</i>
+                                    <i id="peopleInChat"></i>
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <button class="p-classic_nav__model__title__info__pins">
-                                    <i class="p-classic_nav__model__title__info__pins__icon">📍</i>
-                                    &nbsp;
-                                    -<!--                                                                  Pins Count-->
+                                    <i class="material-icons">flag</i>
+                                    <i id="flaggedItems"></i>
                                 </button>
                                 <span class="p-classic_nav__model__title__info__sep">|</span>
                                 <div class="p-classic_nav__model__title__info__item">
@@ -591,7 +660,7 @@
                                     <!--                                    </div>-->
                                     <div id="topic_string_block" class="p-classic_nav__model__title__info__topic__text">
                                         <span id="topic_string"
-                                              class="p-classic_nav__model__title__info__topic__content">Topic content</span>
+                                              class="p-classic_nav__model__title__info__topic__content"></span>
                                         <button id="topic_button" style="display: none;"
                                                 class="p-classic_nav__model__title__info__topic__edit">Edit
                                         </button>
@@ -601,14 +670,14 @@
                             </div>
                         </div>
                         <div class="p-classic_nav__model__buttons">
-                            <button class="p-classic_nav__model__button__call">
-                                <i class="p-classic_nav__model__button__call__icon">📞</i>
+                            <button class="iconsVD-sideBar" id="phoneButton">
+                                <i class="material-icons buttons-TopBar">phone</i>
                             </button>
-                            <button class="p-classic_nav__model__button__details">
-                                <i class="p-classic_nav__model__button__details__icon">ⓘ</i>
+                            <button class="iconsVD-sideBar" id="infoButton">
+                                <i class="material-icons buttons-TopBar">info</i>
                             </button>
-                            <button class="p-classic_nav__model__button__settings" id="settingsMenuButton">
-                                <i class="p-classic_nav__model__button__settings__icon">⚙</i>
+                            <button class="iconsVD-sideBar" id="settingsMenuButton">
+                                <i class="material-icons buttons-TopBar">settings</i>
                             </button>
                         </div>
                     </div>
@@ -628,7 +697,7 @@
                             </button>
                         </div>
                         <button class="p-classic_nav__right__star__button">
-                            <i class="p-classic_nav__right__star__icon">☆</i>
+                            <i style="font-size: 18px; color: orange;">☆</i>
                         </button>
                         <button class="p-classic_nav__right__more_items">
                             <i class="p-classic_nav__right__more_items__icon">⋮</i>
@@ -640,9 +709,11 @@
                 <div class="p-workspace__channel_sidebar">
                     <nav class="p-channel_sidebar">
                         <div class="p-channel_sidebar__navigation_bar">
-                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal" data-target="#modalSearcher">
+                            <button class="p-channel_sidebar__jumper" id="sidebar_search_button" data-toggle="modal"
+                                    data-target="#modalSearcher">
                                 <div class="p-channel_sidebar__jumper_left">
-                                    <i class="p-channel_sidebar__jumper_icon">🔎</i>
+                                    <i class="material-icons"
+                                       style="margin: 2px; font-size: 20px; vertical-align: middle;">search</i>
                                     Jump to...
                                 </div>
                                 <span class="p-channel_sidebar__jumper_keys">Ctrl+K</span>
@@ -654,8 +725,9 @@
                                     <div class="p-channel_sidebar__list__scrollbar__hider">
                                         <div class="p-channel_sidebar__list__scrollbar__child">
                                             <div class="p-channel_sidebar__list__presentation-1"></div>
-                                            <div class="p-channel_sidebar__list__threads">
-                                                <button class="p-channel_sidebar__list__threads__button">
+                                            <div class="p-channel_sidebar__channel">
+                                                <button class="p-channel_sidebar__list__threads__button
+                                                                p-channel_sidebar__name_button">
                                                     <i class="p-channel_sidebar__list__threads__button__icon">≛</i>
                                                     &nbsp;
                                                     <span class="p-channel_sidebar__name-1">Threads</span>
@@ -665,7 +737,7 @@
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__list__channels">
                                                 <div class="p-channel_sidebar__section_heading">
-                                                    <button class="p-channel_sidebar__channels__button">Channels
+                                                    <button class="p-channel_sidebar__channels__button" id="btnChannel-info_1" data-toggle="modal" data-target="#channelModal">Channels
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
                                                         <button class="p-channel_sidebar__section_heading_plus"
@@ -681,16 +753,6 @@
                                             <div class="p-channel_sidebar__channels__list"
                                                  id="id-channel_sidebar__channels__list"></div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
-                                            <div class="p-channel_sidebar__add_channel">
-                                                <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__add_channel__button">
-                                                        <span class="p-channel_sidebar__name-2">Add a channel</span>
-                                                    </button>
-                                                    <button class="p-channel_sidebar__close">
-                                                        <i class="p-channel_sidebar__close__icon">✖</i>
-                                                    </button>
-                                                </div>
-                                            </div>
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__direct-messages">
                                                 <div class="p-channel_sidebar__section_heading">
@@ -698,32 +760,34 @@
                                                         Direct Messages
                                                     </button>
                                                     <div class="p-channel_sidebar__section_heading_right">
-                                                        <button class="p-channel_sidebar__section_heading_plus">✚
+                                                        <button class="p-channel_sidebar__section_heading_plus"
+                                                                data-toggle="modal" data-target="#addDirectMessageModal"
+                                                                id="addDirectMessage">✚
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="p-channel_sidebar__list__presentation-3"></div>
-<!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
-<!--                                                <div class="p-channel_sidebar__close_container">-->
-<!--                                                    <button class="p-channel_sidebar__name_button">-->
-<!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
-<!--                                                        <span class="p-channel_sidebar__name-3">-->
-<!--                                                            <span>Some username</span>-->
-<!--                                                        </span>-->
-<!--                                                    </button>-->
-<!--                                                    <button class="p-channel_sidebar__close">-->
-<!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
-<!--                                                    </button>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
+                                            <!--                                            <div class="p-channel_sidebar__direct-messages__container">-->
+                                            <!--                                                <div class="p-channel_sidebar__close_container">-->
+                                            <!--                                                    <button class="p-channel_sidebar__name_button">-->
+                                            <!--                                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>-->
+                                            <!--                                                        <span class="p-channel_sidebar__name-3">-->
+                                            <!--                                                            <span>Some username</span>-->
+                                            <!--                                                        </span>-->
+                                            <!--                                                    </button>-->
+                                            <!--                                                    <button class="p-channel_sidebar__close">-->
+                                            <!--                                                        <i class="p-channel_sidebar__close__icon">✖</i>-->
+                                            <!--                                                    </button>-->
+                                            <!--                                                </div>-->
+                                            <!--                                            </div>-->
+                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
+                                            <!--ЛИЧКА!!!-->
 
-                                            <div class="p-channel_sidebar__direct-messages__container" id="direct-messages__container_id">
-
+                                            <div class="p-channel_sidebar__direct-messages__container"
+                                                 id="direct-messages__container_id">
                                             </div>
 
-                                            <!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!--><!--ЛИЧКА!!!-->
                                             <div class="p-channel_sidebar__list__presentation-2"></div>
                                             <div class="p-channel_sidebar__invite_people">
                                                 <div class="p-channel_sidebar__close_container">
@@ -755,16 +819,6 @@
                                                  id="id-app_sidebar__apps__list"></div>
                                             <div class="bot-representation" id="bot_representation"></div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
-                                            <div class="p-channel_sidebar__add_app">
-                                                <div class="p-channel_sidebar__close_container">
-                                                    <button class="p-channel_sidebar__add_app__button" data-toggle="modal" data-target="#appsModal">
-                                                        <span class="p-channel_sidebar__name-2">Add apps</span>
-                                                    </button>
-                                                    <button class="p-channel_sidebar__close">
-                                                        <i class="p-channel_sidebar__close__icon">✖</i>
-                                                    </button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="p-channel_sidebar__list__scrollbar__track">
@@ -943,110 +997,59 @@
 
             <div class="p-workspace__footer">
                 <footer class="p-workspace__primary_view_footer">
-                    <div class="p-message_pane_input">
-                        <div class="p-message_pane_input_inner">
-                            <div class="p-workspace__input">
-                                <div class="menu" id="menu">
-                                </div>
-                                <div class="p-message_input_field">
-                                    <div class="ql-buttons">
-                                        <button class="c-texty_input__button--emoji" id="inputEmojiButton">
-                                            <i class="c-icon--smile-o">😊</i>
-                                        </button>
-                                        <button class="c-texty_input__button" id="showAssociatedUsers">
-                                            <i class="c-icon--mentions">@</i>
-                                        </button>
-                                    </div>
-                                    <div class="associatedUserList" id="associatedUserList">
-                                        <form id="associatedUserListForm">
-                                            <select class="associatedUserListSelect"
-                                                    id="associatedUserListSelect" multiple
-                                                    name="usersList"></select>
-                                        </form>
-                                    </div>
-                                    <div>
-                                        <form id="form_message">
-                                            <input class="ql-editor__input-field" id="form_message_input"
-                                                   placeholder="Message #p_some-channel" minlength="1" maxlength="1200" type="text"/>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <button class="p-message_input_file_button" id="attach_file">
-                                    <i class="c-icon--paperclip">📎</i>
-                                </button>
-
+                    <div class="menu" id="menu"></div>
+                    <div style="margin: 5px 10px 5px 10px; height: 90%; border: 1px solid gray; border-radius: 8px;
+                        position: relative;">
+                        <div class="p-message_pane_input p-message_input_field" style="padding-top: 10px; bottom: 0;
+                        height: min-content;
+                        align-content: center;
+                        border-top-left-radius: 8px;
+                        border-top-right-radius: 8px;">
+                            <div class="associatedUserList" id="associatedUserList">
+                                <form>
+                                    <select class="associatedUserListSelect"
+                                            id="associatedUserListSelect" multiple
+                                            name="usersList">
+                                    </select>
+                                </form>
                             </div>
+                            <form id="form_message" style="height: 100%; width: 100%; text-align: center;">
+                                <input class="ql-editor__input-field" id="form_message_input"
+                                       placeholder="Динам конт" minlength="1" maxlength="1200"
+                                       type="text" autocomplete="off"/>
+                            </form>
+                        </div>
+                        <div name="attachedFiles">
                             <span id="attached_file"></span>
                             <input type="file" id="file_selector" style="display: none"/>
 
-                            <div class="p-notification_bar">
-                                <div class="p-notification_bar__section--left"></div>
-                                <div class="p-notification_bar__section--right">
-                                    <span class="p-notification_bar__formatting"><b>*bold*</b> <i>_italics_</i></span>
-                                </div>
-                            </div>
-
+                            <ol id="inputMe"></ol>
+                            <span id="attached_voiceMessage"></span>
+                            <input type="file" id="vm_selector" style="display: none"/></div>
+                        <div class="p-notification_bar"
+                             style="height: min-content; width: 100%; position: absolute; bottom: 0; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                            <button id="attach_file" class="iconsVD-messageBox" style="margin-left: 10px;">
+                                <i class="material-icons buttons-MessageBox">attach_file</i>
+                            </button>
+                            <button id="inputEmojiButton" class="iconsVD-messageBox">
+                                <i class="material-icons buttons-MessageBox">mood</i>
+                            </button>
+                            <button id="showAssociatedUsers" class="iconsVD-messageBox">
+                                <i class="material-icons buttons-MessageBox">share</i>
+                            </button>
+                            <button id="voiceMessageBtn" class="iconsVD-messageBox VoiceMessageButton"
+                                    onclick="recording()"
+                                    style="align-items: center">
+                                <i class="material-icons buttons-MessageBox">mic_none</i>
+                            </button>
                         </div>
                     </div>
                 </footer>
             </div>
-
         </div>
     </div>
-
-    <!--     <div id="info-box" class="info-box" style="display:none;">
-            <h3>Info Box</h3>
-            <p>-</p>
-            <h3>Users</h3>
-            <p>-</p>
-            <p>
-            <h3><a href="/searchUsers">Search User</a></h3>
-            <p>-</p>
-            <div class="user-box" id="user-box">
-            </div>
-        </div> -->
-
 </div>
 
-<!--&lt;!&ndash;add channel modal&ndash;&gt;-->
-<!--<div class="add-channel-modal" id="addChannelModal">-->
-<!--    <div class="add-channel-modal-content">-->
-<!--        <form method="post" th:action="@{/workspace/create}">-->
-<!--            <div class="add-channel-modal-header">-->
-<!--                <span class="addChannelClose">&times;</span>-->
-<!--                <h2>Create channel</h2>-->
-<!--            </div>-->
-<!--            <div class="add-channel-modal-body">-->
-<!--                <p><b> Name </b></p>-->
-<!--                <p><input class="add-channel-input" id="name" name="name" type="text"></p>-->
-<!--                <p><b> Users </b></p>-->
-<!--                &lt;!&ndash;<p> <input type="text" name="users" id="users" class="add-channel-input"> </p>&ndash;&gt;-->
-<!--                <select id="usersList" multiple="multiple" name="usersList">-->
-<!--                    <option value=""> &#45;&#45;</option>-->
-<!--                    <option th:each="user : ${listUser}"-->
-<!--                            th:utext="${user.getLogin()}"-->
-<!--                            th:value="${user.getLogin()}"/>-->
-<!--                </select>-->
-<!--                <p><b> Owner </b></p>-->
-<!--                &lt;!&ndash;<p> <input type="text" name="owner" id="owner" class="add-channel-input"> </p>&ndash;&gt;-->
-<!--                <select id="owner" name="owner">-->
-<!--                    <option value=""> &#45;&#45;</option>-->
-<!--                    <option th:each="user : ${listUser}"-->
-<!--                            th:utext="${user.getLogin()}"-->
-<!--                            th:value="${user.getLogin()}"/>-->
-<!--                </select>-->
-<!--                <p><b> Private </b></p>-->
-<!--                <p><input class="add-channel-input" id="isPrivate" name="isPrivate" type="checkbox"><br></p>-->
-<!--            </div>-->
-<!--            <div class="add-channel-modal-footer">-->
-<!--                <p>-->
-<!--                    <button class="submitCreateChannel" type="submit"> Add new channel</button>-->
-<!--                </p>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
 <div class="settingsList" id="settingsList">
     <div>
         <div class="settingsDiv">
@@ -1514,6 +1517,7 @@
     </div>
 </div>
 
+<!-- Add channel modal -->
 <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1545,6 +1549,36 @@
     </div>
 </div>
 
+<!-- Add direct message modal -->
+<div class="modal fade" id="addDirectMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle2">Direct Messages</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class=" form-check-inline pb-3">
+                        <div class="col-md-10 px-0">
+                            <input class="directMessageModal form-control" type="text" placeholder="Find or start a conversation">
+                        </div>
+                        <div class="col-lg-2">
+                            <button class="directMessageFindButton btn btn-dark" type="submit">Go</button>
+                        </div>
+                    </div>
+<!--                    <div class="">-->
+<!--                        <input class="directMessageModal form-control" type="text" placeholder="Find or start a conversation">-->
+<!--                        <button class="directMessageFindButton btn btn-dark" type="submit">Go</button>-->
+<!--                    </div>-->
+                    <div id="DirectMessageTo">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Модальное окно для поиска каналов и пользователей-->
 <div class="modal" id="modalSearcher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
@@ -1565,71 +1599,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
-            <div id="searchDataContainer" style="display: none">
-                <div class="" id="searchDataTab" style="padding: 10px">
-                    <ul class="nav nav-tabs mb-4" id="pills-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Messages</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Channels</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" id="pills-people-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-people" aria-selected="false">People</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="pills-people" role="tabpanel" aria-labelledby="pills-people-tab">
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row" id="searchDataView" style="padding: 10px">
-                    <div class="col-8" id="searchDataResults">
-
-                    </div>
-
-                    <div class="col-4" id="searchDataFilters">
-                        <h5>Filter by <mark>(not working)</mark></h5>
-
-                        <div id="searchDataFilterUsers">
-                            <p>Shared by</p>
-                            <dl></dl>
-                        </div>
-
-                        <div id="searchDataFilterChannels">
-                            <p>Shared in</p>
-                            <dl></dl>
-                        </div>
-
-                        <div id="searchDataFilterDate">
-                            <p>Date</p>
-                            <input id="searchDataFilterDateFrom" type="date" placeholder="Start">
-                            <input id="searchDataFilterDateTill" type="date" placeholder="End">
-                        </div>
-
-                        <br>
-
-                        <div id="searchDataFilterOther">
-                            <p>More Options</p>
-                            <label>
-                                <input id="searchDataFilterOtherBot" type="checkbox">
-                                Hide bots
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
             <div id="idSearchContent">
                 Что-то пошло не так
             </div>

@@ -18,7 +18,7 @@ public class ThreadDtoServiceImpl implements ThreadDtoService {
         MessageDTO messageDTO = new MessageDTO(message);
 
         messageDTO.setUserId(user.getId());
-        messageDTO.setUserName(user.getName());
+        messageDTO.setUserName(user.getUsername());
         messageDTO.setUserAvatarUrl(user.getAvatarURL());
 
         return new ThreadDTO(threadChannel.getId(), messageDTO);

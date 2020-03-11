@@ -1,14 +1,14 @@
 package jm.api.dao;
 
-import jm.model.Channel;
 import jm.dto.ChannelDTO;
+import jm.model.Channel;
 
 import java.util.List;
 import java.util.Set;
 
 public interface ChannelDAO {
 
-    List<Channel> getAll();
+    List<ChannelDTO> getAllChannel();
 
     void persist(Channel channel);
 
@@ -30,4 +30,11 @@ public interface ChannelDAO {
 
     List<Channel> getChannelsByIds(Set<Long> ids);
 
+    Long getWorkspaceIdByChannelId(Long channelId);
+
+    List<ChannelDTO> getArchivedChannels();
+
+    List<ChannelDTO> getPrivateChannels();
+
+    Channel unzipChannel(Long id);
 }

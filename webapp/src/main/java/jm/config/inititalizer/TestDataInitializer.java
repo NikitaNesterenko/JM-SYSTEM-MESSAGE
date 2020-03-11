@@ -2,6 +2,7 @@ package jm.config.inititalizer;
 
 import jm.ConversationService;
 import jm.DirectMessageService;
+import jm.TypeSlashCommandService;
 import jm.UserService;
 import jm.api.dao.*;
 import jm.model.*;
@@ -35,6 +36,8 @@ public class TestDataInitializer {
     private WorkspaceUserRoleDAO workspaceUserRoleDAO;
     @Autowired
     private SlashCommandDao slashCommandDao;
+    @Autowired
+    private TypeSlashCommandService typeSlashCommandService;
 
     @Autowired
     private ConversationService conversationService;
@@ -76,11 +79,12 @@ public class TestDataInitializer {
     private void dataInit() {
         createRoles();
         createUsers();
+        createTypeSlashCommands();
         createSlashCommands();
 
         createWorkspaces();
-        createBots();
         createChannels();
+        createBots();
         createMessages();
         createLinkRoles();
 
@@ -88,12 +92,32 @@ public class TestDataInitializer {
         createDirectMessages();
     }
 
+    private void createTypeSlashCommands() {
+        TypeSlashCommand all = new TypeSlashCommand();
+        all.setName("all");
+        typeSlashCommandService.createTypeSlashCommand(all);
+
+        TypeSlashCommand get = new TypeSlashCommand();
+        get.setName("get");
+        typeSlashCommandService.createTypeSlashCommand(get);
+
+        TypeSlashCommand send = new TypeSlashCommand();
+        send.setName("send");
+        typeSlashCommandService.createTypeSlashCommand(send);
+    }
+
     private void createSlashCommands(){
+
+        TypeSlashCommand typeAll = typeSlashCommandService.getTypeSlashCommandByName("all");
+        TypeSlashCommand typeGet = typeSlashCommandService.getTypeSlashCommandByName("get");
+        TypeSlashCommand typeSend = typeSlashCommandService.getTypeSlashCommandByName("send");
+
         SlashCommand topicChangeCommand = new SlashCommand();
         topicChangeCommand.setName("topic");
         topicChangeCommand.setUrl("/app/bot/slackbot/");
         topicChangeCommand.setDescription("test description");
         topicChangeCommand.setHints("test Hints");
+        topicChangeCommand.setType(typeSend);
         slashCommandDao.persist(topicChangeCommand);
         sc.add(topicChangeCommand);
 
@@ -102,6 +126,7 @@ public class TestDataInitializer {
         directMessageCommand.setUrl("/app/bot/slackbot");
         directMessageCommand.setDescription("DM description");
         directMessageCommand.setHints("DM Hints");
+        directMessageCommand.setType(typeSend);
         slashCommandDao.persist(directMessageCommand);
         sc.add(directMessageCommand);
 
@@ -110,6 +135,7 @@ public class TestDataInitializer {
         leaveCommand.setUrl("/app/bot/slackbot");
         leaveCommand.setDescription("Leave description");
         leaveCommand.setHints("Leave Hints");
+        leaveCommand.setType(typeAll);
         slashCommandDao.persist(leaveCommand);
         sc.add(leaveCommand);
 
@@ -118,6 +144,7 @@ public class TestDataInitializer {
         joinCommand.setUrl("/app/bot/slackbot");
         joinCommand.setDescription("Join description");
         joinCommand.setHints("Join Hints");
+        joinCommand.setType(typeAll);
         slashCommandDao.persist(joinCommand);
         sc.add(joinCommand);
 
@@ -126,6 +153,7 @@ public class TestDataInitializer {
         openCommand.setUrl("/app/bot/slackbot");
         openCommand.setDescription("Open description");
         openCommand.setHints("Open Hints");
+        openCommand.setType(typeAll);
         slashCommandDao.persist(openCommand);
         sc.add(openCommand);
 
@@ -134,6 +162,7 @@ public class TestDataInitializer {
         shrugCommand.setUrl("/app/bot/slackbot");
         shrugCommand.setDescription("Shrug description");
         shrugCommand.setHints("Shrug Hints");
+        shrugCommand.setType(typeSend);
         slashCommandDao.persist(shrugCommand);
         sc.add(shrugCommand);
 
@@ -142,6 +171,7 @@ public class TestDataInitializer {
         inviteCommand.setUrl("/app/bot/slackbot");
         inviteCommand.setDescription("Invite description");
         inviteCommand.setHints("Invite Hints");
+        inviteCommand.setType(typeAll);
         slashCommandDao.persist(inviteCommand);
         sc.add(inviteCommand);
 
@@ -150,6 +180,7 @@ public class TestDataInitializer {
         whoCommand.setUrl("/app/bot/slackbot");
         whoCommand.setDescription("Who description");
         whoCommand.setHints("Who Hints");
+        whoCommand.setType(typeGet);
         slashCommandDao.persist(whoCommand);
         sc.add(whoCommand);
 
@@ -158,6 +189,7 @@ public class TestDataInitializer {
         kickCommand.setUrl("/app/bot/slackbot");
         kickCommand.setDescription("Kick description");
         kickCommand.setHints("Kick Hints");
+        kickCommand.setType(typeAll);
         slashCommandDao.persist(kickCommand);
         sc.add(kickCommand);
 
@@ -166,6 +198,7 @@ public class TestDataInitializer {
         removeCommand.setUrl("/app/bot/slackbot");
         removeCommand.setDescription("Remove description");
         removeCommand.setHints("Remove Hints");
+        removeCommand.setType(typeAll);
         slashCommandDao.persist(removeCommand);
         sc.add(removeCommand);
 
@@ -174,6 +207,7 @@ public class TestDataInitializer {
         msgCommand.setUrl("/app/bot/slackbot");
         msgCommand.setDescription("Msg description");
         msgCommand.setHints("Msg Hints");
+        msgCommand.setType(typeSend);
         slashCommandDao.persist(msgCommand);
         sc.add(msgCommand);
 
@@ -182,6 +216,7 @@ public class TestDataInitializer {
         renameCommand.setUrl("/app/bot/slackbot");
         renameCommand.setDescription("Rename description");
         renameCommand.setHints("Rename Hints");
+        renameCommand.setType(typeAll);
         slashCommandDao.persist(renameCommand);
         sc.add(renameCommand);
 
@@ -190,6 +225,7 @@ public class TestDataInitializer {
         archiveCommand.setUrl("/app/bot/slackbot");
         archiveCommand.setDescription("Rename description");
         archiveCommand.setHints("Rename Hints");
+        archiveCommand.setType(typeAll);
         slashCommandDao.persist(archiveCommand);
         sc.add(archiveCommand);
 
@@ -198,8 +234,18 @@ public class TestDataInitializer {
         invitePeopleCommand.setUrl("/app/bot/slackbot");
         invitePeopleCommand.setDescription("Invite_people description");
         invitePeopleCommand.setHints("Invite_people Hints");
+        invitePeopleCommand.setType(typeAll);
         slashCommandDao.persist(invitePeopleCommand);
         sc.add(invitePeopleCommand);
+
+        // команда для кастомного бота
+        SlashCommand sendMsgCommand = new SlashCommand();
+        sendMsgCommand.setName("send-to-channel");
+        sendMsgCommand.setUrl("/app/bot/custombot");
+        sendMsgCommand.setDescription("Hello, it's my message!");
+        sendMsgCommand.setHints("Send message in channel");
+        sendMsgCommand.setType(typeSend);
+        slashCommandDao.persist(sendMsgCommand);
     }
 
     private void createRoles() {
@@ -223,65 +269,70 @@ public class TestDataInitializer {
 
         User userJohn = new User();
 
-        userJohn.setName(UserData.JOHN.name);
+        userJohn.setUsername(UserData.JOHN.name);
         userJohn.setLastName(UserData.JOHN.lastName);
         userJohn.setLogin(UserData.JOHN.login);
         userJohn.setEmail(UserData.JOHN.email);
         userJohn.setPassword(UserData.JOHN.password);
         userJohn.setDisplayName(UserData.JOHN.name + " " + UserData.JOHN.lastName);
         userJohn.setRoles(ownerRoleSet);
+        userJohn.setOnline(0);
 
         userService.createUser(userJohn);
         this.users.add(userJohn);
 
         User userStepan = new User();
 
-        userStepan.setName(UserData.STEPAN.name);
+        userStepan.setUsername(UserData.STEPAN.name);
         userStepan.setLastName(UserData.STEPAN.lastName);
         userStepan.setLogin(UserData.STEPAN.login);
         userStepan.setEmail(UserData.STEPAN.email);
         userStepan.setPassword(UserData.STEPAN.password);
         userStepan.setDisplayName(UserData.STEPAN.name + " " + UserData.STEPAN.lastName);
         userStepan.setRoles(userRoleSet);
+        userStepan.setOnline(0);
 
         userService.createUser(userStepan);
         this.users.add(userStepan);
 
         User userPetr = new User();
 
-        userPetr.setName(UserData.PETR.name);
+        userPetr.setUsername(UserData.PETR.name);
         userPetr.setLastName(UserData.PETR.lastName);
         userPetr.setLogin(UserData.PETR.login);
         userPetr.setEmail(UserData.PETR.email);
         userPetr.setPassword(UserData.PETR.password);
         userPetr.setDisplayName(UserData.PETR.name + " " + UserData.PETR.lastName);
         userPetr.setRoles(userRoleSet);
+        userPetr.setOnline(0);
 
         userService.createUser(userPetr);
         this.users.add(userPetr);
 
         User userFoo = new User();
 
-        userFoo.setName(UserData.FOO.name);
+        userFoo.setUsername(UserData.FOO.name);
         userFoo.setLastName(UserData.FOO.lastName);
         userFoo.setLogin(UserData.FOO.login);
         userFoo.setEmail(UserData.FOO.email);
         userFoo.setPassword(UserData.FOO.password);
         userFoo.setDisplayName(UserData.FOO.name + " " + UserData.FOO.lastName);
         userFoo.setRoles(userRoleSet);
+        userFoo.setOnline(0);
 
         userService.createUser(userFoo);
         this.users.add(userFoo);
 
         User userJames = new User();
 
-        userJames.setName(UserData.JAMES.name);
+        userJames.setUsername(UserData.JAMES.name);
         userJames.setLastName(UserData.JAMES.lastName);
         userJames.setLogin(UserData.JAMES.login);
         userJames.setEmail(UserData.JAMES.email);
         userJames.setPassword(UserData.JAMES.password);
         userJames.setDisplayName(UserData.JAMES.name + " " + UserData.JAMES.lastName);
         userJames.setRoles(userRoleSet);
+        userJames.setOnline(0);
 
         userService.createUser(userJames);
         this.users.add(userJames);
@@ -390,11 +441,11 @@ public class TestDataInitializer {
 
     private void createWorkspaces() {
         User userJohn = this.users.stream()
-                .filter(user -> UserData.JOHN.name.equals(user.getName()))
+                .filter(user -> UserData.JOHN.name.equals(user.getUsername()))
                 .findFirst()
                 .orElse(this.users.iterator().next());
         User userStepan = this.users.stream()
-                .filter(user -> UserData.STEPAN.name.equals(user.getName()))
+                .filter(user -> UserData.STEPAN.name.equals(user.getUsername()))
                 .findFirst()
                 .orElse(this.users.iterator().next());
 
@@ -430,27 +481,39 @@ public class TestDataInitializer {
     }
 
     private void createBots() {
-        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now());
+        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
         zoom.getWorkspaces().add(workspaceDAO.getById(1L));
 
 
-        Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now());
+        Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now(), true);
         slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
         sc.forEach(command -> {
             slackBot.getCommands().add(command);
         });
 
+        Bot customBot = new Bot("custom_bot_1", "CustomBot", LocalDateTime.now(), false);
+        customBot.getWorkspaces().add(workspaceDAO.getById(1L));
+        // токен указал вручную для удобства тестирования,
+        // генерация токена: UUID.randomUUID().toString()
+        customBot.setToken("3ccc9bb5-c5d1-4df9-a37d-a2e24321e1eb");
+        customBot.getChannels().add(channelDAO.getChannelByName("general"));
+        SlashCommand sendMsgCommand = slashCommandDao.getByName("send-to-channel");
+        customBot.getCommands().add(sendMsgCommand);
 
         this.bots.add(slackBot);
         this.bots.add(zoom);
+        this.bots.add(customBot);
 
         botDAO.persist(slackBot);
         botDAO.persist(zoom);
+        botDAO.persist(customBot);
 
         sc.forEach(command -> {
             command.setBot(slackBot);
             slashCommandDao.merge(command);
         });
+        sendMsgCommand.setBot(customBot);
+        slashCommandDao.merge(sendMsgCommand);
 
     }
 

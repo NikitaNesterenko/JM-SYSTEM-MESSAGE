@@ -5,10 +5,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jm.ChannelService;
 import jm.MessageService;
+import jm.UserService;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
+import jm.dto.UserDtoService;
 import jm.model.Message;
+import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,8 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/rest/api/messages")
@@ -28,10 +31,16 @@ public class MessageRestController {
 
     private final MessageService messageService;
     private final MessageDtoService messageDtoService;
+    private final ChannelService channelService;
+    private final UserService userService;
+    private final UserDtoService userDtoService;
 
-    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService) {
+    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService, ChannelService channelService, UserService userService, UserDtoService userDtoService) {
         this.messageService = messageService;
         this.messageDtoService = messageDtoService;
+        this.channelService = channelService;
+        this.userService = userService;
+        this.userDtoService = userDtoService;
     }
 
     // DTO compliant
@@ -131,6 +140,14 @@ public class MessageRestController {
         messageDto.setDateCreate(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDto);
         messageService.createMessage(message);
+        //добавление сообщения в список непрочтенных для пользователей, которые оффлайн
+        channelService.getChannelById(message.getChannelId()).getUsers().forEach(user -> {
+            if (user.getOnline() == 0) {
+                user.getUnreadMessages().add(message);
+                userService.updateUser(user);
+            }
+        });
+
         logger.info("Созданное сообщение : {}", message);
         return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
     }
@@ -203,5 +220,31 @@ public class MessageRestController {
             logger.info(message.toString());
         }
         return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
+    public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long chnId, @PathVariable Long usrId) {
+        userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
+        return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
+    public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
+        User user = userService.getUserById(usrId);
+        List<Message> unreadMessages = new ArrayList<>();
+        user.getUnreadMessages().forEach(msg -> {
+            if (msg.getChannelId().equals(chnId)) {
+                unreadMessages.add(msg);
+            }
+        });
+        return ResponseEntity.ok(messageDtoService.toDto(unreadMessages));
+    }
+
+    @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
+    public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
+        User user = userService.getUserById(usrId);
+        user.getUnreadMessages().add(messageService.getMessageById(msgId));
+        userService.updateUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
