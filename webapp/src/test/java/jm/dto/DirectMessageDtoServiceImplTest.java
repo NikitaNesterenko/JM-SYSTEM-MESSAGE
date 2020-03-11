@@ -64,7 +64,7 @@ public class DirectMessageDtoServiceImplTest {
     DirectMessageDTO directMessageDTO = directMessageDtoService.toDto(directMessage);
 
     assertEquals(user1.getId(), directMessageDTO.getUserId());
-    assertEquals(user1.getName(), directMessageDTO.getUserName());
+    assertEquals(user1.getUsername(), directMessageDTO.getUserName());
     assertEquals(1L, (long) directMessageDTO.getId());
     assertNull(directMessageDTO.getChannelName());
     assertNull(directMessageDTO.getSharedMessageId());
@@ -126,7 +126,7 @@ public class DirectMessageDtoServiceImplTest {
         directMessageDtoService.toDto(Collections.singletonList(directMessage));
 
     assertEquals(user1.getId(), directMessageDTOList.get(0).getUserId());
-    assertEquals(user1.getName(), directMessageDTOList.get(0).getUserName());
+    assertEquals(user1.getUsername(), directMessageDTOList.get(0).getUserName());
     assertNull(directMessageDTOList.get(0).getChannelName());
     assertNull(directMessageDTOList.get(0).getSharedMessageId());
     assertEquals(0, directMessageDTOList.get(0).getRecipientUserIds().size());

@@ -2,6 +2,8 @@ package jm;
 
 import jm.dto.ChannelDTO;
 import jm.api.dao.ChannelDAO;
+import jm.dao.ChannelDAOImpl;
+import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import jm.model.CreateWorkspaceToken;
 import jm.model.User;
@@ -19,6 +21,8 @@ import java.util.Set;
 public class ChannelServiceImpl implements ChannelService {
 
     private ChannelDAO channelDAO;
+    private ChannelDTO channelDTO;
+    private ChannelDAOImpl channelDaoImpl;
 
     private CreateWorkspaceTokenService createWorkspaceTokenService;
 
@@ -47,8 +51,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Channel> gelAllChannels() {
-        return channelDAO.getAll();
+    public List<ChannelDTO> getAllChannels() {
+       return channelDAO.getAllChannel();
     }
 
     @Override
@@ -107,5 +111,25 @@ public class ChannelServiceImpl implements ChannelService {
         return channelDAO.getChannelsByUserId(userId);
     }
 
+    @Override
+    public Long getWorkspaceIdByChannelId(Long channelId) {
+        return channelDAO.getWorkspaceIdByChannelId(channelId);
+    }
+
+    @Override
+    public List<ChannelDTO> getAllArchiveChannels() {
+        return channelDAO.getArchivedChannels();
+    }
+
+    @Override
+    public List<ChannelDTO> getPrivateChannels() {
+        return channelDAO.getPrivateChannels();
+    }
+
+    @Override
+    public void unzipChannel(Channel channel) {
+        channel.setArchived(false);
+        channelDAO.unzipChannel(channel.getId());
+    }
 }
 

@@ -43,16 +43,16 @@ public class SlashCommandRestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createSlashCommand(SlashCommandDto slashCommandDto) {
+    public ResponseEntity createSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
         slashCommandService.createSlashCommand(sc);
         logger.info("Created SlashCommand: {}", sc);
-        return new ResponseEntity<>(sc, HttpStatus.CREATED);
+        return new ResponseEntity(slashCommandDtoService.toDto(sc), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateSlashCommand(SlashCommandDto slashCommandDto) {
+    public ResponseEntity updateSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandDtoService.toEntity(slashCommandDto);
         if (!slashCommandService.updateSlashCommand(sc)) {return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
         logger.info("Updated command: {}", sc);
@@ -61,7 +61,7 @@ public class SlashCommandRestController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteMessage(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSlashCommand(@PathVariable Long id) {
         slashCommandService.deleteSlashCommand(id);
         logger.info("SlashCommand with id: {} was deleted", id);
         return new ResponseEntity(HttpStatus.OK);

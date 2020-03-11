@@ -32,7 +32,10 @@ export class DMView {
             });
             $(event.currentTarget).css({color: "white", background: "royalblue"});
             const userId = event.currentTarget.getAttribute('data-user_id');
+            const convId = event.currentTarget.getAttribute('conv_id');
             if (userId) {
+                this.direct_message_service.deleteAllConversationDMForUserFromUnread(convId, window.loggedUserId);
+                this.disableDirectHasUnreadMessage(convId);
                 await this.show(userId);
             }
         });
@@ -90,5 +93,10 @@ export class DMView {
                <span class="p-classic_nav__model__title__info_status">active</span>
                <span class="p-classic_nav__model__title__info__sep">|</span>
                <span class="p-classic_nav__model__title__info_respondent">${respondent.displayName}</span>`);
+    }
+
+    disableDirectHasUnreadMessage = (convId) => {
+        document.querySelector(`span[conv_id='${convId}']`).classList.remove("font-weight-bold");
+        document.querySelector(`span[conv_id='${convId}']`).classList.remove("text-white");
     }
 }
