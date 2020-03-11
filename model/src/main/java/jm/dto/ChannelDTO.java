@@ -97,14 +97,12 @@ public class ChannelDTO {
     }
 
     public void setUserIds (List<Number> userIds) {
-        System.out.println("setUserIds получили: " + userIds);
         this.userIds = userIds.stream()
                                .map(Number::longValue)
                                .collect(Collectors.toSet());
     }
 
     public void setBotIds (List<Number> botIds) {
-        System.out.println("setBotIds получили: " + botIds);
         this.botIds = botIds.stream()
                               .map(Number::longValue)
                               .collect(Collectors.toSet());

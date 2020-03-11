@@ -90,7 +90,6 @@ public class MessageDtoServiceImpl implements MessageDtoService { // implements 
 
     @Override
     public Message toEntity(MessageDTO messageDto) {
-        System.out.println("КЕМ ТО ИСПОЛЬЗУЕТСЯ MessageDtoServiceImpl toEntity ");
         if (messageDto == null) {
             return null;
         }

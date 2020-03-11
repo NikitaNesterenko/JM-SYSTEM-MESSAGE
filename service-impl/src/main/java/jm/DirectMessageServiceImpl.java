@@ -72,7 +72,6 @@ public class DirectMessageServiceImpl implements DirectMessageService {
 
     @Override
     public List<DirectMessage> getMessagesByConversationId(Long id, Boolean isDeleted) {
-        System.out.println("SERVICE getMessagesByConversationId id = " + id);
         return directMessageDAO.getMessagesByConversationId(id, isDeleted);
     }
 

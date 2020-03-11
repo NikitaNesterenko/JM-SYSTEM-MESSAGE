@@ -105,20 +105,10 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel message created")
             })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage (@RequestBody ThreadMessageDTO threadMessageDTO) {
-        System.out.println("CREATE!!! - " + threadMessageDTO);
         ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
         return new ResponseEntity<>(threadMessageDtoService.toDto(threadChannelMessage), HttpStatus.CREATED);
     }
-
-//    @GetMapping("/messages/{id}")
-//    public ResponseEntity<List<ThreadChannelMessage>> findAllThreadChannelMessagesByThreadChannel(@PathVariable Long id) {
-//        System.out.println("ID = " + id);
-//        ThreadChannel threadChannel = threadChannelService.getThreadChennelById(id);
-//        System.out.println("threadChannel = " + threadChannel);
-//        return new ResponseEntity<>(threadChannelMessageService.findAllThreadChannelMessagesByThreadChannel(threadChannel)
-//                , HttpStatus.OK);
-//    }
 
     @GetMapping("/{message_id}")
     @Operation(summary = "Get thread channel by message id",
@@ -133,7 +123,6 @@ public class ThreadChannelRestController {
             })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId (@PathVariable("message_id") Long id) {
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
-        System.out.println("GET-THREADCHANNEL - " + temp);
         return new ResponseEntity<>(threadDtoService.toDto(temp), HttpStatus.OK);
     }
 
@@ -150,7 +139,6 @@ public class ThreadChannelRestController {
             })
     public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId (@PathVariable Long id) {
         List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
-        System.out.println("LIST - " + list.toString());
         return new ResponseEntity<>(threadMessageDtoService.toDto(list), HttpStatus.OK);
     }
 }
