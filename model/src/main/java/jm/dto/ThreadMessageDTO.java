@@ -3,6 +3,8 @@ package jm.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jm.model.ThreadChannel;
+import jm.model.User;
 import jm.model.message.ThreadChannelMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,13 +40,19 @@ public class ThreadMessageDTO {
 
     private Long workspaceId;
 
-    public ThreadMessageDTO(ThreadChannelMessage message) {
-        this.id = message.getId();
-        this.content = message.getContent();
-        this.dateCreate = message.getDateCreate();
-        this.filename = message.getFilename();
-        this.isDeleted = message.getIsDeleted();
-        this.workspaceId = message.getWorkspaceId();
+    public ThreadMessageDTO(ThreadChannelMessage threadChannelMessage) {
+        if (threadChannelMessage != null) {
+            User user = threadChannelMessage.getUser();
+            this.id = threadChannelMessage.getId();
+            this.content = threadChannelMessage.getContent();
+            this.dateCreate = threadChannelMessage.getDateCreate();
+            this.filename = threadChannelMessage.getFilename();
+            this.isDeleted = threadChannelMessage.getIsDeleted();
+            this.workspaceId = threadChannelMessage.getWorkspaceId();
+            this.userId = user.getId();
+            this.userName = user.getName();
+            this.userAvatarUrl = user.getAvatarURL();
+        }
     }
 
     public ThreadMessageDTO(Long id, Long userId, String content, LocalDateTime dateCreate, Long parentMessageId, Boolean isDeleted, String userName, Long workspaceId) {

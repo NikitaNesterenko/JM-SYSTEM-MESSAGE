@@ -1,6 +1,7 @@
 package jm;
 
 import jm.api.dao.ThreadChannelMessageDAO;
+import jm.dto.ThreadMessageDTO;
 import jm.model.ThreadChannel;
 import jm.model.message.ThreadChannelMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -38,5 +40,14 @@ public class ThreadChannelMessageServiceImpl implements ThreadChannelMessageServ
     @Override
     public List<ThreadChannelMessage> findAllThreadChannelMessagesByThreadChannelId(Long id) {
         return threadChannelMessageDAO.findAllThreadChannelMessagesByThreadChannelId(id);
+    }
+
+    @Override
+    public List<ThreadMessageDTO> getAllThreadMessageDTOByThreadChannelId(Long id) {
+        return findAllThreadChannelMessagesByThreadChannelId(id)
+                .stream()
+                .map(ThreadMessageDTO::new)
+                .collect(Collectors.toList());
+
     }
 }
