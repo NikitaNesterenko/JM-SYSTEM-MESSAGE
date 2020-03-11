@@ -30,6 +30,8 @@ public interface ChannelDAO {
 
     List<Channel> getChannelsByIds(Set<Long> ids);
 
+    String getTopicChannelByChannelId(Long id);
+
     Long getWorkspaceIdByChannelId(Long channelId);
 
     List<ChannelDTO> getArchivedChannels();

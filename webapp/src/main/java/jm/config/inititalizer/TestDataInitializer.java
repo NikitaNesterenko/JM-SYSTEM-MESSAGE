@@ -114,7 +114,7 @@ public class TestDataInitializer {
 
         SlashCommand topicChangeCommand = new SlashCommand();
         topicChangeCommand.setName("topic");
-        topicChangeCommand.setUrl("/app/bot/slackbot/");
+        topicChangeCommand.setUrl("/app/bot/slackbot");
         topicChangeCommand.setDescription("test description");
         topicChangeCommand.setHints("test Hints");
         topicChangeCommand.setType(typeSend);

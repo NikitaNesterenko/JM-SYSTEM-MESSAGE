@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +107,6 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByUserId(@PathVariable("id") Long id) {
         List<Channel> channels = channelService.getChannelsByUserId(id);
-        for (Channel channel : channels) {
-            System.out.println(channel);
-        }
         List<ChannelDTO> channelDTOList = channelDTOService.toDto(channels);
 
         return ResponseEntity.ok(channelDTOList);
