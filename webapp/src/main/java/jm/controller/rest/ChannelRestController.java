@@ -287,19 +287,13 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<ChannelDTO> getChannelByName (@PathVariable("name") String name) {
-        System.out.println("Работает TYT!!!");
-        // api/channels/name
-//        Channel channelByName = channelService.getChannelByName(name);
-        Optional<ChannelDTO> channelByName = channelService.getChannelDTOByName(name);
-        if (channelByName.isPresent()) {
-            //        ChannelDTO channelDTO = channelDTOService.toDto(channelByName);
-            System.out.println("ChannelDTO: " + channelByName.toString());
-            return new ResponseEntity<>(channelByName.get(), HttpStatus.OK);
+        Optional<Long> channelIdByName = channelService.getChannelIdByName(name);
+        if (!channelIdByName.isPresent()) {
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest()
                            .build();
         }
-
     }
 
     @PostMapping(value = "/archiving/{id}")

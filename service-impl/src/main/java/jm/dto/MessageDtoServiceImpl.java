@@ -33,9 +33,9 @@ public class MessageDtoServiceImpl implements MessageDtoService { // implements 
     }
 
     @Override
-    // messageDtoService.toDto messageDtoService.toDto 123465
+    // messageDtoService.toDto
+    // messageDtoService.toDto 1234
     public MessageDTO toDto(Message message) {
-        System.out.println("КЕМ ТО ИСПОЛЬЗУЕТСЯ MessageDtoServiceImpl toDto ");
         if (message == null) {
             return null;
         }

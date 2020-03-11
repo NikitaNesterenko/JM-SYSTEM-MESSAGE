@@ -56,10 +56,25 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
             channelDTO.setUserIds(getListUserIdsByName(name));
             channelDTO.setBotIds(getListBotIdsByName(name));
 
-        } catch (IllegalArgumentException e) {
+        } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(channelDTO);
+    }
+
+    @Override
+    public Optional<Long> getChannelIdByName(String chanelName) {
+        
+        Long channelId = null;
+        
+        try {
+            channelId = (Long) entityManager.createNativeQuery("SELECT c.id FROM channels c WHERE c.name=:chanelName")
+                    .setParameter("chanelName", chanelName)
+                    .getSingleResult();
+        } catch (NoResultException ignored) {
+            
+        }
+        return Optional.ofNullable(channelId);
     }
 
     @Override

@@ -63,27 +63,12 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Optional<ChannelDTO> getChannelDTOByName (String name) {
-        //TODO: удалить лишнее
-        Optional<ChannelDTO> channelDTOByName = channelDAO.getChannelDTOByName(name);
-        System.out.println("channelDTOByName: " + channelDTOByName.get()
-                                                          .toString());
-        Optional<ChannelDTO> channelDTOById = channelDAO.getChannelDTOById(channelDTOByName.get()
-                                                                                   .getId());
-        System.out.println("channelDTOById: " + channelDTOById.toString());
-        List<ChannelDTO> allChanelDTO = channelDAO.getAllChanelDTO();
-        System.out.println("allChanelDTO: ");
-        allChanelDTO.forEach(channelDTO -> System.out.println(channelDTO.toString()));
-
-        List<ChannelDTO> channelDtoListByUserId = channelDAO.getChannelDtoListByUserId(1L);
-        System.out.println("channelDtoListByUserId: ");
-        channelDtoListByUserId.forEach(channelDTO -> System.out.println(channelDTO.toString()));
-
-        List<ChannelDTO> channelDtoListByWorkspaceId = channelDAO.getChannelDtoListByWorkspaceId(1L);
-        System.out.println("channelDtoListByWorkspaceId: ");
-        channelDtoListByWorkspaceId.forEach(channelDTO -> System.out.println(channelDTO.toString()));
-
-
         return channelDAO.getChannelDTOByName(name);
+    }
+
+    @Override
+    public Optional<Long> getChannelIdByName(String chanelName) {
+        return channelDAO.getChannelIdByName(chanelName);
     }
 
     @Override

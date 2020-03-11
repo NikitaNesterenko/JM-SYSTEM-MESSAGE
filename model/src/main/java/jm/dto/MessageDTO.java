@@ -104,9 +104,6 @@ public class MessageDTO {
 
 
     public void setId (Number id) {
-        //TODO: delete
-        System.out.println("MessageDTO Получено значчение");
-        System.out.println("Number == " + id);
         this.id = Optional.ofNullable(id)
                           .map(Number::longValue)
                           .orElse(null);
@@ -128,9 +125,6 @@ public class MessageDTO {
         this.dateCreate = dateCreate.toLocalDateTime();
     }
 
-//    public void setDateCreate (LocalDateTime dateCreate) {
-//        this.dateCreate = dateCreate;
-//    }
 
     public void setChannelId (Number channelId) {
         this.channelId = Optional.ofNullable(channelId)

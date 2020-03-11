@@ -316,7 +316,6 @@ public class SlackBotController {
             messageService.createMessage(newMessage);
         }
         ObjectMapper mapper = new ObjectMapper();
-//        messageDtoService.toDto 123456 СДЕЛАНО
         return mapper.writeValueAsString(messageService.getMessageDtoByMessage(newMessage));
     }
 

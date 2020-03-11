@@ -116,6 +116,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
+        return messageDAO.getStarredMessagesDTOForUserByWorkspaceId(userId, workspaceId, isDeleted);
+    }
+
+    @Override
     public List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted) {
         return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId, isDeleted);
     }

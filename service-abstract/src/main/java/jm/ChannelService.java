@@ -23,6 +23,8 @@ public interface ChannelService {
 
     Channel getChannelByName (String name);
 
+    Optional<Long> getChannelIdByName(String chanelName);
+
     Optional<ChannelDTO> getChannelDTOByName (String name);
 
     List<Channel> getChannelsByOwnerId (Long ownerId);

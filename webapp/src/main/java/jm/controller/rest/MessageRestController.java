@@ -48,17 +48,20 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessages () {
         //TODO: удалить лишнее
+        System.out.println("CHECKING getMessages");
 
-        // messageDtoService.toDto 123456 NOT
+        // messageDtoService.toDto 123456 ПРОВЕРИТЬ
 
 //        List<Message> messages = messageService.getAllMessages(false);
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
         if (!messageDTOList.isEmpty()) {
+            System.out.println("WORKING getMessages");
             logger.info("Список сообщений : ");
             messageDTOList.forEach(messageDTO -> logger.info(messageDTO.toString()));
             logger.info("-----------------------");
             return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
         } else {
+            System.out.println("WORKING getMessages not messages");
             return ResponseEntity.badRequest()
                            .build();
         }
@@ -82,11 +85,8 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId (@PathVariable("id") Long id) {
         //TODO: удалить лишнее
-        System.out.println("Работает TYT getMessagesByChannelId");
-        // messageDtoService.toDto 123456 OK
-
-//        List<Message> messages = messageService.getMessagesByChannelId(id, false);
-//        messages.sort(Comparator.comparing(Message::getDateCreate)); Отсортировано в дао
+        System.out.println("CHECKING Работает TYT getMessagesByChannelId");
+        // messageDtoService.toDto 123456 ПРОВЕРИТЬ
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
         if (!messageDTOList.isEmpty()) {
             logger.info("Полученные сообщения из канала с id = {} :", id);
@@ -119,15 +119,6 @@ public class MessageRestController {
                     )
             })
     public ResponseEntity<MessageDTO> getMessageById (@PathVariable("id") Long id) {
-        //TODO: Удалить лишнее ПРОВЕРИТЬ РАБОТУ!!!
-
-        // messageDtoService.toDto 123456 NOT OK
-//        Message message = messageService.getMessageById(id);
-//        logger.info("Сообщение с id = {}", id);
-//        logger.info(message.toString());
-//        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.OK);
-//        Optional<MessageDTO> messageDtoById = messageService.getMessageDtoById(id);
-
         return messageService.getMessageDtoById(id)
                        .map(messageDTO -> new ResponseEntity<>(messageDTO, HttpStatus.OK))
                        .orElse(ResponseEntity.badRequest()
@@ -149,12 +140,6 @@ public class MessageRestController {
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod (@PathVariable("id") Long id,
                                                                              @PathVariable("startDate") String startDate,
                                                                              @PathVariable("endDate") String endDate) {
-        //TODO: убрать лишнее
-
-        // messageDtoService.toDto 123456 NOT OK
-//        List<Message> messages = messageService.getMessagesByChannelIdForPeriod(id, LocalDateTime.now()
-//                                                                                            .minusMonths(3), LocalDateTime.now(), false);
-//        return new ResponseEntity<>(messageDtoService.toDto(messages), HttpStatus.OK);
         List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
                                                                                                         .minusMonths(3), LocalDateTime.now(), false);
 
@@ -167,28 +152,23 @@ public class MessageRestController {
     }
 
     @PostMapping(value = "/create")
-//    @Operation(summary = "Create message",
-//            responses = {
-//                    @ApiResponse(
-//                            content = @Content(
-//                                    mediaType = "application/json",
-//                                    schema = @Schema(implementation = MessageDTO.class)
-//                            )
-//                    ),
-//                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
-//            })
+    @Operation(summary = "Create message",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = MessageDTO.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
+            })
     public ResponseEntity<MessageDTO> createMessage (@RequestBody MessageDTO messageDto) {
-        //TODO: убрать лишнее
-
-        // messageDtoService.toDto 123456 NOT OK
-//        messageDto.setDateCreate(LocalDateTime.now());
-//        Message message = messageDtoService.toEntity(messageDto);
         Message message = messageService.getMessageByMessageDTO(messageDto);
         message.setDateCreate(LocalDateTime.now());
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
-
-        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
+        MessageDTO messageDTO = messageService.getMessageDtoByMessage(message);
+        return new ResponseEntity<>(messageDTO, HttpStatus.CREATED);
     }
 
     // DTO compliant
@@ -205,13 +185,7 @@ public class MessageRestController {
                     @ApiResponse(responseCode = "403", description = "FORBIDDEN: unable to update message"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to find message")
             })
-//    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage (@RequestBody MessageDTO messageDto, Principal principal) {
-        // TODO: убрать лишнее
-
-        System.out.println("TYT updateMessage");
-        System.out.println("Работает TYT updateMessage");
-//        Message message = messageDtoService.toEntity(messageDto);
         Message message = messageService.getMessageByMessageDTO(messageDto);
 
         Message existingMessage = messageService.getMessageById(message.getId());
@@ -255,10 +229,14 @@ public class MessageRestController {
                     )
             })
     public ResponseEntity<List<MessageDTO>> getStarredMessages (@PathVariable Long userId, @PathVariable Long workspaceId) {
-        List<Message> starredMessages = messageService.getStarredMessagesForUserByWorkspaceId(userId, workspaceId, false);
-        logger.info("Сообщения, отмеченные пользователем.");
-        // messageDtoService.toDto 123456 NOT OK ПЕРЕДЕЛАТЬ
-        return ResponseEntity.ok(messageDtoService.toDto(starredMessages));
+        List<MessageDTO> messageDTOS = messageService.getStarredMessagesDTOForUserByWorkspaceId(userId, workspaceId, false);
+        if (!messageDTOS.isEmpty()) {
+            logger.info("Сообщения, отмеченные пользователем.");
+            return ResponseEntity.ok(messageDTOS);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @GetMapping(value = "/user/{id}")

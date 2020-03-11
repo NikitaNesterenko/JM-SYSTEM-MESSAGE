@@ -292,6 +292,91 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .getResultList();
     }
 
+
+    private List<Number> getAllStarredMessagesIdByUserId (Long userId) {
+        List list = new ArrayList<>();
+        try {
+            list = entityManager.createNativeQuery("SELECT usm.starred_messages_id FROM users_starred_messages usm WHERE usm.user_id = :userId")
+                    .setParameter("userId", userId).getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
+    //TODO: использовать в методе getStarredMessagesDTOForUserByWorkspaceId когда будетработать запись workspaceId
+    public Optional<MessageDTO> getMessageDtoByIdAndWorkspaceId (Long id, Long workspaceId, Boolean isDeleted) {
+
+        MessageDTO messageDTO = null;
+
+        try {
+            messageDTO = (MessageDTO) entityManager.createNativeQuery("SELECT " +
+                    "m.id AS \"id\", " +
+                    "m.channel_id AS \"channelId\", " +
+                    "m.content AS \"content\", " +
+                    "m.date_create AS \"dateCreate\", " +
+                    "m.filename AS \"filename\", " +
+                    "m.is_deleted AS \"isDeleted\", " +
+                    "m.voice_message \"voiceMessage\", " +
+                    "m.workspace_id AS \"workspaceId\", " +
+                    "m.bot_id AS \"botId\", " +
+                    "m.parent_message_id AS \"parentMessageId\", " +
+                    "m.shared_message_id AS \"sharedMessageId\", " +
+                    "m.user_id AS \"userId\", " +
+                    "c.name AS \"channelName\" " +
+                    "FROM messages m, channels c " +
+                    "WHERE m.id=:id AND m.workspace_id= :workspaceId AND m.is_deleted= :isDeleted AND c.id = m.channel_id")
+                    .setParameter("id", id).setParameter("workspaceId", workspaceId).setParameter("isDeleted", isDeleted)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(MessageDTO.class))
+                    .getSingleResult();
+
+            if (messageDTO !=null) {
+                messageDTO.setRecipientUserIds(getListRecipientUserIds(id));
+
+
+                Optional<Tuple> userData = getUserNameAndAvatarUrlByUserId(messageDTO.getUserId());
+                if (userData.isPresent()) {
+                    messageDTO.setUserName((String) userData.get()
+                            .get("userName"));
+                    messageDTO.setUserAvatarUrl((String) userData.get()
+                            .get("userAvatarUrl"));
+                }
+
+                Optional<Tuple> botData = getPluginNameAndBotNickNameByBotId(messageDTO.getBotId());
+                if (botData.isPresent()) {
+                    messageDTO.setPluginName((String) botData.get()
+                            .get("pluginName"));
+                    messageDTO.setBotNickName((String) botData.get()
+                            .get("botNickName"));
+                }
+            }
+
+
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(messageDTO);
+    }
+
+    @Override
+    public List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
+        List<MessageDTO> messageDTOS = new ArrayList<>();
+        List<Number> messagesIds = getAllStarredMessagesIdByUserId(userId);
+        if (!messagesIds.isEmpty()) {
+            messageDTOS = messagesIds
+                    .stream()
+                    .map(Number::longValue)
+                    .map(this::getMessageDtoById)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+        }
+        return messageDTOS;
+    }
+
     @Override
     public List<Message> getMessagesByIds (Set<Long> ids, Boolean isDeleted) {
         if (ids == null || ids.isEmpty()) {

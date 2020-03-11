@@ -40,6 +40,8 @@ public interface MessageService {
 
     List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);
 
+    List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);
+
     List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted);
 
     MessageDTO getMessageDtoByMessage (@NonNull Message message);

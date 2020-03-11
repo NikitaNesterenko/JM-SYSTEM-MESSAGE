@@ -23,6 +23,8 @@ public interface ChannelDAO {
 
     Channel getChannelByName (String name);
 
+    Optional<Long> getChannelIdByName (String chanelName);
+
     List<Channel> getChannelsByOwnerId (Long ownerId);
 
     List<Channel> getChannelsByWorkspaceId (Long id);
