@@ -25,7 +25,7 @@ public class UserDtoServiceImpl implements UserDtoService {
 
     @Override
     public UserDTO toDto(User user) {
-
+/*
         if (user == null) {
             return null;
         }
@@ -39,14 +39,15 @@ public class UserDtoServiceImpl implements UserDtoService {
             userDTO.setStarredMessageIds(starredMessageIds);
         }
 
-        return userDTO;
+        return userDTO;*/
+        return null;
     }
 
     @Override
     @Transactional
     public User toEntity(UserDTO userDTO) {
 
-        if (userDTO == null) {
+        /*if (userDTO == null) {
             return null;
         }
 
@@ -67,7 +68,8 @@ public class UserDtoServiceImpl implements UserDtoService {
         user.setStarredMessages(new HashSet<>(starredMessagesList));
 
 
-        return user;
+        return user;*/
+        return null;
     }
 
 }

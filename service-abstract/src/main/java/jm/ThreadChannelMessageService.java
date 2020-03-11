@@ -17,4 +17,6 @@ public interface ThreadChannelMessageService {
     List<ThreadChannelMessage> findAllThreadChannelMessagesByThreadChannelId(Long id);
 
     List<ThreadMessageDTO> getAllThreadMessageDTOByThreadChannelId(Long id);
+
+    ThreadChannelMessage getEntityFromDTO(ThreadMessageDTO threadMessageDTO);
 }

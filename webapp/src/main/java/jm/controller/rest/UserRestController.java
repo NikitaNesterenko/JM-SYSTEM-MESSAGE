@@ -61,8 +61,9 @@ public class UserRestController {
         }
         List<UserDTO> userDTOList = userDtoService.toDto(users);
         return new ResponseEntity<>(userDTOList, HttpStatus.OK);*/
-        return userService.getAllUsersDTO().map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        /*return userService.getAllUsersDTO().map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));*/
+        return new ResponseEntity<>(userService.getAllUsersDTO().get(), HttpStatus.OK);
     }
 
     // DTO compliant
@@ -78,7 +79,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200", description = "OK: user created")
             })
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
-        User user = userDtoService.toEntity(userDto);
+        User user = userService.getEntityFromDTO(userDto);
         userService.createUser(user);
         logger.info("Созданный пользователь : {}", user);
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
@@ -120,7 +121,7 @@ public class UserRestController {
             })
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
-        User user = userDtoService.toEntity(userDTO);
+        User user = userService.getEntityFromDTO(userDTO);
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");

@@ -53,8 +53,7 @@ public class WorkspaceDtoServiceImpl implements WorkspaceDtoService {
 
     @Override
     public Workspace toEntity(WorkspaceDTO workspaceDto) {
-/*
-        if (workspaceDto == null) {
+/*        if (workspaceDto == null) {
             return null;
         }
 

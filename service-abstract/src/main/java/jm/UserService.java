@@ -1,6 +1,7 @@
 package jm;
 
 import jm.dto.UserDTO;
+import jm.dto.UserDtoService;
 import jm.model.User;
 
 import java.util.List;
@@ -44,5 +45,7 @@ public interface UserService {
     Optional<UserDTO> getUserDTOByEmail(String email);
 
     Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
+
+    User getEntityFromDTO(UserDTO userDTO);
 
 }

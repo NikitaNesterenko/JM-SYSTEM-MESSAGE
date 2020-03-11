@@ -36,7 +36,7 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
 
     @Override
     public ThreadMessageDTO toDto(ThreadChannelMessage threadChannelMessage) {
-        if (threadChannelMessage == null) {
+       /* if (threadChannelMessage == null) {
             return null;
         }
 
@@ -48,12 +48,13 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         threadMessageDTO.setUserAvatarUrl(user.getAvatarURL());
         threadMessageDTO.setWorkspaceId(threadChannel.getMessage().getWorkspaceId());
 
-        return threadMessageDTO;
+        return threadMessageDTO;*/
+        return null;
     }
 
     @Override
     public List<ThreadMessageDTO> toDto(List<ThreadChannelMessage> threadChannelMessages) {
-        if (threadChannelMessages == null || threadChannelMessages.isEmpty()) {
+        /*if (threadChannelMessages == null || threadChannelMessages.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -62,12 +63,13 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
             threadMessageDTOList.add(toDto(message));
         }
 
-        return threadMessageDTOList;
+        return threadMessageDTOList;*/
+        return null;
     }
 
     @Override
     public ThreadChannelMessage toEntity(ThreadMessageDTO threadMessageDTO) {
-        if (threadMessageDTO == null) {
+        /*if (threadMessageDTO == null) {
             return null;
         }
 
@@ -83,6 +85,7 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         threadChannelMessage.setParentMessage(messageService.getMessageById(threadMessageDTO.getParentMessageId()));
         threadChannelMessage.setWorkspaceId(threadMessageDTO.getWorkspaceId());
 
-        return threadChannelMessage;
+        return threadChannelMessage;*/
+        return null;
     }
 }

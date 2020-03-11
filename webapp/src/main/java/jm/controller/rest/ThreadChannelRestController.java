@@ -97,7 +97,7 @@ public class ThreadChannelRestController {
             })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
         System.out.println("CREATE!!! - " + threadMessageDTO);
-        ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
+        ThreadChannelMessage threadChannelMessage = threadChannelMessageService.getEntityFromDTO(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
         //ThreadMessageDTO temp = new ThreadMessageDTO(threadChannelMessage);
         return new ResponseEntity<>(new ThreadMessageDTO(threadChannelMessage), HttpStatus.CREATED);
@@ -142,8 +142,8 @@ public class ThreadChannelRestController {
                     )
             })
     public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
-        List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
-        System.out.println("LIST - " + list.toString());
+        /*List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
+        System.out.println("LIST - " + list.toString());*/
         return new ResponseEntity<>(threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id), HttpStatus.OK);
     }
 }

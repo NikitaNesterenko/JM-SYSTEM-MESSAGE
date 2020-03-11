@@ -29,4 +29,6 @@ public interface WorkspaceService {
 
     Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId);
 
+    Workspace getEntityFromDTO(WorkspaceDTO workspaceDto);
+
 }
