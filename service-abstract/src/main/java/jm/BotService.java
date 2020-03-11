@@ -2,16 +2,16 @@ package jm;
 
 import jm.model.Bot;
 import jm.model.Channel;
-import jm.model.SlashCommand;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface BotService {
 
     List<Bot> gelAllBots();
 
-    void createBot(Bot bot);
+    Bot createBot(Bot bot);
 
     void deleteBot(Long id);
 
@@ -24,4 +24,6 @@ public interface BotService {
     Set<Channel> getChannels(Bot bot);
 
     Bot getBotBySlashCommandId(Long id);
+
+    Optional<Bot> findByToken(String token);
 }

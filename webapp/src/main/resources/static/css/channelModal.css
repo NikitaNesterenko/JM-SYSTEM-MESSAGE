@@ -1,0 +1,68 @@
+.modal {
+    background-color: white;
+}
+
+.modal-content {
+    border: none;
+}
+
+.close {
+    margin: 2%;
+}
+
+.input-group .icon-search {
+    position: absolute;
+    top: 50%;
+    margin-left: 17px;
+    margin-top: 17px;
+    z-index: 1;
+}
+
+.md-form {
+    border: 0;
+    background-color: white;
+}
+
+.dropdown-show-inline div {
+    display: inline-block;
+    padding-right: 10%;
+}
+
+.input-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    padding: 10px 15px;
+    width: 500px;
+    margin: 100px auto;
+    border-radius: 40px;
+}
+input {
+    color: #8f8f8f;
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+    border: transparent;
+}
+i {
+    color: #8f8f8f;
+    margin-right: 20px;
+}
+
+div {
+    cursor: default;
+}
+
+/*div #ch-list:hover {*/
+/*    background-color: #F4F7F3;*/
+/*}*/
+
+.selectpicker {
+    border: none;
+    background-color: white;
+}
+
+hr {
+    display: block;
+}

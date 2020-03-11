@@ -1,7 +1,8 @@
 import {
     ConversationRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    DirectMessagesRestController
 } from "/js/rest/entities-rest-pagination.js";
 
 export class ActiveChatMembers {
@@ -10,6 +11,7 @@ export class ActiveChatMembers {
         this.user_service = new UserRestPaginationService();
         this.conversation_service = new ConversationRestPaginationService();
         this.workspace_service = new WorkspaceRestPaginationService();
+        this.directMessage_service = new DirectMessagesRestController();
     }
 
     async populateDirectMessages() {
@@ -31,16 +33,23 @@ export class ActiveChatMembers {
                     conversation_queue_context_container.append(this.messageChat(conversation.openingUser, conversation.id));
                 }
                 direct_messages_container.append(conversation_queue_context_container);
+                //const unreadMessages = this.directMessage_service.getUnreadDMessagesInConversationForUser(conversation.id, principal.id)
+                //проверка, есть ли непрочтенные сообщение для данной беседы у пользователя
+                this.directMessage_service.getUnreadDMessagesInConversationForUser(conversation.id, principal.id).then(messages => {
+                    if (messages.length > 0) {
+                        this.enableDirectHasUnreadMessage(conversation.id)
+                    }
+                })
             }
         });
     }
 
     messageChat(user, conversationId) {
         return `
-            <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
+            <button class="p-channel_sidebar__name_button" data-user_id="${user.id}" conv_id="${conversationId}">
                 <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">${user.online == 1 ? "●" : "○"}</i>
                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
-                    <span data-user_id="${user.id}">${user.name}</span>
+                    <span data-user_id="${user.id}" conv_id="${conversationId}">${user.name}</span>
                 </span>
             </button>
             <button class="p-channel_sidebar__close cross">
@@ -48,4 +57,9 @@ export class ActiveChatMembers {
             </button>
         `;
     }
+
+    enableDirectHasUnreadMessage = (convId) => {
+        document.querySelector(`span[conv_id='${convId}']`).classList.add("font-weight-bold");
+        document.querySelector(`span[conv_id='${convId}']`).classList.add("text-white");
+    };
 }
