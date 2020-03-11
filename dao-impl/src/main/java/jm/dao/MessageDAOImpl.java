@@ -19,7 +19,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     @Override
     public List<Message> getMessageByContent(String word, Boolean isDeleted) {
-        return entityManager.createQuery("select m from Message m where m.content =:content and m.isDeleted = :is_deleted", Message.class)
+        return entityManager.createQuery("SELECT m FROM Message m WHERE m.content =:content AND m.isDeleted = :is_deleted", Message.class)
                 .setParameter("content", word)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
@@ -27,14 +27,14 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     @Override
     public List<Message> getAll(Boolean isDeleted) {
-        return entityManager.createQuery("select m from Message m where m.isDeleted = :is_deleted", Message.class)
+        return entityManager.createQuery("SELECT m FROM Message m WHERE m.isDeleted = :is_deleted", Message.class)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
     }
 
     @Override
     public List<Message> getMessagesByChannelId(Long id, Boolean isDeleted) {
-        return entityManager.createQuery("select m from Message m where m.channelId =:channel_id and m.isDeleted = :is_deleted", Message.class)
+        return entityManager.createQuery("SELECT m FROM Message m WHERE m.channelId =:channel_id AND m.isDeleted = :is_deleted", Message.class)
                 .setParameter("channel_id", id)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
@@ -43,7 +43,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return entityManager
-                .createQuery("select m from Message m where m.channelId =:channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate and m.isDeleted = :is_deleted order by m.dateCreate", Message.class)
+                .createQuery("SELECT m FROM Message m WHERE m.channelId =:channel_id AND m.dateCreate >= :startDate AND m.dateCreate <= :endDate AND m.isDeleted = :is_deleted ORDER BY m.dateCreate", Message.class)
                 .setParameter("channel_id", id)
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)
@@ -54,7 +54,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return entityManager
-                .createQuery("select m from Message m where m.bot.id = :bot_id and m.channelId = :channel_id and m.dateCreate >= :startDate and m.dateCreate <= :endDate and m.isDeleted = :is_deleted order by m.dateCreate", Message.class)
+                .createQuery("SELECT m FROM Message m WHERE m.bot.id = :bot_id AND m.channelId = :channel_id AND m.dateCreate >= :startDate AND m.dateCreate <= :endDate AND m.isDeleted = :is_deleted ORDER BY m.dateCreate", Message.class)
                 .setParameter("bot_id", botId)
                 .setParameter("channel_id", channelId)
                 .setParameter("startDate", startDate)
@@ -76,7 +76,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getStarredMessagesForUser(Long userId, Boolean isDeleted) {
         return entityManager.createQuery(
-                "select sm from User u join u.starredMessages as sm where u.id = :user_id and sm.isDeleted = :is_deleted", Message.class)
+                "SELECT sm FROM User u JOIN u.starredMessages AS sm WHERE u.id = :user_id AND sm.isDeleted = :is_deleted", Message.class)
                 .setParameter("user_id", userId)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
@@ -85,11 +85,11 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
         return entityManager.createQuery(
-                "select sm from User u " +
-                        "join u.starredMessages as sm " +
-                        "where u.id = :user_id " +
-                        "and sm.workspaceId = :workspace_id " +
-                        "and sm.isDeleted = :is_deleted",
+                "SELECT sm FROM User u " +
+                        "JOIN u.starredMessages AS sm " +
+                        "WHERE u.id = :user_id " +
+                        "AND sm.workspaceId = :workspace_id " +
+                        "AND sm.isDeleted = :is_deleted",
                 Message.class)
                 .setParameter("user_id", userId)
                 .setParameter("workspace_id", workspaceId)
@@ -113,7 +113,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("select m from Message m where m.id in :ids and m.isDeleted = :is_deleted", Message.class)
+                .createQuery("SELECT m FROM Message m WHERE m.id IN :ids AND m.isDeleted = :is_deleted", Message.class)
                 .setParameter("ids", ids)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
@@ -121,7 +121,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     @Override
     public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted) {
-        return entityManager.createQuery("select m from Message m join  m.recipientUsers u where u.id =:userId and m.isDeleted = :is_deleted", Message.class)
+        return entityManager.createQuery("SELECT m FROM Message m JOIN  m.recipientUsers u WHERE u.id =:userId AND m.isDeleted = :is_deleted", Message.class)
                 .setParameter("userId", userId)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
