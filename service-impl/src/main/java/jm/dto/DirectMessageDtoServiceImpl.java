@@ -31,7 +31,6 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
     }
 
     @Override
-    // DirectMessageDtoService.toDto
     public List<DirectMessageDTO> toDto(List<DirectMessage> directMessages) {
         if (directMessages == null || directMessages.isEmpty()) {
             return Collections.emptyList();
