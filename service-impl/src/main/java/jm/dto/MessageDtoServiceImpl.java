@@ -33,8 +33,6 @@ public class MessageDtoServiceImpl implements MessageDtoService { // implements 
     }
 
     @Override
-    // messageDtoService.toDto
-    // messageDtoService.toDto 1234
     public MessageDTO toDto(Message message) {
         if (message == null) {
             return null;
@@ -90,6 +88,7 @@ public class MessageDtoServiceImpl implements MessageDtoService { // implements 
 
     @Override
     public Message toEntity(MessageDTO messageDto) {
+        // messageDtoService.toEntity
         if (messageDto == null) {
             return null;
         }
