@@ -65,7 +65,6 @@ public class BotDtoServiceImpl implements BotDtoService {
     @Override
     @Transactional
     public Bot toEntity(BotDTO botDto) {
-
         if (botDto == null) {
             return null;
         }

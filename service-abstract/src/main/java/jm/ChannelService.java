@@ -42,4 +42,6 @@ public interface ChannelService {
 
     Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO);
 
+    ChannelDTO getChannelDtoByChannel(@NonNull Channel channel);
+
 }

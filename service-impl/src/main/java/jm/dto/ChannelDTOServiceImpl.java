@@ -28,11 +28,12 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
     WorkspaceService workspaceService;
 
     @Override
+    // channelDtoService.toDto
     public ChannelDTO toDto(Channel channel) {
         if (channel == null) {
             return null;
         }
-        //channelDTOService.toDto
+
         ChannelDTO channelDTO = new ChannelDTO();
 
         Set<Long> userIds = channel.getUsers().stream().map(User::getId).collect(Collectors.toSet());

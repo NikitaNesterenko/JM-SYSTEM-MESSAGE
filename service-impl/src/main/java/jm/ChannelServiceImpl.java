@@ -140,5 +140,10 @@ public class ChannelServiceImpl implements ChannelService {
 
         return channel;
     }
+
+    @Override
+    public ChannelDTO getChannelDtoByChannel(@NonNull Channel channel) {
+        return new ChannelDTO(channel);
+    }
 }
 

@@ -220,11 +220,6 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getAllChannels () {
         logger.info("Список channel: ");
-//        List<Channel> channels = channelService.gelAllChannels();
-//        for (Channel channel : channels) {
-//            logger.info(channel.toString());
-//        }
-//        channelDTOService.toDto(channels);
         List<ChannelDTO> channelDTOList = channelService.getAllChanelDTO();
         channelDTOList.forEach(channelDTO -> logger.info(channelDTO.toString()));
         return ResponseEntity.ok(channelDTOList);

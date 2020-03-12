@@ -121,8 +121,7 @@ public class SlackBotController {
             if (channel != null) {
                 response.put("report", joinChannel(channel, command.getUserId()));
                 response.put("status", "OK");
-                // channelDtoService.toDto(channel)
-                response.put("channel", mapper.writeValueAsString(new ChannelDTO(channel)));
+                response.put("channel", mapper.writeValueAsString(channelService.getChannelDtoByChannel(channel)));
                 response.put("targetChannelId", channel.getId()
                                                         .toString());
             } else {
