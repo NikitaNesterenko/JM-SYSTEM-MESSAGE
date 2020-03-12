@@ -44,7 +44,7 @@ public class ThreadMessageDtoServiceImpl implements ThreadMessageDtoService {
         User user = threadChannelMessage.getUser();
         ThreadChannel threadChannel = threadChannelMessage.getThreadChannel();
         threadMessageDTO.setUserId(user.getId());
-        threadMessageDTO.setUserName(user.getName());
+        threadMessageDTO.setUserName(user.getUsername());
         threadMessageDTO.setUserAvatarUrl(user.getAvatarURL());
         threadMessageDTO.setWorkspaceId(threadChannel.getMessage().getWorkspaceId());
 

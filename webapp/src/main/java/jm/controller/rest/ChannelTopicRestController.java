@@ -36,7 +36,7 @@ public class ChannelTopicRestController {
                     )
             })
     public ResponseEntity<String> getChannelTopic(@PathVariable Long id) {
-        return ResponseEntity.ok(channelService.getChannelById(id).getTopic());
+        return ResponseEntity.ok(channelService.getTopicChannelByChannelId(id));
     }
 
     @PutMapping("/{id}/topic/update")

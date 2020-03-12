@@ -24,5 +24,21 @@ const notifyParseMessage =(message)=> {
         const messageTo = messageContent.substring(indexToStart, indexToEnd);
         notify("Message to " + messageTo, messageFrom.name + ": " + messageContent);
     }
-}
+};
+
+// Парсер для сообщения типа "{content: "@asdas",...
+// TODO м.б. вообще избавиться от InputMessage?
+const notifyParseMessageDTO =(message)=> {
+    const messageFrom = message.userName;
+    const messageContent = message.content;
+    if (messageContent.includes("@",0)) {
+        const indexToStart = messageContent.indexOf("@");
+        let indexToEnd = messageContent.indexOf(" ",indexToStart);
+        if (indexToEnd == -1) {
+            indexToEnd = messageContent.length;
+        }
+        const messageTo = messageContent.substring(indexToStart, indexToEnd);
+        notify("Message to " + messageTo, messageFrom.name + ": " + messageContent);
+    }
+};
 
