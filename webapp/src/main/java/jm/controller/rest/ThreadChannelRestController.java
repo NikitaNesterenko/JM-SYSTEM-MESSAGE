@@ -105,6 +105,9 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel message created")
             })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage (@RequestBody ThreadMessageDTO threadMessageDTO) {
+        // TODO: проверить
+        // Сохранение сообщения выполняется в MessagesController сразу из websocket
+
         ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
         return new ResponseEntity<>(threadMessageDtoService.toDto(threadChannelMessage), HttpStatus.CREATED);

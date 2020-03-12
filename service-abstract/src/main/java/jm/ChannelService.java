@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChannelService {
-    List<Channel> gelAllChannels ();
+    // TODO: проверить
+    //List<ChannelDTO> getAllChannels();
+    List<Channel> gelAllChannels();
 
     List<ChannelDTO> getAllChanelDTO ();
 
@@ -44,4 +46,13 @@ public interface ChannelService {
 
     ChannelDTO getChannelDtoByChannel(@NonNull Channel channel);
 
+    String getTopicChannelByChannelId(Long id);
+
+    Long getWorkspaceIdByChannelId(Long channelId);
+
+    List<ChannelDTO> getAllArchiveChannels();
+
+    List<ChannelDTO> getPrivateChannels();
+
+    void unzipChannel(Channel channel);
 }

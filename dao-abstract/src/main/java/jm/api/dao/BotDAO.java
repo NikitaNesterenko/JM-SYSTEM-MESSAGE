@@ -16,6 +16,10 @@ public interface BotDAO {
 
     void deleteById (Long id);
 
+    Bot save(Bot bot);
+
+    void deleteById(Long id);
+
     Bot merge (Bot bot);
 
     Bot getById (Long id);
@@ -29,4 +33,6 @@ public interface BotDAO {
     Set<Channel> getChannels (Bot bot);
 
     Bot getBotByCommandId (Long id);
+
+    Optional<Bot> findByToken(String token);
 }

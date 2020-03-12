@@ -46,7 +46,7 @@ public class MessageDtoServiceImpl implements MessageDtoService { // implements 
         Bot bot = message.getBot();
         if (user != null) {
             messageDto.setUserId(user.getId());
-            messageDto.setUserName(user.getName());
+            messageDto.setUserName(user.getUsername());
             messageDto.setUserAvatarUrl(user.getAvatarURL());
         } else if (bot != null) {
             messageDto.setBotId(bot.getId());

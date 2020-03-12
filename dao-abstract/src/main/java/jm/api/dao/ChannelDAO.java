@@ -11,6 +11,8 @@ public interface ChannelDAO {
 
     List<Channel> getAll ();
 
+    // TODO: ПРОВЕРИТЬ
+    // List<ChannelDTO> getAllChannel();
     List<ChannelDTO> getAllChanelDTO ();
 
     void persist (Channel channel);
@@ -46,4 +48,13 @@ public interface ChannelDAO {
     List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
 
 
+    String getTopicChannelByChannelId(Long id);
+
+    Long getWorkspaceIdByChannelId(Long channelId);
+
+    List<ChannelDTO> getArchivedChannels();
+
+    List<ChannelDTO> getPrivateChannels();
+
+    Channel unzipChannel(Long id);
 }

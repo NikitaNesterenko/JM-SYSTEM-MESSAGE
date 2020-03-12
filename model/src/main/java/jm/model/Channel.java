@@ -111,4 +111,15 @@ public class Channel {
         this.isApp = channelDTO.getIsApp();
 
     }
+    public Channel(Long id, String name, Set<User> users, User user, Boolean isPrivate, Boolean archived, LocalDateTime createdDate, Workspace workspace) {
+        this.id = id;
+        this.name = name;
+        this.users = users;
+        this.user = user;
+        this.isPrivate = isPrivate;
+        this.archived = archived;
+        this.createdDate = createdDate;
+        this.workspace = workspace;
+    }
+
 }

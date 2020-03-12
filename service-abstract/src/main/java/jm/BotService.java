@@ -13,7 +13,7 @@ public interface BotService {
 
     List<Bot> gelAllBots ();
 
-    void createBot (Bot bot);
+    Bot createBot(Bot bot);
 
     void deleteBot (Long id);
 
@@ -32,4 +32,6 @@ public interface BotService {
     Bot getBotBySlashCommandId (Long id);
 
     Bot getBotByBotDto(@NonNull BotDTO botDTO);
+
+    Optional<Bot> findByToken(String token);
 }

@@ -14,6 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.security.cert.CollectionCertStoreParameters;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,16 +45,25 @@ public class BotServiceImpl implements BotService {
     public List<Bot> gelAllBots() { return botDAO.getAll(); }
 
     @Override
-    public void createBot(Bot bot) { botDAO.persist(bot); }
+    public Bot createBot(Bot bot) {
+        bot.setToken(UUID.randomUUID().toString());
+        bot.setDateCreate(LocalDateTime.now());
+        bot.setToken(UUID.randomUUID().toString());
+        bot.setIsDefault(false);
 
-    @Override
-    public void deleteBot (Long id) {
-        botDAO.deleteById(id);
+        return botDAO.save(bot);
     }
 
     @Override
-    public void updateBot (Bot bot) {
-        botDAO.merge(bot);
+    public void deleteBot(Long id) {botDAO.deleteById(id); }
+
+    @Override
+    public void updateBot(Bot bot) {
+        Bot existingBot = botDAO.getById(bot.getId());
+        existingBot.setName(bot.getName());
+        existingBot.setNickName(bot.getNickName());
+        existingBot.setToken(bot.getToken());
+        botDAO.merge(existingBot);
     }
 
     @Override
@@ -107,4 +121,10 @@ public class BotServiceImpl implements BotService {
 
         return bot;
     }
+
+    @Override
+    public Optional<Bot> findByToken(String token) {
+        return botDAO.findByToken(token);
+    }
+
 }

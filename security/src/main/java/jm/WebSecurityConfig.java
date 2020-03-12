@@ -1,5 +1,6 @@
 package jm;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +20,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsServiceImpl;
+    private CustomAuthFilter customAuthFilter;
 
-    public WebSecurityConfig(UserDetailsService userDetailsServiceImpl) {
+    public WebSecurityConfig(UserDetailsService userDetailsServiceImpl, CustomAuthFilter customAuthFilter) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.customAuthFilter = customAuthFilter;
     }
 
     @Override
@@ -35,6 +38,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
     }
 
+    @Bean
+    public FilterRegistrationBean<CustomAuthFilter> authFilter() {
+        FilterRegistrationBean<CustomAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(customAuthFilter);
+        registrationBean.addUrlPatterns("/jmsm/api/*");
+        return registrationBean;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -44,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .permitAll()
 //                .and()
 //                .authorizeRequests()
-                .antMatchers("/", "/rest/api/**", "/email/**", "/js/**", "/image/**").permitAll()
+                .antMatchers("/", "/rest/api/**", "/email/**", "/js/**", "/image/**", "/jmsm/api/**").permitAll()
                 .antMatchers("/admin/**").hasRole("OWNER")
                 .antMatchers("/user/**", "/rest/**", "/upload").hasAnyRole("OWNER", "USER")
                 .antMatchers("/chooseWorkspace", "/workspace/**").authenticated()

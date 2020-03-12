@@ -25,6 +25,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -207,7 +208,7 @@ public class ChannelRestController {
                        .build();
     }
 
-    @GetMapping
+    @GetMapping(value = "/all")
     @Operation(summary = "Get all channels",
             responses = {
                     @ApiResponse(responseCode = "200",
@@ -219,9 +220,7 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getAllChannels () {
-        logger.info("Список channel: ");
         List<ChannelDTO> channelDTOList = channelService.getAllChanelDTO();
-        channelDTOList.forEach(channelDTO -> logger.info(channelDTO.toString()));
         return ResponseEntity.ok(channelDTOList);
     }
 
@@ -304,4 +303,35 @@ public class ChannelRestController {
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/private")
+    public ResponseEntity<List<ChannelDTO>> getPrivateChannels() {
+        List<ChannelDTO> channelsDTOList = channelService.getPrivateChannels();
+        return ResponseEntity.ok(channelsDTOList);
+    }
+
+    @GetMapping(value = "/all_archive")
+    public ResponseEntity<List<ChannelDTO>> getAllArchiveChannels() {
+        List<ChannelDTO> channelsDTO = channelService.getAllArchiveChannels();
+        return ResponseEntity.ok(channelsDTO);
+    }
+
+    @PutMapping(value = "/unzip/{id}")
+    @Operation(summary = "Archive channel",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ChannelDTO.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: channel archived")
+            })
+    public ResponseEntity<ChannelDTO> unzipChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(false);
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelDTOService.toDto(channel);
+        logger.info("Канал с id = {} архивирован", id);
+        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+    }
 }
