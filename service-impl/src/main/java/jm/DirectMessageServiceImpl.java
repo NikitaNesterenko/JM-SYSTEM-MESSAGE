@@ -46,7 +46,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     @Override
-    public Optional<DirectMessageDTO> getDirectMessageDtoByMessageId (Long messageId) {
+    public Optional<DirectMessageDTO> getDirectMessageDtoByMessageId (@NonNull Long messageId) {
         DirectMessageDTO directMessageDTO = messageDAO.getMessageDtoById(messageId).map(DirectMessageDTO::new).orElse(null);
         if (directMessageDTO != null) {
             directMessageDAO.getConversationIdByMessageId(messageId).ifPresent(directMessageDTO::setConversationId);

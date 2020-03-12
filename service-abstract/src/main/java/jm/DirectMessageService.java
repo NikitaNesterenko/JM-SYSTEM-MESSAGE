@@ -11,7 +11,7 @@ public interface DirectMessageService {
 
     DirectMessage getDirectMessageById (Long id);
 
-    Optional<DirectMessageDTO> getDirectMessageDtoByMessageId (Long messageId);
+    Optional<DirectMessageDTO> getDirectMessageDtoByMessageId (@NonNull Long messageId);
 
     void saveDirectMessage (DirectMessage directMessage);
 
@@ -26,4 +26,5 @@ public interface DirectMessageService {
     DirectMessage getDirectMessageByDirectMessageDto(@NonNull DirectMessageDTO directMessageDTO);
 
     List<DirectMessageDTO> getDirectMessageDtoListByDirectMessageList(@NonNull List<DirectMessage> directMessagesList);
+
 }

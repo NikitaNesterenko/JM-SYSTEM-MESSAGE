@@ -38,8 +38,6 @@ public interface MessageDAO {
 
     Optional<MessageDTO> getMessageDtoById (Long id);
 
-    Optional<MessageDTO> getMessageDtoByIdAndWorkspaceId (Long id, Long workspaceId, Boolean isDeleted );
-
     List<Message> getStarredMessagesForUser (Long userId, Boolean isDeleted);
 
     List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);

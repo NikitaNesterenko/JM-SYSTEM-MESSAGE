@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.MessageDAO;
 import jm.dto.MessageDTO;
 import jm.model.Message;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
@@ -61,9 +62,14 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         return Optional.ofNullable(tuple);
     }
 
+    private String getChannelNameByChannelId(@NonNull Number channelId) {
+
+        return (String) entityManager.createNativeQuery("Select c.name FROM channels c WHERE c.id= :channelId")
+                .setParameter("channelId", channelId).getSingleResult();
+    }
+
     @Override
     public Optional<MessageDTO> getMessageDtoById (Long id) {
-
         MessageDTO messageDTO = null;
 
         try {
@@ -79,10 +85,9 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                                                                               "m.bot_id AS \"botId\", " +
                                                                               "m.parent_message_id AS \"parentMessageId\", " +
                                                                               "m.shared_message_id AS \"sharedMessageId\", " +
-                                                                              "m.user_id AS \"userId\", " +
-                                                                              "c.name AS \"channelName\" " +
-                                                                              "FROM messages m, channels c " +
-                                                                              "WHERE m.id=:id AND c.id = m.channel_id")
+                                                                              "m.user_id AS \"userId\" " +
+                                                                              "FROM messages m " +
+                                                                              "WHERE m.id=:id ")
                                               .setParameter("id", id)
                                               .unwrap(NativeQuery.class)
                                               .setResultTransformer(Transformers.aliasToBean(MessageDTO.class))
@@ -90,6 +95,10 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
             messageDTO.setRecipientUserIds(getListRecipientUserIds(id));
 
+            Long channelId = messageDTO.getChannelId();
+            if (channelId != null) {
+                messageDTO.setChannelName(getChannelNameByChannelId(channelId));
+            }
 
             Optional<Tuple> userData = getUserNameAndAvatarUrlByUserId(messageDTO.getUserId());
             if (userData.isPresent()) {
@@ -108,7 +117,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
             }
 
 
-        } catch (IllegalArgumentException e) {
+        } catch (NoResultException e) {
             e.printStackTrace();
         }
         return Optional.ofNullable(messageDTO);
@@ -305,62 +314,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         return list;
     }
 
-    @Override
-    //TODO: использовать в методе getStarredMessagesDTOForUserByWorkspaceId когда будетработать запись workspaceId
-    public Optional<MessageDTO> getMessageDtoByIdAndWorkspaceId (Long id, Long workspaceId, Boolean isDeleted) {
 
-        MessageDTO messageDTO = null;
-
-        try {
-            messageDTO = (MessageDTO) entityManager.createNativeQuery("SELECT " +
-                    "m.id AS \"id\", " +
-                    "m.channel_id AS \"channelId\", " +
-                    "m.content AS \"content\", " +
-                    "m.date_create AS \"dateCreate\", " +
-                    "m.filename AS \"filename\", " +
-                    "m.is_deleted AS \"isDeleted\", " +
-                    "m.voice_message \"voiceMessage\", " +
-                    "m.workspace_id AS \"workspaceId\", " +
-                    "m.bot_id AS \"botId\", " +
-                    "m.parent_message_id AS \"parentMessageId\", " +
-                    "m.shared_message_id AS \"sharedMessageId\", " +
-                    "m.user_id AS \"userId\", " +
-                    "c.name AS \"channelName\" " +
-                    "FROM messages m, channels c " +
-                    "WHERE m.id=:id AND m.workspace_id= :workspaceId AND m.is_deleted= :isDeleted AND c.id = m.channel_id")
-                    .setParameter("id", id).setParameter("workspaceId", workspaceId).setParameter("isDeleted", isDeleted)
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(MessageDTO.class))
-                    .getSingleResult();
-
-            if (messageDTO !=null) {
-                messageDTO.setRecipientUserIds(getListRecipientUserIds(id));
-
-
-                Optional<Tuple> userData = getUserNameAndAvatarUrlByUserId(messageDTO.getUserId());
-                if (userData.isPresent()) {
-                    messageDTO.setUserName((String) userData.get()
-                            .get("userName"));
-                    messageDTO.setUserAvatarUrl((String) userData.get()
-                            .get("userAvatarUrl"));
-                }
-
-                Optional<Tuple> botData = getPluginNameAndBotNickNameByBotId(messageDTO.getBotId());
-                if (botData.isPresent()) {
-                    messageDTO.setPluginName((String) botData.get()
-                            .get("pluginName"));
-                    messageDTO.setBotNickName((String) botData.get()
-                            .get("botNickName"));
-                }
-            }
-
-
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return Optional.ofNullable(messageDTO);
-    }
 
     @Override
     public List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {

@@ -50,11 +50,10 @@ public class DirectMessageRestController {
                     )
             })
     public ResponseEntity<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
-        //TODO ПЕРЕДЕЛАТЬ сразу получать ДТО
-        DirectMessage directMessage = directMessageService.getDirectMessageById(id);
-        logger.info(directMessage.toString());
-        DirectMessageDTO directMessageDTO = directMessageService.getDirectMessageDtoByDirectMessage(directMessage);
-        return new ResponseEntity<>(directMessageDTO, HttpStatus.OK);
+        return directMessageService.getDirectMessageDtoByMessageId(id)
+                .map(directMessageDTO -> new ResponseEntity<>(directMessageDTO, HttpStatus.OK))
+                .orElse(ResponseEntity.badRequest().build());
+
     }
 
     @PostMapping(value = "/create")
