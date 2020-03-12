@@ -32,4 +32,6 @@ public interface UserService {
 
     void removeDirectMessagesForConversationFromUnreadForUser(Long conversationId, Long userId);
 
+    boolean isEmailInThisWorkspace(String email, Long workspaceId);
+
 }

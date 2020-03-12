@@ -27,7 +27,7 @@ public class AvatarTestController {
 
     private void createUser99999() {
         User user99999 = new User();
-        user99999.setName("name_99999");
+        user99999.setUsername("name_99999");
         user99999.setLastName("last-name_99999");
         user99999.setLogin("login_99999");
         user99999.setEmail("mymail_99999@testmail.com");
@@ -38,7 +38,7 @@ public class AvatarTestController {
 
     private void createUser100000() {
         User user100000 = new User();
-        user100000.setName("name_100000");
+        user100000.setUsername("name_100000");
         user100000.setLastName("last-name_100000");
         user100000.setLogin("login_100000");
         user100000.setEmail("mymail_100000@testmail.com");

@@ -27,6 +27,53 @@ public class WorkspaceDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
+    private static class Builder {
+        private WorkspaceDTO workspaceDTO;
+
+        public Builder() {
+            workspaceDTO = new WorkspaceDTO();
+        }
+
+        public Builder setId(Long id) {
+            workspaceDTO.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            workspaceDTO.name = name;
+            return this;
+        }
+
+        public Builder setUserIds(Set<Long> userIds) {
+            workspaceDTO.userIds = userIds;
+            return this;
+        }
+
+        public Builder setChannelIds(Set<Long> channelIds) {
+            workspaceDTO.channelIds = channelIds;
+            return this;
+        }
+
+        public Builder setOwnerId(Long ownerId) {
+            workspaceDTO.ownerId = ownerId;
+            return this;
+        }
+
+        public Builder setIsPrivate(Boolean isPrivate) {
+            workspaceDTO.isPrivate = isPrivate;
+            return this;
+        }
+
+        public Builder setCreatedDate(LocalDateTime createdDate) {
+            workspaceDTO.createdDate = createdDate;
+            return this;
+        }
+
+        public WorkspaceDTO build() {
+            return workspaceDTO;
+        }
+    }
+
     // Constructor for simplify Workspace->WorkspaceDTO conversion.
     // copying simple fields
     public WorkspaceDTO(Workspace workspace) {

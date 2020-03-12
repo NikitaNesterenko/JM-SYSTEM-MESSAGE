@@ -1,8 +1,8 @@
 import {
     ConversationRestPaginationService,
+    DirectMessagesRestController,
     UserRestPaginationService,
-    WorkspaceRestPaginationService,
-    DirectMessagesRestController
+    WorkspaceRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
 
 export class ActiveChatMembers {
@@ -49,7 +49,7 @@ export class ActiveChatMembers {
             <button class="p-channel_sidebar__name_button" data-user_id="${user.id}" conv_id="${conversationId}">
                 <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">${user.online == 1 ? "●" : "○"}</i>
                 <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
-                    <span data-user_id="${user.id}" conv_id="${conversationId}">${user.name}</span>
+                    <span data-user_id="${user.id}" conv_id="${conversationId}">${user.displayName}</span>
                 </span>
             </button>
             <button class="p-channel_sidebar__close cross">

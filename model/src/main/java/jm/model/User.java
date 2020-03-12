@@ -1,9 +1,6 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
 import jm.model.message.DirectMessage;
 import lombok.*;
@@ -46,8 +43,8 @@ public class User {
 //    @Column(name = "member_id", nullable = false, updatable = false)
 //    private String memberId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
@@ -186,16 +183,16 @@ public class User {
     private String userSkype;
 
 
-    public User(String name, String lastName, String login, String email, String password) {
-        this.name = name;
+    public User(String username, String lastName, String login, String email, String password) {
+        this.username = username;
         this.lastName = lastName;
         this.login = login;
         this.email = email;
         this.password = password;
 
     }
-    public User(String name, String lastName, String login, String email, String password,Set<Role> roles) {
-        this.name = name;
+    public User(String username, String lastName, String login, String email, String password, Set<Role> roles) {
+        this.username = username;
         this.lastName = lastName;
         this.login = login;
         this.email = email;
@@ -205,7 +202,7 @@ public class User {
 
     public User(UserDTO userDto) {
         this.id = userDto.getId();
-        this.name = userDto.getName();
+        this.username = userDto.getName();
         this.lastName = userDto.getLastName();
         this.login = userDto.getLogin();
         this.email = userDto.getEmail();
