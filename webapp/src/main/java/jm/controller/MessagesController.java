@@ -30,15 +30,13 @@ public class MessagesController {
     private MessageService messageService;
     private SimpMessageSendingOperations simpMessagingTemplate;
     private ThreadChannelMessageService threadChannelMessageService;
-    private ThreadMessageDtoService threadMessageDtoService;
     private UserService userService;
 
     @Autowired
     public MessagesController(ChannelService channelService, DirectMessageDtoService directMessageDtoService,
                               DirectMessageService directMessageService, MessageDtoService messageDtoService,
                               MessageService messageService, SimpMessageSendingOperations simpMessagingTemplate,
-                              ThreadChannelMessageService threadChannelMessageService,
-                              ThreadMessageDtoService threadMessageDtoService, UserService userService) {
+                              ThreadChannelMessageService threadChannelMessageService, UserService userService) {
         this.channelService = channelService;
         this.directMessageDtoService = directMessageDtoService;
         this.directMessageService = directMessageService;
@@ -46,14 +44,13 @@ public class MessagesController {
         this.messageService = messageService;
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.threadChannelMessageService = threadChannelMessageService;
-        this.threadMessageDtoService = threadMessageDtoService;
         this.userService = userService;
     }
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
         Message message = messageDtoService.toEntity(messageDto);
-        if (message.getId() == null){
+        if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());
             messageService.createMessage(message);
             logger.info("Созданное сообщение: {}", message);
@@ -85,12 +82,11 @@ public class MessagesController {
 
     @MessageMapping("/thread")
     public void threadCreation(ThreadMessageDTO threadMessageDTO) {
-
-        ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
+        ThreadChannelMessage threadChannelMessage = threadChannelMessageService.getEntityFromDTO(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
 
         Long channelId = threadChannelMessage.getParentMessage().getChannelId();
-        threadMessageDTO = threadMessageDtoService.toDto(threadChannelMessage);
+        threadMessageDTO = new ThreadMessageDTO(threadChannelMessage);
 
         logger.info("Созданное сообщение в треде: {}", threadChannelMessage);
         simpMessagingTemplate.convertAndSend("/queue/threads/channel-" + channelId, threadMessageDTO);
@@ -100,7 +96,7 @@ public class MessagesController {
     public void directMessageCreation(DirectMessageDTO directMessageDTO) {
 
         DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-        if (directMessage.getId() == null){
+        if (directMessage.getId() == null) {
             directMessage.setDateCreate(LocalDateTime.now());
             directMessageService.saveDirectMessage(directMessage);
             logger.info("Созданное личное сообщение: {}", directMessage);

@@ -4,7 +4,6 @@ import jm.BotService;
 import jm.SlashCommandService;
 import jm.WorkspaceService;
 import jm.dto.SlashCommandDto;
-import jm.dto.SlashCommandDtoService;
 import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.slf4j.Logger;
@@ -22,17 +21,15 @@ public class SlashCommandRestController {
 
     private final SlashCommandService slashCommandService;
     private final WorkspaceService workspaceService;
-    private final SlashCommandDtoService slashCommandDtoService;
     private BotService botService;
 
 
     public static final Logger logger = LoggerFactory.getLogger(SlashCommand.class);
 
     @Autowired
-    public SlashCommandRestController(SlashCommandService slashCommandService, WorkspaceService workspaceService, SlashCommandDtoService slashCommandDtoService, BotService botService) {
+    public SlashCommandRestController(SlashCommandService slashCommandService, WorkspaceService workspaceService, BotService botService) {
         this.slashCommandService = slashCommandService;
         this.workspaceService = workspaceService;
-        this.slashCommandDtoService = slashCommandDtoService;
         this.botService = botService;
     }
 

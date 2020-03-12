@@ -26,7 +26,7 @@ public class ThreadDTO {
             MessageDTO messageDTO = new MessageDTO(message);
 
             messageDTO.setUserId(user.getId());
-            messageDTO.setUserName(user.getName());
+            messageDTO.setUserName(user.getUsername());
             messageDTO.setUserAvatarUrl(user.getAvatarURL());
             this.id = threadChannel.getId();
             this.message = messageDTO;

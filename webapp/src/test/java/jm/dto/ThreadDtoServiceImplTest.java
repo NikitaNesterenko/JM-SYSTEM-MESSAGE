@@ -1,3 +1,4 @@
+/*
 package jm.dto;
 
 import jm.model.Message;
@@ -38,4 +39,4 @@ public class ThreadDtoServiceImplTest {
     assertEquals("Message 1", threadDTO.getMessage().getContent());
     assertEquals(4L, (long) threadDTO.getId());
   }
-}
+}*/

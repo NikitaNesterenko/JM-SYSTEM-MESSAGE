@@ -44,6 +44,7 @@ public class ThreadMessageDTO {
             this.userId = user.getId();
             this.userName = user.getUsername();
             this.userAvatarUrl = user.getAvatarURL();
+            this.parentMessageId = threadChannelMessage.getParentMessage().getId();
         }
     }
 

@@ -1,7 +1,6 @@
 package jm;
 
 import jm.dto.UserDTO;
-import jm.dto.UserDtoService;
 import jm.model.User;
 
 import java.util.List;

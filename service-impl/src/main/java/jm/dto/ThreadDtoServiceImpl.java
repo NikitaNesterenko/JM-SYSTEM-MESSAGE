@@ -1,3 +1,4 @@
+/*
 package jm.dto;
 
 
@@ -29,3 +30,4 @@ public class ThreadDtoServiceImpl implements ThreadDtoService {
         return null;
     }
 }
+*/

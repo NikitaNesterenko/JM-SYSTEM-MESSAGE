@@ -1,3 +1,4 @@
+/*
 package jm.dto;
 
 import jm.BotService;
@@ -19,6 +20,7 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService {
 
     @Override
     public SlashCommandDto toDto(SlashCommand slashCommand) {
+*/
 /*        if (slashCommand == null) {
             return null;
         }
@@ -29,13 +31,15 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService {
         if (bot != null) {
             dto.setBotId(bot.getId());
         }
-         return dto;*/
+         return dto;*//*
+
         return null;
     }
 
     @Override
     public SlashCommand toEntity(SlashCommandDto slashCommandDto) {
- /*       if (slashCommandDto == null){
+ */
+/*       if (slashCommandDto == null){
             return null;
         }
 
@@ -47,7 +51,9 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService {
             sc.setBot(bot);
         }
 
-        return sc;*/
+        return sc;*//*
+
         return null;
     }
 }
+*/

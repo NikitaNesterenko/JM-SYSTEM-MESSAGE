@@ -34,7 +34,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByName(String name) {
         try {
-            return (User) entityManager.createQuery("from User where name  = :name").setParameter("name", name)
+            return (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -68,16 +68,35 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public List<UserDTO> getUsersInWorkspace(Long id) {
-        String query = "SELECT u.id, u.name, u.last_name, u.avatar_url, u.display_name " +
-                "FROM workspace_user_role wur " +
-                "INNER JOIN users u ON wur.user_id = u.id " +
-                "INNER JOIN workspaces ws ON wur.workspace_id = ws.id " +
-                "WHERE (ws.id = :workspace) " +
-                "GROUP BY u.id";
-
-        return entityManager.createNativeQuery(query, "UserDTOMapping")
-                .setParameter("workspace", id)
-                .getResultList();
+        List<UserDTO> usersDTO = null;
+        try {
+            usersDTO = (List<UserDTO>) entityManager
+                    .createNativeQuery("SELECT " +
+                            "u.id AS \"id\", " +
+                            "u.username AS \"name\", " +
+                            "u.last_name AS \"lastName\", " +
+                            "u.login AS \"login\", " +
+                            "u.email AS \"email\", " +
+                            "u.avatar_url AS \"avatarURL\", " +
+                            "u.title AS \"title\", " +
+                            "u.display_name AS \"displayName\", " +
+                            "u.phone_number AS \"phoneNumber\", " +
+                            "u.timezone AS \"timeZone\", " +
+                            "u.is_online AS \"online\", " +
+                            "u.skype AS \"userSkype\" " +
+                            "FROM workspaces_users wu " +
+                            "JOIN users u ON wu.user_id = u.id " +
+                            "WHERE wu.workspace_id = :id " +
+                            "GROUP BY u.id")
+                    .setParameter("id", id)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
+                    .getResultList();
+            usersDTO.forEach(this::setCollections);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        return usersDTO;
     }
 
     @Override
@@ -112,7 +131,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
-                            "u.name AS \"name\", " +
+                            "u.username AS \"name\", " +
                             "u.last_name AS \"lastName\", " +
                             "u.login AS \"login\", " +
                             "u.email AS \"email\", " +
@@ -141,7 +160,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
-                            "u.name AS \"name\", " +
+                            "u.username AS \"name\", " +
                             "u.last_name AS \"lastName\", " +
                             "u.login AS \"login\", " +
                             "u.email AS \"email\", " +
@@ -171,7 +190,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
-                            "u.name AS \"name\", " +
+                            "u.username AS \"name\", " +
                             "u.last_name AS \"lastName\", " +
                             "u.login AS \"login\", " +
                             "u.email AS \"email\", " +
@@ -201,7 +220,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
-                            "u.name AS \"name\", " +
+                            "u.username AS \"name\", " +
                             "u.last_name AS \"lastName\", " +
                             "u.login AS \"login\", " +
                             "u.email AS \"email\", " +
@@ -232,7 +251,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
-                            "u.name AS \"name\", " +
+                            "u.username AS \"name\", " +
                             "u.last_name AS \"lastName\", " +
                             "u.login AS \"login\", " +
                             "u.email AS \"email\", " +

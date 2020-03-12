@@ -2,7 +2,6 @@ package jm.component;
 
 import jm.UserService;
 import jm.dto.UserDTO;
-import jm.dto.UserDtoService;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,19 +13,16 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 
-
 @Component
 public class WebSocketEventListener {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
     private UserService userService;
     private SimpMessageSendingOperations messagingTemplate;
-    private UserDtoService userDtoService;
 
     @Autowired
-    public WebSocketEventListener(UserService userService, SimpMessageSendingOperations messagingTemplate, UserDtoService userDtoService) {
+    public WebSocketEventListener(UserService userService, SimpMessageSendingOperations messagingTemplate) {
         this.userService = userService;
         this.messagingTemplate = messagingTemplate;
-        this.userDtoService = userDtoService;
     }
 
     @EventListener

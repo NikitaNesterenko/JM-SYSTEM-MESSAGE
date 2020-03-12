@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
-import jm.dto.UserDtoService;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +26,13 @@ import java.util.Optional;
 public class UserRestController {
 
     private UserService userService;
-    private UserDtoService userDtoService;
     private MailService mailService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             UserRestController.class);
 
-    UserRestController(UserService userService, UserDtoService userDtoService, MailService mailService) {
+    UserRestController(UserService userService, MailService mailService) {
         this.userService = userService;
-        this.userDtoService = userDtoService;
         this.mailService = mailService;
     }
 
@@ -53,14 +50,6 @@ public class UserRestController {
             })
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
-        /*List<User> users = userService.getAllUsers();
-        for (User user : users) {
-            logger.info(user.toString());
-        }
-        List<UserDTO> userDTOList = userDtoService.toDto(users);
-        return new ResponseEntity<>(userDTOList, HttpStatus.OK);*/
-        /*return userService.getAllUsersDTO().map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));*/
         return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -97,9 +86,6 @@ public class UserRestController {
             })
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Пользователь с id = {}", id);
-        /*User user = userService.getUserById(id);
-        logger.info(user.toString());
-        UserDTO userDTO = userDtoService.toDto(user);*/
         return userService.getUserDTOById(id).map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -155,14 +141,6 @@ public class UserRestController {
             })
     public ResponseEntity<List<UserDTO>> getAllUsersInThisChannel(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
-        /*logger.info("Список пользователей канала с id = {}", id);
-        List<User> users = userService.getAllUsersInThisChannel(id);
-        for (User user : users) {
-            logger.info(user.toString());
-        }
-        List<UserDTO> userDTOList = userDtoService.toDto(users);
-        return ResponseEntity.ok(userDTOList);*/
-
         return userService.getAllUsersDTOInThisChannel(id).map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
@@ -180,10 +158,6 @@ public class UserRestController {
                     )
             })
     public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
-        /*User user = userService.getUserByLogin(principal.getName());
-        logger.info("Залогированный пользователь : {}", user);
-        UserDTO userDTO = userDtoService.toDto(user);
-        return ResponseEntity.ok(userDTO);*/
         Optional<UserDTO> userDTO = userService.getUserDTOByLogin(principal.getName());
         return userDTO.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }

@@ -10,7 +10,6 @@ import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
 import jm.dto.DirectMessageDtoService;
-import jm.dto.UserDtoService;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
@@ -34,15 +33,13 @@ public class DirectMessageRestController {
     private DirectMessageService directMessageService;
     private DirectMessageDtoService directMessageDtoService;
     private UserService userService;
-    private UserDtoService userDtoService;
 
     @Autowired
     public void setDirectMessageService(DirectMessageService directMessageService, DirectMessageDtoService directMessageDtoService,
-                                        UserService userService, UserDtoService userDtoService) {
+                                        UserService userService) {
         this.directMessageService = directMessageService;
         this.directMessageDtoService = directMessageDtoService;
         this.userService = userService;
-        this.userDtoService = userDtoService;
     }
 
     @GetMapping(value = "/{id}")
@@ -125,7 +122,7 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
-    public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long convId, @PathVariable Long usrId) {
+    public ResponseEntity<?> removeChannelMessageFromUnreadForUser(@PathVariable Long convId, @PathVariable Long usrId) {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
         return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));

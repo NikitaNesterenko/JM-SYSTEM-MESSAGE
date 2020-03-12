@@ -10,7 +10,6 @@ import jm.MessageService;
 import jm.UserService;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
-import jm.dto.UserDtoService;
 import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -36,14 +35,12 @@ public class MessageRestController {
     private final MessageDtoService messageDtoService;
     private final ChannelService channelService;
     private final UserService userService;
-    private final UserDtoService userDtoService;
 
-    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService, ChannelService channelService, UserService userService, UserDtoService userDtoService) {
+    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService, ChannelService channelService, UserService userService) {
         this.messageService = messageService;
         this.messageDtoService = messageDtoService;
         this.channelService = channelService;
         this.userService = userService;
-        this.userDtoService = userDtoService;
     }
 
     // DTO compliant
@@ -203,7 +200,7 @@ public class MessageRestController {
     }
 
     @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
-    public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long chnId, @PathVariable Long usrId) {
+    public ResponseEntity<?> removeChannelMessageFromUnreadForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
         userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
         return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));

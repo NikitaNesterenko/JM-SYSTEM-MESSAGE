@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
-import jm.dto.*;
+import jm.dto.MessageDTO;
+import jm.dto.MessageDtoService;
+import jm.dto.ThreadDTO;
+import jm.dto.ThreadMessageDTO;
 import jm.model.Message;
 import jm.model.ThreadChannel;
-import jm.model.message.ThreadChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +34,6 @@ public class ThreadChannelRestController {
     private ThreadChannelService threadChannelService;
     private ThreadChannelMessageService threadChannelMessageService;
     private MessageDtoService messageDtoService;
-    private ThreadMessageDtoService threadMessageDtoService;
-    private ThreadDtoService threadDtoService;
-
-    @Autowired
-    public void setThreadDtoService(ThreadDtoService threadDtoService) {
-        this.threadDtoService = threadDtoService;
-    }
-
-    @Autowired
-    public void setThreadMessageDtoService(ThreadMessageDtoService threadMessageDtoService) {
-        this.threadMessageDtoService = threadMessageDtoService;
-    }
 
     @Autowired
     public void setThreadService(ThreadChannelService threadChannelService) {
