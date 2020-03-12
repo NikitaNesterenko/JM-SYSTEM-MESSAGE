@@ -29,15 +29,16 @@ public class ChannelServiceImplTest {
     private User user1 = new User("John", "Doe", "login_1", "john.doe@testmail.com", "pass_1");
     List<Channel> channels = Arrays.asList(channel1, channel2);
 
-    public ChannelServiceImplTest() {
-        MockitoAnnotations.initMocks(this);
-        this.channelService = new ChannelServiceImpl();
-        channelService.setChannelDAO(channelDAO);
-
-        channel1.setId(1L);
-        channel2.setId(2L);
-        user1.setId(1L);
-    }
+    // TODO: ИСПРАВИТЬ
+//    public ChannelServiceImplTest() {
+//        MockitoAnnotations.initMocks(this);
+//        this.channelService = new ChannelServiceImpl();
+//        channelService.setChannelDAO(channelDAO);
+//
+//        channel1.setId(1L);
+//        channel2.setId(2L);
+//        user1.setId(1L);
+//    }
 
     @Test
     public void gelAllChannelsInList() {

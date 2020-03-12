@@ -136,11 +136,10 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create channel")
             })
     public ResponseEntity<ChannelDTO> createChannel (Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-        //TODO: Удалить лишнее
+
         Channel channel = channelService.getChannelByName(channelDTO.getName());
         if (channel == null) {
-            // TODO: ПЕРЕДЕЛАТЬ
-            channel = channelDTOService.toEntity(channelDTO);
+            channel = channelService.getChannelByChannelDto(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
             Workspace workspace = (Workspace) request.getSession(false)
                                                       .getAttribute("WorkspaceID");
@@ -183,7 +182,7 @@ public class ChannelRestController {
             if (existingChannel == null) {
                 logger.warn("Channel не найден");
             } else {
-                Channel channel = channelDTOService.toEntity(channelDTO);
+                Channel channel = channelService.getChannelByChannelDto(channelDTO);
                 channelService.updateChannel(channel);
                 logger.info("Обновлённый channel: {}", channel);
             }

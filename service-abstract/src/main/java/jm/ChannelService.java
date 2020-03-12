@@ -2,6 +2,7 @@ package jm;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,5 +39,7 @@ public interface ChannelService {
     List<Channel> getChannelsByUserId (Long userId);
 
     List<ChannelDTO> getChannelDtoListByUserId (Long userId);
+
+    Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO);
 
 }

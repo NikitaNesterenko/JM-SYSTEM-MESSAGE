@@ -13,6 +13,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -99,4 +100,15 @@ public class Channel {
         this.workspace = workspace;
     }
 
+
+    public Channel (ChannelDTO channelDTO) {
+        this.id = channelDTO.getId();
+        this.name = channelDTO.getName();
+        this.isPrivate = channelDTO.getIsPrivate();
+        this.archived = false;
+        this.createdDate = channelDTO.getCreatedDate();
+        Optional.ofNullable(channelDTO.getTopic()).ifPresent(topic -> this.topic = topic);
+        this.isApp = channelDTO.getIsApp();
+
+    }
 }

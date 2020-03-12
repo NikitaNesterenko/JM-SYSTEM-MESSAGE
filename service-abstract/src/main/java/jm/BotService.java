@@ -3,6 +3,7 @@ package jm;
 import jm.dto.BotDTO;
 import jm.model.Bot;
 import jm.model.Channel;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,4 +30,6 @@ public interface BotService {
     Set<Channel> getChannels (Bot bot);
 
     Bot getBotBySlashCommandId (Long id);
+
+    Bot getBotByBotDto(@NonNull BotDTO botDTO);
 }

@@ -30,7 +30,6 @@ public class BotDtoServiceImpl implements BotDtoService {
 
     @Override
     public BotDTO toDto(Bot bot) {
-        // botDtoService.toDto
         if (bot == null) {
             return null;
         }

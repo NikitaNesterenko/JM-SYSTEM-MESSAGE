@@ -1,24 +1,37 @@
 package jm;
 
+import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
+import jm.api.dao.UserDAO;
+import jm.api.dao.WorkspaceDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ChannelServiceImpl implements ChannelService {
 
-    private ChannelDAO channelDAO;
+    private final ChannelDAO channelDAO;
 
-    @Autowired
-    public void setChannelDAO (ChannelDAO channelDAO) {
+    private final UserDAO userDAO;
+
+    private final BotDAO botDAO;
+
+    private final WorkspaceDAO workspaceDAO;
+
+    public ChannelServiceImpl(ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO) {
         this.channelDAO = channelDAO;
+        this.userDAO = userDAO;
+        this.botDAO = botDAO;
+        this.workspaceDAO = workspaceDAO;
     }
 
     @Override
@@ -99,6 +112,33 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public List<ChannelDTO> getChannelDtoListByUserId (Long userId) {
         return channelDAO.getChannelDtoListByUserId(userId);
+    }
+
+    @Override
+    public Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO) {
+
+        Channel channel = new Channel(channelDTO);
+
+        channel.setUsers(
+                Optional.ofNullable(channelDTO.getUserIds())
+                        .map(userIds -> userIds.stream().map(userDAO::getById).collect(Collectors.toSet()))
+                        .orElse(new HashSet<>())
+        );
+
+        channel.setBots(
+                Optional.ofNullable(channelDTO.getBotIds())
+                        .map(botIds -> botIds.stream().map(botDAO::getById).collect(Collectors.toSet()))
+                        .orElse(new HashSet<>())
+
+        );
+
+        Optional.ofNullable(channelDTO.getWorkspaceId()).ifPresent(workspaceID -> {
+            channel.setWorkspace(workspaceDAO.getById(workspaceID));
+        });
+
+        Optional.ofNullable(channelDTO.getOwnerId()).ifPresent(ownerId -> channel.setUser(userDAO.getById(ownerId)));
+
+        return channel;
     }
 }
 

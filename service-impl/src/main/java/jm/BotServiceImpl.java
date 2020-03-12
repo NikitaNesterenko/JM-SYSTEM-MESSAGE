@@ -1,18 +1,22 @@
 package jm;
 
 import jm.api.dao.BotDAO;
+import jm.api.dao.ChannelDAO;
+import jm.api.dao.SlashCommandDao;
+import jm.api.dao.WorkspaceDAO;
 import jm.dto.BotDTO;
 import jm.model.Bot;
 import jm.model.Channel;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.security.cert.CollectionCertStoreParameters;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -20,10 +24,17 @@ import java.util.Set;
 public class BotServiceImpl implements BotService {
     private static final Logger logger = LoggerFactory.getLogger(BotServiceImpl.class);
 
-    private BotDAO botDAO;
+    private final BotDAO botDAO;
+    private final WorkspaceDAO workspaceDAO;
+    private final ChannelDAO channelDAO;
+    private final SlashCommandDao slashCommandDao;
 
-    @Autowired
-    public void setBotDAO(BotDAO botDAO) { this.botDAO = botDAO; }
+    public BotServiceImpl(BotDAO botDAO, WorkspaceDAO workspaceDAO, ChannelDAO channelDAO, SlashCommandDao slashCommandDao) {
+        this.botDAO = botDAO;
+        this.workspaceDAO = workspaceDAO;
+        this.channelDAO = channelDAO;
+        this.slashCommandDao = slashCommandDao;
+    }
 
     @Override
     public List<Bot> gelAllBots() { return botDAO.getAll(); }
@@ -71,4 +82,29 @@ public class BotServiceImpl implements BotService {
         return botDAO.getBotByCommandId(id);
     }
 
+    @Override
+    public Bot getBotByBotDto(@NonNull BotDTO botDTO) {
+        Bot bot = new Bot(botDTO);
+
+        bot.setWorkspaces(
+                Optional.ofNullable(botDTO.getWorkspacesId())
+                        .map(workspacesId -> workspacesId.stream().map(workspaceDAO::getById).collect(Collectors.toSet()))
+                        .orElse(new HashSet<>())
+        );
+
+        bot.setCommands(
+                Optional.ofNullable(botDTO.getSlashCommandsIds())
+                        .map(slashCommandsIds -> slashCommandsIds.stream().map(slashCommandDao::getById).collect(Collectors.toSet()))
+                        .orElse(new HashSet<>())
+        );
+
+        bot.setChannels(
+                Optional.ofNullable(botDTO.getChannelIds())
+                        .map(channelIds -> channelIds.stream().map(channelDAO::getById).collect(Collectors.toSet()))
+                        .orElse(new HashSet<>())
+        );
+
+
+        return bot;
+    }
 }

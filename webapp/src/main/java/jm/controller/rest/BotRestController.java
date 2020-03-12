@@ -104,7 +104,7 @@ public class BotRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to create bot")
             })
     public ResponseEntity createBot (@RequestBody BotDTO botDto) {
-        Bot bot = botDtoService.toEntity(botDto);
+        Bot bot = botService.getBotByBotDto(botDto);
         try {
             botService.createBot(bot);
             logger.info("Cозданный bot: {}", bot);
@@ -129,16 +129,16 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: bot updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
-    public ResponseEntity updateBot (@RequestBody BotDTO botDto) {
-        Bot bot = botDtoService.toEntity(botDto);
+    public ResponseEntity<Object> updateBot (@RequestBody BotDTO botDto) {
+        Bot bot = botService.getBotByBotDto(botDto);
         Bot existingBot = botService.getBotById(bot.getId());
         if (existingBot == null) {
             logger.warn("Бот не найден");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         } else {
             botService.updateBot(bot);
             logger.info("Обновлнный бот: {}", bot);
-            return new ResponseEntity(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
     }
 
