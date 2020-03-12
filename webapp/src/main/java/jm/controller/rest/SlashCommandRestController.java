@@ -3,7 +3,7 @@ package jm.controller.rest;
 import jm.BotService;
 import jm.SlashCommandService;
 import jm.WorkspaceService;
-import jm.dto.SlashCommandDTO;
+import jm.dto.SlashCommandDto;
 import jm.dto.SlashCommandDtoService;
 import jm.model.Bot;
 import jm.model.SlashCommand;
@@ -44,16 +44,16 @@ public class SlashCommandRestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity createSlashCommand(@RequestBody SlashCommandDTO slashCommandDto) {
+    public ResponseEntity createSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
         slashCommandService.createSlashCommand(sc);
         logger.info("Created SlashCommand: {}", sc);
-        return new ResponseEntity(new SlashCommandDTO(sc), HttpStatus.CREATED);
+        return new ResponseEntity(new SlashCommandDto(sc), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/update")
-    public ResponseEntity updateSlashCommand(@RequestBody SlashCommandDTO slashCommandDto) {
+    public ResponseEntity updateSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
         SlashCommand existCommand = slashCommandService.getSlashCommandById(sc.getId());
         if (existCommand == null) {
@@ -82,7 +82,7 @@ public class SlashCommandRestController {
     }
 
     @PostMapping("/bot/{id}")
-    public ResponseEntity<?> addSlashCommandToBot(@PathVariable Long id, SlashCommandDTO slashCommandDto) {
+    public ResponseEntity<?> addSlashCommandToBot(@PathVariable Long id, SlashCommandDto slashCommandDto) {
         Bot bot = botService.getBotById(id);
         if (bot == null) {
             logger.warn("Bot with id = {} not found", id);
@@ -100,7 +100,7 @@ public class SlashCommandRestController {
             bot.getCommands().add(sc);
             botService.updateBot(bot);
             logger.info("Slash command created");
-            return new ResponseEntity<>(new SlashCommandDTO(sc), HttpStatus.CREATED);
+            return new ResponseEntity<>(new SlashCommandDto(sc), HttpStatus.CREATED);
         }
     }
 

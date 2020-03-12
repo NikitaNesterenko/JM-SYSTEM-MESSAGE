@@ -2,7 +2,7 @@ package jm.controller.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jm.CommandsBotService;
-import jm.dto.SlashCommandDTO;
+import jm.dto.SlashCommandDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SlackBotRestController {
 
     @PostMapping("/app/bot/slackbot")
     // обработка команд для бота, которые реализованы не через вебсокет (их на данный момент нет).
-    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDTO command) {
+    public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) {
         String currentCommand = command.getCommand();
         ResponseEntity<?> resp = null;
 
@@ -35,7 +35,7 @@ public class SlackBotRestController {
 
     @MessageMapping("/bot/*") //обработка команд, реализованных на вебсокете
     @SendTo("/topic/slackbot")
-    public String getWsCommand(@RequestBody SlashCommandDTO command) throws JsonProcessingException {
+    public String getWsCommand(@RequestBody SlashCommandDto command) throws JsonProcessingException {
         return commandsBotService.getWsCommand(command);
     }
 

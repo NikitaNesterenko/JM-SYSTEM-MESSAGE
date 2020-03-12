@@ -1,7 +1,7 @@
 package jm.model;
 
 
-import jm.dto.SlashCommandDTO;
+import jm.dto.SlashCommandDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -60,7 +60,7 @@ public class SlashCommand {
         this.hints = hints;
     }
 
-    public SlashCommand(SlashCommandDTO dto) {
+    public SlashCommand(SlashCommandDto dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.description = dto.getDescription();

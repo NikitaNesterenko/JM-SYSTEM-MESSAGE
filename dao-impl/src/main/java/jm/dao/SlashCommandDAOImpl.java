@@ -1,7 +1,7 @@
 package jm.dao;
 
 import jm.api.dao.SlashCommandDao;
-import jm.dto.SlashCommandDTO;
+import jm.dto.SlashCommandDto;
 import jm.model.SlashCommand;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
@@ -57,10 +57,10 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     }
 
     @Override
-    public Optional<List<SlashCommandDTO>> getAllSlashCommandDTO() {
-        List<SlashCommandDTO> slashCommandsDTO = null;
+    public Optional<List<SlashCommandDto>> getAllSlashCommandDTO() {
+        List<SlashCommandDto> slashCommandsDTO = null;
         try {
-            slashCommandsDTO = (List<SlashCommandDTO>) entityManager.createNativeQuery("SELECT " +
+            slashCommandsDTO = (List<SlashCommandDto>) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
                     "sc.url AS \"url\", " +
@@ -70,7 +70,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     "sc.type_id AS \"typeId\" " +
                     "FROM slash_commands sc")
                     .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
+                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList();
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -79,10 +79,10 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     }
 
     @Override
-    public Optional<SlashCommandDTO> getSlashCommandDTOById(Long id) {
-        SlashCommandDTO slashCommandDTO = null;
+    public Optional<SlashCommandDto> getSlashCommandDTOById(Long id) {
+        SlashCommandDto slashCommandDTO = null;
         try {
-            slashCommandDTO = (SlashCommandDTO) entityManager.createNativeQuery("SELECT " +
+            slashCommandDTO = (SlashCommandDto) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
                     "sc.url AS \"url\", " +
@@ -94,7 +94,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     "WHERE sc.id = :id")
                     .setParameter("id", id)
                     .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
+                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList().get(0);
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -103,10 +103,10 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     }
 
     @Override
-    public Optional<SlashCommandDTO> getSlashCommandDTOByName(String name) {
-        SlashCommandDTO slashCommandDTO = null;
+    public Optional<SlashCommandDto> getSlashCommandDTOByName(String name) {
+        SlashCommandDto slashCommandDTO = null;
         try {
-            slashCommandDTO = (SlashCommandDTO) entityManager.createNativeQuery("SELECT " +
+            slashCommandDTO = (SlashCommandDto) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
                     "sc.url AS \"url\", " +
@@ -118,7 +118,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     "WHERE sc.name = :name")
                     .setParameter("name", name)
                     .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
+                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList().get(0);
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -127,10 +127,10 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     }
 
     @Override
-    public Optional<List<SlashCommandDTO>> getSlashCommandDTOByBotId(Long id) {
-        List<SlashCommandDTO> slashCommandsDTO = null;
+    public Optional<List<SlashCommandDto>> getSlashCommandDTOByBotId(Long id) {
+        List<SlashCommandDto> slashCommandsDTO = null;
         try {
-            slashCommandsDTO = (List<SlashCommandDTO>) entityManager.createNativeQuery("SELECT " +
+            slashCommandsDTO = (List<SlashCommandDto>) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
                     "sc.url AS \"url\", " +
@@ -142,7 +142,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     "WHERE sc.bot_id = :id")
                     .setParameter("id", id)
                     .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
+                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList();
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -151,10 +151,10 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     }
 
     @Override
-    public Optional<List<SlashCommandDTO>> getSlashCommandDTOByWorkspaceId(Long id) {
-        List<SlashCommandDTO> slashCommandsDTO = null;
+    public Optional<List<SlashCommandDto>> getSlashCommandDTOByWorkspaceId(Long id) {
+        List<SlashCommandDto> slashCommandsDTO = null;
         try {
-            slashCommandsDTO = (List<SlashCommandDTO>) entityManager.createNativeQuery("SELECT " +
+            slashCommandsDTO = (List<SlashCommandDto>) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
                     "sc.url AS \"url\", " +
@@ -167,7 +167,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     "WHERE wb.workspace_id = :id")
                     .setParameter("id", id)
                     .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDTO.class))
+                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList();
         } catch (IllegalStateException e) {
             e.printStackTrace();

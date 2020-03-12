@@ -1,6 +1,6 @@
 package jm;
 
-import jm.dto.SlashCommandDTO;
+import jm.dto.SlashCommandDto;
 import jm.model.SlashCommand;
 
 import java.util.List;
@@ -24,15 +24,15 @@ public interface SlashCommandService {
 
     List<SlashCommand> getSlashCommandsByWorkspaceId(Long id); //+
 
-    Optional<List<SlashCommandDTO>> getAllSlashCommandDTO();
+    Optional<List<SlashCommandDto>> getAllSlashCommandDTO();
 
-    Optional<SlashCommandDTO> getSlashCommandDTOById(Long id);
+    Optional<SlashCommandDto> getSlashCommandDTOById(Long id);
 
-    Optional<SlashCommandDTO> getSlashCommandDTOByName(String name);
+    Optional<SlashCommandDto> getSlashCommandDTOByName(String name);
 
-    Optional<List<SlashCommandDTO>> getSlashCommandDTOByBotId(Long id);
+    Optional<List<SlashCommandDto>> getSlashCommandDTOByBotId(Long id);
 
-    Optional<List<SlashCommandDTO>> getSlashCommandDTOByWorkspaceId(Long id);
+    Optional<List<SlashCommandDto>> getSlashCommandDTOByWorkspaceId(Long id);
 
-    SlashCommand getEntityFromDTO(SlashCommandDTO slashCommandDTO);
+    SlashCommand getEntityFromDTO(SlashCommandDto slashCommandDTO);
 }

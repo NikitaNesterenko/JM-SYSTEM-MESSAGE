@@ -18,7 +18,7 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService {
     }
 
     @Override
-    public SlashCommandDTO toDto(SlashCommand slashCommand) {
+    public SlashCommandDto toDto(SlashCommand slashCommand) {
 /*        if (slashCommand == null) {
             return null;
         }
@@ -34,7 +34,7 @@ public class SlashCommandDtoServiceImpl implements SlashCommandDtoService {
     }
 
     @Override
-    public SlashCommand toEntity(SlashCommandDTO slashCommandDto) {
+    public SlashCommand toEntity(SlashCommandDto slashCommandDto) {
  /*       if (slashCommandDto == null){
             return null;
         }

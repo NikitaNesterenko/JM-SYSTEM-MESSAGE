@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SlashCommandDTO {
+public class SlashCommandDto {
     private Long id;
     private String name;
     private String url;
@@ -23,7 +23,7 @@ public class SlashCommandDTO {
     private Long botId;
     private Long typeId;
 
-    public SlashCommandDTO(SlashCommand sc) {
+    public SlashCommandDto(SlashCommand sc) {
         if (sc != null) {
             this.id = sc.getId();
                 this.name = sc.getName();
