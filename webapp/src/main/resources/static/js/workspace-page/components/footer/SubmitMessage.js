@@ -1,15 +1,15 @@
 import {
-    WorkspaceRestPaginationService,
-    UserRestPaginationService,
     ChannelRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
     SlashCommandRestPaginationService,
-    StorageService
+    StorageService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
 } from '/js/rest/entities-rest-pagination.js'
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
-import {clearUsers, users} from "/js/searchUsersOnInputMessages.js";
+import {users} from "/js/searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -50,12 +50,12 @@ export class SubmitMessage {
                     return
                 }
 
-                const channel_name = sessionStorage.getItem("channelName");
+                const channel_id = sessionStorage.getItem("channelId");
                 const channel_name2 = sessionStorage.getItem("channelname");
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
-                if (channel_name !== '0') {
-                    this.sendChannelMessage(channel_name);
+                if (channel_id !== '0') {
+                    this.sendChannelMessage(channel_id);
                 }
 
                 if (conversation_id !== '0') {
@@ -121,13 +121,13 @@ export class SubmitMessage {
         return null;
     }
 
-    async sendChannelMessage(channel_name) {
-        await this.setChannel(channel_name);
+    async sendChannelMessage(channel_id) {
+        await this.setChannel(channel_id);
         await this.setUser();
 
         let entity = {
             id: null,
-            channelId: this.channel.id,
+            channelId: channel_id,
             userId: this.user.id,
             userName: this.user.name,
             content: this.getMessageInput(),
@@ -135,23 +135,14 @@ export class SubmitMessage {
             filename: await this.getFiles(),
             voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
-            // workspaceId: this.channel.workspaceId
-            workspaceId: null
+            workspaceId: this.channel.workspaceId
     };
 
-        if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
-            this.message_service.create(entity).then(
-                message => sendName(message)
-            );
+        if (window.hasSlashCommand) {
+            await this.sendSlashCommand(entity);
+        } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
+            sendName(entity);
         }
-
-        // if (window.hasSlashCommand) {
-        //     await this.sendSlashCommand(entity);
-        // } else {
-        //     await this.message_service.create(entity).then(
-        //         msg_id => sendName(msg_id)
-        //     );
-        // }
         // clearUsers();
     }
 
@@ -164,15 +155,11 @@ export class SubmitMessage {
                         channelId: entity.channelId,
                         userId: entity.userId,
                         command: entity.content,
-                        name: inputCommand
+                        name: inputCommand,
+                        botId: command.botId,
+                        url: command.url
                     };
-                    if (command.botId == 1) {
-                        //если это команда от слакБота, то отправляем через вебсокет.
-                        sendSlackBotCommand(sendCommand);
-                    } else {
-                        //иначе просто отправляем пост запрос по урлу
-                        this.slashCommandService.sendSlashCommand(command.url, sendCommand);
-                    }
+                    sendSlackBotCommand(sendCommand);
                 }
             });
         }
@@ -193,11 +180,7 @@ export class SubmitMessage {
             workspaceId: workspaceId
         };
 
-        this.direct_message_service.create(entity).then(
-            msg_id => {
-                sendDM(msg_id);
-            }
-        );
+        sendDM(entity);
     }
 
     async setUser() {
@@ -238,8 +221,7 @@ export class SubmitMessage {
             ownerId: this.channel.ownerId,
             isPrivate: this.channel.isPrivate,
             createdDate: this.channel.createdDate,
-            // workspaceId: this.channel.workspaceId
-            workspaceId: null
+            workspaceId: this.channel.workspaceId
         };
 
         await this.channel_service.update(entity).then(() => {

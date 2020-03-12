@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add bot</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script th:src="@{/js/admin-page/components/editSlashCommands.js}" type="module"></script>
+        <style>
+            .div{
+                width: 50%;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="edit-command-for-custom-bot" class="modal">
+            <div class="modal-content div">
+                <h2 id="theme-form-edit-command"></h2>
+                <input id="bot-id" hidden="hidden" th:value="${bot.id}">
+                <input id="command-id" hidden="hidden">
+                <label>Command name: </label><input id="name-for-bot" placeholder="Command name"><br>
+                <label>Type command: </label>
+                    <select id="type-command-id">
+                        <option value=""> -- </option>
+                        <option th:each="type : ${types}" th:text="${type.name}" th:value="${type.id}"></option>
+                    </select><br>
+                <label>Description: <span id="prompt-for-command"></span></label><input id="description-for-custom-bot" placeholder="Description"><br>
+                <label>Hint: </label><input id="hint-for-custom-bot" placeholder="Hint"><br>
+                <button id="save-command-for-bot">Save</button>
+            </div>
+        </div>
+        <div class="div">
+            <h2>Slash Commands</h2>
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr th:each="command : ${commands}">
+                        <td th:text="${command.name}"></td>
+                        <td th:text="${command.description}"></td>
+                        <td>
+                            <button th:id="${command.id}" class="btn-edit-command">edit</button>
+                            <button th:id="${command.id}" class="btn-delete-command">delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button id="add-command">Create New Command</button>
+        </div>
+    </body>
+</html>

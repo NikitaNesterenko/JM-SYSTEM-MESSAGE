@@ -1,12 +1,15 @@
 package jm;
 
-import jm.dto.ChannelDTO;
 import jm.api.dao.ChannelDAO;
+import jm.dao.ChannelDAOImpl;
+import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -14,6 +17,8 @@ import java.util.List;
 public class ChannelServiceImpl implements ChannelService {
 
     private ChannelDAO channelDAO;
+    private ChannelDTO channelDTO;
+    private ChannelDAOImpl channelDaoImpl;
 
     @Autowired
     public void setChannelDAO(ChannelDAO channelDAO) {
@@ -21,8 +26,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Channel> gelAllChannels() {
-        return channelDAO.getAll();
+    public List<ChannelDTO> getAllChannels() {
+       return channelDAO.getAllChannel();
     }
 
     @Override
@@ -68,5 +73,30 @@ public class ChannelServiceImpl implements ChannelService {
         return channelDAO.getChannelsByUserId(userId);
     }
 
+    @Override
+    public String getTopicChannelByChannelId(Long id) {
+        return channelDAO.getTopicChannelByChannelId(id);
+    }
+
+    @Override
+    public Long getWorkspaceIdByChannelId(Long channelId) {
+        return channelDAO.getWorkspaceIdByChannelId(channelId);
+    }
+
+    @Override
+    public List<ChannelDTO> getAllArchiveChannels() {
+        return channelDAO.getArchivedChannels();
+    }
+
+    @Override
+    public List<ChannelDTO> getPrivateChannels() {
+        return channelDAO.getPrivateChannels();
+    }
+
+    @Override
+    public void unzipChannel(Channel channel) {
+        channel.setArchived(false);
+        channelDAO.unzipChannel(channel.getId());
+    }
 }
 

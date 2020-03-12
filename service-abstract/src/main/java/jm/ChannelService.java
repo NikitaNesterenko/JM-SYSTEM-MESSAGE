@@ -6,7 +6,7 @@ import jm.model.Channel;
 import java.util.List;
 
 public interface ChannelService {
-    List<Channel> gelAllChannels();
+    List<ChannelDTO> getAllChannels();
 
     void createChannel(Channel channel);
 
@@ -26,4 +26,13 @@ public interface ChannelService {
 
     List<Channel> getChannelsByUserId(Long userId);
 
+    String getTopicChannelByChannelId(Long id);
+
+    Long getWorkspaceIdByChannelId(Long channelId);
+
+    List<ChannelDTO> getAllArchiveChannels();
+
+    List<ChannelDTO> getPrivateChannels();
+
+    void unzipChannel(Channel channel);
 }

@@ -1,12 +1,10 @@
 import {
-    ThreadChannelMessageRestPaginationService,
     ThreadChannelRestPaginationService,
     UserRestPaginationService,
     WorkspaceRestPaginationService
 } from '../rest/entities-rest-pagination.js';
 
 const threadChannel_service = new ThreadChannelRestPaginationService();
-const threadChannelMessage_service = new ThreadChannelMessageRestPaginationService();
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 
@@ -42,16 +40,10 @@ $(document).on('submit', '#form_thread-message', function (e) {
 
         workspace_service.getChosenWorkspace().then(workspace => {
 
-            const workspaceId = workspace.id;
+            const threadChannelMessage = new ThreadChannelMessage(null, user.id, user.name, text_message, currentDate, threadChannel.message.id, workspace.id);
 
-            const threadChannelMessage = new ThreadChannelMessage(null, user.id, user.name, text_message, currentDate, threadChannel.message.id, workspaceId);
-
-            threadChannelMessage_service.create(threadChannelMessage).then(messageWithId => {
-                window.thread_id = messageWithId.parentMessageId;
-                sendThread(messageWithId);
-            });
+            sendThread(threadChannelMessage);
         });
-
 
     });
     return false;
