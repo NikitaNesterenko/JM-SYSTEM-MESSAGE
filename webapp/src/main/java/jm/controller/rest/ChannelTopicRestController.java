@@ -36,6 +36,8 @@ public class ChannelTopicRestController {
                     )
             })
     public ResponseEntity<String> getChannelTopic(@PathVariable Long id) {
+        // TODO: Поменять на логгер или убрать если ошибка устранена
+        System.out.println("getChannelTopic id: " + id);
         //TODO: Приходит id, для которого нет канала
         return ResponseEntity.ok(channelService.getTopicChannelByChannelId(id));
     }
