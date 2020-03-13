@@ -123,20 +123,26 @@ public class MessagesController {
             }
         });
 
-        Conversation conv = directMessage.getConversation();
+        Conversation conversation = directMessage.getConversation();
 
-        if (!conv.getShowForAssociated()) {
-            conv.setShowForAssociated(true);
-            conversationService.updateConversation(conv);
+        if (!conversation.getShowForAssociated()) {
+            User associatedUser = conversation.getAssociatedUser();
+            conversation.setShowForAssociated(true);
+            associatedUser.getUnreadDirectMessages().add(directMessage);
+            userService.updateUser(associatedUser);
+            conversationService.updateConversation(conversation);
             simpMessagingTemplate
-                    .convertAndSend("/queue/dm/new/user/" + directMessage.getConversation().getAssociatedUser().getId(), directMessageDtoService.toDto(directMessage));
+                    .convertAndSend("/queue/dm/new/user/" + associatedUser.getId(), conversation.getId());
         }
 
-        if (!conv.getShowForOpener()) {
-            conv.setShowForOpener(true);
-            conversationService.updateConversation(conv);
+        if (!conversation.getShowForOpener()) {
+            User openingUser = conversation.getOpeningUser();
+            conversation.setShowForOpener(true);
+            openingUser.getUnreadDirectMessages().add(directMessage);
+            userService.updateUser(openingUser);
+            conversationService.updateConversation(conversation);
             simpMessagingTemplate
-                    .convertAndSend("/queue/dm/new/user/" + directMessage.getConversation().getOpeningUser().getId(), directMessageDtoService.toDto(directMessage));
+                    .convertAndSend("/queue/dm/new/user/" + openingUser.getId(),conversation.getId());
         }
 
         logger.info("Созданное личное сообщение: {}", directMessage);
