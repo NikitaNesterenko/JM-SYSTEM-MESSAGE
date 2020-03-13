@@ -145,19 +145,48 @@ public class User {
     private LocalDateTime expireDateZoomToken;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "users") // cascade = CascadeType.REMOVE
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "workspace_id"))
     @ToString.Exclude
     private Set<Workspace> workspaces;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "users") // cascade = CascadeType.REMOVE
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
     @ToString.Exclude
     private Set<Channel> channels;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Channel> ownedChannels;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Workspace> ownedWorkspaces;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private Set<WorkspaceUserRole> workspaceUserRoles;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Message> messages;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "openingUser", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Conversation> openingConversations;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "associatedUser", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Conversation> associatedConversations;
 
     // TODO invitations - список приглашений другим пользователям
 //    @OneToMany
@@ -214,25 +243,4 @@ public class User {
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
     }
-
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        User user = (User) o;
-//        return id.equals(user.id) &&
-//                email.equals(user.email) &&
-//                password.equals(user.password);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, email, password);
-//    }
-
-
 }

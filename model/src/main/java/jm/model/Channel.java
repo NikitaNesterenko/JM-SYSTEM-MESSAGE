@@ -66,7 +66,7 @@ public class Channel {
     @ToString.Exclude
     private Workspace workspace;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
 

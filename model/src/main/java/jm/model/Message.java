@@ -8,7 +8,6 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -27,7 +26,7 @@ public class Message {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
 

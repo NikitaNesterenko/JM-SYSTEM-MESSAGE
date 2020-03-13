@@ -10,9 +10,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -47,6 +45,7 @@ public class Bot {
     @JsonIgnoreProperties
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    @ToString.Exclude
     private Set<Channel> channels = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -56,7 +55,7 @@ public class Bot {
 
     @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
-    private List<Message> messages = new ArrayList<>();
+    private Set<Message> messages;
 
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

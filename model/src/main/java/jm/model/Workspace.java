@@ -31,14 +31,14 @@ public class Workspace {
     @EqualsAndHashCode.Include
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
     private Set<User> users;
 
     @JsonIgnore
-    @OneToMany (mappedBy = "workspace", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany (mappedBy = "workspace", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private Set<Channel> channels;
 
@@ -49,12 +49,12 @@ public class Workspace {
             inverseJoinColumns = @JoinColumn(name = "app_id"))
     private Set<Apps> apps;
 
-    @OneToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "owner_id")
     private User user;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "workspaces_bots", joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id"))
     @ToString.Exclude
