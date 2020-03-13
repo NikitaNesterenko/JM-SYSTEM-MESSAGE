@@ -64,7 +64,7 @@ public class ThreadChannelRestController {
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
         System.out.println("ТРЕД!");
         // TODO: исправить
-//        messageDTO.setDateCreate(LocalDateTime.now());
+        messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
         Message message = messageDtoService.toEntity(messageDTO);
 //        Message message = new Message(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
