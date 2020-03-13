@@ -2,6 +2,7 @@ package jm.controller;
 
 import jm.*;
 import jm.dto.*;
+import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
 import jm.model.message.DirectMessage;
@@ -31,12 +32,13 @@ public class MessagesController {
     private SimpMessageSendingOperations simpMessagingTemplate;
     private ThreadChannelMessageService threadChannelMessageService;
     private UserService userService;
+    private ConversationService conversationService;
 
     @Autowired
     public MessagesController(ChannelService channelService, DirectMessageDtoService directMessageDtoService,
                               DirectMessageService directMessageService, MessageDtoService messageDtoService,
                               MessageService messageService, SimpMessageSendingOperations simpMessagingTemplate,
-                              ThreadChannelMessageService threadChannelMessageService, UserService userService) {
+                              ThreadChannelMessageService threadChannelMessageService, UserService userService, ConversationService conversationService) {
         this.channelService = channelService;
         this.directMessageDtoService = directMessageDtoService;
         this.directMessageService = directMessageService;
@@ -45,6 +47,7 @@ public class MessagesController {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.threadChannelMessageService = threadChannelMessageService;
         this.userService = userService;
+        this.conversationService = conversationService;
     }
 
     @MessageMapping("/message")
@@ -119,6 +122,22 @@ public class MessagesController {
                 userService.updateUser(user);
             }
         });
+
+        Conversation conv = directMessage.getConversation();
+
+        if (!conv.getShowForAssociated()) {
+            conv.setShowForAssociated(true);
+            conversationService.updateConversation(conv);
+            simpMessagingTemplate
+                    .convertAndSend("/queue/dm/new/user/" + directMessage.getConversation().getAssociatedUser().getId(), directMessageDtoService.toDto(directMessage));
+        }
+
+        if (!conv.getShowForOpener()) {
+            conv.setShowForOpener(true);
+            conversationService.updateConversation(conv);
+            simpMessagingTemplate
+                    .convertAndSend("/queue/dm/new/user/" + directMessage.getConversation().getOpeningUser().getId(), directMessageDtoService.toDto(directMessage));
+        }
 
         logger.info("Созданное личное сообщение: {}", directMessage);
         simpMessagingTemplate

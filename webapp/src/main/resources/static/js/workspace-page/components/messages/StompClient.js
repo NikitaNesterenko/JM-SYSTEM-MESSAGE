@@ -257,6 +257,9 @@ export class StompClient {
     }
 
     subscribeDirectMessage() {
+        this.stompClient.subscribe('/queue/dm/new/user/' + window.loggedUserId, () => {
+            this.dm_chat.populateDirectMessages();
+        });
         this.conversation_service.getAllConversationsByUserId(window.loggedUserId).then(conversations => {
             conversations.forEach(conversation =>
                 this.stompClient.subscribe('/queue/dm/' + conversation.id, (message) => {
@@ -281,6 +284,9 @@ export class StompClient {
                     }
                 })
             )
+        });
+        this.stompClient.subscribe('/queue/dm/new/user/' + window.loggedUserId, () => {
+            this.dm_chat.populateDirectMessages();
         });
     }
 

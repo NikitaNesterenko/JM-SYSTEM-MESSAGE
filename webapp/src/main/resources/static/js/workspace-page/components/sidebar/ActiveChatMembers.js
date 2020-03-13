@@ -33,7 +33,6 @@ export class ActiveChatMembers {
                     conversation_queue_context_container.append(this.messageChat(conversation.openingUser, conversation.id));
                 }
                 direct_messages_container.append(conversation_queue_context_container);
-                //const unreadMessages = this.directMessage_service.getUnreadDMessagesInConversationForUser(conversation.id, principal.id)
                 //проверка, есть ли непрочтенные сообщение для данной беседы у пользователя
                 this.directMessage_service.getUnreadDMessagesInConversationForUser(conversation.id, principal.id).then(messages => {
                     if (messages.length > 0) {
