@@ -28,6 +28,7 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
     WorkspaceService workspaceService;
 
     @Override
+    // channelDtoService.toDto
     public ChannelDTO toDto(Channel channel) {
         if (channel == null) {
             return null;
@@ -36,10 +37,10 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         ChannelDTO channelDTO = new ChannelDTO();
 
         Set<Long> userIds = channel.getUsers().stream().map(User::getId).collect(Collectors.toSet());
-        channelDTO.setUserIds(userIds);
+//        channelDTO.setUserIds(userIds);
 
         Set<Long> botIds = channel.getBots().stream().map(Bot::getId).collect(Collectors.toSet());
-        channelDTO.setBotIds(botIds);
+//        channelDTO.setBotIds(botIds);
 
         channelDTO.setId(channel.getId());
         channelDTO.setName(channel.getName());
@@ -49,13 +50,14 @@ public class ChannelDTOServiceImpl implements ChannelDtoService {
         channelDTO.setIsPrivate(channel.getIsPrivate());
         channelDTO.setTopic(channel.getTopic());
         channelDTO.setIsApp(channel.getIsApp());
-        channelDTO.setCreatedDate(channel.getCreatedDate());
+//        channelDTO.setCreatedDate(channel.getCreatedDate());
 
         channelDTO.setIsArchived(channel.getArchived());
         channelDTO.setIsApp(channel.getIsApp());
 
         return channelDTO;
     }
+
 
     @Override
     public List<ChannelDTO> toDto(List<Channel> channels) {

@@ -80,7 +80,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
 
         // setting up 'recipientUserIds'
         Set<Long> recipientUserIds = directMessage.getRecipientUsers().stream().map(User::getId).collect(Collectors.toSet());
-        directMessageDTO.setRecipientUserIds(recipientUserIds);
+//        directMessageDTO.setRecipientUserIds(recipientUserIds);
 
         // setting up 'parentMessageId'
         Message parentMessage = directMessage.getParentMessage();
@@ -89,7 +89,7 @@ public class DirectMessageDtoServiceImpl implements DirectMessageDtoService {
         }
 
         directMessageDTO.setContent(directMessage.getContent());
-        directMessageDTO.setDateCreate(directMessage.getDateCreate());
+//        directMessageDTO.setDateCreate(directMessage.getDateCreate());
         directMessageDTO.setIsDeleted(directMessage.getIsDeleted());
         directMessageDTO.setFilename(directMessage.getFilename());
         directMessageDTO.setWorkspaceId(directMessage.getWorkspaceId());

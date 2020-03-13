@@ -5,13 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jm.views.ChannelViews;
 import jm.dto.ChannelDTO;
+import jm.views.ChannelViews;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -52,14 +54,16 @@ public class Channel {
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "channel_id"),
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "channels_bots",
+            joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id"))
     @ToString.Exclude
-    private Set<Bot> bots;
+    private Set<Bot> bots = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workspace_id", nullable = false)
@@ -84,10 +88,10 @@ public class Channel {
     @Column(name = "topic")
     private String topic;
 
-    @Column(name = "isApp")
+    @Column(name = "is_app")
     private Boolean isApp;
 
-    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
+    public Channel (String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
         this.name = name;
         this.users = users;
         this.user = user;
@@ -96,6 +100,17 @@ public class Channel {
         this.workspace = workspace;
     }
 
+
+    public Channel (ChannelDTO channelDTO) {
+        this.id = channelDTO.getId();
+        this.name = channelDTO.getName();
+        this.isPrivate = channelDTO.getIsPrivate();
+        this.archived = false;
+        this.createdDate = channelDTO.getCreatedDate();
+        Optional.ofNullable(channelDTO.getTopic()).ifPresent(topic -> this.topic = topic);
+        this.isApp = channelDTO.getIsApp();
+
+    }
     public Channel(Long id, String name, Set<User> users, User user, Boolean isPrivate, Boolean archived, LocalDateTime createdDate, Workspace workspace) {
         this.id = id;
         this.name = name;
