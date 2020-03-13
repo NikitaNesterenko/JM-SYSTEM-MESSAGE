@@ -51,6 +51,7 @@ public class SlashCommandRestController {
 
     @PutMapping("/update")
     public ResponseEntity updateSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
+        // TODO: ПЕРЕДЕЛАТЬ SlashCommand existCommand из базы плучает всю информацию о сущности, а используется только для проверки на существование
         SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
         SlashCommand existCommand = slashCommandService.getSlashCommandById(sc.getId());
         if (existCommand == null) {

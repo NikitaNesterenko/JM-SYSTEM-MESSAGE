@@ -105,6 +105,7 @@ public class UserRestController {
             })
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
     public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
+        // TODO: ПЕРЕДЕЛАТЬ existingUser нет необзодимости в получение всей сущности для проверки на существование
         User user = userService.getEntityFromDTO(userDTO);
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
@@ -177,9 +178,6 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInWorkspace(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);
         List<UserDTO> userDTOsList = userService.getAllUsersInWorkspace(id);
-        for (UserDTO user : userDTOsList) {
-            logger.info(user.toString());
-        }
         return ResponseEntity.ok(userDTOsList);
     }
 

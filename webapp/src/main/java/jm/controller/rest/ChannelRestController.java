@@ -34,8 +34,8 @@ public class ChannelRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(
             ChannelRestController.class);
-    private ChannelService channelService;
-    private UserService userService;
+    private final ChannelService channelService;
+    private final UserService userService;
 
     public ChannelRestController(ChannelService channelService, UserService userService) {
         this.channelService = channelService;
@@ -77,16 +77,11 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<ChannelDTO> getChannelById (@PathVariable("id") Long id) {
-        logger.info("Channel с id = {}", id);  // /rest/api/channels
-
-        Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(id);
-        if (channelDTO.isPresent()) {
-            logger.info(channelDTO.toString());
-            return ResponseEntity.ok(channelDTO.get());
-        } else {
-            return ResponseEntity.badRequest()
-                           .build();
-        }
+        logger.info("Channel с id = {}", id);
+        Optional<ChannelDTO> channelDTOOptional = channelService.getChannelDTOById(id);
+        return channelDTOOptional
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     @GetMapping(value = "/user/{id}")
@@ -146,7 +141,7 @@ public class ChannelRestController {
             Set<User> users = channel.getUsers();
             users.add(userService.getUserByLogin(principal.getName()));
             channelService.updateChannel(channel);
-            channelDTO = new ChannelDTO(channel);
+            channelDTO = channelService.getChannelDtoByChannel(channel);
         }
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
@@ -221,15 +216,8 @@ public class ChannelRestController {
                             description = "OK: get channels"
                     )
             })
-    public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser (
-            @PathVariable("user_id") Long userId,
-            @PathVariable("workspace_id") Long workspaceId
-    ) {
+    public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser (@PathVariable("user_id") Long userId, @PathVariable("workspace_id") Long workspaceId) {
         List<ChannelDTO> channels = channelService.getChannelByWorkspaceAndUser(workspaceId, userId);
-        logger.info("Получены channels, доступные юзеру с id={} из workspace с id={} ", userId, workspaceId);
-        for (ChannelDTO channel : channels) {
-            logger.info(channel.toString());
-        }
         return ResponseEntity.ok(channels);
     }
 
@@ -260,13 +248,9 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<ChannelDTO> getChannelByName (@PathVariable("name") String name) {
-        Optional<Long> channelIdByName = channelService.getChannelIdByName(name);
-        if (!channelIdByName.isPresent()) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.badRequest()
-                           .build();
-        }
+        return channelService.getChannelDTOByName(name)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     @PostMapping(value = "/archiving/{id}")
@@ -284,7 +268,7 @@ public class ChannelRestController {
         Channel channel = channelService.getChannelById(id);
         channel.setArchived(true);
         channelService.updateChannel(channel);
-        ChannelDTO channelDTO = new ChannelDTO(channel);
+        ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
         logger.info("Канал с id = {} архивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }
@@ -313,7 +297,6 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel archived")
             })
     public ResponseEntity<ChannelDTO> unzipChannel(@PathVariable("id") Long id) {
-        //TODO: DELETE
         Channel channel = channelService.getChannelById(id);
         channel.setArchived(false);
         channelService.updateChannel(channel);

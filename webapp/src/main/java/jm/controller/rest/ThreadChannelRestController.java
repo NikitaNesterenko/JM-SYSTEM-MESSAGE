@@ -52,6 +52,7 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel created")
             })
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
+        // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadChannel threadChannel
         messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
         Message message = messageService.getMessageByMessageDTO(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
@@ -88,6 +89,7 @@ public class ThreadChannelRestController {
                     )
             })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
+        // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
         ThreadDTO threadDTO = new ThreadDTO(temp);
         return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);

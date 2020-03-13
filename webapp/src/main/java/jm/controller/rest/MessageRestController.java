@@ -53,15 +53,8 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessages () {
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
-        if (!messageDTOList.isEmpty()) {
-            logger.info("Список сообщений : ");
-            messageDTOList.forEach(messageDTO -> logger.info(messageDTO.toString()));
-            logger.info("-----------------------");
-            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
-        } else {
-            return ResponseEntity.badRequest()
-                           .build();
-        }
+        return !messageDTOList.isEmpty()?
+                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();
     }
 
     // DTO compliant
@@ -78,15 +71,8 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId (@PathVariable("id") Long id) {
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
-        if (!messageDTOList.isEmpty()) {
-            logger.info("Полученные сообщения из канала с id = {} :", id);
-            messageDTOList.forEach(messageDTO -> logger.info(messageDTO.toString()));
-            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
-        } else {
-            logger.info("Сообщения из канала с id = {} не получены", id);
-            return ResponseEntity.badRequest()
-                           .build();
-        }
+        return !messageDTOList.isEmpty()?
+                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();
     }
 
     // DTO compliant
@@ -125,13 +111,8 @@ public class MessageRestController {
                                                                              @PathVariable("endDate") String endDate) {
         List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
                                                                                                         .minusMonths(3), LocalDateTime.now(), false);
-
-        if (!messageDTOList.isEmpty()) {
-            return new ResponseEntity<>(messageDTOList, HttpStatus.OK);
-        } else {
-            return ResponseEntity.badRequest()
-                           .build();
-        }
+        return !messageDTOList.isEmpty()?
+                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/create")
@@ -219,21 +200,12 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getStarredMessages (@PathVariable Long userId, @PathVariable Long workspaceId) {
         List<MessageDTO> messageDTOS = messageService.getStarredMessagesDTOForUserByWorkspaceId(userId, workspaceId, false);
-        if (!messageDTOS.isEmpty()) {
-            logger.info("Сообщения, отмеченные пользователем.");
-            return ResponseEntity.ok(messageDTOS);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-
+        return !messageDTOS.isEmpty()?
+                ResponseEntity.ok(messageDTOS) : ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<List<Message>> getMessagesFromChannelsForUser (@PathVariable("id") Long userId) {
-        logger.info("Список сообщений для юзера от всех @channel: ");
-        for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false)) {
-            logger.info(message.toString());
-        }
         return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false), HttpStatus.OK);
     }
 
@@ -246,6 +218,8 @@ public class MessageRestController {
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
     public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
+        // TODO: ПЕРЕДЕЛАТЬ получать в дао MessageDtoLis где UserId = usrId и ChannelId = chnId
+
         User user = userService.getUserById(usrId);
         List<Message> unreadMessages = new ArrayList<>();
         user.getUnreadMessages().forEach(msg -> {
