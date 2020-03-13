@@ -18,9 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/api/messages")
@@ -137,19 +140,8 @@ public class MessageRestController {
 //                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
 //            })
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
-        messageDto.setDateCreate(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDto);
-        messageService.createMessage(message);
-        //добавление сообщения в список непрочтенных для пользователей, которые оффлайн
-        channelService.getChannelById(message.getChannelId()).getUsers().forEach(user -> {
-            if (user.getOnline() == 0) {
-                user.getUnreadMessages().add(message);
-                userService.updateUser(user);
-            }
-        });
-
-        logger.info("Созданное сообщение : {}", message);
-        return new ResponseEntity<>(messageDtoService.toDto(message), HttpStatus.CREATED);
+//        Сохранение сообщения выполняется в MessagesController сразу из websocket
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // DTO compliant
@@ -168,20 +160,8 @@ public class MessageRestController {
             })
 //    @PreAuthorize("#message.user.login == authentication.principal.username")
     public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
-        Message message = messageDtoService.toEntity(messageDto);
-        Message existingMessage = messageService.getMessageById(message.getId());
-        if (existingMessage == null) {
-            logger.warn("Сообщение не найдено");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        if (principal.getName().equals(existingMessage.getUser().getLogin())) {
-            logger.info("Существующее сообщение: {}", existingMessage);
-            message.setDateCreate(existingMessage.getDateCreate());
-            messageService.updateMessage(message);
-            logger.info("Обновленное сообщение: {}", message);
-            return new ResponseEntity(HttpStatus.OK);
-        }
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+//        Обновление сообщения выполняется в MessagesController сразу из websocket
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")

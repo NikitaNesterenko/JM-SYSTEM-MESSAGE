@@ -114,7 +114,7 @@ public class TestDataInitializer {
 
         SlashCommand topicChangeCommand = new SlashCommand();
         topicChangeCommand.setName("topic");
-        topicChangeCommand.setUrl("/app/bot/slackbot/");
+        topicChangeCommand.setUrl("/app/bot/slackbot");
         topicChangeCommand.setDescription("test description");
         topicChangeCommand.setHints("test Hints");
         topicChangeCommand.setType(typeSend);
@@ -533,10 +533,12 @@ public class TestDataInitializer {
 
         for (User user : this.users) {
             for (Workspace workspace : this.workspaces) {
-                if (user.getId().equals(workspace.getId())) {
-                    createWorkspaceUserRole(workspace, user, ownerRole);
-                } else {
-                    createWorkspaceUserRole(workspace, user, userRole);
+                if (workspace.getUsers().contains(user)) {
+                    if (user.getId().equals(workspace.getUser().getId())) {
+                        createWorkspaceUserRole(workspace, user, ownerRole);
+                    } else {
+                        createWorkspaceUserRole(workspace, user, userRole);
+                    }
                 }
             }
         }
@@ -547,7 +549,9 @@ public class TestDataInitializer {
         workspaceUserRole.setWorkspace(workspace);
         workspaceUserRole.setUser(user);
         workspaceUserRole.setRole(role);
-        workspaceUserRoleDAO.persist(workspaceUserRole);
+        if (!workspaceUserRoleDAO.getAll().contains(workspaceUserRole)){
+            workspaceUserRoleDAO.persist(workspaceUserRole);
+        }
     }
 
     private void createDirectMessages() {

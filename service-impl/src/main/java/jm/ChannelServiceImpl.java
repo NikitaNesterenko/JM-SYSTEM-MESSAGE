@@ -74,6 +74,11 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public String getTopicChannelByChannelId(Long id) {
+        return channelDAO.getTopicChannelByChannelId(id);
+    }
+
+    @Override
     public Long getWorkspaceIdByChannelId(Long channelId) {
         return channelDAO.getWorkspaceIdByChannelId(channelId);
     }

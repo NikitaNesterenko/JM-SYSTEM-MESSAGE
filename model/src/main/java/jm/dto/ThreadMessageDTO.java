@@ -95,6 +95,7 @@ public class ThreadMessageDTO {
         this.filename = message.getFilename();
         this.isDeleted = message.getIsDeleted();
         this.workspaceId = message.getWorkspaceId();
+        this.parentMessageId = message.getParentMessage().getId();
     }
 
     public ThreadMessageDTO(Long id, Long userId, String content, LocalDateTime dateCreate, Long parentMessageId, Boolean isDeleted, String userName, Long workspaceId) {

@@ -26,6 +26,8 @@ public interface ChannelService {
 
     List<Channel> getChannelsByUserId(Long userId);
 
+    String getTopicChannelByChannelId(Long id);
+
     Long getWorkspaceIdByChannelId(Long channelId);
 
     List<ChannelDTO> getAllArchiveChannels();

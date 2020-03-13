@@ -88,14 +88,22 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
             return Collections.emptyList();
         }
         return entityManager
-                .createQuery("SELECT c FROM Channel c WHERE c.id IN :ids", Channel.class)
+                .createQuery("select ch from Channel ch where ch.id in :ids", Channel.class)
                 .setParameter("ids", ids)
                 .getResultList();
     }
 
     @Override
+    public String getTopicChannelByChannelId(Long id) {
+        String topic = (String) entityManager.createNativeQuery("select ch.topic from channels ch where ch.id=?")
+                .setParameter(1, id)
+                .getSingleResult();
+        return topic == null ? "\"Add a topic\"" : topic;
+    }
+
+    @Override
     public Long getWorkspaceIdByChannelId(Long channelId) {
-        BigInteger id = (BigInteger) entityManager.createNativeQuery("SELECT c.workspace_id as  FROM channels c WHERE c.id = ?", Channel.class)
+        BigInteger id = (BigInteger) entityManager.createNativeQuery("select ch.workspace_id from channels ch where ch.id=?")
                 .setParameter(1, channelId)
                 .getSingleResult();
         return id.longValue();
