@@ -25,9 +25,7 @@ public class MessagesController {
     private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
     private ChannelService channelService;
-    private DirectMessageDtoService directMessageDtoService;
     private DirectMessageService directMessageService;
-    private MessageDtoService messageDtoService;
     private MessageService messageService;
     private SimpMessageSendingOperations simpMessagingTemplate;
     private ThreadChannelMessageService threadChannelMessageService;
@@ -35,14 +33,12 @@ public class MessagesController {
     private ConversationService conversationService;
 
     @Autowired
-    public MessagesController(ChannelService channelService, DirectMessageDtoService directMessageDtoService,
-                              DirectMessageService directMessageService, MessageDtoService messageDtoService,
+    public MessagesController(ChannelService channelService,
+                              DirectMessageService directMessageService,
                               MessageService messageService, SimpMessageSendingOperations simpMessagingTemplate,
                               ThreadChannelMessageService threadChannelMessageService, UserService userService, ConversationService conversationService) {
         this.channelService = channelService;
-        this.directMessageDtoService = directMessageDtoService;
         this.directMessageService = directMessageService;
-        this.messageDtoService = messageDtoService;
         this.messageService = messageService;
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.threadChannelMessageService = threadChannelMessageService;
@@ -52,7 +48,7 @@ public class MessagesController {
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
-        Message message = messageDtoService.toEntity(messageDto);
+        Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());
             messageService.createMessage(message);
@@ -80,7 +76,7 @@ public class MessagesController {
         });
 
         simpMessagingTemplate
-                .convertAndSend("/queue/messages/channel-" + message.getChannelId(), messageDtoService.toDto(message));
+                .convertAndSend("/queue/messages/channel-" + message.getChannelId(), messageService.getMessageDtoByMessage(message));
     }
 
     @MessageMapping("/thread")
@@ -97,8 +93,7 @@ public class MessagesController {
 
     @MessageMapping("/direct_message")
     public void directMessageCreation(DirectMessageDTO directMessageDTO) {
-
-        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
+        DirectMessage directMessage = directMessageService.getDirectMessageByDirectMessageDto(directMessageDTO);
         if (directMessage.getId() == null) {
             directMessage.setDateCreate(LocalDateTime.now());
             directMessageService.saveDirectMessage(directMessage);
@@ -147,6 +142,6 @@ public class MessagesController {
 
         logger.info("Созданное личное сообщение: {}", directMessage);
         simpMessagingTemplate
-                .convertAndSend("/queue/dm/" + directMessage.getConversation().getId(), directMessageDtoService.toDto(directMessage));
+                .convertAndSend("/queue/dm/" + directMessage.getConversation().getId(), directMessageService.getDirectMessageDtoByDirectMessage(directMessage));
     }
 }

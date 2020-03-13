@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -135,6 +137,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<MessageDTO> getMessageDtoListByMessageList(@NonNull List<Message> messageList) {
+        return messageList.stream().map(this::getMessageDtoByMessage).collect(Collectors.toList());
+    }
+
+    @Override
     public Message getMessageByMessageDTO (@NonNull MessageDTO messageDTO) {
         Message message = new Message(messageDTO);
 
@@ -158,6 +165,11 @@ public class MessageServiceImpl implements MessageService {
                                           .map(HashSet::new)
                                           .orElse(new HashSet<>()));
         return message;
+    }
+
+    @Override
+    public List<Message> getMessageListByMessageDtoList(@NonNull List<MessageDTO> messageDTOList) {
+        return messageDTOList.stream().map(this::getMessageByMessageDTO).collect(Collectors.toList());
     }
 
     @Override

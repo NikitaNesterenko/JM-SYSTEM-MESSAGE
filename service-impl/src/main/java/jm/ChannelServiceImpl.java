@@ -148,6 +148,11 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public List<ChannelDTO> getChannelDtoListByChannelList(@NonNull List<Channel> channelList) {
+        return channelList.stream().map(this::getChannelDtoByChannel).collect(Collectors.toList());
+    }
+
+    @Override
     public ChannelDTO getChannelDtoByChannel(@NonNull Channel channel) {
         return new ChannelDTO(channel);
     }

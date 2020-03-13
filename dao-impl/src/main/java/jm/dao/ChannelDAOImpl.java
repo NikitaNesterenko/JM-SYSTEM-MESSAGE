@@ -98,12 +98,12 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                                               .setParameter("id", id)
                                               .unwrap(NativeQuery.class)
                                               .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
-                                              .getResultList()
-                                              .get(0);
+                                              .getSingleResult();
             channelDTO.setUserIds(getListUserIdsByName(channelDTO.getName()));
             channelDTO.setBotIds(getListBotIdsByName(channelDTO.getName()));
 
-        } catch (IllegalArgumentException e) {
+        } catch (NoResultException e) {
+            logger.info("Error id: " + id);
             e.printStackTrace();
         }
         return Optional.ofNullable(channelDTO);

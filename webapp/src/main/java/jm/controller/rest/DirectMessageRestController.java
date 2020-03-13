@@ -9,7 +9,6 @@ import jm.DirectMessageService;
 import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
-import jm.dto.DirectMessageDtoService;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
@@ -32,14 +31,10 @@ public class DirectMessageRestController {
             LoggerFactory.getLogger(DirectMessageRestController.class);
 
     private DirectMessageService directMessageService;
-    private DirectMessageDtoService directMessageDtoService;
     private UserService userService;
 
-    @Autowired
-    public void setDirectMessageService(DirectMessageService directMessageService, DirectMessageDtoService directMessageDtoService,
-                                        UserService userService) {
+    public DirectMessageRestController(DirectMessageService directMessageService, UserService userService) {
         this.directMessageService = directMessageService;
-        this.directMessageDtoService = directMessageDtoService;
         this.userService = userService;
     }
 
@@ -156,7 +151,7 @@ public class DirectMessageRestController {
                 unreadMessages.add(msg);
             }
         });
-        return ResponseEntity.ok(directMessageDtoService.toDto(unreadMessages));
+        return ResponseEntity.ok(directMessageService.getDirectMessageDtoListByDirectMessageList(unreadMessages));
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")

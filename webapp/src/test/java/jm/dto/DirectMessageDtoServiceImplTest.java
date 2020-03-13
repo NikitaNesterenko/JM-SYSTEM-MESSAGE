@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 public class DirectMessageDtoServiceImplTest {
-  private DirectMessageDtoServiceImpl directMessageDtoService;
+//  private DirectMessageDtoServiceImpl directMessageDtoService;
   private DirectMessage directMessage;
   private DirectMessageDTO directMessageDTO;
   private LocalDateTime localDateTime = LocalDateTime.now();
@@ -36,8 +36,8 @@ public class DirectMessageDtoServiceImplTest {
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    directMessageDtoService = new DirectMessageDtoServiceImpl();
-    directMessageDtoService.setDirectMessageDtoServiceImpl(userDAO, channelDAO, conversationDAO);
+//    directMessageDtoService = new DirectMessageDtoServiceImpl();
+//    directMessageDtoService.setDirectMessageDtoServiceImpl(userDAO, channelDAO, conversationDAO);
 
     user1.setId(1L);
     user1.setAvatarURL("image.jpg");

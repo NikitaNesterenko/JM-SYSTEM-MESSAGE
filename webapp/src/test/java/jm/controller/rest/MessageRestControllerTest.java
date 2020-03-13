@@ -2,7 +2,6 @@ package jm.controller.rest;
 
 import jm.MessageService;
 import jm.dto.MessageDTO;
-import jm.dto.MessageDtoService;
 import jm.model.Message;
 import jm.model.User;
 import org.junit.Before;
@@ -38,7 +37,7 @@ public class MessageRestControllerTest {
     private MessageService messageServiceMock;
 
     @Mock
-    private MessageDtoService messageDtoServiceMock;
+    private MessageService messageService;
 
     @Mock
     private Principal principal;
@@ -76,7 +75,7 @@ public class MessageRestControllerTest {
         MessageDTO messageDTO2 = new MessageDTO(message2);
 
         when(messageServiceMock.getAllMessages(false)).thenReturn(messages);
-        when(messageDtoServiceMock.toDto(messages)).thenReturn(Arrays.asList(messageDTO1, messageDTO2));
+        when(messageService.getMessageDtoListByMessageList(messages)).thenReturn(Arrays.asList(messageDTO1, messageDTO2));
 
         mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
@@ -111,7 +110,7 @@ public class MessageRestControllerTest {
         MessageDTO messageDTO1 = new MessageDTO(message1);
 
         when(messageServiceMock.getMessageById(testId_1)).thenReturn(message1);
-        when(messageDtoServiceMock.toDto(message1)).thenReturn(messageDTO1);
+        when(messageService.getMessageDtoByMessage(message1)).thenReturn(messageDTO1);
         mockMvc.perform(get(getUrl, testId_1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -142,8 +141,8 @@ public class MessageRestControllerTest {
 
         String messageDTOJson = ("{\"id\":1,\"userId\":3,\"botId\":3,\"content\":\"Hello_1\",\"dateCreate\":\"13.01.2020 16:57\",\"isDeleted\":false,\"channelId\":1}");
 
-        when(messageDtoServiceMock.toEntity(any(MessageDTO.class))).thenReturn(message1);
-        when(messageDtoServiceMock.toDto(any(Message.class))).thenReturn(messageDTO1);
+        when(messageService.getMessageByMessageDTO(any(MessageDTO.class))).thenReturn(message1);
+        when(messageService.getMessageDtoByMessage(any(Message.class))).thenReturn(messageDTO1);
 
         mockMvc.perform(post(createUrl)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -198,10 +197,10 @@ public class MessageRestControllerTest {
 
         String messageDTOJson = ("{\"id\":1,\"userId\":3,\"botId\":3,\"content\":\"Hello_1\",\"dateCreate\":\"13.01.2020 16:57\",\"isDeleted\":false,\"channelId\":1}");
 
-        when(messageDtoServiceMock.toEntity(any(MessageDTO.class))).thenReturn(message1);
+        when(messageService.getMessageByMessageDTO(any(MessageDTO.class))).thenReturn(message1);
         when(messageServiceMock.getMessageById(any())).thenReturn(message1);
         when(principal.getName()).thenReturn("login_1");
-        when(messageDtoServiceMock.toDto(any(Message.class))).thenReturn(messageDTO1);
+        when(messageService.getMessageDtoByMessage(any(Message.class))).thenReturn(messageDTO1);
 
         mockMvc.perform(put(updateUrl)
                 .principal(principal)
@@ -230,10 +229,10 @@ public class MessageRestControllerTest {
 
         String messageDTOJson = ("{\"id\":1,\"userId\":3,\"botId\":3,\"content\":\"Hello_1\",\"dateCreate\":\"13.01.2020 16:57\",\"isDeleted\":false,\"channelId\":1}");
 
-        when(messageDtoServiceMock.toEntity(any(MessageDTO.class))).thenReturn(message1);
+        when(messageService.getMessageByMessageDTO(any(MessageDTO.class))).thenReturn(message1);
         when(messageServiceMock.getMessageById(any())).thenReturn(message1);
         when(principal.getName()).thenReturn("login_2");
-        when(messageDtoServiceMock.toDto(any(Message.class))).thenReturn(messageDTO1);
+        when(messageService.getMessageDtoByMessage(any(Message.class))).thenReturn(messageDTO1);
 
         mockMvc.perform(put(updateUrl)
                 .principal(principal)

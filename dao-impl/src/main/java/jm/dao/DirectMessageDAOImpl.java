@@ -29,10 +29,10 @@ public class DirectMessageDAOImpl extends AbstractDao<DirectMessage> implements 
     public Optional<Long> getConversationIdByMessageId(Long messageId) {
         Long conversationId = null;
         try {
-            conversationId = (Long) entityManager.createNativeQuery("SELECT dm.conversation_id FROM direct_messages dm WHERE dm.id=:messageId ")
+            Number resultId = (Number) entityManager.createNativeQuery("SELECT dm.conversation_id FROM direct_messages dm WHERE dm.id=:messageId ")
                     .setParameter("messageId", messageId)
                     .getSingleResult();
-
+            conversationId = resultId.longValue();
         } catch (NoResultException e) {
             e.printStackTrace();
         }

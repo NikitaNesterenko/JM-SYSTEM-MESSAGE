@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.ChannelService;
 import jm.dto.ChannelDTO;
-import jm.dto.ChannelDtoService;
 import jm.model.ChannelWS;
 import jm.model.ChannelWSTopic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,10 @@ import java.util.Optional;
 public class ChannelWSController {
 
     private ChannelService channelService;
-    private ChannelDtoService channelDTOService;
 
     @Autowired
-    public void setChannelService (ChannelService channelService, ChannelDtoService channelDTOService) {
+    public void setChannelService (ChannelService channelService) {
         this.channelService = channelService;
-        this.channelDTOService = channelDTOService;
     }
 
     @MessageMapping("/channel")

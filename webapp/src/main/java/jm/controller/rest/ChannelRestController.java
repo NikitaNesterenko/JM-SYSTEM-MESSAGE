@@ -8,14 +8,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ChannelService;
 import jm.UserService;
 import jm.dto.ChannelDTO;
-import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
 import org.mockito.internal.util.collections.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,21 +36,10 @@ public class ChannelRestController {
             ChannelRestController.class);
     private ChannelService channelService;
     private UserService userService;
-    private ChannelDtoService channelDTOService;
 
-    @Autowired
-    public void setChannelService (ChannelService channelService) {
+    public ChannelRestController(ChannelService channelService, UserService userService) {
         this.channelService = channelService;
-    }
-
-    @Autowired
-    public void setUserService (UserService userService) {
         this.userService = userService;
-    }
-
-    @Autowired
-    public void setChannelDTOService (ChannelDtoService channelDTOService) {
-        this.channelDTOService = channelDTOService;
     }
 
     @GetMapping("/chosen")
@@ -327,10 +313,11 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel archived")
             })
     public ResponseEntity<ChannelDTO> unzipChannel(@PathVariable("id") Long id) {
+        //TODO: DELETE
         Channel channel = channelService.getChannelById(id);
         channel.setArchived(false);
         channelService.updateChannel(channel);
-        ChannelDTO channelDTO = channelDTOService.toDto(channel);
+        ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
         logger.info("Канал с id = {} архивирован", id);
         return new ResponseEntity<>(channelDTO, HttpStatus.OK);
     }

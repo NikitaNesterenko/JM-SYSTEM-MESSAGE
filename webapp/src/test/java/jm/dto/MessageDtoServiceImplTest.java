@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 public class MessageDtoServiceImplTest {
-  private MessageDtoService messageDtoService;
+//  private MessageDtoService messageDtoService;
   private Message message;
   private Message sharedMessage;
 
@@ -37,7 +37,7 @@ public class MessageDtoServiceImplTest {
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    messageDtoService = new MessageDtoServiceImpl(userDAO, botDAO, channelDAO, messageDAO);
+//    messageDtoService = new MessageDtoServiceImpl(userDAO, botDAO, channelDAO, messageDAO);
 
     user1.setId(1L);
     user1.setAvatarURL("image_1.jpg");

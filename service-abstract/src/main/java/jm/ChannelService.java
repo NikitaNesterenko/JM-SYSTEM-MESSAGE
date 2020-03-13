@@ -42,6 +42,8 @@ public interface ChannelService {
 
     List<ChannelDTO> getChannelDtoListByUserId (Long userId);
 
+    List<ChannelDTO> getChannelDtoListByChannelList (@NonNull List<Channel> channelList);
+
     Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO);
 
     ChannelDTO getChannelDtoByChannel(@NonNull Channel channel);

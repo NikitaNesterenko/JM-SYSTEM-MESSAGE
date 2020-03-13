@@ -5,17 +5,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jm.MessageService;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
 import jm.dto.MessageDTO;
-import jm.dto.MessageDtoService;
 import jm.dto.ThreadDTO;
 import jm.dto.ThreadMessageDTO;
 import jm.model.Message;
 import jm.model.ThreadChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,23 +30,14 @@ public class ThreadChannelRestController {
     private static final Logger logger = LoggerFactory.getLogger(
             ThreadChannelRestController.class);
 
-    private ThreadChannelService threadChannelService;
-    private ThreadChannelMessageService threadChannelMessageService;
-    private MessageDtoService messageDtoService;
+    private final ThreadChannelService threadChannelService;
+    private final ThreadChannelMessageService threadChannelMessageService;
+    private final MessageService messageService;
 
-    @Autowired
-    public void setThreadService(ThreadChannelService threadChannelService) {
+    public ThreadChannelRestController(ThreadChannelService threadChannelService, ThreadChannelMessageService threadChannelMessageService, MessageService messageService) {
         this.threadChannelService = threadChannelService;
-    }
-
-    @Autowired
-    public void setThreadChannelMessageService(ThreadChannelMessageService threadChannelMessageService) {
         this.threadChannelMessageService = threadChannelMessageService;
-    }
-
-    @Autowired
-    public void setMessageDtoService(MessageDtoService messageDtoService) {
-        this.messageDtoService = messageDtoService;
+        this.messageService = messageService;
     }
 
     @PostMapping("/create")
@@ -65,7 +55,8 @@ public class ThreadChannelRestController {
         System.out.println("ТРЕД!");
         // TODO: исправить
         messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDTO);
+//        Message message = messageDtoService.toEntity(messageDTO);
+        Message message = messageService.getMessageByMessageDTO(messageDTO);
 //        Message message = new Message(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
         System.out.println(threadChannel);

@@ -9,7 +9,6 @@ import jm.ChannelService;
 import jm.MessageService;
 import jm.UserService;
 import jm.dto.MessageDTO;
-import jm.dto.MessageDtoService;
 import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -32,13 +30,11 @@ public class MessageRestController {
     private static final Logger logger = LoggerFactory.getLogger(MessageRestController.class);
 
     private final MessageService messageService;
-    private final MessageDtoService messageDtoService;
     private final ChannelService channelService;
     private final UserService userService;
 
-    public MessageRestController(MessageService messageService, MessageDtoService messageDtoService, ChannelService channelService, UserService userService) {
+    public MessageRestController(MessageService messageService, ChannelService channelService, UserService userService) {
         this.messageService = messageService;
-        this.messageDtoService = messageDtoService;
         this.channelService = channelService;
         this.userService = userService;
     }
@@ -257,7 +253,7 @@ public class MessageRestController {
                 unreadMessages.add(msg);
             }
         });
-        return ResponseEntity.ok(messageDtoService.toDto(unreadMessages));
+        return ResponseEntity.ok(messageService.getMessageDtoListByMessageList(unreadMessages));
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")

@@ -46,7 +46,11 @@ public interface MessageService {
 
     MessageDTO getMessageDtoByMessage (@NonNull Message message);
 
+    List<MessageDTO> getMessageDtoListByMessageList(@NonNull List<Message> messageList);
+
     Message getMessageByMessageDTO (@NonNull MessageDTO messageDTO);
+
+    List<Message> getMessageListByMessageDtoList(@NonNull List<MessageDTO> messageDTOList);
 
     Optional<Long> getMessageIdByContent (@NonNull String content);
 
