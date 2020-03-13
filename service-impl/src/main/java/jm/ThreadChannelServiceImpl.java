@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class ThreadChannelServiceImpl implements ThreadChannelService{
+public class ThreadChannelServiceImpl implements ThreadChannelService {
 
     private ThreadChannelDAO threadChannelDao;
 

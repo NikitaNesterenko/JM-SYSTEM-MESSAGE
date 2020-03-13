@@ -376,6 +376,7 @@ public class TestDataInitializer {
         channel3.setCreatedDate(LocalDateTime.now());
         channel3.setWorkspace(workspaceList.get(1));
 
+
         channelDAO.persist(channel3);
         this.channels.add(channel3);
 
