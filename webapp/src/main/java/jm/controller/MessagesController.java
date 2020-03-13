@@ -2,6 +2,7 @@ package jm.controller;
 
 import jm.*;
 import jm.dto.*;
+import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
 import jm.model.message.DirectMessage;
@@ -24,36 +25,31 @@ public class MessagesController {
     private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
     private ChannelService channelService;
-    private DirectMessageDtoService directMessageDtoService;
     private DirectMessageService directMessageService;
-    private MessageDtoService messageDtoService;
     private MessageService messageService;
     private SimpMessageSendingOperations simpMessagingTemplate;
     private ThreadChannelMessageService threadChannelMessageService;
-    private ThreadMessageDtoService threadMessageDtoService;
     private UserService userService;
+    private ConversationService conversationService;
 
     @Autowired
-    public MessagesController(ChannelService channelService, DirectMessageDtoService directMessageDtoService,
-                              DirectMessageService directMessageService, MessageDtoService messageDtoService,
+    public MessagesController(ChannelService channelService,
+                              DirectMessageService directMessageService,
                               MessageService messageService, SimpMessageSendingOperations simpMessagingTemplate,
-                              ThreadChannelMessageService threadChannelMessageService,
-                              ThreadMessageDtoService threadMessageDtoService, UserService userService) {
+                              ThreadChannelMessageService threadChannelMessageService, UserService userService, ConversationService conversationService) {
         this.channelService = channelService;
-        this.directMessageDtoService = directMessageDtoService;
         this.directMessageService = directMessageService;
-        this.messageDtoService = messageDtoService;
         this.messageService = messageService;
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.threadChannelMessageService = threadChannelMessageService;
-        this.threadMessageDtoService = threadMessageDtoService;
         this.userService = userService;
+        this.conversationService = conversationService;
     }
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
-        Message message = messageDtoService.toEntity(messageDto);
-        if (message.getId() == null){
+        Message message = messageService.getMessageByMessageDTO(messageDto);
+        if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());
             messageService.createMessage(message);
             logger.info("Созданное сообщение: {}", message);
@@ -80,17 +76,16 @@ public class MessagesController {
         });
 
         simpMessagingTemplate
-                .convertAndSend("/queue/messages/channel-" + message.getChannelId(), messageDtoService.toDto(message));
+                .convertAndSend("/queue/messages/channel-" + message.getChannelId(), messageService.getMessageDtoByMessage(message));
     }
 
     @MessageMapping("/thread")
     public void threadCreation(ThreadMessageDTO threadMessageDTO) {
-
-        ThreadChannelMessage threadChannelMessage = threadMessageDtoService.toEntity(threadMessageDTO);
+        ThreadChannelMessage threadChannelMessage = threadChannelMessageService.getEntityFromDTO(threadMessageDTO);
         threadChannelMessageService.createThreadChannelMessage(threadChannelMessage);
 
         Long channelId = threadChannelMessage.getParentMessage().getChannelId();
-        threadMessageDTO = threadMessageDtoService.toDto(threadChannelMessage);
+        threadMessageDTO = new ThreadMessageDTO(threadChannelMessage);
 
         logger.info("Созданное сообщение в треде: {}", threadChannelMessage);
         simpMessagingTemplate.convertAndSend("/queue/threads/channel-" + channelId, threadMessageDTO);
@@ -98,9 +93,8 @@ public class MessagesController {
 
     @MessageMapping("/direct_message")
     public void directMessageCreation(DirectMessageDTO directMessageDTO) {
-
-        DirectMessage directMessage = directMessageDtoService.toEntity(directMessageDTO);
-        if (directMessage.getId() == null){
+        DirectMessage directMessage = directMessageService.getDirectMessageByDirectMessageDto(directMessageDTO);
+        if (directMessage.getId() == null) {
             directMessage.setDateCreate(LocalDateTime.now());
             directMessageService.saveDirectMessage(directMessage);
             logger.info("Созданное личное сообщение: {}", directMessage);
@@ -124,8 +118,30 @@ public class MessagesController {
             }
         });
 
+        Conversation conversation = directMessage.getConversation();
+
+        if (!conversation.getShowForAssociated()) {
+            User associatedUser = conversation.getAssociatedUser();
+            conversation.setShowForAssociated(true);
+            associatedUser.getUnreadDirectMessages().add(directMessage);
+            userService.updateUser(associatedUser);
+            conversationService.updateConversation(conversation);
+            simpMessagingTemplate
+                    .convertAndSend("/queue/dm/new/user/" + associatedUser.getId(), conversation.getId());
+        }
+
+        if (!conversation.getShowForOpener()) {
+            User openingUser = conversation.getOpeningUser();
+            conversation.setShowForOpener(true);
+            openingUser.getUnreadDirectMessages().add(directMessage);
+            userService.updateUser(openingUser);
+            conversationService.updateConversation(conversation);
+            simpMessagingTemplate
+                    .convertAndSend("/queue/dm/new/user/" + openingUser.getId(),conversation.getId());
+        }
+
         logger.info("Созданное личное сообщение: {}", directMessage);
         simpMessagingTemplate
-                .convertAndSend("/queue/dm/" + directMessage.getConversation().getId(), directMessageDtoService.toDto(directMessage));
+                .convertAndSend("/queue/dm/" + directMessage.getConversation().getId(), directMessageService.getDirectMessageDtoByDirectMessage(directMessage));
     }
 }

@@ -50,15 +50,6 @@ export class ChannelView {
     }
 
     showPeopleInChannel(channelId) {
-        // alert(channelId);
-        // const countOfPeopleInChannel = $("#peopleInChat");
-        // this.user_service.getUsersByChannelId(channelId).then(
-        //     users => {
-        //         countOfPeopleInChannel.empty();
-        //         countOfPeopleInChannel.append(users.length);
-        //     }
-        // );
-
         alert(sessionStorage.getItem("channelId"));
         const member_list = $('#memberListPlaceholder');
         this.user_service.getUsersByChannelId(sessionStorage.getItem("channelId")).then(

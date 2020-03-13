@@ -3,9 +3,6 @@ package jm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import jm.dto.ChannelDtoService;
-import jm.dto.DirectMessageDtoService;
-import jm.dto.MessageDtoService;
 import jm.dto.SlashCommandDto;
 import jm.model.*;
 import jm.model.message.DirectMessage;
@@ -21,12 +18,9 @@ import java.util.*;
 public class CommandsBotServiceImpl implements CommandsBotService {
     private Logger logger = LoggerFactory.getLogger(CommandsBotServiceImpl.class);
     private BotService botService;
-    private ChannelDtoService channelDtoService;
     private ChannelService channelService;
     private ConversationService conversationService;
-    private DirectMessageDtoService directMessageDtoService;
     private DirectMessageService directMessageService;
-    private MessageDtoService messageDtoService;
     private MessageService messageService;
     private SlashCommandService slashCommandService;
     private UserService userService;
@@ -37,17 +31,14 @@ public class CommandsBotServiceImpl implements CommandsBotService {
     private Bot bot;
 
     @Autowired
-    public CommandsBotServiceImpl(BotService botService, ChannelDtoService channelDtoService, ChannelService channelService,
-                                  ConversationService conversationService, DirectMessageDtoService directMessageDtoService,
-                                  DirectMessageService directMessageService, MessageDtoService messageDtoService,
+    public CommandsBotServiceImpl(BotService botService, ChannelService channelService,
+                                  ConversationService conversationService,
+                                  DirectMessageService directMessageService,
                                   MessageService messageService, SlashCommandService slashCommandService, UserService userService) {
         this.botService = botService;
-        this.channelDtoService = channelDtoService;
         this.channelService = channelService;
         this.conversationService = conversationService;
-        this.directMessageDtoService = directMessageDtoService;
         this.directMessageService = directMessageService;
-        this.messageDtoService = messageDtoService;
         this.messageService = messageService;
         this.slashCommandService = slashCommandService;
         this.userService = userService;
@@ -106,8 +97,8 @@ public class CommandsBotServiceImpl implements CommandsBotService {
 
     // Обработка команд дефольного бота
     private Map<String, String> createReportByDefaultBot(SlashCommandDto command, User currentUser, Channel currentChannel,
-                                             String commandName, String commandBody, Map<String, String> response,
-                                             ObjectMapper mapper) throws JsonProcessingException {
+                                                         String commandName, String commandBody, Map<String, String> response,
+                                                         ObjectMapper mapper) throws JsonProcessingException {
 
         switch (commandName) {
             case "topic":
@@ -150,7 +141,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 if (channel != null) {
                     response.put("report", joinChannel(channel, command.getUserId()));
                     response.put("status", "OK");
-                    response.put("channel", mapper.writeValueAsString(channelDtoService.toDto(channel)));
+                    response.put("channel", mapper.writeValueAsString(channelService.getChannelDtoByChannel(channel)));
                     response.put("targetChannelId", channel.getId().toString());
                 } else {
                     response.put("status", "ERROR");
@@ -335,7 +326,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        return mapper.writeValueAsString(directMessageDtoService.toDto(dm));
+        return mapper.writeValueAsString(directMessageService.getDirectMessageDtoByDirectMessage(dm));
     }
 
     private String joinChannel(Channel channel, Long userId) throws JsonProcessingException {
@@ -466,7 +457,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             messageService.createMessage(newMessage);
         }
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(messageDtoService.toDto(newMessage));
+        return mapper.writeValueAsString(messageService.getMessageDtoByMessage(newMessage));
     }
 
     private Bot getBot(Long botId) {
