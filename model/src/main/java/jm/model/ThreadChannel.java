@@ -18,7 +18,7 @@ public class ThreadChannel {
     private Long id;
 
     @OneToOne(targetEntity = Message.class)
-    @JoinColumn(name="message_id")
+    @JoinColumn(name = "message_id")
     private Message message;
 
     public ThreadChannel(Message message) {

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
+import jm.dto.WorkspaceDTO;
 import jm.model.User;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,7 +145,7 @@ public class WorkspaceRestController {
             })
     public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
-       if(workspace==null) {
+        if(workspace==null) {
            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
        }
         return new ResponseEntity<>(workspace, HttpStatus.OK);
@@ -182,6 +183,7 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
+        // TODO: ПЕРЕДЕЛАТЬ получать только UserID, остальная информация о юзере не используется
         String name = principal.getName();
         User user = userService.getUserByLogin(name);
         List<Workspace> list = workspaceService.getWorkspacesByUserId(user.getId());

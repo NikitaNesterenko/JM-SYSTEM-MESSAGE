@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/jmsm/api")
 public class CustomBotRestController {
 
-    @Autowired
-    private CommandsBotService commandsBotService;
+
+    private final CommandsBotService commandsBotService;
+
+    public CustomBotRestController(CommandsBotService commandsBotService) {
+        this.commandsBotService = commandsBotService;
+    }
 
     @PostMapping("/test.api")
     public ResponseEntity<String> testing() {
