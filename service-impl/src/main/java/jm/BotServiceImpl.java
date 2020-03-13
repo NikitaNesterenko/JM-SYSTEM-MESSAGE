@@ -123,6 +123,11 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
+    public BotDTO getBotDtoByBot(@NonNull Bot bot) {
+        return new BotDTO(bot);
+    }
+
+    @Override
     public Optional<Bot> findByToken(String token) {
         return botDAO.findByToken(token);
     }

@@ -77,7 +77,7 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<ChannelDTO> getChannelById (@PathVariable("id") Long id) {
-        logger.info("Channel с id = {}", id);
+        logger.info("Channel с id = {}", id);  // /rest/api/channels
 
         Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(id);
         if (channelDTO.isPresent()) {

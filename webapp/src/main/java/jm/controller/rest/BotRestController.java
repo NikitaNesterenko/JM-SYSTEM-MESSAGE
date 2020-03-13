@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.*;
 import jm.dto.BotDTO;
-import jm.dto.BotDtoService;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
@@ -36,14 +35,12 @@ public class BotRestController {
     private final WorkspaceService workspaceService;
     private final MessageService messageService;
     private final ChannelService channelService;
-    private final BotDtoService botDtoService;
 
-    public BotRestController (BotService botService, WorkspaceService workspaceService, MessageService messageService, ChannelService channelService, BotDtoService botDtoService) {
+    public BotRestController (BotService botService, WorkspaceService workspaceService, MessageService messageService, ChannelService channelService) {
         this.botService = botService;
         this.workspaceService = workspaceService;
         this.messageService = messageService;
         this.channelService = channelService;
-        this.botDtoService = botDtoService;
     }
 
     @GetMapping("/generate.token")
@@ -138,7 +135,7 @@ public class BotRestController {
             ResponseEntity.badRequest()
                     .build();
         }
-        return new ResponseEntity<>(botDtoService.toDto(bot), HttpStatus.CREATED);
+        return new ResponseEntity<>(botService.getBotDtoByBot(bot), HttpStatus.CREATED);
     }
 
     // DTO compliant

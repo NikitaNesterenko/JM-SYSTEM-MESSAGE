@@ -33,5 +33,7 @@ public interface BotService {
 
     Bot getBotByBotDto(@NonNull BotDTO botDTO);
 
+    BotDTO getBotDtoByBot(@NonNull Bot bot);
+
     Optional<Bot> findByToken(String token);
 }
