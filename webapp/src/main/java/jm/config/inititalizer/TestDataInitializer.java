@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TestDataInitializer {
 
@@ -260,12 +259,43 @@ public class TestDataInitializer {
         this.roles.add(ownerRole);
     }
 
-    private void createUsers() {
-        Set<Role> userRoleSet = this.roles.stream()
-                .filter(role -> "ROLE_USER".equals(role.getAuthority())).collect(Collectors.toSet());
+    private void createLinkRoles() {
+        Role userRole = roleDAO.getRoleByRolename("ROLE_USER");
+        Role ownerRole = roleDAO.getRoleByRolename("ROLE_OWNER");
 
-        Set<Role> ownerRoleSet = this.roles.stream()
-                .filter(role -> "ROLE_OWNER".equals(role.getAuthority())).collect(Collectors.toSet());
+        for (User user : this.users) {
+            for (Workspace workspace : this.workspaces) {
+                if (workspace.getUsers().contains(user)) {
+                    if (user.getId().equals(workspace.getUser().getId())) {
+                        createWorkspaceUserRole(workspace, user, ownerRole);
+                    } else {
+                        createWorkspaceUserRole(workspace, user, userRole);
+                    }
+                }
+            }
+        }
+    }
+
+    private void createWorkspaceUserRole(Workspace workspace, User user, Role role) {
+        WorkspaceUserRole workspaceUserRole = new WorkspaceUserRole();
+        workspaceUserRole.setWorkspace(workspace);
+        workspaceUserRole.setUser(user);
+        workspaceUserRole.setRole(role);
+        if (!workspaceUserRoleDAO.getAll().contains(workspaceUserRole)){
+            workspaceUserRoleDAO.persist(workspaceUserRole);
+        }
+    }
+
+    private void createUsers() {
+        Role user = roleDAO.getRoleByRolename("ROLE_USER");
+        Role owner = roleDAO.getRoleByRolename("ROLE_OWNER");
+
+        Set<Role> userRoleSet = new HashSet<>();
+        userRoleSet.add(user);
+
+        Set<Role> ownerRoleSet = new HashSet<>();
+        ownerRoleSet.add(owner);
+        ownerRoleSet.add(user);
 
         User userJohn = new User();
 
@@ -289,7 +319,7 @@ public class TestDataInitializer {
         userStepan.setEmail(UserData.STEPAN.email);
         userStepan.setPassword(UserData.STEPAN.password);
         userStepan.setDisplayName(UserData.STEPAN.name + " " + UserData.STEPAN.lastName);
-        userStepan.setRoles(userRoleSet);
+        userStepan.setRoles(ownerRoleSet);
         userStepan.setOnline(0);
 
         userService.createUser(userStepan);
@@ -524,43 +554,6 @@ public class TestDataInitializer {
         sendMsgCommand.setBot(customBot);
         slashCommandDao.merge(sendMsgCommand);
 
-    }
-
-    private void createLinkRoles() {
-        Role userRole = null;
-        for (Role role : this.roles) {
-            if ("ROLE_USER".equals(role.getAuthority())) {
-                userRole = role;
-            }
-        }
-        Role ownerRole = null;
-        for (Role role : this.roles) {
-            if ("ROLE_OWNER".equals(role.getAuthority())) {
-                ownerRole = role;
-            }
-        }
-
-        for (User user : this.users) {
-            for (Workspace workspace : this.workspaces) {
-                if (workspace.getUsers().contains(user)) {
-                    if (user.getId().equals(workspace.getUser().getId())) {
-                        createWorkspaceUserRole(workspace, user, ownerRole);
-                    } else {
-                        createWorkspaceUserRole(workspace, user, userRole);
-                    }
-                }
-            }
-        }
-    }
-
-    private void createWorkspaceUserRole(Workspace workspace, User user, Role role) {
-        WorkspaceUserRole workspaceUserRole = new WorkspaceUserRole();
-        workspaceUserRole.setWorkspace(workspace);
-        workspaceUserRole.setUser(user);
-        workspaceUserRole.setRole(role);
-        if (!workspaceUserRoleDAO.getAll().contains(workspaceUserRole)){
-            workspaceUserRoleDAO.persist(workspaceUserRole);
-        }
     }
 
     private void createDirectMessages() {
