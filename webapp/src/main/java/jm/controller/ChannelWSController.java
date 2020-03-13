@@ -46,7 +46,7 @@ public class ChannelWSController {
     @SendTo("/topic/channel.changeTopic")
     public String changeChannelTopic (ChannelWSTopic zapros)
             throws JsonProcessingException {
-        Long channel_id = Long.parseLong(zapros.getId());
+        Long channel_id = zapros.getId();
         Optional<ChannelDTO> channelDTO = channelService.getChannelDTOById(channel_id);
         if (channelDTO.isPresent()) {
             channelDTO.get()

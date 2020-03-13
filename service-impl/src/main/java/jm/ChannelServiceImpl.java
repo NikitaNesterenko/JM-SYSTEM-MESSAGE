@@ -4,7 +4,6 @@ import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.UserDAO;
 import jm.api.dao.WorkspaceDAO;
-import jm.dto.ChannelDTO;
 import jm.dao.ChannelDAOImpl;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +23,7 @@ public class ChannelServiceImpl implements ChannelService {
     private final ChannelDAO channelDAO;
 
     private final UserDAO userDAO;
-    private ChannelDAO channelDAO;
+
     private ChannelDTO channelDTO;
     private ChannelDAOImpl channelDaoImpl;
 

@@ -43,14 +43,14 @@ public class ChannelServiceImplTest {
     @Test
     public void gelAllChannelsInList() {
         Mockito.when(channelDAO.getAll()).thenReturn(channels);
-        assertEquals(channelService.getAllChannels(), channels);
+        assertEquals(channelService.getAllChanelDTO(), channels);
         verify(channelDAO).getAll();
     }
 
     @Test
     public void gelAllChannelsInListWasNull() {
         Mockito.when(channelDAO.getAll()).thenReturn(null);
-        assertEquals(channelService.getAllChannels(), null);
+        assertEquals(channelService.getAllChanelDTO(), null);
         verify(channelDAO).getAll();
     }
 

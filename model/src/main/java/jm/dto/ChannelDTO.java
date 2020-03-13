@@ -39,10 +39,6 @@ public class ChannelDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
-    private String topic;
-    private Boolean isArchived;
-    private Boolean isApp;
-
     public ChannelDTO (Long id, String name, Boolean isPrivate) {
         this.id = id;
         this.name = name;
@@ -84,6 +80,23 @@ public class ChannelDTO {
         this.isArchived = isArchived;
         this.isApp = isApp;
     }
+
+    public ChannelDTO(Long id, String name, Boolean isArchived, LocalDateTime createdDate) {
+        this.id = id;
+        this.name = name;
+        this.isArchived = isArchived;
+        this.createdDate = createdDate;
+    }
+
+    public ChannelDTO(Long id, String name, String username, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.isPrivate = isPrivate;
+        this.isArchived = isArchived;
+        this.createdDate = createdDate;
+    }
+
 
     public void setId (Number id) {
         this.id = id.longValue();
@@ -185,26 +198,5 @@ public class ChannelDTO {
         }
     }
 
-    public ChannelDTO(Long id, String name, Boolean isPrivate) {
-        this.id = id;
-        this.name = name;
-        this.isPrivate = isPrivate;
-    }
-
-    public ChannelDTO(Long id, String name, Boolean isArchived, LocalDateTime createdDate) {
-        this.id = id;
-        this.name = name;
-        this.isArchived = isArchived;
-        this.createdDate = createdDate;
-    }
-
-    public ChannelDTO(Long id, String name, String username, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.isPrivate = isPrivate;
-        this.isArchived = isArchived;
-        this.createdDate = createdDate;
-    }
 
 }

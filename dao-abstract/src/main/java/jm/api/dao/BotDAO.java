@@ -18,8 +18,6 @@ public interface BotDAO {
 
     Bot save(Bot bot);
 
-    void deleteById(Long id);
-
     Bot merge (Bot bot);
 
     Bot getById (Long id);

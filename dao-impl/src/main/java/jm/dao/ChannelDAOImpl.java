@@ -314,14 +314,6 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getAllChannel() {
-        return entityManager.createQuery("SELECT c.id as id, c.name as name, c.createdDate as createdDate, u.username as username FROM  Channel c LEFT JOIN c.user u ORDER BY u.id")
-                .unwrap(org.hibernate.query.Query.class)
-                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
-                .getResultList();
-    }
-
-    @Override
     public Channel unzipChannel(Long id) {
         return (Channel) entityManager.createNativeQuery("UPDATE channels c SET c.archived = false WHERE c.id = :id")
                 .setParameter("id", id)
