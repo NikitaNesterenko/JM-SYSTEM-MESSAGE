@@ -248,6 +248,10 @@ public class MessageDTO {
         this.dateCreate = dateCreate.toLocalDateTime();
     }
 
+//    public void setDateCreate (LocalDateTime dateCreate) {
+//        this.dateCreate = dateCreate;
+//    }
+
 
     public void setChannelId (Number channelId) {
         this.channelId = Optional.ofNullable(channelId)

@@ -100,6 +100,13 @@ public class ChannelDTO {
         this.createdDate = createdDate;
     }
 
+    public ChannelDTO(Long id, String name, Workspace workspace, boolean isPrivate) {
+        this.id = id;
+        this.name = name;
+        this.workspaceId = workspace.getId();
+        this.isPrivate = isPrivate;
+    }
+
 
     public void setId (Number id) {
         this.id = id.longValue();
@@ -202,21 +209,6 @@ public class ChannelDTO {
     }
 
 
-}
 
-    public ChannelDTO(Long id, String name, String username, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.isPrivate = isPrivate;
-        this.isArchived = isArchived;
-        this.createdDate = createdDate;
-    }
 
-    public ChannelDTO(Long id, String name, Workspace workspace, boolean isPrivate) {
-        this.id = id;
-        this.name = name;
-        this.workspaceId = workspace.getId();
-        this.isPrivate = isPrivate;
-    }
 }

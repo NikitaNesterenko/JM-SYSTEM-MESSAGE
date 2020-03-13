@@ -38,7 +38,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     private Optional<Tuple> getUserNameAndAvatarUrlByUserId (Long userId) {
         Tuple tuple = null;
         try {
-            tuple = (Tuple) entityManager.createNativeQuery("SELECT u.name AS \"userName\", u.avatar_url AS \"userAvatarUrl\" " +
+            tuple = (Tuple) entityManager.createNativeQuery("SELECT u.username AS \"userName\", u.avatar_url AS \"userAvatarUrl\" " +
                                                                     "FROM users u WHERE u.id=:userId", Tuple.class)
                                     .setParameter("userId", userId)
                                     .getSingleResult();
