@@ -183,7 +183,7 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
-        // TODO: переделать получать только UserID, остальная информация о юзере не используется
+        // TODO: ПЕРЕДЕЛАТЬ получать только UserID, остальная информация о юзере не используется
         String name = principal.getName();
         User user = userService.getUserByLogin(name);
         List<Workspace> list = workspaceService.getWorkspacesByUserId(user.getId());

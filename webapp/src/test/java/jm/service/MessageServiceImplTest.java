@@ -32,7 +32,7 @@ class MessageServiceImplTest {
 
     public MessageServiceImplTest() {
         MockitoAnnotations.initMocks(this);
-        // TODO: Переделать
+        // TODO: не использовать дто сервис
 //        this.messageService = new MessageServiceImpl();
 //        messageService.setMessageDAO(messageDAO);
 //
