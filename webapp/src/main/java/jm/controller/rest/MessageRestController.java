@@ -133,8 +133,8 @@ public class MessageRestController {
         System.out.println("startDate: " + startDate);
         System.out.println("endDate: " + endDate);
 
-//        List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now(), false);
-        List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, startDate, endDate, false);
+        List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now().minusMonths(3), LocalDateTime.now(), false);
+//        List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, startDate, endDate, false);
 
         if (!messageDTOList.isEmpty()) {
             return new ResponseEntity<>(messageDTOList, HttpStatus.OK);

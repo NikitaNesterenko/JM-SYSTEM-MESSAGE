@@ -32,7 +32,7 @@ public interface MessageService {
 
     List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
-    List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, String startDate, String endDate, Boolean isDeleted);
+    List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
     List<Message> getMessagesByBotIdByChannelIdForPeriod (Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
