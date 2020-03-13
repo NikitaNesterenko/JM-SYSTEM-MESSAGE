@@ -98,7 +98,7 @@ public class CreateWorkspaceRestController {
             })
     public ResponseEntity confirmEmail(@RequestBody String json) {
         int code = Integer.parseInt(json);
-        CreateWorkspaceToken token = createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code);
+        CreateWorkspaceToken token = createWorkspaceTokenDAO.getCreateWorkspaceTokenByCode(code).orElse(null);
 
         if (token == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
