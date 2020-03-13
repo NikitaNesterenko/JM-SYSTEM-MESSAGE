@@ -13,6 +13,6 @@
 //
 //    @Override
 //    public void onMessage(ConsumerRecord<String, KafkaMessage> data) {
-//        System.out.println("dateCreate: " + LocalDateTime.ofInstant(Instant.ofEpochMilli(data.timestamp()), ZoneId.systemDefault()) + ", topic: " + data.topic() + ", " + data.value());
+
 //    }
 //}

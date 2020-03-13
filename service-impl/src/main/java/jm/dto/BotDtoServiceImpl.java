@@ -30,7 +30,6 @@ public class BotDtoServiceImpl implements BotDtoService {
 
     @Override
     public BotDTO toDto(Bot bot) {
-
         if (bot == null) {
             return null;
         }
@@ -38,24 +37,26 @@ public class BotDtoServiceImpl implements BotDtoService {
         // creating new BotDTO with simple fields copied from Bot
         BotDTO botDTO = new BotDTO(bot);
 
-        botDTO.setWorkspacesId(new HashSet<>());
-        botDTO.setSlashCommandsIds(new HashSet<>());
+//        botDTO.setWorkspacesId(new HashSet<>());
+//        botDTO.setSlashCommandsIds(new HashSet<>());
 
         // setting up 'workspaceId'
         Set<Workspace> workspaces = bot.getWorkspaces();
         if ((workspaces != null) && !workspaces.isEmpty()) {
-            workspaces.forEach(workspace -> botDTO.getWorkspacesId().add(workspace.getId()));
+            workspaces.forEach(workspace -> botDTO.getWorkspacesId()
+                                                    .add(workspace.getId()));
         }
 
         Set<SlashCommand> slashCommands = bot.getCommands();
         if ((slashCommands != null) && !slashCommands.isEmpty()) {
-            slashCommands.forEach(slashCommand -> botDTO.getSlashCommandsIds().add(slashCommand.getId()));
+            slashCommands.forEach(slashCommand -> botDTO.getSlashCommandsIds()
+                                                          .add(slashCommand.getId()));
         }
 
         // setting up 'channelIds'
         if (bot.getChannels() != null) {
             Set<Long> channelIds = bot.getChannels().stream().map(Channel::getId).collect(Collectors.toSet());
-            botDTO.setChannelIds(channelIds);
+//            botDTO.setChannelIds(channelIds);
         }
 
         return botDTO;
@@ -64,7 +65,6 @@ public class BotDtoServiceImpl implements BotDtoService {
     @Override
     @Transactional
     public Bot toEntity(BotDTO botDto) {
-
         if (botDto == null) {
             return null;
         }

@@ -53,7 +53,7 @@ public class GoogleCalendarController {
     public ResponseEntity<List<Event>> showDateEvent(@PathVariable String date,
                                         Principal principal) {
         LocalDate nowDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        LocalDateTime nowStartDateTime = nowDate.atTime(0, 0, 1);//TODO: +3 hours msk zone
+        LocalDateTime nowStartDateTime = nowDate.atTime(0, 0, 1);
         LocalDateTime nowEndDateTime = nowDate.atTime(20, 59, 59);
 
         DateTime dateStart = DateTime.parseRfc3339(nowStartDateTime.toString());

@@ -83,7 +83,6 @@ public class InviteTokenRestController {
         ModelAndView modelAndView = new ModelAndView();
 
         if (inviteToken != null) {
-            System.out.println("workspace-page");
             modelAndView.setViewName("redirect:/workspace");
             return modelAndView;
         }

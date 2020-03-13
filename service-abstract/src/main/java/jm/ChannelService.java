@@ -2,29 +2,49 @@ package jm;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChannelService {
-    List<ChannelDTO> getAllChannels();
+    // TODO: проверить
+    //List<ChannelDTO> getAllChannels();
+    List<Channel> gelAllChannels();
 
-    void createChannel(Channel channel);
+    List<ChannelDTO> getAllChanelDTO ();
 
-    void deleteChannel(Long id);
+    void createChannel (Channel channel);
 
-    void updateChannel(Channel channel);
+    void deleteChannel (Long id);
 
-    Channel getChannelById(Long id);
+    void updateChannel (Channel channel);
 
-    Channel getChannelByName(String name);
+    Channel getChannelById (Long id);
 
-    List<Channel> getChannelsByOwnerId(Long ownerId);
+    Optional<ChannelDTO> getChannelDTOById (Long id);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+    Channel getChannelByName (String name);
 
-    List<Channel> getChannelsByWorkspaceId(Long id);
+    Optional<Long> getChannelIdByName(String chanelName);
 
-    List<Channel> getChannelsByUserId(Long userId);
+    Optional<ChannelDTO> getChannelDTOByName (String name);
+
+    List<Channel> getChannelsByOwnerId (Long ownerId);
+
+    List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
+
+    List<Channel> getChannelsByWorkspaceId (Long workspaceId);
+
+    List<ChannelDTO> getChannelDtoListByWorkspaceId (Long id);
+
+    List<Channel> getChannelsByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByUserId (Long userId);
+
+    Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO);
+
+    ChannelDTO getChannelDtoByChannel(@NonNull Channel channel);
 
     String getTopicChannelByChannelId(Long id);
 

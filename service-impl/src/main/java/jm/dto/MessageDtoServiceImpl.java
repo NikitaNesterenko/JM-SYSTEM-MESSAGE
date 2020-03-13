@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class MessageDtoServiceImpl implements MessageDtoService {
+public class MessageDtoServiceImpl implements MessageDtoService { // implements MessageDtoService
 
     private UserDAO userDAO;
     private BotDAO botDAO;
     private ChannelDAO channelDAO;
     private MessageDAO messageDAO;
 
-    public MessageDtoServiceImpl(UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
+    public MessageDtoServiceImpl (UserDAO userDAO, BotDAO botDAO, ChannelDAO channelDAO, MessageDAO messageDAO) {
         this.userDAO = userDAO;
         this.botDAO = botDAO;
         this.channelDAO = channelDAO;
@@ -34,7 +34,6 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
     @Override
     public MessageDTO toDto(Message message) {
-
         if (message == null) {
             return null;
         }
@@ -70,7 +69,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
         // setting up 'recipientUserIds'
         Set<Long> recipientUserIds = message.getRecipientUsers().stream().map(User::getId).collect(Collectors.toSet());
-        messageDto.setRecipientUserIds(recipientUserIds);
+//        messageDto.setRecipientUserIds(recipientUserIds);
 
         // setting up 'parentMessageId'
         Message parentMessage = message.getParentMessage();
@@ -89,7 +88,7 @@ public class MessageDtoServiceImpl implements MessageDtoService {
 
     @Override
     public Message toEntity(MessageDTO messageDto) {
-
+        // messageDtoService.toEntity
         if (messageDto == null) {
             return null;
         }
