@@ -10,7 +10,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -18,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString()
+@ToString
 @Entity
 @Table(name = "bots")
 public class Bot {
@@ -47,10 +49,14 @@ public class Bot {
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
     private Set<Channel> channels = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "bots_slash_commands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slash_command_id"))
     @ToString.Exclude
     private Set<SlashCommand> commands = new HashSet<>();
+
+    @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<Message> messages = new ArrayList<>();
 
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

@@ -37,9 +37,9 @@ public class Workspace {
     @ToString.Exclude
     private Set<User> users;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinTable(name = "workspaces_channels", joinColumns = @JoinColumn(name = "workspace_id"),
-            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    @JsonIgnore
+    @OneToMany (mappedBy = "workspace", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private Set<Channel> channels;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
@@ -74,6 +74,16 @@ public class Workspace {
 
     @Column(name = "google_client_secret")
     private String googleClientSecret;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "workspace", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<WorkspaceUserRole> workspaceUserRoles;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "workspace", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Conversation> conversations;
 
     public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;

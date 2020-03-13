@@ -1,6 +1,5 @@
 package jm.model.message;
 
-import jm.dto.DirectMessageDTO;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
@@ -24,7 +23,7 @@ public class DirectMessage extends Message {
 //            inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
 //    private Set<User> recipientUsers;
 
-    @ManyToOne(targetEntity = Conversation.class)
+    @ManyToOne(targetEntity = Conversation.class, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "conversation_id")
     private Conversation conversation;
 

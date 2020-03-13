@@ -1,9 +1,6 @@
 package jm.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jm.dto.UserDTO;
 import jm.model.message.DirectMessage;
 import lombok.*;
@@ -147,20 +144,20 @@ public class User {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime expireDateZoomToken;
 
-    // TODO каналы пользователя, исправить маппинг в Channel
-    // юзер может создавать каналы, либо быть участником (member) в чужих каналах
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_channels",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "channel_id")
-//    )
-//    private Set<Channel> userChannels;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "users") // cascade = CascadeType.REMOVE
+    @ToString.Exclude
+    private Set<Workspace> workspaces;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "users") // cascade = CascadeType.REMOVE
+    @ToString.Exclude
+    private Set<Channel> channels;
 
-//    TODO двухсторонняя связь - исправить мапинг в Workspace
-//    @OneToOne
-//    private Workspace workspace;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<WorkspaceUserRole> workspaceUserRoles;
 
     // TODO invitations - список приглашений другим пользователям
 //    @OneToMany

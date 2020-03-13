@@ -20,11 +20,11 @@ public class WorkspaceUserRole implements GrantedAuthority {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jm.views.ChannelViews;
 import jm.dto.ChannelDTO;
+import jm.views.ChannelViews;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -48,7 +48,7 @@ public class Channel {
     @JsonView(ChannelViews.IdNameView.class)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
@@ -61,8 +61,9 @@ public class Channel {
     @ToString.Exclude
     private Set<Bot> bots;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "workspace_id", nullable = false)
+    @ToString.Exclude
     private Workspace workspace;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
