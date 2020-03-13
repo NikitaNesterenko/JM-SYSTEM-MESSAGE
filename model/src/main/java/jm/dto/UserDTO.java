@@ -27,6 +27,8 @@ public class UserDTO {
     private String timeZone;
     private Set<Long> starredMessageIds;
     private Set<Long> directMessagesToUserIds;
+    private Set<Long> unreadMessageIds;
+    private Set<Long> unreadDirectMessageIds;
     private Integer online;
     private String userSkype;
 
@@ -136,5 +138,35 @@ public class UserDTO {
         this.timeZone = user.getTimeZone();
         this.online = user.getOnline();
         this.userSkype = user.getUserSkype();
+
+        if (user.getUnreadMessages() != null) {
+            Set<Long> unreadMessageIds = user.getUnreadMessages().stream().map(Message::getId).collect(Collectors.toSet());
+            this.unreadMessageIds = unreadMessageIds;
+        }
+
+        if (user.getUnreadDirectMessages() != null) {
+            Set<Long> unreadDirectMessageIds = user.getUnreadDirectMessages().stream().map(Message::getId).collect(Collectors.toSet());
+            this.unreadDirectMessageIds = unreadDirectMessageIds;
+        }
+
+        if (user.getStarredMessages() != null) {
+            Set<Long> starredMessageIds = user.getStarredMessages().stream().map(Message::getId).collect(Collectors.toSet());
+            this.starredMessageIds = starredMessageIds;
+        }
+
+        if (user.getDirectMessagesToUsers() != null) {
+            Set<Long> directMessageToUsersIds = user.getDirectMessagesToUsers().stream().map(User::getId).collect(Collectors.toSet());
+            this.directMessagesToUserIds = directMessageToUsersIds;
+        }
+
+
+    }
+
+    public void setId(Number id) {
+        this.id = id.longValue();
+    }
+
+    public void setOnline(Number online) {
+        this.online = online.intValue();
     }
 }

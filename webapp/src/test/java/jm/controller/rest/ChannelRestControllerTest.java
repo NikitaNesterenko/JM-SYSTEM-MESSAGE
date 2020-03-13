@@ -3,7 +3,6 @@ package jm.controller.rest;
 import jm.ChannelService;
 import jm.UserService;
 import jm.dto.ChannelDTO;
-import jm.dto.ChannelDtoService;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
@@ -22,13 +21,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,8 +38,11 @@ public class ChannelRestControllerTest {
     @Mock
     private ChannelService channelServiceMock;
 
+//    @Mock
+//    private ChannelDtoService channelDtoServiceMock;
+
     @Mock
-    private ChannelDtoService channelDtoServiceMock;
+    private ChannelService channelService;
 
     @Mock
     private UserService userServiceMock;
@@ -78,7 +79,8 @@ public class ChannelRestControllerTest {
         ChannelDTO channelDTO = new ChannelDTO(channel.getId(), channel.getName(), channel.getIsPrivate());
 
         when(channelServiceMock.getChannelById(testId_1)).thenReturn(channel);
-        when(channelDtoServiceMock.toDto(channel)).thenReturn(channelDTO);
+//        when(channelService.toDto(channel)).thenReturn(channelDTO);
+        when(channelService.getChannelDtoByChannel(channel)).thenReturn(channelDTO);
         mockMvc.perform(get(getUrl, testId_1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -125,7 +127,7 @@ public class ChannelRestControllerTest {
         when(userServiceMock.getUserByLogin("login_1")).thenReturn(user1);
         when(Objects.requireNonNull(request.getSession()).getAttribute("WorkspaceID")).thenReturn(workspace);
 
-        when(channelDtoServiceMock.toEntity(channelDTO)).thenReturn(channel);
+        when(channelService.getChannelByChannelDto(channelDTO)).thenReturn(channel);
 
         mockMvc.perform(post(createUrl)
                 .principal(principal)
@@ -166,7 +168,7 @@ public class ChannelRestControllerTest {
         when(userServiceMock.getUserByLogin("login_1")).thenReturn(user1);
         when(Objects.requireNonNull(request.getSession()).getAttribute("WorkspaceID")).thenReturn(workspace);
 
-        when(channelDtoServiceMock.toEntity(channelDTO)).thenReturn(channel);
+        when(channelService.getChannelByChannelDto(channelDTO)).thenReturn(channel);
 
         mockMvc.perform(post(createUrl)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -276,8 +278,8 @@ public class ChannelRestControllerTest {
         ChannelDTO channelDTO2 = new ChannelDTO(channel2.getId(), channel2.getName(), channel2.getIsPrivate());
 
 
-        when(channelServiceMock.getAllChannels()).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
-        when(channelDtoServiceMock.toDto(Arrays.asList(channel1, channel2))).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
+        when(channelServiceMock.getAllChanelDTO()).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
+        when(channelService.getChannelDtoListByChannelList(Arrays.asList(channel1, channel2))).thenReturn(Arrays.asList(channelDTO1, channelDTO2));
 
         mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
@@ -290,7 +292,7 @@ public class ChannelRestControllerTest {
                 .andExpect(jsonPath("$[1].name", is("test_2")))
                 .andExpect(jsonPath("$[1].isPrivate", is(Boolean.FALSE)));
 
-        verify(channelServiceMock, times(1)).getAllChannels();
+        verify(channelServiceMock, times(1)).getAllChanelDTO();
         verifyNoMoreInteractions(channelServiceMock);
     }
 }
