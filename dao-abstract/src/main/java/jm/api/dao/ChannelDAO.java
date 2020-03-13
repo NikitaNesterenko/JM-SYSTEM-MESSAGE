@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface ChannelDAO {
 
-    List<Channel> getAll();
+    List<ChannelDTO> getAllChannel();
 
     void persist(Channel channel);
 
@@ -30,5 +30,13 @@ public interface ChannelDAO {
 
     List<Channel> getChannelsByIds(Set<Long> ids);
 
+    String getTopicChannelByChannelId(Long id);
+
     Long getWorkspaceIdByChannelId(Long channelId);
+
+    List<ChannelDTO> getArchivedChannels();
+
+    List<ChannelDTO> getPrivateChannels();
+
+    Channel unzipChannel(Long id);
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 @Entity
@@ -17,7 +17,7 @@ public class WorkspaceUserRole implements GrantedAuthority {
     @Id
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)

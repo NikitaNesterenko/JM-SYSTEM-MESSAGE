@@ -17,7 +17,7 @@ export class NavHeader {
         return this;
     }
 
-    setInfo(numOfPeople, numOfStarredItems) {
+    setInfo(numOfPeople, numOfStarredItems, topic) {
         this.header
             .find('.p-classic_nav__model__title__info')
             .replaceWith(`
@@ -38,8 +38,7 @@ export class NavHeader {
                     <span class="p-classic_nav__model__title__info__sep">|</span>
                     <div class="p-classic_nav__model__title__info__item">
                         <div id="topic_string_block" class="p-classic_nav__model__title__info__topic__text">
-                            <span id="topic_string" class="p-classic_nav__model__title__info__topic__content">
-                            <i class="material-icons" style="font-size: 15px;">edit</i> Add a topic</span>
+                            <span id="topic_string" class="p-classic_nav__model__title__info__topic__content"> ${topic} </span>
                             <button id="topic_button" style="display: none;" class="p-classic_nav__model__title__info__topic__edit">
                                 <i class="material-icons">edit</i>
                             </button>

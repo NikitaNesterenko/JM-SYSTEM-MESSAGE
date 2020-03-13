@@ -1,10 +1,11 @@
 import {
-    ChannelRestPaginationService,MessageRestPaginationService,
+    ChannelRestPaginationService,
+    ConversationRestPaginationService,
+    MessageRestPaginationService,
     UserRestPaginationService,
     WorkspaceRestPaginationService
 } from "../rest/entities-rest-pagination.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
-import {ConversationRestPaginationService} from "../rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const conversation_service = new ConversationRestPaginationService();
@@ -76,7 +77,7 @@ $(document).on('click', '[id^=deleteDmButton]', async function (e) {
         <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
             <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">●</i>
             <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
-                <span data-user_id="${user.id}">${user.name}</span>
+                <span data-user_id="${user.id}">${user.displayName}</span>
             </span>
         </button>
         <button class="p-channel_sidebar__close cross">

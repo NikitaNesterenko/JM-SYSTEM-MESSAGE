@@ -62,7 +62,7 @@ public class BotRestController {
         Message message = new Message();
         message.setChannelId(1L);
         message.setUser(user);
-        message.setContent("Hello, it's testing message from " + user.getName());
+        message.setContent("Hello, it's testing message from " + user.getUsername());
         message.setDateCreate(LocalDateTime.now());
         message.setWorkspaceId(1L);
 

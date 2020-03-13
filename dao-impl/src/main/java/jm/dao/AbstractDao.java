@@ -1,5 +1,6 @@
 package jm.dao;
 
+import jm.api.dao.ChannelDAO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
