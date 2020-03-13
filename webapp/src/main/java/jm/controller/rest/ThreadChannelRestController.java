@@ -52,14 +52,9 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel created")
             })
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
-        System.out.println("ТРЕД!");
-        // TODO: исправить
         messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
-//        Message message = messageDtoService.toEntity(messageDTO);
         Message message = messageService.getMessageByMessageDTO(messageDTO);
-//        Message message = new Message(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
-        System.out.println(threadChannel);
         threadChannelService.createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);
         return new ResponseEntity<>(threadChannel, HttpStatus.CREATED);
@@ -81,15 +76,6 @@ public class ThreadChannelRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @GetMapping("/messages/{id}")
-//    public ResponseEntity<List<ThreadChannelMessage>> findAllThreadChannelMessagesByThreadChannel(@PathVariable Long id) {
-//        System.out.println("ID = " + id);
-//        ThreadChannel threadChannel = threadChannelService.getThreadChennelById(id);
-//        System.out.println("threadChannel = " + threadChannel);
-//        return new ResponseEntity<>(threadChannelMessageService.findAllThreadChannelMessagesByThreadChannel(threadChannel)
-//                , HttpStatus.OK);
-//    }
-
     @GetMapping("/{message_id}")
     @Operation(summary = "Get thread channel by message id",
             responses = {
@@ -103,7 +89,6 @@ public class ThreadChannelRestController {
             })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
-        System.out.println("GET-THREADCHANNEL - " + temp);
         ThreadDTO threadDTO = new ThreadDTO(temp);
         return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);
     }
@@ -120,8 +105,6 @@ public class ThreadChannelRestController {
                     )
             })
     public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
-        /*List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
-        System.out.println("LIST - " + list.toString());*/
         return new ResponseEntity<>(threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id), HttpStatus.OK);
     }
 }
