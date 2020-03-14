@@ -92,6 +92,7 @@ public class Workspace {
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
     }
+
     public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, String googleClientId, String googleClientSecret) {
         this.name = name;
         this.users = users;

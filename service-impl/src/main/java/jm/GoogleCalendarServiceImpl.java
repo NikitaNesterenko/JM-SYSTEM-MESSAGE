@@ -111,7 +111,6 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         }
 
         authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectURI);
-        System.out.println("cal authorizationUrl->" + authorizationUrl);
 
         return authorizationUrl.build();
     }

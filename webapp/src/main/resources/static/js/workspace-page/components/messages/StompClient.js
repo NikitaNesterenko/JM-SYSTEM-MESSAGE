@@ -257,29 +257,13 @@ export class StompClient {
     }
 
     subscribeDirectMessage() {
+        this.stompClient.subscribe('/queue/dm/new/user/' + window.loggedUserId, (conversationId) => {
+            this.dm_chat.populateDirectMessages().then(() => this.stompClient
+                .subscribe('/queue/dm/' + parseInt(conversationId.body), (message) => this.newConversationMessageHandler(message)));
+        });
         this.conversation_service.getAllConversationsByUserId(window.loggedUserId).then(conversations => {
             conversations.forEach(conversation =>
-                this.stompClient.subscribe('/queue/dm/' + conversation.id, (message) => {
-                    const response = JSON.parse(message.body);
-                    let current_conversation_id = sessionStorage.getItem('conversation_id');
-
-                    if (!response.isDeleted) {
-                        if (response.isUpdated) {
-                            this.dm_view.updateMessage(response);
-                        } else {
-                            if (response.conversationId == current_conversation_id) {
-                                this.dm_view.createMessage(response);
-                            } else {
-                                if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
-                                    this.dm_chat.enableDirectHasUnreadMessage(response.conversationId);
-                                    this.directMessage_service.addUnreadMessageForUser(response.id, window.loggedUserId)
-                                }
-                            }
-                        }
-                    } else {
-                        this.dm_view.dialog.deleteMessage(response.id, response.userId);
-                    }
-                })
+                this.stompClient.subscribe('/queue/dm/' + conversation.id, (message) => this.newConversationMessageHandler(message))
             )
         });
     }
@@ -398,5 +382,27 @@ export class StompClient {
 
     isConversationPresentInList(convId) {
         return document.querySelector(`button[conv_id='${convId}']`)
+    }
+
+    newConversationMessageHandler(message) {
+        const response = JSON.parse(message.body);
+        let current_conversation_id = sessionStorage.getItem('conversation_id');
+
+        if (!response.isDeleted) {
+            if (response.isUpdated) {
+                this.dm_view.updateMessage(response);
+            } else {
+                if (response.conversationId == current_conversation_id) {
+                    this.dm_view.createMessage(response);
+                } else {
+                    if (response.userId != window.loggedUserId && this.isConversationPresentInList(response.conversationId)) {
+                        this.dm_chat.enableDirectHasUnreadMessage(response.conversationId);
+                        this.directMessage_service.addUnreadMessageForUser(response.id, window.loggedUserId)
+                    }
+                }
+            }
+        } else {
+            this.dm_view.dialog.deleteMessage(response.id, response.userId);
+        }
     }
 }

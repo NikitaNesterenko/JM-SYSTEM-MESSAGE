@@ -15,7 +15,7 @@ public interface MailService {
 
     Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo);
 
-    void sendRecoveryPasswordToken(User userTo);
+    void sendRecoveryPasswordToken (User userTo);
 
-    boolean changePasswordUserByToken(String token, String password);
+    boolean changePasswordUserByToken (String token, String password);
 }

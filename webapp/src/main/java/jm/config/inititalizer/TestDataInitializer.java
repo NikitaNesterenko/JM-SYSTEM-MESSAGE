@@ -409,6 +409,7 @@ public class TestDataInitializer {
         channel3.setWorkspace(workspaceList.get(1));
         channel3.setIsApp(false);
 
+
         channelDAO.persist(channel3);
         this.channels.add(channel3);
 

@@ -33,4 +33,8 @@ public class DirectMessage extends Message {
             joinColumns = @JoinColumn(name = "msg_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> starredByWhom;
+
+    public  DirectMessage (Message message) {
+        super(message);
+    }
 }

@@ -60,7 +60,7 @@ export class WorkspacePageEventHandler {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", (event) => {
             this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text()).setInfo();
 
-            const channelId = parseInt($(event.currentTarget).val());
+            const channelId = $(event.currentTarget).val();
             pressChannelButton(channelId);
 
             sessionStorage.setItem("channelName", channelId);
@@ -72,10 +72,6 @@ export class WorkspacePageEventHandler {
                 });
 
             });
-
-
-
-
 
             refreshMemberList();
         });
@@ -101,6 +97,16 @@ export class WorkspacePageEventHandler {
             });
         });
     }
+
+    onHideChannelModal() {
+        $("#addChannelModal").on('hide.bs.modal', function () {
+            $(":input", $('#addChannelModal')).val("");
+            $('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        });
+    }
+
 
     getFormattedCreateDate() {
         const date = new Date();

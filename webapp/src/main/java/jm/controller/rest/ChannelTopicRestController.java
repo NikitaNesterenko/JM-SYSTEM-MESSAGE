@@ -1,6 +1,7 @@
 package jm.controller.rest;
 
 
+import com.sun.xml.bind.v2.TODO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,6 +37,9 @@ public class ChannelTopicRestController {
                     )
             })
     public ResponseEntity<String> getChannelTopic(@PathVariable Long id) {
+        // TODO: Поменять на логгер или убрать если ошибка устранена
+        System.out.println("getChannelTopic id: " + id);
+        //TODO: Приходит id, для которого нет канала
         return ResponseEntity.ok(channelService.getTopicChannelByChannelId(id));
     }
 
@@ -51,6 +55,9 @@ public class ChannelTopicRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel topic was set")
             })
     public ResponseEntity<String> setChannelTopic(@PathVariable Long id, @RequestBody String topic) {
+        // TODO: Зачем получат Channel - getChannelById,
+        //  заносить туда topic - setTopic
+        //  чтобы потом возвращать getChannelById?
         Channel channel = channelService.getChannelById(id);
         channel.setTopic(topic);
         return ResponseEntity.ok(channelService.getChannelById(id).getTopic());

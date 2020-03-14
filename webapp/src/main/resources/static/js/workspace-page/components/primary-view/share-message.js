@@ -3,11 +3,13 @@ import {ShareMessageView} from "/js/workspace-page/components/messages/ShareMess
 const share_message = new ShareMessageView();
 
 $(document).on('click', '#share-message-id', async function (e) {
-    let msg_id = $(e.target).data('msg_id');
-    await share_message.setUser();
-    await share_message.setChannel();
-    await share_message.setMessage(msg_id);
-    share_message.shareModalWindow().show();
+    if (sessionStorage.getItem("channelId") != 0) {
+        let msg_id = $(e.target).data('msg_id');
+        await share_message.setUser();
+        await share_message.setChannel();
+        await share_message.setMessage(msg_id);
+        share_message.shareModalWindow().show();
+    }
 });
 
 // remove all dynamically created content when modal window is hidden.

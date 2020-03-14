@@ -4,31 +4,49 @@ import jm.dto.ChannelDTO;
 import jm.model.Channel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ChannelDAO {
 
-    List<ChannelDTO> getAllChannel();
+    List<Channel> getAll ();
 
-    void persist(Channel channel);
+    // TODO: ПРОВЕРИТЬ
+    // List<ChannelDTO> getAllChannel();
+    List<ChannelDTO> getAllChanelDTO ();
 
-    void deleteById(Long id);
+    void persist (Channel channel);
 
-    Channel merge(Channel channel);
+    void deleteById (Long id);
 
-    Channel getById(Long id);
+    Channel merge (Channel channel);
 
-    Channel getChannelByName(String name);
+    Channel getById (Long id);
 
-    List<Channel> getChannelsByOwnerId(Long ownerId);
+    Channel getChannelByName (String name);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+    Optional<Long> getChannelIdByName (String chanelName);
 
-    List<Channel> getChannelsByWorkspaceId(Long id);
+    List<Channel> getChannelsByOwnerId (Long ownerId);
 
-    List<Channel> getChannelsByUserId(Long userId);
+    List<Channel> getChannelsByWorkspaceId (Long id);
 
-    List<Channel> getChannelsByIds(Set<Long> ids);
+    List<ChannelDTO> getChannelDtoListByWorkspaceId (Long workspaceId);
+
+    List<Channel> getChannelsByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByUserId (Long userId);
+
+    List<Channel> getChannelsByIds (Set<Long> ids);
+
+    Optional<ChannelDTO> getIdByName (String name);
+
+    Optional<ChannelDTO> getChannelDTOByName (String name);
+
+    Optional<ChannelDTO> getChannelDTOById (Long id);
+
+    List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
+
 
     String getTopicChannelByChannelId(Long id);
 
