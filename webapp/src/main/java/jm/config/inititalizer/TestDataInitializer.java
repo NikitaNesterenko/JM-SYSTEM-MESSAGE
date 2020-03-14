@@ -351,6 +351,7 @@ public class TestDataInitializer {
         channelGeneral.setUsers(this.users);
         channelGeneral.setUser(userList.get(0));
         channelGeneral.setIsPrivate(false);
+        channelGeneral.setArchived(false);
         channelGeneral.setCreatedDate(LocalDateTime.now());
         channelGeneral.setWorkspace(workspaceList.get(0));
         channelGeneral.setIsApp(false);
@@ -363,6 +364,7 @@ public class TestDataInitializer {
         channelRandom.setUsers(userSet);
         channelRandom.setUser(userList.get(0));
         channelRandom.setIsPrivate(false);
+        channelRandom.setArchived(false);
         channelRandom.setCreatedDate(LocalDateTime.now());
         channelRandom.setWorkspace(workspaceList.get(0));
         channelRandom.setIsApp(false);
@@ -375,6 +377,7 @@ public class TestDataInitializer {
         channel3.setUsers(userSet);
         channel3.setUser(userList.get(2));
         channel3.setIsPrivate(true);
+        channel3.setArchived(false);
         channel3.setCreatedDate(LocalDateTime.now());
         channel3.setWorkspace(workspaceList.get(1));
         channel3.setIsApp(false);
