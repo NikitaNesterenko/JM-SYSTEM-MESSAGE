@@ -1,4 +1,4 @@
-import {ChannelRestPaginationService, BotRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelRestPaginationService, BotRestPaginationService, MessageRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "/js/workspace-page/components/messages/ChannelMessageView.js";
 import {UserRestPaginationService} from "../../../rest/entities-rest-pagination.js";
 
@@ -8,6 +8,7 @@ export class ChannelView {
     constructor() {
         this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
+        this.message_service = new MessageRestPaginationService();
         this.channel_message_view = new ChannelMessageView();
         this.bot_service = new BotRestPaginationService();
         window.pressChannelButton = (id) => {
@@ -70,6 +71,7 @@ export class ChannelView {
     }
 
     showBots(workspace_id) {
+        $('#bot_representation').empty(); //чтоб не добавлялись лишние боты
         this.bot_service.getBotByWorkspaceId(workspace_id).then(
             bots => {
                 if (bots !== undefined) {
@@ -103,10 +105,16 @@ export class ChannelView {
         $('#id-channel_sidebar__channels__list').empty(); //обнулдяем список каналов перед заполнением
         $.each(channels, (idx, chn) => {
             if (!chn.isArchived && this.checkPrivacy(chn)) {
+                this.addChannelIntoSidebarChannelList(chn);
                 if (this.default_channel === null) {
                     this.default_channel = chn;
+                } else {
+                    this.message_service.getUnreadMessageInChannelForUser(chn.id, this.loggedUser.id).then(messages => {
+                        if (messages.length > 0) {
+                            this.enableChannelHasUnreadMessage(chn.id);
+                        }
+                    });
                 }
-                this.addChannelIntoSidebarChannelList(chn);
             }
         });
     }
@@ -166,11 +174,22 @@ export class ChannelView {
             }
 
             $(btn).css(bg_color);
+            this.disableChannelHasUnreadMessage(id);
         });
     }
 
     checkPrivacy(channel) {
         return (channel.isPrivate && this.loggedUser.id === channel.ownerId) || !channel.isPrivate;
+    };
+
+    enableChannelHasUnreadMessage = (chnId) => {
+        document.querySelector(`span#channel_name_${chnId}`).classList.add("font-weight-bold");
+        document.querySelector(`span#channel_name_${chnId}`).classList.add("text-white");
+    };
+
+    disableChannelHasUnreadMessage = (chnId) => {
+        document.querySelector(`span#channel_name_${chnId}`).classList.remove("font-weight-bold");
+        document.querySelector(`span#channel_name_${chnId}`).classList.remove("text-white");
     }
 }
 
@@ -186,5 +205,7 @@ export const deleteChannelFromList = (targetChannelId) => {
             }
         }
     })
+
+
 };
 
