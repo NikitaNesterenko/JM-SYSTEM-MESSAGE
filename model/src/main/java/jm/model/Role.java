@@ -19,7 +19,7 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
@@ -29,7 +29,7 @@ public class Role implements GrantedAuthority {
 
     @JsonIgnore
     @ToString.Exclude
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.REFRESH)
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
     public Role(Long id, String role) {

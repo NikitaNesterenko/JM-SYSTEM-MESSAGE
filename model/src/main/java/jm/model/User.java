@@ -145,37 +145,37 @@ public class User {
     private LocalDateTime expireDateZoomToken;
 
     @JsonIgnore
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "workspace_id"))
-    @ToString.Exclude
     private Set<Workspace> workspaces;
 
     @JsonIgnore
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "channel_id"))
-    @ToString.Exclude
     private Set<Channel> channels;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Channel> ownedChannels;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Workspace> ownedWorkspaces;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<WorkspaceUserRole> workspaceUserRoles;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Message> messages;
 
     @JsonIgnore
