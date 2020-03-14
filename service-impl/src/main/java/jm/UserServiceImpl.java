@@ -140,12 +140,24 @@ public class UserServiceImpl implements UserService {
         // creating new User with simple fields copied from UserDTO
         User user = new User(userDTO);
 
-        // setting up 'password'
+        /* setting up 'password', roles, channels, workspaces, workspaceUserRoles
+        ownedChannels, ownedWorkspaces, openingConversations, associatedConversations,
+        messages
+        * */
         Long id = userDTO.getId();
         if (id != null && user.getPassword() == null) {
             User existingUser = userDAO.getById(id);
             if (existingUser != null) {
                 user.setPassword(existingUser.getPassword());
+                user.setRoles(existingUser.getRoles());
+                user.setChannels(existingUser.getChannels());
+                user.setWorkspaces(existingUser.getWorkspaces());
+                user.setOwnedChannels(existingUser.getOwnedChannels());
+                user.setOwnedWorkspaces(existingUser.getOwnedWorkspaces());
+                user.setMessages(existingUser.getMessages());
+                user.setWorkspaceUserRoles(existingUser.getWorkspaceUserRoles());
+                user.setOpeningConversations(existingUser.getOpeningConversations());
+                user.setAssociatedConversations(existingUser.getAssociatedConversations());
             }
         }
 

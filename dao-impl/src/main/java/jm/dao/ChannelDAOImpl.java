@@ -5,8 +5,6 @@ import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
-import jm.model.User;
-import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -212,7 +210,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
-                    .createNativeQuery("SELECT wc.channel_id FROM workspaces_channels wc where wc.workspace_id=:id")
+                    .createNativeQuery("SELECT id FROM channels where workspace_id = :id")
                     .setParameter("id", id)
                     .getResultList();
 
