@@ -51,7 +51,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     public GoogleCalendarServiceImpl(AppsService appsService, ChannelService channelService, UserService userService, MessageService messageService,
                                      @Value("${file.upload-dir.application}") String pathApplicationFiles,
                                      @Value("${google.client.redirectUri}") String redirectURI,
-                                     @Value("${application.name}") String applicationName,
+                                     @Value("${google.calendar}") String applicationName,
                                      @Value("${google.calendar.event.warningBeforeEvent.hour}") int warningBeforeEvent,
                                      @Value("${google.calendar.event.update.day.period}") int updatePeriod) {
         this.appsService = appsService;
@@ -154,7 +154,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
             Calendar clientCalendar = new com.google.api.services.calendar.Calendar.Builder(httpTransport, jsonFactory, credential)
                     .setApplicationName(applicationName).build();
 
-            appsService.saveAppToken(workspaceId, App.GOOGLE_CALENDAR, credential.getAccessToken());
+            appsService.saveAppToken(workspaceId, applicationName, credential.getAccessToken());
             return clientCalendar;
 
         } catch (IOException e) {
@@ -225,7 +225,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     @Override
     public Calendar getCalendarByAccessToken(Long workspaceId) {
 
-        String accessToken = appsService.loadAppToken(workspaceId, App.GOOGLE_CALENDAR);
+        String accessToken = appsService.loadAppToken(workspaceId, applicationName);
 
         Credential credential = new GoogleCredential
                                     .Builder()
@@ -239,7 +239,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     public void setGoogleClientIdAndSecret(Workspace workspace) {
-        App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), App.GOOGLE_CALENDAR);
+        App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), applicationName);
         clientId = app.getClientId();
         clientSecret = app.getClientSecret();
     }
