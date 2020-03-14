@@ -52,7 +52,6 @@ window.addEventListener('load', async () => {
     workspace_event.onWindowClick();
     workspace_event.onSelectChannel();
     workspace_event.onAddChannelSubmit();
-    workspace_event.onHideChannelModal();
 });
 
 $(document).ready(async () => {
