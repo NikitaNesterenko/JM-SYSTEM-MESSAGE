@@ -95,13 +95,13 @@ public class WorkspaceRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to update channel")
             })
-    public ResponseEntity updateChannel(@RequestBody Workspace workspace) {
+    public ResponseEntity updateChannel(@RequestBody Workspace workspace,HttpServletRequest request) {
         try {
             workspaceService.updateWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
-
+        request.getSession(false).setAttribute("WorkspaceID", workspace);
         return ResponseEntity.ok().build();
     }
 
