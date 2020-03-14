@@ -13,11 +13,11 @@ import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -90,19 +90,24 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "200", description = "OK: direct message updated"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to update direct message")
             })
-    public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
-        // TODO: проверить
+    public ResponseEntity<DirectMessageDTO> updateDirectMessage(@RequestBody DirectMessageDTO directMessageDTO, Principal principal) {
+        // TODO: ПЕРЕДЕЛАТЬ DirectMessage isCreated должен получать только DateCreate, т.к. только эти данные в дальнейшем испоьзуются
         // Обновление личного сообщения выполняется в MessagesController сразу из websocket
-
-        DirectMessage message = directMessageService.getDirectMessageByDirectMessageDto(messageDTO);
-        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
-        if (isCreated == null) {
-            logger.warn("Сообщение не найдено");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (directMessageService.checkingPermissionOnUpdate(principal.getName(), directMessageDTO.getUserName())){
+            DirectMessage directMessage = directMessageService.getDirectMessageByDirectMessageDto(directMessageDTO);
+            DirectMessage isCreated = directMessageService.getDirectMessageById(directMessageDTO.getId());
+            if (isCreated == null) {
+                logger.warn("Сообщение не найдено");
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            directMessage.setDateCreate(isCreated.getDateCreate());
+            DirectMessage updateDirectMessage = directMessageService.updateDirectMessage(directMessage);
+            return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(updateDirectMessage), HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest().build();
         }
-        message.setDateCreate(isCreated.getDateCreate());
-        DirectMessage directMessage = directMessageService.updateDirectMessage(message);
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.OK);
+
+
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -110,7 +115,8 @@ public class DirectMessageRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: direct message deleted")
             })
-    public ResponseEntity<DirectMessageDTO> deleteMessage(@PathVariable Long id) {
+    public ResponseEntity<DirectMessageDTO> deleteDirectMessage(@PathVariable Long id) {
+
         directMessageService.deleteDirectMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
         return ResponseEntity.ok().build();

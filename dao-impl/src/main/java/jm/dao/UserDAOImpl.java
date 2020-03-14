@@ -326,4 +326,16 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         userDTO.setUnreadDirectMessageIds(getUnreadDirectMessageIds(id));
     }
 
+    @Override
+    public Optional<String> getLoginBuUserName(String userName) {
+
+        String login = null;
+        try {
+            login = (String) entityManager.createNativeQuery("SELECT u.login FROM users u WHERE u.username = :userName").setParameter("userName", userName).getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+
+        return Optional.ofNullable(login);
+    }
 }

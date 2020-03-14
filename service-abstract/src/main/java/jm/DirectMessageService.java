@@ -27,4 +27,6 @@ public interface DirectMessageService {
 
     List<DirectMessageDTO> getDirectMessageDtoListByDirectMessageList(@NonNull List<DirectMessage> directMessagesList);
 
+    Boolean checkingPermissionOnUpdate(@NonNull String userLogin, @NonNull String userName);
+
 }
