@@ -1,8 +1,6 @@
 package jm.dao;
 
 import jm.api.dao.DirectMessageDAO;
-import jm.model.Message;
-import jm.dto.DirectMessageDTO;
 import jm.model.message.DirectMessage;
 import org.springframework.stereotype.Repository;
 

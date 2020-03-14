@@ -96,13 +96,5 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         return directMessagesList.stream().map(this::getDirectMessageDtoByDirectMessage).collect(Collectors.toList());
     }
 
-    @Override
-    public Boolean checkingPermissionOnUpdate(@NonNull String userLogin, @NonNull String userName) {
-        return userDAO.getLoginBuUserName(userName).map(userLogin::equals).orElse(false);
-    }
 
-    @Override
-    public Boolean checkingPermissionOnDelete(@NonNull String userLogin, @NonNull Long messageId) {
-        return userDAO.getLoginByMessageId(messageId).map(userLogin::equals).orElse(false);
-    }
 }

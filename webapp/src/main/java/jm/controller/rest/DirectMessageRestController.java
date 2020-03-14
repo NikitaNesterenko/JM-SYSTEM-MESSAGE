@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.DirectMessageService;
+import jm.MessageService;
 import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
@@ -32,10 +33,12 @@ public class DirectMessageRestController {
 
     private final DirectMessageService directMessageService;
     private final UserService userService;
+    private final MessageService messageService;
 
-    public DirectMessageRestController(DirectMessageService directMessageService, UserService userService) {
+    public DirectMessageRestController(DirectMessageService directMessageService, UserService userService, MessageService messageService) {
         this.directMessageService = directMessageService;
         this.userService = userService;
+        this.messageService = messageService;
     }
 
     @GetMapping(value = "/{id}")
@@ -93,7 +96,7 @@ public class DirectMessageRestController {
     public ResponseEntity<DirectMessageDTO> updateDirectMessage(@RequestBody DirectMessageDTO directMessageDTO, Principal principal) {
         // TODO: ПЕРЕДЕЛАТЬ DirectMessage isCreated должен получать только DateCreate, т.к. только эти данные в дальнейшем испоьзуются
         // Обновление личного сообщения выполняется в MessagesController сразу из websocket
-        if (directMessageService.checkingPermissionOnUpdate(principal.getName(), directMessageDTO.getUserName())){
+        if (messageService.checkingPermissionOnUpdate(principal.getName(), directMessageDTO.getUserName())) {
             DirectMessage directMessage = directMessageService.getDirectMessageByDirectMessageDto(directMessageDTO);
             DirectMessage isCreated = directMessageService.getDirectMessageById(directMessageDTO.getId());
             if (isCreated == null) {
@@ -114,11 +117,11 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "200", description = "OK: direct message deleted")
             })
     public ResponseEntity<DirectMessageDTO> deleteDirectMessage(@PathVariable Long id, Principal principal) {
-        if (directMessageService.checkingPermissionOnDelete(principal.getName(), id)) {
+        if (messageService.checkingPermissionOnDelete(principal.getName(), id)) {
             directMessageService.deleteDirectMessage(id);
             logger.info("Удалено сообщение с id = {}", id);
             return ResponseEntity.ok().build();
-        }else {
+        } else {
             return ResponseEntity.badRequest().build();
         }
     }

@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.MessageDTO;
 import jm.model.Message;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -49,4 +50,6 @@ public interface MessageDAO {
     Optional<Long> getMessageIdByContent (String content);
 
     Optional<String> getMessageContentById (Long id);
+
+    Optional<LocalDateTime> getMessageDateCreateByMessageId(@NonNull Long messageId);
 }

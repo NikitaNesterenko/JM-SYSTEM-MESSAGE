@@ -35,7 +35,7 @@ public class UserDTO {
     private static class Builder {
         private UserDTO userDTO;
 
-        public Builder () {
+        public Builder() {
             userDTO = new UserDTO();
         }
 
@@ -114,7 +114,6 @@ public class UserDTO {
         }
     }
 
-
     public UserDTO(Long id, String name, String lastName, String avatarURL, String displayName) {
         this.id = id;
         this.name = name;
@@ -140,26 +139,20 @@ public class UserDTO {
         this.userSkype = user.getUserSkype();
 
         if (user.getUnreadMessages() != null) {
-            Set<Long> unreadMessageIds = user.getUnreadMessages().stream().map(Message::getId).collect(Collectors.toSet());
-            this.unreadMessageIds = unreadMessageIds;
+            this.unreadMessageIds = user.getUnreadMessages().stream().map(Message::getId).collect(Collectors.toSet());
         }
 
         if (user.getUnreadDirectMessages() != null) {
-            Set<Long> unreadDirectMessageIds = user.getUnreadDirectMessages().stream().map(Message::getId).collect(Collectors.toSet());
-            this.unreadDirectMessageIds = unreadDirectMessageIds;
+            this.unreadDirectMessageIds = user.getUnreadDirectMessages().stream().map(Message::getId).collect(Collectors.toSet());
         }
 
         if (user.getStarredMessages() != null) {
-            Set<Long> starredMessageIds = user.getStarredMessages().stream().map(Message::getId).collect(Collectors.toSet());
-            this.starredMessageIds = starredMessageIds;
+            this.starredMessageIds = user.getStarredMessages().stream().map(Message::getId).collect(Collectors.toSet());
         }
 
         if (user.getDirectMessagesToUsers() != null) {
-            Set<Long> directMessageToUsersIds = user.getDirectMessagesToUsers().stream().map(User::getId).collect(Collectors.toSet());
-            this.directMessagesToUserIds = directMessageToUsersIds;
+            this.directMessagesToUserIds = user.getDirectMessagesToUsers().stream().map(User::getId).collect(Collectors.toSet());
         }
-
-
     }
 
     public void setId(Number id) {

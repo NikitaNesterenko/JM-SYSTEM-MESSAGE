@@ -1,7 +1,9 @@
 package jm.controller;
 
 import jm.*;
-import jm.dto.*;
+import jm.dto.DirectMessageDTO;
+import jm.dto.MessageDTO;
+import jm.dto.ThreadMessageDTO;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
@@ -9,12 +11,11 @@ import jm.model.message.DirectMessage;
 import jm.model.message.ThreadChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +25,15 @@ public class MessagesController {
 
     private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
-    private ChannelService channelService;
-    private DirectMessageService directMessageService;
-    private MessageService messageService;
-    private SimpMessageSendingOperations simpMessagingTemplate;
-    private ThreadChannelMessageService threadChannelMessageService;
-    private UserService userService;
-    private ConversationService conversationService;
+    private final ChannelService channelService;
+    private final DirectMessageService directMessageService;
+    private final MessageService messageService;
+    private final SimpMessageSendingOperations simpMessagingTemplate;
+    private final ThreadChannelMessageService threadChannelMessageService;
+    private final UserService userService;
+    private final ConversationService conversationService;
 
-    @Autowired
+
     public MessagesController(ChannelService channelService,
                               DirectMessageService directMessageService,
                               MessageService messageService, SimpMessageSendingOperations simpMessagingTemplate,
@@ -47,7 +48,7 @@ public class MessagesController {
     }
 
     @MessageMapping("/message")
-    public void messageCreation(MessageDTO messageDto) {
+    public void messageCreation(MessageDTO messageDto, Principal principal) {
         Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());
@@ -55,7 +56,7 @@ public class MessagesController {
             logger.info("Созданное сообщение: {}", message);
         } else {
             Message existingMessage = messageService.getMessageById(message.getId());
-            String editedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+            String editedUserName = principal.getName();
             boolean editingAllowed = existingMessage != null && editedUserName.equals(existingMessage.getUser().getLogin());
             if (editingAllowed) {
                 logger.info("Существующее сообщение: {}", existingMessage);
@@ -137,7 +138,7 @@ public class MessagesController {
             userService.updateUser(openingUser);
             conversationService.updateConversation(conversation);
             simpMessagingTemplate
-                    .convertAndSend("/queue/dm/new/user/" + openingUser.getId(),conversation.getId());
+                    .convertAndSend("/queue/dm/new/user/" + openingUser.getId(), conversation.getId());
         }
 
         logger.info("Созданное личное сообщение: {}", directMessage);
