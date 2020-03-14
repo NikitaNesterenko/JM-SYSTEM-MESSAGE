@@ -3,14 +3,13 @@ package jm.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jm.model.Workspace;
 import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.User;
+import jm.model.Workspace;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class ChannelDTO {
 
     private Long id;
