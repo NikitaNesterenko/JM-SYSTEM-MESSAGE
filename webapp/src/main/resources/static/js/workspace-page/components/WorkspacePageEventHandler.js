@@ -73,10 +73,6 @@ export class WorkspacePageEventHandler {
 
             });
 
-
-
-
-
             refreshMemberList();
         });
     }
@@ -101,6 +97,16 @@ export class WorkspacePageEventHandler {
             });
         });
     }
+
+    onHideChannelModal() {
+        $("#addChannelModal").on('hide.bs.modal', function () {
+            $(":input", $('#addChannelModal')).val("");
+            $('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        });
+    }
+
 
     getFormattedCreateDate() {
         const date = new Date();

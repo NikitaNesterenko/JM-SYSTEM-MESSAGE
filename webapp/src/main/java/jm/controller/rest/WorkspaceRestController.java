@@ -162,7 +162,7 @@ public class WorkspaceRestController {
         if (workspace == null) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-        request.getSession(false).setAttribute("WorkspaceID", workspace);
+        request.getSession(true).setAttribute("WorkspaceID", workspace);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
