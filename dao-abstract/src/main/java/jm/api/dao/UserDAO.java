@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.UserDTO;
 import jm.model.User;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,4 +49,6 @@ public interface UserDAO {
     Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
 
     Optional<String> getLoginBuUserName(String userName);
+
+    Optional<String> getLoginByMessageId(@NonNull Long messageId);
 }

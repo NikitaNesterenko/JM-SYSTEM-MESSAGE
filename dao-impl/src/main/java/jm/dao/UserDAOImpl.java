@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.UserDAO;
 import jm.dto.UserDTO;
 import jm.model.User;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
@@ -333,7 +334,19 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         try {
             login = (String) entityManager.createNativeQuery("SELECT u.login FROM users u WHERE u.username = :userName").setParameter("userName", userName).getSingleResult();
         } catch (NoResultException ignored) {
+        }
 
+        return Optional.ofNullable(login);
+    }
+
+    @Override
+    public Optional<String> getLoginByMessageId(@NonNull Long messageId) {
+
+        String login = null;
+        try {
+            login = (String) entityManager.createNativeQuery("SELECT u.login FROM users u, messages m WHERE m.id= :messageId AND m.user_id = u.id ")
+                    .setParameter("messageId", messageId).getSingleResult();
+        } catch (NoResultException ignored) {
         }
 
         return Optional.ofNullable(login);

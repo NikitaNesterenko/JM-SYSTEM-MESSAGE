@@ -27,6 +27,27 @@ public interface DirectMessageService {
 
     List<DirectMessageDTO> getDirectMessageDtoListByDirectMessageList(@NonNull List<DirectMessage> directMessagesList);
 
+    /**
+     * Метод сравнивает логин авторизированного пользователя с логином пользователя,
+     * сообщение которого должно быть изменено
+     * Если авторизированный пользователь совершает попытку изменить сообщение, автором которого не является то false.
+     * Иначе true.
+     *
+     * @param userLogin
+     * @param userName
+     * @return Boolean
+     */
     Boolean checkingPermissionOnUpdate(@NonNull String userLogin, @NonNull String userName);
+
+    /**
+     * Метод сравнивает логин авторизированного пользователя с логином пользователя,
+     * сообщение которого должно быть удалено.
+     * Если авторизированный пользователь совершает попытку удалить сообщение, автором которого не является то false.
+     * Иначе true.
+     * @param userLogin
+     * @param messageId
+     * @return Boolean
+     */
+    Boolean checkingPermissionOnDelete(@NonNull String userLogin, @NonNull Long messageId);
 
 }

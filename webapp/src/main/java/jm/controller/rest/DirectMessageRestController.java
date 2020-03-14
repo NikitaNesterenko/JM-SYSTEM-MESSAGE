@@ -106,8 +106,6 @@ public class DirectMessageRestController {
         } else {
             return ResponseEntity.badRequest().build();
         }
-
-
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -115,11 +113,14 @@ public class DirectMessageRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: direct message deleted")
             })
-    public ResponseEntity<DirectMessageDTO> deleteDirectMessage(@PathVariable Long id) {
-
-        directMessageService.deleteDirectMessage(id);
-        logger.info("Удалено сообщение с id = {}", id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<DirectMessageDTO> deleteDirectMessage(@PathVariable Long messageId, Principal principal) {
+        if (directMessageService.checkingPermissionOnDelete(principal.getName(), messageId)) {
+            directMessageService.deleteDirectMessage(messageId);
+            logger.info("Удалено сообщение с id = {}", messageId);
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value = "/conversation/{id}")
