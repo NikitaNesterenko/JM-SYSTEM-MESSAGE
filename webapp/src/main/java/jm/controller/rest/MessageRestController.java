@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jm.ChannelService;
 import jm.MessageService;
 import jm.UserService;
 import jm.dto.MessageDTO;
@@ -30,12 +29,10 @@ public class MessageRestController {
     private static final Logger logger = LoggerFactory.getLogger(MessageRestController.class);
 
     private final MessageService messageService;
-    private final ChannelService channelService;
     private final UserService userService;
 
-    public MessageRestController(MessageService messageService, ChannelService channelService, UserService userService) {
+    public MessageRestController(MessageService messageService, UserService userService) {
         this.messageService = messageService;
-        this.channelService = channelService;
         this.userService = userService;
     }
 
@@ -89,9 +86,8 @@ public class MessageRestController {
             })
     public ResponseEntity<MessageDTO> getMessageById (@PathVariable("id") Long id) {
         return messageService.getMessageDtoById(id)
-                       .map(messageDTO -> new ResponseEntity<>(messageDTO, HttpStatus.OK))
-                       .orElse(ResponseEntity.badRequest()
-                                       .build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     // DTO compliant
@@ -172,6 +168,7 @@ public class MessageRestController {
             logger.info("Обновленное сообщение: {}", message);
             return new ResponseEntity(HttpStatus.OK);
         }
+
         return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 

@@ -27,7 +27,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserDAO userDAO;
     private final ChannelDAO channelDAO;
 
-    @Autowired
     public WorkspaceServiceImpl(WorkspaceDAO workspaceDAO, UserDAO userDAO, ChannelDAO channelDAO) {
         this.workspaceDAO = workspaceDAO;
         this.userDAO = userDAO;

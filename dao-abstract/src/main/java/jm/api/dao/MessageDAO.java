@@ -49,5 +49,4 @@ public interface MessageDAO {
     Optional<Long> getMessageIdByContent (String content);
 
     Optional<String> getMessageContentById (Long id);
-
 }

@@ -314,8 +314,6 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         return list;
     }
 
-
-
     @Override
     public List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
         List<MessageDTO> messageDTOS = new ArrayList<>();
