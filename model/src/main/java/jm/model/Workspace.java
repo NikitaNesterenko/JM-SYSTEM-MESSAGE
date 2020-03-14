@@ -69,28 +69,12 @@ public class Workspace {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime createdDate;
 
-    @Column(name = "google_client_id")
-    private String googleClientId;
-
-    @Column(name = "google_client_secret")
-    private String googleClientSecret;
-
     public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate) {
         this.name = name;
         this.users = users;
         this.user = user;
         this.isPrivate = isPrivate;
         this.createdDate = createdDate;
-    }
-
-    public Workspace(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, String googleClientId, String googleClientSecret) {
-        this.name = name;
-        this.users = users;
-        this.user = user;
-        this.isPrivate = isPrivate;
-        this.createdDate = createdDate;
-        this.googleClientId = googleClientId;
-        this.googleClientSecret = googleClientSecret;
     }
 
     // Constructor for simplify WorkspaceDTO->Workspace conversion.

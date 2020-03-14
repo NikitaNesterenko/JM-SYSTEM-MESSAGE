@@ -23,24 +23,24 @@ export class NavHeader {
             .replaceWith(`
                 <div class="p-classic_nav__model__title__info">
                     <button class="p-classic_nav__model__title__info__star">
-                        <i class="material-icons" style="font-size: 18px; color: orange;">star</i>
+                        <i style="font-size: 18px; color: orange;">☆</i>
                     </button>
                     <span class="p-classic_nav__model__title__info__sep">|</span>
-                        <button class="p-classic_nav__model__title__info__members">
-                        <i class="material-icons">people</i>
-                    &nbsp;<i id="peopleInChat"> ${numOfPeople} </i>
+                    <button class="p-classic_nav__model__title__info__members">
+                        <i class="material-icons" style="font-size: 18px">people</i>
+                        <i id="peopleInChat"> ${numOfPeople} </i>
                     </button>
                     <span class="p-classic_nav__model__title__info__sep">|</span>
-                        <button class="p-classic_nav__model__title__info__pins">
-                        <i class="material-icons">flag</i>
-                    &nbsp;<i id="flaggedItems"> ${numOfStarredItems} </i>
-                    </button>
+                    <button class="p-classic_nav__model__title__info__pins">
+                        <i class="material-icons" style="font-size: 18px">flag</i>
+                        <i id="flaggedItems"> ${numOfStarredItems} </i>
+                    </button> 
                     <span class="p-classic_nav__model__title__info__sep">|</span>
                     <div class="p-classic_nav__model__title__info__item">
                         <div id="topic_string_block" class="p-classic_nav__model__title__info__topic__text">
                             <span id="topic_string" class="p-classic_nav__model__title__info__topic__content"> ${topic} </span>
                             <button id="topic_button" style="display: none;" class="p-classic_nav__model__title__info__topic__edit">
-                                <i class="material-icons">edit</i>
+                                <i class="material-icons" style="font-size: 18px">edit</i>
                             </button>
                         </div>
                     </div>
