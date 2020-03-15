@@ -63,7 +63,7 @@ export class WorkspacePageEventHandler {
             const channelId = $(event.currentTarget).val();
             pressChannelButton(channelId);
 
-            sessionStorage.setItem("channelName", channelId);
+            sessionStorage.setItem("channelId", channelId);
             sessionStorage.setItem('conversation_id', '0');
 
             this.channel_topic_service.getChannelTopic(channelId).then(topic => {

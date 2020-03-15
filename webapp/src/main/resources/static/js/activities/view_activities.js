@@ -55,7 +55,7 @@ const add_active_msg_to_right_panel = (time, message) => {
                 <div class="c-message__content--feature_sonic_inputs">
                   <div class="c-message__content_header" id="message_${message.id}_user_${message.user.id}_content_header">
                     <span class="c-message__sender">
-                      <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.name}</a>
+                      <a href="#modal_1" class="message__sender" id="user_${message.user.id}" data-user_id="${message.user.id}" data-toggle="modal">${message.user.username}</a>
                     </span>
                     <a class="c-timestamp--static">
                       <span class="c-timestamp__label">
