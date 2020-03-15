@@ -2,6 +2,7 @@ package jm;
 
 import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,5 +31,7 @@ public interface WorkspaceService {
     Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId);
 
     Workspace getEntityFromDTO(WorkspaceDTO workspaceDto);
+
+    List<Workspace> getWorkspaceListByLogin(@NonNull String login);
 
 }

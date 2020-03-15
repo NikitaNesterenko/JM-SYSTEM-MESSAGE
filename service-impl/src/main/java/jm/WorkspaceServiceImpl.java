@@ -7,9 +7,9 @@ import jm.dto.WorkspaceDTO;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserDAO userDAO;
     private final ChannelDAO channelDAO;
 
-    @Autowired
     public WorkspaceServiceImpl(WorkspaceDAO workspaceDAO, UserDAO userDAO, ChannelDAO channelDAO) {
         this.workspaceDAO = workspaceDAO;
         this.userDAO = userDAO;
@@ -72,7 +71,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public List<Workspace> getWorkspacesByUserId(Long userId) {
         return workspaceDAO.getWorkspacesByUserId(userId);
-    } //+
+    }
 
     @Override
     public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
@@ -118,5 +117,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return null;
     }
 
-
+    @Override
+    public List<Workspace> getWorkspaceListByLogin(@NonNull String login) {
+        return workspaceDAO.getWorkspaceListByLogin(login);
+    }
 }

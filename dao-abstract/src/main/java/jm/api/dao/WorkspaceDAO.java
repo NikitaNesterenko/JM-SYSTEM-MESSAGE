@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,4 +30,14 @@ public interface WorkspaceDAO {
     Optional<WorkspaceDTO> getWorkspaceDTOById(Long id);
 
     Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId);
+
+    /**
+     * Создает коллецию воркспейсов по Логину. Сравнивает
+     *
+     * ВНИМАНИЕ!!! на  15.03.2019 таблица workspaces_users содержит userId=1 на workspace, в которых нет юзера
+     *
+     * @param login
+     * @return List<Workspace>
+     */
+    List<Workspace> getWorkspaceListByLogin(@NonNull String login);
 }
