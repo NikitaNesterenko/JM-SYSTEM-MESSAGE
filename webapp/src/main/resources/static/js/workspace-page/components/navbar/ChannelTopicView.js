@@ -2,22 +2,14 @@ import {ChannelTopicRestPaginationService} from "/js/rest/entities-rest-paginati
 
 export class ChannelTopicView {
     channel_topic;
-    channel_id;
 
     constructor() {
         this.channel_topic_service = new ChannelTopicRestPaginationService();
     }
 
     buildEvents() {
-        this.onClickChannelSelection();
         this.onChannelTopicMouseOver();
         this.onClickChannelEdit();
-    }
-
-    onClickChannelSelection() {
-        $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", () => {
-            this.setTopic();
-        })
     }
 
     onChannelTopicMouseOver() {
@@ -32,32 +24,22 @@ export class ChannelTopicView {
         });
     }
 
-    setTopic() {
-        this.channel_id = sessionStorage.getItem("channelId");
-        if (this.channel_id !== 0 && this.channel_id != null) {
-            this.channel_topic_service.getChannelTopic(this.channel_id).then(chn_topic => {
-                //if (chn_topic !== null && chn_topic !== undefined) {
-                    this.channel_topic = this.checkTopic(chn_topic);
-                    $("#topic_string").text(this.channel_topic);
-               // }
-            });
-        }
-    }
-
     checkTopic(topic) {
         return topic === "" || topic === "null" ? "Enter channel topic here." : topic;
     }
 
-    updateTopic() {
-        this.channel_id = sessionStorage.getItem("channelId");
-        this.channel_topic_service.getChannelTopic(this.channel_id).then(chn_topic => {this.channel_topic = chn_topic});
+    async updateTopic() {
+        const id = sessionStorage.getItem("channelId");
+        await this.channel_topic_service.getChannelTopic(id).then(old_topic => {
+                this.channel_topic = old_topic;
+        });
         const newTopic = prompt("Please provide topic for the channel:", this.channel_topic);
         if (newTopic != null) {
-            this.channel_topic_service.updateChannelTopic(this.channel_id, newTopic).then(chn_topic => {
+            this.channel_topic_service.updateChannelTopic(id, newTopic).then(chn_topic => {
                 $("#topic_string").text(this.checkTopic(chn_topic));
-                console.log(this.channel_id);
+                console.log(id);
                 console.log(newTopic);
-                sendChannelTopicChange(this.channel_id,newTopic);
+                sendChannelTopicChange(id, newTopic);
             });
         }
     }

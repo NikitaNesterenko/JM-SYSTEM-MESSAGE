@@ -68,13 +68,15 @@ export class WorkspacePageEventHandler {
 
             this.channel_topic_service.getChannelTopic(channelId).then(topic => {
                 this.user_service.getUsersByChannelId(channelId).then(users => {
-                    this.wks_header.setInfo(users.length, 666, topic);
+                    this.wks_header.setInfo(users.length, 666, this.checkTopic(topic));
                 });
-
             });
-
             refreshMemberList();
         });
+    }
+
+    checkTopic(topic) {
+        return topic === "" || topic === "null" ? "Enter channel topic here." : topic;
     }
 
     onAddChannelSubmit() {

@@ -284,7 +284,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         String topic = (String) entityManager.createNativeQuery("select ch.topic from channels ch where ch.id=?")
                 .setParameter(1, id)
                 .getSingleResult();
-        return topic == null ? "\"Add a topic\"" : topic;
+        return topic == null ? "\"Enter channel topic here.\"" : topic;
     }
 
     @Override

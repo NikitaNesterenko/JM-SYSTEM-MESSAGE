@@ -18,7 +18,6 @@ export class ChannelView {
         window.pressChannelButton = (id) => {
             window.channel_id = id;
             this.selectChannel(id);
-            //sessionStorage.setItem('conversation_id', '0');
         }
     }
 
@@ -32,14 +31,12 @@ export class ChannelView {
     showAllChannels(workspace_id) {
         this.addCurrentWorkspace(workspace_id);
         sessionStorage.clear();
-        //this.setLocalStorageSettings(0);
         //берем каналы для конкретного пользователя и конкретного воркспейса
         this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, this.loggedUser.id).then(
             channels => {
                 if (channels.length > 0) {
                     this.addChannels(channels);
                     if (this.default_channel !== null) {
-                        //this.setLocalStorageSettings(this.default_channel.id);
                         this.setChannelBGColor(this.default_channel);
                         this.channel_message_view.update();
                     }
