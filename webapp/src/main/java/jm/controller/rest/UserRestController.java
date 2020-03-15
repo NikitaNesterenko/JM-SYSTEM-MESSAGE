@@ -90,6 +90,23 @@ public class UserRestController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/username/{username}")
+    @Operation(summary = "Get user by id",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDTO.class)
+                            ),
+                            description = "OK: get user"
+                    )
+            })
+    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+        User user = userService.getUserByName(username);
+
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
     // DTO compliant
     @PutMapping(value = "/update")
     @Operation(summary = "Update user",

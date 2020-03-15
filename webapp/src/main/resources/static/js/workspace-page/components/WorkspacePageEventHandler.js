@@ -3,7 +3,8 @@ import {
     ChannelRestPaginationService,
     ChannelTopicRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    ConversationRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
 import {NavHeader} from "./navbar/NavHeader.js";
 
@@ -20,6 +21,8 @@ export class WorkspacePageEventHandler {
         this.user_service = new UserRestPaginationService();
         this.wks_header = new NavHeader();
         this.user_service = new UserRestPaginationService();
+        this.workspace_service = new WorkspaceRestPaginationService();
+        this.conversation_serivce = new ConversationRestPaginationService();
     }
 
     onAddChannelClick() {
@@ -75,6 +78,33 @@ export class WorkspacePageEventHandler {
 
             refreshMemberList();
         });
+    }
+
+    onAddConversationSubmit() {
+        $("#addConversationSubmit").click(() => {
+            let name = $('#inputUsernameForConversation').val();
+            const workspace = this.workspace_service.getChosenWorkspace();
+            const user = this.user_service.getLoggedUser();
+
+            this.user_service.getUserByName(name).then(userTo => {
+                if (typeof (userTo) === 'undefined') {
+                    alert('User not found');
+                } else {
+
+                    const entity = {
+                        openingUser: user,
+                        associatedUser: userTo,
+                        workspace: workspace,
+
+                        showForOpener: true,
+                        showForAssociated: true
+                    };
+
+
+                    this.conversation_serivce.create(entity);
+                }
+            })
+        })
     }
 
     onAddChannelSubmit() {
