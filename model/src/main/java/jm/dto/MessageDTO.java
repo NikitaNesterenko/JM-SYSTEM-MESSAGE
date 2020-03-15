@@ -244,8 +244,8 @@ public class MessageDTO {
                              .orElse(null);
     }
 
-    public void setDateCreate (Timestamp dateCreate) {
-        this.dateCreate = dateCreate.toLocalDateTime();
+    public void setDateCreate (LocalDateTime dateCreate) {
+        this.dateCreate = dateCreate.now();
     }
 
     public void setDateCreateLocalDateTime (LocalDateTime dateCreate) {

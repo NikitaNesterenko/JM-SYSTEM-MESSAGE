@@ -2,7 +2,6 @@ package jm;
 
 import jm.api.dao.ThreadChannelDAO;
 import jm.dto.MessageDTO;
-import jm.dto.MessageDtoService;
 import jm.model.Message;
 import jm.model.ThreadChannel;
 import org.slf4j.Logger;
@@ -21,10 +20,7 @@ public class ThreadChannelServiceImpl implements ThreadChannelService {
 
     private ThreadChannelDAO threadChannelDao;
 
-    private MessageDtoService messageDtoService;
 
-    @Autowired
-    public void setMessageDtoService(MessageDtoService messageDtoService) {this.messageDtoService = messageDtoService; }
 
     @Autowired
     public void setThreadChannelDao(ThreadChannelDAO threadChannelDao) {
@@ -39,7 +35,7 @@ public class ThreadChannelServiceImpl implements ThreadChannelService {
     @Override
     public ThreadChannel createThreadChannelByMessageDTO(MessageDTO messageDTO) {
         messageDTO.setDateCreate(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDTO);
+        Message message = new Message(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
         createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);
