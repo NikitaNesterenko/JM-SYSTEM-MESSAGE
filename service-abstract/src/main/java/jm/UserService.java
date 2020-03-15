@@ -16,14 +16,13 @@ public interface UserService {
 
     void updateUser(User user);
 
-    User getUserById(Long id); //+
+    User getUserById(Long id);
 
-
-    User getUserByLogin(String login); //+
+    User getUserByLogin(String login);
 
     User getUserByName(String name);
 
-    User getUserByEmail(String email); //+
+    User getUserByEmail(String email);
 
     List<User> getAllUsersInThisChannel(Long id); //+
 
