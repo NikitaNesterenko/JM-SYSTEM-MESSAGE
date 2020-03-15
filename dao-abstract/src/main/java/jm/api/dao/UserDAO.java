@@ -16,7 +16,11 @@ public interface UserDAO {
 
     void deleteById(Long id);
 
+    Boolean deleteUser(@NonNull User user);
+
     User merge(User user);
+
+    Boolean updateUser(@NonNull User user);
 
     User getById(Long id);
 
@@ -51,4 +55,6 @@ public interface UserDAO {
     Optional<String> getLoginBuUserName(String userName);
 
     Optional<String> getLoginByMessageId(@NonNull Long messageId);
+
+    Optional<String> getLoginByUserId(@NonNull Long userId);
 }

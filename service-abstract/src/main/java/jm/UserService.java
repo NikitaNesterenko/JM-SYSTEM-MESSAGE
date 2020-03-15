@@ -2,6 +2,7 @@ package jm;
 
 import jm.dto.UserDTO;
 import jm.model.User;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +15,11 @@ public interface UserService {
 
     void deleteUser(Long id);
 
-    void updateUser(User user);
+    Boolean deleteUser(@NonNull User user);
+
+    Boolean updateUser(@NonNull User user);
 
     User getUserById(Long id); //+
-
 
     User getUserByLogin(String login); //+
 
@@ -46,5 +48,9 @@ public interface UserService {
     Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
 
     User getEntityFromDTO(UserDTO userDTO);
+
+    Boolean checkingPermissionOnUpdate(@NonNull String userLogin, @NonNull Long userId);
+
+    Boolean checkingPermissionOnDelete(@NonNull String userLogin, @NonNull Long userId);
 
 }

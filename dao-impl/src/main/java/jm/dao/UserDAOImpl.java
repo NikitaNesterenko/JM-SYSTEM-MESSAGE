@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TransactionRequiredException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -45,7 +46,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public User getUserByEmail(String email) {
         try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+            return (User) entityManager.createQuery("from User where email  = :email")
+                    .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
@@ -350,5 +352,43 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         }
 
         return Optional.ofNullable(login);
+    }
+
+    @Override
+    public Optional<String> getLoginByUserId(@NonNull Long userId) {
+        String login = null;
+        try {
+            login = (String) entityManager.createNativeQuery("SELECT u.login FROM users u WHERE u.id = :userId").setParameter("userId", userId).getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+        return Optional.ofNullable(login);
+    }
+
+    @Override
+    public Boolean updateUser(@NonNull User user) {
+        boolean result = false;
+
+        try {
+            entityManager.merge(user);
+            result = true;
+        } catch (IllegalArgumentException | TransactionRequiredException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public Boolean deleteUser(@NonNull User user) {
+        boolean result = false;
+
+        try {
+            entityManager.remove(user);
+            result = true;
+        } catch (IllegalArgumentException | TransactionRequiredException e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

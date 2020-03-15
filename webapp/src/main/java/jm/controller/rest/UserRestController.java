@@ -9,14 +9,17 @@ import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.model.User;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,17 +107,9 @@ public class UserRestController {
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to update user")
             })
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
-    public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
-        // TODO: ПЕРЕДЕЛАТЬ existingUser нет необзодимости в получение всей сущности для проверки на существование
+    public ResponseEntity updateUser(@RequestBody UserDTO userDTO, Authentication authorization) {
         User user = userService.getEntityFromDTO(userDTO);
-        User existingUser = userService.getUserById(user.getId());
-        if (existingUser == null) {
-            logger.warn("Пользователь не найден");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        userService.updateUser(user);
-        logger.info("Обновленный пользователь: {}", user);
-        return new ResponseEntity(HttpStatus.OK);
+        return userService.updateUser(user)? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -122,10 +117,16 @@ public class UserRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: user deleted")
             })
-    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
-        logger.info("Удален польщователь с id = {}", id);
-        return ResponseEntity.ok(true);
+    public ResponseEntity deleteUser(@PathVariable("id") Long id, Principal principal) {
+//        if (userService.checkingPermissionOnUpdate(principal.getName(), id)) {
+//            userService.deleteUser(id);
+//            return ResponseEntity.ok(true);
+//        } else {
+//            return ResponseEntity.badRequest().build();
+//        }
+        User user = userService.getUserById(id);
+        return userService.checkingPermissionOnUpdate(principal.getName(), id) && userService.deleteUser(user)?
+                ResponseEntity.ok(true) : ResponseEntity.badRequest().build();
     }
 
     // DTO compliant

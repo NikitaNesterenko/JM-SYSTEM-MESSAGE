@@ -7,6 +7,7 @@ import jm.dto.UserDTO;
 import jm.model.Message;
 import jm.model.User;
 import jm.model.message.DirectMessage;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +46,19 @@ public class UserServiceImpl implements UserService {
         userDAO.persist(user);
     }
 
-
     @Override
     public void deleteUser(Long id) {
         userDAO.deleteById(id);
     }
 
     @Override
-    public void updateUser(User user) {
-        userDAO.merge(user);
+    public Boolean deleteUser(@NonNull User user) {
+        return userDAO.deleteUser(user);
+    }
+
+    @Override
+    public Boolean updateUser(@NonNull User user) {
+        return userDAO.updateUser(user);
     }
 
     @Override
@@ -161,5 +166,15 @@ public class UserServiceImpl implements UserService {
         user.setUnreadDirectMessages(new HashSet<>(unreadDirectMessageList));
 
         return user;
+    }
+
+    @Override
+    public Boolean checkingPermissionOnUpdate(@NonNull String userLogin, @NonNull Long userId) {
+        return userDAO.getLoginByUserId(userId).map(userLogin::equals).orElse(false);
+    }
+
+    @Override
+    public Boolean checkingPermissionOnDelete(@NonNull String userLogin, @NonNull Long userId) {
+        return userDAO.getLoginByUserId(userId).map(userLogin::equals).orElse(false);
     }
 }
