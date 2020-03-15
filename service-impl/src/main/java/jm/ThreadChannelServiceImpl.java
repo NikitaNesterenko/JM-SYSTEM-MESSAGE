@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Transactional
-public class ThreadChannelServiceImpl implements ThreadChannelService{
+public class ThreadChannelServiceImpl implements ThreadChannelService {
     private static final Logger logger = LoggerFactory.getLogger(
             ThreadChannelServiceImpl.class);
 

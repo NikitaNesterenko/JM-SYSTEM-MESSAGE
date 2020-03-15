@@ -1,33 +1,58 @@
 package jm;
 
+import jm.dto.MessageDTO;
 import jm.model.Message;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface MessageService {
 
-    List<Message> getAllMessages(Boolean isDeleted);
+    List<Message> getAllMessages (Boolean isDeleted);
 
-    List<Message> getMessagesByChannelId(Long id, Boolean isDeleted);
+    List<MessageDTO> getAllMessageDtoByIsDeleted (Boolean isDeleted);
 
-    List<Message> getMessagesByContent(String word, Boolean isDeleted);
+    List<Message> getMessagesByChannelId (Long id, Boolean isDeleted);
 
-    Message getMessageById(Long id);
+    List<MessageDTO> getMessageDtoListByChannelId (Long id, Boolean isDeleted);
 
-    void createMessage(Message message);
+    List<Message> getMessagesByContent (String word, Boolean isDeleted);
 
-    void deleteMessage(Long id);
+    Message getMessageById (Long id);
 
-    void updateMessage(Message message);
+    Optional<MessageDTO> getMessageDtoById (Long id);
 
-    List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
+    void createMessage (Message message);
 
-    List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
+    void deleteMessage (Long id);
 
-    List<Message> getStarredMessagesForUser(Long id, Boolean isDeleted);
+    void updateMessage (Message message);
 
-    List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted);
+    List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
 
-    List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted);
+    List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
+
+    List<Message> getMessagesByBotIdByChannelIdForPeriod (Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted);
+
+    List<Message> getStarredMessagesForUser (Long id, Boolean isDeleted);
+
+    List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);
+
+    List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted);
+
+    List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted);
+
+    MessageDTO getMessageDtoByMessage (@NonNull Message message);
+
+    List<MessageDTO> getMessageDtoListByMessageList(@NonNull List<Message> messageList);
+
+    Message getMessageByMessageDTO (@NonNull MessageDTO messageDTO);
+
+    List<Message> getMessageListByMessageDtoList(@NonNull List<MessageDTO> messageDTOList);
+
+    Optional<Long> getMessageIdByContent (@NonNull String content);
+
+    Optional<String> getMessageContentById (@NonNull Long id);
 }

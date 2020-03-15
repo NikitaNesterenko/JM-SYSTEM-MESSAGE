@@ -2,33 +2,57 @@ package jm;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
 import jm.model.CreateWorkspaceToken;
 import jm.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChannelService {
-    List<ChannelDTO> getAllChannels();
+    // TODO: проверить
+    //List<ChannelDTO> getAllChannels();
+    List<Channel> gelAllChannels();
 
-    void createChannel(Channel channel);
+    List<ChannelDTO> getAllChanelDTO ();
 
-    void deleteChannel(Long id);
+    void createChannel (Channel channel);
 
-    void updateChannel(Channel channel);
+    void deleteChannel (Long id);
+
+    void updateChannel (Channel channel);
 
     void createChannelByTokenAndUsers(CreateWorkspaceToken createWorkspaceToken, Set<User> users);
 
-    Channel getChannelById(Long id);
+    Channel getChannelById (Long id);
 
-    Channel getChannelByName(String name);
+    Optional<ChannelDTO> getChannelDTOById (Long id);
 
-    List<Channel> getChannelsByOwnerId(Long ownerId);
+    Channel getChannelByName (String name);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+    Optional<Long> getChannelIdByName(String chanelName);
 
-    List<Channel> getChannelsByWorkspaceId(Long id);
+    Optional<ChannelDTO> getChannelDTOByName (String name);
 
-    List<Channel> getChannelsByUserId(Long userId);
+    List<Channel> getChannelsByOwnerId (Long ownerId);
+
+    List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
+
+    List<Channel> getChannelsByWorkspaceId (Long workspaceId);
+
+    List<ChannelDTO> getChannelDtoListByWorkspaceId (Long id);
+
+    List<Channel> getChannelsByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByChannelList (@NonNull List<Channel> channelList);
+
+    Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO);
+
+    ChannelDTO getChannelDtoByChannel(@NonNull Channel channel);
+
+    String getTopicChannelByChannelId(Long id);
 
     Long getWorkspaceIdByChannelId(Long channelId);
 

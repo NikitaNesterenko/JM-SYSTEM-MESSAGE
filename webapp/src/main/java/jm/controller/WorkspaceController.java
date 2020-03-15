@@ -14,7 +14,6 @@ public class WorkspaceController {
     public ModelAndView addUser(@RequestParam("name") String name, @RequestParam("usersList") String[] usersList,
                                 @RequestParam("owner") String owner, @RequestParam(value = "isPrivate", required = false) boolean isPrivate) {
         ModelAndView modelAndView = new ModelAndView();
-        //TODO
         modelAndView.setViewName("redirect:/workspace");
         return modelAndView;
     }

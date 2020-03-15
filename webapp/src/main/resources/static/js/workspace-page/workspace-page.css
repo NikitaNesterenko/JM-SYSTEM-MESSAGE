@@ -13,21 +13,21 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
 }
 
 .p-client_container {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
 }
 
@@ -35,13 +35,13 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     overflow: hidden;
-    background: rgba(var(--sk_primary_background,255,255,255),1);
+    background: rgba(var(--sk_primary_background, 255, 255, 255), 1);
     width: 100vw;
     height: 100vh;
     display: grid;
@@ -60,7 +60,8 @@ button:focus {
     font-family: Slack-Lato,appleLogo,sans-serif;
     box-sizing: inherit;
     display: grid;
-    grid-template-rows: min-content auto 65px;
+    grid-template-columns: 220px auto 492px;
+    grid-template-rows: min-content auto 140px;
     /*grid-template-areas: "p-workspace__banner p-workspace__banner p-workspace__banner"*/
     /*                     "p-workspace__top_nav p-workspace__top_nav p-workspace__top_nav"*/
     /*                      "p-workspace__sidebar p-workspace__primary_view p-workspace__secondary_view"*/
@@ -68,7 +69,7 @@ button:focus {
     grid-template-areas:
                          "p-workspace__top_nav p-workspace__top_nav p-workspace__top_nav"
                           "p-workspace__sidebar p-workspace__primary_view p-workspace__primary_view"
-                         "p-workspace__sidebar p-workspace_footer p-workspace_footer";
+                         "p-workspace__sidebar p-workspace__footer p-workspace__footer";
 
     grid-template-columns: 220px auto 492px;
     min-width: 0;
@@ -127,6 +128,83 @@ button:focus {
     grid-template-rows: auto;
 }
 
+.p-workspace__footer {
+    overflow: auto;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    box-sizing: inherit;
+    grid-area: p-workspace__footer;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+.buttons-MessageBox {
+    margin: 6px 3px;
+}
+
+.buttons-SideBar {
+    margin: 5px 0;
+    padding: 0;
+}
+
+.buttons-TopBar {
+    margin: 5px 5px;
+    color: lightslategray;
+}
+
+.VoiceMessageButton {
+    transition: color 200ms ease;
+}
+
+.VoiceMessageButtonBlink{
+    color:transparent;
+}
+
+.noselect {
+    user-select: none;
+}
+
+.iconsVD-sideBar {
+    font-size: 20px;
+    color: rgb(188,171,188);
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none !important;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    height: min-content;
+}
+
+.iconsVD-sideBar:hover {
+    color: #d5d8cc;
+}
+
+.directMessageFindButton {
+
+}
+
+.directMessageModal {
+
+}
+
+.iconsVD-messageBox {
+    font-size: 20px;
+    color: #646f83;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none !important;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.iconsVD-messageBox:hover {
+    background-color: silver;
+}
+
 .p-workspace__secondary_view {
     font-size: 15px;
     line-height: 1.46668;
@@ -171,7 +249,7 @@ button:focus {
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     box-sizing: inherit;
-    padding: 8px 16px;
+    padding: 4px 16px;
     user-select: none;
     -webkit-app-region: drag;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
@@ -179,7 +257,7 @@ button:focus {
     flex-shrink: 0;
     width: 220px;
     height: 60px;
-    background: #2e0055;
+    background: #400E41;
     color: #FFFFFF;
 }
 
@@ -239,7 +317,6 @@ button:focus {
 
 .p-classic_nav__team_header__team {
     font-size: 15px;
-    line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
@@ -251,10 +328,10 @@ button:focus {
     box-sizing: inherit;
     display: flex;
     align-items: center;
+    height: 30px;
 }
 
 .p-classic_nav__team_header__user {
-    line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
@@ -265,7 +342,6 @@ button:focus {
     cursor: pointer;
     box-sizing: inherit;
     display: flex;
-    align-items: center;
     font-size: 14px;
 }
 
@@ -278,8 +354,7 @@ button:focus {
     color: #FFFFFF;
     cursor: pointer;
     box-sizing: inherit;
-    font-size: 18px;
-    line-height: 1.33334;
+    font-size: 16px;
     font-weight: 900;
     display: block;
     text-overflow: ellipsis;
@@ -309,7 +384,6 @@ button:focus {
 
 .p-classic_nav__team_header__team__dnd_container {
     font-size: 15px;
-    line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
@@ -652,26 +726,6 @@ button:focus {
     width: 1em;
 }
 
-.p-classic_nav__model__title__info__members__icon {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    user-select: none;
-    color: inherit;
-    font: inherit;
-    text-align: initial;
-    cursor: pointer;
-    box-sizing: inherit;
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: auto;
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    width: 1em;
-}
-
 .p-classic_nav__model__title__info__pins__icon {
     -webkit-font-smoothing: antialiased;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
@@ -746,114 +800,6 @@ button:focus {
     display: none;
     margin-left: 8px;
     color: rgba(var(--sk_highlight,18,100,163),1);
-}
-
-.p-classic_nav__model__button__call {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    box-sizing: inherit;
-    background: none;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    border-radius: 4px;
-    color: rgba(var(--sk_foreground_low,29,28,29),.13);
-    font-size: 20px;
-}
-
-.p-classic_nav__model__button__call__icon {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    font: inherit;
-    line-height: inherit;
-    text-align: initial;
-    cursor: pointer;
-    color: rgba(var(--sk_foreground_low,29,28,29),.13);
-    box-sizing: inherit;
-    position: relative;
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-    justify-content: center;
-    font-weight: bolder;
-}
-
-.p-classic_nav__model__button__details {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    box-sizing: inherit;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    border-radius: 4px;
-    background: rgba(var(--sk_foreground_low,29,28,29),.13);
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-}
-
-.p-classic_nav__model__button__details__icon {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    font: inherit;
-    line-height: inherit;
-    text-align: initial;
-    cursor: pointer;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    box-sizing: inherit;
-    position: relative;
-    display: inline-flex;
-    width: 20px;
-    height: 20px;
-    align-items: center;
-    justify-content: center;
-    font-weight: bolder;
-}
-
-.p-classic_nav__model__button__settings {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    box-sizing: inherit;
-    background: none;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 32px;
-    height: 32px;
-    justify-content: center;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
-    border-radius: 4px;
-    font-size: 20px;
-    font-weight: bolder;
 }
 
 .p-classic_nav__model__button__settings__icon {
@@ -1150,7 +1096,7 @@ button:focus {
     display: flex;
     flex-direction: column;
     font-size: 15px;
-    background: #2e0055;
+    background: #400E41 !important;
     color: rgb(188,171,188);
 }
 
@@ -1215,6 +1161,7 @@ button:focus {
     white-space: nowrap;
     box-sizing: inherit;
     margin-right: 6px;
+    size: 10px;
 }
 
 .p-channel_sidebar__jumper_keys {
@@ -1304,7 +1251,7 @@ button:focus {
     -webkit-font-smoothing: antialiased;
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    background: #400E41 !important;
     box-sizing: inherit;
     position: relative;
     overflow: hidden;
@@ -1391,9 +1338,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 12px;
 }
@@ -1403,9 +1350,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 26px;
 }
@@ -1432,7 +1379,7 @@ button:focus {
     padding: 0 12px 0 15px;
     width: 100%;
     border-radius: 0;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
 }
 
 .p-channel_sidebar__name-1 {
@@ -1441,7 +1388,7 @@ button:focus {
     text-align: initial;
     cursor: pointer;
     line-height: 26px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     margin-right: auto;
     text-overflow: ellipsis;
@@ -1455,9 +1402,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 12px;
 }
@@ -1467,9 +1414,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     padding: 0 12px 0 15px;
     margin: 0;
@@ -1480,6 +1427,7 @@ button:focus {
 }
 
 .p-channel_sidebar__channels__button {
+    position: absolute;
     -webkit-font-smoothing: antialiased;
     box-sizing: inherit;
     background: none;
@@ -1495,7 +1443,7 @@ button:focus {
     display: block;
     opacity: 1;
     text-align: left;
-    width: 100%;
+    width: min-content;
     transition: color .1s ease-out;
     white-space: nowrap;
     font-weight: 700;
@@ -1511,9 +1459,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     padding: 0 12px 0 0;
     margin: 0;
@@ -1528,9 +1476,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     margin-left: auto;
     padding: 0;
@@ -1562,9 +1510,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 18px;
 }
@@ -1574,26 +1522,30 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 0;
 }
 
 .p-channel_sidebar__channel {
+    position: relative;
     line-height: 1.46668;
     font-weight: 400;
-    font-variant-ligatures: common-ligatures;
+    /*font-variant-ligatures: common-ligatures;*/
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    box-sizing: inherit;
     height: 26px;
 }
 
 .p-channel_sidebar__channel:hover {
-    background: #150037;
+    background: #461643;
+}
+
+.p-channel_sidebar__channel:hover .cross {
+    display: inline-block;
 }
 
 .p-channel_sidebar__name_button {
@@ -1601,7 +1553,7 @@ button:focus {
     box-sizing: inherit;
     background: none;
     border: 0;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     font: inherit;
     margin: 0;
     overflow: initial;
@@ -1619,15 +1571,10 @@ button:focus {
     outline: none;
 }
 
-.p-channel_sidebar__name_button:focus {
-    color: white;
-    background: royalblue;
-}
-
 .p-channel_sidebar__channel_icon_prefix {
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     position: relative;
     align-items: center;
@@ -1650,7 +1597,7 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
     line-height: 26px;
     /*color: rgb(188,171,188);*/
@@ -1663,30 +1610,16 @@ button:focus {
     opacity: 1;
 }
 
-
-
 .p-channel_sidebar__list__presentation-4 {
     line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 18px;
-}
-
-.p-channel_sidebar__add_channel {
-    line-height: 1.46668;
-    font-weight: 400;
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    font-size: 15px;
-    color: rgb(188,171,188);
-    box-sizing: inherit;
-    height: 26px;
 }
 
 .p-channel_sidebar__add_app {
@@ -1694,9 +1627,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 26px;
 }
@@ -1706,9 +1639,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     position: relative;
 }
@@ -1718,15 +1651,15 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     position: relative;
 }
 
 .p-channel_sidebar__close_container:hover {
-    background: #150037;
+    background: #461643;
 }
 
 .p-channel_sidebar__add_channel__button {
@@ -1747,7 +1680,7 @@ button:focus {
     padding: 0 12px 0 15px;
     width: 100%;
     border-radius: 0;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     outline: none;
 }
 
@@ -1769,7 +1702,7 @@ button:focus {
     padding: 0 12px 0 15px;
     width: 100%;
     border-radius: 0;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     outline: none;
 }
 
@@ -1779,7 +1712,7 @@ button:focus {
     text-align: initial;
     cursor: pointer;
     line-height: 26px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     margin-right: auto;
     text-overflow: ellipsis;
@@ -1793,24 +1726,16 @@ button:focus {
     box-sizing: inherit;
     background: none;
     border: 0;
-    color: inherit;
-    font: inherit;
-    margin: 0;
-    overflow: initial;
-    padding: 0;
     text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    opacity: 0;
     position: absolute;
     top: 3px;
     right: .75rem;
     line-height: 1;
+    display: none;
 }
 
 .p-channel_sidebar__close__icon {
     -webkit-font-smoothing: antialiased;
-    color: inherit;
     font: inherit;
     text-align: initial;
     cursor: pointer;
@@ -1822,16 +1747,28 @@ button:focus {
     height: 20px;
     align-items: center;
     justify-content: center;
+    color: gainsboro;
 }
+
+.p-channel_sidebar__close__icon:hover {
+    -webkit-animation: color-change 1s forwards;
+}
+
+@-webkit-keyframes color-change {
+    0% { color: gainsboro; }
+    50% { color: #b4545e; }
+    100% { color: red; }
+}
+
 
 .p-channel_sidebar__direct-messages {
     line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     padding: 0 12px 0 15px;
     margin: 0;
@@ -1841,14 +1778,14 @@ button:focus {
     align-items: center;
 }
 
-.p-channel_sidebar__app{
+.p-channel_sidebar__app {
     line-height: 1.46668;
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     padding: 0 12px 0 15px;
     margin: 0;
@@ -1890,9 +1827,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     position: relative;
 }
@@ -1904,9 +1841,6 @@ button:focus {
     position: relative;
     align-items: center;
     justify-content: center;
-    height: auto;
-    line-height: inherit;
-    margin: 0 1px 0 -4px;
     font-family: Slack v2;
     font-size: 20px;
     font-style: normal;
@@ -1916,8 +1850,6 @@ button:focus {
     width: 20px;
     flex-shrink: 0;
     color: #2BAC76;
-    opacity: 1;
-    padding-bottom: 5px;
 }
 
 .p-channel_sidebar__channel_icon_circle:hover {
@@ -1929,9 +1861,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 15px;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     box-sizing: inherit;
     height: 26px;
 }
@@ -1954,7 +1886,7 @@ button:focus {
     padding: 0 12px 0 15px;
     width: 100%;
     border-radius: 0;
-    color: rgb(188,171,188);
+    color: rgb(188, 171, 188);
     outline: none;
 }
 
@@ -1962,10 +1894,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
@@ -1978,10 +1910,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
@@ -1993,12 +1925,12 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     flex: 1;
     min-height: 0;
     position: relative;
@@ -2006,91 +1938,23 @@ button:focus {
     /*bottom: 15px;*/
 }
 
-.p-workspace__primary_view_footer {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    box-sizing: inherit;
-}
-
-.p-message_pane_input {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    box-sizing: inherit;
-    display: flex;
-    padding: 0 20px;
-}
-
-.p-message_pane_input_inner {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    box-sizing: inherit;
-    flex: 1 1 auto;
-    min-width: 0;
-    min-height: 0;
-}
-
-.p-workspace__input {
-    font-size: 15px;
-    line-height: 1.46668;
-    font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    box-sizing: inherit;
-    display: flex;
-    position: relative;
-}
-
-.p-message_input_field {
-    line-height: 1.46668;
-    font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    font-variant-ligatures: common-ligatures;
-    -webkit-font-smoothing: antialiased;
-    box-sizing: border-box;
-    font-size: 13px;
-    height: 100%;
-    margin: 0;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    border: 1px solid var(--saf-0);
-    position: relative;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    background: rgba(var(--sk_primary_background,255,255,255),1);
-    border-radius: 4px;
-    border-width: 1px;
-    border-color: rgba(var(--sk_foreground_high,29,28,29),.5);
-    min-height: 42px;
-    min-width: 1px;
-    padding-top: 0;
-    padding-bottom: 4px;
-    padding-right: 0;
-    flex: 1;
-    padding-left: 43px;
-    z-index: 200;
-}
+/*.p-workspace__primary_view_footer {*/
+/*    font-size: 15px;*/
+/*    line-height: 1.46668;*/
+/*    font-weight: 400;*/
+/*    color: rgba(var(--sk_primary_foreground,29,28,29),1);*/
+/*    font-variant-ligatures: common-ligatures;*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    font-family: Slack-Lato,appleLogo,sans-serif;*/
+/*    box-sizing: inherit;*/
+/*}*/
 
 .ql-editor {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
     /*-webkit-user-modify: read-write;*/
     /*-webkit-line-break: after-white-space;*/
     unicode-bidi: -webkit-isolate;
@@ -2123,7 +1987,7 @@ button:focus {
 }
 
 .ql-editor.ql-blank:before {
-    color: rgba(0,0,0,.6);
+    color: rgba(0, 0, 0, .6);
     content: attr(data-placeholder);
     font-style: italic;
     pointer-events: none;
@@ -2133,12 +1997,12 @@ button:focus {
 .ql-clipboard {
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
     font-size: 13px;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
     -webkit-user-modify: read-write;
     overflow-wrap: break-word;
     -webkit-line-break: after-white-space;
@@ -2153,74 +2017,35 @@ button:focus {
 .ql-composer {
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
     font-size: 13px;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     position: absolute;
 }
 
 .ql-buttons {
-    line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-size: 13px;
     --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
     font-family: Slack-Lato,appleLogo,sans-serif;
     box-sizing: inherit;
-    bottom: 4px;
-    height: 32px;
     position: absolute;
-    right: 4px;
-    width: 67px;
-}
-
-.c-texty_input__button--emoji {
-    -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    box-sizing: inherit;
-    background: none;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    align-items: center;
-    display: inline-flex;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 2px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: opacity .2s,background-color .2s,color .2s;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
-    font-weight: bolder;
-    outline: none;
-}
-
-.c-texty_input__button--emoji:hover {
-    background: silver;
 }
 
 .c-icon--smile-o {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
     font: inherit;
     line-height: inherit;
     text-align: initial;
     cursor: pointer;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    color: rgba(var(--sk_foreground_max, 29, 28, 29), .7);
     box-sizing: inherit;
     position: relative;
     display: inline-flex;
@@ -2231,47 +2056,38 @@ button:focus {
     font-size: 15px;
 }
 
-.c-texty_input__button {
+.workspace-input_bar-button {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
     box-sizing: inherit;
-    background: none;
-    border: 0;
+    background: transparent;
     font: inherit;
-    margin: 0;
     line-height: inherit;
     overflow: initial;
-    padding: 0;
     text-align: initial;
     vertical-align: initial;
     cursor: pointer;
     align-items: center;
-    display: inline-flex;
+    display: table-row;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 2px;
     position: absolute;
-    top: 0;
-    transition: opacity .2s,background-color .2s,color .2s;
+    transition: opacity .2s, background-color .2s, color .2s;
     color: rgba(var(--sk_foreground_max,29,28,29),.7);
-    right: 33px;
     font-weight: bolder;
-    outline: none;
 }
 
-.c-texty_input__button:hover {
+.workspace-input_bar-button:hover {
     background: silver;
 }
 
 .c-icon--mentions {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
     font: inherit;
     line-height: inherit;
     text-align: initial;
     cursor: pointer;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    color: rgba(var(--sk_foreground_max, 29, 28, 29), .7);
     box-sizing: inherit;
     position: relative;
     display: inline-flex;
@@ -2285,14 +2101,14 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     padding: 0;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     filter: grayscale(100%);
     font-style: normal;
     max-height: 100%;
@@ -2326,50 +2142,13 @@ button:focus {
     white-space: nowrap;
 }
 
-.p-message_input_file_button {
-    -webkit-font-smoothing: antialiased;
-    box-sizing: inherit;
-    background: none;
-    border: 0;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-    transition: all .1s ease-out;
-    border-radius: 2px;
-    color: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    left: 5px;
-    bottom: 5px;
-    position: absolute;
-    height: 32px;
-    width: 32px;
-    z-index: 200;
-    font-weight: bolder;
-    outline: none;
-}
-
-.p-message_input_file_button:hover {
-    background: #2BAC76;
-}
-
-.p-message_input_file_button:focus {
-    background: #2BAC76;
-}
-
 .c-icon--paperclip {
     -webkit-font-smoothing: antialiased;
     font: inherit;
     line-height: inherit;
     text-align: initial;
     cursor: pointer;
-    color: rgba(var(--sk_foreground_high_solid,134,134,134),1);
+    color: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
     box-sizing: inherit;
     position: relative;
     display: inline-flex;
@@ -2377,6 +2156,10 @@ button:focus {
     height: 20px;
     align-items: center;
     justify-content: center;
+}
+
+.c-icon--paperclip:hover{
+    color: silver;
 }
 
 .p-hidden_file_input {
@@ -2393,30 +2176,56 @@ button:focus {
     border: 0;
 }
 
+/*.workspace-input_bar-button:hover {*/
+/*    background: silver;*/
+/*}*/
+
+/*.workspace-input_bar-button:focus {*/
+/*    background: #2BAC76;*/
+/*}*/
+
+/*.workspace-input_bar-button {*/
+/*    -webkit-font-smoothing: antialiased;*/
+/*    box-sizing: inherit;*/
+/*    background: transparent;*/
+/*    border: 0;*/
+/*    font: inherit;*/
+/*    margin: 0;*/
+/*    line-height: inherit;*/
+/*    overflow: initial;*/
+/*    padding: 0;*/
+/*    text-align: initial;*/
+/*    vertical-align: initial;*/
+/*    cursor: pointer;*/
+/*    transition: all .1s ease-out;*/
+/*    color: rgba(var(--sk_foreground_high_solid,134,134,134),1);*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    font-weight: bolder;*/
+/*}*/
+
 .p-notification_bar {
     font-size: 15px;
-    line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
-    height: 24px;
     display: flex;
     align-items: center;
-    margin-right: 12px;
-    width: calc(100% - 51px);
-    margin-left: 44px;
+    height: 50%;
+    background-color: #e3e4ec;
 }
 
 .p-notification_bar__section--left {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
     font-size: .7em;
     line-height: 1rem;
     height: 1rem;
@@ -2431,9 +2240,9 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
     font-size: .7em;
     line-height: 1rem;
     height: 1rem;
@@ -2451,8 +2260,8 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
     font-size: .7em;
     line-height: 1rem;
     white-space: nowrap;
@@ -2464,10 +2273,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     grid-area: p-workspace__secondary_view_contents;
     min-width: 0;
@@ -2478,10 +2287,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     height: 100%;
     display: flex;
@@ -2493,21 +2302,21 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
-    background: rgba(var(--sk_foreground_min_solid,248,248,248),1);
-    border-bottom: 1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    background: rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     padding: 12px 16px;
 }
 
 .p-flexpane_header__primary {
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     font-size: 18px;
     line-height: 1.33334;
@@ -2517,10 +2326,10 @@ button:focus {
 }
 
 .p-flexpane_header__primary_content {
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 18px;
     line-height: 1.33334;
     font-weight: 900;
@@ -2533,10 +2342,10 @@ button:focus {
 }
 
 .p-flexpane__title_container {
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     font-size: 18px;
     line-height: 1.33334;
     font-weight: 900;
@@ -2569,7 +2378,7 @@ button:focus {
     width: 36px;
     cursor: pointer;
     margin-left: 4px;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    color: rgba(var(--sk_foreground_max, 29, 28, 29), .7);
 }
 
 .c-icon--times {
@@ -2578,7 +2387,7 @@ button:focus {
     line-height: inherit;
     text-align: initial;
     cursor: pointer;
-    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    color: rgba(var(--sk_foreground_max, 29, 28, 29), .7);
     box-sizing: inherit;
     position: relative;
     display: inline-flex;
@@ -2592,10 +2401,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     overflow: visible;
     height: 0px;
@@ -2606,10 +2415,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     position: relative;
     overflow: hidden;
@@ -2621,10 +2430,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -2642,10 +2451,10 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     width: 491px;
 }
@@ -2654,15 +2463,15 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details_section__header {
@@ -2715,7 +2524,7 @@ button:focus {
     font-family: inherit;
     line-height: inherit;
     margin-right: 8px;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
     font-weight: bolder;
 }
 
@@ -2746,97 +2555,97 @@ button:focus {
     font-size: inherit;
     font-family: inherit;
     line-height: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
 }
 
 .p-channel_details__highlights_section {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details__pinned_items_section {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details__members_list_section {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details__apps_section {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details__shared_files_section {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details__notification_prefs_section {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: Slack-Lato, appleLogo, sans-serif;
     box-sizing: inherit;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    border-bottom: 1px solid rgba(var(--sk_foreground_low, 29, 28, 29), .13);
 }
 
 .p-channel_details_section__highlights__icon {
@@ -2873,11 +2682,11 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     box-sizing: inherit;
     flex: 1;
     width: 100%;
@@ -2900,13 +2709,14 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     unicode-bidi: -webkit-isolate;
     box-sizing: inherit;
     width: 100%;
+    height: min-content;
     color: rgba(var(--sk_primary_foreground,29,28,29),1);
     word-wrap: break-word;
     margin: 8px 0 -4px;
@@ -2917,11 +2727,11 @@ button:focus {
 
 .c-message--light {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     box-sizing: inherit;
     min-width: 1px;
     position: relative;
@@ -2933,11 +2743,11 @@ button:focus {
 
 .c-message__gutter--feature_sonic_inputs {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -2950,7 +2760,7 @@ button:focus {
 
 .c-message__avatar__button {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     box-sizing: inherit;
     background: none;
     border: 0;
@@ -2973,7 +2783,7 @@ button:focus {
 
 .c-avatar__image {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     color: inherit;
     font: inherit;
     text-align: initial;
@@ -2983,17 +2793,17 @@ button:focus {
     box-sizing: inherit;
     border-radius: 3px;
     display: block;
-    height: 100%!important;
-    width: 100%!important;
+    height: 100% !important;
+    width: 100% !important;
 }
 
 .c-message__content--feature_sonic_inputs {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -3006,11 +2816,11 @@ button:focus {
 
 .c-message__content_header {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     box-sizing: inherit;
@@ -3021,22 +2831,22 @@ button:focus {
 .c-message__sender {
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 1;
     box-sizing: inherit;
     font-weight: 900;
     word-break: break-word;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
 }
 
 .c-message__sender_link {
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 1;
@@ -3045,13 +2855,13 @@ button:focus {
     box-sizing: inherit;
     text-decoration: none;
     display: inline-block;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     background-color: Transparent;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
     overflow: hidden;
-    outline:none;
+    outline: none;
 }
 
 .c-message__sender_link:hover {
@@ -3062,13 +2872,13 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     line-height: 1;
     box-sizing: inherit;
     font-size: 12px;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
     text-decoration: none;
     cursor: default;
 }
@@ -3077,14 +2887,14 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     line-height: 1;
     font-size: 12px;
     cursor: default;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
 }
 
 .p-message_pane--classic-nav {
@@ -3093,11 +2903,11 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     box-sizing: inherit;
     width: 100%;
     /*position: absolute;*/
@@ -3111,21 +2921,20 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     box-sizing: inherit;
 }
 
 .ql-editor__input-field {
-
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_high_solid,134,134,134),1);
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
     cursor: text;
     text-align: left;
     white-space: pre-wrap;
@@ -3135,15 +2944,15 @@ button:focus {
     font-size: 15px;
     line-height: 1.46668;
     box-sizing: inherit;
-    margin: 0;
+    margin: 5px;
     padding: 0;
     counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
     width: 95%;
-    height: 100%;
     outline: none;
     border-color: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
+    /*height: ;*/
 }
 
 
@@ -3234,8 +3043,8 @@ button:focus {
     background-color: #A9A9A9;
 }
 
-#associatedUserListSelect::-webkit-scrollbar{
-    background-color:#FFFFFF;
+#associatedUserListSelect::-webkit-scrollbar {
+    background-color: #FFFFFF;
     border-radius: 10px;
     width: 8px;
     /*height: 100px;*/
@@ -3251,6 +3060,21 @@ button:focus {
 #associatedUserListSelect option:hover {
     cursor: pointer;
     background-color: #1d9bd1;
+}
+
+#switchWorkspacesWindow {
+    display: none;
+    font-style: italic;
+    border-radius: 5px;
+    font-size: 0.8em;
+}
+
+.switchWorkspacesWindow {
+    position: absolute;
+    background-color: #ffffff;
+    border-style: solid;
+    border-width: thin;
+    border-color: #cccccc;
 }
 
 #settingsList{
@@ -3349,15 +3173,15 @@ button:focus {
     background-color: #1d9bd1;
 }
 
-.settingsButton4:hover{
+.settingsButton4:hover {
     background-color: #1d9bd1;
 }
 
-.settingsButton5:hover{
+.settingsButton5:hover {
     background-color: #1d9bd1;
 }
 
-#additionalOptions{
+#additionalOptions {
     display: none;
     font-style: italic;
     border-radius: 5px;
@@ -3367,21 +3191,21 @@ button:focus {
     z-index: 1001;
 }
 
-.additionalOptions{
+.additionalOptions {
     position: absolute;
     background-color: #ffffff;
     height: 100%;
     width: 100%;
 }
 
-.formButton{
+.formButton {
     /*padding-top: 15px;*/
     /*padding-bottom: 15px;*/
-    border-bottom:1px solid #cccccc;
-    border-top:1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
 }
 
-.additionalOptionsButton{
+.additionalOptionsButton {
     margin-top: 20px;
     margin-bottom: 20px;
     padding-right: 20px;
@@ -3411,7 +3235,7 @@ button:focus {
     transition: 0.5s;
 }
 
-.additionalOptionsHeaderSpan{
+.additionalOptionsHeaderSpan {
     font-style: italic;
 }
 
@@ -3424,7 +3248,7 @@ button:focus {
     right: 0;
 }
 
-.additionalOptionsCloseButton{
+.additionalOptionsCloseButton {
     position: absolute;
     border: none;
     top: 6px;
@@ -3433,7 +3257,7 @@ button:focus {
     background-color: #ffffff;
 }
 
-.archivingModalLeftButton{
+.archivingModalLeftButton {
     position: absolute;
     border: none;
     top: 5px;
@@ -3442,18 +3266,18 @@ button:focus {
     background-color: #ffffff;
 }
 
-.additionalOptionsHeader{
-    border-bottom:1px solid #cccccc;
+.additionalOptionsHeader {
+    border-bottom: 1px solid #cccccc;
 }
 
-.archivingChannels{
+.archivingChannels {
     position: absolute;
     background-color: #ffffff;
     height: 100%;
     width: 100%;
 }
 
-#archivingChannels{
+#archivingChannels {
     display: none;
     font-style: italic;
     border-radius: 5px;
@@ -3463,22 +3287,22 @@ button:focus {
     z-index: 1002;
 }
 
-.archivingChannelsUl{
+.archivingChannelsUl {
     padding-left: 15px;
 }
 
-.archivingText{
+.archivingText {
     font-style: normal; /* Курсивное начертание */;
     font-size: 13pt;
 }
 
-#archivingSubmit{
+#archivingSubmit {
     position: absolute;
     padding: auto;
     right: 20px;
 }
 
-#archivingCancel{
+#archivingCancel {
     position: absolute;
     padding: auto;
     right: 250px;
@@ -3492,11 +3316,11 @@ button:focus {
 
 .c-message__message_blocks {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -3507,11 +3331,11 @@ button:focus {
 
 .p-block_kit_renderer {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -3522,11 +3346,11 @@ button:focus {
 
 .p-block_kit_renderer__block_wrapper {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -3536,11 +3360,11 @@ button:focus {
 
 .p-rich_text_block {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     unicode-bidi: -webkit-isolate;
     box-sizing: inherit;
     counter-reset: list-0 list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
@@ -3555,11 +3379,11 @@ button:focus {
 
 .p-rich_text_section {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     /*white-space: pre-wrap;*/
     user-select: text;
     text-align: left;
@@ -3571,11 +3395,11 @@ button:focus {
 
 .c-message__attachments {
     font-weight: 400;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -3589,8 +3413,8 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
@@ -3600,19 +3424,19 @@ button:focus {
     position: relative;
     margin: 0 0 8px 0;
     max-width: 600px;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
 }
 
 .c-message_attachment__border {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 16px;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     box-sizing: inherit;
     flex-shrink: 0;
     width: 4px;
@@ -3624,10 +3448,10 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     box-sizing: inherit;
     flex: 1;
     padding: 0 12px;
@@ -3641,10 +3465,10 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-size: 15px;
     line-height: 1.46666667;
     box-sizing: inherit;
@@ -3654,43 +3478,44 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-size: 15px;
     line-height: 1.46666667;
     box-sizing: inherit;
 }
 
-.c-message_attachment__author--distinct {font-weight: 400;
+.c-message_attachment__author--distinct {
+    font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 1.46666667;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    color: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
 }
 
 .c-message_attachment__part {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 15px;
     line-height: 1.46666667;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
 }
 
 .c-avatar--interactive_button {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     background: none;
     border: 0;
@@ -3715,7 +3540,7 @@ button:focus {
 
 .c-message_attachment__author_name {
     -webkit-font-smoothing: antialiased;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     box-sizing: inherit;
     background: none;
@@ -3729,7 +3554,7 @@ button:focus {
     cursor: pointer;
     text-decoration: none;
     vertical-align: baseline;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-weight: 900;
 }
 
@@ -3737,10 +3562,10 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-size: 15px;
     line-height: 1.46666667;
     box-sizing: inherit;
@@ -3750,10 +3575,10 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    color: rgba(var(--sk_primary_foreground, 29, 28, 29), 1);
     font-size: 15px;
     line-height: 1.46666667;
     unicode-bidi: -webkit-isolate;
@@ -3764,13 +3589,13 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     box-sizing: inherit;
     align-items: center;
     padding-top: 4px;
-    color: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    color: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     font-size: 12px;
     line-height: 1.25;
 }
@@ -3779,8 +3604,8 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 12px;
     line-height: 1.25;
@@ -3793,99 +3618,66 @@ button:focus {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 12px;
     line-height: 1.25;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
 }
 
 .c-message_attachment__footer_ts {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 12px;
     line-height: 1.25;
     box-sizing: inherit;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
+    color: rgba(var(--sk_foreground_max_solid, 97, 96, 97), 1);
 }
 
 .c-message_attachment__par_sk_highlight {
     font-weight: 400;
     font-variant-ligatures: common-ligatures;
     -webkit-font-smoothing: antialiased;
-    font-family: Slack-Lato,appleLogo,sans-serif;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    font-family: Slack-Lato, appleLogo, sans-serif;
+    --saf-0: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
     user-select: text;
     font-size: 12px;
     line-height: 1.25;
     box-sizing: inherit;
-    color: rgba(var(--sk_highlight,18,100,163),1);
+    color: rgba(var(--sk_highlight, 18, 100, 163), 1);
 }
 
-.nav_workspace_messages {
-    align-self: flex-start;
-    z-index: 202;
-    bottom: 0;
-    position: relative;
-    background: rgba(var(--sk_foreground_min_solid,248,248,248),1);
-    width: 100%;
-    margin-bottom: 16px;
+/*Voice message button*/
+.vmBtn{
+    display: inline-block;
+    border: none;
+    color: #705D07;
+    border-radius: 50px 50px 50px 50px;
+    -webkit-border-radius: 50px 50px 50px 50px;
+    -moz-border-radius: 50px 50px 50px 50px;
+    font-family: Verdana;
+    width: 0px;
+    height: 0px;
+    font-size: 0px;
+    padding: 10px 10px;
+    box-shadow: inset 0px 0px 11px 0 #330000,inset 0 -1px 0 0 #e3c852,inset 0 0 0 1px #fce88d,0 2px 4px 0 #D4D4D4;
+    -moz-box-shadow: inset 0px 0px 11px 0 #330000,inset 0 -1px 0 0 #e3c852,inset 0 0 0 1px #fce88d,0 2px 4px 0 #D4D4D4;
+    -webkit-box-shadow: inset 0px 0px 11px 0 #330000,inset 0 -1px 0 0 #e3c852,inset 0 0 0 1px #fce88d,0 2px 4px 0 #D4D4D4;
+    text-shadow: 0px 1px 0 #fff;
+    background-image: linear-gradient(to top, #ff000, #fcdf5b);
+    background-color: #ff0000;
 }
-
-.c-tabs__tab_menu {
-    display: flex;
-    --saf-0: rgba(var(--sk_foreground_low_solid,221,221,221),1);
-    box-shadow: inset 0 -1px 0 0 var(--saf-0);
-    position: relative;
-    z-index: 1;
-}
-
-.c-tabs__tab {
-    font-size: 13px;
-    line-height: 1.38463;
-    font-weight: 400;
-    -webkit-tap-highlight-color: transparent;
-    background: none;
-    border: 0;
-    box-shadow: inset 0 -2px 0 0 transparent;
-    color: rgba(var(--sk_foreground_max_solid,97,96,97),1);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    padding: 12px 8px;
-    text-align: center;
-    transition: box-shadow .125s ease-out;
-}
-
-.c-tabs__tab:active {
-    outline: 0;
-    color: rgba(var(--sk_primary_foreground,29,28,29),1);
-    box-shadow: inset 0 -2px 0 0 #007a5a;
-    text-decoration: none;
-}
-
-.c-button-unstyled {
-    background: none;
-    border: 0;
-    color: inherit;
-    font: inherit;
-    margin: 0;
-    line-height: inherit;
-    overflow: initial;
-    padding: 0;
-    text-align: initial;
-    vertical-align: initial;
-    cursor: pointer;
-}
-
-.ui-datepicker .selected-start:not(.selected-end) a {
-    background: #F3FDD5;
+.vmBtn:hover, .vmBtn:active{
+    border: none;
+    color: #705D07;
+    box-shadow: inset 0 1px 0 0 #fff6ce,inset 0 -1px 0 0 #e3c852,inset 0 0 0 1px #fce88d;
+    -moz-box-shadow: inset 0 1px 0 0 #fff6ce,inset 0 -1px 0 0 #e3c852,inset 0 0 0 1px #fce88d;
+    -webkit-box-shadow: inset 0 1px 0 0 #fff6ce,inset 0 -1px 0 0 #e3c852,inset 0 0 0 1px #fce88d;
+    background-color: #fcdf5b;
 }

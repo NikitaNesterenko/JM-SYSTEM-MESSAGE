@@ -138,18 +138,10 @@ export class SubmitMessage {
             workspaceId: this.channel.workspaceId
     };
 
-        // if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
-        //     this.message_service.create(entity).then(
-        //         message => sendName(message)
-        //     );
-        // }
-
         if (window.hasSlashCommand) {
             await this.sendSlashCommand(entity);
         } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
-            await this.message_service.create(entity).then(
-                msg_id => sendName(msg_id)
-            );
+            sendName(entity);
         }
         // clearUsers();
     }
@@ -168,13 +160,6 @@ export class SubmitMessage {
                         url: command.url
                     };
                     sendSlackBotCommand(sendCommand);
-                    // if (command.botId === 1) {
-                    //     //если это команда от слакБота, то отправляем через вебсокет.
-                    //     sendSlackBotCommand(sendCommand);
-                    // } else {
-                    //     //иначе просто отправляем пост запрос по урлу
-                    //     this.slashCommandService.sendSlashCommand(command.url, sendCommand);
-                    // }
                 }
             });
         }
@@ -195,11 +180,7 @@ export class SubmitMessage {
             workspaceId: workspaceId
         };
 
-        this.direct_message_service.create(entity).then(
-            msg_id => {
-                sendDM(msg_id);
-            }
-        );
+        sendDM(entity);
     }
 
     async setUser() {

@@ -7,13 +7,15 @@ import {DirectMessageView} from "./components/messages/DirectMessageView.js";
 import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
+import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
 // import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 // const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
-const current_wks = workspace_service.getChosenWorkspace();
+const switch_workspace_window = new SwitchWorkspaceWindow();
+let current_wks = workspace_service.getChosenWorkspace();
 // const current_chn = channel_service.getChosenChannel();
 
 
@@ -26,6 +28,7 @@ window.addEventListener('load', async () => {
     const channel_view = new ChannelView();
     // const channel = new ChannelRestPaginationService();
 
+    switch_workspace_window.buildEvents();
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
     // channel_view.setFlaggedItems();
@@ -49,6 +52,7 @@ window.addEventListener('load', async () => {
     workspace_event.onWindowClick();
     workspace_event.onSelectChannel();
     workspace_event.onAddChannelSubmit();
+    workspace_event.onHideChannelModal();
 });
 
 $(document).ready(async () => {

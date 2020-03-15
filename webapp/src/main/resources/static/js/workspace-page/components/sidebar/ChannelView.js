@@ -50,15 +50,6 @@ export class ChannelView {
     }
 
     showPeopleInChannel(channelId) {
-        // alert(channelId);
-        // const countOfPeopleInChannel = $("#peopleInChat");
-        // this.user_service.getUsersByChannelId(channelId).then(
-        //     users => {
-        //         countOfPeopleInChannel.empty();
-        //         countOfPeopleInChannel.append(users.length);
-        //     }
-        // );
-
         alert(sessionStorage.getItem("channelId"));
         const member_list = $('#memberListPlaceholder');
         this.user_service.getUsersByChannelId(sessionStorage.getItem("channelId")).then(
@@ -129,13 +120,25 @@ export class ChannelView {
 
     addChannelIntoSidebarChannelList(channel) {
         const chn_symbol = channel.isPrivate ? "🔒" : "#";
-        $('#id-channel_sidebar__channels__list').append(`
+
+        if (!channel.isApp) {
+            $('#id-channel_sidebar__channels__list').append(`
             <div class="p-channel_sidebar__channel">
                 <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
                     <i class="p-channel_sidebar__channel_icon_prefix">${chn_symbol}</i>
                     <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
                 </button>
             </div>`);
+        } else {
+            $('#id-app_sidebar__apps__list')
+                .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="channel_button_${channel.id}" value="${channel.id}">
+                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${channel.id}">${channel.name}</span>
+                                    </button>
+                                  </div>`
+                );
+        }
     }
 
     setChannelBGColor(channel) {

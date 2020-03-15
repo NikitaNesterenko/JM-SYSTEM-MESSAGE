@@ -1,8 +1,11 @@
 import {refreshMemberList} from "/js/member-list/member-list.js";
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {
+    ChannelRestPaginationService,
+    ChannelTopicRestPaginationService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 import {NavHeader} from "./navbar/NavHeader.js";
-import {UserRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class WorkspacePageEventHandler {
 
@@ -13,6 +16,7 @@ export class WorkspacePageEventHandler {
         this.addChannelBtn = $("#addChannelButton");
         this.addDirectMessage = $("#addDirectMessage");
         this.channel_service = new ChannelRestPaginationService();
+        this.channel_topic_service = new ChannelTopicRestPaginationService();
         this.user_service = new UserRestPaginationService();
         this.wks_header = new NavHeader();
         this.user_service = new UserRestPaginationService();
@@ -56,15 +60,17 @@ export class WorkspacePageEventHandler {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", (event) => {
             this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text()).setInfo();
 
-
-            const channelId = parseInt($(event.currentTarget).val());
+            const channelId = $(event.currentTarget).val();
             pressChannelButton(channelId);
 
             sessionStorage.setItem("channelName", channelId);
             sessionStorage.setItem('conversation_id', '0');
 
-            this.user_service.getUsersByChannelId(channelId).then(users => {
-                this.wks_header.setInfo(users.length, 666);
+            this.channel_topic_service.getChannelTopic(channelId).then(topic => {
+                this.user_service.getUsersByChannelId(channelId).then(users => {
+                    this.wks_header.setInfo(users.length, 666, topic);
+                });
+
             });
 
             refreshMemberList();
@@ -91,6 +97,16 @@ export class WorkspacePageEventHandler {
             });
         });
     }
+
+    onHideChannelModal() {
+        $("#addChannelModal").on('hide.bs.modal', function () {
+            $(":input", $('#addChannelModal')).val("");
+            $('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        });
+    }
+
 
     getFormattedCreateDate() {
         const date = new Date();

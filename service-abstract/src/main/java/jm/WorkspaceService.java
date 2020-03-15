@@ -1,9 +1,11 @@
 package jm;
 
 import jm.model.CreateWorkspaceToken;
+import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WorkspaceService {
     List<Workspace> getAllWorkspaces();
@@ -23,5 +25,13 @@ public interface WorkspaceService {
     List<Workspace> getWorkspacesByUserId(Long userId);
 
     void createWorkspaceByToken(CreateWorkspaceToken createWorkspaceToken);
+
+    Optional<List<WorkspaceDTO>> getAllWorkspacesDTO();
+
+    Optional<WorkspaceDTO> getWorkspaceDTOById(Long id);
+
+    Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId);
+
+    Workspace getEntityFromDTO(WorkspaceDTO workspaceDto);
 
 }

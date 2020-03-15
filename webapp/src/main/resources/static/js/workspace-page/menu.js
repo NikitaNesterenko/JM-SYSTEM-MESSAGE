@@ -9,7 +9,4 @@ $(document).ready(async () => {
         window.loggedUserId = user.id;
     });
     await getCommandsList();
-    /*await userService.getLoggedUser().then(user => {
-        window.loggedUserId = user.id;
-    })*/
 });

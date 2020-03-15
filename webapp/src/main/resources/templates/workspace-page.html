@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Workspace Page</title>
     <link rel="stylesheet" th:href="@{../bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script th:src="@{/js/jquery/jquery-3.4.1.min.js}"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
@@ -304,7 +306,7 @@
 
 <!-- User menu modal-->
 <div class="menu-user-workspace popover"
-     style="position: absolute; left: 8px; top: 10px; outline: none; transition-duration: 80ms;">
+     style="position: absolute; left: 8px; top: 54px; outline: none; transition-duration: 80ms;">
     <div>
         <div class="c-menu">
 
@@ -383,26 +385,26 @@
                         </div>
                         <div class="c-menu_item__li" data-qa="sign-out-wrapper">
                             <a href="/logout">
-                            <button class="c-button-unstyled c-menu_item__button" type="button">
-                                <div class="c-menu_item__label">
-                                    Sign out of
-                                    <strong>
-                                        Java Mentoring
-                                    </strong>
-                                </div>
-                            </button>
+                                <button class="c-button-unstyled c-menu_item__button" type="button">
+                                    <div class="c-menu_item__label">
+                                        Sign out of
+                                        <strong>
+                                            Java Mentoring
+                                        </strong>
+                                    </div>
+                                </button>
                             </a>
                         </div>
                         <div aria-hidden="true"
                              class="c-menu_separator__li c-menu_separator__li--no_first_child c-menu_separator__li--no_last_child">
                             <hr class="c-menu_separator__separator">
                         </div>
-                        <div role="presentation" class="c-submenu">
+                        <div role="presentation" class="c-submenu" id="switchWorkspaceMenuBar">
                             <div class="c-menu_item__li">
                                 <button class="c-button-unstyled c-menu_item__button c-menu_item__button--with_submenu"
-                                        type="button">
+                                        type="button" id="switchWorkspaceButton">
                                     <div class="c-menu_item__label">Switch workspaces</div>
-                                    <i class="glyphicon glyphicon-hand-left c-icon c-menu_item__submenu-indicator c-icon--chevron-right"
+                                    <i class="fas fa-angle-right c-icon c-menu_item__submenu-indicator c-icon--chevron-right"
                                        aria-hidden="true">
                                     </i></button>
                             </div>
@@ -433,6 +435,17 @@
                         </a></div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Switch Workspace Modal  -->
+<div role="presentation" id="switchWorkspacesWindow" class="switchWorkspacesWindow c-submenu__container" style="left: 310px; top: 530px; z-index: 1000">
+    <div class="c-menu">
+        <div class="c-menu__items_scroller">
+            <div class="c-menu__items" role="menu" tabindex="-1" no-bootstrap="1" id="workspaces">
+                <div class="c-menu_item__header"> Your other workspaces</div>
             </div>
         </div>
     </div>
@@ -520,7 +533,8 @@
                                 </tr>
                             </table>
                         </form>
-                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back</button>
+                        <button id="back_modal_button" class="btn btn-secondary back_modal_button" type="button">Back
+                        </button>
                     </div>
                 </div>
             </div>
@@ -609,7 +623,7 @@
                                 </div>
                                 <button class="p-classic_nav__team_header__team__icon_button">
                                     <i class="p-classic_nav__team_header__team__icon">
-                                        ˅
+                                        <i class="fas fa-angle-down"></i>
                                     </i>
                                 </button>
                                 <div class="p-classic_nav__team_header__team__dnd_container">
@@ -1529,17 +1543,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post">
                     <div class="form-group">
                         <label for="exampleInputChannelName">Название канала</label>
-                        <input type="email" class="form-control" id="exampleInputChannelName"
+                        <input type="text" class="form-control" id="exampleInputChannelName"
                                placeholder="Введите название канала">
                     </div>
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Сделать канал приватным?</label>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал
