@@ -83,8 +83,14 @@ export class WorkspacePageEventHandler {
     onAddConversationSubmit() {
         $("#addConversationSubmit").click(() => {
             let name = $('#inputUsernameForConversation').val();
-            const workspace = this.workspace_service.getChosenWorkspace();
-            const user = this.user_service.getLoggedUser();
+            let workspace;
+
+            this.workspace_service.getChosenWorkspace().then(work => {
+                workspace= work;
+            });
+
+
+
 
             this.user_service.getUserByName(name).then(userTo => {
                 if (typeof (userTo) === 'undefined') {
@@ -92,10 +98,9 @@ export class WorkspacePageEventHandler {
                 } else {
 
                     const entity = {
-                        openingUser: user,
-                        associatedUser: userTo,
-                        workspace: workspace,
-
+                        associatedUserId: userTo.id,
+                        workspaceId: workspace.id,
+                        openingUserId: this.logged_user.id,
                         showForOpener: true,
                         showForAssociated: true
                     };
