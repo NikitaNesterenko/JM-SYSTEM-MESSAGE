@@ -130,7 +130,8 @@ public class User {
     private Set<DirectMessage> unreadDirectMessages;
 
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @ToString.Exclude
     private Set<User> directMessagesToUsers;
 

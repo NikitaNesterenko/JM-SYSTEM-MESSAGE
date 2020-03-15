@@ -9,7 +9,6 @@ import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.model.User;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,16 +26,17 @@ import java.util.Optional;
 @Tag(name = "user", description = "User API")
 public class UserRestController {
 
-    private UserService userService;
-    private MailService mailService;
+    private final UserService userService;
+    private final MailService mailService;
 
     private static final Logger logger = LoggerFactory.getLogger(
             UserRestController.class);
 
-    UserRestController(UserService userService, MailService mailService) {
+    public UserRestController(UserService userService, MailService mailService) {
         this.userService = userService;
         this.mailService = mailService;
     }
+
 
     // DTO compliant
     @GetMapping
@@ -107,7 +106,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to update user")
             })
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
-    public ResponseEntity updateUser(@RequestBody UserDTO userDTO, Authentication authorization) {
+    public ResponseEntity updateUser(@RequestBody UserDTO userDTO) {
         User user = userService.getEntityFromDTO(userDTO);
         return userService.updateUser(user)? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
@@ -147,7 +146,7 @@ public class UserRestController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    // DTO compliant
+
     @GetMapping(value = "/loggedUser")
     @Operation(summary = "Get logged user",
             responses = {
