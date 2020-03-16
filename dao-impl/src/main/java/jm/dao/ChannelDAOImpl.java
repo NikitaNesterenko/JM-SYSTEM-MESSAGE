@@ -3,9 +3,8 @@ package jm.dao;
 import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
-import jm.model.User;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -321,5 +320,18 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return (Channel) entityManager.createNativeQuery("UPDATE channels c SET c.archived = false WHERE c.id = :id")
                 .setParameter("id", id)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<Channel> getChannelListByBotId(@NonNull Long botId) {
+        List<Channel> channelList = new ArrayList<>();
+        try {
+            channelList = entityManager.createNativeQuery("SELECT c.* FROM channels c, bots b, channels_bots cb " +
+                                                                  "WHERE c.id = cb.channel_id AND b.id = cb.bot_id AND b.id= :botId", Channel.class)
+                    .setParameter("botId", botId).getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return channelList;
     }
 }

@@ -31,6 +31,8 @@ public interface BotService {
 
     Set<Channel> getChannels (Bot bot);
 
+    Set<Channel> getChannelSetByBotId (@NonNull Long botId);
+
     Bot getBotBySlashCommandId (Long id);
 
     Bot getBotByBotDto(@NonNull BotDTO botDTO);
