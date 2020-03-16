@@ -301,7 +301,6 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .getResultList();
     }
 
-
     private List<Number> getAllStarredMessagesIdByUserId (Long userId) {
         List list = new ArrayList<>();
         try {
@@ -313,8 +312,6 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         }
         return list;
     }
-
-
 
     @Override
     public List<MessageDTO> getStarredMessagesDTOForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {

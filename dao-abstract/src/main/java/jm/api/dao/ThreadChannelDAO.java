@@ -1,9 +1,9 @@
 package jm.api.dao;
 
 import jm.model.ThreadChannel;
-import jm.model.message.ThreadChannelMessage;
+import lombok.NonNull;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface ThreadChannelDAO {
 
@@ -12,4 +12,6 @@ public interface ThreadChannelDAO {
     ThreadChannel getById(Long id);
 
     ThreadChannel getByChannelMessageId(Long id);
+
+    Optional<Number> getThreadIdByChannelMessageId(@NonNull Long channelMessageId);
 }

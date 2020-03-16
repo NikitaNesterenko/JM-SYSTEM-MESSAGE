@@ -6,6 +6,7 @@ import jm.api.dao.TypeSlashCommandDAO;
 import jm.dto.SlashCommandDto;
 import jm.model.Bot;
 import jm.model.SlashCommand;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ import java.util.Optional;
 public class SlashCommandServiceImpl implements SlashCommandService {
     private static final Logger logger = LoggerFactory.getLogger(SlashCommand.class);
 
-    private SlashCommandDao slashCommandDao;
-    private BotDAO botDAO;
+    private final SlashCommandDao slashCommandDao;
+    private final BotDAO botDAO;
     private final TypeSlashCommandDAO typeSlashCommandDAO;
 
     @Autowired
@@ -30,7 +31,6 @@ public class SlashCommandServiceImpl implements SlashCommandService {
         this.botDAO = botDAO;
         this.typeSlashCommandDAO = typeSlashCommandDAO;
     }
-
 
     @Override
     public List<SlashCommand> getAllSlashCommands() {
@@ -58,13 +58,13 @@ public class SlashCommandServiceImpl implements SlashCommandService {
     }
 
     @Override
-    public void updateSlashCommand(SlashCommand slashCommand) {
+    public Boolean updateSlashCommand(SlashCommand slashCommand) {
         SlashCommand existCommand = slashCommandDao.getById(slashCommand.getId());
         existCommand.setName(slashCommand.getName());
         existCommand.setDescription(slashCommand.getDescription());
         existCommand.setHints(slashCommand.getHints());
         existCommand.setType(slashCommand.getType());
-        slashCommandDao.merge(existCommand);
+        return slashCommandDao.updateSlashCommand(existCommand);
     }
 
     @Override
@@ -129,5 +129,8 @@ public class SlashCommandServiceImpl implements SlashCommandService {
         return sc;
     }
 
-
+    @Override
+    public Optional<String> getSlashCommandNameById(@NonNull Long slashCommandId) {
+        return slashCommandDao.getSlashCommandNameById(slashCommandId);
+    }
 }

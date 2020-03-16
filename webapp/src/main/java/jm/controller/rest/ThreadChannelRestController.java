@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/api/threads")
@@ -89,10 +90,12 @@ public class ThreadChannelRestController {
                     )
             })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
-        // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
-        ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
-        ThreadDTO threadDTO = new ThreadDTO(temp);
-        return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);
+        // Два варианта реализации.
+//        ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
+//        ThreadDTO threadDTO = new ThreadDTO(temp);
+//        return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);
+        Optional<ThreadDTO> threadDtoOptional = threadChannelService.getThreadDtoByChannelMessageId(id);
+        return threadDtoOptional.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/messages/{id}")
