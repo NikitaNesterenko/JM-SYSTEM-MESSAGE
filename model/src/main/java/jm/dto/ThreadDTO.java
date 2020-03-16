@@ -6,10 +6,10 @@ import jm.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ThreadDTO {
     private Long id;
     private MessageDTO message;
@@ -18,18 +18,13 @@ public class ThreadDTO {
         this.message = message;
     }
 
-    public ThreadDTO(ThreadChannel threadChannel) {
-        if (threadChannel != null) {
+    public ThreadDTO(@NonNull Long id, @NonNull MessageDTO message) {
+        this.id = id;
+        this.message = message;
+    }
 
-            Message message = threadChannel.getMessage();
-            User user = message.getUser();
-            MessageDTO messageDTO = new MessageDTO(message);
-
-            messageDTO.setUserId(user.getId());
-            messageDTO.setUserName(user.getUsername());
-            messageDTO.setUserAvatarUrl(user.getAvatarURL());
-            this.id = threadChannel.getId();
-            this.message = messageDTO;
-        }
+    public ThreadDTO(@NonNull ThreadChannel threadChannel) {
+        this.id = threadChannel.getId();
+        this.message = new MessageDTO(threadChannel.getMessage());
     }
 }
