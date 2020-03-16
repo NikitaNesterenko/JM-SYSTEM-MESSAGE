@@ -148,17 +148,9 @@ public class BotRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
             })
     public ResponseEntity<Object> updateBot (@RequestBody BotDTO botDto) {
-        // TODO: ПЕРЕДЕЛАТЬ сразу получать existingBot
         Bot bot = botService.getBotByBotDto(botDto);
-        Bot existingBot = botService.getBotById(bot.getId());
-        if (existingBot == null) {
-            logger.warn("Бот не найден");
-            return ResponseEntity.notFound().build();
-        } else {
-            botService.updateBot(bot);
-            logger.info("Обновлнный бот: {}", bot);
-            return ResponseEntity.ok().build();
-        }
+        return botService.getBotNameByBotId(bot.getId()).isPresent() && botService.getBooleanResultByUpdateBot(bot) ?
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/delete/{id}")
