@@ -38,16 +38,16 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         try {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
-                            "c.id  AS \"id\", " +
-                            "c.name AS \"name\", " +
-                            "c.workspace_id AS \"workspaceId\", " +
-                            "c.owner_id AS \"ownerId\", " +
-                            "c.is_private AS \"isPrivate\", " +
-                            "c.created_date \"createdDate\", " +
-                            "c.topic AS \"topic\", " +
-                            "c.archived AS \"isArchived\", " +
-                            "c.is_app AS \"isApp\" " +
-                            "FROM channels c WHERE name=:name")
+                                               "c.id  AS \"id\", " +
+                                               "c.name AS \"name\", " +
+                                               "c.workspace_id AS \"workspaceId\", " +
+                                               "c.owner_id AS \"ownerId\", " +
+                                               "c.is_private AS \"isPrivate\", " +
+                                               "c.created_date \"createdDate\", " +
+                                               "c.topic AS \"topic\", " +
+                                               "c.archived AS \"isArchived\", " +
+                                               "c.is_app AS \"isApp\" " +
+                                               "FROM channels c WHERE name=:name")
                     .setParameter("name", name)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
@@ -84,16 +84,16 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         try {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
-                            "c.id  AS \"id\", " +
-                            "c.name AS \"name\", " +
-                            "c.workspace_id AS \"workspaceId\", " +
-                            "c.owner_id AS \"ownerId\", " +
-                            "c.is_private AS \"isPrivate\", " +
-                            "c.created_date \"createdDate\", " +
-                            "c.topic AS \"topic\", " +
-                            "c.archived AS \"isArchived\", " +
-                            "c.is_app AS \"isApp\" " +
-                            "FROM channels c WHERE id=:id")
+                                               "c.id  AS \"id\", " +
+                                               "c.name AS \"name\", " +
+                                               "c.workspace_id AS \"workspaceId\", " +
+                                               "c.owner_id AS \"ownerId\", " +
+                                               "c.is_private AS \"isPrivate\", " +
+                                               "c.created_date \"createdDate\", " +
+                                               "c.topic AS \"topic\", " +
+                                               "c.archived AS \"isArchived\", " +
+                                               "c.is_app AS \"isApp\" " +
+                                               "FROM channels c WHERE id=:id")
                     .setParameter("id", id)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
@@ -138,8 +138,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         try {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
-                            "c.id  AS \"id\" " +
-                            "FROM channels c WHERE name=:name")
+                                               "c.id  AS \"id\" " +
+                                               "FROM channels c WHERE name=:name")
                     .setParameter("name", name)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
@@ -320,6 +320,17 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return (Channel) entityManager.createNativeQuery("UPDATE channels c SET c.archived = false WHERE c.id = :id")
                 .setParameter("id", id)
                 .getSingleResult();
+    }
+
+    @Override
+    public Optional<Number> getChannelIdByChannelName(@NonNull String channelName) {
+        Number channelId = null;
+        try {
+            channelId = (Number) entityManager.createNativeQuery("SELECT c.id FROM channels c WHERE c.name= :channelName")
+                    .setParameter("channelName", channelName).getSingleResult();
+        } catch (NoResultException ignored) {
+        }
+        return Optional.ofNullable(channelId);
     }
 
     @Override

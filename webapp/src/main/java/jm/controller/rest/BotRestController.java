@@ -216,16 +216,10 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per hour")
             })
     public ResponseEntity<List<Message>> getMessagesPerHour(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-
-        // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
-        //  Зачем получать бота, когда нужен только его ID?
-        //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now()
                 .minusHours(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        return ResponseEntity.ok(messageService.getMessagesByBotIdByChannelIdForPeriod(botId, channelName, startDate, endDate, false));
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
@@ -240,15 +234,10 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per day")
             })
     public ResponseEntity<List<Message>> getMessagesPerDay(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
-        //  Зачем получать бота, когда нужен только его ID?
-        //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now()
                 .minusDays(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        return ResponseEntity.ok(messageService.getMessagesByBotIdByChannelIdForPeriod(botId, channelName, startDate, endDate, false));
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
@@ -263,15 +252,10 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per week")
             })
     public ResponseEntity<List<Message>> getMessagesPerWeek(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
-        //  Зачем получать бота, когда нужен только его ID?
-        //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now()
                 .minusWeeks(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        return ResponseEntity.ok(messageService.getMessagesByBotIdByChannelIdForPeriod(botId, channelName, startDate, endDate, false));
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
@@ -286,14 +270,9 @@ public class BotRestController {
                     @ApiResponse(responseCode = "200", description = "OK: get bot messages per month")
             })
     public ResponseEntity<List<Message>> getMessagesPerMonth(@PathVariable("id") Long botId, @PathVariable("name") String channelName) {
-        // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
-        //  Зачем получать бота, когда нужен только его ID?
-        //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = LocalDateTime.now()
                 .minusMonths(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        return ResponseEntity.ok(messageService.getMessagesByBotIdByChannelIdForPeriod(botId, channelName, startDate, endDate, false));
     }
 }
