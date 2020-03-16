@@ -242,6 +242,36 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
         }
         return Optional.ofNullable(userDTO);
     }
+
+    @Override
+    public Optional<UserDTO> getUserDTOByName(String name) {
+        UserDTO userDTO = null;
+        try {
+            userDTO = (UserDTO) entityManager
+                    .createNativeQuery("SELECT " +
+                            "u.id AS \"id\", " +
+                            "u.username AS \"name\", " +
+                            "u.last_name AS \"lastName\", " +
+                            "u.login AS \"login\", " +
+                            "u.email AS \"email\", " +
+                            "u.avatar_url AS \"avatarURL\", " +
+                            "u.title AS \"title\", " +
+                            "u.display_name AS \"displayName\", " +
+                            "u.phone_number AS \"phoneNumber\", " +
+                            "u.timezone AS \"timeZone\", " +
+                            "u.is_online AS \"online\", " +
+                            "u.skype AS \"userSkype\" " +
+                            "FROM users u WHERE u.username = :username")
+                    .setParameter("username", name)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
+                    .getResultList().get(0);
+            setCollections(userDTO);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(userDTO);
+    }
     /* TODO доделать exception */
 
     @Override

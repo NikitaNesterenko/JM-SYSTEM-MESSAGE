@@ -1,5 +1,6 @@
 package jm;
 
+import jm.dto.ConversationDTO;
 import jm.model.Conversation;
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ConversationService {
     Conversation getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
+
+    Conversation getEntityFromDTO(ConversationDTO conversationDTO);
 }

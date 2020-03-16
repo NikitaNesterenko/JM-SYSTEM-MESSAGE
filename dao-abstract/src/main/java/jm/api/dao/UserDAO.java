@@ -45,5 +45,7 @@ public interface UserDAO {
 
     Optional<UserDTO> getUserDTOByEmail(String email);
 
+    Optional<UserDTO> getUserDTOByName(String name);
+
     Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
 }
