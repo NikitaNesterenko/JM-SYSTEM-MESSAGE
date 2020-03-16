@@ -185,11 +185,10 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     @Override
     public List<MessageDTO> getAllMessageDtoByIsDeleted(Boolean isDeleted) {
         return getAllMessageId(isDeleted).stream()
-                .map(Number::longValue)
-                .map(this::getMessageDtoById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+                       .map(Number::longValue)
+                       .map(this::getMessageDtoById)
+                       .map(Optional::get)
+                       .collect(Collectors.toList());
     }
 
     @Override
