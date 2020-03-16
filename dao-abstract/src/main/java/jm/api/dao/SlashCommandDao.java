@@ -1,7 +1,9 @@
 package jm.api.dao;
 
+import com.google.api.client.util.BackOff;
 import jm.dto.SlashCommandDto;
 import jm.model.SlashCommand;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,5 +36,7 @@ public interface SlashCommandDao {
 
     Optional<List<SlashCommandDto>> getSlashCommandDTOByWorkspaceId(Long id);
 
+    Optional<String> getSlashCommandNameById(@NonNull Long slashCommandId);
 
+    Boolean updateSlashCommand(@NonNull SlashCommand slashCommand);
 }

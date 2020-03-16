@@ -19,6 +19,8 @@ public interface BotService {
 
     void updateBot (Bot bot);
 
+    Boolean getBooleanResultByUpdateBot(@NonNull Bot bot);
+
     Bot getBotById (Long id);
 
     Optional<BotDTO> getBotDTOById (Long id);
@@ -29,6 +31,8 @@ public interface BotService {
 
     Set<Channel> getChannels (Bot bot);
 
+    Set<Channel> getChannelSetByBotId (@NonNull Long botId);
+
     Bot getBotBySlashCommandId (Long id);
 
     Bot getBotByBotDto(@NonNull BotDTO botDTO);
@@ -36,4 +40,6 @@ public interface BotService {
     BotDTO getBotDtoByBot(@NonNull Bot bot);
 
     Optional<Bot> findByToken(String token);
+
+    Optional<String> getBotNameByBotId(@NonNull Long botId);
 }

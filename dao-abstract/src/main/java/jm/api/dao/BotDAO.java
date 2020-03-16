@@ -3,6 +3,7 @@ package jm.api.dao;
 import jm.dto.BotDTO;
 import jm.model.Bot;
 import jm.model.Channel;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +34,8 @@ public interface BotDAO {
     Bot getBotByCommandId (Long id);
 
     Optional<Bot> findByToken(String token);
+
+    Optional<String> getBotNameByBotId(@NonNull Long botId);
+
+    Boolean updateBot(@NonNull Bot bot);
 }
