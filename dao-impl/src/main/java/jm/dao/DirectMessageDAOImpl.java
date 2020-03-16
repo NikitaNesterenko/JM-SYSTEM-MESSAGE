@@ -4,14 +4,14 @@ import jm.api.dao.DirectMessageDAO;
 import jm.model.Message;
 import jm.dto.DirectMessageDTO;
 import jm.model.message.DirectMessage;
+import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -50,5 +50,18 @@ public class DirectMessageDAOImpl extends AbstractDao<DirectMessage> implements 
                 .setParameter("ids", ids)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
+    }
+
+    @Override
+    public List<Number> getMessagesIdByConversationId(@NonNull Long conversationId) {
+        List<Number> messagesIds = new ArrayList<>();
+
+        try {
+            messagesIds = entityManager.createNativeQuery("SELECT dm.id FROM direct_messages dm WHERE dm.conversation_id= :conversationId ").setParameter("conversationId", conversationId).getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return messagesIds;
     }
 }

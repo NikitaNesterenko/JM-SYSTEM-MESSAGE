@@ -27,4 +27,6 @@ public interface DirectMessageService {
 
     List<DirectMessageDTO> getDirectMessageDtoListByDirectMessageList(@NonNull List<DirectMessage> directMessagesList);
 
+    List<DirectMessageDTO> getDirectMessageDtoListByConversationId(@NonNull Long conversationId);
+
 }
