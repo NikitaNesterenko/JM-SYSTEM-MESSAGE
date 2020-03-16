@@ -2,6 +2,7 @@ package jm;
 
 import jm.dto.SlashCommandDto;
 import jm.model.SlashCommand;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ public interface SlashCommandService {
 
     void deleteSlashCommand(Long id);
 
-    void updateSlashCommand(SlashCommand slashCommand);
+    Boolean updateSlashCommand(SlashCommand slashCommand);
 
     SlashCommand getSlashCommandById(Long id); //+
 
@@ -35,4 +36,6 @@ public interface SlashCommandService {
     Optional<List<SlashCommandDto>> getSlashCommandDTOByWorkspaceId(Long id);
 
     SlashCommand getEntityFromDTO(SlashCommandDto slashCommandDTO);
+
+    Optional<String> getSlashCommandNameById(@NonNull Long slashCommandId);
 }

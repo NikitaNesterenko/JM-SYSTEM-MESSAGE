@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.SlashCommandDao;
 import jm.dto.SlashCommandDto;
 import jm.model.SlashCommand;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TransactionRequiredException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +20,6 @@ import java.util.Optional;
 @Transactional
 public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements SlashCommandDao {
     private static final Logger logger = LoggerFactory.getLogger(SlashCommandDAOImpl.class);
-
 
     @Override
     public SlashCommand getByName(String commandName) {
@@ -173,5 +174,32 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
             e.printStackTrace();
         }
         return Optional.of(slashCommandsDTO);
+    }
+
+    @Override
+    public Optional<String> getSlashCommandNameById(@NonNull Long slashCommandId) {
+        String slashCommandName = null;
+        try {
+            slashCommandName = (String) entityManager.createNativeQuery("SELECT sc.name " +
+                                                                       "FROM slash_commands sc " +
+                                                                       "WHERE sc.id= :slashCommandId")
+                    .setParameter("slashCommandId", slashCommandId)
+                    .getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+        return Optional.ofNullable(slashCommandName);
+    }
+
+    @Override
+    public Boolean updateSlashCommand(@NonNull SlashCommand slashCommand) {
+        boolean result = false;
+        try {
+            entityManager.merge(slashCommand);
+            result = true;
+        } catch (IllegalArgumentException | TransactionRequiredException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

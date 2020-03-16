@@ -2,42 +2,38 @@ package jm.controller.rest;
 
 import jm.BotService;
 import jm.SlashCommandService;
-import jm.WorkspaceService;
 import jm.dto.SlashCommandDto;
 import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/rest/api/slashcommand")
 public class SlashCommandRestController {
 
     private final SlashCommandService slashCommandService;
-    private final WorkspaceService workspaceService;
-    private BotService botService;
-
+    private final BotService botService;
 
     public static final Logger logger = LoggerFactory.getLogger(SlashCommand.class);
 
-    @Autowired
-    public SlashCommandRestController(SlashCommandService slashCommandService, WorkspaceService workspaceService, BotService botService) {
+    public SlashCommandRestController(SlashCommandService slashCommandService, BotService botService) {
         this.slashCommandService = slashCommandService;
-        this.workspaceService = workspaceService;
         this.botService = botService;
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSlashCommandById(@PathVariable Long id) {
         logger.info("Slash command with id = {}", id);
         return ResponseEntity.ok(slashCommandService.getSlashCommandDTOById(id).map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)));
+                                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)));
     }
 
     @PostMapping("/create")
@@ -51,17 +47,10 @@ public class SlashCommandRestController {
 
     @PutMapping("/update")
     public ResponseEntity updateSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
-        // TODO: ПЕРЕДЕЛАТЬ SlashCommand existCommand из базы плучает всю информацию о сущности, а используется только для проверки на существование
-        SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
-        SlashCommand existCommand = slashCommandService.getSlashCommandById(sc.getId());
-        if (existCommand == null) {
-            logger.warn("slashcommand not found");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        logger.info("Existing command: {}", existCommand);
-        slashCommandService.updateSlashCommand(sc);
-        logger.info("Updated command: {}", sc);
-        return new ResponseEntity(HttpStatus.OK);
+        SlashCommand slashCommand = slashCommandService.getEntityFromDTO(slashCommandDto);
+        Optional<String> slashCommandName = slashCommandService.getSlashCommandNameById(slashCommand.getId());
+        return slashCommandName.isPresent() && slashCommandService.updateSlashCommand(slashCommand) ?
+                ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
 
