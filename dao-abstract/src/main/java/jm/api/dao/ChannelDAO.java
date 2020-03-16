@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,8 +12,6 @@ public interface ChannelDAO {
 
     List<Channel> getAll ();
 
-    // TODO: ПРОВЕРИТЬ
-    // List<ChannelDTO> getAllChannel();
     List<ChannelDTO> getAllChanelDTO ();
 
     void persist (Channel channel);
@@ -47,7 +46,6 @@ public interface ChannelDAO {
 
     List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
 
-
     String getTopicChannelByChannelId(Long id);
 
     Long getWorkspaceIdByChannelId(Long channelId);
@@ -57,4 +55,6 @@ public interface ChannelDAO {
     List<ChannelDTO> getPrivateChannels();
 
     Channel unzipChannel(Long id);
+
+    Optional<Number> getChannelIdByChannelName(@NonNull String channelName);
 }
