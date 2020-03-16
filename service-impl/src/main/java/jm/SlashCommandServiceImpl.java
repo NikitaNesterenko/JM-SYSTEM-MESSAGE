@@ -58,13 +58,19 @@ public class SlashCommandServiceImpl implements SlashCommandService {
     }
 
     @Override
-    public void updateSlashCommand(SlashCommand slashCommand) {
+    public boolean updateSlashCommand(SlashCommand slashCommand) {
         SlashCommand existCommand = slashCommandDao.getById(slashCommand.getId());
+        if (existCommand == null) {
+            logger.warn("slashcommand not found");
+            return false;
+        }
         existCommand.setName(slashCommand.getName());
         existCommand.setDescription(slashCommand.getDescription());
         existCommand.setHints(slashCommand.getHints());
         existCommand.setType(slashCommand.getType());
+        logger.info("Existing command: {}", existCommand);
         slashCommandDao.merge(existCommand);
+        return true;
     }
 
     @Override

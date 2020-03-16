@@ -1,5 +1,6 @@
 package jm;
 
+import jm.model.CreateWorkspaceToken;
 import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
 
@@ -22,6 +23,8 @@ public interface WorkspaceService {
     List<Workspace> getWorkspacesByOwnerId(Long ownerId);
 
     List<Workspace> getWorkspacesByUserId(Long userId);
+
+    void createWorkspaceByToken(CreateWorkspaceToken createWorkspaceToken);
 
     Optional<List<WorkspaceDTO>> getAllWorkspacesDTO();
 
