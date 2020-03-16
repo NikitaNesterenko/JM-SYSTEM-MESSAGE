@@ -4,6 +4,7 @@ import jm.api.dao.BotDAO;
 import jm.dto.BotDTO;
 import jm.model.Bot;
 import jm.model.Channel;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TransactionRequiredException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,6 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
             return null;
         }
     }
-
 
     private List<Number> getListWorkspacesIdByBotId (Long botId) {
         List<Number> list = new ArrayList<>();
@@ -149,5 +150,31 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Optional<String> getBotNameByBotId(@NonNull Long botId) {
+        String botName = null;
+
+        try {
+            botName = (String) entityManager.createNativeQuery("SELECT b.name FROM bots b WHERE b.id= :botId ").setParameter("botId", botId).getSingleResult();
+        } catch (NoResultException ignored) {
+
+        }
+
+        return Optional.ofNullable(botName);
+    }
+
+    @Override
+    public Boolean updateBot(@NonNull Bot bot) {
+        boolean result = false;
+
+        try {
+            entityManager.merge(bot);
+            result = true;
+        } catch (IllegalArgumentException | TransactionRequiredException e){
+            e.printStackTrace();
+        }
+        return result;
     }
 }
