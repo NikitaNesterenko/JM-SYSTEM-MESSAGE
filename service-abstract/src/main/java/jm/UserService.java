@@ -41,6 +41,8 @@ public interface UserService {
 
     Optional<UserDTO> getUserDTOByLogin(String login);
 
+    Optional<UserDTO> getUserDTOByName(String name);
+
     Optional<UserDTO> getUserDTOByEmail(String email);
 
     Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);

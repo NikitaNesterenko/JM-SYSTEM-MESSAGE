@@ -91,7 +91,7 @@ public class UserRestController {
     }
 
     @GetMapping("/username/{username}")
-    @Operation(summary = "Get user by id",
+    @Operation(summary = "Get user by username",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -101,10 +101,10 @@ public class UserRestController {
                             description = "OK: get user"
                     )
             })
-    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
-        User user = userService.getUserByName(username);
-
-        return new ResponseEntity<>(user,HttpStatus.OK);
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username) {
+        logger.info("Пользователь с username = {}", username);
+        return userService.getUserDTOByName(username).map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // DTO compliant

@@ -121,6 +121,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserDTO> getUserDTOByName(String name) {
+        return userDAO.getUserDTOByName(name);
+    }
+
+    @Override
     public Optional<UserDTO> getUserDTOByEmail(String email) {
         return userDAO.getUserDTOByEmail(email);
     }

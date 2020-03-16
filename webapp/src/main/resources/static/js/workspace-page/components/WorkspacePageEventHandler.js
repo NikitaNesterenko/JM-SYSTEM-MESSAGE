@@ -6,6 +6,7 @@ import {
     WorkspaceRestPaginationService,
     ConversationRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
+import {ActiveChatMembers} from "./sidebar/ActiveChatMembers.js";
 import {NavHeader} from "./navbar/NavHeader.js";
 
 export class WorkspacePageEventHandler {
@@ -23,6 +24,7 @@ export class WorkspacePageEventHandler {
         this.user_service = new UserRestPaginationService();
         this.workspace_service = new WorkspaceRestPaginationService();
         this.conversation_serivce = new ConversationRestPaginationService();
+        this.chat_members = new ActiveChatMembers();
     }
 
     onAddChannelClick() {
@@ -85,18 +87,13 @@ export class WorkspacePageEventHandler {
             let name = $('#inputUsernameForConversation').val();
             let workspace;
 
-            this.workspace_service.getChosenWorkspace().then(work => {
-                workspace= work;
-            });
-
-
-
-
+            (async () => {
+               workspace = await this.workspace_service.getChosenWorkspace();
+            })();
             this.user_service.getUserByName(name).then(userTo => {
-                if (typeof (userTo) === 'undefined') {
+                if (userTo && userTo.message) {
                     alert('User not found');
                 } else {
-
                     const entity = {
                         associatedUserId: userTo.id,
                         workspaceId: workspace.id,
@@ -104,9 +101,10 @@ export class WorkspacePageEventHandler {
                         showForOpener: true,
                         showForAssociated: true
                     };
+                    this.conversation_serivce.create(entity).then(conv => {
+                        this.chat_members.populateDirectMessages();
+                    });
 
-
-                    this.conversation_serivce.create(entity);
                 }
             })
         })
