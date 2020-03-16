@@ -4,14 +4,14 @@ import jm.api.dao.DirectMessageDAO;
 import jm.model.Message;
 import jm.dto.DirectMessageDTO;
 import jm.model.message.DirectMessage;
+import lombok.NonNull;
+import org.bouncycastle.operator.InputAEADDecryptor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 @Transactional
@@ -50,5 +50,43 @@ public class DirectMessageDAOImpl extends AbstractDao<DirectMessage> implements 
                 .setParameter("ids", ids)
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
+    }
+
+    @Override
+    public List<DirectMessage> getDirectMessageListByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId) {
+        List<DirectMessage> directMessageList = new ArrayList<>();
+
+        try {
+            directMessageList = entityManager.createNativeQuery("SELECT dm.* FROM direct_messages dm, users_unread_direct_messages uudm " +
+                                                                        "WHERE uudm.user_id= :userId " +
+                                                                        "AND dm.conversation_id= :conversationId " +
+                                                                        "AND uudm.unread_direct_message_id = dm.id ")
+                    .setParameter("userId", userId)
+                    .setParameter("conversationId", conversationId)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return directMessageList;
+    }
+
+    @Override
+    public List<Number> getDirectMessageIdsByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId) {
+        List<Number> directMessageIds = new ArrayList<>();
+
+        try {
+            directMessageIds = entityManager.createNativeQuery("SELECT dm.id FROM direct_messages dm, users_unread_direct_messages uudm " +
+                                                                       "WHERE uudm.user_id= :userId " +
+                                                                       "AND dm.conversation_id= :conversationId " +
+                                                                       "AND uudm.unread_direct_message_id = dm.id ")
+                    .setParameter("userId", userId)
+                    .setParameter("conversationId", conversationId)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return directMessageIds;
     }
 }

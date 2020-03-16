@@ -227,21 +227,15 @@ public class MessageDTO {
 
 
     public void setId (Number id) {
-        this.id = Optional.ofNullable(id)
-                          .map(Number::longValue)
-                          .orElse(null);
+        Optional.ofNullable(id).ifPresent(mid -> this.id = mid.longValue());
     }
 
     public void setUserId (Number userId) {
-        this.userId = Optional.ofNullable(userId)
-                              .map(Number::longValue)
-                              .orElse(null);
+        Optional.ofNullable(userId).ifPresent(uId -> this.userId = uId.longValue());
     }
 
     public void setBotId (Number botId) {
-        this.botId = Optional.ofNullable(botId)
-                             .map(Number::longValue)
-                             .orElse(null);
+        Optional.ofNullable(botId).ifPresent(bId -> this.botId = bId.longValue());
     }
 
     public void setDateCreate (Timestamp dateCreate) {
@@ -254,27 +248,19 @@ public class MessageDTO {
 
 
     public void setChannelId (Number channelId) {
-        this.channelId = Optional.ofNullable(channelId)
-                                 .map(Number::longValue)
-                                 .orElse(null);
+        Optional.ofNullable(channelId).ifPresent(cId -> this.channelId = channelId.longValue());
     }
 
     public void setWorkspaceId (Number workspaceId) {
-        this.workspaceId = Optional.ofNullable(workspaceId)
-                                   .map(Number::longValue)
-                                   .orElse(null);
+        Optional.ofNullable(workspaceId).ifPresent(wId -> this.workspaceId = wId.longValue());
     }
 
     public void setSharedMessageId (Number sharedMessageId) {
-        this.sharedMessageId = Optional.ofNullable(sharedMessageId)
-                                       .map(Number::longValue)
-                                       .orElse(null);
+        Optional.ofNullable(sharedMessageId).ifPresent(smId -> this.sharedMessageId = smId.longValue());
     }
 
     public void setParentMessageId (Number parentMessageId) {
-        this.parentMessageId = Optional.ofNullable(parentMessageId)
-                                       .map(Number::longValue)
-                                       .orElse(null);
+        Optional.ofNullable(parentMessageId).ifPresent( pmId -> this.parentMessageId = pmId.longValue());
     }
 
     public void setRecipientUserIds (List<Number> recipientUserIds) {
