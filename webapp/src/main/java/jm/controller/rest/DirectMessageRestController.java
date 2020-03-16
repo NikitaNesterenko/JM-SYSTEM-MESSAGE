@@ -13,14 +13,12 @@ import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -127,11 +125,9 @@ public class DirectMessageRestController {
                             description = "OK: get direct message by conversation id"
                     )
             })
-    public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
-        // TODO: ПЕРЕДЕЛАТЬ получать сразу List DirectMessageDto по ConversationId
-        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
-        messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
+    public ResponseEntity<List<DirectMessageDTO>> getDirectMessagesByConversationId(@PathVariable Long id) {
+        List<DirectMessageDTO> directMessageDtoList = directMessageService.getDirectMessageDtoListByConversationId(id);
+        return !directMessageDtoList.isEmpty() ? ResponseEntity.ok(directMessageDtoList) : ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")

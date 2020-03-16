@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.DirectMessageDTO;
 import jm.model.message.DirectMessage;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,6 @@ public interface DirectMessageDAO {
 
     Optional<Long> getConversationIdByMessageId(Long messageId);
 
-
     void persist(DirectMessage directMessage);
 
     DirectMessage merge(DirectMessage directMessage);
@@ -25,4 +25,11 @@ public interface DirectMessageDAO {
     List<DirectMessage> getMessagesByConversationId(Long id, Boolean isDeleted);
 
     List<DirectMessage> getMessagesByIds(Set<Long> ids, Boolean isDeleted);
+
+    /**
+     * Получает MessagesId по conversationId
+     * @param conversationId
+     * @return List<Long>
+     */
+    List<Number> getMessagesIdByConversationId(@NonNull Long conversationId);
 }
