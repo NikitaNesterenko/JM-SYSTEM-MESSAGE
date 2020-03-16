@@ -140,7 +140,7 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
-    public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
+    public ResponseEntity<?> getUnreadDirectMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
         List<DirectMessageDTO> directMessageDTOList = directMessageService.getDirectMessageDtoListByUserIdAndConversationId(convId, usrId);
         return ResponseEntity.ok(directMessageDTOList);
     }

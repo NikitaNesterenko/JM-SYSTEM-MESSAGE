@@ -55,4 +55,6 @@ public interface MessageService {
     Optional<Long> getMessageIdByContent (@NonNull String content);
 
     Optional<String> getMessageContentById (@NonNull Long id);
+
+    List<MessageDTO> getMessageDtoListByChannelIdAndUserId(@NonNull Long channelId, @NonNull Long userId);
 }
