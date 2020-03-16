@@ -4,7 +4,6 @@ import jm.api.dao.BotDAO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.UserDAO;
 import jm.api.dao.WorkspaceDAO;
-import jm.dao.ChannelDAOImpl;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import lombok.NonNull;
@@ -24,9 +23,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     private final UserDAO userDAO;
 
-    private ChannelDTO channelDTO;
-    private ChannelDAOImpl channelDaoImpl;
-
     private final BotDAO botDAO;
 
     private final WorkspaceDAO workspaceDAO;
@@ -39,49 +35,47 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    // TODO: ПРОВЕИТЬ
-    // List<ChannelDTO> getAllChannels()
     public List<Channel> gelAllChannels() {
         return channelDAO.getAll();
     }
 
     @Override
-    public List<ChannelDTO> getAllChanelDTO () {
+    public List<ChannelDTO> getAllChanelDTO() {
         return channelDAO.getAllChanelDTO();
     }
 
     @Override
-    public void createChannel (Channel channel) {
+    public void createChannel(Channel channel) {
         channelDAO.persist(channel);
     }
 
     @Override
-    public void deleteChannel (Long id) {
+    public void deleteChannel(Long id) {
         channelDAO.deleteById(id);
     }
 
     @Override
-    public void updateChannel (Channel channel) {
+    public void updateChannel(Channel channel) {
         channelDAO.merge(channel);
     }
 
     @Override
-    public Channel getChannelById (Long id) {
+    public Channel getChannelById(Long id) {
         return channelDAO.getById(id);
     }
 
     @Override
-    public Optional<ChannelDTO> getChannelDTOById (Long id) {
+    public Optional<ChannelDTO> getChannelDTOById(Long id) {
         return channelDAO.getChannelDTOById(id);
     }
 
     @Override
-    public Channel getChannelByName (String name) {
+    public Channel getChannelByName(String name) {
         return channelDAO.getChannelByName(name);
     }
 
     @Override
-    public Optional<ChannelDTO> getChannelDTOByName (String name) {
+    public Optional<ChannelDTO> getChannelDTOByName(String name) {
         return channelDAO.getChannelDTOByName(name);
     }
 
@@ -91,32 +85,32 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public List<Channel> getChannelsByOwnerId (Long ownerId) {
+    public List<Channel> getChannelsByOwnerId(Long ownerId) {
         return channelDAO.getChannelsByOwnerId(ownerId);
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId) {
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
         return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId);
     }
 
     @Override
-    public List<Channel> getChannelsByWorkspaceId (Long id) {
+    public List<Channel> getChannelsByWorkspaceId(Long id) {
         return channelDAO.getChannelsByWorkspaceId(id);
     }
 
     @Override
-    public List<ChannelDTO> getChannelDtoListByWorkspaceId (Long workspaceId) {
+    public List<ChannelDTO> getChannelDtoListByWorkspaceId(Long workspaceId) {
         return channelDAO.getChannelDtoListByWorkspaceId(workspaceId);
     }
 
     @Override
-    public List<Channel> getChannelsByUserId (Long userId) {
+    public List<Channel> getChannelsByUserId(Long userId) {
         return channelDAO.getChannelsByUserId(userId);
     }
 
     @Override
-    public List<ChannelDTO> getChannelDtoListByUserId (Long userId) {
+    public List<ChannelDTO> getChannelDtoListByUserId(Long userId) {
         return channelDAO.getChannelDtoListByUserId(userId);
     }
 

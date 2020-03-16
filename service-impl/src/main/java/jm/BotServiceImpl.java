@@ -10,16 +10,10 @@ import jm.model.Channel;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.security.cert.CollectionCertStoreParameters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,7 +36,9 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public List<Bot> gelAllBots() { return botDAO.getAll(); }
+    public List<Bot> gelAllBots() {
+        return botDAO.getAll();
+    }
 
     @Override
     public Bot createBot(Bot bot) {
@@ -55,7 +51,9 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public void deleteBot(Long id) {botDAO.deleteById(id); }
+    public void deleteBot(Long id) {
+        botDAO.deleteById(id);
+    }
 
     @Override
     public void updateBot(Bot bot) {
@@ -67,32 +65,32 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public Bot getBotById (Long id) {
+    public Bot getBotById(Long id) {
         return botDAO.getById(id);
     }
 
     @Override
-    public Optional<BotDTO> getBotDTOById (Long id) {
+    public Optional<BotDTO> getBotDTOById(Long id) {
         return botDAO.getBotDTOById(id);
     }
 
     @Override
-    public List<Bot> getBotsByWorkspaceId (Long id) {
+    public List<Bot> getBotsByWorkspaceId(Long id) {
         return botDAO.getBotsByWorkspaceId(id);
     }
 
     @Override
-    public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
+    public List<BotDTO> getBotDtoListByWorkspaceId(Long id) {
         return botDAO.getBotDtoListByWorkspaceId(id);
     }
 
     @Override
-    public Set<Channel> getChannels (Bot bot) {
+    public Set<Channel> getChannels(Bot bot) {
         return botDAO.getChannels(bot);
     }
 
     @Override
-    public Bot getBotBySlashCommandId (Long id) {
+    public Bot getBotBySlashCommandId(Long id) {
         return botDAO.getBotByCommandId(id);
     }
 
@@ -132,4 +130,8 @@ public class BotServiceImpl implements BotService {
         return botDAO.findByToken(token);
     }
 
+    @Override
+    public Set<Channel> getChannelSetByBotId(@NonNull Long botId) {
+        return null;
+    }
 }

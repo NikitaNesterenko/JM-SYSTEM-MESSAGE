@@ -3,9 +3,8 @@ package jm.dao;
 import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
-import jm.model.User;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,26 +33,26 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public Optional<ChannelDTO> getChannelDTOByName (String name) {
+    public Optional<ChannelDTO> getChannelDTOByName(String name) {
         ChannelDTO channelDTO = null;
         try {
             channelDTO = (ChannelDTO) entityManager
-                                              .createNativeQuery("SELECT " +
-                                                                         "c.id  AS \"id\", " +
-                                                                         "c.name AS \"name\", " +
-                                                                         "c.workspace_id AS \"workspaceId\", " +
-                                                                         "c.owner_id AS \"ownerId\", " +
-                                                                         "c.is_private AS \"isPrivate\", " +
-                                                                         "c.created_date \"createdDate\", " +
-                                                                         "c.topic AS \"topic\", " +
-                                                                         "c.archived AS \"isArchived\", " +
-                                                                         "c.is_app AS \"isApp\" " +
-                                                                         "FROM channels c WHERE name=:name")
-                                              .setParameter("name", name)
-                                              .unwrap(NativeQuery.class)
-                                              .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
-                                              .getResultList()
-                                              .get(0);
+                    .createNativeQuery("SELECT " +
+                                               "c.id  AS \"id\", " +
+                                               "c.name AS \"name\", " +
+                                               "c.workspace_id AS \"workspaceId\", " +
+                                               "c.owner_id AS \"ownerId\", " +
+                                               "c.is_private AS \"isPrivate\", " +
+                                               "c.created_date \"createdDate\", " +
+                                               "c.topic AS \"topic\", " +
+                                               "c.archived AS \"isArchived\", " +
+                                               "c.is_app AS \"isApp\" " +
+                                               "FROM channels c WHERE name=:name")
+                    .setParameter("name", name)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                    .getResultList()
+                    .get(0);
 
             channelDTO.setUserIds(getListUserIdsByName(name));
             channelDTO.setBotIds(getListBotIdsByName(name));
@@ -80,25 +79,25 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public Optional<ChannelDTO> getChannelDTOById (Long id) {
+    public Optional<ChannelDTO> getChannelDTOById(Long id) {
         ChannelDTO channelDTO = null;
         try {
             channelDTO = (ChannelDTO) entityManager
-                                              .createNativeQuery("SELECT " +
-                                                                         "c.id  AS \"id\", " +
-                                                                         "c.name AS \"name\", " +
-                                                                         "c.workspace_id AS \"workspaceId\", " +
-                                                                         "c.owner_id AS \"ownerId\", " +
-                                                                         "c.is_private AS \"isPrivate\", " +
-                                                                         "c.created_date \"createdDate\", " +
-                                                                         "c.topic AS \"topic\", " +
-                                                                         "c.archived AS \"isArchived\", " +
-                                                                         "c.is_app AS \"isApp\" " +
-                                                                         "FROM channels c WHERE id=:id")
-                                              .setParameter("id", id)
-                                              .unwrap(NativeQuery.class)
-                                              .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
-                                              .getSingleResult();
+                    .createNativeQuery("SELECT " +
+                                               "c.id  AS \"id\", " +
+                                               "c.name AS \"name\", " +
+                                               "c.workspace_id AS \"workspaceId\", " +
+                                               "c.owner_id AS \"ownerId\", " +
+                                               "c.is_private AS \"isPrivate\", " +
+                                               "c.created_date \"createdDate\", " +
+                                               "c.topic AS \"topic\", " +
+                                               "c.archived AS \"isArchived\", " +
+                                               "c.is_app AS \"isApp\" " +
+                                               "FROM channels c WHERE id=:id")
+                    .setParameter("id", id)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                    .getSingleResult();
             channelDTO.setUserIds(getListUserIdsByName(channelDTO.getName()));
             channelDTO.setBotIds(getListBotIdsByName(channelDTO.getName()));
 
@@ -109,24 +108,24 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return Optional.ofNullable(channelDTO);
     }
 
-    private List<Number> getListUserIdsByName (String name) {
+    private List<Number> getListUserIdsByName(String name) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT cu.user_id  FROM channels_users cu LEFT JOIN channels c on cu.channel_id = c.id WHERE name=:name")
-                           .setParameter("name", name)
-                           .getResultList();
+                    .setParameter("name", name)
+                    .getResultList();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         return list;
     }
 
-    private List<Number> getListBotIdsByName (String name) {
+    private List<Number> getListBotIdsByName(String name) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT cb.bot_id  FROM channels_bots cb LEFT JOIN channels c on cb.channel_id = c.id WHERE name=:name")
-                           .setParameter("name", name)
-                           .getResultList();
+                    .setParameter("name", name)
+                    .getResultList();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -134,18 +133,18 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public Optional<ChannelDTO> getIdByName (String name) {
+    public Optional<ChannelDTO> getIdByName(String name) {
         ChannelDTO channelDTO = null;
         try {
             channelDTO = (ChannelDTO) entityManager
-                                              .createNativeQuery("SELECT " +
-                                                                         "c.id  AS \"id\" " +
-                                                                         "FROM channels c WHERE name=:name")
-                                              .setParameter("name", name)
-                                              .unwrap(NativeQuery.class)
-                                              .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
-                                              .getResultList()
-                                              .get(0);
+                    .createNativeQuery("SELECT " +
+                                               "c.id  AS \"id\" " +
+                                               "FROM channels c WHERE name=:name")
+                    .setParameter("name", name)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                    .getResultList()
+                    .get(0);
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -154,7 +153,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<Channel> getChannelsByOwnerId (Long ownerId) {
+    public List<Channel> getChannelsByOwnerId(Long ownerId) {
         try {
             return (List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE owner_id = ?", Channel.class)
                     .setParameter(1, ownerId)
@@ -165,26 +164,26 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId) {
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
         String query = "SELECT ch.id, ch.name, ch.is_private " +
-                               "FROM channels ch " +
-                               "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
-                               "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
-                               "LEFT JOIN users u ON chu.user_id = u.id " +
-                               "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
-                               "GROUP BY ch.id";
+                "FROM channels ch " +
+                "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
+                "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
+                "LEFT JOIN users u ON chu.user_id = u.id " +
+                "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
+                "GROUP BY ch.id";
 
         return entityManager.createNativeQuery(query, "ChannelDTOMapping")
-                       .setParameter("workspace_id", workspaceId)
-                       .setParameter("user_id", userId)
-                       .getResultList();
+                .setParameter("workspace_id", workspaceId)
+                .setParameter("user_id", userId)
+                .getResultList();
     }
 
-    private List<Number> getAllChannelId () {
+    private List<Number> getAllChannelId() {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT c.id FROM channels c ")
-                           .getResultList();
+                    .getResultList();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -192,13 +191,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getAllChanelDTO () {
+    public List<ChannelDTO> getAllChanelDTO() {
         return getAllChannelId()
-                       .stream()
-                       .map(Number::longValue)
-                       .map(this::getChannelDTOById)
-                       .map(Optional::get)
-                       .collect(Collectors.toList());
+                .stream()
+                .map(Number::longValue)
+                .map(this::getChannelDTOById)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -208,7 +207,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 .getResultList();
     }
 
-    private List<Number> getAllChannelIdByWorkspaceId (Long id) {
+    private List<Number> getAllChannelIdByWorkspaceId(Long id) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
@@ -223,7 +222,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelDtoListByWorkspaceId (Long workspaceId) {
+    public List<ChannelDTO> getChannelDtoListByWorkspaceId(Long workspaceId) {
         return getAllChannelIdByWorkspaceId(workspaceId)
                 .stream()
                 .map(Number::longValue)
@@ -246,13 +245,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return channels;
     }
 
-    private List<Number> getAllChannelIdByUserId (Long id) {
+    private List<Number> getAllChannelIdByUserId(Long id) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
-                           .createNativeQuery("SELECT cu.channel_id FROM channels_users cu WHERE cu.user_id=:id ")
-                           .setParameter("id", id)
-                           .getResultList();
+                    .createNativeQuery("SELECT cu.channel_id FROM channels_users cu WHERE cu.user_id=:id ")
+                    .setParameter("id", id)
+                    .getResultList();
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -261,17 +260,17 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelDtoListByUserId (Long userId) {
+    public List<ChannelDTO> getChannelDtoListByUserId(Long userId) {
         return getAllChannelIdByUserId(userId)
-                       .stream()
-                       .map(Number::longValue)
-                       .map(this::getChannelDTOById)
-                       .map(Optional::get)
-                       .collect(Collectors.toList());
+                .stream()
+                .map(Number::longValue)
+                .map(this::getChannelDTOById)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Channel> getChannelsByIds (Set<Long> ids) {
+    public List<Channel> getChannelsByIds(Set<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return Collections.emptyList();
         }
@@ -318,5 +317,27 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         return (Channel) entityManager.createNativeQuery("UPDATE channels c SET c.archived = false WHERE c.id = :id")
                 .setParameter("id", id)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<Number> getChannelIdsByBotId(@NonNull Long botId) {
+        List<Number> channelIds = new ArrayList<>();
+        try {
+            channelIds = entityManager.createNativeQuery("SELECT cb.channel_id FROM channels_bots cb WHERE cb.bot_id= :botId").setParameter("botId", botId).getResultList()
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+        return channelIds;
+    }
+
+    @Override
+    public List<Channel> getChannelListByBotId(@NonNull Long botId) {
+        List<Channel> channelList = new ArrayList<>();
+
+        try {
+            channelList = entityManager.createNativeQuery("SELECT c.* FROM channels c ")
+        }
+
+        return null;
     }
 }
