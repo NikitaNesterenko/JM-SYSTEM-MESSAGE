@@ -34,10 +34,10 @@ public class GoogleCalendarController {
     @GetMapping
     public RedirectView googleConnection(HttpServletRequest request, Principal principal) throws Exception {
         Workspace workspace = getWorkspaceFromSession(request);
-        if(workspace==null) {
-            return  new RedirectView("/chooseWorkspace");
+        if (workspace == null) {
+            return new RedirectView("/chooseWorkspace");
         }
-        String authorize = googleCalendarService.authorize(workspace,principal.getName());
+        String authorize = googleCalendarService.authorize(workspace, principal.getName());
         return new RedirectView(authorize);
     }
 
@@ -50,21 +50,20 @@ public class GoogleCalendarController {
     }
 
     @GetMapping(value = "/showDateEvent/{date}")
-    public ResponseEntity<List<Event>> showDateEvent(@PathVariable String date,
-                                        Principal principal) {
+    public ResponseEntity<List<Event>> showDateEvent(@PathVariable String date, HttpServletRequest request) {
         LocalDate nowDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         LocalDateTime nowStartDateTime = nowDate.atTime(0, 0, 1);
         LocalDateTime nowEndDateTime = nowDate.atTime(20, 59, 59);
 
         DateTime dateStart = DateTime.parseRfc3339(nowStartDateTime.toString());
         DateTime dateEnd = DateTime.parseRfc3339(nowEndDateTime.toString());
-        List<Event> events = googleCalendarService.getEvents(principal.getName(), dateStart, dateEnd);
+        List<Event> events = googleCalendarService.getEvents(getWorkspaceFromSession(request).getId(), dateStart, dateEnd);
 
         return ResponseEntity.ok(events);
     }
 
     @GetMapping(value = "/test")
-    public String test(Principal principal) {
+    public String test(Principal principal, HttpServletRequest request) {
 
         LocalDateTime now = LocalDateTime.now();
         now.withHour(0);
@@ -72,12 +71,12 @@ public class GoogleCalendarController {
 
         DateTime dateStart = DateTime.parseRfc3339(now.minusDays(7).toString());
         DateTime dateEnd = DateTime.parseRfc3339(now.toString());
-        googleCalendarService.secondStart(principal.getName(), dateStart, dateEnd);
+        googleCalendarService.secondStart(getWorkspaceFromSession(request).getId(), principal.getName(), dateStart, dateEnd);
 
         return "redirect:/workspace";
     }
 
-    private Workspace getWorkspaceFromSession (HttpServletRequest request) {
+    private Workspace getWorkspaceFromSession(HttpServletRequest request) {
         return (Workspace) request.getSession(false).getAttribute("WorkspaceID");
     }
 }

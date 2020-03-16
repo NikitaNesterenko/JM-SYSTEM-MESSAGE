@@ -47,7 +47,7 @@ public class Workspace {
             name = "workspaces_apps",
             joinColumns = @JoinColumn(name = "workspace_id"),
             inverseJoinColumns = @JoinColumn(name = "app_id"))
-    private Set<Apps> apps;
+    private Set<App> apps;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "owner_id")
