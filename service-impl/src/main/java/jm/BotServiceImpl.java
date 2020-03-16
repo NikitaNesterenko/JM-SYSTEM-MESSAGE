@@ -139,4 +139,9 @@ public class BotServiceImpl implements BotService {
     public Boolean getBooleanResultByUpdateBot(@NonNull Bot bot) {
         return botDAO.updateBot(bot);
     }
+
+    @Override
+    public Optional<String> getBotNameByBotId(@NonNull Long botId) {
+        return botDAO.getBotNameByBotId(botId);
+    }
 }
