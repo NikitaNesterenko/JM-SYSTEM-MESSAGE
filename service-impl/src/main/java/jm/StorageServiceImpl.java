@@ -26,8 +26,8 @@ public class StorageServiceImpl  implements StorageService {
     String uploadPath;
 
     @Override
-    public String store(MultipartFile file) throws IOException {
-        Path uploadDir = Paths.get(uploadPath);
+    public String store(MultipartFile file, String storage) throws IOException {
+        Path uploadDir = Paths.get(storage);
 
         //Костыльное удаление папки при первом сохранении с рестарта
         if (count++ < 1) {
@@ -45,9 +45,14 @@ public class StorageServiceImpl  implements StorageService {
             Files.createDirectory(uploadDir);
         }
         String fileName = file.getOriginalFilename();
-        file.transferTo(Paths.get(uploadPath + "/" + fileName));
+        file.transferTo(Paths.get(storage + "/" + fileName));
         logger.info("File upload was successful");
         return fileName;
+    }
+
+    @Override
+    public String store(MultipartFile file) throws IOException {
+        return store(file, uploadPath);
     }
 
     public Path load(String filename) {
