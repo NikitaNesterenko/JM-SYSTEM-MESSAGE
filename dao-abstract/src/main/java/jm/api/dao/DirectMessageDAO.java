@@ -32,4 +32,8 @@ public interface DirectMessageDAO {
      * @return List<Long>
      */
     List<Number> getMessagesIdByConversationId(@NonNull Long conversationId);
+
+    List<DirectMessage> getDirectMessageListByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId);
+
+    List<Number> getDirectMessageIdsByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId);
 }

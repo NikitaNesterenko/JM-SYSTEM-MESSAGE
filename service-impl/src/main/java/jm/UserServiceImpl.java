@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
         this.directMessageDAO = directMessageDAO;
     }
 
-
     @Override
     public List<User> getAllUsers() {
         return userDAO.getAll();
@@ -44,7 +43,6 @@ public class UserServiceImpl implements UserService {
     public void createUser(User user) {
         userDAO.persist(user);
     }
-
 
     @Override
     public void deleteUser(Long id) {

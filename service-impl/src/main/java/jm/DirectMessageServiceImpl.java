@@ -6,13 +6,14 @@ import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
 import jm.dto.DirectMessageDTO;
 import jm.model.Message;
-import jm.model.User;
 import jm.model.message.DirectMessage;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,6 +92,22 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     @Override
     public List<DirectMessageDTO> getDirectMessageDtoListByDirectMessageList(@NonNull List<DirectMessage> directMessagesList) {
         return directMessagesList.stream().map(this::getDirectMessageDtoByDirectMessage).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DirectMessage> getDirectMessageListByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId) {
+        return directMessageDAO.getDirectMessageListByUserIdAndConversationId(userId, conversationId);
+    }
+
+    @Override
+    public List<DirectMessageDTO> getDirectMessageDtoListByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId) {
+        return directMessageDAO.getDirectMessageIdsByUserIdAndConversationId(userId, conversationId)
+                .stream()
+                .map(Number::longValue)
+                .map(this::getDirectMessageDtoByMessageId)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override

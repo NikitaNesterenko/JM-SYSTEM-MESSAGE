@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -139,16 +140,8 @@ public class DirectMessageRestController {
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
     public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
-        // TODO: ПЕРЕДЕЛАТЬ получать в дао DirectMessageDto где ConversationId = convId и UserId = usrId
-
-        User user = userService.getUserById(usrId);
-        List<DirectMessage> unreadMessages = new ArrayList<>();
-        user.getUnreadDirectMessages().forEach(msg -> {
-            if (msg.getConversation().getId().equals(convId)) {
-                unreadMessages.add(msg);
-            }
-        });
-        return ResponseEntity.ok(directMessageService.getDirectMessageDtoListByDirectMessageList(unreadMessages));
+        List<DirectMessageDTO> directMessageDTOList = directMessageService.getDirectMessageDtoListByUserIdAndConversationId(convId, usrId);
+        return ResponseEntity.ok(directMessageDTOList);
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")

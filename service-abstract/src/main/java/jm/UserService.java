@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> getAllUsers(); //+
+    List<User> getAllUsers();
 
     void createUser(User user);
 
@@ -24,7 +24,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannel(Long id); //+
+    List<User> getAllUsersInThisChannel(Long id);
 
     List<UserDTO> getAllUsersInWorkspace(Long id);
 
