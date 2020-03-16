@@ -320,24 +320,15 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<Number> getChannelIdsByBotId(@NonNull Long botId) {
-        List<Number> channelIds = new ArrayList<>();
-        try {
-            channelIds = entityManager.createNativeQuery("SELECT cb.channel_id FROM channels_bots cb WHERE cb.bot_id= :botId").setParameter("botId", botId).getResultList()
-        } catch (IllegalArgumentException e){
-            e.printStackTrace();
-        }
-        return channelIds;
-    }
-
-    @Override
     public List<Channel> getChannelListByBotId(@NonNull Long botId) {
         List<Channel> channelList = new ArrayList<>();
-
         try {
-            channelList = entityManager.createNativeQuery("SELECT c.* FROM channels c ")
+            channelList = entityManager.createNativeQuery("SELECT c.* FROM channels c, bots b, channels_bots cb " +
+                                                                  "WHERE c.id = cb.channel_id AND b.id = cb.bot_id AND b.id= :botId", Channel.class)
+                    .setParameter("botId", botId).getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
-
-        return null;
+        return channelList;
     }
 }

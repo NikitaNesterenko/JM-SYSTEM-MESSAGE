@@ -57,6 +57,4 @@ public interface ChannelDAO {
     List<ChannelDTO> getPrivateChannels();
 
     Channel unzipChannel(Long id);
-
-    List<Number> getChannelIdsByBotId(@NonNull Long botId);
 }

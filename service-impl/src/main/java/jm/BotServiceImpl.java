@@ -132,6 +132,6 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Set<Channel> getChannelSetByBotId(@NonNull Long botId) {
-        return null;
+        return new HashSet<>(channelDAO.getChannelListByBotId(botId));
     }
 }
