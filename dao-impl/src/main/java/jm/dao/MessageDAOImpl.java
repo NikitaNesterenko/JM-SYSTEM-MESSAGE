@@ -351,4 +351,23 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                 .setParameter("is_deleted", isDeleted)
                 .getResultList();
     }
+
+    @Override
+    public List<Number> getMessageIdsByChannelIdAndUserId(@NonNull Long channelId, @NonNull Long userId) {
+        List<Number> messageIds = new ArrayList<>();
+
+        try {
+            messageIds = entityManager.createNativeQuery("SELECT m.id FROM messages m, users_unread_messages uum " +
+                                                                 "WHERE m.channel_id= :channelId " +
+                                                                 "AND m.user_id= :userId " +
+                                                                 "AND uum.user_id = m.user_id")
+                    .setParameter("channelId", channelId)
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return messageIds;
+    }
 }

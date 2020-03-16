@@ -14,7 +14,7 @@ public interface MessageService {
 
     List<MessageDTO> getAllMessageDtoByIsDeleted(Boolean isDeleted);
 
-    List<Message> getMessagesByChannelId(Long id, Boolean isDeleted);
+    List<Message> getMessagesByChannelId (Long id, Boolean isDeleted);
 
     List<MessageDTO> getMessageDtoListByChannelId(Long id, Boolean isDeleted);
 
@@ -54,5 +54,8 @@ public interface MessageService {
 
     Optional<Long> getMessageIdByContent(@NonNull String content);
 
-    Optional<String> getMessageContentById(@NonNull Long id);
+    Optional<String> getMessageContentById (@NonNull Long id);
+
+    List<MessageDTO> getMessageDtoListByChannelIdAndUserId(@NonNull Long channelId, @NonNull Long userId);
+
 }

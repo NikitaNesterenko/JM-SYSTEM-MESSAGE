@@ -187,4 +187,15 @@ public class MessageServiceImpl implements MessageService {
     public Optional<String> getMessageContentById(@NonNull Long id) {
         return messageDAO.getMessageContentById(id);
     }
+
+    @Override
+    public List<MessageDTO> getMessageDtoListByChannelIdAndUserId(@NonNull Long channelId, @NonNull Long userId) {
+        List<Number> messageIds = messageDAO.getMessageIdsByChannelIdAndUserId(channelId, userId);
+        return messageIds.stream()
+                .map(Number::longValue)
+                .map(this::getMessageDtoById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
 }

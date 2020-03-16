@@ -218,16 +218,7 @@ public class MessageRestController {
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
     public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
-        // TODO: ПЕРЕДЕЛАТЬ получать в дао MessageDtoLis где UserId = usrId и ChannelId = chnId
-
-        User user = userService.getUserById(usrId);
-        List<Message> unreadMessages = new ArrayList<>();
-        user.getUnreadMessages().forEach(msg -> {
-            if (msg.getChannelId().equals(chnId)) {
-                unreadMessages.add(msg);
-            }
-        });
-        return ResponseEntity.ok(messageService.getMessageDtoListByMessageList(unreadMessages));
+        return ResponseEntity.ok(messageService.getMessageDtoListByChannelIdAndUserId(chnId, usrId));
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
