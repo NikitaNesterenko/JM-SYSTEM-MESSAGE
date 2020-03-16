@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -99,8 +100,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
-        return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate, isDeleted);
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(@NonNull Long botId,
+                                                                @NonNull String channelName,
+                                                                @NonNull LocalDateTime startDate,
+                                                                @NonNull LocalDateTime endDate,
+                                                                @NonNull Boolean isDeleted) {
+        return channelDAO.getChannelIdByChannelName(channelName)
+                .map(channelId -> messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId.longValue(), startDate, endDate, isDeleted))
+                .orElse(new ArrayList<>());
     }
 
     @Override
@@ -179,6 +186,17 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Optional<String> getMessageContentById(@NonNull Long id) {
         return messageDAO.getMessageContentById(id);
+    }
+
+    @Override
+    public List<MessageDTO> getMessageDtoListByChannelIdAndUserId(@NonNull Long channelId, @NonNull Long userId) {
+        List<Number> messageIds = messageDAO.getMessageIdsByChannelIdAndUserId(channelId, userId);
+        return messageIds.stream()
+                .map(Number::longValue)
+                .map(this::getMessageDtoById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override

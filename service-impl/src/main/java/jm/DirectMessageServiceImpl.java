@@ -6,16 +6,14 @@ import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
 import jm.dto.DirectMessageDTO;
 import jm.model.Message;
-import jm.model.User;
 import jm.model.message.DirectMessage;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,12 +39,12 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     @Override
-    public DirectMessage getDirectMessageById (Long id) {
+    public DirectMessage getDirectMessageById(Long id) {
         return this.directMessageDAO.getById(id);
     }
 
     @Override
-    public Optional<DirectMessageDTO> getDirectMessageDtoByMessageId (@NonNull Long messageId) {
+    public Optional<DirectMessageDTO> getDirectMessageDtoByMessageId(@NonNull Long messageId) {
         DirectMessageDTO directMessageDTO = messageDAO.getMessageDtoById(messageId).map(DirectMessageDTO::new).orElse(null);
         if (directMessageDTO != null) {
             directMessageDAO.getConversationIdByMessageId(messageId).ifPresent(directMessageDTO::setConversationId);
@@ -56,12 +54,12 @@ public class DirectMessageServiceImpl implements DirectMessageService {
     }
 
     @Override
-    public void saveDirectMessage (DirectMessage directMessage) {
+    public void saveDirectMessage(DirectMessage directMessage) {
         this.directMessageDAO.persist(directMessage);
     }
 
     @Override
-    public DirectMessage updateDirectMessage (DirectMessage directMessage) {
+    public DirectMessage updateDirectMessage(DirectMessage directMessage) {
         return this.directMessageDAO.merge(directMessage);
     }
 
@@ -96,5 +94,32 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         return directMessagesList.stream().map(this::getDirectMessageDtoByDirectMessage).collect(Collectors.toList());
     }
 
+    @Override
+    public List<DirectMessage> getDirectMessageListByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId) {
+        return directMessageDAO.getDirectMessageListByUserIdAndConversationId(userId, conversationId);
+    }
 
+    @Override
+    public List<DirectMessageDTO> getDirectMessageDtoListByUserIdAndConversationId(@NonNull Long userId, @NonNull Long conversationId) {
+        return directMessageDAO.getDirectMessageIdsByUserIdAndConversationId(userId, conversationId)
+                .stream()
+                .map(Number::longValue)
+                .map(this::getDirectMessageDtoByMessageId)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DirectMessageDTO> getDirectMessageDtoListByConversationId(@NonNull Long conversationId) {
+        List<Number> messagesIds = directMessageDAO.getMessagesIdByConversationId(conversationId);
+
+        return messagesIds.stream()
+                .map(Number::longValue)
+                .map(this::getDirectMessageDtoByMessageId)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .sorted(Comparator.comparing(DirectMessageDTO::getDateCreate))
+                .collect(Collectors.toList());
+    }
 }

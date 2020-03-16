@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
         this.directMessageDAO = directMessageDAO;
     }
 
-
     @Override
     public List<User> getAllUsers() {
         return userDAO.getAll();

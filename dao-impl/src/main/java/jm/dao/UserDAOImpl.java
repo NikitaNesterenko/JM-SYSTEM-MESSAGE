@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.UserDAO;
 import jm.dto.UserDTO;
 import jm.model.User;
+import jm.model.message.DirectMessage;
 import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;

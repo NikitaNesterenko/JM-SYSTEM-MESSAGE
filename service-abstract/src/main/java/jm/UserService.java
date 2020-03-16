@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> getAllUsers(); //+
+    List<User> getAllUsers();
 
     void createUser(User user);
 
@@ -19,15 +19,15 @@ public interface UserService {
 
     Boolean updateUser(@NonNull User user);
 
-    User getUserById(Long id); //+
+    User getUserById(Long id);
 
-    User getUserByLogin(String login); //+
+    User getUserByLogin(String login);
 
     User getUserByName(String name);
 
-    User getUserByEmail(String email); //+
+    User getUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannel(Long id); //+
+    List<User> getAllUsersInThisChannel(Long id);
 
     List<UserDTO> getAllUsersInWorkspace(Long id);
 

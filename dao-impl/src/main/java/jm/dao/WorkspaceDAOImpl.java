@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.WorkspaceDAO;
 import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
+import lombok.NonNull;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
@@ -113,7 +114,6 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
         return Optional.ofNullable(workspaceDTOList);
     }
 
-
     private Set<Long> getBotIds(Long workspaceId) {
         List<Number> list = new ArrayList<>();
         list = (List<Number>) entityManager.createNativeQuery("SELECT wb.bot_id " +
@@ -155,5 +155,20 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
         workspaceDTO.setBotIds(getBotIds(workspaceDTO.getId()));
         workspaceDTO.setChannelIds(getChannelIds(workspaceDTO.getId()));
         workspaceDTO.setUserIds(getUserIds(workspaceDTO.getId()));
+    }
+
+    @Override
+    public List<Workspace> getWorkspaceListByLogin(@NonNull String login) {
+        List<Workspace> workspaceList = null;
+        try {
+            workspaceList = (List<Workspace>) entityManager.
+                    createNativeQuery("SELECT w.* FROM workspaces w, users u, workspaces_users wu " +
+                            "WHERE wu.user_id=u.id AND wu.workspace_id=w.id AND u.login= :login", Workspace.class)
+                    .setParameter("login", login)
+                    .getResultList();
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+        return workspaceList;
     }
 }

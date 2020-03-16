@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.UserDTO;
 import jm.model.User;
+import jm.model.message.DirectMessage;
 import lombok.NonNull;
 
 import java.util.List;

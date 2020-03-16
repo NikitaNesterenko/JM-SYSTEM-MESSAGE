@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -183,10 +184,7 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
-        // TODO: ПЕРЕДЕЛАТЬ получать только UserID, остальная информация о юзере не используется
-        String name = principal.getName();
-        User user = userService.getUserByLogin(name);
-        List<Workspace> list = workspaceService.getWorkspacesByUserId(user.getId());
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        List<Workspace> list = workspaceService.getWorkspaceListByLogin(principal.getName());
+        return !list.isEmpty()? ResponseEntity.ok(list) : ResponseEntity.badRequest().build();
     }
 }

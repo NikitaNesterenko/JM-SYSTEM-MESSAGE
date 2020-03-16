@@ -1,8 +1,9 @@
 package jm.controller;
 
-import jm.*;
-import jm.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import jm.BotService;
+import jm.SlashCommandService;
+import jm.TypeSlashCommandService;
+import jm.WorkspaceService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,18 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin/apps")
 public class AdminAppsController {
 
-    private BotService botService;
-    private WorkspaceService workspaceService;
-    private UserService userService;
-    private SlashCommandService slashCommandService;
-    private TypeSlashCommandService typeSlashCommandService;
+    private final BotService botService;
+    private final WorkspaceService workspaceService;
+    private final SlashCommandService slashCommandService;
+    private final TypeSlashCommandService typeSlashCommandService;
 
-    @Autowired
-    public AdminAppsController(BotService botService, WorkspaceService workspaceService, UserService userService,
-                               SlashCommandService slashCommandService, TypeSlashCommandService typeSlashCommandService) {
+    public AdminAppsController(BotService botService, WorkspaceService workspaceService, SlashCommandService slashCommandService, TypeSlashCommandService typeSlashCommandService) {
         this.botService = botService;
         this.workspaceService = workspaceService;
-        this.userService = userService;
         this.slashCommandService = slashCommandService;
         this.typeSlashCommandService = typeSlashCommandService;
     }
@@ -34,8 +31,7 @@ public class AdminAppsController {
     @GetMapping(value = "/bots")
     public ModelAndView addCustomBot(Model model) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.getUserByLogin(userName);
-        model.addAttribute("workspaces", workspaceService.getWorkspacesByUserId(user.getId()));
+        model.addAttribute("workspaces", workspaceService.getWorkspaceListByLogin(userName));
         model.addAttribute("bots", botService.gelAllBots());
         return new ModelAndView("apps/create-custom-bot");
     }

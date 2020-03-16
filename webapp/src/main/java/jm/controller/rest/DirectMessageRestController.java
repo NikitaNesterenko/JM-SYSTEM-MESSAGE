@@ -137,11 +137,9 @@ public class DirectMessageRestController {
                             description = "OK: get direct message by conversation id"
                     )
             })
-    public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
-        // TODO: ПЕРЕДЕЛАТЬ получать сразу List DirectMessageDto по ConversationId
-        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
-        messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
+    public ResponseEntity<List<DirectMessageDTO>> getDirectMessagesByConversationId(@PathVariable Long id) {
+        List<DirectMessageDTO> directMessageDtoList = directMessageService.getDirectMessageDtoListByConversationId(id);
+        return !directMessageDtoList.isEmpty() ? ResponseEntity.ok(directMessageDtoList) : ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
@@ -152,17 +150,9 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
-    public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
-        // TODO: ПЕРЕДЕЛАТЬ получать в дао DirectMessageDto где ConversationId = convId и UserId = usrId
-
-        User user = userService.getUserById(usrId);
-        List<DirectMessage> unreadMessages = new ArrayList<>();
-        user.getUnreadDirectMessages().forEach(msg -> {
-            if (msg.getConversation().getId().equals(convId)) {
-                unreadMessages.add(msg);
-            }
-        });
-        return ResponseEntity.ok(directMessageService.getDirectMessageDtoListByDirectMessageList(unreadMessages));
+    public ResponseEntity<?> getUnreadDirectMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
+        List<DirectMessageDTO> directMessageDTOList = directMessageService.getDirectMessageDtoListByUserIdAndConversationId(convId, usrId);
+        return ResponseEntity.ok(directMessageDTOList);
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")

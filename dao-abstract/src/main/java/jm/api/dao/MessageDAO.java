@@ -51,5 +51,7 @@ public interface MessageDAO {
 
     Optional<String> getMessageContentById (Long id);
 
+    List<Number> getMessageIdsByChannelIdAndUserId(@NonNull Long channelId, @NonNull Long userId);
+
     Optional<LocalDateTime> getMessageDateCreateByMessageId(@NonNull Long messageId);
 }
