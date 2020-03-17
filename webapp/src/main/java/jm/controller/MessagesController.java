@@ -21,6 +21,8 @@ import java.util.List;
 
 @Controller
 public class MessagesController {
+//    @Autowired
+//    GithubService githubService;
 
     private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
@@ -48,6 +50,21 @@ public class MessagesController {
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
+
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("--->");
+//        System.out.println("message");
+//        System.out.println(messageDto);
+//        if (messageDto.getChannelName().split(" ")[0].equals("GitHub") && messageDto.getContent().split(" ")[0].equals("/github")) {
+//            githubService.secondStart(messageDto);
+//        }
+
         Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());
