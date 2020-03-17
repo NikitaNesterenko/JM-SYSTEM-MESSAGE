@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Objects;
 
 @RestController
 public class StorageController {
@@ -41,9 +42,13 @@ public class StorageController {
     @PostMapping("/avatar")
     public ResponseEntity<String> saveAvatar(@RequestParam MultipartFile file, Principal principal) throws IOException {
         Long id = userService.getUserByLogin(principal.getName()).getId();
-        String filename = storageService.store(file);
+        String filename = storageService.storeAvatars(file, id);
         return new ResponseEntity<>(filename, HttpStatus.OK);
     }
 
-
+    @GetMapping("/avatar/{fileName}")
+    public ResponseEntity<Resource> getAvatar(@PathVariable String fileName) throws IOException {
+        Resource avatar = storageService.loadAvatarAsResource(fileName);
+        return Objects.isNull(avatar) ? new ResponseEntity<>(HttpStatus.NOT_FOUND) : ResponseEntity.ok(avatar);
+    }
 }

@@ -46,7 +46,7 @@ export class FileUploader {
         if (file !== undefined) {
             const data = new FormData();
             data.append("file", file);
-            await this.storage_service.uploadFile(data);
+            await this.storage_service.uploadAvatar(data);
             $('#attached_file').html("");
             return file.name;
         }

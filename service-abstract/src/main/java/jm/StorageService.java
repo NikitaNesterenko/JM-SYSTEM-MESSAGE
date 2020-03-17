@@ -9,7 +9,9 @@ public interface StorageService {
 
     String store(MultipartFile file) throws IOException;
 
-    String store(MultipartFile file, String storage) throws IOException;
+    String storeAvatars(MultipartFile file, Long userId) throws IOException;
 
     Resource loadAsResource(String filename);
+
+    Resource loadAvatarAsResource(String filename) throws IOException;
 }

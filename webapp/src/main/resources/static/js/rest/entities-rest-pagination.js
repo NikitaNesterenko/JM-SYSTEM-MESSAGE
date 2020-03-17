@@ -337,6 +337,15 @@ export class StorageService {
             return response.text()
         });
     };
+
+    uploadAvatar = async (file) => {
+        return await fetch(`/avatar`, {
+            method: 'POST',
+            body: file
+        }).then(response => {
+            return response.text()
+        });
+    };
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
