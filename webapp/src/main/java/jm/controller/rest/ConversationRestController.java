@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ConversationService;
+import jm.dto.ConversationDTO;
 import jm.model.Conversation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,13 +54,13 @@ public class ConversationRestController {
                     @ApiResponse(responseCode = "200", description = "OK: conversation created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to create conversation")
             })
-    public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
+    public ResponseEntity<Conversation> createConversation(@RequestBody ConversationDTO conversationDTO) {
+        Conversation conversation = conversationService.getEntityFromDTO(conversationDTO);
         try {
             conversationService.createConversation(conversation);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
-
         return new ResponseEntity<>(conversation, HttpStatus.OK);
     }
 

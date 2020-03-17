@@ -4,9 +4,7 @@ import jm.api.dao.ChannelDAO;
 import jm.api.dao.UserDAO;
 import jm.api.dao.WorkspaceDAO;
 import jm.dto.WorkspaceDTO;
-import jm.model.Channel;
-import jm.model.User;
-import jm.model.Workspace;
+import jm.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,18 +25,24 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final WorkspaceDAO workspaceDAO;
     private final UserDAO userDAO;
     private final ChannelDAO channelDAO;
+    private CreateWorkspaceTokenService createWorkspaceTokenService;
+    private UserService userService;
+    private WorkspaceUserRoleService workspaceUserRoleService;
 
     @Autowired
-    public WorkspaceServiceImpl(WorkspaceDAO workspaceDAO, UserDAO userDAO, ChannelDAO channelDAO) {
+    public WorkspaceServiceImpl(WorkspaceDAO workspaceDAO, UserDAO userDAO, ChannelDAO channelDAO, CreateWorkspaceTokenService createWorkspaceTokenService,UserService userService, WorkspaceUserRoleService workspaceUserRoleService) {
         this.workspaceDAO = workspaceDAO;
         this.userDAO = userDAO;
         this.channelDAO = channelDAO;
+        this.createWorkspaceTokenService = createWorkspaceTokenService;
+        this.userService = userService;
+        this.workspaceUserRoleService = workspaceUserRoleService;
     }
 
     @Override
     public List<Workspace> getAllWorkspaces() {
         return workspaceDAO.getAll();
-    } //+
+    }
 
     @Override
     public void createWorkspace(Workspace workspace) {
@@ -57,7 +62,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public Workspace getWorkspaceById(Long id) {
         return workspaceDAO.getById(id);
-    } //+
+    }
 
     @Override
     public Workspace getWorkspaceByName(String name) {
@@ -118,5 +123,20 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return null;
     }
 
+
+    @Override
+    public void createWorkspaceByToken(CreateWorkspaceToken createWorkspaceToken) {
+        Set<User> users = null;
+        createWorkspaceTokenService.updateCreateWorkspaceToken(createWorkspaceToken);
+        User emailUser = userService.getUserByLogin(createWorkspaceToken.getUserEmail());
+        users.add(emailUser);
+        Workspace workspace1 = new Workspace(createWorkspaceToken.getWorkspaceName(),users, emailUser,false, LocalDateTime.now());
+        createWorkspace(workspace1);
+        workspace1 = getWorkspaceByName(createWorkspaceToken.getWorkspaceName());
+        workspaceUserRoleService.create(new WorkspaceUserRole(
+                workspace1,
+                emailUser,
+                new Role( 2L, "ROLE_OWNER")));
+    }
 
 }

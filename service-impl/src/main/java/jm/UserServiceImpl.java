@@ -77,6 +77,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createUserByEmail(String email) {
+        User user = new User(email, email, email, email, email);
+        createUser(user);
+        return user;
+    }
+
+    @Override
     public List<User> getAllUsersInThisChannel(Long id) {
         return userDAO.getAllUsersInThisChannel(id);
     }
@@ -118,6 +125,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserDTO> getUserDTOByLogin(String login) {
         return userDAO.getUserDTOByLogin(login);
+    }
+
+    @Override
+    public Optional<UserDTO> getUserDTOByName(String name) {
+        return userDAO.getUserDTOByName(name);
     }
 
     @Override
