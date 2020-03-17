@@ -37,10 +37,10 @@ export class ChannelTopicView {
     setTopic() {
         if (this.channel_id !== 0 && this.channel_id != null) {
             this.channel_topic_service.getChannelTopic(this.channel_id).then(chn_topic => {
-                if (chn_topic !== null && chn_topic !== undefined) {
+                // if (chn_topic !== null && chn_topic !== undefined) {
                     this.channel_topic = this.checkTopic(chn_topic);
                     $("#topic_string").text(this.channel_topic);
-                }
+                // }
             });
         }
     }
@@ -60,6 +60,4 @@ export class ChannelTopicView {
             });
         }
     }
-
-
 }
