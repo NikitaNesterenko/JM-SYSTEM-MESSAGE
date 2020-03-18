@@ -12,7 +12,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -54,16 +53,16 @@ public class Channel {
     @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
-    private Set<User> users = new HashSet<>();
+    private Set<User> users;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "channels_bots",
             joinColumns = @JoinColumn(name = "channel_id"),
             inverseJoinColumns = @JoinColumn(name = "bot_id"))
     @ToString.Exclude
-    private Set<Bot> bots = new HashSet<>();
+    private Set<Bot> bots;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "workspace_id", nullable = false)

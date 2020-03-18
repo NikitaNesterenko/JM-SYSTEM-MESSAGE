@@ -1,9 +1,6 @@
 package jm;
 
-import jm.api.dao.BotDAO;
-import jm.api.dao.ChannelDAO;
-import jm.api.dao.MessageDAO;
-import jm.api.dao.UserDAO;
+import jm.api.dao.*;
 import jm.dto.MessageDTO;
 import jm.model.Channel;
 import jm.model.Message;
@@ -30,12 +27,14 @@ public class MessageServiceImpl implements MessageService {
     private final ChannelDAO channelDAO;
     private final UserDAO userDAO;
     private final BotDAO botDAO;
+    private final WorkspaceDAO workspaceDAO;
 
-    public MessageServiceImpl (MessageDAO messageDAO, ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO) {
+    public MessageServiceImpl (MessageDAO messageDAO, ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO) {
         this.messageDAO = messageDAO;
         this.channelDAO = channelDAO;
         this.userDAO = userDAO;
         this.botDAO = botDAO;
+        this.workspaceDAO = workspaceDAO;
     }
 
 
@@ -159,7 +158,7 @@ public class MessageServiceImpl implements MessageService {
                 .ifPresent(parentMessageId -> message.setParentMessage(messageDAO.getById(parentMessageId)));
 
         Optional.ofNullable(messageDTO.getWorkspaceId())
-                .ifPresent(message::setWorkspaceId);
+                .ifPresent(workspaceId ->message.setWorkspace(workspaceDAO.getById(workspaceId)));
 
         message.setRecipientUsers(Optional.ofNullable(messageDTO.getRecipientUserIds())
                                           .map(userDAO::getUsersByIds)

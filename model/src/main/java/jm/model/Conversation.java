@@ -2,9 +2,7 @@ package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jm.model.message.DirectMessage;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "conversations")
 public class Conversation {
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +32,17 @@ public class Conversation {
     private Workspace workspace;
 
     @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<DirectMessage> directMessages;
 
     @Column(name = "show_for_opener", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Boolean showForOpener;
 
     @Column(name = "show_for_associated", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Boolean showForAssociated;
 
     public Conversation(User openingUser, User associatedUser, Workspace workspace, Boolean showForOpener, Boolean showForAssociated) {

@@ -38,7 +38,8 @@ export class ChannelMessageView extends MessageView {
             "content": msg,
             "dateCreate": convert_date_to_format_Json(new Date()),
             "filename": filename,
-            "isUpdated": true
+            "isUpdated": true,
+            "workspaceId": parseInt(sessionStorage.getItem("workspaceId"))
         };
         this.message_service.update(message).then(
             () => sendName(message)

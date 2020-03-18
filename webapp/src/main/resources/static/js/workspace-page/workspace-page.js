@@ -31,6 +31,7 @@ window.addEventListener('load', async () => {
     switch_workspace_window.buildEvents();
     channel_view.setLoggedUser(await logged_user);
     channel_view.showAllChannels((await current_wks).id);
+    sessionStorage.setItem("workspaceId", (await current_wks).id);
     // channel_view.setFlaggedItems();
     // channel_view.showPeopleInChannel();
 

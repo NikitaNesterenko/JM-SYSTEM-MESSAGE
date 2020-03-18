@@ -163,7 +163,12 @@ public class MessageDTO {
         this.voiceMessage = message.getVoiceMessage();
         this.isDeleted = message.getIsDeleted();
         this.channelId = message.getChannelId();
-        this.workspaceId = message.getWorkspaceId();
+
+        Optional.ofNullable(message.getWorkspace())
+                .map(workspace -> {
+                    this.workspaceId = workspace.getId();
+                    return null;
+                });
 
         Optional.ofNullable(message.getSharedMessage())
                 .map(sharedMessage -> this.sharedMessageId = sharedMessage.getId());

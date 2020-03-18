@@ -21,14 +21,16 @@ public class ThreadChannelMessageServiceImpl implements ThreadChannelMessageServ
     private final ThreadChannelMessageDAO threadChannelMessageDAO;
     private final UserDAO userDAO;
     private final ThreadChannelDAO threadChannelDAO;
+    private final WorkspaceService workspaceService;
     private final MessageService messageService;
 
     @Autowired
-    public ThreadChannelMessageServiceImpl(ThreadChannelMessageDAO threadChannelMessageDAO, UserDAO userDAO, ThreadChannelDAO threadChannelDAO, MessageService messageService) {
+    public ThreadChannelMessageServiceImpl(ThreadChannelMessageDAO threadChannelMessageDAO, UserDAO userDAO, ThreadChannelDAO threadChannelDAO, MessageService messageService, WorkspaceService workspaceService) {
         this.threadChannelMessageDAO = threadChannelMessageDAO;
         this.userDAO = userDAO;
         this.threadChannelDAO = threadChannelDAO;
         this.messageService = messageService;
+        this.workspaceService = workspaceService;
     }
 
 
@@ -77,7 +79,7 @@ public class ThreadChannelMessageServiceImpl implements ThreadChannelMessageServ
         threadChannelMessage.setIsDeleted(threadMessageDTO.getIsDeleted());
         threadChannelMessage.setThreadChannel(threadChannel);
         threadChannelMessage.setParentMessage(messageService.getMessageById(threadMessageDTO.getParentMessageId()));
-        threadChannelMessage.setWorkspaceId(threadMessageDTO.getWorkspaceId());
+        threadChannelMessage.setWorkspace(workspaceService.getWorkspaceById(threadMessageDTO.getWorkspaceId()));
 
         return threadChannelMessage;
     }

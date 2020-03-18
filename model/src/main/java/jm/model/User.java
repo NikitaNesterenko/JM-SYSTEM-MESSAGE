@@ -79,8 +79,9 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ToString.Exclude
     private Set<Role> roles;
 
     // TODO timezone - вычисляется или указывается пользователем
@@ -132,6 +133,7 @@ public class User {
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
     @ToString.Exclude
+    @JsonIgnore
     private Set<User> directMessagesToUsers;
 
     @Column(name = "zoom_token", length = 2000)

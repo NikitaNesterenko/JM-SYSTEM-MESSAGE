@@ -40,7 +40,7 @@ public class ThreadMessageDTO {
             this.dateCreate = threadChannelMessage.getDateCreate();
             this.filename = threadChannelMessage.getFilename();
             this.isDeleted = threadChannelMessage.getIsDeleted();
-            this.workspaceId = threadChannelMessage.getWorkspaceId();
+            this.workspaceId = threadChannelMessage.getWorkspace().getId();
             this.userId = user.getId();
             this.userName = user.getUsername();
             this.userAvatarUrl = user.getAvatarURL();

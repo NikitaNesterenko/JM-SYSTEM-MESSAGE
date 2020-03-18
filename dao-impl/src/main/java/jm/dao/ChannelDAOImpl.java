@@ -3,6 +3,7 @@ package jm.dao;
 import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Workspace;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
@@ -288,11 +289,10 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public Long getWorkspaceIdByChannelId(Long channelId) {
-        BigInteger id = (BigInteger) entityManager.createNativeQuery("select ch.workspace_id from channels ch where ch.id=?")
-                .setParameter(1, channelId)
+    public Workspace getWorkspaceByChannelId(Long channelId) {
+        return (Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE channel_id = :id")
+                .setParameter("id", channelId)
                 .getSingleResult();
-        return id.longValue();
     }
 
     @Override

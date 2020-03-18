@@ -7,8 +7,8 @@ import jm.api.dao.WorkspaceDAO;
 import jm.dao.ChannelDAOImpl;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Workspace;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,8 +166,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Long getWorkspaceIdByChannelId(Long channelId) {
-        return channelDAO.getWorkspaceIdByChannelId(channelId);
+    public Workspace getWorkspaceByChannelId(Long channelId) {
+        return channelDAO.getWorkspaceByChannelId(channelId);
     }
 
     @Override

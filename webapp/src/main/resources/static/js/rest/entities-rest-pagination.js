@@ -70,6 +70,7 @@ export class MessageRestPaginationService extends RestPaginationService {
 
     deleteAllChannelMessageForUserFromUnread = async (chnId, usrId) => {
         const response = await fetch (`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
+        console.log(response);
         return response.status;
     }
 }

@@ -13,24 +13,25 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "roles")
-@ToString
 public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
 
-    @EqualsAndHashCode.Include
     @Column(name = "role", nullable = false)
     private String role;
 
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
+
+    public Role(String role) {
+        this.role = role;
+    }
 
     public Role(Long id, String role) {
         this.id = id;
@@ -41,9 +42,5 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return this.role;
-    }
-
-    public Role(String role) {
-        this.role = role;
     }
 }
