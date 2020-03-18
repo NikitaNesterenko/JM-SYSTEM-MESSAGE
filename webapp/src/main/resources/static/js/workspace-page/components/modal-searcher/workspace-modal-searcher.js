@@ -26,7 +26,7 @@ window.addEventListener('load', function () {
     const searcher_sidebar_btn = document.getElementById("sidebar_search_button");
 
     function showSearchBlock() {
-        $("#modalSearcher").modal("show");
+        searcher_modal.style.display = 'block';
 
         const work = workspace_service.getChosenWorkspace();
         const user = user_service.getLoggedUser();
@@ -49,6 +49,10 @@ window.addEventListener('load', function () {
     }
 
     searcher_btn.onclick = function () {
+        showSearchBlock();
+    };
+
+    searcher_sidebar_btn.onclick = function () {
         showSearchBlock();
     };
 });
