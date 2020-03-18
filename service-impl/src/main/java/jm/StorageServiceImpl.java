@@ -33,19 +33,7 @@ public class StorageServiceImpl  implements StorageService {
     public String store(MultipartFile file) throws IOException {
         Path uploadDir = Paths.get(uploadPath);
 
-        /**TODO решить, как и где хранить файлы */
-
-        /*//Костыльное удаление папки при первом сохранении с рестарта
-        if (count++ < 1) {
-            File dir = new File(uploadPath);
-            String[] entries = dir.list();
-            assert entries != null;
-            for(String s: entries){
-                File currentFile = new File(dir.getPath(),s);
-                currentFile.delete();
-            }
-            Files.deleteIfExists(uploadDir);
-        }*/
+        /**TODO решить, как и где хранить файлы*/
 
         if (!Files.exists(uploadDir)) {
             Files.createDirectory(uploadDir);
@@ -97,8 +85,6 @@ public class StorageServiceImpl  implements StorageService {
 
     @Override
     public String storeAvatars(MultipartFile file, Long userId) throws IOException {
-        /*TODO решить, где хранить аватарки*/
-
         Path uploadDir = Paths.get(avatarPath);
 
         if (!Files.exists(uploadDir)) {
