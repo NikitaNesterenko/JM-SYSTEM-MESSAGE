@@ -444,6 +444,16 @@ public class TestDataInitializer {
 
         messageDAO.persist(message5);
         this.messages.add(message5);
+
+        Message message6 = new Message();
+        message6.setChannelId(channels.get(2).getId());
+        message6.setUser(userList.get(4));
+        message6.setContent("Hello everybody!");
+        message6.setDateCreate(LocalDateTime.now());
+        message6.setWorkspaceId(1L);
+
+        messageDAO.persist(message6);
+        this.messages.add(message6);
     }
 
     private void createWorkspaces() {
