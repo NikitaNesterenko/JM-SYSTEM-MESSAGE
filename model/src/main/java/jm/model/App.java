@@ -12,8 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "apps")
-public class Apps {
-    private final static String GOOGLE_CALENDAR = "Google calendar";
+public class App {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +20,17 @@ public class Apps {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "app_name")
     @EqualsAndHashCode.Include
     private String name;
+
+    @ToString.Exclude
+    @Column(name = "client_id")
+    private String clientId;
+
+    @ToString.Exclude
+    @Column(name = "client_secret")
+    private String clientSecret;
 
     @ToString.Exclude
     @Column(name = "token")

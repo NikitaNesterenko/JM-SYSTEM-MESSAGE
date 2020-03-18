@@ -47,6 +47,11 @@ public class ChannelDTO {
         this.isPrivate = isPrivate;
     }
 
+    public ChannelDTO (Long id, String name, Boolean isPrivate, Boolean archived) {
+        this(id, name, isPrivate);
+        this.isArchived = archived;
+    }
+
     public ChannelDTO (Channel channel) {
         this.id = channel.getId();
         this.name = channel.getName();

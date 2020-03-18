@@ -60,6 +60,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    /** TODO поле avatarURL больше не нужно. УДалить */
     @Column(name = "avatar_url")
     private String avatarURL;
 

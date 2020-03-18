@@ -1,12 +1,15 @@
 package jm;
 
 import jm.api.dao.BotDAO;
+import jm.dto.ChannelDTO;
 import jm.api.dao.ChannelDAO;
 import jm.api.dao.UserDAO;
 import jm.api.dao.WorkspaceDAO;
 import jm.dao.ChannelDAOImpl;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.CreateWorkspaceToken;
+import jm.model.User;
 import jm.model.Workspace;
 import lombok.NonNull;
 import org.springframework.scheduling.annotation.Async;
@@ -14,30 +17,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @Transactional
 public class ChannelServiceImpl implements ChannelService {
 
     private final ChannelDAO channelDAO;
-
     private final UserDAO userDAO;
-
-    private ChannelDTO channelDTO;
+    private final BotDAO botDAO;
+    private final WorkspaceDAO workspaceDAO;
+    private final WorkspaceService workspaceService;
+    private final UserService userService;
+    private  CreateWorkspaceTokenService createWorkspaceTokenService;
+    private  ChannelDTO channelDTO;
     private ChannelDAOImpl channelDaoImpl;
 
-    private final BotDAO botDAO;
-
-    private final WorkspaceDAO workspaceDAO;
-
-    public ChannelServiceImpl(ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO) {
+    public ChannelServiceImpl(ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO, WorkspaceService workspaceService, UserService userService, CreateWorkspaceTokenService createWorkspaceTokenService) {
         this.channelDAO = channelDAO;
         this.userDAO = userDAO;
         this.botDAO = botDAO;
         this.workspaceDAO = workspaceDAO;
+        this.workspaceService = workspaceService;
+        this.userService = userService;
+        this.createWorkspaceTokenService = createWorkspaceTokenService;
     }
 
     @Override
@@ -66,6 +73,19 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public void updateChannel (Channel channel) {
         channelDAO.merge(channel);
+    }
+
+    @Override
+    public void createChannelByTokenAndUsers(CreateWorkspaceToken createWorkspaceToken, Set<User> users) {
+        createWorkspaceTokenService.updateCreateWorkspaceToken(createWorkspaceToken);
+        Workspace workspace = workspaceService.getWorkspaceByName(createWorkspaceToken.getWorkspaceName());
+        Channel channel = new Channel(
+                createWorkspaceToken.getChannelname(),
+                users,
+                userService.getUserByEmail(createWorkspaceToken.getUserEmail()),
+                false,
+                LocalDateTime.now(),workspace);
+        createChannel(channel);
     }
 
     @Override

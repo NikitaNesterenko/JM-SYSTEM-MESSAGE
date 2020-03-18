@@ -4,9 +4,12 @@ import jm.dto.ChannelDTO;
 import jm.model.Channel;
 import jm.model.Workspace;
 import lombok.NonNull;
+import jm.model.CreateWorkspaceToken;
+import jm.model.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ChannelService {
     // TODO: проверить
@@ -20,6 +23,8 @@ public interface ChannelService {
     void deleteChannel (Long id);
 
     void updateChannel (Channel channel);
+
+    void createChannelByTokenAndUsers(CreateWorkspaceToken createWorkspaceToken, Set<User> users);
 
     Channel getChannelById (Long id);
 

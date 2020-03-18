@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/rest/api/**", "/email/**", "/js/**", "/image/**", "/jmsm/api/**").permitAll()
                 .antMatchers("/admin/**").hasRole("OWNER")
                 .antMatchers("/user/**", "/rest/**", "/upload").hasAnyRole("OWNER", "USER")
-                .antMatchers("/chooseWorkspace", "/workspace/**").authenticated()
+                .antMatchers("/chooseWorkspace", "/workspace/**", "/avatar", "/avatar/**").authenticated()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/signin", "/password-recovery/**").permitAll()

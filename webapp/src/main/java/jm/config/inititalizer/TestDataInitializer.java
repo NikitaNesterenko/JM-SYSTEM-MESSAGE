@@ -382,6 +382,7 @@ public class TestDataInitializer {
         channelGeneral.setUsers(this.users);
         channelGeneral.setUser(userList.get(0));
         channelGeneral.setIsPrivate(false);
+        channelGeneral.setArchived(false);
         channelGeneral.setCreatedDate(LocalDateTime.now());
         channelGeneral.setWorkspace(workspaceList.get(0));
         channelGeneral.setIsApp(false);
@@ -394,6 +395,7 @@ public class TestDataInitializer {
         channelRandom.setUsers(userSet);
         channelRandom.setUser(userList.get(0));
         channelRandom.setIsPrivate(false);
+        channelRandom.setArchived(false);
         channelRandom.setCreatedDate(LocalDateTime.now());
         channelRandom.setWorkspace(workspaceList.get(0));
         channelRandom.setIsApp(false);
@@ -406,6 +408,7 @@ public class TestDataInitializer {
         channel3.setUsers(userSet);
         channel3.setUser(userList.get(2));
         channel3.setIsPrivate(true);
+        channel3.setArchived(false);
         channel3.setCreatedDate(LocalDateTime.now());
         channel3.setWorkspace(workspaceList.get(1));
         channel3.setIsApp(false);
@@ -519,6 +522,16 @@ public class TestDataInitializer {
 
         messageDAO.persist(message5);
         this.messages.add(message5);
+
+        Message message6 = new Message();
+        message6.setChannelId(channels.get(2).getId());
+        message6.setUser(userList.get(4));
+        message6.setContent("Hello everybody!");
+        message6.setDateCreate(LocalDateTime.now());
+        message6.setWorkspace(workspaceDAO.getById(1L));
+
+        messageDAO.persist(message6);
+        this.messages.add(message6);
     }
 
     private void createBots() {

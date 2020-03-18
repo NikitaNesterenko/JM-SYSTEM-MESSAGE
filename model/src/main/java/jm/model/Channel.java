@@ -30,7 +30,8 @@ import java.util.Set;
                 columns = {
                         @ColumnResult(name = "id", type = Long.class),
                         @ColumnResult(name = "name"),
-                        @ColumnResult(name = "is_private")
+                        @ColumnResult(name = "is_private"),
+                        @ColumnResult(name = "archived")
                 }
         )
 )
