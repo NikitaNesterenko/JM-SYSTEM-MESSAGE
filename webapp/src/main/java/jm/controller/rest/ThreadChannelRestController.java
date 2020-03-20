@@ -5,15 +5,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jm.MessageService;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
-import jm.dto.*;
+import jm.dto.MessageDTO;
+import jm.dto.ThreadDTO;
+import jm.dto.ThreadMessageDTO;
 import jm.model.Message;
 import jm.model.ThreadChannel;
-import jm.model.message.ThreadChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,35 +30,14 @@ public class ThreadChannelRestController {
     private static final Logger logger = LoggerFactory.getLogger(
             ThreadChannelRestController.class);
 
-    private ThreadChannelService threadChannelService;
-    private ThreadChannelMessageService threadChannelMessageService;
-    private MessageDtoService messageDtoService;
-    private ThreadMessageDtoService threadMessageDtoService;
-    private ThreadDtoService threadDtoService;
+    private final ThreadChannelService threadChannelService;
+    private final ThreadChannelMessageService threadChannelMessageService;
+    private final MessageService messageService;
 
-    @Autowired
-    public void setThreadDtoService(ThreadDtoService threadDtoService) {
-        this.threadDtoService = threadDtoService;
-    }
-
-    @Autowired
-    public void setThreadMessageDtoService(ThreadMessageDtoService threadMessageDtoService) {
-        this.threadMessageDtoService = threadMessageDtoService;
-    }
-
-    @Autowired
-    public void setThreadService(ThreadChannelService threadChannelService) {
+    public ThreadChannelRestController(ThreadChannelService threadChannelService, ThreadChannelMessageService threadChannelMessageService, MessageService messageService) {
         this.threadChannelService = threadChannelService;
-    }
-
-    @Autowired
-    public void setThreadChannelMessageService(ThreadChannelMessageService threadChannelMessageService) {
         this.threadChannelMessageService = threadChannelMessageService;
-    }
-
-    @Autowired
-    public void setMessageDtoService(MessageDtoService messageDtoService) {
-        this.messageDtoService = messageDtoService;
+        this.messageService = messageService;
     }
 
     @PostMapping("/create")
@@ -74,12 +54,10 @@ public class ThreadChannelRestController {
                     @ApiResponse(responseCode = "201", description = "thread channel created")
             })
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
-        System.out.println("ТРЕД!");
-        messageDTO.setDateCreate(LocalDateTime.now());
-        Message message = messageDtoService.toEntity(messageDTO);
-//        Message message = new Message(messageDTO);
+        // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadChannel threadChannel
+        messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
+        Message message = messageService.getMessageByMessageDTO(messageDTO);
         ThreadChannel threadChannel = new ThreadChannel(message);
-        System.out.println(threadChannel);
         threadChannelService.createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);
         return new ResponseEntity<>(threadChannel, HttpStatus.CREATED);
@@ -103,15 +81,6 @@ public class ThreadChannelRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @GetMapping("/messages/{id}")
-//    public ResponseEntity<List<ThreadChannelMessage>> findAllThreadChannelMessagesByThreadChannel(@PathVariable Long id) {
-//        System.out.println("ID = " + id);
-//        ThreadChannel threadChannel = threadChannelService.getThreadChennelById(id);
-//        System.out.println("threadChannel = " + threadChannel);
-//        return new ResponseEntity<>(threadChannelMessageService.findAllThreadChannelMessagesByThreadChannel(threadChannel)
-//                , HttpStatus.OK);
-//    }
-
     @GetMapping("/{message_id}")
     @Operation(
             operationId = "findThreadChannelByChannelMessageId",
@@ -126,9 +95,10 @@ public class ThreadChannelRestController {
                     )
             })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
+        // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
         ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
-        System.out.println("GET-THREADCHANNEL - " + temp);
-        return new ResponseEntity<>(threadDtoService.toDto(temp), HttpStatus.OK);
+        ThreadDTO threadDTO = new ThreadDTO(temp);
+        return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);
     }
 
     @GetMapping("/messages/{id}")
@@ -145,8 +115,6 @@ public class ThreadChannelRestController {
                     )
             })
     public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
-        List<ThreadChannelMessage> list = threadChannelMessageService.findAllThreadChannelMessagesByThreadChannelId(id);
-        System.out.println("LIST - " + list.toString());
-        return new ResponseEntity<>(threadMessageDtoService.toDto(list), HttpStatus.OK);
+        return new ResponseEntity<>(threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id), HttpStatus.OK);
     }
 }

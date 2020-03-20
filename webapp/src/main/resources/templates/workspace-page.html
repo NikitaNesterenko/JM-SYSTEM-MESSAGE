@@ -1543,17 +1543,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post">
                     <div class="form-group">
                         <label for="exampleInputChannelName">Название канала</label>
-                        <input type="email" class="form-control" id="exampleInputChannelName"
+                        <input type="text" class="form-control" id="exampleInputChannelName"
                                placeholder="Введите название канала">
                     </div>
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Сделать канал приватным?</label>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="submit" data-dismiss="modal" id="addChannelSubmit" class="btn btn-success">Создать канал
@@ -1575,10 +1573,10 @@
                 <form>
                     <div class=" form-check-inline pb-3">
                         <div class="col-md-10 px-0">
-                            <input class="directMessageModal form-control" type="text" placeholder="Find or start a conversation">
+                            <input class="directMessageModal form-control" id="inputUsernameForConversation" type="text" placeholder="Find or start a conversation">
                         </div>
                         <div class="col-lg-2">
-                            <button class="directMessageFindButton btn btn-dark" type="submit">Go</button>
+                            <button class="directMessageFindButton btn btn-dark" data-dismiss="modal" id="addConversationSubmit" type="submit">Go</button>
                         </div>
                     </div>
 <!--                    <div class="">-->
@@ -1614,7 +1612,7 @@
                 </button>
             </div>
             <div id="idSearchContent">
-                Что-то пошло не так
+                Загрузка содержимого...
             </div>
         </div>
     </div>

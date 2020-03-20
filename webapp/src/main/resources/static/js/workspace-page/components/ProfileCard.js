@@ -92,11 +92,7 @@ export class ProfileCard {
     }
 
     setUserImg(selector) {
-        if (this.user.avatarURL == null || this.user.avatarURL === "") {
-            $(selector).attr("src", "../image/blank_user.png");
-        } else {
-            $(selector).attr("src", "/files/" + this.user.avatarURL);
-        }
+        $(selector).attr("src", "/avatar/" + this.user.id);
         return this;
     }
 

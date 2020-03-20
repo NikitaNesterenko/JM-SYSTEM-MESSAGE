@@ -4,6 +4,7 @@ import jm.dto.UserDTO;
 import jm.model.User;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface UserDAO {
@@ -20,6 +21,8 @@ public interface UserDAO {
 
     User getUserByLogin(String login);
 
+    User getUserByName(String name);
+
     User getUserByEmail(String email);
 
     void addRoleForUser(User user, String role);
@@ -30,9 +33,19 @@ public interface UserDAO {
 
     List<UserDTO> getUsersInWorkspace(Long id);
 
-    User getUserByName(String name);
-
     List<User> getUsersByIds(Set<Long> ids);
 
     boolean isEmailInThisWorkspace(String email, Long workspaceId);
+
+    Optional<List<UserDTO>> getAllUsersDTO();
+
+    Optional<UserDTO> getUserDTOById(Long id);
+
+    Optional<UserDTO> getUserDTOByLogin(String login);
+
+    Optional<UserDTO> getUserDTOByEmail(String email);
+
+    Optional<UserDTO> getUserDTOByName(String name);
+
+    Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
 }

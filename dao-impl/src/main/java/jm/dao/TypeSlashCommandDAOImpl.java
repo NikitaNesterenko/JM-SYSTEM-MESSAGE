@@ -20,7 +20,7 @@ public class TypeSlashCommandDAOImpl extends AbstractDao<TypeSlashCommand> imple
             return entityManager.createQuery("select type from TypeSlashCommand type where type.name=:name", TypeSlashCommand.class)
                     .setParameter("name", name)
                     .getSingleResult();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             return null;
         }
     }

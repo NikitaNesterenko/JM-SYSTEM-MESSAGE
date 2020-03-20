@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.DirectMessageService;
 import jm.UserService;
+import jm.dto.BotDTO;
+import jm.dto.DirectMessageDTO;
 import jm.dto.*;
 import jm.model.User;
 import jm.model.message.DirectMessage;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,18 +31,12 @@ public class DirectMessageRestController {
     private static final Logger logger =
             LoggerFactory.getLogger(DirectMessageRestController.class);
 
-    private DirectMessageService directMessageService;
-    private DirectMessageDtoService directMessageDtoService;
-    private UserService userService;
-    private UserDtoService userDtoService;
+    private final DirectMessageService directMessageService;
+    private final UserService userService;
 
-    @Autowired
-    public void setDirectMessageService(DirectMessageService directMessageService, DirectMessageDtoService directMessageDtoService,
-                                        UserService userService, UserDtoService userDtoService) {
+    public DirectMessageRestController(DirectMessageService directMessageService, UserService userService) {
         this.directMessageService = directMessageService;
-        this.directMessageDtoService = directMessageDtoService;
         this.userService = userService;
-        this.userDtoService = userDtoService;
     }
 
     @GetMapping(value = "/{id}")
@@ -56,10 +53,9 @@ public class DirectMessageRestController {
                     )
             })
     public ResponseEntity<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
-        logger.info("Сообщение с id = {}", id);
-        DirectMessage directMessage = directMessageService.getDirectMessageById(id);
-        logger.info(directMessage.toString());
-        return new ResponseEntity<>(directMessageDtoService.toDto(directMessage), HttpStatus.OK);
+        return directMessageService.getDirectMessageDtoByMessageId(id)
+                .map(directMessageDTO -> new ResponseEntity<>(directMessageDTO, HttpStatus.OK))
+                .orElse(ResponseEntity.badRequest().build());
     }
 
     @PostMapping(value = "/create")
@@ -76,8 +72,15 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "201", description = "CREATED: direct message created")
             })
     public ResponseEntity<DirectMessageDTO> createDirectMessage(@RequestBody DirectMessageDTO directMessageDTO) {
-//        Сохранение личного сообщения выполняется в MessagesController сразу из websocket
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        // TODO: ПРОВЕРИТЬ
+        //Сохранение личного сообщения выполняется в MessagesController сразу из websocket
+
+        DirectMessage directMessage = directMessageService.getDirectMessageByDirectMessageDto(directMessageDTO);
+        directMessage.setDateCreate(LocalDateTime.now());
+
+        directMessageService.saveDirectMessage(directMessage);
+        logger.info("Созданное сообщение : {}", directMessage);
+        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
@@ -95,8 +98,18 @@ public class DirectMessageRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to update direct message")
             })
     public ResponseEntity<DirectMessageDTO> updateMessage(@RequestBody DirectMessageDTO messageDTO) {
-//        Обновление личного сообщения выполняется в MessagesController сразу из websocket
-        return new ResponseEntity<>(HttpStatus.OK);
+        // TODO: проверить
+        // Обновление личного сообщения выполняется в MessagesController сразу из websocket
+
+        DirectMessage message = directMessageService.getDirectMessageByDirectMessageDto(messageDTO);
+        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
+        if (isCreated == null) {
+            logger.warn("Сообщение не найдено");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        message.setDateCreate(isCreated.getDateCreate());
+        DirectMessage directMessage = directMessageService.updateDirectMessage(message);
+        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -109,7 +122,7 @@ public class DirectMessageRestController {
     public ResponseEntity<DirectMessageDTO> deleteMessage(@PathVariable Long id) {
         directMessageService.deleteDirectMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/conversation/{id}")
@@ -126,9 +139,10 @@ public class DirectMessageRestController {
                     )
             })
     public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
+        // TODO: ПЕРЕДЕЛАТЬ получать сразу List DirectMessageDto по ConversationId
         List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
         messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(directMessageDtoService.toDto(messages), HttpStatus.OK);
+        return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
@@ -146,7 +160,8 @@ public class DirectMessageRestController {
             })
     public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long convId, @PathVariable Long usrId) {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
-        return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
+        return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
@@ -163,6 +178,8 @@ public class DirectMessageRestController {
                     )
             })
     public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
+        // TODO: ПЕРЕДЕЛАТЬ получать в дао DirectMessageDto где ConversationId = convId и UserId = usrId
+
         User user = userService.getUserById(usrId);
         List<DirectMessage> unreadMessages = new ArrayList<>();
         user.getUnreadDirectMessages().forEach(msg -> {
@@ -170,7 +187,7 @@ public class DirectMessageRestController {
                 unreadMessages.add(msg);
             }
         });
-        return ResponseEntity.ok(directMessageDtoService.toDto(unreadMessages));
+        return ResponseEntity.ok(directMessageService.getDirectMessageDtoListByDirectMessageList(unreadMessages));
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")

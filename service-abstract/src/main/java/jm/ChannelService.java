@@ -2,29 +2,56 @@ package jm;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import lombok.NonNull;
+import jm.model.CreateWorkspaceToken;
+import jm.model.User;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public interface ChannelService {
-    List<ChannelDTO> getAllChannels();
+    // TODO: проверить
+    //List<ChannelDTO> getAllChannels();
+    List<Channel> gelAllChannels();
 
-    void createChannel(Channel channel);
+    List<ChannelDTO> getAllChanelDTO ();
 
-    void deleteChannel(Long id);
+    void createChannel (Channel channel);
 
-    void updateChannel(Channel channel);
+    void deleteChannel (Long id);
 
-    Channel getChannelById(Long id);
+    void updateChannel (Channel channel);
 
-    Channel getChannelByName(String name);
+    void createChannelByTokenAndUsers(CreateWorkspaceToken createWorkspaceToken, Set<User> users);
 
-    List<Channel> getChannelsByOwnerId(Long ownerId);
+    Channel getChannelById (Long id);
 
-    List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId);
+    Optional<ChannelDTO> getChannelDTOById (Long id);
 
-    List<Channel> getChannelsByWorkspaceId(Long id);
+    Channel getChannelByName (String name);
 
-    List<Channel> getChannelsByUserId(Long userId);
+    Optional<Long> getChannelIdByName(String chanelName);
+
+    Optional<ChannelDTO> getChannelDTOByName (String name);
+
+    List<Channel> getChannelsByOwnerId (Long ownerId);
+
+    List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId);
+
+    List<Channel> getChannelsByWorkspaceId (Long workspaceId);
+
+    List<ChannelDTO> getChannelDtoListByWorkspaceId (Long id);
+
+    List<Channel> getChannelsByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByUserId (Long userId);
+
+    List<ChannelDTO> getChannelDtoListByChannelList (@NonNull List<Channel> channelList);
+
+    Channel getChannelByChannelDto(@NonNull ChannelDTO channelDTO);
+
+    ChannelDTO getChannelDtoByChannel(@NonNull Channel channel);
 
     String getTopicChannelByChannelId(Long id);
 

@@ -3,8 +3,10 @@ import {
     ChannelRestPaginationService,
     ChannelTopicRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    ConversationRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
+import {ActiveChatMembers} from "./sidebar/ActiveChatMembers.js";
 import {NavHeader} from "./navbar/NavHeader.js";
 
 export class WorkspacePageEventHandler {
@@ -20,6 +22,9 @@ export class WorkspacePageEventHandler {
         this.user_service = new UserRestPaginationService();
         this.wks_header = new NavHeader();
         this.user_service = new UserRestPaginationService();
+        this.workspace_service = new WorkspaceRestPaginationService();
+        this.conversation_serivce = new ConversationRestPaginationService();
+        this.chat_members = new ActiveChatMembers();
     }
 
     onAddChannelClick() {
@@ -60,7 +65,7 @@ export class WorkspacePageEventHandler {
         $(".p-channel_sidebar__channels__list").on("click", "button.p-channel_sidebar__name_button", (event) => {
             this.wks_header.setChannelTitle($(event.currentTarget).find('i').text(), $(event.currentTarget).find('span').text()).setInfo();
 
-            const channelId = parseInt($(event.currentTarget).val());
+            const channelId = $(event.currentTarget).val();
             pressChannelButton(channelId);
 
             sessionStorage.setItem("channelName", channelId);
@@ -73,12 +78,36 @@ export class WorkspacePageEventHandler {
 
             });
 
-
-
-
-
             refreshMemberList();
         });
+    }
+
+    onAddConversationSubmit() {
+        $("#addConversationSubmit").click(() => {
+            let name = $('#inputUsernameForConversation').val();
+            let workspace;
+
+            (async () => {
+               workspace = await this.workspace_service.getChosenWorkspace();
+            })();
+            this.user_service.getUserByName(name).then(userTo => {
+                if (userTo && userTo.message) {
+                    alert('User not found');
+                } else {
+                    const entity = {
+                        associatedUserId: userTo.id,
+                        workspaceId: workspace.id,
+                        openingUserId: this.logged_user.id,
+                        showForOpener: true,
+                        showForAssociated: true
+                    };
+                    this.conversation_serivce.create(entity).then(conv => {
+                        this.chat_members.populateDirectMessages();
+                    });
+
+                }
+            })
+        })
     }
 
     onAddChannelSubmit() {
@@ -101,6 +130,16 @@ export class WorkspacePageEventHandler {
             });
         });
     }
+
+    onHideChannelModal() {
+        $("#addChannelModal").on('hide.bs.modal', function () {
+            $(":input", $('#addChannelModal')).val("");
+            $('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        });
+    }
+
 
     getFormattedCreateDate() {
         const date = new Date();

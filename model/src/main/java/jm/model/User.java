@@ -60,6 +60,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    /** TODO поле avatarURL больше не нужно. УДалить */
     @Column(name = "avatar_url")
     private String avatarURL;
 
@@ -117,7 +118,7 @@ public class User {
     @JoinTable(
             name = "users_unread_messages",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "unread_messages_id", referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "unread_message_id", referencedColumnName = "id"))
     private Set<Message> unreadMessages;
 
     @JsonIgnore

@@ -19,6 +19,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,8 +85,19 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    public void sendInviteMessagesByTokenAndInvites(CreateWorkspaceToken createWorkspaceToken, String[] invites) {
+        Arrays.stream(invites)
+                .forEach(invite -> sendInviteMessage(
+                        userService.getUserByEmail(createWorkspaceToken.getUserEmail()).getLogin(),
+                        createWorkspaceToken.getUserEmail(),
+                        invite,
+                        createWorkspaceToken.getWorkspaceName(),
+                        "http://localhost:8080/"));
+    }
+
+    @Override
     public Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo) {
-        int code = (int) (Math.random() * 999999);
+        int code = (int) (Math.random() * 900000) + 100000;
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -103,7 +115,7 @@ public class MailServiceImpl implements MailService {
             logger.error("Sending confirmation code to " + emailTo + " failed");
             e.printStackTrace();
         }
-
+        createWorkspaceToken.setUserEmail(emailTo);
         return Optional.ofNullable(createWorkspaceToken);
     }
 
@@ -134,20 +146,20 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public boolean changePasswordUserByToken(String token, String password) {
-        String[] split = token.split("/");
+            String[] split = token.split("/");
 
-        InviteToken byHash = inviteTokenService.getByHash(split[4]);
-        LocalDateTime validDateCreate = byHash.getDateCreate().plusHours(validPasswordHours);
-        LocalDateTime now = LocalDateTime.now();
+            InviteToken byHash = inviteTokenService.getByHash(split[4]);
+            LocalDateTime validDateCreate = byHash.getDateCreate().plusHours(validPasswordHours);
+            LocalDateTime now = LocalDateTime.now();
 
-        if (validDateCreate.isAfter(now)) {
-            User userByEmail = userService.getUserByEmail(byHash.getEmail());
-            userByEmail.setPassword(password);
-            userService.updateUser(userByEmail);
-            inviteTokenService.deleteInviteToken(byHash.getId());
-            logger.info("Восстановление пароля пользователя с id = {}", userByEmail.getId());
-            return true;
-        }
+            if (validDateCreate.isAfter(now)) {
+                User userByEmail = userService.getUserByEmail(byHash.getEmail());
+                userByEmail.setPassword(password);
+                userService.updateUser(userByEmail);
+                inviteTokenService.deleteInviteToken(byHash.getId());
+                logger.info("Восстановление пароля пользователя с id = {}", userByEmail.getId());
+                return true;
+            }
 
         logger.info("Попытка восстановления пароля пользователя с помощью токена = {}", token);
         return false;

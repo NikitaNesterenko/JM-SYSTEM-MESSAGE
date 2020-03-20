@@ -50,15 +50,6 @@ export class ChannelView {
     }
 
     showPeopleInChannel(channelId) {
-        // alert(channelId);
-        // const countOfPeopleInChannel = $("#peopleInChat");
-        // this.user_service.getUsersByChannelId(channelId).then(
-        //     users => {
-        //         countOfPeopleInChannel.empty();
-        //         countOfPeopleInChannel.append(users.length);
-        //     }
-        // );
-
         alert(sessionStorage.getItem("channelId"));
         const member_list = $('#memberListPlaceholder');
         this.user_service.getUsersByChannelId(sessionStorage.getItem("channelId")).then(
@@ -166,7 +157,7 @@ export class ChannelView {
 
     selectChannel(id) {
         this.channel_message_view.update().then(() => this.setLocalStorageSettings(id));
-        $('.p-channel_sidebar__name_button').each((btn) => {
+        $('.p-channel_sidebar__name_button').each((idx, btn) => {
             let bg_color = {color: "rgb(188,171,188)", background: "none"};
 
             if ($(btn).filter(`[id=channel_button_${id}]`).length) {

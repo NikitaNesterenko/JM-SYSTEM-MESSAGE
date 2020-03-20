@@ -3,7 +3,8 @@ import {
     ConversationRestPaginationService,
     MessageRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    DirectMessagesRestController
 } from "../rest/entities-rest-pagination.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 
@@ -12,6 +13,7 @@ const conversation_service = new ConversationRestPaginationService();
 const message_service = new MessageRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
+const direct_message_service = new DirectMessagesRestController();
 const star_button_blank = '\u2606';
 const star_button_filled = '\u2605';
 
@@ -48,67 +50,9 @@ $(document).on('click', '[id^=deleteDmButton]', async function (e) {
     const principal = await user_service.getLoggedUser();
     await conversation_service.deleteConversation(conversation_id, principal.id).then( t => {
         if (t === 200) {
-            updateDMList();
+            document.querySelector(`.p-channel_sidebar__name_button[conv_id='${conversation_id}']`).parentElement.remove()
         }
     });
-
-    async function updateDMList() {
-        const direct_messages_container = $("#direct-messages__container_id");
-        direct_messages_container.empty();
-        const conversations = await conversation_service.getAllConversationsByUserId(principal.id);
-        const workspace = await workspace_service.getChosenWorkspace();
-        conversations.forEach((conversation, i) => {
-            if (conversation.workspace.id === workspace.id) {
-                const conversation_queue_context_container = $('<div class="p-channel_sidebar__channel" ' +
-                    'style="height: min-content; width: 100%;"></div>');
-                conversation_queue_context_container.className = "p-channel_sidebar__channel";
-                if (conversation.openingUser.id === principal.id) {
-                    conversation_queue_context_container.append(messageChat(conversation.associatedUser, conversation.id));
-                } else {
-                    conversation_queue_context_container.append(messageChat(conversation.openingUser, conversation.id));
-                }
-                direct_messages_container.append(conversation_queue_context_container);
-            }
-        });
-    }
-
-    function messageChat(user, conversationId) {
-        return `
-        <button class="p-channel_sidebar__name_button" data-user_id="${user.id}">
-            <i class="p-channel_sidebar__channel_icon_circle pb-0" data-user_id="${user.id}">●</i>
-            <span class="p-channel_sidebar__name-3" data-user_id="${user.id}">
-                <span data-user_id="${user.id}">${user.displayName}</span>
-            </span>
-        </button>
-        <button class="p-channel_sidebar__close cross">
-            <i id="deleteDmButton" data-conversationId="${conversationId}" class="p-channel_sidebar__close__icon">✖</i>
-        </button>
-    `;
-    }
-
-    // getUserAndMessage(msg_id).then(user_and_msg => {
-    //     let user = user_and_msg[0];
-    //     let message = user_and_msg[1];
-    //
-    //     let principalStarredMessageIds = user["starredMessageIds"];
-    //
-    //     if (principalStarredMessageIds.find(id => id === message.id)) {
-    //         principalStarredMessageIds.splice(principalStarredMessageIds.indexOf(message.id), 1);
-    //         user["starredMessageIds"] = principalStarredMessageIds;
-    //         user_service.update(user).then(() => {
-    //             $(`#msg-icons-menu__starred_msg_${msg_id}`).text(star_button_blank);
-    //             $(`#message_${msg_id}_user_${message.userId}_starred`).remove();
-    //             reopen_right_menu();
-    //         });
-    //     } else {
-    //         principalStarredMessageIds.push(message.id);
-    //         user["starredMessageIds"] = principalStarredMessageIds;
-    //         user_service.update(user).then(() => {
-    //             add_msg_starred_attr(message);
-    //             reopen_right_menu();
-    //         });
-    //     }
-    // });
 });
 
 //переход к сообщению из списка избранного
@@ -116,8 +60,15 @@ $(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
     message_service.getById(msg_id).then(message => {
         const {channelId, userId, id} = message;
-        //смена номера активного канала
-        window.pressChannelButton(channelId);
+        if (channelId) {
+            //смена номера активного канала
+            window.pressChannelButton(channelId);
+        } else {
+            direct_message_service.getById(msg_id).then(direct_message => {
+                window.pressConversationButton(direct_message.conversationId)
+            })
+        }
+
         //сделал задержку перед скроллом к конкретному сообщению.
         // Надо попробовать отловить событие завершения отрисовки всех сообщений в канале и скролл к концу
         setTimeout(function () {

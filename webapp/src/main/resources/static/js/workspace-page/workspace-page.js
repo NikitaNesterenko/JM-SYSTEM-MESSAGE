@@ -1,6 +1,6 @@
 import {ActiveChatMembers} from "./components/sidebar/ActiveChatMembers.js";
 import {WorkspacePageEventHandler} from "./components/WorkspacePageEventHandler.js";
-import {UserRestPaginationService, WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {UserRestPaginationService, WorkspaceRestPaginationService, AppRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "./components/messages/ChannelMessageView.js";
 import {ThreadMessageView} from "./components/messages/ThreadMessageView.js";
 import {DirectMessageView} from "./components/messages/DirectMessageView.js";
@@ -12,6 +12,7 @@ import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
+const app_service = new AppRestPaginationService();
 // const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
 const switch_workspace_window = new SwitchWorkspaceWindow();
@@ -52,6 +53,8 @@ window.addEventListener('load', async () => {
     workspace_event.onWindowClick();
     workspace_event.onSelectChannel();
     workspace_event.onAddChannelSubmit();
+    workspace_event.onAddConversationSubmit();
+    workspace_event.onHideChannelModal();
 });
 
 $(document).ready(async () => {
@@ -162,8 +165,9 @@ window.showEvents = function showEvents(response) {
 
 $("#google-calendar-button").click(
     async function () {
-        current_wks = await workspace_service.getChosenWorkspace();
-        if (!(current_wks.googleClientId) || !(current_wks.googleClientSecret)) {
+        const app_name = "Google calendar";
+        let google_calendar_app = await app_service.getAppByName(app_name);
+        if (google_calendar_app.clientId == null || google_calendar_app.clientSecret == null) {
             $("#addGoogleCalendarIdSecretModal").modal('toggle')
         } else {
             location.href = "/application/google/calendar";
@@ -174,23 +178,20 @@ $("#google-calendar-button").click(
 
 $("#addGoogleCalendarIdSecretSubmit").click(
     async function () {
-        current_wks = await workspace_service.getChosenWorkspace();
-        let  googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
+        const app_name = "Google calendar";
+        let google_calendar_app = await app_service.getAppByName(app_name);
+        let googleCalendarClientId = $("#InputGoogleCalendarClientId").val();
         let googleCalendarClientSecret = $("#InputGoogleCalendarClientSecret").val();
         const entity = {
-            id: (current_wks).id,
-            name: (current_wks).name,
-            users: (current_wks).users,
-            channels: (current_wks).channels,
-            user: (current_wks).user,
-            isPrivate: (current_wks).isPrivate,
-            createdDate: (current_wks).createdDate,
-            googleClientId: googleCalendarClientId,
-            googleClientSecret: googleCalendarClientSecret
-        }
-        await workspace_service.update(entity).then(()=>{
-            $("#addGoogleCalendarIdSecretModal").modal('toggle')
-            $('#appsModal').modal('toggle')
+            id: (google_calendar_app).id,
+            name: (google_calendar_app).name,
+            workspace: (google_calendar_app).workspace,
+            clientId: googleCalendarClientId,
+            clientSecret: googleCalendarClientSecret
+        };
+        await app_service.update(entity).then(()=>{
+            $("#addGoogleCalendarIdSecretModal").modal('toggle');
+            $('#appsModal').modal('toggle');
             location.href = "/application/google/calendar";
             return false;
         });

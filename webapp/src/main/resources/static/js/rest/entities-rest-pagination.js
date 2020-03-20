@@ -27,6 +27,12 @@ export class UserRestPaginationService extends RestPaginationService {
         const user = await fetch(`/rest/api/users/${id}`);
         return await user.json();
     }
+
+    getUserByName = async (username) => {
+        const user = await fetch(`/rest/api/users/username/${username}`);
+        return await user.json()
+            .catch(err => console.log(err.status));
+    }
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -60,16 +66,16 @@ export class MessageRestPaginationService extends RestPaginationService {
     };
 
     addUnreadMessageForUser = async (msgId, usrId) => {
-        await fetch (`/rest/api/messages/unread/add/message/${msgId}/user/${usrId}`);
+        await fetch(`/rest/api/messages/unread/add/message/${msgId}/user/${usrId}`);
     };
 
     getUnreadMessageInChannelForUser = async (chnId, usrId) => {
-        const response = await fetch (`/rest/api/messages/unread/channel/${chnId}/user/${usrId}`);
+        const response = await fetch(`/rest/api/messages/unread/channel/${chnId}/user/${usrId}`);
         return response.json();
     };
 
     deleteAllChannelMessageForUserFromUnread = async (chnId, usrId) => {
-        const response = await fetch (`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
+        const response = await fetch(`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
         return response.status;
     }
 }
@@ -243,6 +249,17 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 }
 
+export class AppRestPaginationService extends RestPaginationService {
+    constructor() {
+        super('/rest/api/apps');
+    }
+
+    getAppByName = async (name) => {
+        const response = await fetch('/rest/api/apps/' + name);
+        return response.json()
+    };
+}
+
 export class WorkspaceRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/workspaces');
@@ -337,10 +354,19 @@ export class StorageService {
             return response.text()
         });
     };
+
+    uploadAvatar = async (file) => {
+        return await fetch(`/avatar`, {
+            method: 'POST',
+            body: file
+        }).then(response => {
+            return response.text()
+        });
+    };
 }
 
 export class InviteRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/invites');
     }
 
@@ -353,10 +379,11 @@ export class InviteRestPaginationService extends RestPaginationService {
     }
 }
 
-export class ThreadChannelRestPaginationService extends  RestPaginationService{
-    constructor(){
+export class ThreadChannelRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/threads');
     }
+
     getThreadChannelByChannelMessageId = async (id) => {
         const response = await fetch('/rest/api/threads/' + id);
         return response.json();
@@ -376,27 +403,28 @@ export class ThreadChannelRestPaginationService extends  RestPaginationService{
     };
 }
 
-export class ThreadChannelMessageRestPaginationService extends  RestPaginationService{
-    constructor(){
+export class ThreadChannelMessageRestPaginationService extends RestPaginationService {
+    constructor() {
         super('/rest/api/threads/messages');
     }
+
     getThreadChannelMessagesByThreadChannelId = async (id) => {
         const response = await fetch('/rest/api/threads/messages/' + id);
         return response.json();
     };
 
-    createThreadMsg = async (msg,user) => {
+    createThreadMsg = async (msg, user) => {
         const response = await fetch(`/rest/api/threads/messages/create`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(msg,user)
+            body: JSON.stringify(msg, user)
         });
         return response.json();
     }
 }
 
 export class ConversationRestPaginationService extends RestPaginationService {
-    constructor(){
+    constructor() {
         super('/rest/api/conversations');
     }
 
@@ -427,19 +455,25 @@ export class DirectMessagesRestController extends RestPaginationService {
     };
 
     addUnreadMessageForUser = async (msgId, usrId) => {
-        await fetch (`/rest/api/direct_messages/unread/add/message/${msgId}/user/${usrId}`);
+        await fetch(`/rest/api/direct_messages/unread/add/message/${msgId}/user/${usrId}`);
     };
 
     getUnreadDMessagesInConversationForUser = async (convId, usrId) => {
-        const response = await fetch (`/rest/api/direct_messages/unread/conversation/${convId}/user/${usrId}`);
+        const response = await fetch(`/rest/api/direct_messages/unread/conversation/${convId}/user/${usrId}`);
         return response.json();
     };
 
     deleteAllConversationDMForUserFromUnread = async (convId, usrId) => {
-        const response = await fetch (`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
+        const response = await fetch(`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
         return response.status;
     }
 
+}
+
+export class AppService extends RestPaginationService {
+    constructor() {
+        super("/rest/api/apps");
+    }
 }
 
 export class PluginRestPaginationService extends RestPaginationService {
