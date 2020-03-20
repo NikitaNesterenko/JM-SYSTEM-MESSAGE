@@ -56,7 +56,9 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/sendEmail")
-    @Operation(summary = "Send email confirmation code",
+    @Operation(
+            operationId = "sendEmailCode",
+            summary = "Send email confirmation code",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -85,7 +87,9 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/confirmEmail")
-    @Operation(summary = "Confirm email",
+    @Operation(
+            operationId = "confirmEmail",
+            summary = "Confirm email",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -108,7 +112,9 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/workspaceName")
-    @Operation(summary = "Set workspace name",
+    @Operation(
+            operationId = "workspaceName",
+            summary = "Set workspace name",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -135,7 +141,9 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/channelName")
-    @Operation(summary = "Set channel name",
+    @Operation(
+            operationId = "channelName",
+            summary = "Set channel name",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -157,7 +165,9 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/invites")
-    @Operation(summary = "Send invitation page",
+    @Operation(
+            operationId = "invitesPage",
+            summary = "Send invitation page",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -181,7 +191,9 @@ public class CreateWorkspaceRestController {
     }
 
     @PostMapping("/tada")
-    @Operation(summary = "Starting page",
+    @Operation(
+            operationId = "tadaPage",
+            summary = "Starting page",
             responses = {
                     @ApiResponse(
                             content = @Content(

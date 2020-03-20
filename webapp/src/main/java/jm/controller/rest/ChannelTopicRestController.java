@@ -25,7 +25,9 @@ public class ChannelTopicRestController {
     }
 
     @GetMapping("/{id}/topic")
-    @Operation(summary = "Get channel topic by id",
+    @Operation(
+            operationId = "getChannelTopic",
+            summary = "Get channel topic by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -40,7 +42,9 @@ public class ChannelTopicRestController {
     }
 
     @PutMapping("/{id}/topic/update")
-    @Operation(summary = "Set channel topic",
+    @Operation(
+            operationId = "setChannelTopic",
+            summary = "Set channel topic",
             responses = {
                     @ApiResponse(
                             content = @Content(

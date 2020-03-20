@@ -10,13 +10,10 @@ import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
 import jm.model.User;
 import jm.model.Workspace;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -49,7 +46,9 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get workspace by id",
+    @Operation(
+            operationId = "getWorkspaceById",
+            summary = "Get workspace by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -64,7 +63,9 @@ public class WorkspaceRestController {
     }
 
     @PostMapping(value = "/create")
-    @Operation(summary = "Create workspace",
+    @Operation(
+            operationId = "createWorkspace",
+            summary = "Create workspace",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -86,7 +87,9 @@ public class WorkspaceRestController {
     }
 
     @PutMapping(value = "/update")
-    @Operation(summary = "Update channel",
+    @Operation(
+            operationId = "updateChannel",
+            summary = "Update channel",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -108,7 +111,9 @@ public class WorkspaceRestController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    @Operation(summary = "Delete workspace",
+    @Operation(
+            operationId = "deleteWorkspace",
+            summary = "Delete workspace",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: workspace deleted")
             })
@@ -119,7 +124,9 @@ public class WorkspaceRestController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all workspaces",
+    @Operation(
+            operationId = "getAllWorkspaces",
+            summary = "Get all workspaces",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -134,7 +141,9 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/chosen")
-    @Operation(summary = "Get chosen workspace",
+    @Operation(
+            operationId = "getChosenWorkspace",
+            summary = "Get chosen workspace",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -154,7 +163,9 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/chosen/{name}")
-    @Operation(summary = "Set chosen workspace",
+    @Operation(
+            operationId = "chosenWorkspace",
+            summary = "Set chosen workspace",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: get workspace"),
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to find workspace")
@@ -169,12 +180,26 @@ public class WorkspaceRestController {
     }
 
     @GetMapping("/name/{name}")
+    @Operation(
+            operationId = "getWorkspaceByName",
+            summary = "Get workspace by name",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Boolean.class)
+                            ),
+                            description = "OK: got workspace"
+                    )
+            })
     public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
         return chosenWorkspace(name, request);
     }
 
     @GetMapping("/byLoggedUser")
-    @Operation(summary = "Get all workspace by user",
+    @Operation(
+            operationId = "getAllWorkspacesByUser",
+            summary = "Get all workspace by user",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(

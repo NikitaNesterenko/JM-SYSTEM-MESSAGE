@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ConversationService;
 import jm.model.Conversation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,9 @@ public class ConversationRestController {
     }
 
     @GetMapping(value = "/{id}")
-    @Operation(summary = "Get conversation by id",
+    @Operation(
+            operationId = "getConversationById",
+            summary = "Get conversation by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -42,7 +43,9 @@ public class ConversationRestController {
     }
 
     @PostMapping(value = "/create")
-    @Operation(summary = "Create conversation",
+    @Operation(
+            operationId = "createConversation",
+            summary = "Create conversation",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -64,7 +67,9 @@ public class ConversationRestController {
     }
 
     @PutMapping(value = "/update")
-    @Operation(summary = "Update conversation",
+    @Operation(
+            operationId = "updateConversation",
+            summary = "Update conversation",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -85,7 +90,9 @@ public class ConversationRestController {
     }
 
     @GetMapping(value = "/delete/{conversationID}/{userID}")
-    @Operation(summary = "Delete conversation",
+    @Operation(
+            operationId = "deleteConversation",
+            summary = "Delete conversation",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: conversation deleted")
             })
@@ -95,7 +102,9 @@ public class ConversationRestController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all conversations",
+    @Operation(
+            operationId = "getAllConversations",
+            summary = "Get all conversations",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -110,7 +119,9 @@ public class ConversationRestController {
     }
 
     @GetMapping(value = "/user/{id}")
-    @Operation(summary = "Get conversation by user id",
+    @Operation(
+            operationId = "getConversationsByUserId",
+            summary = "Get conversation by user id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -125,7 +136,9 @@ public class ConversationRestController {
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
-    @Operation(summary = "Get conversation by respondents",
+    @Operation(
+            operationId = "getConversationByRespondents",
+            summary = "Get conversation by respondents",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(

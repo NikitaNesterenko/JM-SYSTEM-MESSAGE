@@ -10,6 +10,7 @@ import jm.MessageService;
 import jm.UserService;
 import jm.dto.MessageDTO;
 import jm.dto.MessageDtoService;
+import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
 import jm.model.Message;
 import jm.model.User;
@@ -48,7 +49,9 @@ public class MessageRestController {
 
     // DTO compliant
     @GetMapping
-    @Operation(summary = "Get all messages",
+    @Operation(
+            operationId = "getMessages",
+            summary = "Get all messages",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -70,7 +73,9 @@ public class MessageRestController {
 
     // DTO compliant
     @GetMapping(value = "/channel/{id}")
-    @Operation(summary = "Get messages by channel id",
+    @Operation(
+            operationId = "getMessagesByChannelId",
+            summary = "Get messages by channel id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -92,7 +97,9 @@ public class MessageRestController {
 
     // DTO compliant
     @GetMapping(value = "/{id}")
-    @Operation(summary = "Get message by id",
+    @Operation(
+            operationId = "getMessageById",
+            summary = "Get message by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -111,7 +118,9 @@ public class MessageRestController {
 
     // DTO compliant
     @GetMapping(value = "/channel/{id}/{startDate}/{endDate}")
-    @Operation(summary = "Get messages by channel & period",
+    @Operation(
+            operationId = "getMessagesByChannelIdForPeriod",
+            summary = "Get messages by channel & period",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -146,7 +155,9 @@ public class MessageRestController {
 
     // DTO compliant
     @PutMapping(value = "/update")
-    @Operation(summary = "Update message",
+    @Operation(
+            operationId = "updateMessage",
+            summary = "Update message",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -165,7 +176,9 @@ public class MessageRestController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    @Operation(summary = "Delete message",
+    @Operation(
+            operationId = "deleteMessage",
+            summary = "Delete message",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: message deleted")
             })
@@ -177,7 +190,9 @@ public class MessageRestController {
 
     // DTO compliant
     @GetMapping("/{userId}/{workspaceId}/starred")
-    @Operation(summary = "Get starred messages",
+    @Operation(
+            operationId = "getStarredMessages",
+            summary = "Get starred messages",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -194,6 +209,18 @@ public class MessageRestController {
     }
 
     @GetMapping(value = "/user/{id}")
+    @Operation(
+            operationId = "getMessagesFromChannelsForUser",
+            summary = "Get list of messages by userId",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(type = "array", implementation = UserDTO.class)
+                            ),
+                            description = "OK: Got all message from all channels"
+                    )
+            })
     public ResponseEntity<List<Message>> getMessagesFromChannelsForUser(@PathVariable("id") Long userId) {
         logger.info("Список сообщений для юзера от всех @channel: ");
         for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false)) {
@@ -203,12 +230,36 @@ public class MessageRestController {
     }
 
     @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
+    @Operation(
+            operationId = "removeChannelMessageFromUnreadForUser",
+            summary = "Remove message from unread",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDTO.class)
+                            ),
+                            description = "OK: Removed message from unread"
+                    )
+            })
     public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long chnId, @PathVariable Long usrId) {
         userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
         return new ResponseEntity<>(userDtoService.toDto(userService.getUserById(usrId)), HttpStatus.OK);
     }
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
+    @Operation(
+            operationId = "getUnreadMessageInChannelForUser",
+            summary = "Get unread messages",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(type = "array", implementation = MessageDTO.class)
+                            ),
+                            description = "OK: Got all unread messages"
+                    )
+            })
     public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
         User user = userService.getUserById(usrId);
         List<Message> unreadMessages = new ArrayList<>();
@@ -221,6 +272,18 @@ public class MessageRestController {
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
+    @Operation(
+            operationId = "addMessageToUnreadForUser",
+            summary = "Add unread message",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Message.class)
+                            ),
+                            description = "OK: Got message to unread"
+                    )
+            })
     public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
         User user = userService.getUserById(usrId);
         user.getUnreadMessages().add(messageService.getMessageById(msgId));

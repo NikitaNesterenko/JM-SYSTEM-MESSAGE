@@ -4,13 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MailService;
 import jm.UserService;
 import jm.dto.UserDTO;
 import jm.dto.UserDtoService;
-import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +40,9 @@ public class UserRestController {
 
     // DTO compliant
     @GetMapping
-    @Operation(summary = "Get all users",
+    @Operation(
+            operationId = "getUsers",
+            summary = "Get all users",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -64,7 +64,9 @@ public class UserRestController {
 
     // DTO compliant
     @PostMapping(value = "/create")
-    @Operation(summary = "Create user",
+    @Operation(
+            operationId = "createUser",
+            summary = "Create user",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -83,7 +85,9 @@ public class UserRestController {
 
     // DTO compliant
     @GetMapping("/{id}")
-    @Operation(summary = "Get user by id",
+    @Operation(
+            operationId = "getUser",
+            summary = "Get user by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -103,7 +107,9 @@ public class UserRestController {
 
     // DTO compliant
     @PutMapping(value = "/update")
-    @Operation(summary = "Update user",
+    @Operation(
+            operationId = "updateUser",
+            summary = "Update user",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -128,7 +134,9 @@ public class UserRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Operation(summary = "Delete user",
+    @Operation(
+            operationId = "deleteUser",
+            summary = "Delete user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: user deleted")
             })
@@ -140,7 +148,9 @@ public class UserRestController {
 
     // DTO compliant
     @GetMapping(value = "/channel/{id}")
-    @Operation(summary = "Get all users by channel",
+    @Operation(
+            operationId = "getAllUsersInThisChannel",
+            summary = "Get all users by channel",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -162,7 +172,9 @@ public class UserRestController {
 
     // DTO compliant
     @GetMapping(value = "/loggedUser")
-    @Operation(summary = "Get logged user",
+    @Operation(
+            operationId = "getLoggedUserId",
+            summary = "Get logged user",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -181,7 +193,9 @@ public class UserRestController {
 
     // DTO compliant
     @GetMapping(value = "/workspace/{id}")
-    @Operation(summary = "Get all users by workspace",
+    @Operation(
+            operationId = "getAllUsersInWorkspace",
+            summary = "Get all users by workspace",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -201,7 +215,9 @@ public class UserRestController {
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
-    @Operation(summary = "Send password recovery token to email",
+    @Operation(
+            operationId = "isExistUserWithEmail",
+            summary = "Send password recovery token to email",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: recovery password token was send"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to send password recovery token")
@@ -219,7 +235,9 @@ public class UserRestController {
     }
 
     @PostMapping(value = "/password-recovery")
-    @Operation(summary = "Recover password",
+    @Operation(
+            operationId = "passwordRecovery",
+            summary = "Recover password",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: password recovered"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to recover password")
