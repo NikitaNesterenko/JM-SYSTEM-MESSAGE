@@ -9,16 +9,21 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "apps")
-public class Apps {
-    private final static String GOOGLE_CALENDAR = "Google calendar";
+public class App {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "app_name")
     private String name;
+
+    @Column(name = "client_id")
+    private String clientId;
+
+    @Column(name = "client_secret")
+    private String clientSecret;
 
     @Column(name = "token")
     private String token;
@@ -27,6 +32,6 @@ public class Apps {
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    public Apps() {
+    public App() {
     }
 }

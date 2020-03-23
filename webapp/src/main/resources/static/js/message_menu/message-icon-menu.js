@@ -3,7 +3,8 @@ import {
     ConversationRestPaginationService,
     MessageRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    DirectMessagesRestController
 } from "../rest/entities-rest-pagination.js";
 import {close_right_panel, open_right_panel} from "../right_slide_panel/right_panel.js";
 
@@ -12,6 +13,7 @@ const conversation_service = new ConversationRestPaginationService();
 const message_service = new MessageRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const channel_service = new ChannelRestPaginationService();
+const direct_message_service = new DirectMessagesRestController();
 const star_button_blank = '\u2606';
 const star_button_filled = '\u2605';
 
@@ -58,8 +60,15 @@ $(document).on('click', '[id^=msg-icons-menu__back_to_msg_]', function (e) {
     let msg_id = $(e.target).data('msg_id');
     message_service.getById(msg_id).then(message => {
         const {channelId, userId, id} = message;
-        //смена номера активного канала
-        window.pressChannelButton(channelId);
+        if (channelId) {
+            //смена номера активного канала
+            window.pressChannelButton(channelId);
+        } else {
+            direct_message_service.getById(msg_id).then(direct_message => {
+                window.pressConversationButton(direct_message.conversationId)
+            })
+        }
+
         //сделал задержку перед скроллом к конкретному сообщению.
         // Надо попробовать отловить событие завершения отрисовки всех сообщений в канале и скролл к концу
         setTimeout(function () {

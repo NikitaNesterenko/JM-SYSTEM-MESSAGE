@@ -444,6 +444,16 @@ public class TestDataInitializer {
 
         messageDAO.persist(message5);
         this.messages.add(message5);
+
+        Message message6 = new Message();
+        message6.setChannelId(channels.get(2).getId());
+        message6.setUser(userList.get(4));
+        message6.setContent("Hello everybody!");
+        message6.setDateCreate(LocalDateTime.now());
+        message6.setWorkspaceId(1L);
+
+        messageDAO.persist(message6);
+        this.messages.add(message6);
     }
 
     private void createWorkspaces() {
@@ -462,8 +472,6 @@ public class TestDataInitializer {
         workspace1.setUser(userJohn);
         workspace1.setIsPrivate(false);
         workspace1.setCreatedDate(LocalDateTime.now());
-        workspace1.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
-        workspace1.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace1);
         this.workspaces.add(workspace1);
@@ -474,8 +482,6 @@ public class TestDataInitializer {
         workspace2.setUser(userStepan);
         workspace2.setIsPrivate(true);
         workspace2.setCreatedDate(LocalDateTime.now());
-        workspace2.setGoogleClientId("270266382009-o2j9h70k4q0io74df8pm8pla4vko75pq.apps.googleusercontent.com");
-        workspace2.setGoogleClientSecret("256bTZoiZUa6eKiGVmI-T4wb");
 
         workspaceDAO.persist(workspace2);
         this.workspaces.add(workspace2);
@@ -486,8 +492,6 @@ public class TestDataInitializer {
         workspace3.setUser(userJohn);
         workspace3.setIsPrivate(false);
         workspace3.setCreatedDate(LocalDateTime.now());
-        workspace3.setGoogleClientId("");
-        workspace3.setGoogleClientSecret("");
 
         workspaceDAO.persist(workspace3);
         this.workspaces.add(workspace3);

@@ -99,7 +99,7 @@ public class WorkspaceDTO {
         }
 
         if (workspace.getApps() != null) {
-            Set<Long> appsIds = workspace.getApps().stream().map(Apps::getId).collect(Collectors.toSet());
+            Set<Long> appsIds = workspace.getApps().stream().map(App::getId).collect(Collectors.toSet());
             this.setAppIds(appsIds);
         }
 

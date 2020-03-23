@@ -249,6 +249,17 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 }
 
+export class AppRestPaginationService extends RestPaginationService {
+    constructor() {
+        super('/rest/api/apps');
+    }
+
+    getAppByName = async (name) => {
+        const response = await fetch('/rest/api/apps/' + name);
+        return response.json()
+    };
+}
+
 export class WorkspaceRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/workspaces');
@@ -337,6 +348,15 @@ export class StorageService {
 
     uploadFile = async (file) => {
         return await fetch(`/uploadFile`, {
+            method: 'POST',
+            body: file
+        }).then(response => {
+            return response.text()
+        });
+    };
+
+    uploadAvatar = async (file) => {
+        return await fetch(`/avatar`, {
             method: 'POST',
             body: file
         }).then(response => {
@@ -448,6 +468,12 @@ export class DirectMessagesRestController extends RestPaginationService {
         return response.status;
     }
 
+}
+
+export class AppService extends RestPaginationService {
+    constructor() {
+        super("/rest/api/apps");
+    }
 }
 
 export class PluginRestPaginationService extends RestPaginationService {

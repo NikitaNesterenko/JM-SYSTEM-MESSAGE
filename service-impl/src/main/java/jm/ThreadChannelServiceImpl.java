@@ -34,8 +34,8 @@ public class ThreadChannelServiceImpl implements ThreadChannelService {
 
     @Override
     public ThreadChannel createThreadChannelByMessageDTO(MessageDTO messageDTO) {
-        messageDTO.setDateCreate(LocalDateTime.now());
         Message message = new Message(messageDTO);
+        message.setDateCreate(LocalDateTime.now());
         ThreadChannel threadChannel = new ThreadChannel(message);
         createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);

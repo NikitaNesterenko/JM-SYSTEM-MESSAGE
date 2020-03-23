@@ -11,6 +11,13 @@ export class DMView {
         this.user_service = new UserRestPaginationService();
         this.direct_message_view = dm_view;
         this.dm_chat = new ActiveChatMembers();
+        window.pressConversationButton = (conversationId) => {
+            window.channel_id = 0;
+            sessionStorage.setItem('conversation_id', conversationId);
+            sessionStorage.setItem('channelId', '0');
+            document.querySelector(`button[conv_id='${conversationId}']`).click()
+
+        }
     }
 
     onClickModalMessage() {

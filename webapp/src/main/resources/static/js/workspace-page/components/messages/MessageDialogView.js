@@ -115,22 +115,13 @@ export class MessageDialogView {
     }
 
     setAvatar() {
-        if (this.message.userAvatarUrl == null) {
-            this.root.prepend(`
-                <div class="c-message__gutter--feature_sonic_inputs">
-                    <button class="c-message__avatar__button">
-                        <img class="c-avatar__image">
-                    </button>
-                </div>`);
-        } else {
-            const avatar = this.message.userId === null ? this.message.userAvatarUrl : `/files/${this.message.userAvatarUrl}`;
+            const avatar = this.message.userId === null ? this.message.userAvatarUrl : `/avatar/${this.message.userId}`;
             this.root.prepend(`
                 <div class="c-message__gutter--feature_sonic_inputs">
                     <button class="c-message__avatar__button">
                         <img class="c-avatar__image" src="${avatar}">
                     </button>
                 </div>`);
-        }
         return this;
     }
 
