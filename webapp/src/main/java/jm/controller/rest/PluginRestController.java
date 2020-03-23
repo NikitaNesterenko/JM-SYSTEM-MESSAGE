@@ -4,11 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.PluginService;
 import jm.dto.ZoomDTO;
-import jm.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +28,9 @@ public class PluginRestController {
     }
 
     @GetMapping("/zoom")
-    @Operation(summary = "Create message",
+    @Operation(
+            operationId = "zoomOAuth",
+            summary = "Create message",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(

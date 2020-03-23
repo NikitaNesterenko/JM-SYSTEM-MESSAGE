@@ -44,12 +44,38 @@ public class BotRestController {
 
 
     @GetMapping("/generate.token")
+    @Operation(
+            operationId = "generateApiToken",
+            summary = "Get token",
+            description = "Generate string token:{token} with 128-bit UUID token",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = String.class)
+                            ),
+                            description = "OK: got token"),
+                    @ApiResponse(responseCode = "400", description = "BAD_REQUEST: token not found")
+            })
     public ResponseEntity<String> generateApiToken(){
         String token = "{\"token\":\"" + UUID.randomUUID().toString() + "\"}";
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/test.send")
+    @Operation( // нужно ли на тестовый метод?
+            operationId = "testingSend",
+            summary = "Testing message from user",
+            description = "Generate string message from user",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = String.class)
+                            ),
+                            description = "OK: got message"),
+                    @ApiResponse(responseCode = "400", description = "BAD_REQUEST: testing message not found")
+            })
     public ResponseEntity<String> testingSend(){
         User user = userService.getUserById(1L);
         Message message = new Message();
@@ -66,12 +92,14 @@ public class BotRestController {
 
     // DTO compliant
     @GetMapping("/workspace/{id}")
-    @Operation(summary = "Get bot by workspace",
+    @Operation(
+            operationId = "getBotByWorkspace",
+            summary = "Get bot by workspace",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = BotDTO.class)
+                                    schema = @Schema(type = "array", implementation = BotDTO.class)
                             ),
                             description = "OK: get bot"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
@@ -90,7 +118,9 @@ public class BotRestController {
 
     // DTO compliant
     @GetMapping("/{id}")
-    @Operation(summary = "Get bot by id",
+    @Operation(
+            operationId = "getBotById",
+            summary = "Get bot by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -110,7 +140,9 @@ public class BotRestController {
 
     // DTO compliant
     @PostMapping(value = "/create")
-    @Operation(summary = "Create bot",
+    @Operation(
+            operationId = "createBot",
+            summary = "Create bot",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -136,7 +168,9 @@ public class BotRestController {
 
     // DTO compliant
     @PutMapping(value = "/update")
-    @Operation(summary = "Update bot",
+    @Operation(
+            operationId = "updateBot",
+            summary = "Update bot",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -162,7 +196,9 @@ public class BotRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Operation(summary = "Delete bot",
+    @Operation(
+            operationId = "deleteBot",
+            summary = "Delete bot",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: bot deleted")
             })
@@ -173,7 +209,9 @@ public class BotRestController {
     }
 
     @PostMapping("/{id}/channels/{name}/messages")
-    @Operation(summary = "Create message",
+    @Operation(
+            operationId = "createMessage",
+            summary = "Create message",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -194,7 +232,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels")
-    @Operation(summary = "Get channels",
+    @Operation(
+            operationId = "getChannels",
+            summary = "Get channels",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -211,7 +251,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/hour")
-    @Operation(summary = "Get messages per hour",
+    @Operation(
+            operationId = "getMessagesPerHour",
+            summary = "Get messages per hour",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -235,7 +277,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
-    @Operation(summary = "Get messages per day",
+    @Operation(
+            operationId = "getMessagesPerDay",
+            summary = "Get messages per day",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -258,7 +302,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
-    @Operation(summary = "Get messages per week",
+    @Operation(
+            operationId = "getMessagesPerWeek",
+            summary = "Get messages per week",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -281,7 +327,9 @@ public class BotRestController {
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
-    @Operation(summary = "Get messages per month",
+    @Operation(
+            operationId = "getMessagesPerMonth",
+            summary = "Get messages per month",
             responses = {
                     @ApiResponse(
                             content = @Content(
