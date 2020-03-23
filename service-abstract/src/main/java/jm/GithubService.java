@@ -7,12 +7,13 @@ import org.kohsuke.github.GitHub;
 
 public interface GithubService {
     void firstStartClientAuthorization(Long installationId, Workspace workspace, String principalName);
-    //    MessageDTO secondStart(MessageDTO message);
+    MessageDTO secondStart(MessageDTO message);
     void createGithubChannel(Workspace workspace, String principalName);
     void createGithubBot();
     void createClientAccessToken(Long installationId, Workspace workspace, String principalName);
     void saveClientAccessToken(String appInstallationToken, Workspace workspace);
-//    Apps getGithubApp(Workspace workspace, String principalName);
-//    String getGithubToken(Workspace workspace, String principalName);
-//    GitHub getGithubByAccessToken(Workspace workspace, String principalName);
+    Apps loadGithubApp(Workspace workspace);
+    String getClientAccessToken(Workspace workspace);
+    GitHub getGithubByAccessToken(Workspace workspace);
+    MessageDTO subscribeToEvents(String s);
 }

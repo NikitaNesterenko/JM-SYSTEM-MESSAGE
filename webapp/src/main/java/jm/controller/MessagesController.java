@@ -21,8 +21,8 @@ import java.util.List;
 
 @Controller
 public class MessagesController {
-//    @Autowired
-//    GithubService githubService;
+    @Autowired
+    GithubService githubService;
 
     private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
@@ -50,20 +50,12 @@ public class MessagesController {
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
-
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("--->");
-//        System.out.println("message");
-//        System.out.println(messageDto);
-//        if (messageDto.getChannelName().split(" ")[0].equals("GitHub") && messageDto.getContent().split(" ")[0].equals("/github")) {
-//            githubService.secondStart(messageDto);
-//        }
+        try {
+            if (messageDto.getChannelId() == 1L && messageDto.getContent().substring(0,1).equals("/")) {
+                messageDto = githubService.secondStart(messageDto);
+            }
+        } catch (NullPointerException e) {
+        }
 
         Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {
