@@ -4,18 +4,12 @@ import com.google.common.io.Files;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jm.api.dao.AppsRepository;
-import jm.api.dao.GithubRepository;
-import jm.api.dao.UserDAO;
-import jm.api.dao.WorkspaceDAO;
+import jm.api.dao.*;
 import jm.dto.MessageDTO;
 import jm.model.*;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kohsuke.github.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,35 +18,31 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class GithubServiceImpl implements GithubService {
-    @Value("${github.github.name}")
+    @Value("${github}")
     private String githubName;
 
     @Autowired
-    private AppsRepository appRepo;
+    private AppsDAO appsDAO;
+    @Autowired
+    private GithubEventRepository githubEventRepo;
     @Autowired
     private UserDAO userDAO;
     @Autowired
     private WorkspaceDAO workspaceDAO;
-    @Autowired
-    private GithubRepository ghRepo;
 
     private ChannelService channelService;
     private UserService userService;
     private String nameChannelStartWth = githubName + " ";
     private String nameGithubBot = "GH-bot";
-//    private int updatePeriod;
 
-    public GithubServiceImpl(ChannelService channelService, UserService userService/*,
-                             @Value("${github.github.event.update.day.period}") int updatePeriod*/) {
+    public GithubServiceImpl(ChannelService channelService, UserService userService) {
         this.channelService = channelService;
         this.userService = userService;
-//        this.updatePeriod = updatePeriod;
     }
 
     @Override
@@ -74,29 +64,30 @@ public class GithubServiceImpl implements GithubService {
 
             switch (m.length) {
                 case (1):
-                    return messageDTO123(message);
+                    return ghHelp(message);
                 case (2):
                     if (m[1].equals("settings")) {
                         message.setContent("настройки");
                         return message;
                     } else {
-                        return messageDTO123(message);
+                        return ghHelp(message);
                     }
                 default:
-                    Workspace workspace = workspaceDAO.getById(message.getWorkspaceId());
-                    return messageDTO1235687(message, m, getGithubByAccessToken(workspace),
-                            getClientAccessToken(workspace));
+                    return messageDTO1235687(message, m);
             }
         } else {
+            return errorCommand(message);
+        }
+    }
+    private MessageDTO errorCommand(MessageDTO message) {
 //            message.setContent(message.getContent() + " is not a valid command. In Slack," +
 //                    "all messages that start with the \"/\" character are interpreted as commands. <br>" +
 //                    "If you are trying to send a message and not run a command," +
 //                    "try preceding the \"/\" with an empty space.");
-            message.setContent("после / идет команда");
-            return message;
-        }
+        message.setContent("после \"/\" идет команда");
+        return message;
     }
-    private MessageDTO messageDTO123(MessageDTO message) {
+    private MessageDTO ghHelp(MessageDTO message) {
         message.setContent("список команд гитхаб");
 //        message.setContent("Subscribe to notifications for a repository:<br>" +
 //                "/github subscribe owner/repository<br>" +
@@ -134,126 +125,106 @@ public class GithubServiceImpl implements GithubService {
 //                "/github deploy owner/repository list.");
         return message;
     }
-    private MessageDTO messageDTO1235687(MessageDTO message, String[] m, GitHub githubByAccessToken,
-                                        String token) {
-        switch (m[1]) {
-            case ("subscribe"):
-                if (m[2].indexOf("/") == -1) {
-                    GithubEvent ghEvent;
-                    if ((ghEvent = ghUser(githubByAccessToken, m[2])) == null) {
-                        return errr(message);
-                    }
-                    ghEvent.setAllRepository(true);
-                    ghEvent.setRepository(null);
-                    ghEvent.setRepositoryUnsubscribe(null);
-                    ghRepo.save(ghEvent);
-                    return message;
-                } else {
-                    if (m[2].split("/").length == 2) {
-                        GHRepository repository;
-                        try {
-                            repository = githubByAccessToken.getRepository(m[2]);
-                        } catch (IOException e) {
-                            return errr(message);
-                        }
-                        GithubEvent ghEvent;
-                        if ((ghEvent = ghUser(githubByAccessToken, m[2].split("/")[0])) != null) {
-                            if (ghEvent.getAllRepository()) {
-                                message.setContent("подписан на все репоз");
-                                return message;
-                            }
-                            Set<Long> set = ghEvent.getRepository();
-                            if (set == null) {
-                                set = new HashSet<>();
-                            }
-                            for (Long repos : set) {
-                                if (repos == repository.getId()) {
-                                    message.setContent("репоз есть");
-                                    return message;
-                                }
-                            }
-                            set.add(repository.getId());
-                            ghEvent.setRepository(set);
-                            ghRepo.save(ghEvent);
-                            return message;
-                        } else {
-                            return errr(message);
-                        }
-                    } else {
-                        messageDTO123(message);
-                    }
-                }
-            case  ("unsubscribe"):
-                if (m[2].indexOf("/") == -1) {
-                    GithubEvent ghEvent;
-                    if ((ghEvent = ghUser(githubByAccessToken, m[2])) == null) {
-                        ghEvent.setRepository(null);
-                        ghEvent.setRepositoryUnsubscribe(null);
-                        ghRepo.save(ghEvent);
-                        message.setContent("подписались на все");
-                        return message;
-                    }
-                    ghEvent.setAllRepository(false);
-                    ghEvent.setRepository(new HashSet<>());
-                    ghEvent.setRepositoryUnsubscribe(new HashSet<>());
-                    ghRepo.save(ghEvent);
-                    return message;
-                } else {
-                    if (m[2].split("/").length == 2) {
-                        GHRepository repository;
-                        try {
-                            repository = githubByAccessToken.getRepository(m[2]);
-                        } catch (IOException e) {
-                            return errr(message);
-                        }
-                        GithubEvent ghEvent;
-                        if ((ghEvent = ghUser(githubByAccessToken, m[2].split("/")[0])) != null) {
-                            if (!ghEvent.getAllRepository()) {
-                                ghEvent.setRepository(new HashSet<>());
-                                ghRepo.save(ghEvent);
-                                message.setContent("отписан на все репоз");
-                                return message;
-                            }
-                            Set<Long> set = ghEvent.getRepositoryUnsubscribe();
-                            if (set == null) {
-                                set = new HashSet<>();
-                            }
-                            for (Long repos : set) {
-                                if (repos == repository.getId()) {
-                                    message.setContent("репоз есть в отпис");
-                                    return message;
-                                }
-                            }
-                            set.add(repository.getId());
-                            ghEvent.setRepositoryUnsubscribe(set);
-                            ghRepo.save(ghEvent);
-                            return message;
-                        } else {
-                            return errr(message);
-                        }
-                    } else {
-                        return messageDTO123(message);
-                    }
-                }
-            default:
-                return messageDTO123(message);
-        }
-    }
-    private GithubEvent ghUser(GitHub github, String user) {
-        String ghLogin = null;
-        try {
-            ghLogin = github.getUser(user).getLogin();
-        } catch (IOException e) {
-            return null;
-        }
-        return ghRepo.findGithubEventByGhLogin(ghLogin);
-    }
-    private MessageDTO errr(MessageDTO message) {
+    private MessageDTO installApp(MessageDTO message) {
         message.setContent("ссылка для установки приложения / либо не существует репозитория");
 //                            message.setContent("Either the app isn't installed on your repository or the repository does not exist. Install it to proceed." +
 //                                    "Note: You will need to ask the owner of the repository to install it for you. Give them <a href='https://github.com/apps/jm-system-message'>this link.</a>123" +
 //                                    "<a href='https://github.com/apps/jm-system-message'>Install GitHub App</a>");
         return message;
+    }
+    private MessageDTO errorSubscribe(MessageDTO message) {
+        message.setContent("подписаны");
+        return message;
+    }
+    private MessageDTO errorUnsubscribe(MessageDTO message) {
+        message.setContent("уже были отписаны");
+        return message;
+    }
+    private MessageDTO messageDTO1235687(MessageDTO message, String[] m) {
+        if (m[2].split("/").length > 2) {
+            return ghHelp(message);
+        }
+
+        if (m[2].equals("list")) {
+            switch (m.length) {
+                case (3):
+                    List<GithubEvent> ghEventList = githubEventRepo.findGithubEventByWorkspaceAndUser(
+                            workspaceDAO.getById(message.getWorkspaceId()),
+                            userDAO.getById(message.getUserId()));
+                    message.setContent("подписаны:");
+                    for (GithubEvent ghEvent : ghEventList) {
+                        message.setContent(" " + message.getContent() + ghEvent.getSubscribe());
+                    }
+                    return message;
+                case (4):
+//                    GithubEvent ghEvent = null;
+//                    if ((ghEvent = githubEventDAO.getGithubEventBySubscribe(m[2])) == null) {
+//                        errr23424121231234(message);
+//                    }
+//                    githubEventDAO.deleteById(ghEvent.getId());
+                    return message;
+                default:
+                    return ghHelp(message);
+            }
+        }
+
+        if (ghRep123(m[2])) {
+            return installApp(message);
+        }
+
+        GithubEvent ghEvent = null;
+        try {
+            ghEvent = githubEventRepo.findGithubEventByWorkspaceAndUserAndSubscribe(
+                        workspaceDAO.getById(message.getWorkspaceId()),
+                        userDAO.getById(message.getUserId()), m[2])
+                    .get(0);
+        } catch (IndexOutOfBoundsException e) {
+        }
+        switch (m[1]) {
+            case ("subscribe"):
+                if (ghEvent != null) {
+                    errorSubscribe(message);
+                }
+                ghEvent = new GithubEvent();
+                ghEvent.setWorkspace(workspaceDAO.getById(message.getWorkspaceId()));
+                ghEvent.setUser(userDAO.getById(message.getUserId()));
+                ghEvent.setSubscribe(m[2]);
+                ghEvent.setIssues(true);
+                ghEvent.setPulls(true);
+                ghEvent.setStatuses(true);
+                ghEvent.setCommits(true);
+                ghEvent.setDeployments(true);
+                ghEvent.setPublicRepository(true);
+                ghEvent.setReleases(true);
+                ghEvent.setReviews(false);
+                ghEvent.setComments(false);
+                ghEvent.setBranches(false);
+                ghEvent.setCommitsAll(false);
+                githubEventRepo.save(ghEvent);
+
+                return message;
+            case ("unsubscribe"):
+                if (ghEvent == null) {
+                    errorUnsubscribe(message);
+                }
+                githubEventRepo.deleteById(ghEvent.getId());
+                return message;
+            default:
+                return ghHelp(message);
+        }
+    }
+    private boolean ghRep123(String ghLogin) {
+        try {
+            if (ghLogin.indexOf("/") == -1) {
+                getGhApp().getInstallationByUser(ghLogin);
+            }
+            else {
+                getGhApp().getInstallationByRepository(ghLogin.split("/")[0], ghLogin.split("/")[1]);
+            }
+            return false;
+        } catch (IOException e) {
+            return true;
+        }
     }
 
     @Override
@@ -276,7 +247,6 @@ public class GithubServiceImpl implements GithubService {
         }
     }
 
-
     @Override
     public void createGithubBot() {
         User githubUser = userService.getUserByLogin(nameGithubBot);
@@ -292,83 +262,83 @@ public class GithubServiceImpl implements GithubService {
 
     @Override
     public void createClientAccessToken(Long installationId, Workspace workspace, String login) {
-        GHAppInstallation appInstallation = null;
+        //        GithubAccount ghAccount = new GithubAccount();
+//        ghAccount.setGhLogin(appInstallation.getAccount().getLogin());
+//        try {
+//            ghAccountDao.persist(ghAccount);
+//        } catch (DataIntegrityViolationException e) {
+//        }
+        Map<String, GHPermissionType> permissions = new HashMap<>();
+        permissions.put("checks", GHPermissionType.READ);
+        permissions.put("contents", GHPermissionType.READ);
+        permissions.put("deployments", GHPermissionType.WRITE);
+        permissions.put("issues", GHPermissionType.WRITE);
+        permissions.put("metadata", GHPermissionType.READ);
+        permissions.put("pull_requests", GHPermissionType.WRITE);
+        permissions.put("repository_projects", GHPermissionType.READ);
+        permissions.put("statuses", GHPermissionType.READ);
+
+        String token = null;
         try {
-            appInstallation = new GitHubBuilder().withJwtToken(createJWT("54655", 60000)).build()
-                    .getApp().getInstallationById(installationId);
-        } catch (Exception e) {
+            token = getGhApp().getInstallationById(installationId).createToken(permissions).create().getToken();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        GithubEvent ghEvent = new GithubEvent();
-        ghEvent.setGhLogin(appInstallation.getAccount().getLogin());
-        ghEvent.setAllRepository(false);
+        saveClientAccessToken(token, workspace);
+    }
+    private GHApp getGhApp() {
         try {
-            ghRepo.save(ghEvent);
-        } catch (DataIntegrityViolationException e) {
+            return new GitHubBuilder().withJwtToken(createJWT("54655", 60000)).build().getApp();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        if (loadGithubApp(workspace) == null) {
-            Map<String, GHPermissionType> permissions = new HashMap<>();
-            permissions.put("checks", GHPermissionType.READ);
-            permissions.put("contents", GHPermissionType.READ);
-            permissions.put("deployments", GHPermissionType.WRITE);
-            permissions.put("issues", GHPermissionType.WRITE);
-            permissions.put("metadata", GHPermissionType.READ);
-            permissions.put("pull_requests", GHPermissionType.WRITE);
-            permissions.put("repository_projects", GHPermissionType.READ);
-            permissions.put("statuses", GHPermissionType.READ);
-            String token = null;
-            try {
-                token = appInstallation.createToken(permissions).create().getToken();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            saveClientAccessToken(token, workspace);
-        }
+        return null;
     }
 
     @Override
     public void saveClientAccessToken(String token, Workspace workspace) {
         if (!token.isEmpty() && !workspace.equals(null)) {
-            Apps app = null;
+            App app = null;
             try {
-                app = appRepo.findAppsByNameAndWorkspace(githubName, workspace);
+                app = appsDAO.getAppByWorkspaceIdAndAppName(workspace.getId(), githubName);
                 app.setToken(token);
             } catch (NullPointerException e) {
-                app = new Apps();
+                app = new App();
                 app.setName(githubName);
+                app.setClientId("Iv1.8eb89d3832f0ff75");
+                app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
                 app.setWorkspace(workspace);
                 app.setToken(token);
             }
-            appRepo.save(app);
+            appsDAO.persist(app);
         }
     }
 
     @Override
-    public Apps loadGithubApp(Workspace workspace) {
-        return appRepo.findAppsByNameAndWorkspace(githubName, workspace);
+    public App loadGithubApp(Long workspaceId) {
+        return appsDAO.getAppByWorkspaceIdAndAppName(workspaceId, githubName);
     }
 
     @Override
-    public String getClientAccessToken(Workspace workspace) {
+    public String getClientAccessToken(Long workspace) {
         return loadGithubApp(workspace).getToken();
     }
 
-    @Override
-    public GitHub getGithubByAccessToken(Workspace workspace) {
-        if (!workspace.equals(null)) {
-            String accessToken = getClientAccessToken(workspace);
-            GitHub githubAuthAsInst = null;
-            try {
-                githubAuthAsInst = new GitHubBuilder().withAppInstallationToken(accessToken).build();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return githubAuthAsInst;
-        }
-        return null;
-    }
+//    @Override
+//    public GitHub getGithubByAccessToken(Workspace workspace) {
+//        if (!workspace.equals(null)) {
+//            String accessToken = getClientAccessToken(workspace);
+//            GitHub githubAuthAsInst = null;
+//            try {
+//                githubAuthAsInst = new GitHubBuilder().withAppInstallationToken(accessToken).build();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return githubAuthAsInst;
+//        }
+//        return null;
+//    }
 
     private static String createJWT(String githubAppId, long ttlMillis) throws Exception {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS256;
@@ -395,58 +365,57 @@ public class GithubServiceImpl implements GithubService {
 
     @Override
     public MessageDTO subscribeToEvents(String s) {
-        JSONObject json = null;
-        try {
-            json = new JSONObject(s);
-        } catch (JSONException e) {
-            return null;
-        }
-        Long repository = null;
-        String login = null;
-        try {
-            json.getString("pusher");
-            repository = new JSONObject(json.getString("repository")).getLong("id");
-            login = new JSONObject(new JSONObject(json.getString("repository")).getString("owner")).getString("login");
-        } catch (JSONException e) {
-            return null;
-        }
-
-        GithubEvent githubEvent = null;
-        if ((githubEvent = ghRepo.findGithubEventByGhLogin(login)) != null) {
-            if (githubEvent.getAllRepository() == true) {
-                Set<Long> set;
-                if ((set = githubEvent.getRepositoryUnsubscribe()) != null) {
-                    for (Long rep : set) {
-                        if (rep == repository) {
-                            return null;
-                        }
-                    }
-                }
-                return createMessage();
-            } else {
-                Set<Long> set;
-                if ((set = githubEvent.getRepository()) != null) {
-                    for (Long rep : set) {
-                        if (rep == repository) {
-                            return createMessage();
-                        }
-                    }
-                }
-                return null;
-            }
-        }
+//        JSONObject json = null;
+//        try {
+//            json = new JSONObject(s);
+//        } catch (JSONException e) {
+//            return null;
+//        }
+//        Long repository = null;
+//        String login = null;
+//        try {
+//            json.getString("pusher");
+//            repository = new JSONObject(json.getString("repository")).getLong("id");
+//            login = new JSONObject(new JSONObject(json.getString("repository")).getString("owner")).getString("login");
+//        } catch (JSONException e) {
+//            return null;
+//        }
+//
+//        GithubEvent githubEvent = null;
+//        if ((githubEvent = ghEventRepo.findGithubEventByGhLogin(login)) != null) {
+//            if (githubEvent.getAllRepository() == true) {
+//                Set<Long> set;
+//                if ((set = githubEvent.getRepositoryUnsubscribe()) != null) {
+//                    for (Long rep : set) {
+//                        if (rep == repository) {
+//                            return null;
+//                        }
+//                    }
+//                }
+//                return createMessage();
+//            } else {
+//                Set<Long> set;
+//                if ((set = githubEvent.getRepository()) != null) {
+//                    for (Long rep : set) {
+//                        if (rep == repository) {
+//                            return createMessage();
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//        }
         return null;
     }
-    private MessageDTO createMessage() {
-        MessageDTO message = new MessageDTO();
-        message.setUserId(1L);
-        message.setContent("сообщение");
-        message.setIsDeleted(false);
-        message.setIsUpdated(false);
-        message.setChannelId(1L);
-        message.setWorkspaceId(1L);
-        message.setUserName("John");
-        message.setDateCreate(LocalDateTime.now());
-        return message;
-    }
+//    private MessageDTO createMessage() {
+//        MessageDTO message = new MessageDTO();
+//        message.setUserId(1L);
+//        message.setContent("сообщение");
+//        message.setIsDeleted(false);
+//        message.setIsUpdated(false);
+//        message.setChannelId(1L);
+//        message.setWorkspaceId(1L);
+//        message.setUserName("John");
+//        return message;
+//    }
 }
