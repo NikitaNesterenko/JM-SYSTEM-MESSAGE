@@ -2,6 +2,7 @@ package jm.api.dao;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Workspace;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +51,7 @@ public interface ChannelDAO {
 
     String getTopicChannelByChannelId(Long id);
 
-    Long getWorkspaceIdByChannelId(Long channelId);
+    Workspace getWorkspaceByChannelId(Long channelId);
 
     List<ChannelDTO> getArchivedChannels();
 

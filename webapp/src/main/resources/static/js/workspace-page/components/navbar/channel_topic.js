@@ -6,8 +6,3 @@ window.addEventListener('load', function () {
     get_topic_channel.buildEvents();
 });
 
-$(document).ready(() => {
-   get_topic_channel.setTopic();
-
-});
-

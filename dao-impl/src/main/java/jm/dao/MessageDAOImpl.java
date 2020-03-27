@@ -292,7 +292,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                 "select sm from User u " +
                         "join u.starredMessages as sm " +
                         "where u.id = :user_id " +
-                        "and sm.workspaceId = :workspace_id " +
+                        "and sm.workspace.id = :workspace_id " +
                         "and sm.isDeleted = :is_deleted",
                 Message.class)
                        .setParameter("user_id", userId)

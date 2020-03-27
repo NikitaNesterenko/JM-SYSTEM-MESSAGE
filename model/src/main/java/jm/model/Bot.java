@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString()
+@ToString
 @Entity
 @Table(name = "bots")
 public class Bot {
@@ -37,20 +37,25 @@ public class Bot {
     @EqualsAndHashCode.Include
     private String nickName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "workspaces_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "workspace_id"))
     @ToString.Exclude
-    private Set<Workspace> workspaces = new HashSet<>();
+    private Set<Workspace> workspaces;
 
     @JsonIgnoreProperties
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "channels_bots", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "channel_id"))
-    private Set<Channel> channels = new HashSet<>();
+    @ToString.Exclude
+    private Set<Channel> channels;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "bots_slash_commands", joinColumns = @JoinColumn(name = "bot_id"), inverseJoinColumns = @JoinColumn(name = "slash_command_id"))
     @ToString.Exclude
-    private Set<SlashCommand> commands = new HashSet<>();
+    private Set<SlashCommand> commands;
+
+    @OneToMany(mappedBy = "bot", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Message> messages;
 
     @Column(name = "date_create", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

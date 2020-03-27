@@ -2,6 +2,7 @@ package jm;
 
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Workspace;
 import lombok.NonNull;
 import jm.model.CreateWorkspaceToken;
 import jm.model.User;
@@ -55,7 +56,7 @@ public interface ChannelService {
 
     String getTopicChannelByChannelId(Long id);
 
-    Long getWorkspaceIdByChannelId(Long channelId);
+    Workspace getWorkspaceByChannelId(Long channelId);
 
     List<ChannelDTO> getAllArchiveChannels();
 

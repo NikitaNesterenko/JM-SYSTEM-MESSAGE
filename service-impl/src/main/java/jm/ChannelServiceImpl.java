@@ -12,6 +12,7 @@ import jm.model.CreateWorkspaceToken;
 import jm.model.User;
 import jm.model.Workspace;
 import lombok.NonNull;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,7 @@ public class ChannelServiceImpl implements ChannelService {
         channelDAO.persist(channel);
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteChannel (Long id) {
         channelDAO.deleteById(id);
@@ -184,8 +186,8 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public Long getWorkspaceIdByChannelId(Long channelId) {
-        return channelDAO.getWorkspaceIdByChannelId(channelId);
+    public Workspace getWorkspaceByChannelId(Long channelId) {
+        return channelDAO.getWorkspaceByChannelId(channelId);
     }
 
     @Override

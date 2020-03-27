@@ -31,15 +31,17 @@ public class BotRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(BotRestController.class);
     private final BotService botService;
+    private final WorkspaceService workspaceService;
     private final MessageService messageService;
     private final ChannelService channelService;
     private final UserService userService;
 
-    public BotRestController(BotService botService, MessageService messageService, ChannelService channelService, UserService userService) {
+    public BotRestController(BotService botService, MessageService messageService, ChannelService channelService, UserService userService, WorkspaceService workspaceService) {
         this.botService = botService;
         this.messageService = messageService;
         this.channelService = channelService;
         this.userService = userService;
+        this.workspaceService = workspaceService;
     }
 
 
@@ -83,7 +85,7 @@ public class BotRestController {
         message.setUser(user);
         message.setContent("Hello, it's testing message from " + user.getUsername());
         message.setDateCreate(LocalDateTime.now());
-        message.setWorkspaceId(1L);
+        message.setWorkspace(workspaceService.getWorkspaceById(1L));
 
         messageService.createMessage(message);
 

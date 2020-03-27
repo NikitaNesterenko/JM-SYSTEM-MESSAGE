@@ -3,9 +3,8 @@ package jm.dao;
 import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Workspace;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
-import jm.model.User;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -212,7 +211,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
-                    .createNativeQuery("SELECT wc.channel_id FROM workspaces_channels wc where wc.workspace_id=:id")
+                    .createNativeQuery("SELECT id FROM channels where workspace_id = :id")
                     .setParameter("id", id)
                     .getResultList();
 
@@ -286,15 +285,14 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         String topic = (String) entityManager.createNativeQuery("select ch.topic from channels ch where ch.id=?")
                 .setParameter(1, id)
                 .getSingleResult();
-        return topic == null ? "\"Add a topic\"" : topic;
+        return topic == null ? "\"Enter channel topic here.\"" : topic;
     }
 
     @Override
-    public Long getWorkspaceIdByChannelId(Long channelId) {
-        BigInteger id = (BigInteger) entityManager.createNativeQuery("select ch.workspace_id from channels ch where ch.id=?")
-                .setParameter(1, channelId)
+    public Workspace getWorkspaceByChannelId(Long channelId) {
+        return (Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE channel_id = :id")
+                .setParameter("id", channelId)
                 .getSingleResult();
-        return id.longValue();
     }
 
     @Override

@@ -68,16 +68,14 @@ export class WorkspacePageEventHandler {
             const channelId = $(event.currentTarget).val();
             pressChannelButton(channelId);
 
-            sessionStorage.setItem("channelName", channelId);
+            sessionStorage.setItem("channelId", channelId);
             sessionStorage.setItem('conversation_id', '0');
 
             this.channel_topic_service.getChannelTopic(channelId).then(topic => {
                 this.user_service.getUsersByChannelId(channelId).then(users => {
-                    this.wks_header.setInfo(users.length, 666, topic);
+                    this.wks_header.setInfo(users.length, 666, this.checkTopic(topic));
                 });
-
             });
-
             refreshMemberList();
         });
     }
@@ -108,6 +106,10 @@ export class WorkspacePageEventHandler {
                 }
             })
         })
+    }
+
+    checkTopic(topic) {
+        return topic === "" || topic === "null" ? "Enter channel topic here." : topic;
     }
 
     onAddChannelSubmit() {

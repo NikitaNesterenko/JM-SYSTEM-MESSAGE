@@ -82,6 +82,7 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ToString.Exclude
     private Set<Role> roles;
 
     // TODO timezone - вычисляется или указывается пользователем
@@ -133,6 +134,7 @@ public class User {
     // TODO список пользователей, с которыми у юзера было прямое общение(?)
     @OneToMany
     @ToString.Exclude
+    @JsonIgnore
     private Set<User> directMessagesToUsers;
 
     @Column(name = "zoom_token", length = 2000)
@@ -145,20 +147,49 @@ public class User {
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime expireDateZoomToken;
 
-    // TODO каналы пользователя, исправить маппинг в Channel
-    // юзер может создавать каналы, либо быть участником (member) в чужих каналах
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_channels",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "channel_id")
-//    )
-//    private Set<Channel> userChannels;
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "workspaces_users", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "workspace_id"))
+    private Set<Workspace> workspaces;
 
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinTable(name = "channels_users", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "channel_id"))
+    private Set<Channel> channels;
 
-//    TODO двухсторонняя связь - исправить мапинг в Workspace
-//    @OneToOne
-//    private Workspace workspace;
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Channel> ownedChannels;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Workspace> ownedWorkspaces;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<WorkspaceUserRole> workspaceUserRoles;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Set<Message> messages;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "openingUser", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Conversation> openingConversations;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "associatedUser", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<Conversation> associatedConversations;
 
     // TODO invitations - список приглашений другим пользователям
 //    @OneToMany
@@ -215,25 +246,4 @@ public class User {
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
     }
-
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        User user = (User) o;
-//        return id.equals(user.id) &&
-//                email.equals(user.email) &&
-//                password.equals(user.password);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, email, password);
-//    }
-
-
 }
