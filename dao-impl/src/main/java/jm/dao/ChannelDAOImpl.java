@@ -164,19 +164,29 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId) {
-        String query = "SELECT ch.id, ch.name, ch.is_private, ch.archived " +
-                               "FROM channels ch " +
-                               "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
-                               "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
-                               "LEFT JOIN users u ON chu.user_id = u.id " +
-                               "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
-                               "GROUP BY ch.id";
-
-        return entityManager.createNativeQuery(query, "ChannelDTOMapping")
-                       .setParameter("workspace_id", workspaceId)
-                       .setParameter("user_id", userId)
-                       .getResultList();
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
+        return (List<ChannelDTO>) entityManager.
+                createNativeQuery("SELECT " +
+                        "ch.id  AS \"id\", " +
+                        "ch.name AS \"name\", " +
+                        "ch.workspace_id AS \"workspaceId\", " +
+                        "ch.owner_id AS \"ownerId\", " +
+                        "ch.is_private AS \"isPrivate\", " +
+                        "ch.created_date \"createdDate\", " +
+                        "ch.topic AS \"topic\", " +
+                        "ch.archived AS \"isArchived\", " +
+                        "ch.is_app AS \"isApp\" " +
+                        "FROM channels ch " +
+                        "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
+                        "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
+                        "LEFT JOIN users u ON chu.user_id = u.id " +
+                        "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
+                        "GROUP BY ch.id")
+                .setParameter("workspace_id", workspaceId)
+                .setParameter("user_id", userId)
+                .unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                .getResultList();
     }
 
     private List<Number> getAllChannelId () {
