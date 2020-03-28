@@ -32,18 +32,29 @@ public class GithubEvent {
     @Column(nullable = false)
     private String subscribe;
 
-    private boolean issues;
-    private boolean pulls;
-    private boolean statuses;
-    private boolean commits;
-    private boolean deployments;
-    private boolean publicRepository;
-    private boolean releases;
+    @Column(nullable = false)
+    private Boolean issues;
+    @Column(nullable = false)
+    private Boolean pulls;
+    @Column(nullable = false)
+    private Boolean statuses;
+    @Column(nullable = false)
+    private Boolean commits;
+    @Column(nullable = false)
+    private Boolean deployments;
+    @Column(nullable = false)
+    private Boolean publicRepository;
+    @Column(nullable = false)
+    private Boolean releases;
 
-    private boolean reviews;
-    private boolean comments;
-    private boolean branches;
-    private boolean commitsAll;
+    @Column(nullable = false)
+    private Boolean reviews;
+    @Column(nullable = false)
+    private Boolean comments;
+    @Column(nullable = false)
+    private Boolean branches;
+    @Column(nullable = false)
+    private Boolean commitsAll;
 
     private String label;
 }

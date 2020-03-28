@@ -1,9 +1,6 @@
 package jm.config.inititalizer;
 
-import jm.ConversationService;
-import jm.DirectMessageService;
-import jm.TypeSlashCommandService;
-import jm.UserService;
+import jm.*;
 import jm.api.dao.*;
 import jm.model.*;
 import jm.model.message.DirectMessage;
@@ -11,12 +8,15 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestDataInitializer {
+    @Value("${github}")
+    private String githubName;
 
     private static final Logger logger = LoggerFactory.getLogger(TestDataInitializer.class);
 
@@ -38,6 +38,8 @@ public class TestDataInitializer {
     private SlashCommandDao slashCommandDao;
     @Autowired
     private TypeSlashCommandService typeSlashCommandService;
+    @Autowired
+    private AppsService appsService;
 
     @Autowired
     private ConversationService conversationService;
@@ -90,6 +92,8 @@ public class TestDataInitializer {
 
         createConversations();
         createDirectMessages();
+
+        createApps();
     }
 
     private void createTypeSlashCommands() {
@@ -667,5 +671,28 @@ public class TestDataInitializer {
 
         conversationService.createConversation(conversation4);
         this.conversations.add(conversation4);
+    }
+
+    private void createApps() {
+        App app = new App();
+        app.setName(githubName);
+        app.setClientId("Iv1.8eb89d3832f0ff75");
+        app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
+        app.setWorkspace(workspaceDAO.getById(1L));
+        appsService.createApp(app);
+
+        app = new App();
+        app.setName(githubName);
+        app.setClientId("Iv1.8eb89d3832f0ff75");
+        app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
+        app.setWorkspace(workspaceDAO.getById(2L));
+        appsService.createApp(app);
+
+        app = new App();
+        app.setName(githubName);
+        app.setClientId("Iv1.8eb89d3832f0ff75");
+        app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
+        app.setWorkspace(workspaceDAO.getById(3L));
+        appsService.createApp(app);
     }
 }

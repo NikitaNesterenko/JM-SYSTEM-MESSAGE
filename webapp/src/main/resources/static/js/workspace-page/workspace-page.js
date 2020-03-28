@@ -204,7 +204,7 @@ $("#github-button").click(
         // if (!(current_wks.googleClientId) || !(current_wks.googleClientSecret)) {
         //     $("#addGoogleCalendarIdSecretModal").modal('toggle')
         // } else {
-        location.href = "/application/github/github";
+        location.href = "/application/github";
         //         return false;
         //     }
     }

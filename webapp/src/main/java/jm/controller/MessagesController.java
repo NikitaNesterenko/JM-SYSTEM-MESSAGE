@@ -51,6 +51,7 @@ public class MessagesController {
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto) {
         try {
+            // !!! id канала
             if (messageDto.getChannelId() == 1L && messageDto.getContent().substring(0,1).equals("/")) {
                 messageDto = githubService.secondStart(messageDto);
             }
