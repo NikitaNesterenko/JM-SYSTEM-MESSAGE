@@ -1,6 +1,7 @@
 package jm.controller;
 
 import jm.GithubService;
+import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ public class GithubController {
         if (workspace == null) {
             return  new RedirectView("/chooseWorkspace");
         }
-        // можно сделать проверку, хотя зачем?
         return new RedirectView("https://github.com/apps/jm-system-message");
     }
 
@@ -37,21 +37,9 @@ public class GithubController {
 
     @PostMapping("/payload")
     public void subscribeToEvents(@RequestBody String s) {
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println("--->");
-        System.out.println(s);
-        MessageDTO message = githubService.subscribeToEvents(s);
+        DirectMessageDTO message = githubService.subscribeToEvents(s);
         if (message != null) {
-            messagesController.messageCreation(message);
+            messagesController.directMessageCreation(message);
         }
     }
 

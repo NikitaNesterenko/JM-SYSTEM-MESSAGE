@@ -52,7 +52,8 @@ public class MessagesController {
     public void messageCreation(MessageDTO messageDto) {
         try {
             // !!! id канала
-            if (messageDto.getChannelId() == 1L && messageDto.getContent().substring(0,1).equals("/")) {
+            Long сhannelId = 1L;
+            if (messageDto.getChannelId() == сhannelId && messageDto.getContent().substring(0,1).equals("/")) {
                 messageDto = githubService.secondStart(messageDto);
             }
         } catch (NullPointerException e) {

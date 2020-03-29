@@ -5,7 +5,9 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jm.api.dao.*;
+import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
+import jm.dto.ThreadMessageDTO;
 import jm.model.*;
 import org.kohsuke.github.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -628,84 +631,21 @@ public class GithubServiceImpl implements GithubService {
         return message;
     }
 
-//    @Override
-//    public App loadGithubApp(Long workspaceId) {
-//        return appsDAO.getAppByWorkspaceIdAndAppName(workspaceId, githubName);
-//    }
-//
-//    @Override
-//    public String getClientAccessToken(Long workspace) {
-//        return loadGithubApp(workspace).getToken();
-//    }
-
-//    @Override
-//    public GitHub getGithubByAccessToken(Workspace workspace) {
-//        if (!workspace.equals(null)) {
-//            String accessToken = getClientAccessToken(workspace);
-//            GitHub githubAuthAsInst = null;
-//            try {
-//                githubAuthAsInst = new GitHubBuilder().withAppInstallationToken(accessToken).build();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return githubAuthAsInst;
-//        }
-//        return null;
-//    }
-
     @Override
-    public MessageDTO subscribeToEvents(String s) {
-//        JSONObject json = null;
-//        try {
-//            json = new JSONObject(s);
-//        } catch (JSONException e) {
-//            return null;
-//        }
-//        Long repository = null;
-//        String login = null;
-//        try {
-//            json.getString("pusher");
-//            repository = new JSONObject(json.getString("repository")).getLong("id");
-//            login = new JSONObject(new JSONObject(json.getString("repository")).getString("owner")).getString("login");
-//        } catch (JSONException e) {
-//            return null;
-//        }
-//
-//        GithubEvent githubEvent = null;
-//        if ((githubEvent = ghEventRepo.findGithubEventByGhLogin(login)) != null) {
-//            if (githubEvent.getAllRepository() == true) {
-//                Set<Long> set;
-//                if ((set = githubEvent.getRepositoryUnsubscribe()) != null) {
-//                    for (Long rep : set) {
-//                        if (rep == repository) {
-//                            return null;
-//                        }
-//                    }
-//                }
-//                return createMessage();
-//            } else {
-//                Set<Long> set;
-//                if ((set = githubEvent.getRepository()) != null) {
-//                    for (Long rep : set) {
-//                        if (rep == repository) {
-//                            return createMessage();
-//                        }
-//                    }
-//                }
-//                return null;
-//            }
-//        }
-        return null;
+    public DirectMessageDTO subscribeToEvents(String s) {
+
+        MessageDTO messageDTO = new DirectMessageDTO();
+        messageDTO.setUserId(2L);
+        messageDTO.setContent("asd");
+        messageDTO.setIsDeleted(false);
+        messageDTO.setIsUpdated(false);
+        messageDTO.setWorkspaceId(1);
+        messageDTO.setUserName("Степан");
+        messageDTO.setDateCreate(new Timestamp(System.currentTimeMillis()));
+
+        DirectMessageDTO messageDTO2 = new DirectMessageDTO(messageDTO);
+        messageDTO2.setConversationId(1L);
+
+        return messageDTO2;
     }
-//    private MessageDTO createMessage() {
-//        MessageDTO message = new MessageDTO();
-//        message.setUserId(1L);
-//        message.setContent("сообщение");
-//        message.setIsDeleted(false);
-//        message.setIsUpdated(false);
-//        message.setChannelId(1L);
-//        message.setWorkspaceId(1L);
-//        message.setUserName("John");
-//        return message;
-//    }
 }
