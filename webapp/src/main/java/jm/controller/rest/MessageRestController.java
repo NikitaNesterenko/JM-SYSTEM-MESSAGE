@@ -9,6 +9,7 @@ import jm.ChannelService;
 import jm.MessageService;
 import jm.UserService;
 import jm.dto.MessageDTO;
+import jm.dto.UserDTO;
 import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
