@@ -181,4 +181,9 @@ public class MessageServiceImpl implements MessageService {
     public Optional<String> getMessageContentById (@NonNull Long id) {
         return messageDAO.getMessageContentById(id);
     }
+
+    @Override
+    public LocalDateTime getDateCreateById(Long id) {
+        return messageDAO.getDateCreateById(id);
+    };
 }

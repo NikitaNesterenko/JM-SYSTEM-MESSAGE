@@ -50,4 +50,6 @@ public interface MessageDAO {
 
     Optional<String> getMessageContentById (Long id);
 
+    LocalDateTime getDateCreateById(Long id);
+
 }
