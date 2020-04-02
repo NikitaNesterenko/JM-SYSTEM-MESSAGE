@@ -41,7 +41,9 @@ public class ThreadChannelRestController {
     }
 
     @PostMapping("/create")
-    @Operation(summary = "Create thread channel",
+    @Operation(
+            operationId = "createThreadChannel",
+            summary = "Create thread channel",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -62,7 +64,9 @@ public class ThreadChannelRestController {
     }
 
     @PostMapping("/messages/create")
-    @Operation(summary = "Create thread channel message",
+    @Operation(
+            operationId = "createThreadChannelMessage",
+            summary = "Create thread channel message",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -78,7 +82,9 @@ public class ThreadChannelRestController {
     }
 
     @GetMapping("/{message_id}")
-    @Operation(summary = "Get thread channel by message id",
+    @Operation(
+            operationId = "findThreadChannelByChannelMessageId",
+            summary = "Get thread channel by message id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -96,7 +102,9 @@ public class ThreadChannelRestController {
     }
 
     @GetMapping("/messages/{id}")
-    @Operation(summary = "Get thread channel message by thread channel id",
+    @Operation(
+            operationId = "findAllThreadChannelMessagesByThreadChannelId",
+            summary = "Get thread channel message by thread channel id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(

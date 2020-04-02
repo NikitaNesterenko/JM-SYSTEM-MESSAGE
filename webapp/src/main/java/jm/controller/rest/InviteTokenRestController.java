@@ -40,7 +40,9 @@ public class InviteTokenRestController {
     }
 
     @PostMapping("/create")
-    @Operation(summary = "Send invite token",
+    @Operation(
+            operationId = "invites",
+            summary = "Send invite token",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -78,6 +80,19 @@ public class InviteTokenRestController {
     }
 
     @GetMapping("/{hash}")
+    @Operation(
+            operationId = "inviteJoin",
+            summary = "Join by invite token",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ModelAndView.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: joined by invitation"),
+                    @ApiResponse(responseCode = "401", description = "Sorry: your invite token is invalid") // need to review
+            })
     public ModelAndView inviteJoin(@PathVariable String hash) {
         InviteToken inviteToken = inviteTokenService.getByHash(hash);
         ModelAndView modelAndView = new ModelAndView();
@@ -92,7 +107,9 @@ public class InviteTokenRestController {
 
 
     @PostMapping
-    @Operation(summary = "Check user",
+    @Operation(
+            operationId = "checkUser",
+            summary = "Check user",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -109,7 +126,7 @@ public class InviteTokenRestController {
             logger.info("invite token удален");
             return ResponseEntity.ok(true);
         } else {
-            logger.warn("Не удалось удалить олучить пользователя");
+            logger.warn("Не удалось удалить получить пользователя");
             return ResponseEntity.notFound().build();
         }
     }

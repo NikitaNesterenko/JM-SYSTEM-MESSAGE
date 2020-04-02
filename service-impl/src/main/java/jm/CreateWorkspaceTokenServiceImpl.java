@@ -4,6 +4,7 @@ package jm;
 import jm.api.dao.CreateWorkspaceTokenDAO;
 import jm.model.CreateWorkspaceToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,6 +31,7 @@ public class CreateWorkspaceTokenServiceImpl implements CreateWorkspaceTokenServ
         createWorkspaceTokenDAO.persist(createWorkspaceToken);
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteCreateWorkspaceTokenById(Long id) {
         createWorkspaceTokenDAO.deleteById(id);

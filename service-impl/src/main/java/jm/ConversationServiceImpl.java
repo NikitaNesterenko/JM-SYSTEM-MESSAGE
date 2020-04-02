@@ -7,6 +7,7 @@ import jm.dto.ConversationDTO;
 import jm.model.Conversation;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -37,6 +38,7 @@ public class ConversationServiceImpl implements ConversationService {
         conversationDAO.persist(conversation);
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteConversation(Long conversationID, Long userID) {
         conversationDAO.deleteById(conversationID, userID);

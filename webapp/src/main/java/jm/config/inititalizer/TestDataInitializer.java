@@ -264,12 +264,44 @@ public class TestDataInitializer {
         this.roles.add(ownerRole);
     }
 
-    private void createUsers() {
-        Set<Role> userRoleSet = this.roles.stream()
-                .filter(role -> "ROLE_USER".equals(role.getAuthority())).collect(Collectors.toSet());
+    private void createLinkRoles() {
+        Role userRole = roleDAO.getRoleByRolename("ROLE_USER");
+        Role ownerRole = roleDAO.getRoleByRolename("ROLE_OWNER");
 
-        Set<Role> ownerRoleSet = this.roles.stream()
-                .filter(role -> "ROLE_OWNER".equals(role.getAuthority())).collect(Collectors.toSet());
+        for (User user : this.users) {
+            for (Workspace workspace : this.workspaces) {
+                if (workspace.getUsers().contains(user)) {
+                    if (user.getId().equals(workspace.getUser().getId())) {
+                        createWorkspaceUserRole(workspace, user, ownerRole);
+                    } else {
+                        createWorkspaceUserRole(workspace, user, userRole);
+                    }
+                }
+            }
+        }
+    }
+
+    private void createWorkspaceUserRole(Workspace workspace, User user, Role role) {
+        WorkspaceUserRole workspaceUserRole = new WorkspaceUserRole();
+        workspaceUserRole.setWorkspace(workspace);
+        workspaceUserRole.setUser(user);
+        workspaceUserRole.setRole(role);
+        if (!workspaceUserRoleDAO.getAll().contains(workspaceUserRole)){
+            workspaceUserRoleDAO.persist(workspaceUserRole);
+        }
+    }
+
+
+    private void createUsers() {
+        Role user = roleDAO.getRoleByRolename("ROLE_USER");
+        Role owner = roleDAO.getRoleByRolename("ROLE_OWNER");
+
+        Set<Role> userRoleSet = new HashSet<>();
+        userRoleSet.add(user);
+
+        Set<Role> ownerRoleSet = new HashSet<>();
+        ownerRoleSet.add(owner);
+        ownerRoleSet.add(user);
 
         User userJohn = new User();
 
@@ -293,7 +325,7 @@ public class TestDataInitializer {
         userStepan.setEmail(UserData.STEPAN.email);
         userStepan.setPassword(UserData.STEPAN.password);
         userStepan.setDisplayName(UserData.STEPAN.name + " " + UserData.STEPAN.lastName);
-        userStepan.setRoles(userRoleSet);
+        userStepan.setRoles(ownerRoleSet);
         userStepan.setOnline(0);
 
         userService.createUser(userStepan);
@@ -393,73 +425,6 @@ public class TestDataInitializer {
 
     }
 
-    private void createMessages() {
-        List<User> userList = new ArrayList<>(this.users);
-        List<Channel> channels = new ArrayList<>(this.channels);
-        List<Bot> bots = new ArrayList<>(this.bots);
-
-        Message message1 = new Message();
-        message1.setChannelId(channels.get(0).getId());
-        message1.setUser(userList.get(0));
-        message1.setContent("Hello from " + userList.get(0).getDisplayName());
-        message1.setDateCreate(LocalDateTime.now());
-        message1.setWorkspaceId(1L);
-
-        messageDAO.persist(message1);
-        this.messages.add(message1);
-
-        Message message2 = new Message();
-        message2.setChannelId(channels.get(1).getId());
-        message2.setUser(userList.get(1));
-        message2.setContent("Hello from " + userList.get(1).getDisplayName());
-        message2.setDateCreate(LocalDateTime.now());
-        message2.setWorkspaceId(2L);
-
-        messageDAO.persist(message2);
-        this.messages.add(message2);
-
-        Message message3 = new Message();
-        message3.setChannelId(channels.get(2).getId());
-        message3.setUser(userList.get(2));
-        message3.setContent("Hello from " + userList.get(2).getDisplayName());
-        message3.setDateCreate(LocalDateTime.now());
-        message3.setWorkspaceId(1L);
-
-        messageDAO.persist(message3);
-        this.messages.add(message3);
-
-        Message message4 = new Message();
-        message4.setChannelId(channels.get(1).getId());
-        message4.setBot(bots.get(0));
-        message4.setContent("Hello from BOT!");
-        message4.setDateCreate(LocalDateTime.now());
-        message4.setWorkspaceId(2L);
-
-        messageDAO.persist(message4);
-        this.messages.add(message4);
-
-        Message message5 = new Message();
-        message5.setChannelId(channels.get(2).getId());
-        message5.setUser(userList.get(1));
-        message5.setContent("@John hello everybody!");
-        message5.setDateCreate(LocalDateTime.now());
-        message5.setRecipientUsers(Collections.singleton(userService.getUserById(1L)));
-        message5.setWorkspaceId(1L);
-
-        messageDAO.persist(message5);
-        this.messages.add(message5);
-
-        Message message6 = new Message();
-        message6.setChannelId(channels.get(2).getId());
-        message6.setUser(userList.get(4));
-        message6.setContent("Hello everybody!");
-        message6.setDateCreate(LocalDateTime.now());
-        message6.setWorkspaceId(1L);
-
-        messageDAO.persist(message6);
-        this.messages.add(message6);
-    }
-
     private void createWorkspaces() {
         User userJohn = this.users.stream()
                 .filter(user -> UserData.JOHN.name.equals(user.getUsername()))
@@ -501,23 +466,92 @@ public class TestDataInitializer {
         this.workspaces.add(workspace3);
     }
 
-    private void createBots() {
-        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
-        zoom.getWorkspaces().add(workspaceDAO.getById(1L));
+    private void createMessages() {
+        List<User> userList = new ArrayList<>(this.users);
+        List<Channel> channels = new ArrayList<>(this.channels);
+        List<Bot> bots = new ArrayList<>(this.bots);
 
+        Message message1 = new Message();
+        message1.setChannelId(channels.get(0).getId());
+        message1.setUser(userList.get(0));
+        message1.setContent("Hello from " + userList.get(0).getDisplayName());
+        message1.setDateCreate(LocalDateTime.now());
+        message1.setWorkspace(workspaceDAO.getById(1L));
+
+        messageDAO.persist(message1);
+        this.messages.add(message1);
+
+        Message message2 = new Message();
+        message2.setChannelId(channels.get(1).getId());
+        message2.setUser(userList.get(1));
+        message2.setContent("Hello from " + userList.get(1).getDisplayName());
+        message2.setDateCreate(LocalDateTime.now());
+        message2.setWorkspace(workspaceDAO.getById(1L));
+
+        messageDAO.persist(message2);
+        this.messages.add(message2);
+
+        Message message3 = new Message();
+        message3.setChannelId(channels.get(2).getId());
+        message3.setUser(userList.get(2));
+        message3.setContent("Hello from " + userList.get(2).getDisplayName());
+        message3.setDateCreate(LocalDateTime.now());
+        message3.setWorkspace(workspaceDAO.getById(1L));
+
+        messageDAO.persist(message3);
+        this.messages.add(message3);
+
+        Message message4 = new Message();
+        message4.setChannelId(channels.get(1).getId());
+        message4.setBot(bots.get(0));
+        message4.setContent("Hello from BOT!");
+        message4.setDateCreate(LocalDateTime.now());
+        message4.setWorkspace(workspaceDAO.getById(2L));
+
+        messageDAO.persist(message4);
+        this.messages.add(message4);
+
+        Message message5 = new Message();
+        message5.setChannelId(channels.get(2).getId());
+        message5.setUser(userList.get(1));
+        message5.setContent("@John hello everybody!");
+        message5.setDateCreate(LocalDateTime.now());
+        message5.setRecipientUsers(Collections.singleton(userService.getUserById(1L)));
+        message5.setWorkspace(workspaceDAO.getById(2L));
+
+        messageDAO.persist(message5);
+        this.messages.add(message5);
+
+        Message message6 = new Message();
+        message6.setChannelId(channels.get(2).getId());
+        message6.setUser(userList.get(4));
+        message6.setContent("Hello everybody!");
+        message6.setDateCreate(LocalDateTime.now());
+        message6.setWorkspace(workspaceDAO.getById(1L));
+
+        messageDAO.persist(message6);
+        this.messages.add(message6);
+    }
+
+    private void createBots() {
+        Set<Workspace> workspaces = Collections.singleton(workspaceDAO.getById(1L));
+        Set<Channel> channels = Collections.singleton(channelDAO.getById(1L));
+
+        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
+        zoom.setWorkspaces(workspaces);
 
         Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now(), true);
-        slackBot.getWorkspaces().add(workspaceDAO.getById(1L));
+        slackBot.setWorkspaces(workspaces);
         sc.forEach(command -> {
             slackBot.getCommands().add(command);
         });
 
         Bot customBot = new Bot("custom_bot_1", "CustomBot", LocalDateTime.now(), false);
-        customBot.getWorkspaces().add(workspaceDAO.getById(1L));
+        customBot.setWorkspaces(workspaces);
         // токен указал вручную для удобства тестирования,
         // генерация токена: UUID.randomUUID().toString()
         customBot.setToken("3ccc9bb5-c5d1-4df9-a37d-a2e24321e1eb");
-        customBot.getChannels().add(channelDAO.getChannelByName("general"));
+        customBot.setChannels(channels);
         SlashCommand sendMsgCommand = slashCommandDao.getByName("send-to-channel");
         customBot.getCommands().add(sendMsgCommand);
 
@@ -538,43 +572,6 @@ public class TestDataInitializer {
 
     }
 
-    private void createLinkRoles() {
-        Role userRole = null;
-        for (Role role : this.roles) {
-            if ("ROLE_USER".equals(role.getAuthority())) {
-                userRole = role;
-            }
-        }
-        Role ownerRole = null;
-        for (Role role : this.roles) {
-            if ("ROLE_OWNER".equals(role.getAuthority())) {
-                ownerRole = role;
-            }
-        }
-
-        for (User user : this.users) {
-            for (Workspace workspace : this.workspaces) {
-                if (workspace.getUsers().contains(user)) {
-                    if (user.getId().equals(workspace.getUser().getId())) {
-                        createWorkspaceUserRole(workspace, user, ownerRole);
-                    } else {
-                        createWorkspaceUserRole(workspace, user, userRole);
-                    }
-                }
-            }
-        }
-    }
-
-    private void createWorkspaceUserRole(Workspace workspace, User user, Role role) {
-        WorkspaceUserRole workspaceUserRole = new WorkspaceUserRole();
-        workspaceUserRole.setWorkspace(workspace);
-        workspaceUserRole.setUser(user);
-        workspaceUserRole.setRole(role);
-        if (!workspaceUserRoleDAO.getAll().contains(workspaceUserRole)){
-            workspaceUserRoleDAO.persist(workspaceUserRole);
-        }
-    }
-
     private void createDirectMessages() {
         User user1 = this.userService.getUserById(1L);
         User user2 = this.userService.getUserById(2L);
@@ -591,7 +588,7 @@ public class TestDataInitializer {
         dm1.setUser(user1);
         dm1.setContent("Direct message #1");
         dm1.setDateCreate(LocalDateTime.now());
-        dm1.setWorkspaceId(1L);
+        dm1.setWorkspace(workspaceDAO.getById(1L));
         this.directMessageService.saveDirectMessage(dm1);
         this.directMessages.add(dm1);
 
@@ -600,7 +597,7 @@ public class TestDataInitializer {
         dm2.setUser(user2);
         dm2.setContent("Direct message #2");
         dm2.setDateCreate(LocalDateTime.now());
-        dm2.setWorkspaceId(1L);
+        dm2.setWorkspace(workspaceDAO.getById(1L));
         this.directMessageService.saveDirectMessage(dm2);
         this.directMessages.add(dm2);
 
@@ -609,7 +606,7 @@ public class TestDataInitializer {
         dm3.setUser(user1);
         dm3.setContent("Direct message #3");
         dm3.setDateCreate(LocalDateTime.now());
-        dm3.setWorkspaceId(1L);
+        dm3.setWorkspace(workspaceDAO.getById(1L));
         this.directMessageService.saveDirectMessage(dm3);
         this.directMessages.add(dm3);
 
@@ -618,6 +615,7 @@ public class TestDataInitializer {
         dm4.setUser(user2);
         dm4.setContent("Direct message #4");
         dm4.setDateCreate(LocalDateTime.now());
+        dm3.setWorkspace(workspaceDAO.getById(1L));
         this.directMessageService.saveDirectMessage(dm4);
         this.directMessages.add(dm4);
     }

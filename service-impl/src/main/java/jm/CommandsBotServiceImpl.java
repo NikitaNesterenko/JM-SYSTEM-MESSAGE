@@ -321,7 +321,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         dm.setContent(message);
         dm.setIsDeleted(false);
         dm.setRecipientUsers(new HashSet<>());
-        dm.setWorkspaceId(workspace.getId());
+        dm.setWorkspace(workspace);
         directMessageService.saveDirectMessage(dm);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -452,7 +452,7 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         newMessage.setContent(reportMsg);
         newMessage.setChannelId(channelId);
         newMessage.setRecipientUsers(new HashSet<>());
-        newMessage.setWorkspaceId(channelService.getWorkspaceIdByChannelId(channelId));
+        newMessage.setWorkspace(channelService.getWorkspaceByChannelId(channelId));
         if (saveToBase) {
             messageService.createMessage(newMessage);
         }

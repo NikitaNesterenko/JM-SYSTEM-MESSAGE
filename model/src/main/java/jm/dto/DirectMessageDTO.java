@@ -18,7 +18,7 @@ public class DirectMessageDTO extends MessageDTO {
     public DirectMessageDTO(DirectMessage directMessage) {
         super(directMessage);
         this.conversationId = directMessage.getConversation().getId();
-        this.starredByWhom = directMessage.getStarredByWhom();
+        //this.starredByWhom = directMessage.getStarredByWhom(); удалить если не используется
     }
     public DirectMessageDTO(MessageDTO messageDTO) {
         super(messageDTO);

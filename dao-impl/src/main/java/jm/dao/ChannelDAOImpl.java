@@ -3,9 +3,8 @@ package jm.dao;
 import jm.api.dao.ChannelDAO;
 import jm.dto.ChannelDTO;
 import jm.model.Channel;
+import jm.model.Workspace;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
-import jm.model.User;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,19 +164,29 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId) {
-        String query = "SELECT ch.id, ch.name, ch.is_private, ch.archived " +
-                               "FROM channels ch " +
-                               "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
-                               "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
-                               "LEFT JOIN users u ON chu.user_id = u.id " +
-                               "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
-                               "GROUP BY ch.id";
-
-        return entityManager.createNativeQuery(query, "ChannelDTOMapping")
-                       .setParameter("workspace_id", workspaceId)
-                       .setParameter("user_id", userId)
-                       .getResultList();
+    public List<ChannelDTO> getChannelByWorkspaceAndUser(Long workspaceId, Long userId) {
+        return (List<ChannelDTO>) entityManager.
+                createNativeQuery("SELECT " +
+                        "ch.id  AS \"id\", " +
+                        "ch.name AS \"name\", " +
+                        "ch.workspace_id AS \"workspaceId\", " +
+                        "ch.owner_id AS \"ownerId\", " +
+                        "ch.is_private AS \"isPrivate\", " +
+                        "ch.created_date \"createdDate\", " +
+                        "ch.topic AS \"topic\", " +
+                        "ch.archived AS \"isArchived\", " +
+                        "ch.is_app AS \"isApp\" " +
+                        "FROM channels ch " +
+                        "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
+                        "LEFT JOIN workspaces ws ON ch.workspace_id = ws.id " +
+                        "LEFT JOIN users u ON chu.user_id = u.id " +
+                        "WHERE (ws.id = :workspace_id AND u.id = :user_id) " +
+                        "GROUP BY ch.id")
+                .setParameter("workspace_id", workspaceId)
+                .setParameter("user_id", userId)
+                .unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
+                .getResultList();
     }
 
     private List<Number> getAllChannelId () {
@@ -212,7 +221,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
-                    .createNativeQuery("SELECT wc.channel_id FROM workspaces_channels wc where wc.workspace_id=:id")
+                    .createNativeQuery("SELECT id FROM channels where workspace_id = :id")
                     .setParameter("id", id)
                     .getResultList();
 
@@ -286,15 +295,14 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
         String topic = (String) entityManager.createNativeQuery("select ch.topic from channels ch where ch.id=?")
                 .setParameter(1, id)
                 .getSingleResult();
-        return topic == null ? "\"Add a topic\"" : topic;
+        return topic == null ? "\"Enter channel topic here.\"" : topic;
     }
 
     @Override
-    public Long getWorkspaceIdByChannelId(Long channelId) {
-        BigInteger id = (BigInteger) entityManager.createNativeQuery("select ch.workspace_id from channels ch where ch.id=?")
-                .setParameter(1, channelId)
+    public Workspace getWorkspaceByChannelId(Long channelId) {
+        return (Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE channel_id = :id")
+                .setParameter("id", channelId)
                 .getSingleResult();
-        return id.longValue();
     }
 
     @Override

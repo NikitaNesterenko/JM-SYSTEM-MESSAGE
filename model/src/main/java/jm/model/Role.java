@@ -2,10 +2,13 @@ package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +23,16 @@ public class Role implements GrantedAuthority {
     @Column(name = "role", nullable = false)
     private String role;
 
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
+
+    public Role(String role) {
+        this.role = role;
+    }
+
     public Role(Long id, String role) {
         this.id = id;
         this.role = role;
@@ -29,9 +42,5 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return this.role;
-    }
-
-    public Role(String role) {
-        this.role = role;
     }
 }

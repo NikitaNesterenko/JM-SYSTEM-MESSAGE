@@ -1,7 +1,9 @@
 package jm.controller;
 
 import jm.*;
-import jm.dto.*;
+import jm.dto.DirectMessageDTO;
+import jm.dto.MessageDTO;
+import jm.dto.ThreadMessageDTO;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
@@ -12,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +51,7 @@ public class MessagesController {
     }
 
     @MessageMapping("/message")
-    public void messageCreation(MessageDTO messageDto) {
+    public void messageCreation(MessageDTO messageDto, Principal principal) {
         try {
             // !!! id канала
             Long сhannelId = 1L;
@@ -59,6 +61,8 @@ public class MessagesController {
         } catch (NullPointerException e) {
         }
 
+
+
         Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());
@@ -66,12 +70,12 @@ public class MessagesController {
             logger.info("Созданное сообщение: {}", message);
         } else {
             Message existingMessage = messageService.getMessageById(message.getId());
-            String editedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+            String editedUserName = principal.getName();
             boolean editingAllowed = existingMessage != null && editedUserName.equals(existingMessage.getUser().getLogin());
             if (editingAllowed) {
                 logger.info("Существующее сообщение: {}", existingMessage);
                 message.setDateCreate(existingMessage.getDateCreate());
-                messageService.updateMessage(message);
+                messageService.updateMessage(message); // todo: вот тут и кроется проблема с несохранением WS_id
                 logger.info("Обновленное сообщение: {}", message);
             } else {
                 logger.warn("Сообщение не найдено");

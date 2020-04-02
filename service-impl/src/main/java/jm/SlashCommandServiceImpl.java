@@ -9,6 +9,7 @@ import jm.model.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
         botDAO.merge(bot);
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteSlashCommand(Long id) {
         SlashCommand slashCommand = slashCommandDao.getById(id);

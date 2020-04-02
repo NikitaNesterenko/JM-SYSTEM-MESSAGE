@@ -9,6 +9,7 @@ import jm.model.Message;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import lombok.NonNull;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -65,6 +66,7 @@ public class DirectMessageServiceImpl implements DirectMessageService {
         return this.directMessageDAO.merge(directMessage);
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteDirectMessage(Long id) {
         this.directMessageDAO.deleteById(id);

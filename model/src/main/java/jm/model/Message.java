@@ -1,9 +1,9 @@
 package jm.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-
 import jm.dto.MessageDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -27,11 +27,11 @@ public class Message {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "bot_id")
     private Bot bot;
 
@@ -57,8 +57,27 @@ public class Message {
     @Column(name = "channel_id")
     private Long channelId;
 
-    @Column(name = "workspace_id")
-    private Long workspaceId;
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "workspace_id")
+    private Workspace workspace;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_starred_messages",
+            joinColumns = @JoinColumn(name = "starred_messages_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> starredMessagesOwners;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_unread_messages",
+            joinColumns = @JoinColumn(name = "unread_message_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> unreadMessagesRecipients;
 
     // from ChannelMessage
     @ManyToOne
@@ -70,6 +89,7 @@ public class Message {
     @JoinTable(name = "messages_recipient_users",
             joinColumns = @JoinColumn(name = "direct_message_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "recipient_user_id", referencedColumnName = "id"))
+    @ToString.Exclude
     private Set<User> recipientUsers;
 
     // from ThreadChannelMessage and ThreadDirectMessage
@@ -129,8 +149,6 @@ public class Message {
         this.voiceMessage = messageDto.getVoiceMessage();
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
-
-
     }
 
     public Message ( Message message) {
@@ -143,7 +161,7 @@ public class Message {
         this.voiceMessage = message.voiceMessage;
         this.isDeleted = message.isDeleted;
         this.channelId = message.channelId;
-        this.workspaceId = message.workspaceId;
+        this.workspace = message.workspace;
         this.sharedMessage = message.sharedMessage;
         this.recipientUsers = message.recipientUsers;
         this.parentMessage = message.parentMessage;

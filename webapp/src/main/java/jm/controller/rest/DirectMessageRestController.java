@@ -9,6 +9,7 @@ import jm.DirectMessageService;
 import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
+import jm.dto.*;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
@@ -39,7 +40,9 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/{id}")
-    @Operation(summary = "Get direct message by id",
+    @Operation(
+            operationId = "getDirectMessageById",
+            summary = "Get direct message by id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -56,7 +59,9 @@ public class DirectMessageRestController {
     }
 
     @PostMapping(value = "/create")
-    @Operation(summary = "Create direct message",
+    @Operation(
+            operationId = "createDirectMessage",
+            summary = "Create direct message",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -79,7 +84,9 @@ public class DirectMessageRestController {
     }
 
     @PutMapping(value = "/update")
-    @Operation(summary = "Update message",
+    @Operation(
+            operationId = "updateMessage",
+            summary = "Update message",
             responses = {
                     @ApiResponse(
                             content = @Content(
@@ -106,7 +113,9 @@ public class DirectMessageRestController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    @Operation(summary = "Delete message",
+    @Operation(
+            operationId = "deleteMessage",
+            summary = "Delete message",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: direct message deleted")
             })
@@ -117,7 +126,9 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/conversation/{id}")
-    @Operation(summary = "Get messages by conversation id",
+    @Operation(
+            operationId = "getMessagesByConversationId",
+            summary = "Get messages by conversation id",
             responses = {
                     @ApiResponse(responseCode = "200",
                             content = @Content(
@@ -135,13 +146,37 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
-    public ResponseEntity<?> removeChannelMessageFromUnreadForUser(@PathVariable Long convId, @PathVariable Long usrId) {
+    @Operation(
+            operationId = "removeChannelMessageFromUnreadForUser",
+            summary = "Remove direct messages by conversation id from unread",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDTO.class)
+                            ),
+                            description = "OK: removed direct message by conversation id"
+                    )
+            })
+    public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long convId, @PathVariable Long usrId) {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
         return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
+    @Operation(
+            operationId = "getUnreadMessageInChannelForUser",
+            summary = "Get unread messages in channel",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(type = "array", implementation = DirectMessage.class) // need to review
+                            ),
+                            description = "OK: Got unread messages"
+                    )
+            })
     public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long convId, @PathVariable Long usrId) {
         // TODO: ПЕРЕДЕЛАТЬ получать в дао DirectMessageDto где ConversationId = convId и UserId = usrId
 
@@ -156,6 +191,18 @@ public class DirectMessageRestController {
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
+    @Operation(
+            operationId = "addMessageToUnreadForUser",
+            summary = "Add direct message to unread",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = DirectMessage.class) // need to review
+                            ),
+                            description = "OK: Got direct message to unread"
+                    )
+            })
     public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
         User user = userService.getUserById(usrId);
         user.getUnreadDirectMessages().add(directMessageService.getDirectMessageById(msgId));

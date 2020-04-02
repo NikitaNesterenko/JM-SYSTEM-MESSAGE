@@ -3,6 +3,7 @@ package jm;
 import jm.api.dao.TypeSlashCommandDAO;
 import jm.model.TypeSlashCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class TypeSlashCommandServiceImpl implements TypeSlashCommandService {
         typeSlashCommandDAO.persist(type);
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
     public void deleteTypeSlashCommand(Long id) {
         typeSlashCommandDAO.deleteById(id);
