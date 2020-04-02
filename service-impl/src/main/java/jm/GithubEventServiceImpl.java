@@ -1,11 +1,10 @@
 package jm;
 
+import com.google.common.collect.Lists;
 import jm.api.dao.GithubEventRepository;
 import jm.api.dao.UserDAO;
 import jm.api.dao.WorkspaceDAO;
 import jm.model.GithubEvent;
-import jm.model.User;
-import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +18,11 @@ public class GithubEventServiceImpl implements GithubEventService {
     private UserDAO userDAO;
     @Autowired
     private WorkspaceDAO workspaceDAO;
+
+    @Override
+    public List<GithubEvent> getAllGhEvent() {
+        return Lists.newArrayList(githubEventRepo.findAll());
+    }
 
     @Override
     public void updateGhEvent(GithubEvent ghEvent) {

@@ -1,13 +1,14 @@
 package jm;
 
 import com.google.common.io.Files;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jm.api.dao.*;
 import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
-import jm.dto.ThreadMessageDTO;
 import jm.model.*;
 import org.kohsuke.github.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -517,7 +518,7 @@ public class GithubServiceImpl implements GithubService {
             set.add("branches");
         }
         if (ghEvent.getCommitsAll()) {
-            set.add("commitsAl");
+            set.add("commits:all");
         }
         return getMessageFeature(message, name, set);
     }
@@ -632,20 +633,124 @@ public class GithubServiceImpl implements GithubService {
     }
 
     @Override
-    public DirectMessageDTO subscribeToEvents(String s) {
+    public DirectMessageDTO subscribeToEvents(String str) {
+        String event = null;
+        String[] arrayEvent = null;
+        try {
+            event = JsonPath.read(str, "$.pusher.name");
+            event = "push";
+            arrayEvent = createArrayEventPush(str);
+        } catch (PathNotFoundException e) {
+        }
+        try {
+            event = JsonPath.read(str, "$.issue.url");
+            event = "issues";
+            arrayEvent = createArrayEventIssues(str);
+        } catch (PathNotFoundException e) {
+        }
 
+        if (event == null || arrayEvent == null) {
+            return null;
+        }
+
+        List<GithubEvent> listGhEvent = ghEventService.getAllGhEvent();
+        for (GithubEvent ghEvent: listGhEvent) {
+            String subscribe = ghEvent.getSubscribe();
+            if (arrayEvent[1].equals(subscribe)
+                    || (arrayEvent[1] + "/" + arrayEvent[0]).equals(subscribe)) {
+                switch (event) {
+                    case "push":
+                        return createMessageEventPush(ghEvent, arrayEvent);
+                    case "issues":
+                        return createMessageEventIssues(ghEvent, arrayEvent);
+                }
+            }
+        }
+        return null;
+    }
+    private String[] createArrayEventPush(String str) {
+        String[] arrayEventPush = new String[6];
+        try {
+            arrayEventPush[0] = JsonPath.read(str, "$.repository.name");
+            arrayEventPush[1] = JsonPath.read(str, "$.repository.owner.login");
+            arrayEventPush[3] = JsonPath.read(str, "$.after");
+            arrayEventPush[5] = JsonPath.read(str, "$.repository.default_branch");
+
+            arrayEventPush[2] = JsonPath.read(str, "$.ref");
+            arrayEventPush[2] = arrayEventPush[2].split("/")[2];
+
+            List<Map> list = JsonPath.read(str, "$.commits");
+            Map<String, String> map = list.get(0);
+            arrayEventPush[4] = map.get("message");
+        } catch (PathNotFoundException e) {
+            return null;
+        }
+        return arrayEventPush;
+    }
+    private DirectMessageDTO createMessageEventPush(GithubEvent ghEvent, String[] arrayEvent) {
+        if (arrayEvent[2].equals(arrayEvent[5]) || ghEvent.getCommitsAll()) {
+            return makeMessageEvent(ghEvent, getMessageEventPush(arrayEvent));
+        }
+        return null;
+    }
+    private String[] createArrayEventIssues(String str) {
+        String[] arrayEventIssues = new String[3];
+        try {
+            arrayEventIssues[0] = JsonPath.read(str, "$.repository.name");
+            arrayEventIssues[1] = JsonPath.read(str, "$.repository.owner.login");
+
+            arrayEventIssues[2] = JsonPath.read(str, "$.action");
+            if (!arrayEventIssues[2].equals("opened") && !arrayEventIssues[2].equals("closed")) {
+                return null;
+            }
+        } catch (PathNotFoundException e) {
+            return null;
+        }
+        return arrayEventIssues;
+    }
+    private DirectMessageDTO createMessageEventIssues(GithubEvent ghEvent, String[] arrayEvent) {
+        return makeMessageEvent(ghEvent, getMessageEventIssues(arrayEvent));
+    }
+    private DirectMessageDTO makeMessageEvent(GithubEvent ghEvent, String message) {
         MessageDTO messageDTO = new DirectMessageDTO();
-        messageDTO.setUserId(2L);
-        messageDTO.setContent("asd");
+
+        Long userId = ghEvent.getUser().getId();
+        String userLogin = ghEvent.getUser().getUsername();
+        Long workspaceId = ghEvent.getWorkspace().getId();
+        Long conversationId = 1L;
+
+        messageDTO.setUserId(userId);
+        messageDTO.setUserName(userLogin);
+        messageDTO.setWorkspaceId(workspaceId);
+
         messageDTO.setIsDeleted(false);
         messageDTO.setIsUpdated(false);
-        messageDTO.setWorkspaceId(1);
-        messageDTO.setUserName("Степан");
         messageDTO.setDateCreate(new Timestamp(System.currentTimeMillis()));
 
+        messageDTO.setContent(message);
+
         DirectMessageDTO messageDTO2 = new DirectMessageDTO(messageDTO);
-        messageDTO2.setConversationId(1L);
+        messageDTO2.setConversationId(conversationId);
 
         return messageDTO2;
+    }
+    private String getMessageEventPush(String[] arrayEventPush) {
+        return "Push " + arrayEventPush[1] + "/" + arrayEventPush[0] + "<br>"
+                + arrayEventPush[2] + "<br>"
+                + arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4];
+//        GitHubAPP
+//        arrayEventPush[1]
+//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
+//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
+//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
+    }
+    private String getMessageEventIssues(String[] arrayEventIssues) {
+        return "Issue " + arrayEventIssues[1] + "/" + arrayEventIssues[0] + "<br>"
+                + arrayEventIssues[2];
+//        GitHubAPP
+//        arrayEventPush[1]
+//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
+//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
+//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
     }
 }

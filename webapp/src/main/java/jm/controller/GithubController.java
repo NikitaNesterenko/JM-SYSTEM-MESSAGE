@@ -1,8 +1,8 @@
 package jm.controller;
 
+import com.jayway.jsonpath.JsonPath;
 import jm.GithubService;
 import jm.dto.DirectMessageDTO;
-import jm.dto.MessageDTO;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/application/github")
