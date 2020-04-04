@@ -166,4 +166,8 @@ public class Message {
         this.recipientUsers = message.recipientUsers;
         this.parentMessage = message.parentMessage;
     }
+
+    public Message(Long id) {
+        this.id = id;
+    }
 }
