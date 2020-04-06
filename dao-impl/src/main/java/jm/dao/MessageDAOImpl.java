@@ -345,12 +345,9 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     @Override
     public LocalDateTime getDateCreateById(Long id) {
-        if (id == null) {
-            return null;
-        }
-        return entityManager
-                .createQuery("select m.dateCreate from Message m where m.id = :id", Message.class)
-                .setParameter("id", id).getSingleResult().getDateCreate();
+        return Optional.ofNullable((LocalDateTime) entityManager
+                .createNativeQuery("select m.date_create from messages m where m.id = " + id).getSingleResult())
+                .orElse(null);
     }
 
     @Override
