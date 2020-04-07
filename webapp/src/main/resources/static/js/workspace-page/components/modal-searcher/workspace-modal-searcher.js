@@ -42,7 +42,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 available_users = values[1];
                 available_messages = values[2];
                 available_messages = values[2];
-
                 showSearchResult(available_channels, available_users, available_messages);
             })
         });

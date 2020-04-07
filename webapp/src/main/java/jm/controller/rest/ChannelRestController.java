@@ -171,6 +171,7 @@ public class ChannelRestController {
                                                       .getAttribute("WorkspaceID");
 
             channel.setUser(owner);
+            channel.setIsApp(false);
             channel.setWorkspace(workspace);
             channel.setUsers(Sets.newSet(owner));
             try {
