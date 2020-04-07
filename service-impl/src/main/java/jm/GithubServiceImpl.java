@@ -85,7 +85,9 @@ public class GithubServiceImpl implements GithubService {
     }
     private void createClientAccessToken(Long workspace, Long installationId) {
         try {
-            String token = createTokenByInstallationId(installationId);
+            String token = createGhApp().getInstallationById(installationId)
+                    .createToken(createMapPermissions()).create()
+                    .getToken();
             appsService.saveAppToken(workspace, githubName, token);
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,25 +95,21 @@ public class GithubServiceImpl implements GithubService {
             e2.printStackTrace();
         }
     }
-    private String createTokenByInstallationId(Long installationId) throws Exception {
-        Map<String, GHPermissionType> permissionsMap = new HashMap<>();
-        permissionsMap.put("checks", GHPermissionType.READ);
-        permissionsMap.put("contents", GHPermissionType.READ);
-        permissionsMap.put("deployments", GHPermissionType.WRITE);
-        permissionsMap.put("issues", GHPermissionType.WRITE);
-        permissionsMap.put("metadata", GHPermissionType.READ);
-        permissionsMap.put("pull_requests", GHPermissionType.WRITE);
-        permissionsMap.put("repository_projects", GHPermissionType.READ);
-        permissionsMap.put("statuses", GHPermissionType.READ);
-
-        return getGhApp().getInstallationById(installationId)
-                .createToken(permissionsMap).create()
-                .getToken();
-    }
-    // вынесен в отдельный метод, т.к. используется в 2-х местах
-    private GHApp getGhApp() throws Exception {
+    private GHApp createGhApp() throws Exception {
         return new GitHubBuilder().withJwtToken(createJWT("54655", 60000)).build()
                 .getApp();
+    }
+    private Map<String, GHPermissionType> createMapPermissions() {
+        Map<String, GHPermissionType> mapPermissions = new HashMap<>();
+        mapPermissions.put("checks", GHPermissionType.READ);
+        mapPermissions.put("contents", GHPermissionType.READ);
+        mapPermissions.put("deployments", GHPermissionType.WRITE);
+        mapPermissions.put("issues", GHPermissionType.WRITE);
+        mapPermissions.put("metadata", GHPermissionType.READ);
+        mapPermissions.put("pull_requests", GHPermissionType.WRITE);
+        mapPermissions.put("repository_projects", GHPermissionType.READ);
+        mapPermissions.put("statuses", GHPermissionType.READ);
+        return mapPermissions;
     }
     // https://github-api.kohsuke.org/githubappjwtauth.html
     private static String createJWT(String githubAppId, long ttlMillis) throws Exception {
@@ -140,241 +138,268 @@ public class GithubServiceImpl implements GithubService {
     @Override
     public MessageDTO secondStart(MessageDTO message) {
         if (!message.getContent().split(" ")[0].equals("/github")) {
-            return getMessageErrorOfCommand(message);
+//            Slackbot
+//            message.getContent() + " is not a valid command. In Slack, all messages that start with the "/" character are interpreted as commands."
+//            If you are trying to send a message and not run a command, try preceding the "/" with an empty space.
+            message.setContent("недопустимая команда");
+            return message;
         }
         while (message.getContent().contains("  ")) {
             message.setContent(message.getContent().replace("  ", " "));
         }
+        return createMessage(message);
+    }
+    private MessageDTO createMessage(MessageDTO message) {
         String[] arrayMessage = message.getContent().split(" ");
         switch (arrayMessage.length) {
             case (1):
-                return getMessageGhHelp(message);
+                return createMessageGhHelp(message);
             case (2):
                 if (!arrayMessage[1].equals("settings")) {
-                    return getMessageGhHelp(message);
+                    return createMessageGhHelp(message);
                 }
-                // ???
+                // событие /github settings
                 message.setContent("настройки");
                 return message;
             default:
-                return makeMessage(message, arrayMessage);
+                switch (arrayMessage[1]) {
+                    case ("subscribe"):
+                    case ("unsubscribe"):
+                        return createMessageSubscribeUnsubscribe(message, arrayMessage);
+                    default:
+                        return createMessageGhHelp(message);
+                }
+                // друие события: close, reopen, open, deploy, subscribe и unsubscribe +label:"your label
         }
     }
-    private MessageDTO makeMessage(MessageDTO message, String[] arrayMessage) {
-        switch (arrayMessage[1]) {
-            case ("subscribe"):
-            case ("unsubscribe"):
-                return makeMessageSubscribeUnsubscribe(message, arrayMessage);
-            default:
-                return getMessageGhHelp(message);
-        }
-        // друие события: close, reopen, open, deploy, subscribe и unsubscribe +label:"your label
-    }
-    private MessageDTO makeMessageSubscribeUnsubscribe(MessageDTO message, String[] arrayMessage) {
+    private MessageDTO createMessageSubscribeUnsubscribe(MessageDTO message, String[] arrayMessage) {
         if (arrayMessage[2].split("/").length > 2) {
-            return getMessageGhHelp(message);
+            return createMessageGhHelp(message);
         }
         if (arrayMessage[2].equals("list")) {
-            return makeMessageSubscribeUnsubscribeList(message, arrayMessage);
+            return createMessageSubscribeUnsubscribeList(message, arrayMessage);
         }
-        return makeMessageSubscribeUnsubscribeUserOrRepository(message, arrayMessage);
+        return createMessageSubscribeUnsubscribeAccountOrRepository(message, arrayMessage);
     }
-    private MessageDTO makeMessageSubscribeUnsubscribeList(MessageDTO message, String[] arrayMessage) {
+    private MessageDTO createMessageSubscribeUnsubscribeList(MessageDTO message, String[] arrayMessage) {
+        List<Set<String>> listSet;
         switch (arrayMessage.length) {
             case (3):
-                return makeSetUserOrRepositoryForMessage(message);
+                listSet = createListSetAccountOrRepository(message);
+                return createMessageSubscribeUnsubscribeList(message, listSet.get(0), listSet.get(1));
             case (4):
-                return makeSetFeatureForMessage(message, arrayMessage[3]);
+                listSet = createListSetFeature(message, arrayMessage[3]);
+                if (listSet == null) {
+                    return createMessageGhHelp(message);
+                }
+                return createMessageSubscribeUnsubscribeList(message, listSet.get(0), listSet.get(1));
             default:
-                return getMessageGhHelp(message);
+                return createMessageGhHelp(message);
         }
     }
-    private MessageDTO makeSetUserOrRepositoryForMessage(MessageDTO message) {
-        List<GithubEvent> ghEventList = ghEventService.getGhEventByWorkspaceAndUser(
+    private List<Set<String>> createListSetAccountOrRepository(MessageDTO message) {
+        List<GithubEvent> listGhEventList = ghEventService.getGhEventByWorkspaceAndUser(
                 message.getWorkspaceId(), message.getUserId());
-        Set<String> accountsSet = new HashSet<>();
-        Set<String> repositoriesSet = new HashSet<>();
-        for (GithubEvent ghEvent : ghEventList) {
+        Set<String> setAccount = new HashSet<>();
+        Set<String> setRepository = new HashSet<>();
+        for (GithubEvent ghEvent : listGhEventList) {
             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                accountsSet.add(ghEvent.getSubscribe());
+                setAccount.add(ghEvent.getSubscribe());
             } else {
-                repositoriesSet.add(ghEvent.getSubscribe());
+                setRepository.add(ghEvent.getSubscribe());
             }
         }
-        return getMessageSubscribeUnsubscribeList(message, repositoriesSet, accountsSet);
+        List<Set<String>> listSet = new ArrayList<>();
+        listSet.add(setAccount);
+        listSet.add(setRepository);
+        return listSet;
     }
-    private MessageDTO makeSetFeatureForMessage(MessageDTO message, String s) {
+    private List<Set<String>> createListSetFeature(MessageDTO message, String s) {
         List<GithubEvent> ghEventList = ghEventService.getGhEventByWorkspaceAndUser(
                 message.getWorkspaceId(), message.getUserId());
         String[] m = s.split(",");
-        Set<String> accountsSet = new HashSet<>();
-        Set<String> repositoriesSet = new HashSet<>();
-        Set<String> accountsSet2 = new HashSet<>();
-        Set<String> repositoriesSet2 = new HashSet<>();
+        Set<String> setAccount = new HashSet<>();
+        Set<String> setRepository = new HashSet<>();
+        Set<String> setAccount2 = new HashSet<>();
+        Set<String> setRepository2 = new HashSet<>();
         for (int i = 0; i < m.length; i++) {
             switch (m[i]) {
                 case ("issues"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getIssues()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("pulls"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getPulls()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("statuses"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getStatuses()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("commits"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getCommits()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("deployments"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getDeployments()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("public"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getPublicRepository()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("releases"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getReleases()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("reviews"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getReviews()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("comments"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getComments()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("branches"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getBranches()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 case ("commits:all"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getCommitsAll()) {
                             if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                accountsSet2.add(ghEvent.getSubscribe());
+                                setAccount2.add(ghEvent.getSubscribe());
                             } else {
-                                repositoriesSet2.add(ghEvent.getSubscribe());
+                                setRepository2.add(ghEvent.getSubscribe());
                             }
                         }
                     }
-                    accountsSet = getSetFeature(accountsSet, accountsSet2);
-                    repositoriesSet = getSetFeature(repositoriesSet, repositoriesSet2);
+                    setAccount = addNewAccountOrRepository(setAccount, setAccount2);
+                    setRepository = addNewAccountOrRepository(setRepository, setRepository2);
                     break;
                 default:
-                    return getMessageGhHelp(message);
+                    return null;
             }
         }
-        return getMessageSubscribeUnsubscribeList(message, repositoriesSet, accountsSet);
+        List<Set<String>> listSet = new ArrayList<>();
+        listSet.add(setAccount);
+        listSet.add(setRepository);
+        return listSet;
     }
-    private Set<String> getSetFeature(Set<String> set1, Set<String> set2) {
+    private Set<String> addNewAccountOrRepository(Set<String> set1, Set<String> set2) {
         if (set1.size() == 0) {
             return set2;
         }
         set1.retainAll(set2);
         return set1;
     }
-    private MessageDTO makeMessageSubscribeUnsubscribeUserOrRepository(MessageDTO message, String[] arrayMessage) {
-        if (userOrRepositoryIsNotExist(arrayMessage[2])) {
+    private MessageDTO createMessageSubscribeUnsubscribeAccountOrRepository(MessageDTO message, String[] arrayMessage) {
+        if (accountOrRepositoryIsNotExist(arrayMessage[2])) {
             if (arrayMessage[2].indexOf("/") == -1) {
-                return getMessageErrorGhUser(message);
+//                Only visible to you
+//                GitHubAPP
+//                Either the app isn't installed on your repository or the repository does not exist. Install it to proceed.
+//                Note: You will need to ask the owner of the repository to install it for you. Give them this link.
+//                Install GitHub App (ссылка на приложение: https://github.com/apps/jm-system-message)
+                message.setContent("ошибка хранилища");
+                return message;
             }
-            return getMessageErrorRepository(message);
+//            Only visible to you
+//            GitHubAPP
+//            Either the app isn't installed on your repository or the repository does not exist. Install it to proceed.
+//            Install GitHub App (ссылка на приложение: https://github.com/apps/jm-system-message)
+            message.setContent("ошибка репозитория");
+            return message;
         }
         GithubEvent ghEvent = ghEventService.getGhEventByWorkspaceAndUserAndSubscribe(
                 message.getWorkspaceId(), message.getUserId(), arrayMessage[2]);
@@ -382,32 +407,32 @@ public class GithubServiceImpl implements GithubService {
             case ("subscribe"):
                 switch (arrayMessage.length) {
                     case (3):
-                        return makeMessageSubscribeUserOrRepository(message, ghEvent, arrayMessage[2]);
+                        return createMessageSubscribeAccountOrRepository(message, ghEvent, arrayMessage[2]);
                     case (4):
-                        return makeMessageasFeature(true, message, arrayMessage[3].split(","), ghEvent);
+                        return createMessageasFeature(true, message, arrayMessage[3].split(","), ghEvent);
                     default:
-                        return getMessageGhHelp(message);
+                        return createMessageGhHelp(message);
                 }
             case ("unsubscribe"):
                 switch (arrayMessage.length) {
                     case (3):
-                        return makeMessageUnsubscribeUserOrRepository(message, ghEvent);
+                        return createMessageUnsubscribeAccountOrRepository(message, ghEvent);
                     case (4):
-                        return makeMessageasFeature(false, message, arrayMessage[3].split(","), ghEvent);
+                        return createMessageasFeature(false, message, arrayMessage[3].split(","), ghEvent);
                     default:
-                        return getMessageGhHelp(message);
+                        return createMessageGhHelp(message);
                 }
             default:
-                return getMessageGhHelp(message);
+                return createMessageGhHelp(message);
         }
     }
-    private boolean userOrRepositoryIsNotExist(String ghLogin) {
+    private boolean accountOrRepositoryIsNotExist(String ghLogin) {
         try {
             if (ghLogin.indexOf("/") == -1) {
-                getGhApp().getInstallationByUser(ghLogin);
+                createGhApp().getInstallationByUser(ghLogin);
                 return false;
             }
-            getGhApp().getInstallationByRepository(ghLogin.split("/")[0], ghLogin.split("/")[1]);
+            createGhApp().getInstallationByRepository(ghLogin.split("/")[0], ghLogin.split("/")[1]);
             return false;
         } catch (IOException e) {
             return true;
@@ -415,9 +440,13 @@ public class GithubServiceImpl implements GithubService {
             return true;
         }
     }
-    private MessageDTO makeMessageSubscribeUserOrRepository(MessageDTO message, GithubEvent ghEvent, String userOrRepository) {
+    private MessageDTO createMessageSubscribeAccountOrRepository(MessageDTO message, GithubEvent ghEvent, String userOrRepository) {
         if (ghEvent != null) {
-            return getMessageErrorSubscribe(message);
+//            Only visible to you
+//            GitHubAPP
+//            "You're already subscribed to " + message.getContent().split(" ")/[2]
+            message.setContent("уже были подписаны");
+            return message;
         }
         ghEvent = new GithubEvent();
         ghEvent.setWorkspace(workspaceDAO.getById(message.getWorkspaceId()));
@@ -437,14 +466,19 @@ public class GithubServiceImpl implements GithubService {
         ghEventService.updateGhEvent(ghEvent);
         return message;
     }
-    private MessageDTO makeMessageUnsubscribeUserOrRepository(MessageDTO message, GithubEvent ghEvent) {
+    private MessageDTO createMessageUnsubscribeAccountOrRepository(MessageDTO message, GithubEvent ghEvent) {
         if (ghEvent == null) {
-            return getMessageErrorUnsubscribe(message);
+//            Only visible to you
+//            GitHubAPP
+//            "You're not currently subscribed to " + message.getContent().split(" ")/[2]
+//            "Use /github subscribe " + message.getContent().split(" ")/[2] + " to subscribe."
+            message.setContent("не подписаны");
+            return message;
         }
         ghEventService.deleteById(ghEvent.getId());
         return message;
     }
-    private MessageDTO makeMessageasFeature(boolean isSubscribe, MessageDTO message, String[] arrayFeature, GithubEvent ghEvent) {
+    private MessageDTO createMessageasFeature(boolean isSubscribe, MessageDTO message, String[] arrayFeature, GithubEvent ghEvent) {
         for (int i = 0; i < arrayFeature.length; i++) {
             switch (arrayFeature[i]) {
                 case ("issues"):
@@ -481,55 +515,58 @@ public class GithubServiceImpl implements GithubService {
                     ghEvent.setCommitsAll(isSubscribe);
                     break;
                 default:
-                    return getMessageErrorFeature(message, arrayFeature[i]);
+//                    Only visible to you
+//                    GitHubAPP
+//                    "Uh oh! " + feature + " is not a feature. Available features are:"
+//                    issues, pulls, deployments, statuses, public, commits, releases, comments, branches, reviews, required_labels
+                    message.setContent(arrayFeature[i] + "не feature");
+                    return message;
             }
         }
         ghEventService.updateGhEvent(ghEvent);
-        String name = ghEvent.getSubscribe();
-        Set<String> set = new HashSet();
+        String AccountOrRepository = ghEvent.getSubscribe();
+        Set<String> setFeature = new HashSet();
         if (ghEvent.getIssues()) {
-            set.add("issues");
+            setFeature.add("issues");
         }
         if (ghEvent.getPulls()) {
-            set.add("pulls");
+            setFeature.add("pulls");
         }
         if (ghEvent.getStatuses()) {
-            set.add("statuses");
+            setFeature.add("statuses");
         }
         if (ghEvent.getCommits()) {
-            set.add("commits");
+            setFeature.add("commits");
         }
         if (ghEvent.getDeployments()) {
-            set.add("deployments");
+            setFeature.add("deployments");
         }
         if (ghEvent.getPublicRepository()) {
-            set.add("public");
+            setFeature.add("public");
         }
         if (ghEvent.getReleases()) {
-            set.add("releases");
+            setFeature.add("releases");
         }
         if (ghEvent.getReviews()) {
-            set.add("reviews");
+            setFeature.add("reviews");
         }
         if (ghEvent.getComments()) {
-            set.add("comments");
+            setFeature.add("comments");
         }
         if (ghEvent.getBranches()) {
-            set.add("branches");
+            setFeature.add("branches");
         }
         if (ghEvent.getCommitsAll()) {
-            set.add("commits:all");
+            setFeature.add("commits:all");
         }
-        return getMessageFeature(message, name, set);
-    }
-    private MessageDTO getMessageErrorOfCommand(MessageDTO message) {
-//        Slackbot
-//        message.getContent() + " is not a valid command. In Slack, all messages that start with the "/" character are interpreted as commands."
-//        If you are trying to send a message and not run a command, try preceding the "/" with an empty space.
-        message.setContent("недопустимая команда");
+        message.setContent(AccountOrRepository + ":" + setFeature);
+//        GitHubAPP
+//        "This channel will get notifications from " + name + " for:"
+//        setFeature
+//        Learn More (ссылка)
         return message;
     }
-    private MessageDTO getMessageGhHelp(MessageDTO message) {
+    private MessageDTO createMessageGhHelp(MessageDTO message) {
 //        !!! 3 ссылки
 //        Only visible to you
 //        GitHubAPP
@@ -572,63 +609,15 @@ public class GithubServiceImpl implements GithubService {
         message.setContent("список команд гитхаба");
         return message;
     }
-    private MessageDTO getMessageErrorRepository(MessageDTO message) {
-//        Only visible to you
-//        GitHubAPP
-//        Either the app isn't installed on your repository or the repository does not exist. Install it to proceed.
-//        Install GitHub App (ссылка на приложение: https://github.com/apps/jm-system-message)
-        message.setContent("ошибка репозитория");
-        return message;
-    }
-    private MessageDTO getMessageErrorGhUser(MessageDTO message) {
-//        Only visible to you
-//        GitHubAPP
-//        Either the app isn't installed on your repository or the repository does not exist. Install it to proceed.
-//        Note: You will need to ask the owner of the repository to install it for you. Give them this link.
-//        Install GitHub App (ссылка на приложение: https://github.com/apps/jm-system-message)
-        message.setContent("ошибка хранилища");
-        return message;
-    }
-    private MessageDTO getMessageErrorSubscribe(MessageDTO message) {
-//        Only visible to you
-//        GitHubAPP
-//        "You're already subscribed to " + message.getContent().split(" ")/[2]
-        message.setContent("уже были подписаны");
-        return message;
-    }
-    private MessageDTO getMessageErrorUnsubscribe(MessageDTO message) {
-//        Only visible to you
-//        GitHubAPP
-//        "You're not currently subscribed to " + message.getContent().split(" ")/[2]
-//        "Use /github subscribe " + message.getContent().split(" ")/[2] + " to subscribe."
-        message.setContent("не подписаны");
-        return message;
-    }
-    private MessageDTO getMessageSubscribeUnsubscribeList(MessageDTO message,
-                                                          Set<String> repositoriesSet,
-                                                          Set<String> accountsSet) {
+    private MessageDTO createMessageSubscribeUnsubscribeList(MessageDTO message,
+                                                             Set<String> repositoriesSet,
+                                                             Set<String> accountsSet) {
         message.setContent(repositoriesSet + "<br>" + accountsSet);
 //        GitHubAPP
 //        Subscribed to the following repositories
 //        repositoriesList
 //        Subscribed to the following accounts
 //        accountsList
-        return message;
-    }
-    private MessageDTO getMessageErrorFeature(MessageDTO message, String feature) {
-        message.setContent(feature + "не feature");
-//        Only visible to you
-//        GitHubAPP
-//        "Uh oh! " + feature + " is not a feature. Available features are:"
-//        issues, pulls, deployments, statuses, public, commits, releases, comments, branches, reviews, required_labels
-        return message;
-    }
-    private MessageDTO getMessageFeature(MessageDTO message, String name, Set<String> setFeature) {
-        message.setContent(name + ":" + setFeature);
-//        GitHubAPP
-//        "This channel will get notifications from " + name + " for:"
-//        setFeature
-//        Learn More (ссылка)
         return message;
     }
 
@@ -689,7 +678,7 @@ public class GithubServiceImpl implements GithubService {
     }
     private DirectMessageDTO createMessageEventPush(GithubEvent ghEvent, String[] arrayEvent) {
         if (arrayEvent[2].equals(arrayEvent[5]) || ghEvent.getCommitsAll()) {
-            return makeMessageEvent(ghEvent, getMessageEventPush(arrayEvent));
+            return createMessageEvent(ghEvent, getMessageEventPush(arrayEvent));
         }
         return null;
     }
@@ -709,9 +698,9 @@ public class GithubServiceImpl implements GithubService {
         return arrayEventIssues;
     }
     private DirectMessageDTO createMessageEventIssues(GithubEvent ghEvent, String[] arrayEvent) {
-        return makeMessageEvent(ghEvent, getMessageEventIssues(arrayEvent));
+        return createMessageEvent(ghEvent, getMessageEventIssues(arrayEvent));
     }
-    private DirectMessageDTO makeMessageEvent(GithubEvent ghEvent, String message) {
+    private DirectMessageDTO createMessageEvent(GithubEvent ghEvent, String message) {
         MessageDTO messageDTO = new DirectMessageDTO();
 
         Long userId = ghEvent.getUser().getId();
@@ -735,22 +724,22 @@ public class GithubServiceImpl implements GithubService {
         return messageDTO2;
     }
     private String getMessageEventPush(String[] arrayEventPush) {
+//        GitHubAPP
+//        arrayEventPush[1]
+//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
+//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
+//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
         return "Push " + arrayEventPush[1] + "/" + arrayEventPush[0] + "<br>"
                 + arrayEventPush[2] + "<br>"
                 + arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4];
-//        GitHubAPP
-//        arrayEventPush[1]
-//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
-//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
-//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
     }
     private String getMessageEventIssues(String[] arrayEventIssues) {
-        return "Issue " + arrayEventIssues[1] + "/" + arrayEventIssues[0] + "<br>"
-                + arrayEventIssues[2];
 //        GitHubAPP
 //        arrayEventPush[1]
 //        1 new commit pushed to arrayEventPush[2] (2 ссылки)
 //        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
 //        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
+        return "Issue " + arrayEventIssues[1] + "/" + arrayEventIssues[0] + "<br>"
+                + arrayEventIssues[2];
     }
 }

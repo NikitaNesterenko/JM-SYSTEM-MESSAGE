@@ -12,6 +12,9 @@ import java.util.List;
 @Repository
 @Transactional
 public interface GithubEventRepository extends CrudRepository<GithubEvent, Long> {
-    List<GithubEvent> findGithubEventByWorkspaceAndUserAndSubscribe(Workspace workspace, User user, String subscribe);
+
+    List<GithubEvent> findGithubEventByWorkspaceAndUserAndSubscribe(Workspace workspace, User user,
+                                                                    String subscribe);
+
     List<GithubEvent> findGithubEventByWorkspaceAndUser(Workspace workspace, User user);
 }

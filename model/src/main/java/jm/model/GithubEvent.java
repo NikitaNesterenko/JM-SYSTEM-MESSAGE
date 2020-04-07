@@ -34,25 +34,34 @@ public class GithubEvent {
 
     @Column(nullable = false)
     private Boolean issues;
+
     @Column(nullable = false)
     private Boolean pulls;
+
     @Column(nullable = false)
     private Boolean statuses;
+
     @Column(nullable = false)
     private Boolean commits;
+
     @Column(nullable = false)
     private Boolean deployments;
+
     @Column(nullable = false)
     private Boolean publicRepository;
+
     @Column(nullable = false)
     private Boolean releases;
 
     @Column(nullable = false)
     private Boolean reviews;
+
     @Column(nullable = false)
     private Boolean comments;
+
     @Column(nullable = false)
     private Boolean branches;
+
     @Column(nullable = false)
     private Boolean commitsAll;
 

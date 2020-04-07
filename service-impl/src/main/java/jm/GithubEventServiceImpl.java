@@ -14,10 +14,13 @@ import java.util.List;
 public class GithubEventServiceImpl implements GithubEventService {
     @Autowired
     private GithubEventRepository githubEventRepo;
+
     @Autowired
     private UserDAO userDAO;
+
     @Autowired
     private WorkspaceDAO workspaceDAO;
+
 
     @Override
     public List<GithubEvent> getAllGhEvent() {
@@ -37,13 +40,12 @@ public class GithubEventServiceImpl implements GithubEventService {
     @Override
     public GithubEvent getGhEventByWorkspaceAndUserAndSubscribe(Long workspaceId, Long userId,
                                                                 String subscribe) {
-        try {
-            return githubEventRepo.findGithubEventByWorkspaceAndUserAndSubscribe(
-                        workspaceDAO.getById(userId), userDAO.getById(userId), subscribe)
-                    .get(0);
-        } catch (IndexOutOfBoundsException e) {
+        List<GithubEvent> githubEventList = githubEventRepo.findGithubEventByWorkspaceAndUserAndSubscribe(
+                workspaceDAO.getById(userId), userDAO.getById(userId), subscribe);
+        if (githubEventList.size() == 0) {
             return null;
         }
+        return githubEventList.get(0);
     }
 
     @Override
