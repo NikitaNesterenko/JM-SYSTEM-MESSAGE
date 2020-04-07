@@ -20,7 +20,7 @@ let available_users;
 let available_channels;
 let available_messages;
 
-window.addEventListener('load', function () {
+window.addEventListener('DOMContentLoaded', function () {
     const searcher_modal = document.getElementById("modalSearcher");
     const searcher_btn = document.getElementById("buttonSearcher");
     const searcher_sidebar_btn = document.getElementById("sidebar_search_button");
