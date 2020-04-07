@@ -16,7 +16,6 @@ public class App {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     @EqualsAndHashCode.Include
     private Long id;
 
@@ -25,15 +24,15 @@ public class App {
     private String name;
 
     @ToString.Exclude
-    @Column(name = "client_id")
     private String clientId;
 
     @ToString.Exclude
-    @Column(name = "client_secret")
     private String clientSecret;
 
     @ToString.Exclude
-    @Column(name = "token")
+    private Long AppId;
+
+    @ToString.Exclude
     @EqualsAndHashCode.Include
     private String token;
 

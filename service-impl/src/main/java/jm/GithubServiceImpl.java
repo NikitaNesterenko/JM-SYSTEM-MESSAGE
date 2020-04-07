@@ -32,12 +32,21 @@ public class GithubServiceImpl implements GithubService {
 
     @Autowired
     private AppsService appsService;
+
     @Autowired
     private GithubEventService ghEventService;
+
     @Autowired
     private UserDAO userDAO;
+
     @Autowired
     private WorkspaceDAO workspaceDAO;
+
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    BotService botService;
 
     private ChannelService channelService;
     private UserService userService;
@@ -51,12 +60,11 @@ public class GithubServiceImpl implements GithubService {
 
     @Override
     public void firstStartClientAuthorization(Long installationId, Workspace workspace, String login) {
-        createGithubBot();
-        createGithubChannel(workspace, login);
-
+        User githubBot = createGithubBot();
+        createGithubChannel(workspace, login, githubBot);
         createClientAccessToken(workspace.getId(), installationId);
     }
-    private void createGithubBot() {
+    private User createGithubBot() {
         User githubUser = userService.getUserByLogin(nameGithubBot);
         if (githubUser == null) {
             githubUser = new User("Github",
@@ -66,29 +74,36 @@ public class GithubServiceImpl implements GithubService {
                     "gh");
             userService.createUser(githubUser);
         }
+        return githubUser;
     }
-    private void createGithubChannel(Workspace workspace, String login) {
+    private void createGithubChannel(Workspace workspace, String login, User githubBot) {
         User user = userService.getUserByLogin(login);
         String nameChannel = nameChannelStartWth + user.getId();
-        Channel channelByName = channelService.getChannelByName(nameChannel);
-        if (channelByName == null) {
-            Channel channel = new Channel();
-            channel.setName(nameChannel);
-            channel.setUser(user);
-            channel.setArchived(false);
-            channel.setIsPrivate(true);
-            channel.setCreatedDate(LocalDateTime.now());
-            channel.setWorkspace(workspace);
-            channel.setIsApp(true);
-            channelService.createChannel(channel);
+        Channel channel = channelService.getChannelByName(nameChannel);
+        if (channel == null) {
+            Channel channelByName = new Channel();
+            channelByName.setName(nameChannel);
+            channelByName.setArchived(false);
+            // true
+            channelByName.setIsPrivate(false);
+            channelByName.setCreatedDate(LocalDateTime.now());
+            channelByName.setWorkspace(workspace);
+            // true
+            channelByName.setIsApp(false);
+            channelByName.setUser(user);
+            Set<User> botSet = new HashSet<>();
+            botSet.add(githubBot);
+            botSet.add(user);
+            channelByName.setUsers(botSet);
+            channelService.createChannel(channelByName);
         }
     }
-    private void createClientAccessToken(Long workspace, Long installationId) {
+    private void createClientAccessToken(Long workspaceId, Long installationId) {
         try {
             String token = createGhApp().getInstallationById(installationId)
-                    .createToken(createMapPermissions()).create()
+                    .createToken(createPermissionsMap()).create()
                     .getToken();
-            appsService.saveAppToken(workspace, githubName, token);
+            appsService.saveAppToken(workspaceId, githubName, token);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e2) {
@@ -96,22 +111,22 @@ public class GithubServiceImpl implements GithubService {
         }
     }
     private GHApp createGhApp() throws Exception {
-        return new GitHubBuilder().withJwtToken(createJWT("54655", 60000)).build()
+        Long githubAppId = appsService.getAppByWorkspaceIdAndAppName(1L, githubName).getAppId();
+        return new GitHubBuilder().withJwtToken(createJWT(githubAppId.toString(), 60000)).build()
                 .getApp();
     }
-    private Map<String, GHPermissionType> createMapPermissions() {
-        Map<String, GHPermissionType> mapPermissions = new HashMap<>();
-        mapPermissions.put("checks", GHPermissionType.READ);
-        mapPermissions.put("contents", GHPermissionType.READ);
-        mapPermissions.put("deployments", GHPermissionType.WRITE);
-        mapPermissions.put("issues", GHPermissionType.WRITE);
-        mapPermissions.put("metadata", GHPermissionType.READ);
-        mapPermissions.put("pull_requests", GHPermissionType.WRITE);
-        mapPermissions.put("repository_projects", GHPermissionType.READ);
-        mapPermissions.put("statuses", GHPermissionType.READ);
-        return mapPermissions;
+    private Map<String, GHPermissionType> createPermissionsMap() {
+        Map<String, GHPermissionType> permissionsMap = new HashMap<>();
+        permissionsMap.put("checks", GHPermissionType.READ);
+        permissionsMap.put("contents", GHPermissionType.READ);
+        permissionsMap.put("deployments", GHPermissionType.WRITE);
+        permissionsMap.put("issues", GHPermissionType.WRITE);
+        permissionsMap.put("metadata", GHPermissionType.READ);
+        permissionsMap.put("pull_requests", GHPermissionType.WRITE);
+        permissionsMap.put("repository_projects", GHPermissionType.READ);
+        permissionsMap.put("statuses", GHPermissionType.READ);
+        return permissionsMap;
     }
-    // https://github-api.kohsuke.org/githubappjwtauth.html
     private static String createJWT(String githubAppId, long ttlMillis) throws Exception {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS256;
         long nowMillis = System.currentTimeMillis();
@@ -137,11 +152,25 @@ public class GithubServiceImpl implements GithubService {
 
     @Override
     public MessageDTO secondStart(MessageDTO message) {
+        message.setUserId(userService.getUserByLogin("GH-bot").getId());
         if (!message.getContent().split(" ")[0].equals("/github")) {
+            // по имени!!!
+            Long botId = botService.getBotByNickName("slack_bot").getId();
+            message.setUserId(null);
+            message.setBotId(botId);
 //            Slackbot
-//            message.getContent() + " is not a valid command. In Slack, all messages that start with the "/" character are interpreted as commands."
-//            If you are trying to send a message and not run a command, try preceding the "/" with an empty space.
-            message.setContent("недопустимая команда");
+            message.setContent(message.getContent()
+                    + " is not a valid command. In Slack, all messages that start with the \"/\" character are interpreted as commands.<br>"
+                    + "If you are trying to send a message and not run a command, try preceding the \"/\" with an empty space.");
+
+
+//            Message message2 = new Message(message.getChannelId(),
+//                    githubBotId,
+//                    "недопустимая команда",
+//                    LocalDateTime.now());
+//            messageService.createMessage(message2);
+
+
             return message;
         }
         while (message.getContent().contains("  ")) {

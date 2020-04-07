@@ -57,7 +57,7 @@ public class Channel {
     private Set<User> users;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "channels_bots",
             joinColumns = @JoinColumn(name = "channel_id"),

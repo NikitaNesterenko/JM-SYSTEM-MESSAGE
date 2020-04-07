@@ -20,7 +20,7 @@ public interface BotDAO {
 
     Bot merge (Bot bot);
 
-    Bot getById (Long id);
+    Bot getById(Long id);
 
     Optional<BotDTO> getBotDTOById (Long id);
 
@@ -33,4 +33,6 @@ public interface BotDAO {
     Bot getBotByCommandId (Long id);
 
     Optional<Bot> findByToken(String token);
+
+    Optional<Bot> findByNickName(String nickName);
 }

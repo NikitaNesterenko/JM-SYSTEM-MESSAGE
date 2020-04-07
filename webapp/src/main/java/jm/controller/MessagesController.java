@@ -4,6 +4,7 @@ import jm.*;
 import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
 import jm.dto.ThreadMessageDTO;
+import jm.model.Channel;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
@@ -12,6 +13,7 @@ import jm.model.message.ThreadChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,9 @@ import java.util.List;
 
 @Controller
 public class MessagesController {
+    @Value("${github}")
+    private String githubName;
+
     @Autowired
     GithubService githubService;
 
@@ -52,16 +57,11 @@ public class MessagesController {
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto, Principal principal) {
-        try {
-            // !!! id канала
-            Long сhannelId = 1L;
-            if (messageDto.getChannelId() == сhannelId && messageDto.getContent().substring(0,1).equals("/")) {
-                messageDto = githubService.secondStart(messageDto);
-            }
-        } catch (NullPointerException e) {
+        String сhannelName = channelService.getChannelById(messageDto.getChannelId()).getName()
+                .split(" ")[0];
+        if (сhannelName.equals(githubName) && messageDto.getContent().substring(0,1).equals("/")) {
+            githubService.secondStart(messageDto);
         }
-
-
 
         Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {

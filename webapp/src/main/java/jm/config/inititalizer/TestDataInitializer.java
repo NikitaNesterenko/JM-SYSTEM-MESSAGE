@@ -540,7 +540,7 @@ public class TestDataInitializer {
         Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
         zoom.setWorkspaces(workspaces);
 
-        Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now(), true);
+        Bot slackBot = new Bot("slack_bot", "SlackBot", LocalDateTime.now(), true);
         slackBot.setWorkspaces(workspaces);
         sc.forEach(command -> {
             slackBot.getCommands().add(command);
@@ -676,6 +676,7 @@ public class TestDataInitializer {
         app.setName(githubName);
         app.setClientId("Iv1.8eb89d3832f0ff75");
         app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
+        app.setAppId(54655L);
         app.setWorkspace(workspaceDAO.getById(1L));
         appsService.createApp(app);
 
@@ -683,6 +684,7 @@ public class TestDataInitializer {
         app.setName(githubName);
         app.setClientId("Iv1.8eb89d3832f0ff75");
         app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
+        app.setAppId(54655L);
         app.setWorkspace(workspaceDAO.getById(2L));
         appsService.createApp(app);
 
@@ -690,6 +692,7 @@ public class TestDataInitializer {
         app.setName(githubName);
         app.setClientId("Iv1.8eb89d3832f0ff75");
         app.setClientSecret("f25dd66b91fc7ca9035ea364a9e3058c5c7398d2");
+        app.setAppId(54655L);
         app.setWorkspace(workspaceDAO.getById(3L));
         appsService.createApp(app);
     }

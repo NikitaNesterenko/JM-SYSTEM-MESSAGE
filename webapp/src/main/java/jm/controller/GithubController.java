@@ -16,6 +16,7 @@ import java.security.Principal;
 public class GithubController {
     @Autowired
     private GithubService githubService;
+
     @Autowired
     private MessagesController messagesController;
 
