@@ -12,7 +12,8 @@ public interface GithubEventService {
 
     void deleteById(Long ghEventId);
 
-    GithubEvent getGhEventByWorkspaceAndUserAndSubscribe(Long workspaceId, Long userId, String subscribe);
+    GithubEvent getGhEventByWorkspaceAndUserAndAccountOrRepository(Long workspaceId, Long userId,
+                                                                   String AccountOrRepository);
 
     List<GithubEvent> getGhEventByWorkspaceAndUser(Long workspaceId, Long userId);
 }

@@ -2,8 +2,9 @@ package jm;
 
 import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
-import jm.model.Message;
 import jm.model.Workspace;
+
+import java.util.List;
 
 public interface GithubService {
 
@@ -11,5 +12,5 @@ public interface GithubService {
 
     void secondStart(MessageDTO message);
 
-    DirectMessageDTO subscribeToEvents(String s);
+    List<DirectMessageDTO> getMessageSubscribeToEvents(String s);
 }

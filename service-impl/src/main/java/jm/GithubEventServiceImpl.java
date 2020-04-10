@@ -8,6 +8,7 @@ import jm.model.GithubEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,10 +39,11 @@ public class GithubEventServiceImpl implements GithubEventService {
     }
 
     @Override
-    public GithubEvent getGhEventByWorkspaceAndUserAndSubscribe(Long workspaceId, Long userId,
-                                                                String subscribe) {
-        List<GithubEvent> githubEventList = githubEventRepo.findGithubEventByWorkspaceAndUserAndSubscribe(
-                workspaceDAO.getById(userId), userDAO.getById(userId), subscribe);
+    public GithubEvent getGhEventByWorkspaceAndUserAndAccountOrRepository(Long workspaceId,
+                                                                          Long userId,
+                                                                          String AccountOrRepository) {
+        List<GithubEvent> githubEventList = githubEventRepo.findGithubEventByWorkspaceAndUserAndAccountRepository(
+                workspaceDAO.getById(userId), userDAO.getById(userId), AccountOrRepository);
         if (githubEventList.size() == 0) {
             return null;
         }

@@ -61,6 +61,12 @@ public class MessagesController {
                 .split(" ")[0];
         if (сhannelName.equals(githubName) && messageDto.getContent().substring(0,1).equals("/")) {
             githubService.secondStart(messageDto);
+            DirectMessageDTO messageList = githubService.getMessageSubscribeToEvents(json);
+            if (messageList != null) {
+                for (DirectMessageDTO message : messageList) {
+                    messagesController.directMessageCreation(message);
+                }
+            }
             return;
         }
 

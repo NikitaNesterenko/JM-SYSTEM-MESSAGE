@@ -2,6 +2,7 @@ package jm.controller;
 
 import jm.GithubService;
 import jm.dto.DirectMessageDTO;
+import jm.dto.MessageDTO;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/application/github")
@@ -36,10 +38,12 @@ public class GithubController {
     }
 
     @PostMapping("/payload")
-    public void subscribeToEvents(@RequestBody String subscribe) {
-        DirectMessageDTO message = githubService.subscribeToEvents(subscribe);
-        if (message != null) {
-            messagesController.directMessageCreation(message);
+    public void subscribeToEvents(@RequestBody String json) {
+        List<DirectMessageDTO> messageList = githubService.getMessageSubscribeToEvents(json);
+        if (messageList != null) {
+            for (DirectMessageDTO message : messageList) {
+                messagesController.directMessageCreation(message);
+            }
         }
     }
 

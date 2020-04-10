@@ -234,10 +234,10 @@ public class GithubServiceImpl implements GithubService {
         Set<String> accountSet = new TreeSet<>();
         Set<String> repositorySet = new TreeSet<>();
         for (GithubEvent ghEvent : listGhEventList) {
-            if (isAccount(ghEvent.getSubscribe())) {
-                accountSet.add(ghEvent.getSubscribe());
+            if (isAccount(ghEvent.getAccountRepository())) {
+                accountSet.add(ghEvent.getAccountRepository());
             } else {
-                repositorySet.add(ghEvent.getSubscribe());
+                repositorySet.add(ghEvent.getAccountRepository());
             }
         }
         StringBuilder accountString = new StringBuilder();
@@ -266,10 +266,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("issues"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getIssues()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -279,10 +279,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("pulls"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getPulls()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -292,10 +292,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("statuses"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getStatuses()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -305,10 +305,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("commits"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getCommits()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -318,10 +318,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("deployments"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getDeployments()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -331,10 +331,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("public"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getPublicRepository()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -344,10 +344,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("releases"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getReleases()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -357,10 +357,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("reviews"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getReviews()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -370,10 +370,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("comments"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getComments()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -383,10 +383,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("branches"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getBranches()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -396,10 +396,10 @@ public class GithubServiceImpl implements GithubService {
                 case ("commits:all"):
                     for (GithubEvent ghEvent : ghEventList) {
                         if (ghEvent.getCommitsAll()) {
-                            if (ghEvent.getSubscribe().indexOf("/") == -1) {
-                                setAccount.add(ghEvent.getSubscribe());
+                            if (ghEvent.getAccountRepository().indexOf("/") == -1) {
+                                setAccount.add(ghEvent.getAccountRepository());
                             } else {
-                                setRepository.add(ghEvent.getSubscribe());
+                                setRepository.add(ghEvent.getAccountRepository());
                             }
                         }
                     }
@@ -466,7 +466,7 @@ public class GithubServiceImpl implements GithubService {
             createMessageWithoutSavingGhBot(messageDto.getChannelId(), contentMessage);
             return;
         }
-        GithubEvent ghEvent = ghEventService.getGhEventByWorkspaceAndUserAndSubscribe(
+        GithubEvent ghEvent = ghEventService.getGhEventByWorkspaceAndUserAndAccountOrRepository(
                 messageDto.getWorkspaceId(), messageDto.getUserId(), messageDtoArrayOfWords[2]);
         switch (messageDtoArrayOfWords[1]) {
             case ("subscribe"):
@@ -566,7 +566,7 @@ public class GithubServiceImpl implements GithubService {
             createMessageNotCurrentlySubscribeAndSave(messageDto);
         }
         ghEventService.deleteById(ghEvent.getId());
-        createMessageUnsubscribeAccountOrRepositoryAndSave(messageDto, ghEvent.getSubscribe());
+        createMessageUnsubscribeAccountOrRepositoryAndSave(messageDto, ghEvent.getAccountRepository());
     }
     private void createMessageasFeature(boolean isSubscribe, MessageDTO messageDto,
                                         String[] arrayFeature, GithubEvent ghEvent) {
@@ -706,10 +706,10 @@ public class GithubServiceImpl implements GithubService {
                 || ghEvent.getPublicRepository() || ghEvent.getReleases() || ghEvent.getReviews()
                 || ghEvent.getComments() || ghEvent.getBranches() || ghEvent.getCommitsAll())) {
             ghEventService.deleteById(ghEvent.getId());
-            createMessageUnsubscribeAccountOrRepositoryAndSave(messageDto, ghEvent.getSubscribe());
+            createMessageUnsubscribeAccountOrRepositoryAndSave(messageDto, ghEvent.getAccountRepository());
             return;
         }
-        String contentMessage = "This channel will get notifications from <a href='https://github.com/" + ghEvent.getSubscribe() + "' target='_blank'>" + ghEvent.getSubscribe() + "</a> for:<br>"
+        String contentMessage = "This channel will get notifications from <a href='https://github.com/" + ghEvent.getAccountRepository() + "' target='_blank'>" + ghEvent.getAccountRepository() + "</a> for:<br>"
                 + feature
                 + "<br><a href='https://github.com/integrations/slack#configuration' target='_blank'>Learn More</a>";
         createMessageAndSave(messageDto, contentMessage);
@@ -810,83 +810,103 @@ public class GithubServiceImpl implements GithubService {
     }
 
     @Override
-    public DirectMessageDTO subscribeToEvents(String str) {
+    public List<DirectMessageDTO> getMessageSubscribeToEvents(String json) {
         String event = null;
-        String[] arrayEvent = null;
+        String[] eventArray = null;
         try {
-            event = JsonPath.read(str, "$.pusher.name");
+            event = JsonPath.read(json, "$.pusher.name");
             event = "push";
-            arrayEvent = createArrayEventPush(str);
+            eventArray = createEventPushArray(json);
         } catch (PathNotFoundException e) {
         }
         try {
-            event = JsonPath.read(str, "$.issue.url");
+            event = JsonPath.read(json, "$.issue.url");
             event = "issues";
-            arrayEvent = createArrayEventIssues(str);
+            eventArray = createEventIssuesArray(json);
         } catch (PathNotFoundException e) {
         }
 
-        if (event == null || arrayEvent == null) {
+        if (event == null || eventArray == null) {
             return null;
         }
-
+        List<DirectMessageDTO> messageDtoList = new ArrayList<>();
         List<GithubEvent> listGhEvent = ghEventService.getAllGhEvent();
         for (GithubEvent ghEvent: listGhEvent) {
-            String subscribe = ghEvent.getSubscribe();
-            if (arrayEvent[1].equals(subscribe)
-                    || (arrayEvent[1] + "/" + arrayEvent[0]).equals(subscribe)) {
+            String accountOrRepository = ghEvent.getAccountRepository();
+            if (eventArray[1].equals(accountOrRepository)
+                    || (eventArray[1] + "/" + eventArray[0]).equals(accountOrRepository)) {
                 switch (event) {
                     case "push":
-                        return createMessageEventPush(ghEvent, arrayEvent);
+                        messageDtoList.add(createMessageForEventPush(ghEvent, eventArray));
                     case "issues":
-                        return createMessageEventIssues(ghEvent, arrayEvent);
+                        messageDtoList.add(createMessageForEventIssues(ghEvent, eventArray));
                 }
             }
         }
-        return null;
+        return messageDtoList;
     }
-    private String[] createArrayEventPush(String str) {
-        String[] arrayEventPush = new String[6];
+    private String[] createEventPushArray(String json) {
+        String[] eventPushArray = new String[6];
         try {
-            arrayEventPush[0] = JsonPath.read(str, "$.repository.name");
-            arrayEventPush[1] = JsonPath.read(str, "$.repository.owner.login");
-            arrayEventPush[3] = JsonPath.read(str, "$.after");
-            arrayEventPush[5] = JsonPath.read(str, "$.repository.default_branch");
+            eventPushArray[0] = JsonPath.read(json, "$.repository.name");
+            eventPushArray[1] = JsonPath.read(json, "$.repository.owner.login");
+            eventPushArray[3] = JsonPath.read(json, "$.after");
+            eventPushArray[5] = JsonPath.read(json, "$.repository.default_branch");
 
-            arrayEventPush[2] = JsonPath.read(str, "$.ref");
-            arrayEventPush[2] = arrayEventPush[2].split("/")[2];
+            eventPushArray[2] = JsonPath.read(json, "$.ref");
+            eventPushArray[2] = eventPushArray[2].split("/")[2];
 
-            List<Map> list = JsonPath.read(str, "$.commits");
-            Map<String, String> map = list.get(0);
-            arrayEventPush[4] = map.get("message");
+            List<Map> jsonMapList = JsonPath.read(json, "$.commits");
+            Map<String, String> jsonMap = jsonMapList.get(0);
+            eventPushArray[4] = jsonMap.get("message");
         } catch (PathNotFoundException e) {
             return null;
         }
-        return arrayEventPush;
+        return eventPushArray;
     }
-    private DirectMessageDTO createMessageEventPush(GithubEvent ghEvent, String[] arrayEvent) {
-        if (arrayEvent[2].equals(arrayEvent[5]) || ghEvent.getCommitsAll()) {
-            return createMessageEvent(ghEvent, getMessageEventPush(arrayEvent));
-        }
-        return null;
-    }
-    private String[] createArrayEventIssues(String str) {
-        String[] arrayEventIssues = new String[3];
+    private String[] createEventIssuesArray(String json) {
+        String[] eventIssuesArray = new String[3];
         try {
-            arrayEventIssues[0] = JsonPath.read(str, "$.repository.name");
-            arrayEventIssues[1] = JsonPath.read(str, "$.repository.owner.login");
+            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
 
-            arrayEventIssues[2] = JsonPath.read(str, "$.action");
-            if (!arrayEventIssues[2].equals("opened") && !arrayEventIssues[2].equals("closed")) {
+            eventIssuesArray[2] = JsonPath.read(json, "$.action");
+            if (!eventIssuesArray[2].equals("opened") && !eventIssuesArray[2].equals("closed")) {
                 return null;
             }
         } catch (PathNotFoundException e) {
             return null;
         }
-        return arrayEventIssues;
+        return eventIssuesArray;
     }
-    private DirectMessageDTO createMessageEventIssues(GithubEvent ghEvent, String[] arrayEvent) {
-        return createMessageEvent(ghEvent, getMessageEventIssues(arrayEvent));
+    private DirectMessageDTO createMessageForEventPush(GithubEvent ghEvent, String[] eventPushArray) {
+        if (eventPushArray[2].equals(eventPushArray[5]) || ghEvent.getCommitsAll()) {
+
+//        GitHubAPP
+//        arrayEventPush[1]
+//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
+//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
+//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
+
+            String message = "Push " + eventPushArray[1] + "/" + eventPushArray[0] + "<br>"
+                    + eventPushArray[2] + "<br>"
+                    + eventPushArray[3].substring(0, 8) + " - " + eventPushArray[4];
+            return createMessageEvent(ghEvent, message);
+        }
+        return null;
+    }
+    private DirectMessageDTO createMessageForEventIssues(GithubEvent ghEvent, String[] eventIssuesArray) {
+
+//        GitHubAPP
+//        arrayEventPush[1]
+//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
+//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
+//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
+        String message = "Issue " + eventIssuesArray[1] + "/" + eventIssuesArray[0] + "<br>"
+                + eventIssuesArray[2];
+
+
+        return createMessageEvent(ghEvent, message);
     }
     private DirectMessageDTO createMessageEvent(GithubEvent ghEvent, String message) {
         MessageDTO messageDTO = new DirectMessageDTO();
@@ -910,24 +930,5 @@ public class GithubServiceImpl implements GithubService {
         messageDTO2.setConversationId(conversationId);
 
         return messageDTO2;
-    }
-    private String getMessageEventPush(String[] arrayEventPush) {
-//        GitHubAPP
-//        arrayEventPush[1]
-//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
-//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
-//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
-        return "Push " + arrayEventPush[1] + "/" + arrayEventPush[0] + "<br>"
-                + arrayEventPush[2] + "<br>"
-                + arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4];
-    }
-    private String getMessageEventIssues(String[] arrayEventIssues) {
-//        GitHubAPP
-//        arrayEventPush[1]
-//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
-//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
-//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
-        return "Issue " + arrayEventIssues[1] + "/" + arrayEventIssues[0] + "<br>"
-                + arrayEventIssues[2];
     }
 }

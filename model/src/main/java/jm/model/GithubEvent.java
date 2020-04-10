@@ -27,7 +27,7 @@ public class GithubEvent {
     private Workspace workspace;
 
     @Column(nullable = false)
-    private String subscribe;
+    private String accountRepository;
 
     @Column(nullable = false)
     private Boolean issues;
