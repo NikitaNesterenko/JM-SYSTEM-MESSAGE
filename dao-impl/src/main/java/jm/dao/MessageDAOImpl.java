@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -125,16 +126,14 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     @Override
     public Optional<Long> getMessageIdByContent (String content) {
-        Long id = null;
-
+        BigInteger idBigInteger = null;
         try {
-            id = (Long) entityManager.createNativeQuery("SELECT id FROM messages WHERE content= :content")
+            idBigInteger = (BigInteger) entityManager.createNativeQuery("SELECT id FROM messages WHERE content= :content")
                                 .setParameter("content", content)
                                 .getSingleResult();
         } catch (NoResultException ignored) {
-
         }
-
+        Long id = idBigInteger.longValue();
         return Optional.ofNullable(id);
     }
 

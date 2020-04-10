@@ -136,7 +136,7 @@ export class SubmitMessage {
             voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
             workspaceId: this.channel.workspaceId
-    };
+        };
 
         if (window.hasSlashCommand) {
             await this.sendSlashCommand(entity);

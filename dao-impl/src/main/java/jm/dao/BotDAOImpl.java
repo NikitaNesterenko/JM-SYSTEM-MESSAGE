@@ -152,7 +152,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Optional<Bot> findByNickName(String name) {
+    public Optional<Bot> findByName(String name) {
         try {
             Bot bot = entityManager.createQuery("SELECT b FROM Bot b WHERE b.name = :name", Bot.class)
                     .setParameter("name", name)

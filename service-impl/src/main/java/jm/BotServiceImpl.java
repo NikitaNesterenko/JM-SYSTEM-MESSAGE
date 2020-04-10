@@ -72,8 +72,8 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public Bot getBotByNickName(String nickName) {
-        return botDAO.findByNickName(nickName).get();
+    public Bot getBotByName(String name) {
+        return botDAO.findByName(name).get();
     }
 
     @Override

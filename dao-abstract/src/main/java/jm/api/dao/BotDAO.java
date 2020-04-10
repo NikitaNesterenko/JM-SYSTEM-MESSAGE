@@ -34,5 +34,5 @@ public interface BotDAO {
 
     Optional<Bot> findByToken(String token);
 
-    Optional<Bot> findByNickName(String nickName);
+    Optional<Bot> findByName(String name);
 }

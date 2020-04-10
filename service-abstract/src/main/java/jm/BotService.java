@@ -21,7 +21,7 @@ public interface BotService {
 
     Bot getBotById(Long id);
 
-    Bot getBotByNickName(String nickName);
+    Bot getBotByName(String name);
 
     Optional<BotDTO> getBotDTOById (Long id);
 

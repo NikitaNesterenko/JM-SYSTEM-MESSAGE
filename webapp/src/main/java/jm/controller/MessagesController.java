@@ -61,6 +61,7 @@ public class MessagesController {
                 .split(" ")[0];
         if (сhannelName.equals(githubName) && messageDto.getContent().substring(0,1).equals("/")) {
             githubService.secondStart(messageDto);
+            return;
         }
 
         Message message = messageService.getMessageByMessageDTO(messageDto);
