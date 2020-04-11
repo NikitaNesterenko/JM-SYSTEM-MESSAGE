@@ -3696,6 +3696,8 @@ button:focus {
     width: 100%;
     position: fixed;
     background: #f1f2f3;
+    opacity: 1;
+    transition: opacity 300ms;
     z-index: 1;
 }
 .ldio-k0qtnwvcnqi > div div { position: absolute; }
