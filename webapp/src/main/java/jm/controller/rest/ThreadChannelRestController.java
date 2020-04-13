@@ -56,8 +56,7 @@ public class ThreadChannelRestController {
     public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
         // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadChannel threadChannel
         messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
-        Message message = messageService.getMessageByMessageDTO(messageDTO);
-        ThreadChannel threadChannel = new ThreadChannel(message);
+        ThreadChannel threadChannel = new ThreadChannel(messageDTO.getId());
         threadChannelService.createThreadChannel(threadChannel);
         logger.info("Созданный тред : {}", threadChannel);
         return new ResponseEntity<>(threadChannel, HttpStatus.CREATED);
