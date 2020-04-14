@@ -7,6 +7,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jm.api.dao.*;
+import jm.dto.ChannelDTO;
 import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
 import jm.model.*;
@@ -80,7 +81,7 @@ public class GithubServiceImpl implements GithubService {
     }
     private void createGithubChannel(Workspace workspace, String login, User githubBot) {
         User user = userService.getUserByLogin(login);
-        String nameChannel = nameChannelStartWth + user.getId();
+        String nameChannel = nameChannelStartWth + user.getId() + workspace.getId();
         Channel channel = channelService.getChannelByName(nameChannel);
         if (channel == null) {
             Channel channelByName = new Channel();
@@ -194,7 +195,7 @@ public class GithubServiceImpl implements GithubService {
                     default:
                         createMessageGhHelp(messageDto);
                 }
-                // друие события: close, reopen, open, deploy, subscribe и unsubscribe +label:"your label
+// друие события: close, reopen, open, deploy, subscribe и unsubscribe +label:"your label
         }
     }
     private void createMessageSubscribeUnsubscribe(MessageDTO messageDto, String[] messageDtoArrayOfWords) {
@@ -825,6 +826,55 @@ public class GithubServiceImpl implements GithubService {
             eventArray = createEventIssuesArray(json);
         } catch (PathNotFoundException e) {
         }
+//        try {
+//            event = JsonPath.read(json, "$.pull_request");
+//            event = "pull";
+//            eventArray = createEventPullArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.commit");
+//            event = JsonPath.read(json, "$.state");
+//            event = "state";
+//            eventArray = createEventStateArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.deployment");
+//            event = "deployment";
+//            eventArray = createEventDeploymentArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.private");
+//            event = "public";
+//            eventArray = createEventPublicArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.release");
+//            event = "release";
+//            eventArray = createEventReleaseArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.reviews");
+//            event = "reviews";
+//            eventArray = createEventReviewsArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.comment");
+//            event = "comment";
+//            eventArray = createEventCommentArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
+//        try {
+//            event = JsonPath.read(json, "$.comment");
+//            event = "branches";
+//            eventArray = createEventCommentArray(json);
+//        } catch (PathNotFoundException e) {
+//        }
 
         if (event == null || eventArray == null) {
             return null;
@@ -837,9 +887,25 @@ public class GithubServiceImpl implements GithubService {
                     || (eventArray[1] + "/" + eventArray[0]).equals(accountOrRepository)) {
                 switch (event) {
                     case "push":
-                        messageDtoList.add(createMessageForEventPush(ghEvent, eventArray));
+                        messageDtoList.add(new DirectMessageDTO(createMessageForEventPush(ghEvent, eventArray)));
                     case "issues":
-                        messageDtoList.add(createMessageForEventIssues(ghEvent, eventArray));
+                        messageDtoList.add(new DirectMessageDTO(createMessageForEventIssues(ghEvent, eventArray)));
+//                    case "pull":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventPull(ghEvent, eventArray)));
+//                    case "state":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventState(ghEvent, eventArray)));
+//                    case "deployment":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventDeployment(ghEvent, eventArray)));
+//                    case "public":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventPublic(ghEvent, eventArray)));
+//                    case "release":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventRelease(ghEvent, eventArray)));
+//                    case "reviews":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventReviews(ghEvent, eventArray)));
+//                    case "comment":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventComment(ghEvent, eventArray)));
+//                    case "branches":
+//                        messageDtoList.add(new DirectMessageDTO(createMessageForEventComment123(ghEvent, eventArray)));
                 }
             }
         }
@@ -879,42 +945,141 @@ public class GithubServiceImpl implements GithubService {
         }
         return eventIssuesArray;
     }
-    private DirectMessageDTO createMessageForEventPush(GithubEvent ghEvent, String[] eventPushArray) {
+//    private String[] createEventPullArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+//    private String[] createEventStateArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+//            eventIssuesArray[2] = JsonPath.read(json, "$.commit");
+//            eventIssuesArray[3] = JsonPath.read(json, "$.state");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+//    private String[] createEventDeploymentArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+////            eventIssuesArray[2] = JsonPath.read(json, "$.commit");
+////            eventIssuesArray[3] = JsonPath.read(json, "$.state");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+//    private String[] createEventPublicArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+////            eventIssuesArray[2] = JsonPath.read(json, "$.commit");
+////            eventIssuesArray[3] = JsonPath.read(json, "$.state");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+//    private String[] createEventReleaseArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+////            eventIssuesArray[2] = JsonPath.read(json, "$.commit");
+////            eventIssuesArray[3] = JsonPath.read(json, "$.state");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+//    private String[] createEventReviewsArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+////            eventIssuesArray[2] = JsonPath.read(json, "$.commit");
+////            eventIssuesArray[3] = JsonPath.read(json, "$.state");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+//    private String[] createEventCommentArray(String json) {
+//        String[] eventIssuesArray = new String[3];
+//        try {
+//            eventIssuesArray[0] = JsonPath.read(json, "$.repository.name");
+//            eventIssuesArray[1] = JsonPath.read(json, "$.repository.owner.login");
+////            eventIssuesArray[2] = JsonPath.read(json, "$.commit");
+////            eventIssuesArray[3] = JsonPath.read(json, "$.state");
+//        } catch (PathNotFoundException e) {
+//            return null;
+//        }
+//        return eventIssuesArray;
+//    }
+    private MessageDTO createMessageForEventPush(GithubEvent ghEvent, String[] eventPushArray) {
         if (eventPushArray[2].equals(eventPushArray[5]) || ghEvent.getCommitsAll()) {
-
-//        GitHubAPP
-//        arrayEventPush[1]
-//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
-//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
-//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
-
-            String message = "Push " + eventPushArray[1] + "/" + eventPushArray[0] + "<br>"
-                    + eventPushArray[2] + "<br>"
-                    + eventPushArray[3].substring(0, 8) + " - " + eventPushArray[4];
+            String message = ghEvent.getAccountRepository()
+                    + "1 new commit pushed to " + eventPushArray[2]
+                    + eventPushArray[3].substring(0, 8) + " - " + eventPushArray[4]
+                    + "<a href='https://github.com/" + ghEvent.getAccountRepository() + "' target='_blank'>\"" + ghEvent.getAccountRepository() + "/" + eventPushArray[0];
             return createMessageEvent(ghEvent, message);
         }
         return null;
     }
-    private DirectMessageDTO createMessageForEventIssues(GithubEvent ghEvent, String[] eventIssuesArray) {
-
-//        GitHubAPP
-//        arrayEventPush[1]
-//        1 new commit pushed to arrayEventPush[2] (2 ссылки)
-//        arrayEventPush[3].substring(0, 8) + " - " + arrayEventPush[4] (1 ссылка)
-//        arrayEventPush[1] + "/" + arrayEventPush[0] (1 ссылка)
+    private MessageDTO createMessageForEventIssues(GithubEvent ghEvent, String[] eventIssuesArray) {
         String message = "Issue " + eventIssuesArray[1] + "/" + eventIssuesArray[0] + "<br>"
                 + eventIssuesArray[2];
-
-
         return createMessageEvent(ghEvent, message);
     }
-    private DirectMessageDTO createMessageEvent(GithubEvent ghEvent, String message) {
+//    private MessageDTO createMessageForEventPull(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventState(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventDeployment(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventPublic(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventRelease(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventReviews(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventComment(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+//    private MessageDTO createMessageForEventComment123(GithubEvent ghEvent, String[] eventIssuesArray) {
+//        String message = "Pull " + eventIssuesArray[1] + "/" + eventIssuesArray[0];
+//        return createMessageEvent(ghEvent, message);
+//    }
+    private MessageDTO createMessageEvent(GithubEvent ghEvent, String message) {
         MessageDTO messageDTO = new DirectMessageDTO();
 
         Long userId = ghEvent.getUser().getId();
         String userLogin = ghEvent.getUser().getUsername();
         Long workspaceId = ghEvent.getWorkspace().getId();
-        Long conversationId = 1L;
 
         messageDTO.setUserId(userId);
         messageDTO.setUserName(userLogin);
@@ -926,9 +1091,6 @@ public class GithubServiceImpl implements GithubService {
 
         messageDTO.setContent(message);
 
-        DirectMessageDTO messageDTO2 = new DirectMessageDTO(messageDTO);
-        messageDTO2.setConversationId(conversationId);
-
-        return messageDTO2;
+        return messageDTO;
     }
 }

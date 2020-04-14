@@ -4,7 +4,6 @@ import jm.*;
 import jm.dto.DirectMessageDTO;
 import jm.dto.MessageDTO;
 import jm.dto.ThreadMessageDTO;
-import jm.model.Channel;
 import jm.model.Conversation;
 import jm.model.Message;
 import jm.model.User;
@@ -18,6 +17,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
+import javax.websocket.Session;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,12 +61,6 @@ public class MessagesController {
                 .split(" ")[0];
         if (сhannelName.equals(githubName) && messageDto.getContent().substring(0,1).equals("/")) {
             githubService.secondStart(messageDto);
-            DirectMessageDTO messageList = githubService.getMessageSubscribeToEvents(json);
-            if (messageList != null) {
-                for (DirectMessageDTO message : messageList) {
-                    messagesController.directMessageCreation(message);
-                }
-            }
             return;
         }
 

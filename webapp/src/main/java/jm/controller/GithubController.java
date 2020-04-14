@@ -40,7 +40,7 @@ public class GithubController {
     @PostMapping("/payload")
     public void subscribeToEvents(@RequestBody String json) {
         List<DirectMessageDTO> messageList = githubService.getMessageSubscribeToEvents(json);
-        if (messageList != null) {
+        if (messageList.size() != 0) {
             for (DirectMessageDTO message : messageList) {
                 messagesController.directMessageCreation(message);
             }
