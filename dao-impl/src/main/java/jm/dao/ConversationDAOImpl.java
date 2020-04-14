@@ -57,9 +57,9 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
         entityManager.createNativeQuery(
                 "UPDATE conversations " +
                 "SET " +
-                "    show_for_opener = IF(opener_id = ?, false, true), " +
-                "    show_for_associated = IF(associated_id = ?, false, true) " +
+                "    show_for_opener = IF(opener_id = ? ^ show_for_opener = false , false, true), " +
+                "    show_for_associated = IF(associated_id = ? ^ show_for_associated = false, false, true) " +
                 "WHERE id = ?")
-                .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
+                .setParameter(1, userID).setParameter(2, userID).setParameter(3,conversationID).executeUpdate();
     }
 }

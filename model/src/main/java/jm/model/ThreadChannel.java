@@ -25,6 +25,10 @@ public class ThreadChannel {
         this.message = message;
     }
 
+    public ThreadChannel(Long id) {
+        this.message = new Message(id);
+    }
+
 //    @Column(name = "created_date", nullable = false)
 //    @JsonSerialize(using = LocalDateTimeSerializer.class)
 //    @Type(type = "org.hibernate.type.LocalDateTimeType")

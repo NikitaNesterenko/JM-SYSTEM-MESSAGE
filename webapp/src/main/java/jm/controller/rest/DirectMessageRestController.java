@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.DirectMessageService;
+import jm.MessageService;
 import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
@@ -31,10 +32,12 @@ public class DirectMessageRestController {
     private static final Logger logger =
             LoggerFactory.getLogger(DirectMessageRestController.class);
 
+    private final MessageService messageService;
     private final DirectMessageService directMessageService;
     private final UserService userService;
 
-    public DirectMessageRestController(DirectMessageService directMessageService, UserService userService) {
+    public DirectMessageRestController(MessageService messageService, DirectMessageService directMessageService, UserService userService) {
+        this.messageService = messageService;
         this.directMessageService = directMessageService;
         this.userService = userService;
     }
@@ -102,12 +105,12 @@ public class DirectMessageRestController {
         // Обновление личного сообщения выполняется в MessagesController сразу из websocket
 
         DirectMessage message = directMessageService.getDirectMessageByDirectMessageDto(messageDTO);
-        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
-        if (isCreated == null) {
+        final LocalDateTime dateCreate = messageService.getDateCreateById(messageDTO.getId());
+        if (dateCreate == null) {
             logger.warn("Сообщение не найдено");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        message.setDateCreate(isCreated.getDateCreate());
+        message.setDateCreate(dateCreate);
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
         return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.OK);
     }

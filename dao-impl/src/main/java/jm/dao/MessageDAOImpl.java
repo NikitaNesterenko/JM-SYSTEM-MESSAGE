@@ -343,6 +343,13 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     @Override
+    public LocalDateTime getDateCreateById(Long id) {
+        return Optional.ofNullable((LocalDateTime) entityManager
+                .createNativeQuery("select m.date_create from messages m where m.id = " + id).getSingleResult())
+                .orElse(null);
+    }
+
+    @Override
     public List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted) {
         return entityManager.createQuery("select m from Message m join  m.recipientUsers u where u.id =:userId and m.isDeleted = :is_deleted", Message.class)
                        .setParameter("userId", userId)
