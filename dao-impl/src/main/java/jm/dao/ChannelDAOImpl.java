@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.*;
@@ -300,9 +301,10 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public Workspace getWorkspaceByChannelId(Long channelId) {
-        return (Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE channel_id = :id")
-                .setParameter("id", channelId)
-                .getSingleResult();
+        return Optional.ofNullable((Workspace) entityManager.createNativeQuery("SELECT * FROM workspaces WHERE id = (SELECT workspace_id from channels WHERE id = :channelId)", Workspace.class)
+                .setParameter("channelId", channelId)
+                .getSingleResult())
+                .orElse(null);
     }
 
     @Override
