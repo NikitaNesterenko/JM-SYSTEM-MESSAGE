@@ -214,9 +214,10 @@ public class CommandsBotServiceImpl implements CommandsBotService {
             case "msg":
                 String targetChannelName = getChannelsNamesFromMsg(commandBody).get(0);
                 Channel targetChannel = channelService.getChannelByName(targetChannelName);
+                final User msgOwner = Optional.ofNullable(getUsersFromMessage(commandBody).get(0)).orElse(userService.getUserById(command.getUserId()));
                 if (targetChannel != null) {
                     response.put("status", "OK");
-                    response.put("report", sendPermRequestMessage(targetChannel.getId(), userService.getUserById(command.getUserId()),
+                    response.put("report", sendPermRequestMessage(targetChannel.getId(), msgOwner,
                             commandBody.substring(commandBody.indexOf(targetChannelName) + targetChannelName.length())));
                     response.put("targetChannelId", targetChannel.getId().toString());
                 } else {
