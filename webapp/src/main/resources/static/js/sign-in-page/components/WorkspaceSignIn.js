@@ -8,6 +8,11 @@ export class WorkspaceSignIn {
 
     onSubmit() {
         $('#submit_button').click(this.checkWorkspace.bind(this));
+        $('#signin_input').keypress(function (event) {
+            if (event.key === 'Enter' || event.key === 13) {
+                $('#submit_button').trigger('click')
+            }
+        })
     }
 
     checkWorkspace() {
