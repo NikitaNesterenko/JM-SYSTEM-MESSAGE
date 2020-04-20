@@ -226,8 +226,9 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                 break;
             case "dm":
                 User targetUser = getUsersFromMessage(commandBody).get(0);
-                String targetUserName = targetUser.getUsername();
+                String targetUserName = "";
                 if (targetUser != null) {
+                    targetUserName = targetUser.getUsername();
                     response.put("status", "OK");
                     response.put("report", sendDirectMessage(command.getUserId(), targetUser,
                             commandBody.substring(commandBody.indexOf(targetUserName) + targetUserName.length()), command.getChannelId()));
