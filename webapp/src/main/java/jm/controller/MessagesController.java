@@ -12,10 +12,12 @@ import jm.model.message.ThreadChannelMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
+import javax.websocket.Session;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +25,11 @@ import java.util.List;
 
 @Controller
 public class MessagesController {
+    @Value("${github}")
+    private String githubName;
+
+    @Autowired
+    GithubService githubService;
 
     private static final Logger logger = LoggerFactory.getLogger(MessagesController.class);
 
@@ -50,6 +57,13 @@ public class MessagesController {
 
     @MessageMapping("/message")
     public void messageCreation(MessageDTO messageDto, Principal principal) {
+        String сhannelName = channelService.getChannelById(messageDto.getChannelId()).getName()
+                .split(" ")[0];
+        if (сhannelName.equals(githubName) && messageDto.getContent().substring(0,1).equals("/")) {
+            githubService.secondStart(messageDto);
+            return;
+        }
+
         Message message = messageService.getMessageByMessageDTO(messageDto);
         if (message.getId() == null) {
             message.setDateCreate(LocalDateTime.now());

@@ -150,4 +150,16 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<Bot> findByName(String name) {
+        try {
+            Bot bot = entityManager.createQuery("SELECT b FROM Bot b WHERE b.name = :name", Bot.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            return Optional.of(bot);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
 }

@@ -42,5 +42,4 @@ public abstract class AbstractDao<T> {
     public void deleteById(Long id) {
         entityManager.remove(getById(id));
     }
-
 }

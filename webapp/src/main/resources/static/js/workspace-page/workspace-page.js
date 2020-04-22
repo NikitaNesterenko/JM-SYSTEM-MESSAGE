@@ -198,3 +198,15 @@ $("#addGoogleCalendarIdSecretSubmit").click(
         });
     }
 );
+
+$("#github-button").click(
+    async function () {
+        // current_wks = await workspace_service.getChoosedWorkspace();
+        // if (!(current_wks.googleClientId) || !(current_wks.googleClientSecret)) {
+        //     $("#addGoogleCalendarIdSecretModal").modal('toggle')
+        // } else {
+        location.href = "/application/github";
+        //         return false;
+        //     }
+    }
+);

@@ -19,7 +19,9 @@ public interface BotService {
 
     void updateBot (Bot bot);
 
-    Bot getBotById (Long id);
+    Bot getBotById(Long id);
+
+    Bot getBotByName(String name);
 
     Optional<BotDTO> getBotDTOById (Long id);
 

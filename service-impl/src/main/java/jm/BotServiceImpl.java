@@ -10,7 +10,6 @@ import jm.model.Channel;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.security.cert.CollectionCertStoreParameters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,6 +69,11 @@ public class BotServiceImpl implements BotService {
     @Override
     public Bot getBotById (Long id) {
         return botDAO.getById(id);
+    }
+
+    @Override
+    public Bot getBotByName(String name) {
+        return botDAO.findByName(name).get();
     }
 
     @Override
