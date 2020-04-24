@@ -20,13 +20,13 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
 
     @Override
-    public Workspace getWorkspaceByName(String name) {
+    public Optional<Workspace> getWorkspaceByName(String name) {
         try {
-            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
+            return Optional.of((Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
-                    .getSingleResult();
+                    .getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

@@ -39,7 +39,7 @@ public class TypeSlashCommandServiceImpl implements TypeSlashCommandService {
 
     @Override
     public TypeSlashCommand getTypeSlashCommandByName(String name) {
-        return typeSlashCommandDAO.getByName(name);
+        return typeSlashCommandDAO.getByName(name).get();
     }
 
     @Override

@@ -6,20 +6,21 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 @Transactional
 public class AppsDAOImpl extends AbstractDao<App> implements AppsDAO {
 
     @Override
-    public App getAppByWorkspaceIdAndAppName(Long id, String appName) {
+    public Optional<App> getAppByWorkspaceIdAndAppName(Long id, String appName) {
         try {
-            return (App) entityManager.createNativeQuery("select * from apps where workspace_id = :workspace_id and app_name = :app_name", App.class)
+            return Optional.of((App) entityManager.createNativeQuery("select * from apps where workspace_id = :workspace_id and app_name = :app_name", App.class)
                     .setParameter("workspace_id", id)
                     .setParameter("app_name", appName)
-                    .getSingleResult();
+                    .getSingleResult());
         } catch (NoResultException | NullPointerException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }

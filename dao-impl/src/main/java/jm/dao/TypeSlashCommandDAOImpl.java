@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -15,13 +16,13 @@ public class TypeSlashCommandDAOImpl extends AbstractDao<TypeSlashCommand> imple
     private static final Logger logger = LoggerFactory.getLogger(TypeSlashCommandDAOImpl.class);
 
     @Override
-    public TypeSlashCommand getByName(String name) {
+    public Optional<TypeSlashCommand> getByName(String name) {
         try {
-            return entityManager.createQuery("select type from TypeSlashCommand type where type.name=:name", TypeSlashCommand.class)
+            return Optional.of(entityManager.createQuery("select type from TypeSlashCommand type where type.name=:name", TypeSlashCommand.class)
                     .setParameter("name", name)
-                    .getSingleResult();
+                    .getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }

@@ -95,7 +95,7 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public Bot getBotBySlashCommandId (Long id) {
-        return botDAO.getBotByCommandId(id);
+        return botDAO.getBotByCommandId(id).get();
     }
 
     @Override

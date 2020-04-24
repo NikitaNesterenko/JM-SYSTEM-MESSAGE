@@ -258,8 +258,8 @@ public class TestDataInitializer {
     }
 
     private void createLinkRoles() {
-        Role userRole = roleDAO.getRoleByRolename("ROLE_USER");
-        Role ownerRole = roleDAO.getRoleByRolename("ROLE_OWNER");
+        Role userRole = roleDAO.getRoleByRolename("ROLE_USER").get();
+        Role ownerRole = roleDAO.getRoleByRolename("ROLE_OWNER").get();
 
         for (User user : this.users) {
             for (Workspace workspace : this.workspaces) {
@@ -286,8 +286,8 @@ public class TestDataInitializer {
 
 
     private void createUsers() {
-        Role user = roleDAO.getRoleByRolename("ROLE_USER");
-        Role owner = roleDAO.getRoleByRolename("ROLE_OWNER");
+        Role user = roleDAO.getRoleByRolename("ROLE_USER").get();
+        Role owner = roleDAO.getRoleByRolename("ROLE_OWNER").get();
 
         Set<Role> userRoleSet = new HashSet<>();
         userRoleSet.add(user);
@@ -545,7 +545,7 @@ public class TestDataInitializer {
         // генерация токена: UUID.randomUUID().toString()
         customBot.setToken("3ccc9bb5-c5d1-4df9-a37d-a2e24321e1eb");
         customBot.setChannels(channels);
-        SlashCommand sendMsgCommand = slashCommandDao.getByName("send-to-channel");
+        SlashCommand sendMsgCommand = slashCommandDao.getByName("send-to-channel").get();
         customBot.getCommands().add(sendMsgCommand);
 
         this.bots.add(slackBot);
