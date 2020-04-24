@@ -53,7 +53,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
     @Override
     public void deleteSlashCommand(Long id) {
         SlashCommand slashCommand = slashCommandDao.getById(id);
-        Bot bot = botDAO.getBotByCommandId(id);
+        Bot bot = botDAO.getBotByCommandId(id).get();
         bot.getCommands().remove(slashCommand);
         botDAO.merge(bot);
         slashCommandDao.deleteById(id);
@@ -82,7 +82,7 @@ public class SlashCommandServiceImpl implements SlashCommandService {
 
     @Override
     public SlashCommand getSlashCommandByName(String name) {
-        return slashCommandDao.getByName(name);
+        return slashCommandDao.getByName(name).get();
     }
 
     @Override

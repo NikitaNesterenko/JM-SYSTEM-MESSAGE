@@ -22,32 +22,35 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
 
     @Override
-    public User getUserByLogin(String login) {
+    public Optional<User> getUserByLogin(String login) {
         try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+            User user = (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
                     .getSingleResult();
+            return Optional.of(user);
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
-    public User getUserByName(String name) {
+    public Optional<User> getUserByName(String name) {
         try {
-            return (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
+            User user = (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
+            return Optional.of(user);
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+            User user = (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
                     .getSingleResult();
+            return Optional.of(user);
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -113,7 +116,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public boolean isEmailInThisWorkspace(String email, Long workspaceId) {
         try {
-            User user = getUserByEmail(email);
+            User user = getUserByEmail(email).get();
             entityManager.createNativeQuery("select * from workspaces_users where user_id =? and workspace_id =?")
                     .setParameter(1, user.getId())
                     .setParameter(2, workspaceId)

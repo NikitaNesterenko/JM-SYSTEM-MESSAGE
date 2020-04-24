@@ -100,7 +100,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel getChannelByName (String name) {
-        return channelDAO.getChannelByName(name);
+        return channelDAO.getChannelByName(name).get();
     }
 
     @Override

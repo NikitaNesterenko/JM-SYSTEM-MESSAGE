@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -15,12 +16,13 @@ public class RoleDAOImpl extends AbstractDao<Role> implements RoleDAO {
     private static final Logger logger = LoggerFactory.getLogger(RoleDAOImpl.class);
 
     @Override
-    public Role getRoleByRolename(String role) {
+    public Optional<Role> getRoleByRolename(String role) {
         try {
-            return (Role) entityManager.createQuery("from Role where role  = :role").setParameter("role", role)
+            Role roleObj = (Role) entityManager.createQuery("from Role where role  = :role").setParameter("role", role)
                     .getSingleResult();
+            return Optional.of(roleObj);
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }
