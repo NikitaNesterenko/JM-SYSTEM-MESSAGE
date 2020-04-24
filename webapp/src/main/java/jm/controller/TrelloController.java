@@ -17,6 +17,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Класс контроллер Trello.
+ * https://docs.google.com/document/d/1KQVn9yOx-I3dqy3l1E-3TfiTcGA-GLVR-A0MRvXbTCE/edit?usp=sharing
+ */
+
 @RestController
 @RequestMapping("/api/trello")
 public class TrelloController {
@@ -164,7 +169,7 @@ public class TrelloController {
                 String json = getBoardOrCardByName(pointer, token);
                 JsonNode boardsNode = objectMapper.readTree(json).get("boards");
 
-                if (boardsNode.isNull()) {
+                if (boardsNode.size() == 0) {
                     return new ResponseEntity<>("Cant find any boards!", HttpStatus.BAD_REQUEST);
                 }
 
@@ -191,7 +196,7 @@ public class TrelloController {
     }
 
     /**
-     * Если передан параметр позиции списка на доске, то устанавливает текущий список. Если метод вызван без параметров,
+     * Если передан параметр позиции списка на доске, метод устанавливает текущий список. Если метод вызван без параметров,
      * то возвращает все списки.
      *
      * @param listPosition - позиция
@@ -276,9 +281,9 @@ public class TrelloController {
     }
 
     /**
-     * Метод устанавливает срок истечения карточки для последней карточки.
+     * Метод устанавливает срок истечения для установленной карточки.
      *
-     * @param date
+     * @param date - дата истечения карточки.
      */
 
     @PostMapping (value = "/due")
@@ -309,7 +314,7 @@ public class TrelloController {
     }
 
     /**
-     * Метод добавляет комментарий к последней карточке.
+     * Метод добавляет комментарий к установленной карточке.
      *
      * @param comment - текст комментария.
      * @param principal - данные текущего пользователя.
@@ -382,18 +387,44 @@ public class TrelloController {
     }
 
     /**
+     * Метод добавляет пользователя к участникам установленной карточки.
      *
-     * @param memberID
-     * @param principal
+     * @param userName - имя добавляемого пользователя.
      */
 
     @PostMapping (value = "assign")
     public ResponseEntity<String> assignMember (
-            @RequestParam (name = "id") String memberID,
+            @RequestParam (name = "name") String userName) {
+
+        try {
+            String userToken = checkToken(userName);
+            String userID = getUserIDByToken(userToken);
+            assignUserToCardByID(userID, userToken);
+            return new ResponseEntity<>("User assigned successfully!", HttpStatus.OK);
+        } catch (NullPointerException ex) {
+            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
+        } catch (HttpClientErrorException ex) {
+            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
+        } catch (IOException ex) {
+            return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    /**
+     * Метод получает отзывы пользователей.
+     *
+     * @param feedback - текст отзыва.
+     * @param principal - данные текущего пользователя.
+     */
+
+    @PostMapping (value = "feedback")
+    public ResponseEntity<String> getFeedback (
+            @RequestParam (name = "text") String feedback,
             @Autowired Principal principal) {
 
-        //https://api.trello.com/1/cards/{id}/idMembers=
-        return null;
+        // Какие-то действия с отзывом пользователя...
+
+        return new ResponseEntity<>("Feedback received!", HttpStatus.OK);
     }
 
     /*
@@ -404,6 +435,14 @@ public class TrelloController {
 
     private String checkToken (Principal principal) throws NullPointerException {
         String token = userService.getUserByLogin(principal.getName()).getTrelloToken();
+        if (token == null) {
+            throw new NullPointerException("Token not set!");
+        }
+        return token;
+    }
+
+    private String checkToken (String userName) throws NullPointerException {
+        String token = userService.getUserByName(userName).getTrelloToken();
         if (token == null) {
             throw new NullPointerException("Token not set!");
         }
@@ -449,6 +488,21 @@ public class TrelloController {
                 + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
     }
 
+    private void setDueDate (String RFC822date, String token, String json) {
+        restTemplate.put("https://api.trello.com/1/cards/" + cardID
+                + "?due=" + RFC822date + "&dueComplete=false&key=" + API_KEY + "&token=" + token, json);
+    }
+
+    private String getUserIDByToken (String token) throws IOException {
+        String json = restTemplate.getForEntity("https://api.trello.com/1/tokens/" + token + "/member?key=" + API_KEY + "&token=" + token, String.class).getBody();
+        return objectMapper.readTree(json).get("id").asText();
+    }
+
+    private void assignUserToCardByID (String userID, String token) {
+        restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/idMembers?value=" + userID
+                + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
+    }
+
     private String formatUserDateToRFC822Date(String date) {
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -463,11 +517,9 @@ public class TrelloController {
             calendar.set(Calendar.MILLISECOND, 0);
             currentDate = calendar.getTime();
             isDateFormatted = true;
-
-        } else if (true) {
-            // next week
-            // next friday
         }
+
+        // Нужно добавить обработку для ближайшей пятницы пятницы, следующей недели, а также точного указания даты.
 
         if (isDateFormatted) {
             TimeZone timeZone = TimeZone.getTimeZone("UTC");
@@ -477,22 +529,5 @@ public class TrelloController {
         }
 
         return null;
-    }
-
-    private void setDueDate (String RFC822date, String token, String json) {
-        restTemplate.put("https://api.trello.com/1/cards/" + cardID
-                + "?due=" + RFC822date + "&dueComplete=false&key=" + API_KEY + "&token=" + token, json);
-    }
-
-    private Collection<String> getMembersIDByBoardID (String boardID, String token) throws IOException {
-        String json = restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID + "/memberships?key="
-                + API_KEY + "&token=" + token, String.class).getBody();
-
-        ArrayList<String> membersID = new ArrayList<>();
-        for (JsonNode member : objectMapper.readTree(json)) {
-            membersID.add(member.get("idMember").asText());
-        }
-
-        return membersID;
     }
 }
