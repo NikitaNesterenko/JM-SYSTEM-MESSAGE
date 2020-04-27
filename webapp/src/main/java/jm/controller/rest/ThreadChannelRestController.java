@@ -11,7 +11,6 @@ import jm.ThreadChannelService;
 import jm.dto.MessageDTO;
 import jm.dto.ThreadDTO;
 import jm.dto.ThreadMessageDTO;
-import jm.model.Message;
 import jm.model.ThreadChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,9 +94,16 @@ public class ThreadChannelRestController {
             })
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
-        ThreadChannel temp = threadChannelService.findByChannelMessageId(id);
-        ThreadDTO threadDTO = new ThreadDTO(temp);
-        return new ResponseEntity<>(threadDTO.getId() == null ? null : threadDTO, HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(
+                    new ThreadDTO(
+                            threadChannelService.findByChannelMessageId(id)
+                    ),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/messages/{id}")
