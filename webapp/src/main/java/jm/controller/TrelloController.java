@@ -2,20 +2,12 @@ package jm.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jm.UserService;
-import jm.model.User;
+import jm.TrelloServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
-import java.security.Principal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  * Класс контроллер Trello.
@@ -25,58 +17,42 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/trello")
 public class TrelloController {
-    private final String API_KEY = "606bf0409dd3c5dcd9bc40e2430e237e";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private TrelloServiceImpl trelloService;
     private String boardID;
     private String listID;
     private String cardID;
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private UserService userService;
 
     @Autowired
-    public void setUserService (UserService userService) {
-        this.userService = userService;
+    public void setTrelloService (TrelloServiceImpl trelloService) {
+        this.trelloService = trelloService;
     }
 
     /**
      * Метод устанавливает токен Trello для текущего авторизованного пользователя.
      *
      * @param token - токен Trello.
-     * @param principal - данные текущего пользователя.
      */
 
     @PostMapping (value = "/token")
-    public ResponseEntity <String> setUserToken (
-            @RequestParam (name = "value") String token,
-            @Autowired Principal principal) {
-
-        User user = userService.getUserByLogin(principal.getName());
-        user.setTrelloToken(token);
-        userService.updateUser(user);
-
-        return new ResponseEntity<> ("Trello token was set for current user!", HttpStatus.OK);
+    public ResponseEntity <String> setUserToken (@RequestParam (name = "value") String token) {
+        trelloService.setToken(token);
+        return new ResponseEntity<> ("Trello token was set!", HttpStatus.OK);
     }
 
     /**
-     * Метод позволяет получить информацию о текущей доске.
+     * Метод позволяет получить информацию (JSON объект) о текущей доске.
      *
-     * @param principal - данные текущего пользователя.
      */
 
-    @GetMapping (value = "info", produces = "application/json")
-    public ResponseEntity<String> getBoardInfo (
-            @Autowired Principal principal) {
-
-        try {
-            String token = checkToken(principal);
-            String json = getBoardByID(boardID, token);
-
-            return new ResponseEntity<>(json, HttpStatus.OK);
-        } catch (NullPointerException ex) {
+    @GetMapping (value = "info")
+    public ResponseEntity<String> getBoardInfo () {
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
             return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         }
+        String boardJSON = trelloService.getBoardByBoardID(boardID, token);
+        return new ResponseEntity<>(boardJSON, HttpStatus.OK);
     }
 
     /**
@@ -84,7 +60,6 @@ public class TrelloController {
      * качестве параметра передано URL доски и доску/список/карточку, если в качестве параметра передано URL карточки.
      *
      * @param URL - ссылка на доску или карточку.
-     * @param principal - данные текущего пользователя.
      */
 
     /*
@@ -92,27 +67,31 @@ public class TrelloController {
     /trello link {board URL}. Отказался от этого решения, добавив установку доски/списка/карточки.
      */
 
-    @GetMapping (value = "/details", produces = "application/json")
-    public ResponseEntity<String> getBoardOrCardByURL (
-            @RequestParam (name = "url") String URL,
-            @Autowired Principal principal) {
+    @GetMapping (value = "/details")
+    public ResponseEntity<String> getBoardOrCardDetails (@RequestParam (name = "url") String URL) {
 
-        try {
-            String token = checkToken(principal);
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
+            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
+        }
 
-            boolean isBoardURL = false;
-            boolean isCardURL = false;
-            if (URL.startsWith("https://trello.com/b/")) {
-                isBoardURL = true;
+        boolean isBoardURL = false;
+        boolean isCardURL = false;
+        if (URL.startsWith("https://trello.com/b/")) {
+            isBoardURL = true;
+        }
+        if (URL.startsWith("https://trello.com/c/")) {
+            isCardURL = true;
+        }
+
+        if (isBoardURL || isCardURL) {
+            String json = trelloService.getBoardOrCardByURL(URL, token);
+            if (json == null) {
+                return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
             }
-            if (URL.startsWith("https://trello.com/c/")) {
-                isCardURL = true;
-            }
 
-            if (isBoardURL || isCardURL) {
-                String json = getBoardOrCardByURL(URL, token);
+            try {
                 JsonNode jsonNode = objectMapper.readTree(json);
-
                 if (isBoardURL) {
                     boardID = jsonNode.get("id").asText();
                 }
@@ -121,20 +100,14 @@ public class TrelloController {
                     listID = jsonNode.get("idList").asText();
                     cardID = jsonNode.get("id").asText();
                 }
-
-                return new ResponseEntity<>(json, HttpStatus.OK);
+            } catch (IOException ex) {
+                return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
             }
 
-            return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
-        } catch (NullPointerException ex) {
-            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
-        } catch (IOException ex) {
-            return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(json, HttpStatus.OK);
         }
+
+        return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -142,31 +115,32 @@ public class TrelloController {
      * Устанавливает текущую доску, если была передана ссылка.
      *
      * @param pointer - указатель на доску. Может быть как ссылкой, так и именем.
-     * @param principal - данные текущего пользователя.
      */
 
-    @PostMapping (value = "/link", produces = "application/json")
-    public ResponseEntity<String> getBoardByURL (
-            @RequestParam (name = "pointer") String pointer,
-            @Autowired Principal principal) {
+    @PostMapping (value = "/link")
+    public ResponseEntity<String> linkBoard (
+            @RequestParam (name = "pointer") String pointer) {
 
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
+            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
+        }
+
+        boolean isBoardURL = false;
+        if (pointer.startsWith("https://trello.com/b/")) {
+            isBoardURL = true;
+        }
+
+        String json = trelloService.getBoardOrCardByName(pointer, token);
         try {
-            String token = checkToken(principal);
-
-            boolean isBoardURL = false;
-            if (pointer.startsWith("https://trello.com/b/")) {
-                isBoardURL = true;
-            }
-
             if (isBoardURL) {
-                String json = getBoardOrCardByURL(pointer, token);
 
-                JsonNode jsonNode = objectMapper.readTree(json);
-                boardID = jsonNode.get("id").asText();
+                JsonNode boardNode = objectMapper.readTree(json);
+                boardID = boardNode.get("id").asText();
 
                 return new ResponseEntity<>(json, HttpStatus.OK);
             } else {
-                String json = getBoardOrCardByName(pointer, token);
+
                 JsonNode boardsNode = objectMapper.readTree(json).get("boards");
 
                 if (boardsNode.size() == 0) {
@@ -176,20 +150,14 @@ public class TrelloController {
                 StringBuilder boards = new StringBuilder();
                 for (JsonNode boardNode : boardsNode) {
                     String boardID = boardNode.get("id").asText();
-                    String boardJSON = getBoardByID(boardID, token);
+                    String boardJSON = trelloService.getBoardByBoardID(boardID, token);
                     boards.append(boardJSON);
                     boards.append(",");
                 }
                 boards.deleteCharAt(boards.length() - 1);
-                
+
                 return new ResponseEntity<>(boards.toString(), HttpStatus.OK);
             }
-        } catch (NullPointerException ex) {
-            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         } catch (IOException ex) {
             return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -202,25 +170,25 @@ public class TrelloController {
      * @param listPosition - позиция
      */
 
-    @PostMapping (value = "/list", produces = "application/json")
-    public ResponseEntity<String> getListIDFromBoard (
-            @RequestParam (name = "pos") String listPosition,
-            @Autowired Principal principal) {
+    @PostMapping (value = "/list")
+    public ResponseEntity<String> setList (@RequestParam (name = "pos") String listPosition) {
 
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
+            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (boardID == null) {
+            return new ResponseEntity<>("Board not set!", HttpStatus.BAD_REQUEST);
+        }
+
+        String json = trelloService.getListsByBoardID(boardID, token);
         try {
-            String token = checkToken(principal);
-
-            if (boardID == null) {
-                return new ResponseEntity<>("Board not set!", HttpStatus.BAD_REQUEST);
-            }
-
-            String json = getListsByBoardID(token);
-            JsonNode jsonNode = objectMapper.readTree(json);
-
+            JsonNode listsNode = objectMapper.readTree(json);
             if (listPosition != null) {
                 int listPos = Integer.parseInt(listPosition);
                 int currentListPos = 1;
-                for (JsonNode listNode : jsonNode) {
+                for (JsonNode listNode : listsNode) {
                     if (currentListPos == listPos) {
                         listID = listNode.get("id").asText();
                         return new ResponseEntity<>("List set!", HttpStatus.OK);
@@ -228,17 +196,13 @@ public class TrelloController {
                     currentListPos++;
                 }
             }
-
-            return new ResponseEntity<>(json, HttpStatus.OK);
-        }  catch (NullPointerException ex) {
-            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         } catch (NumberFormatException ex) {
             return new ResponseEntity<>("Error in list position!", HttpStatus.BAD_REQUEST);
         } catch (IOException ex) {
             return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 
     /**
@@ -249,19 +213,20 @@ public class TrelloController {
 
     @PostMapping (value = "/add")
     public ResponseEntity<String> addCard (
-            @RequestParam (name = "name") String cardName,
-            @Autowired Principal principal) {
+            @RequestParam (name = "name") String cardName) {
 
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
+            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (listID == null) {
+            return new ResponseEntity<>("List not set!", HttpStatus.BAD_REQUEST);
+        }
+
+        trelloService.addNewCard(cardName, listID, token);
+        String json = trelloService.getCardsByListID(listID, token);
         try {
-            String token = checkToken(principal);
-
-            if (listID == null) {
-                return new ResponseEntity<>("List not set!", HttpStatus.BAD_REQUEST);
-            }
-
-            addNewCard(cardName, token);
-
-            String json = getCardsByListID(token);
             JsonNode jsonNode = objectMapper.readTree(json);
             for (JsonNode cardNode : jsonNode) {
                 String currentNodeCardName = cardNode.get("name").asText();
@@ -269,15 +234,11 @@ public class TrelloController {
                     cardID = cardNode.get("id").asText();
                 }
             }
-
-            return new ResponseEntity<>("New card was created successfully!", HttpStatus.OK);
-        } catch (NullPointerException ex) {
-            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         } catch (IOException ex) {
             return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
+        return new ResponseEntity<>("New card was created successfully!", HttpStatus.OK);
     }
 
     /**
@@ -287,79 +248,68 @@ public class TrelloController {
      */
 
     @PostMapping (value = "/due")
-    public ResponseEntity<String> setDueDate (
-            @RequestParam (name = "date") String date,
-            @Autowired Principal principal) {
-
-        try {
-            String token = checkToken(principal);
-
-            if (cardID == null) {
-                return new ResponseEntity<>("Card not set!", HttpStatus.BAD_REQUEST);
-            }
-
-            String RFC822Date = formatUserDateToRFC822Date(date);
-            if (RFC822Date != null) {
-                String json = getCardByID(cardID, token);
-                setDueDate(RFC822Date, token, json);
-                return new ResponseEntity<>("Due set!", HttpStatus.OK);
-            }
-
-            return new ResponseEntity<>("Error in date!", HttpStatus.BAD_REQUEST);
-        } catch (NullPointerException ex) {
+    public ResponseEntity<String> setDueDate (@RequestParam (name = "date") String date) {
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
             return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         }
+
+        if (cardID == null) {
+            return new ResponseEntity<>("Card not set!", HttpStatus.BAD_REQUEST);
+        }
+
+        String RFC822Date = trelloService.formatStringToRFC822Date(date);
+        if (RFC822Date == null) {
+            return new ResponseEntity<>("Error in date!", HttpStatus.BAD_REQUEST);
+        }
+
+        String json = trelloService.getCardByCardID(cardID, token);
+        trelloService.setCardDueDate(RFC822Date, cardID, token, json);
+        return new ResponseEntity<>("Due set!", HttpStatus.OK);
     }
 
     /**
      * Метод добавляет комментарий к установленной карточке.
      *
      * @param comment - текст комментария.
-     * @param principal - данные текущего пользователя.
      */
 
     @PostMapping (value = "/comment")
     public ResponseEntity<String> addComment (
-            @RequestParam (name = "text") String comment,
-            @Autowired Principal principal) {
+            @RequestParam (name = "text") String comment) {
 
-        try {
-            String token = checkToken(principal);
-
-            if (cardID == null) {
-                return new ResponseEntity<>("Card not set!", HttpStatus.BAD_REQUEST);
-            }
-
-            addCommentToCard(comment, token);
-
-            return new ResponseEntity<>("Comment was added successfully!", HttpStatus.OK);
-        } catch (NullPointerException ex) {
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
             return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         }
+
+        if (cardID == null) {
+            return new ResponseEntity<>("Card not set!", HttpStatus.BAD_REQUEST);
+        }
+
+        trelloService.addCommentToCard(comment, cardID, token);
+        return new ResponseEntity<>("Comment was added successfully!", HttpStatus.OK);
     }
 
     /**
      * Метод возвращает набор карточек, подходящих по запросу.
      *
      * @param name - имя искомой карточки.
-     * @param principal - данные текущего пользователя.
      */
 
-    @GetMapping (value = "/search", produces = "application/json")
+    @GetMapping (value = "/search")
     public ResponseEntity<String> performSearch (
-            @RequestParam (name = "name") String name,
-            @Autowired Principal principal) {
+            @RequestParam (name = "name") String name) {
 
+        String token = trelloService.getTokenByUserLogin();
+        if (token == null) {
+            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
+        }
+
+        String json = trelloService.getBoardOrCardByName(name, token);
         try {
-            String token = checkToken(principal);
-            String json = getBoardOrCardByName(name, token);
             JsonNode cardsNode = objectMapper.readTree(json).get("cards");
-
-            if (cardsNode.isNull()) {
+            if (cardsNode.size() == 0) {
                 return new ResponseEntity<>("Cant find any cards!", HttpStatus.BAD_REQUEST);
             }
 
@@ -375,15 +325,11 @@ public class TrelloController {
                 cards.deleteCharAt(cards.length() - 1);
                 return new ResponseEntity<>(cards.toString(), HttpStatus.OK);
             }
-
-            return new ResponseEntity<>("Cant find any cards!", HttpStatus.BAD_REQUEST);
-        } catch (NullPointerException ex) {
-            return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
         } catch (IOException ex) {
             return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
+        return new ResponseEntity<>("Cant find any cards!", HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -396,138 +342,28 @@ public class TrelloController {
     public ResponseEntity<String> assignMember (
             @RequestParam (name = "name") String userName) {
 
-        try {
-            String userToken = checkToken(userName);
-            String userID = getUserIDByToken(userToken);
-            assignUserToCardByID(userID, userToken);
-            return new ResponseEntity<>("User assigned successfully!", HttpStatus.OK);
-        } catch (NullPointerException ex) {
+        String userToken = trelloService.getTokenByUserName(userName);
+        if (userToken == null) {
             return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
-        } catch (HttpClientErrorException ex) {
-            return new ResponseEntity<>("Error in token!", HttpStatus.UNAUTHORIZED);
-        } catch (IOException ex) {
-            return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
+        String userID = trelloService.getUserIDByUserToken(userToken);
+        trelloService.assignUserToCardByUserID(userID, cardID, userToken);
+        return new ResponseEntity<>("User assigned successfully!", HttpStatus.OK);
     }
 
     /**
      * Метод получает отзывы пользователей.
      *
      * @param feedback - текст отзыва.
-     * @param principal - данные текущего пользователя.
      */
 
     @PostMapping (value = "feedback")
     public ResponseEntity<String> getFeedback (
-            @RequestParam (name = "text") String feedback,
-            @Autowired Principal principal) {
+            @RequestParam (name = "text") String feedback) {
 
         // Какие-то действия с отзывом пользователя...
 
         return new ResponseEntity<>("Feedback received!", HttpStatus.OK);
-    }
-
-    /*
-    ===============================================================================================
-    ================================= Private methods starts here =================================
-    ===============================================================================================
-     */
-
-    private String checkToken (Principal principal) throws NullPointerException {
-        String token = userService.getUserByLogin(principal.getName()).getTrelloToken();
-        if (token == null) {
-            throw new NullPointerException("Token not set!");
-        }
-        return token;
-    }
-
-    private String checkToken (String userName) throws NullPointerException {
-        String token = userService.getUserByName(userName).getTrelloToken();
-        if (token == null) {
-            throw new NullPointerException("Token not set!");
-        }
-        return token;
-    }
-
-    private String getBoardOrCardByURL(String URL, String token) {
-        return restTemplate.getForEntity(URL + ".json?key=" + API_KEY + "&token=" + token, String.class).getBody();
-    }
-
-    private String getBoardOrCardByName (String name, String token) {
-        return restTemplate.getForEntity("https://api.trello.com/1/search?query=" + name + "&key=" + API_KEY
-                + "&token=" + token, String.class).getBody();
-    }
-
-    private String getListsByBoardID (String token) {
-        return restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID
-                + "/lists?key=" + API_KEY + "&token=" + token, String.class).getBody();
-    }
-
-    private String getCardsByListID (String token) {
-        return restTemplate.getForEntity("https://api.trello.com/1/lists/" + listID +
-                "/cards" + "?key=" + API_KEY + "&token=" + token, String.class).getBody();
-    }
-
-    private String getCardByID (String cardID, String token) {
-        return restTemplate.getForEntity("https://api.trello.com/1/cards/" + cardID + "?key=" + API_KEY
-                + "&token=" + token, String.class).getBody();
-    }
-
-    private String getBoardByID (String boardID, String token) {
-        return restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID + "?key=" + API_KEY
-                + "&token=" + token, String.class).getBody();
-    }
-
-    private void addNewCard (String cardName, String token) {
-        restTemplate.postForEntity("https://api.trello.com/1/cards?idList=" + listID
-                + "&name=" + cardName + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
-    }
-
-    private void addCommentToCard (String comment, String token) {
-        restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/actions/comments?text=" + comment
-                + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
-    }
-
-    private void setDueDate (String RFC822date, String token, String json) {
-        restTemplate.put("https://api.trello.com/1/cards/" + cardID
-                + "?due=" + RFC822date + "&dueComplete=false&key=" + API_KEY + "&token=" + token, json);
-    }
-
-    private String getUserIDByToken (String token) throws IOException {
-        String json = restTemplate.getForEntity("https://api.trello.com/1/tokens/" + token + "/member?key=" + API_KEY + "&token=" + token, String.class).getBody();
-        return objectMapper.readTree(json).get("id").asText();
-    }
-
-    private void assignUserToCardByID (String userID, String token) {
-        restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/idMembers?value=" + userID
-                + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
-    }
-
-    private String formatUserDateToRFC822Date(String date) {
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        boolean isDateFormatted = false;
-
-        if (date.equalsIgnoreCase("Tomorrow") || date.equalsIgnoreCase("Завтра")) {
-            calendar.setTime(currentDate);
-            calendar.add(Calendar.DATE, 1);
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            currentDate = calendar.getTime();
-            isDateFormatted = true;
-        }
-
-        // Нужно добавить обработку для ближайшей пятницы пятницы, следующей недели, а также точного указания даты.
-
-        if (isDateFormatted) {
-            TimeZone timeZone = TimeZone.getTimeZone("UTC");
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            dateFormat.setTimeZone(timeZone);
-            return dateFormat.format(currentDate);
-        }
-
-        return null;
     }
 }
