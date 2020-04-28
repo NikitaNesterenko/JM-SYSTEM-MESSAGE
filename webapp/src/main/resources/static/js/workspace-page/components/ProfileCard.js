@@ -39,7 +39,7 @@ export class ProfileCard {
 
             $('#modal_1_user_profile_button').text(this.user.name);
 
-            this.setTitle();
+           // this.setTitle();
             this.setUserImg('#modal_1_user_img');
         });
     }
@@ -82,14 +82,14 @@ export class ProfileCard {
         )
     }
 
-    setTitle() {
-        if (this.user.title == null || this.user.title === "") {
-            $('#modal_1_set_title_btn').show();
-        } else {
-            $('#modal_1_set_title_btn').hide();
-            $('#modal_1_user_title').val(this.user.title);
-        }
-    }
+    // setTitle() {
+    //     if (this.user.title == null || this.user.title === "") {
+    //         $('#modal_1_set_title_btn').show();
+    //     } else {
+    //         $('#modal_1_set_title_btn').hide();
+    //         $('#modal_1_user_title').val(this.user.title);
+    //     }
+    // }
 
     setUserImg(selector) {
         $(selector).attr("src", "/avatar/" + this.user.id);
