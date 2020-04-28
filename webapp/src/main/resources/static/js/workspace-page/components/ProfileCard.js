@@ -10,9 +10,9 @@ export class ProfileCard {
         this.user_service = new UserRestPaginationService();
         this.bot_service = new BotRestPaginationService();
         this.storage_service = new StorageService();
-        this.profileCardModal = $('#modal_1');
-        this.profileEditModal = $('#modal_2');
-        this.edit_btn = $('#modal_1_edit_profile_btn, #modal_1_set_title_btn');
+        this.profileCardModal = $('#modal_1');//окно редактирования при нажатии на иконку
+        this.profileEditModal = $('#modal_2');//окно с данными пользователя для редактирования
+        this.edit_btn = $('#modal_1_edit_profile_btn, #modal_1_set_title_btn');//кнопка редактирования
         this.onFileUpload();
     }
 
