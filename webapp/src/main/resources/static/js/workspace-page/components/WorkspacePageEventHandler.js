@@ -86,7 +86,7 @@ export class WorkspacePageEventHandler {
             let workspace;
 
             (async () => {
-               workspace = await this.workspace_service.getChosenWorkspace();
+                workspace = await this.workspace_service.getChosenWorkspace();
             })();
             this.user_service.getUserByName(name).then(userTo => {
                 if (userTo && userTo.message) {
@@ -120,16 +120,13 @@ export class WorkspacePageEventHandler {
                 createdDate: this.getFormattedCreateDate(),
                 ownerId: this.logged_user.id
             };
-
-            this.channel_service.getChannelByName(entity.name).then(chn => {
-                if (typeof (chn) === 'undefined') {
-                    this.channel_service.create(entity).then(chn => {
-                        sendChannel(chn);
-                    })
+            this.channel_service.create(entity).then(chn => {
+                if (chn) {
+                    sendChannel(chn)
                 } else {
-                    alert('That name is already taken by a channel, username, or user group.');
+                    alert("That name is already taken!")
                 }
-            });
+            })
         });
     }
 

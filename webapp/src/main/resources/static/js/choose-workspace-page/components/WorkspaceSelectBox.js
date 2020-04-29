@@ -24,7 +24,7 @@ export class WorkspaceSelectBox {
     watchChanges() {
         $('#favcity').change((event) => {
             let wks_name = event.target.value;
-            alert(wks_name);
+            // alert(wks_name);
             this.selectWorkspace(wks_name);
         });
     }

@@ -45,8 +45,10 @@ export class MessageRestPaginationService extends RestPaginationService {
         return response.json();
     };
 
+    // FIXME: формат startDate, endDate
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
         const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
+        console.log(startDate, "\n", endDate)
         return response.json();
     };
 
@@ -216,7 +218,8 @@ export class ChannelRestPaginationService extends RestPaginationService {
     };
 
     getChannelByName = async (name) => {
-        const response = await fetch('/rest/api/channels/name/' + name);
+        const response = await fetch(`/rest/api/channels/name/${name}`);
+        alert(response.status)
         return await response.json()
             .catch(err => console.log(err.status));
     };
