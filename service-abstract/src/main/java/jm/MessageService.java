@@ -58,4 +58,12 @@ public interface MessageService {
 
     LocalDateTime getDateCreateById(Long id);
 
+    Message setVoiceMessageSoundIntoMessage(Message message);
+
+    void getVoiceMessageSoundById(Long id) ;
+
+    String getVoiceMessagePathById(Long id) ;
+
+
+
 }

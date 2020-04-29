@@ -28,6 +28,8 @@ public class MessageDTO {
     private String content;
     private String filename;
     private String voiceMessage;
+    private String voiceMessagePath;
+    private byte[] voiceMessageSound;
     private Boolean isDeleted = false;
     private Boolean isUpdated = false;
     private Long channelId;
@@ -161,6 +163,7 @@ public class MessageDTO {
         this.dateCreate = message.getDateCreate();
         this.filename = message.getFilename();
         this.voiceMessage = message.getVoiceMessage();
+        this.voiceMessagePath = message.getVoiceMessagePath();
         this.isDeleted = message.getIsDeleted();
         this.channelId = message.getChannelId();
 
@@ -206,6 +209,8 @@ public class MessageDTO {
 
         this.filename = messageDTO.getFilename();
         this.voiceMessage = messageDTO.getVoiceMessage();
+        this.voiceMessagePath = messageDTO.getVoiceMessagePath();
+        this.voiceMessageSound = messageDTO.getVoiceMessageSound();
         this.isDeleted = messageDTO.getIsDeleted();
         this.isUpdated = messageDTO.getIsUpdated();
         this.channelId = messageDTO.getChannelId();

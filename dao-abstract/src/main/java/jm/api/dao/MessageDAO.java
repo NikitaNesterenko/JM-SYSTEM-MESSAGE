@@ -52,4 +52,8 @@ public interface MessageDAO {
 
     LocalDateTime getDateCreateById(Long id);
 
+    byte[] getVoiceMessageSoundById(long id);
+
+    String getVoiceMessagePathById(long id);
+
 }
