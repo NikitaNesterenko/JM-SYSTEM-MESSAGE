@@ -357,4 +357,18 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                        .setParameter("is_deleted", isDeleted)
                        .getResultList();
     }
+
+    @Override
+    public String getVoiceMessagePathById(long id) {
+        return (String) entityManager.createQuery(("SELECT voiceMessagePath FROM Message where id = :id"))
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public byte[] getVoiceMessageSoundById(long id) {
+        return (byte[]) entityManager.createQuery("SELECT voiceMessageSound FROM Message where id =: id")
+                .setParameter("id", id)
+                .getSingleResult();
+    }
 }
