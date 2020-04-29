@@ -36,6 +36,10 @@ window.addEventListener('load', function () {
         menu_modal.style.display = "inline-table";
     };
 
+    $('#bellId').on('click', function () {
+        alert("Bell ring");
+    });
+
     $('#invite-button').on('click', function () {
         showInviteModalOnWorkspace();
     });
