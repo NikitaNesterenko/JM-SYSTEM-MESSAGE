@@ -10,12 +10,11 @@ import jm.MessageService;
 import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
-import jm.dto.*;
+import jm.dto.UserDTO;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -144,8 +143,12 @@ public class DirectMessageRestController {
     public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
         // TODO: ПЕРЕДЕЛАТЬ получать сразу List DirectMessageDto по ConversationId
         List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
-        messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
+        if (messages .isEmpty()){
+            return ResponseEntity.noContent().build();
+        } else {
+            messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
+            return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
@@ -208,7 +211,11 @@ public class DirectMessageRestController {
             })
     public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
         User user = userService.getUserById(usrId);
-        user.getUnreadDirectMessages().add(directMessageService.getDirectMessageById(msgId));
+        DirectMessage directMessage = directMessageService.getDirectMessageById(msgId);
+        if ( user == null || directMessage == null ){
+            return ResponseEntity.noContent().build();
+        }
+        user.getUnreadDirectMessages().add(directMessage);
         userService.updateUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

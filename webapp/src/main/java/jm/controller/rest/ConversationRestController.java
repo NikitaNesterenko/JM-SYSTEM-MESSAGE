@@ -40,7 +40,11 @@ public class ConversationRestController {
                     )
             })
     public ResponseEntity<Conversation> getConversationById(@PathVariable Long id) {
-        return ResponseEntity.ok(conversationService.getConversationById(id));
+        try {
+            return ResponseEntity.ok(conversationService.getConversationById(id));
+        } catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @PostMapping(value = "/create")
@@ -116,7 +120,8 @@ public class ConversationRestController {
                     )
             })
     public ResponseEntity<List<Conversation>> getAllConversations() {
-        return ResponseEntity.ok(conversationService.getAllConversations());
+        List<Conversation> conversationsList = conversationService.getAllConversations();
+        return conversationsList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(conversationsList);
     }
 
     @GetMapping(value = "/user/{id}")
@@ -133,7 +138,8 @@ public class ConversationRestController {
                     )
             })
     public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
-        return ResponseEntity.ok(conversationService.getConversationsByUserId(id));
+        List<Conversation> conversationList = conversationService.getConversationsByUserId(id);
+        return conversationList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(conversationList);
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
@@ -151,9 +157,13 @@ public class ConversationRestController {
             })
     public ResponseEntity<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
-        return new ResponseEntity<>(
-                conversationService.getConversationByUsersId(firstId, secondId),
-                HttpStatus.OK
-        );
+        try {
+            return new ResponseEntity<>(
+                    conversationService.getConversationByUsersId(firstId, secondId),
+                    HttpStatus.OK
+            );
+        } catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 }

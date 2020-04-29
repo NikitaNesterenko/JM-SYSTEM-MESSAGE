@@ -253,7 +253,7 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getAllChannels () {
         List<ChannelDTO> channelDTOList = channelService.getAllChanelDTO();
-        return ResponseEntity.ok(channelDTOList);
+        return channelDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(channelDTOList);
     }
 
     @GetMapping("/workspace/{workspace_id}/user/{user_id}")
@@ -271,7 +271,7 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceAndUser (@PathVariable("user_id") Long userId, @PathVariable("workspace_id") Long workspaceId) {
         List<ChannelDTO> channels = channelService.getChannelByWorkspaceAndUser(workspaceId, userId);
-        return ResponseEntity.ok(channels);
+        return channels.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(channels);
     }
 
     @GetMapping("/workspace/{id}")
@@ -288,7 +288,8 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceId (@PathVariable("id") Long id) {
-        return new ResponseEntity<>(channelService.getChannelDtoListByWorkspaceId(id), HttpStatus.OK);
+        List<ChannelDTO> channelDTOSList =  channelService.getChannelDtoListByWorkspaceId(id);
+        return channelDTOSList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(channelDTOSList);
     }
 
     @GetMapping("/name/{name}")
@@ -324,12 +325,16 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel archived")
             })
     public ResponseEntity<ChannelDTO> archivingChannel (@PathVariable("id") Long id) {
-        Channel channel = channelService.getChannelById(id);
-        channel.setArchived(true);
-        channelService.updateChannel(channel);
-        ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
-        logger.info("Канал с id = {} архивирован", id);
-        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+       try {
+           Channel channel = channelService.getChannelById(id);
+           channel.setArchived(true);
+           channelService.updateChannel(channel);
+           ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
+           logger.info("Канал с id = {} архивирован", id);
+           return ResponseEntity.ok(channelDTO);
+       } catch (Exception e){
+           return ResponseEntity.notFound().build();
+       }
     }
 
 
@@ -348,7 +353,7 @@ public class ChannelRestController {
             })
     public ResponseEntity<List<ChannelDTO>> getPrivateChannels() {
         List<ChannelDTO> channelsDTOList = channelService.getPrivateChannels();
-        return ResponseEntity.ok(channelsDTOList);
+        return channelsDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(channelsDTOList);
     }
 
 

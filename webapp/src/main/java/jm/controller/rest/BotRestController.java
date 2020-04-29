@@ -248,8 +248,12 @@ public class BotRestController {
             })
     public ResponseEntity<Set<Channel>> getChannels (@PathVariable("id") Long id) {
         // TODO: ПЕРЕДЕЛАТЬ получать сразу getChannels по bot или вынести на уровень сервиса
-        Bot bot = botService.getBotById(id);
-        return new ResponseEntity<>(botService.getChannels(bot), HttpStatus.OK);
+       try {
+           Bot bot = botService.getBotById(id);
+           return new ResponseEntity<>(botService.getChannels(bot), HttpStatus.OK);
+       } catch (Exception e){
+           return ResponseEntity.noContent().build();
+       }
     }
 
     @GetMapping("/{id}/channels/{name}/messages/hour")
@@ -270,12 +274,19 @@ public class BotRestController {
         // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
         //  Зачем получать бота, когда нужен только его ID?
         //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now()
-                                          .minusHours(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        try {
+            Channel channel = channelService.getChannelByName(channelName);
+            Bot bot = botService.getBotById(botId);
+            LocalDateTime endDate = LocalDateTime.now();
+            LocalDateTime startDate = LocalDateTime.now()
+                    .minusHours(1);
+            return new ResponseEntity<>(
+                    messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false),
+                    HttpStatus.OK
+            );
+        } catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @GetMapping("/{id}/channels/{name}/messages/day")
@@ -295,12 +306,18 @@ public class BotRestController {
         // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
         //  Зачем получать бота, когда нужен только его ID?
         //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now()
-                                          .minusDays(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        try {
+            Channel channel = channelService.getChannelByName(channelName);
+            Bot bot = botService.getBotById(botId);
+            LocalDateTime endDate = LocalDateTime.now();
+            LocalDateTime startDate = LocalDateTime.now().minusDays(1);
+            return new ResponseEntity<>(
+                    messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false),
+                    HttpStatus.OK
+            );
+        }catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @GetMapping("/{id}/channels/{name}/messages/week")
@@ -320,12 +337,18 @@ public class BotRestController {
         // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
         //  Зачем получать бота, когда нужен только его ID?
         //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now()
-                                          .minusWeeks(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        try {
+            Channel channel = channelService.getChannelByName(channelName);
+            Bot bot = botService.getBotById(botId);
+            LocalDateTime endDate = LocalDateTime.now();
+            LocalDateTime startDate = LocalDateTime.now().minusWeeks(1);
+            return new ResponseEntity<>(
+                    messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false),
+                    HttpStatus.OK
+            );
+        } catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @GetMapping("/{id}/channels/{name}/messages/month")
@@ -345,11 +368,17 @@ public class BotRestController {
         // TODO: ПЕРЕДЕЛАТЬ вынести логику в сервис.
         //  Зачем получать бота, когда нужен только его ID?
         //  Зачем нужен весь канал, когда нужен только его ID?
-        Channel channel = channelService.getChannelByName(channelName);
-        Bot bot = botService.getBotById(botId);
-        LocalDateTime endDate = LocalDateTime.now();
-        LocalDateTime startDate = LocalDateTime.now()
-                                          .minusMonths(1);
-        return new ResponseEntity<>(messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false), HttpStatus.OK);
+        try {
+            Channel channel = channelService.getChannelByName(channelName);
+            Bot bot = botService.getBotById(botId);
+            LocalDateTime endDate = LocalDateTime.now();
+            LocalDateTime startDate = LocalDateTime.now().minusMonths(1);
+            return new ResponseEntity<>(
+                    messageService.getMessagesByBotIdByChannelIdForPeriod(bot.getId(), channel.getId(), startDate, endDate, false),
+                    HttpStatus.OK
+            );
+        } catch (Exception e){
+            return ResponseEntity.noContent().build();
+        }
     }
 }

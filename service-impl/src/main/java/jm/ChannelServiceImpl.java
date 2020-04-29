@@ -16,12 +16,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
+import java.util.*;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -115,32 +112,56 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<Channel> getChannelsByOwnerId (Long ownerId) {
-        return channelDAO.getChannelsByOwnerId(ownerId);
+        try {
+            return channelDAO.getChannelsByOwnerId(ownerId);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<ChannelDTO> getChannelByWorkspaceAndUser (Long workspaceId, Long userId) {
-        return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId);
+        try {
+            return channelDAO.getChannelByWorkspaceAndUser(workspaceId, userId);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<Channel> getChannelsByWorkspaceId (Long id) {
-        return channelDAO.getChannelsByWorkspaceId(id);
+        try {
+            return channelDAO.getChannelsByWorkspaceId(id);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<ChannelDTO> getChannelDtoListByWorkspaceId (Long workspaceId) {
-        return channelDAO.getChannelDtoListByWorkspaceId(workspaceId);
+        try {
+            return channelDAO.getChannelDtoListByWorkspaceId(workspaceId);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<Channel> getChannelsByUserId (Long userId) {
-        return channelDAO.getChannelsByUserId(userId);
+        try {
+            return channelDAO.getChannelsByUserId(userId);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<ChannelDTO> getChannelDtoListByUserId (Long userId) {
-        return channelDAO.getChannelDtoListByUserId(userId);
+        try {
+            return channelDAO.getChannelDtoListByUserId(userId);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
@@ -192,12 +213,20 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelDTO> getAllArchiveChannels() {
-        return channelDAO.getArchivedChannels();
+        try {
+            return channelDAO.getArchivedChannels();
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<ChannelDTO> getPrivateChannels() {
-        return channelDAO.getPrivateChannels();
+        try {
+            return channelDAO.getPrivateChannels();
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
     }
 
     @Override
