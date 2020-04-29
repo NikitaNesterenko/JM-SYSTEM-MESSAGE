@@ -70,7 +70,7 @@ public class ChannelServiceImplTest {
 
     @Test
     public void getChannelByNameInChannel() {
-        Mockito.when(channelDAO.getChannelByName("Channel1")).thenReturn(channel1);
+        Mockito.when(channelDAO.getChannelByName("Channel1").get()).thenReturn(channel1);
         assertEquals(channelService.getChannelByName("Channel1"), channel1);
         verify(channelDAO).getChannelByName("Channel1");
     }

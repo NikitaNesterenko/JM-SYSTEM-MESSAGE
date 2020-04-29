@@ -18,7 +18,7 @@ public interface SlashCommandDao {
 
     SlashCommand getById(Long id);
 
-    SlashCommand getByName(String commandName);
+    Optional<SlashCommand> getByName(String commandName);
 
     List<SlashCommand> getByWorkspaceId(Long id);
 

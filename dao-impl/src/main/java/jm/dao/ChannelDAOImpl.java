@@ -22,13 +22,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     private static final Logger logger = LoggerFactory.getLogger(ChannelDAOImpl.class);
 
     @Override
-    public Channel getChannelByName(String name) {
+    public Optional<Channel> getChannelByName(String name) {
         try {
-            return (Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
+            return Optional.of((Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
                     .setParameter("name", name)
-                    .getSingleResult();
+                    .getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -159,7 +159,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                     .setParameter(1, ownerId)
                     .getResultList();
         } catch (NoResultException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 

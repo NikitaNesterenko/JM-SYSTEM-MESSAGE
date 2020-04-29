@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +22,13 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
 
 
     @Override
-    public SlashCommand getByName(String commandName) {
+    public Optional<SlashCommand> getByName(String commandName) {
         try {
-            return (SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
+            return Optional.of((SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
                     .setParameter(1, commandName)
-                    .getSingleResult();
+                    .getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -41,7 +42,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .setParameter(1, id)
                     .getResultList();
         } catch (NoResultException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -52,7 +53,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .setParameter(1, id)
                     .getResultList();
         } catch (NullPointerException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 

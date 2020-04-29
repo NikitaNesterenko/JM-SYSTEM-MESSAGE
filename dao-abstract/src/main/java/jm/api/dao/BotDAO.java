@@ -30,7 +30,7 @@ public interface BotDAO {
 
     Set<Channel> getChannels (Bot bot);
 
-    Bot getBotByCommandId (Long id);
+    Optional<Bot> getBotByCommandId (Long id);
 
     Optional<Bot> findByToken(String token);
 }
