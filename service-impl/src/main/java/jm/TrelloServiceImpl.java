@@ -3,6 +3,7 @@ package jm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,19 +15,23 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
-public class TrelloServiceImpl {
-    private final String API_KEY = "606bf0409dd3c5dcd9bc40e2430e237e";
+public class TrelloServiceImpl implements TrelloService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
     private UserService userService;
+    @Value("${trello.api-key}")
+    private String API_KEY;
 
     @Autowired
     public void setUserService (UserService userService) {
         this.userService = userService;
     }
 
+    @Override
     public void setToken (String token) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUserByLogin(userDetails.getUsername());
@@ -34,111 +39,124 @@ public class TrelloServiceImpl {
         userService.updateUser(user);
     }
 
+    @Override
     public String getTokenByUserLogin () {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userService.getUserByLogin(userDetails.getUsername()).getTrelloToken();
     }
 
+    @Override
     public String getTokenByUserName (String userName) {
         return userService.getUserByName(userName).getTrelloToken();
     }
 
+    @Override
     public String getBoardOrCardByURL(String URL, String token) {
-        String objectJSON = null;
-
-        try {
-            objectJSON = restTemplate.getForEntity(URL + ".json?key=" + API_KEY + "&token=" + token, String.class).getBody();
-        } catch (IllegalArgumentException ex) {
-
-        }
-
-        return objectJSON;
+        return restTemplate.getForEntity(URL + ".json?key=" + API_KEY + "&token=" + token, String.class).getBody();
     }
 
+    @Override
     public String getBoardOrCardByName (String pointer, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/search?query=" + pointer + "&key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
     }
 
+    @Override
     public String getListsByBoardID (String boardID, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID
                 + "/lists?key=" + API_KEY + "&token=" + token, String.class).getBody();
     }
 
+    @Override
     public String getCardsByListID (String listID, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/lists/" + listID +
                 "/cards" + "?key=" + API_KEY + "&token=" + token, String.class).getBody();
     }
 
+    @Override
     public String getCardByCardID (String cardID, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/cards/" + cardID + "?key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
     }
 
+    @Override
     public String getBoardByBoardID (String boardID, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID + "?key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
     }
 
+    @Override
     public void addNewCard (String cardName, String listID, String token) {
         restTemplate.postForEntity("https://api.trello.com/1/cards?idList=" + listID
                 + "&name=" + cardName + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
     }
 
+    @Override
     public void addCommentToCard (String comment, String cardID, String token) {
         restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/actions/comments?text=" + comment
                 + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
     }
 
+    @Override
     public void setCardDueDate (String RFC822date, String cardID, String cardJSON, String token) {
         restTemplate.put("https://api.trello.com/1/cards/" + cardID
-                + "?due=" + RFC822date + "&dueComplete=false&key=" + API_KEY + "&token=" + token, cardJSON);
+                + "?due=" + RFC822date + "&key=" + API_KEY + "&token=" + token, cardJSON);
     }
 
+    @Override
     public String getUserIDByUserToken (String token) {
         String userJSON = restTemplate.getForEntity("https://api.trello.com/1/tokens/" + token + "/member?key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
         String userID = null;
 
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
             userID = objectMapper.readTree(userJSON).get("id").asText();
         } catch (IOException ex) {
-
+            logger.log(Level.WARNING, "Error occurred while trying get user ID from user JSON!");
         }
 
         return userID;
     }
 
+    @Override
     public void assignUserToCardByUserID (String userID, String cardID, String token) {
         restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/idMembers?value=" + userID
                 + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
     }
 
-    public String formatStringToRFC822Date(String date) {
+    @Override
+    public String formatStringToRFC822Date(String week, int day, int hour) {
+        if (!week.equals("this") && !week.equals("next")) {
+            return null;
+        }
+        if (day < 1 || day > 7) {
+            return null;
+        }
+        if (hour < 1 || hour > 24) {
+            return null;
+        }
+
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
-        boolean isDateFormatted = false;
 
-        if (date.equalsIgnoreCase("Tomorrow") || date.equalsIgnoreCase("Завтра")) {
-            calendar.setTime(currentDate);
-            calendar.add(Calendar.DATE, 1);
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            currentDate = calendar.getTime();
-            isDateFormatted = true;
+        calendar.setTime(currentDate);
+        if (week.equals("next")) {
+            calendar.add(Calendar.DATE, 7);
         }
-
-        // Нужно добавить обработку для ближайшей пятницы пятницы, следующей недели, а также точного указания даты.
-
-        if (isDateFormatted) {
-            TimeZone timeZone = TimeZone.getTimeZone("UTC");
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            dateFormat.setTimeZone(timeZone);
-            return dateFormat.format(currentDate);
+        if (day == 7) {
+            day = 0;
         }
+        calendar.set(Calendar.DAY_OF_WEEK, day + 1);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        currentDate = calendar.getTime();
 
-        return null;
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        dateFormat.setTimeZone(timeZone);
+        return dateFormat.format(currentDate);
     }
 }

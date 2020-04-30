@@ -2,49 +2,40 @@ package jm.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jm.TrelloServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import jm.TrelloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
-/**
- * Класс контроллер Trello.
- * https://docs.google.com/document/d/1KQVn9yOx-I3dqy3l1E-3TfiTcGA-GLVR-A0MRvXbTCE/edit?usp=sharing
- */
-
 @RestController
 @RequestMapping("/api/trello")
 public class TrelloController {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private TrelloServiceImpl trelloService;
+    private TrelloService trelloService;
     private String boardID;
     private String listID;
     private String cardID;
 
     @Autowired
-    public void setTrelloService (TrelloServiceImpl trelloService) {
+    public void setTrelloService (TrelloService trelloService) {
         this.trelloService = trelloService;
     }
 
-    /**
-     * Метод устанавливает токен Trello для текущего авторизованного пользователя.
-     *
-     * @param token - токен Trello.
-     */
-
+    @Operation (
+            description = "Метод устанавливает токен Trello для текущего авторизованного пользователя."
+    )
     @PostMapping (value = "/token")
     public ResponseEntity <String> setUserToken (@RequestParam (name = "value") String token) {
         trelloService.setToken(token);
         return new ResponseEntity<> ("Trello token was set!", HttpStatus.OK);
     }
 
-    /**
-     * Метод позволяет получить информацию (JSON объект) о текущей доске.
-     *
-     */
-
+    @Operation (
+            description = "Метод позволяет получить информацию (JSON объект) о текущей доске."
+    )
     @GetMapping (value = "info")
     public ResponseEntity<String> getBoardInfo () {
         String token = trelloService.getTokenByUserLogin();
@@ -55,18 +46,11 @@ public class TrelloController {
         return new ResponseEntity<>(boardJSON, HttpStatus.OK);
     }
 
-    /**
-     * Метод позволяет получить объект доски или карточки по ссылке на них. Также устанавливает текущую доску, если в
-     * качестве параметра передано URL доски и доску/список/карточку, если в качестве параметра передано URL карточки.
-     *
-     * @param URL - ссылка на доску или карточку.
-     */
-
-    /*
-    Slack не позволяет создавать карточки после установки текущей карточки через её URL и просит установить доску командой
-    /trello link {board URL}. Отказался от этого решения, добавив установку доски/списка/карточки.
-     */
-
+    @Operation (
+            description = "Метод позволяет получить объект доски или карточки по ссылке на них. Также устанавливает" +
+                    "текущую доску, если в качестве параметра передано URL доски и доску/список/карточку, если в качестве" +
+                    "параметра передано URL карточки."
+    )
     @GetMapping (value = "/details")
     public ResponseEntity<String> getBoardOrCardDetails (@RequestParam (name = "url") String URL) {
 
@@ -85,13 +69,13 @@ public class TrelloController {
         }
 
         if (isBoardURL || isCardURL) {
-            String json = trelloService.getBoardOrCardByURL(URL, token);
-            if (json == null) {
+            String boardOrCardJSON = trelloService.getBoardOrCardByURL(URL, token);
+            if (boardOrCardJSON == null) {
                 return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
             }
 
             try {
-                JsonNode jsonNode = objectMapper.readTree(json);
+                JsonNode jsonNode = objectMapper.readTree(boardOrCardJSON);
                 if (isBoardURL) {
                     boardID = jsonNode.get("id").asText();
                 }
@@ -104,19 +88,16 @@ public class TrelloController {
                 return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
             }
 
-            return new ResponseEntity<>(json, HttpStatus.OK);
+            return new ResponseEntity<>(boardOrCardJSON, HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Error in URL!", HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Метод позволяет получить объект доски по ссылке на неё. При поиске по имени возвращает все подходящие доски.
-     * Устанавливает текущую доску, если была передана ссылка.
-     *
-     * @param pointer - указатель на доску. Может быть как ссылкой, так и именем.
-     */
-
+    @Operation (
+            description = "Метод позволяет получить объект доски по ссылке на неё. При поиске по имени возвращает все" +
+                    "подходящие доски. Устанавливает текущую доску, если была передана ссылка."
+    )
     @PostMapping (value = "/link")
     public ResponseEntity<String> linkBoard (
             @RequestParam (name = "pointer") String pointer) {
@@ -131,17 +112,17 @@ public class TrelloController {
             isBoardURL = true;
         }
 
-        String json = trelloService.getBoardOrCardByName(pointer, token);
+        String pointerResponseJSON = trelloService.getBoardOrCardByName(pointer, token);
         try {
             if (isBoardURL) {
 
-                JsonNode boardNode = objectMapper.readTree(json);
+                JsonNode boardNode = objectMapper.readTree(pointerResponseJSON);
                 boardID = boardNode.get("id").asText();
 
-                return new ResponseEntity<>(json, HttpStatus.OK);
+                return new ResponseEntity<>(pointerResponseJSON, HttpStatus.OK);
             } else {
 
-                JsonNode boardsNode = objectMapper.readTree(json).get("boards");
+                JsonNode boardsNode = objectMapper.readTree(pointerResponseJSON).get("boards");
 
                 if (boardsNode.size() == 0) {
                     return new ResponseEntity<>("Cant find any boards!", HttpStatus.BAD_REQUEST);
@@ -163,13 +144,10 @@ public class TrelloController {
         }
     }
 
-    /**
-     * Если передан параметр позиции списка на доске, метод устанавливает текущий список. Если метод вызван без параметров,
-     * то возвращает все списки.
-     *
-     * @param listPosition - позиция
-     */
-
+    @Operation (
+            description = "Если передан параметр позиции списка на доске, метод устанавливает текущий список. Если метод" +
+                    "вызван без параметров, то возвращает все списки."
+    )
     @PostMapping (value = "/list")
     public ResponseEntity<String> setList (@RequestParam (name = "pos") String listPosition) {
 
@@ -182,9 +160,9 @@ public class TrelloController {
             return new ResponseEntity<>("Board not set!", HttpStatus.BAD_REQUEST);
         }
 
-        String json = trelloService.getListsByBoardID(boardID, token);
+        String listsJSON = trelloService.getListsByBoardID(boardID, token);
         try {
-            JsonNode listsNode = objectMapper.readTree(json);
+            JsonNode listsNode = objectMapper.readTree(listsJSON);
             if (listPosition != null) {
                 int listPos = Integer.parseInt(listPosition);
                 int currentListPos = 1;
@@ -202,15 +180,12 @@ public class TrelloController {
             return new ResponseEntity<>("Unexpected error!", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        return new ResponseEntity<>(json, HttpStatus.OK);
+        return new ResponseEntity<>(listsJSON, HttpStatus.OK);
     }
 
-    /**
-     * Метод создаёт новую карточку, делая её текущей.
-     *
-     * @param cardName - имя создаваемой карточки.
-     */
-
+    @Operation (
+            description = "Метод создаёт новую карточку, делая её текущей."
+    )
     @PostMapping (value = "/add")
     public ResponseEntity<String> addCard (
             @RequestParam (name = "name") String cardName) {
@@ -225,9 +200,9 @@ public class TrelloController {
         }
 
         trelloService.addNewCard(cardName, listID, token);
-        String json = trelloService.getCardsByListID(listID, token);
+        String cardJSON = trelloService.getCardsByListID(listID, token);
         try {
-            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode jsonNode = objectMapper.readTree(cardJSON);
             for (JsonNode cardNode : jsonNode) {
                 String currentNodeCardName = cardNode.get("name").asText();
                 if (cardName.equals(currentNodeCardName)) {
@@ -241,14 +216,14 @@ public class TrelloController {
         return new ResponseEntity<>("New card was created successfully!", HttpStatus.OK);
     }
 
-    /**
-     * Метод устанавливает срок истечения для установленной карточки.
-     *
-     * @param date - дата истечения карточки.
-     */
-
+    @Operation (
+            description = "Метод устанавливает срок истечения для установленной карточки."
+    )
     @PostMapping (value = "/due")
-    public ResponseEntity<String> setDueDate (@RequestParam (name = "date") String date) {
+    public ResponseEntity<String> setDueDate (
+            @RequestParam (name = "week") String week,
+            @RequestParam (name = "day") int day,
+            @RequestParam (name = "hour") int hour) {
         String token = trelloService.getTokenByUserLogin();
         if (token == null) {
             return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
@@ -258,22 +233,19 @@ public class TrelloController {
             return new ResponseEntity<>("Card not set!", HttpStatus.BAD_REQUEST);
         }
 
-        String RFC822Date = trelloService.formatStringToRFC822Date(date);
+        String RFC822Date = trelloService.formatStringToRFC822Date(week, day, hour);
         if (RFC822Date == null) {
             return new ResponseEntity<>("Error in date!", HttpStatus.BAD_REQUEST);
         }
 
-        String json = trelloService.getCardByCardID(cardID, token);
-        trelloService.setCardDueDate(RFC822Date, cardID, token, json);
+        String cardJSON = trelloService.getCardByCardID(cardID, token);
+        trelloService.setCardDueDate(RFC822Date, cardID, cardJSON, token);
         return new ResponseEntity<>("Due set!", HttpStatus.OK);
     }
 
-    /**
-     * Метод добавляет комментарий к установленной карточке.
-     *
-     * @param comment - текст комментария.
-     */
-
+    @Operation (
+            description = "Метод добавляет комментарий к установленной карточке."
+    )
     @PostMapping (value = "/comment")
     public ResponseEntity<String> addComment (
             @RequestParam (name = "text") String comment) {
@@ -291,12 +263,9 @@ public class TrelloController {
         return new ResponseEntity<>("Comment was added successfully!", HttpStatus.OK);
     }
 
-    /**
-     * Метод возвращает набор карточек, подходящих по запросу.
-     *
-     * @param name - имя искомой карточки.
-     */
-
+    @Operation (
+            description = "Метод возвращает набор карточек, подходящих по запросу."
+    )
     @GetMapping (value = "/search")
     public ResponseEntity<String> performSearch (
             @RequestParam (name = "name") String name) {
@@ -306,9 +275,9 @@ public class TrelloController {
             return new ResponseEntity<>("Token is empty!", HttpStatus.UNAUTHORIZED);
         }
 
-        String json = trelloService.getBoardOrCardByName(name, token);
+        String nameResponseJSON = trelloService.getBoardOrCardByName(name, token);
         try {
-            JsonNode cardsNode = objectMapper.readTree(json).get("cards");
+            JsonNode cardsNode = objectMapper.readTree(nameResponseJSON).get("cards");
             if (cardsNode.size() == 0) {
                 return new ResponseEntity<>("Cant find any cards!", HttpStatus.BAD_REQUEST);
             }
@@ -332,12 +301,9 @@ public class TrelloController {
         return new ResponseEntity<>("Cant find any cards!", HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Метод добавляет пользователя к участникам установленной карточки.
-     *
-     * @param userName - имя добавляемого пользователя.
-     */
-
+    @Operation (
+            description = "Метод добавляет пользователя к участникам установленной карточки."
+    )
     @PostMapping (value = "assign")
     public ResponseEntity<String> assignMember (
             @RequestParam (name = "name") String userName) {
@@ -352,18 +318,15 @@ public class TrelloController {
         return new ResponseEntity<>("User assigned successfully!", HttpStatus.OK);
     }
 
-    /**
-     * Метод получает отзывы пользователей.
-     *
-     * @param feedback - текст отзыва.
-     */
-
+    @Operation (
+            description = "Метод получает отзывы пользователей."
+    )
     @PostMapping (value = "feedback")
     public ResponseEntity<String> getFeedback (
             @RequestParam (name = "text") String feedback) {
 
         // Какие-то действия с отзывом пользователя...
 
-        return new ResponseEntity<>("Feedback received!", HttpStatus.OK);
+        return new ResponseEntity<>("Feedback received! Feedback text: " + feedback, HttpStatus.OK);
     }
 }
