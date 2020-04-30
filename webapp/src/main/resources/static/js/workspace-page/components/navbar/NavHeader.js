@@ -10,7 +10,7 @@ export class NavHeader {
             .replaceWith(`
                 <div class="p-classic_nav__model__title__name__button">
                     <i class="p-classic_nav__model__title__name__hash_icon">${channel_icon}</i>
-                    <span class="p-classic_nav__model__title__info__name">${channel_name}</span> 
+                    <span class="p-classic_nav__model__title__info__name" id="chanelName">${channel_name}</span> 
                 </div>
             `);
 

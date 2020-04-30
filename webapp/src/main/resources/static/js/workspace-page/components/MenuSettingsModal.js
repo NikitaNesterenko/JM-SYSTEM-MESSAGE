@@ -158,13 +158,15 @@ export class MenuSettingsModal {
     }
 
     addChannelTitle(elementHeader) {
-        const title = $("<span></span>");
-        this.channel_service.getById(this.channel_id).then(
-            channel => {
-                title.text(channel.name);
-                this.setAdditionalOptionHeaderTitle(title, elementHeader);
-            }
-        );
+        const titleContent = $('#chanelName').html();
+        const title = $(`<span>${titleContent}</span>`);
+        this.setAdditionalOptionHeaderTitle(title, elementHeader);
+        // this.channel_service.getById(this.channel_id).then(
+        //     channel => {
+        //         title.text(channel.name);
+        //         this.setAdditionalOptionHeaderTitle(title, elementHeader);
+        //     }
+        // );
     }
 
     setAdditionalOptionHeaderTitle(title, element) {
