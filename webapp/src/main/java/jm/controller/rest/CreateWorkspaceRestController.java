@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.*;
 import jm.api.dao.CreateWorkspaceTokenDAO;
-import jm.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import jm.model.CreateWorkspaceToken;
+import jm.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -71,12 +71,14 @@ public class CreateWorkspaceRestController {
         if (createWorkspaceToken.isPresent()) {
             CreateWorkspaceToken token = createWorkspaceToken.get();
             token.setUserEmail(emailTo);
-        request.getSession(false).setAttribute("token", token);
-        createWorkspaceTokenService.createCreateWorkspaceToken(token);
-        User user = userService.getUserByEmail(emailTo);
-        if(user == null) {userService.createUserByEmail(emailTo);}
-        return new ResponseEntity(HttpStatus.OK);
-    }
+            request.getSession(false).setAttribute("token", token);
+            createWorkspaceTokenService.createCreateWorkspaceToken(token);
+            User user = userService.getUserByEmail(emailTo);
+            if(user == null) {
+                userService.createUserByEmail(emailTo);
+            }
+            return new ResponseEntity(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
