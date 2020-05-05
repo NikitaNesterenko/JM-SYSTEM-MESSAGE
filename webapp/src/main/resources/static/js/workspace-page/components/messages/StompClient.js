@@ -276,37 +276,41 @@ export class StompClient {
     }
 
     sendThread(message) {
-        this.stompClient.send('/app/thread', {}, JSON.stringify({
-            'id': message.id,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'content': message.content,
-            'isDeleted': message.isDeleted,
-            'dateCreate': message.dateCreate,
-            'parentMessageId': message.parentMessageId,
-            'workspaceId': message.workspaceId
-        }))
+        if (message.content.length > 0){
+            this.stompClient.send('/app/thread', {}, JSON.stringify({
+                'id': message.id,
+                'userId': message.userId,
+                'userName': message.userName,
+                'userAvatarUrl': message.userAvatarUrl,
+                'content': message.content,
+                'isDeleted': message.isDeleted,
+                'dateCreate': message.dateCreate,
+                'parentMessageId': message.parentMessageId,
+                'workspaceId': message.workspaceId
+            }))
+        }
     }
 
     sendDM(message) {
-        const entity = {
-            'id': message.id,
-            'content': message.content,
-            'isDeleted': message.isDeleted,
-            'isUpdated': message.isUpdated,
-            'dateCreate': message.dateCreate,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'filename': message.filename,
-            'sharedMessageId': message.sharedMessageId,
-            'conversationId': message.conversationId,
-            'parentMessageId': message.parentMessageId,
-            'workspaceId': message.workspaceId
-        };
+        if (message.content.length > 0){
+            const entity = {
+                'id': message.id,
+                'content': message.content,
+                'isDeleted': message.isDeleted,
+                'isUpdated': message.isUpdated,
+                'dateCreate': message.dateCreate,
+                'userId': message.userId,
+                'userName': message.userName,
+                'userAvatarUrl': message.userAvatarUrl,
+                'filename': message.filename,
+                'sharedMessageId': message.sharedMessageId,
+                'conversationId': message.conversationId,
+                'parentMessageId': message.parentMessageId,
+                'workspaceId': message.workspaceId
+            };
 
-        this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
+            this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
+        }
     }
 
     sendName(message) {
