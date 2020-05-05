@@ -101,8 +101,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Optional<ChannelDTO> getChannelDTOByName(String name) {
-        Optional<ChannelDTO> result = channelDAO.getChannelDTOByName(name);
-        return result;
+        return channelDAO.getChannelDTOByName(name);
     }
 
     @Override
