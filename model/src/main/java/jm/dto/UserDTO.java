@@ -24,6 +24,7 @@ public class UserDTO {
     private String displayName;
     private String phoneNumber;
     //    private Set<Long> roleIds;
+    private Boolean notifications;
     private String timeZone;
     private Set<Long> starredMessageIds;
     private Set<Long> directMessagesToUserIds;
@@ -88,6 +89,10 @@ public class UserDTO {
             userDTO.timeZone = timeZone;
             return this;
         }
+        public Builder setNotifications(Boolean notifications) {
+            userDTO.notifications = notifications;
+            return this;
+        }
 
         public Builder setStarredMessageIds(Set<Long> starredMessageIds) {
             userDTO.starredMessageIds = starredMessageIds;
@@ -138,6 +143,7 @@ public class UserDTO {
         this.timeZone = user.getTimeZone();
         this.online = user.getOnline();
         this.userSkype = user.getUserSkype();
+        this.notifications = user.getNotifications();
 
         if (user.getUnreadMessages() != null) {
             Set<Long> unreadMessageIds = user.getUnreadMessages().stream().map(Message::getId).collect(Collectors.toSet());

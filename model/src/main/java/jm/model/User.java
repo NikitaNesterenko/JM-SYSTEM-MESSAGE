@@ -143,6 +143,9 @@ public class User {
     @Column(name = "zoom_refresh_token", length = 2000)
     private String refreshZoomToken;
 
+    @Column(name="notifications")
+    private Boolean notifications;
+
     @Column(name = "zoom_expire_date")
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime expireDateZoomToken;
@@ -245,5 +248,6 @@ public class User {
         this.timeZone = userDto.getTimeZone();
         this.online = userDto.getOnline();
         this.userSkype = userDto.getUserSkype();
+        this.notifications = userDto.getNotifications();
     }
 }
