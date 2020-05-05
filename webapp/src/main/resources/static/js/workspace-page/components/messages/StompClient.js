@@ -268,6 +268,10 @@ export class StompClient {
         });
     }
 
+    subscribeNewDirectMessage(conversationId){
+        this.stompClient.subscribe('/queue/dm/' + conversationId, (message) => this.newConversationMessageHandler(message))
+    }
+
     sendChannel(channel) {
         this.stompClient.send('/app/channel', {}, JSON.stringify({
             'name': channel.name,
