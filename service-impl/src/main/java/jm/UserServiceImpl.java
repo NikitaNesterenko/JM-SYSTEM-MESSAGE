@@ -85,8 +85,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsersInThisChannel(Long id) {
-        return userDAO.getAllUsersInThisChannel(id);
+    public List<User> getAllUsersInThisChannelByChannelId(Long id) {
+        return userDAO.getAllUsersInThisChannelByChannelId(id);
     }
 
     @Override
