@@ -29,7 +29,7 @@ public interface UserDAO {
 
     void updateUserRole(User user, String role);
 
-    List<User> getAllUsersInThisChannel(Long id);
+    List<User> getAllUsersInThisChannelByChannelId(Long id);
 
     List<UserDTO> getUsersInWorkspace(Long id);
 

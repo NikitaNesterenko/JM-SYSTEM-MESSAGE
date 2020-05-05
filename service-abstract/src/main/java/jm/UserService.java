@@ -27,7 +27,7 @@ public interface UserService {
 
     User createUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannel(Long id); //+
+    List<User> getAllUsersInThisChannelByChannelId(Long id); //+
 
     List<UserDTO> getAllUsersInWorkspace(Long id);
 
