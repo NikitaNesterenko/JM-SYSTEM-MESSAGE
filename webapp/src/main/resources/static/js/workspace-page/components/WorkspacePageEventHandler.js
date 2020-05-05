@@ -2,9 +2,9 @@ import {refreshMemberList} from "/js/member-list/member-list.js";
 import {
     ChannelRestPaginationService,
     ChannelTopicRestPaginationService,
+    ConversationRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService,
-    ConversationRestPaginationService
+    WorkspaceRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
 import {ActiveChatMembers} from "./sidebar/ActiveChatMembers.js";
 import {NavHeader} from "./navbar/NavHeader.js";
@@ -120,11 +120,12 @@ export class WorkspacePageEventHandler {
                 createdDate: this.getFormattedCreateDate(),
                 ownerId: this.logged_user.id
             };
+
             this.channel_service.create(entity).then(chn => {
-                if (chn) {
-                    sendChannel(chn)
+                if (chn.id !== undefined) {
+                    sendChannel(chn);
                 } else {
-                    alert("That name is already taken!")
+                    alert("A channel with the same name already exists.")
                 }
             })
         });
