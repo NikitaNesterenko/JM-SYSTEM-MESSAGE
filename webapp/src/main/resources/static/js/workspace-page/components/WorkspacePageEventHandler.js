@@ -101,7 +101,6 @@ export class WorkspacePageEventHandler {
                         showForAssociated: true
                     };
                     this.conversation_serivce.create(entity).then(conv => {
-                        //Вот тут не работает подписка на чат после создания
                         this.chat_members.populateDirectMessages();
                         this.stomp_client.subscribeNewDirectMessage(conv.id)
                     });
