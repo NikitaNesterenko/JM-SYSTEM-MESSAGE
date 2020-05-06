@@ -146,17 +146,12 @@ function addNewLineIntoResultInvite(email) {
 $('#bellId').on('click', function () {
     user_rest_service.getUserById(loggedUserId)
         .then(userEntity => {
-            console.log(userEntity);
             let notification = userEntity['notifications'];
-            console.log(notification);
             if (notification === null || notification === true) {
                 userEntity['notifications'] = false;
-                console.log('this place in notification true')
             } else {
                 userEntity['notifications'] = true;
-                console.log('this place in notification false')
             }
-            user_rest_service.updateUser(userEntity).then(r =>
-                console.log(r));
+            user_rest_service.update(userEntity).then(r => console.log(r));
         });
 });

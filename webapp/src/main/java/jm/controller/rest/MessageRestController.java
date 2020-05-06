@@ -56,8 +56,7 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessages () {
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
-        return !messageDTOList.isEmpty()?
-                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();
+        return messageDTOList.isEmpty() ? ResponseEntity.noContent().build(): ResponseEntity.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -76,8 +75,7 @@ public class MessageRestController {
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId (@PathVariable("id") Long id) {
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
-        return !messageDTOList.isEmpty()?
-                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();
+        return messageDTOList.isEmpty() ? ResponseEntity.badRequest().build(): ResponseEntity.ok(messageDTOList);
     }
 
     // DTO compliant

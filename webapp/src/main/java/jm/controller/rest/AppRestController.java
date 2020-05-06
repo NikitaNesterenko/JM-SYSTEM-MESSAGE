@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/rest/api/apps")
-public class AppRestController {private AppsService appsService;
+public class AppRestController {
+
+    private AppsService appsService;
 
     @Autowired
     public AppRestController(AppsService appsService) {

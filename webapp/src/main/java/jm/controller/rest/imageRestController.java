@@ -46,7 +46,7 @@ public class imageRestController {
             MediaType mediaType = MediaType.valueOf("image/" + nameAsArray[nameAsArray.length - 1]);
             return ResponseEntity.ok().contentType(mediaType).body(IOUtils.toByteArray(in));
         } catch (NullPointerException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 }

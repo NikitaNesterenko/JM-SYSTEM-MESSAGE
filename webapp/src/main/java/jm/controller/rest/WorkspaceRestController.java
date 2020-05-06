@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
-import jm.dto.WorkspaceDTO;
 import jm.model.User;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
