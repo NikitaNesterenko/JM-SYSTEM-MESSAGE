@@ -12,9 +12,10 @@ import {NavHeader} from "./navbar/NavHeader.js";
 export class WorkspacePageEventHandler {
 
     channel_id;
-
-    constructor(logged_user) {
+  
+    constructor(logged_user, stompClient) {
         this.logged_user = logged_user;
+        this.stomp_client = stompClient;
         this.addChannelModal = $("#addChannelModal");
         this.addDirectMessageModal = $("#addDirectMessageModal");
         this.addChannelBtn = $("#addChannelButton");
@@ -103,6 +104,7 @@ export class WorkspacePageEventHandler {
                     };
                     this.conversation_serivce.create(entity).then(conv => {
                         this.chat_members.populateDirectMessages();
+                        this.stomp_client.subscribeNewDirectMessage(conv.id)
                     });
 
                 }
