@@ -14,7 +14,7 @@ export class UserRestPaginationService extends RestPaginationService {
     };
 
     getUsersByWorkspace = async (id) => {
-        const response = await fetch('/rest/api/users/workspace/' + id);
+        const response = await fetch(`/rest/api/users/workspace/${id}`);
         return response.json();
     };
 
@@ -55,13 +55,13 @@ export class MessageRestPaginationService extends RestPaginationService {
     }
 
     getAllMessagesByChannelId = async (id) => {
-        const response = await fetch('/rest/api/messages/channel/' + id);
+        const response = await fetch(`/rest/api/messages/channel/${id}`);
         return response.json();
     };
 
     // FIXME: формат startDate, endDate
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
-        const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
+        const response = await fetch(`/rest/api/messages/channel/${id}/${startDate}/${endDate}`);
         console.log(startDate, "\n", endDate)
         return response.json();
     };
@@ -72,7 +72,7 @@ export class MessageRestPaginationService extends RestPaginationService {
     };
 
     getMessageById = async (id) => {
-        const response = await fetch('/rest/api/messages/' + id);
+        const response = await fetch(`/rest/api/messages/${id}`);
         return response.json();
     };
 

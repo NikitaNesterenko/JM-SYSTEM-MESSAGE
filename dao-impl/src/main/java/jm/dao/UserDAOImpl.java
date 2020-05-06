@@ -63,7 +63,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsersInThisChannel(Long id) {
+    public List<User> getAllUsersInThisChannelByChannelId(Long id) {
         TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
                 .setParameter(1, id);
         return query.getResultList();
