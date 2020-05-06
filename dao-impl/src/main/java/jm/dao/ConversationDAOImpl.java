@@ -18,11 +18,15 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public void persist(Conversation conversation) {
+        //FIXME  странно что тут проверка на существование Conversation при создании
         if (
                 getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
                         || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
         ) {
             entityManager.merge(conversation);
+        } else {
+            //добавлено так как условие выше никогда не проходило проверку, из-за этого не подгружались личные сообщения
+            entityManager.persist(conversation);
         }
     }
 

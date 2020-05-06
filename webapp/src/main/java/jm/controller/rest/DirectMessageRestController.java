@@ -142,13 +142,11 @@ public class DirectMessageRestController {
             })
     public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
         // TODO: ПЕРЕДЕЛАТЬ получать сразу List DirectMessageDto по ConversationId
-        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
-        if (messages .isEmpty()){
-            return ResponseEntity.noContent().build();
-        } else {
-            messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-            return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
-        }
+        return new ResponseEntity<>(
+                directMessageService.getDirectMessageDtoListByDirectMessageList(
+                        directMessageService.getMessagesByConversationId(id, false)
+                ),
+                HttpStatus.OK);
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
