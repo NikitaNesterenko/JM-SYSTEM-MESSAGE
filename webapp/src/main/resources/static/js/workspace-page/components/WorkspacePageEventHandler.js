@@ -11,6 +11,8 @@ import {NavHeader} from "./navbar/NavHeader.js";
 
 export class WorkspacePageEventHandler {
 
+    channel_id;
+
     constructor(logged_user) {
         this.logged_user = logged_user;
         this.addChannelModal = $("#addChannelModal");
@@ -73,7 +75,7 @@ export class WorkspacePageEventHandler {
 
             this.channel_topic_service.getChannelTopic(channelId).then(topic => {
                 this.user_service.getUsersByChannelId(channelId).then(users => {
-                    this.wks_header.setInfo(users.length, 666, this.checkTopic(topic));
+                    this.wks_header.setInfo(channelId, users.length, 666, this.checkTopic(topic));
                 });
             });
             refreshMemberList();

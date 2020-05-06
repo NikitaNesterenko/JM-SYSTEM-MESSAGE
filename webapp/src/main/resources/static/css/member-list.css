@@ -35,3 +35,19 @@
 .p-channel_details__member_list__member:hover {
     background-color: #e6e6e6;
 }
+
+.channel-member-info {
+    display: none;
+    position: absolute;
+    border: #1d1c1d solid 1px;
+    width: 90px;
+    height: 200px;
+    left: 65px;
+    top: 60px;
+    background: white;
+    z-index: 1;
+}
+
+.ul-channel-member-info li {
+    list-style-type: none;
+}

@@ -220,7 +220,30 @@ export class MenuSettingsModal {
         this.onCopyChannelNameBtnClick();
         this.onAddPeopleToChannelBtnClick();
         this.onMuteChannel();
+        this.viewChannelMemberList();
     }
 
+    viewChannelMemberList() {
+        $(document).on('click', '#memberList',() => {
+            this.channel_id = sessionStorage.getItem("channelId");
+            this.users_service.getUsersByChannelId(this.channel_id).then(
+                userList => {
+                    $('.channel-member-info').find('.ul-channel-member-info')
+                        .empty();
+                    userList.forEach(function (item) {
+                        $('.channel-member-info').find('.ul-channel-member-info')
+                            .append(
+                            `<li>${item.name}</li>`
+                            );
+                    })
+                }
+            );
+            if($('.channel-member-info').css("display") == "none") {
+                $('.channel-member-info').css("display", "block");
+            } else {
+                $('.channel-member-info').css("display", "none");
+            }
+        })
+    }
 
 }
