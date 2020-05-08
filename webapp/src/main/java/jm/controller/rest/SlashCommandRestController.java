@@ -58,13 +58,17 @@ public class SlashCommandRestController {
                                     schema = @Schema(implementation = SlashCommandDto.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "201", description = "CREATED: createSlashCommand created"),
+                    @ApiResponse(responseCode = "200", description = "createSlashCommand created"),
+                    @ApiResponse(responseCode = "404", description = "createSlashCommand no created")
             })
-    public ResponseEntity createSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
+    public ResponseEntity<?> createSlashCommand(@RequestBody SlashCommandDto slashCommandDto) {
         SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
-        slashCommandService.createSlashCommand(sc);
-        logger.info("Created SlashCommand: {}", sc);
-        return new ResponseEntity(new SlashCommandDto(sc), HttpStatus.CREATED);
+        if (sc != null) {
+            slashCommandService.createSlashCommand(sc);
+            logger.info("Created SlashCommand: {}", sc);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
@@ -93,12 +97,15 @@ public class SlashCommandRestController {
             summary = "delete SlashCommand",
             responses = {
                     @ApiResponse(responseCode = "200", description = "DELETE: SlashCommand delete"),
+                    @ApiResponse(responseCode = "404", description = "not delete SlashCommand with such id")
             })
     public ResponseEntity<?> deleteSlashCommand(@PathVariable Long id) {
-        slashCommandService.deleteSlashCommand(id);
-        logger.info("SlashCommand with id: {} was deleted", id);
-        return new ResponseEntity(HttpStatus.OK);
-
+        if (getSlashCommandById(id).getStatusCode().is2xxSuccessful()) {
+            logger.info("SlashCommand with id: {} was deleted", id);
+            slashCommandService.deleteSlashCommand(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/bot/{id}")
@@ -113,10 +120,14 @@ public class SlashCommandRestController {
                             )
                     ),
                     @ApiResponse(responseCode = "200", description = "Returns a list of bot commands by id "),
+                    @ApiResponse(responseCode = "404", description = "not found list of bot commands by id ")
             })
-    public ResponseEntity<?> getSlashCommandByBotId(@PathVariable Long id) {
+    public ResponseEntity<List<SlashCommandDto>> getSlashCommandByBotId(@PathVariable Long id) {
+        final List<SlashCommandDto> slashCommandDtoList = slashCommandService.getSlashCommandDTOByBotId(id).get();
         logger.info("Slash command for Bot with id = {}", id);
-        return new ResponseEntity<>(slashCommandService.getSlashCommandDTOByBotId(id).get(), HttpStatus.OK);
+        return !slashCommandDtoList.isEmpty()
+                ? new ResponseEntity<>(slashCommandDtoList, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/bot/{id}")
@@ -146,7 +157,6 @@ public class SlashCommandRestController {
         if (slashCommands.stream().anyMatch(command -> command.getName().equals(sc.getName()))) {
             logger.warn("Slash command with name = {} already exist", sc.getName());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-
         } else {
             slashCommandService.createSlashCommand(sc);
             bot.getCommands().add(sc);
@@ -189,10 +199,15 @@ public class SlashCommandRestController {
                             )
                     ),
                     @ApiResponse(responseCode = "200", description = "will return a all commands"),
+                    @ApiResponse(responseCode = "404", description = "all commands not found"),
             })
-    public ResponseEntity<?> getAllSlashCommand() {
-        logger.info("Getting all SlashCommands");
-        return new ResponseEntity<>(slashCommandService.getAllSlashCommandDTO(), HttpStatus.OK);
+    public ResponseEntity<List<SlashCommandDto>> getAllSlashCommand() {
+        final List<SlashCommandDto> slashCommandDtoList = slashCommandService.getAllSlashCommandDTO().get();
+        if (!slashCommandDtoList.isEmpty()) {
+            logger.info("Getting all SlashCommands");
+            return new ResponseEntity<>(slashCommandDtoList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/workspace/id/{id}")
@@ -206,11 +221,16 @@ public class SlashCommandRestController {
                                     schema = @Schema(implementation = SlashCommandDto.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "200", description = "will return all commands to workspace "),
+                    @ApiResponse(responseCode = "200", description = "will return all commands to workspace"),
+                    @ApiResponse(responseCode = "200", description = "not found all commands to workspace")
             })
-    public ResponseEntity<?> getSlashCommandsByWorkspace(@PathVariable Long id) {
-        logger.info("Getting all SlashCommands for workspace with id = {}", id);
-        return new ResponseEntity<>(slashCommandService.getSlashCommandDTOByWorkspaceId(id).get(), HttpStatus.OK);
+    public ResponseEntity<List<SlashCommandDto>> getSlashCommandsByWorkspace(@PathVariable Long id) {
+        final List<SlashCommandDto> slashCommandDtoList = slashCommandService.getSlashCommandDTOByWorkspaceId(id).get();
+        if (!slashCommandDtoList.isEmpty()) {
+            logger.info("Getting all SlashCommands for workspace with id = {}", id);
+            return new ResponseEntity<>(slashCommandDtoList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/bot/id/{id}/")
@@ -224,10 +244,15 @@ public class SlashCommandRestController {
                                     schema = @Schema(implementation = SlashCommandDto.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "200", description = "will return all bot commands with id"),
+                    @ApiResponse(responseCode = "200", description = "will return all bot commands with such id"),
+                    @ApiResponse(responseCode = "404", description = "not found all bot commands with such id")
             })
-    public ResponseEntity<?> getSlashCommandsByBot(@PathVariable Long id) {
-        logger.info("Getting all SlashCommands for bot with id = {}", id);
-        return new ResponseEntity<>(slashCommandService.getSlashCommandDTOByBotId(id).get(), HttpStatus.OK);
+    public ResponseEntity<List<SlashCommandDto>> getSlashCommandsByBot(@PathVariable Long id) {
+        final List<SlashCommandDto> slashCommandDtoList = slashCommandService.getSlashCommandDTOByBotId(id).get();
+        if (!slashCommandDtoList.isEmpty()) {
+            logger.info("Getting all SlashCommands for bot with id = {}", id);
+            return new ResponseEntity<>(slashCommandDtoList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
