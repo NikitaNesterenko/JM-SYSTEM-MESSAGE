@@ -264,7 +264,7 @@ let base64;
 navigator.mediaDevices.getUserMedia({audio: true})
     .then(stream => {
         const mediaRecorder = new MediaRecorder(stream);
-         let base64 = null;
+        base64 = null;
 
         document.querySelector('#recordVoiceButton').addEventListener('click', function () {
             console.log("Start")
@@ -297,6 +297,7 @@ navigator.mediaDevices.getUserMedia({audio: true})
             reader.onloadend = function () {
                 base64 = reader.result;
                 base64 = base64.replace('data:audio/wav;base64,', '')
+                console.log(base64);
             }
             audioChunks = [];
         });
