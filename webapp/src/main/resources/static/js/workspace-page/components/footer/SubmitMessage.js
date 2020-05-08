@@ -107,18 +107,20 @@ export class SubmitMessage {
     }
 
     async getVoiceMessage() {
-        const audioInput = $("#audioInput");
-        const src = audioInput.prop('src');
 
-        if (src !== undefined) {
-            let blob = await fetch(src).then(r => r.blob());
-            let arrayBuffer = await blob.arrayBuffer();
-            let base64 = await btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-            $('#inputMe').html("");
+        // const audioInput = $("#audioInput");
+        // const src = audioInput.prop('src');
+        //
+        // if (src !== undefined) {
+        //     let blob = await fetch(src).then(r => r.blob());
+        //     let arrayBuffer = await blob.arrayBuffer();
+        //     let base64 = await btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+        //     $('#inputMe').html("");
+        //
+        //     return base64;
+        // }
 
-            return base64;
-        }
-        return null;
+        return base64;
     }
 
     async sendChannelMessage(channel_id) {
@@ -142,6 +144,8 @@ export class SubmitMessage {
             await this.sendSlashCommand(entity);
         } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
             sendName(entity);
+            base64=null;
+            $('#audio').empty();
         }
         // clearUsers();
     }
@@ -256,3 +260,49 @@ export class SubmitMessage {
         )
     }
 }
+let base64;
+navigator.mediaDevices.getUserMedia({audio: true})
+    .then(stream => {
+        const mediaRecorder = new MediaRecorder(stream);
+         let base64 = null;
+
+        document.querySelector('#recordVoiceButton').addEventListener('click', function () {
+            console.log("Start")
+            mediaRecorder.start();
+        });
+
+        var audioChunks = [];
+
+        mediaRecorder.addEventListener("dataavailable", async function (event) {
+            audioChunks.push(event.data);
+
+            mediaRecorder.addEventListener("stop", function () {
+            });
+
+            let audioBlob = new Blob(audioChunks,
+                {
+                    type: 'audio/wav'
+                }
+            );
+            const audioUrl = URL.createObjectURL(audioBlob);
+            let audio = document.createElement('audio');
+
+            audio.src = audioUrl;
+            audio.controls = true;
+            // audio.autoplay = true;
+            document.querySelector('#audio').appendChild(audio);
+
+            let reader = new window.FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = function () {
+                base64 = reader.result;
+                base64 = base64.replace('data:audio/wav;base64,', '')
+            }
+            audioChunks = [];
+        });
+        document.querySelector('#stopRecordVoiceButton').addEventListener('click', async function () {
+            mediaRecorder.stop();
+            console.log("Stop")
+            $("#mySmallModalLabelVoice").trigger("click");
+        });
+    });
