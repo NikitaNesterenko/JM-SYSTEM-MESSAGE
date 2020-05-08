@@ -56,10 +56,15 @@ public class WorkspaceRestController {
                                     schema = @Schema(implementation = Workspace.class)
                             ),
                             description = "OK: get workspace"
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no workspace with such id")
             })
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
+        final Workspace workspace = workspaceService.getWorkspaceById(id);
+//        return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
+        return workspace != null
+                ? new ResponseEntity<>(workspace, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(value = "/create")
@@ -73,17 +78,16 @@ public class WorkspaceRestController {
                                     schema = @Schema(implementation = Workspace.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "200", description = "OK: workspace created"),
+                    @ApiResponse(responseCode = "200", description = "ОК: workspace created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to create workspace")
             })
-    public ResponseEntity createWorkspace(@RequestBody Workspace workspace) {
+    public ResponseEntity<?> createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            ResponseEntity.badRequest().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/update")
@@ -100,14 +104,14 @@ public class WorkspaceRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to update channel")
             })
-    public ResponseEntity updateChannel(@RequestBody Workspace workspace,HttpServletRequest request) {
+    public ResponseEntity<?> updateChannel(@RequestBody Workspace workspace,HttpServletRequest request) {
         try {
             workspaceService.updateWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            ResponseEntity.badRequest().build();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         request.getSession(false).setAttribute("WorkspaceID", workspace);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -115,12 +119,15 @@ public class WorkspaceRestController {
             operationId = "deleteWorkspace",
             summary = "Delete workspace",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "OK: workspace deleted")
+                    @ApiResponse(responseCode = "200", description = "OK: workspace deleted"),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no workspace with such id")
             })
-    public ResponseEntity deleteWorkspace(@PathVariable("id") Long id) {
-        workspaceService.deleteWorkspace(id);
-
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> deleteWorkspace(@PathVariable("id") Long id) {
+        if(getWorkspaceById(id).getStatusCode().is2xxSuccessful()) {
+            workspaceService.deleteWorkspace(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
@@ -134,10 +141,14 @@ public class WorkspaceRestController {
                                     schema = @Schema(type = "array", implementation = Workspace.class)
                             ),
                             description = "OK: get workspaces"
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no workspaces")
             })
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
-        return new ResponseEntity<>(workspaceService.getAllWorkspaces(),HttpStatus.OK);
+        final List<Workspace> workspaces = workspaceService.getAllWorkspaces();
+        return workspaces != null && !workspaces.isEmpty()
+                ? new ResponseEntity<>(workspaces, HttpStatus.OK)
+                : new ResponseEntity<>(workspaces, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/chosen")
@@ -193,7 +204,11 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
-        return chosenWorkspace(name, request);
+        if(chosenWorkspace(name, request).getStatusCode().is2xxSuccessful()) {
+            chosenWorkspace(name, request);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/byLoggedUser")
@@ -207,13 +222,14 @@ public class WorkspaceRestController {
                                     schema = @Schema(type = "array", implementation = Workspace.class)
                             ),
                             description = "OK: get workspaces"
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no workspaces at this user")
             })
     public ResponseEntity<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
         // TODO: ПЕРЕДЕЛАТЬ получать только UserID, остальная информация о юзере не используется
-        String name = principal.getName();
-        User user = userService.getUserByLogin(name);
-        List<Workspace> list = workspaceService.getWorkspacesByUserId(user.getId());
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        final List<Workspace> list = workspaceService.getWorkspacesByUserId(userService.getUserByLogin(principal.getName()).getId());
+        return list != null && !list.isEmpty()
+                ? new ResponseEntity<>(list, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

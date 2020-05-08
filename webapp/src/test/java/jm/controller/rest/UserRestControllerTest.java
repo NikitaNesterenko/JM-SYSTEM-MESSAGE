@@ -129,7 +129,7 @@ public class UserRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        verify(userService, times(1)).getAllUsersInThisChannelByChannelId(channelTestId);
+        verify(userService, times(1)).getAllUsersInChannelByChannelId(channelTestId);
     }
 
     /*  This method is impossible to test just now, because method now only give 200 status on success.
@@ -159,7 +159,7 @@ public class UserRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        verify(userService, times(1)).getAllUsersInWorkspace(workspaceTestId);
+        verify(userService, times(1)).getAllUsersInWorkspaceByWorkspaceId(workspaceTestId);
     }
 }
 

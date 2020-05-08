@@ -27,9 +27,9 @@ public interface UserService {
 
     User createUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannelByChannelId(Long id); //+
+    List<User> getAllUsersInChannelByChannelId(Long id); //+
 
-    List<UserDTO> getAllUsersInWorkspace(Long id);
+    List<UserDTO> getAllUsersInWorkspaceByWorkspaceId(Long id);
 
     void removeChannelMessageFromUnreadForUser(Long channelId, Long userId);
 
