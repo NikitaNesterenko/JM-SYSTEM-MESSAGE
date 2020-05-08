@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -77,9 +78,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void createMessage (Message message) {
 
-        if(message.getVoiceMessagePath()!=null){
-            message = setVoiceMessageSoundIntoMessage(message);
-        }
         messageDAO.persist(message);
     }
 
@@ -191,39 +189,5 @@ public class MessageServiceImpl implements MessageService {
     public LocalDateTime getDateCreateById(Long id) {
         return messageDAO.getDateCreateById(id);
     };
-
-    @Override
-    public Message setVoiceMessageSoundIntoMessage(Message message) {
-        String pathFile = message.getVoiceMessagePath();
-        try (FileInputStream fis = new FileInputStream(pathFile)) {
-            byte[] files = new byte[fis.available()];
-            fis.read(files, 0, fis.available());
-            message.setVoiceMessageSound(files);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        File fileDelete = new File(pathFile);
-        fileDelete.delete();
-        return message;
-    }
-
-    @Override
-    public String getVoiceMessagePathById(Long id)  {
-        return messageDAO.getVoiceMessagePathById(id);
-    }
-
-    @Override
-    public void getVoiceMessageSoundById(Long id)  {
-
-        String pathFile = getVoiceMessagePathById(id);
-
-        try (FileOutputStream fos = new FileOutputStream(pathFile)) {
-            byte[] files = messageDAO.getVoiceMessageSoundById(id);
-            fos.write(files, 0, files.length);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
