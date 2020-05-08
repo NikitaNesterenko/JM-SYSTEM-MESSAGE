@@ -180,11 +180,11 @@ public class UserRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no users in channel with such id")
             })
-    public ResponseEntity<List<User>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
+    public ResponseEntity<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
-        List<User> list = userService.getAllUsersInChannelByChannelId(id);
-        return list != null && !list.isEmpty()
-                ? new ResponseEntity<>(list, HttpStatus.OK)
+        Optional<List<UserDTO>> list = userService.getAllUsersDTOInChannelByChannelId(id);
+        return list.isPresent()
+                ? new ResponseEntity<>(list.get(), HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

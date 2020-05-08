@@ -47,7 +47,7 @@ public interface UserService {
 
     Optional<UserDTO> getUserDTOByEmail(String email);
 
-    Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
+    Optional<List<UserDTO>> getAllUsersDTOInChannelByChannelId(Long id);
 
     User getEntityFromDTO(UserDTO userDTO);
 

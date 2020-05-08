@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id) {
+    public Optional<List<UserDTO>> getAllUsersDTOInChannelByChannelId(Long id) {
         return userDAO.getAllUsersDTOInThisChannel(id);
     }
 
