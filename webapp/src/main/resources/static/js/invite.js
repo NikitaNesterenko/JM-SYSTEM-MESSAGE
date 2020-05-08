@@ -1,9 +1,9 @@
-import {InviteRestPaginationService, UserRestPaginationService} from "./rest/entities-rest-pagination.js"
-// import {RestPaginationService} from "./rest/rest-pagination.js"
+import {InviteRestPaginationService, NotificationsRestService} from "./rest/entities-rest-pagination.js"
+
 
 const invite_service = new InviteRestPaginationService();
-const user_rest_service = new UserRestPaginationService();
-// const rest_service = new RestPaginationService();
+const notification_rest_service = new NotificationsRestService();
+
 
 class Invite {
     constructor(email, firstName) {
@@ -142,16 +142,25 @@ function addNewLineIntoResultInvite(email) {
                 </tr>`;
     $('#invitesAnswerTable').append(line)
 }
+
+export function createNotification() {
+    let notification = {
+        "chosen": true,
+        "workspaceId": chosenWorkspace,
+        "userId": loggedUserId
+    };
+}
+
 //функция колокольчика
 $('#bellId').on('click', function () {
-    user_rest_service.getUserById(loggedUserId)
-        .then(userEntity => {
-            let notification = userEntity['notifications'];
-            if (notification === null || notification === true) {
-                userEntity['notifications'] = false;
+    notification_rest_service.getNotifications()
+        .then(notification => {
+            if (notification['chosen'] === true) {
+                notification['chosen'] = false;
             } else {
-                userEntity['notifications'] = true;
+                notification['chosen'] = true;
             }
-            user_rest_service.update(userEntity).then(r => console.log(r));
-        });
+            notification_rest_service.updateNotifications(notification)
+                .then(r => console.log(r))
+        })
 });

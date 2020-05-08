@@ -503,4 +503,26 @@ export class PluginRestPaginationService extends RestPaginationService {
         return plugin.json();
     }
 }
+export class NotificationsRestService extends RestPaginationService{
+    constructor() {
+        super("/rest/api/notifications");
+    }
+
+    async getNotifications() {
+
+        const notification = await fetch(`${this.url}/${chosenWorkspace}/${loggedUserId}`);
+        return notification.json();
+    };
+
+    async createNotifications(){
+        const notification = await fetch(`${this.url}/create`);
+        return notification.json().catch(err=>console.log(err));
+    }
+
+    async updateNotifications(){
+        const notification = await fetch(`${this.url}/update`);
+        return notification.json().catch(err=>console.log(err));
+    }
+
+}
 
