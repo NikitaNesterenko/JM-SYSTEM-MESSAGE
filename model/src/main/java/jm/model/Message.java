@@ -48,14 +48,8 @@ public class Message {
     @Column(name = "filename")
     private String filename;
 
-    @Column(name = "voice_Message_Path")
-    private String voiceMessagePath;
-
     @Lob
-    @Column(name = "voice_MessageSound", columnDefinition = "BLOB")
-    private byte[] voiceMessageSound;
-
-    @Lob
+    @Column(name = "voice_Message", columnDefinition = "MEDIUMBLOB")
     private String voiceMessage;
 
     @Column(name = "is_deleted")
@@ -154,7 +148,6 @@ public class Message {
         this.dateCreate = messageDto.getDateCreate();
         this.filename = messageDto.getFilename();
         this.voiceMessage = messageDto.getVoiceMessage();
-        this.voiceMessagePath = messageDto.getVoiceMessagePath();
         this.isDeleted = messageDto.getIsDeleted();
         this.channelId = messageDto.getChannelId();
     }
@@ -167,8 +160,6 @@ public class Message {
         this.dateCreate = message.dateCreate;
         this.filename = message.filename;
         this.voiceMessage = message.voiceMessage;
-        this.voiceMessagePath = message.voiceMessagePath;
-        this.voiceMessageSound = message.voiceMessageSound;
         this.isDeleted = message.isDeleted;
         this.channelId = message.channelId;
         this.workspace = message.workspace;

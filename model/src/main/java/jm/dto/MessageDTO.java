@@ -163,7 +163,6 @@ public class MessageDTO {
         this.dateCreate = message.getDateCreate();
         this.filename = message.getFilename();
         this.voiceMessage = message.getVoiceMessage();
-        this.voiceMessagePath = message.getVoiceMessagePath();
         this.isDeleted = message.getIsDeleted();
         this.channelId = message.getChannelId();
 
