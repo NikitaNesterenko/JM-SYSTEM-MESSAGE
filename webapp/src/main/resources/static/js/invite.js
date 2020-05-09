@@ -143,7 +143,9 @@ function addNewLineIntoResultInvite(email) {
     $('#invitesAnswerTable').append(line)
 }
 
-//
+//функция на экспорт для создания уведомлений экспортируется в StompClient  224 строка тк
+//не нашел места где в js можно воткнуть ее создание при загрузке workspace
+//в будущем можно перекинуть куда нужно я просто в js не знаю куда и как
 export function createNotifications() {
     let notification = {
         "chosen": true,
@@ -151,6 +153,7 @@ export function createNotifications() {
         "userId": loggedUserId
     };
     notification_rest_service.createNotifications(notification).then(e=>console.log(e));
+    //создается в entities-rest-pagination
 }
 
 //функция колокольчика

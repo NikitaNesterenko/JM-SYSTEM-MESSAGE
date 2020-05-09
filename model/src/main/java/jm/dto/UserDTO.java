@@ -143,7 +143,6 @@ public class UserDTO {
         this.timeZone = user.getTimeZone();
         this.online = user.getOnline();
         this.userSkype = user.getUserSkype();
-        this.notifications = user.getNotifications();
 
         if (user.getUnreadMessages() != null) {
             Set<Long> unreadMessageIds = user.getUnreadMessages().stream().map(Message::getId).collect(Collectors.toSet());

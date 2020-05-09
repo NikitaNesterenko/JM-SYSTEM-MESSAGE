@@ -173,7 +173,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                             "u.phone_number AS \"phoneNumber\", " +
                             "u.timezone AS \"timeZone\", " +
                             "u.is_online AS \"online\", " +
-                            "u.notifications AS \"notifications\", "+
                             "u.skype AS \"userSkype\" " +
                             "FROM users u WHERE u.id = :id")
                     .setParameter("id", id)

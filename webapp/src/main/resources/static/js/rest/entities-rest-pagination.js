@@ -493,6 +493,7 @@ export class AppService extends RestPaginationService {
     }
 }
 
+//класс для создания и вкл/выкл уведомлений
 export class PluginRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/plugin');
