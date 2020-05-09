@@ -143,17 +143,19 @@ function addNewLineIntoResultInvite(email) {
     $('#invitesAnswerTable').append(line)
 }
 
-export function createNotification() {
+//
+export function createNotifications() {
     let notification = {
         "chosen": true,
         "workspaceId": chosenWorkspace,
         "userId": loggedUserId
     };
+    notification_rest_service.createNotifications(notification).then(e=>console.log(e));
 }
 
 //функция колокольчика
 $('#bellId').on('click', function () {
-    notification_rest_service.getNotifications()
+    notification_rest_service.getNotifications(chosenWorkspace,loggedUserId)
         .then(notification => {
             if (notification['chosen'] === true) {
                 notification['chosen'] = false;

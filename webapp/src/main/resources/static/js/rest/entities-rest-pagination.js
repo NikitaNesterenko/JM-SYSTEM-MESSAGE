@@ -34,19 +34,19 @@ export class UserRestPaginationService extends RestPaginationService {
             .catch(err => console.log(err.status));
     };
 
-    updateUser = async (userEntity)  => {
-            const response = await fetch('/rest/api/users/update', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(userEntity)
-            });
-            console.log(userEntity);
-            return await response.json()
-                .catch(err => console.log(err.status));
+    updateUser = async (userEntity) => {
+        const response = await fetch('/rest/api/users/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(userEntity)
+        });
+        console.log(userEntity);
+        return await response.json()
+            .catch(err => console.log(err.status));
 
-        };
+    };
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -503,25 +503,38 @@ export class PluginRestPaginationService extends RestPaginationService {
         return plugin.json();
     }
 }
-export class NotificationsRestService extends RestPaginationService{
+
+export class NotificationsRestService extends RestPaginationService {
     constructor() {
         super("/rest/api/notifications");
     }
 
-    async getNotifications() {
-
-        const notification = await fetch(`${this.url}/${chosenWorkspace}/${loggedUserId}`);
-        return notification.json();
+    getNotifications = async (workspaceId,userId) => {
+        const response = await fetch(`${this.url}/${workspaceId}/${userId}`);
+        return response.json();
     };
 
-    async createNotifications(){
-        const notification = await fetch(`${this.url}/create`);
-        return notification.json().catch(err=>console.log(err));
-    }
+    createNotifications = async (notification) => {
+        //
+        const response = await fetch(`${this.url}/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;'
+            },
+            body: JSON.stringify(notification)
+        });
+        return response.json().catch(err => console.log(err));
+    };
 
-    async updateNotifications(){
-        const notification = await fetch(`${this.url}/update`);
-        return notification.json().catch(err=>console.log(err));
+    updateNotifications = async (notification) => {
+        const response = await fetch(`${this.url}/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;'
+            },
+            body: JSON.stringify(notification)
+        });
+        return response.json().catch(err => console.log(err));
     }
 
 }

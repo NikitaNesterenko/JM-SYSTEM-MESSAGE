@@ -1,5 +1,9 @@
+
+
 const sound = new Audio("/audio/push.mp3");
 const pic = "/image/img.JPG";
+
+
 
 function notify (title, message){
     Push.create(title, {
@@ -10,6 +14,7 @@ function notify (title, message){
     sound.play();
 }
 
+// StompClient
 // Парсер для сообщения типа "{inputMassage: "@asdas", dateCreate: "14.11.2019 18:07", user: {…}, bot: null}"
 // user {id: 2, name: "name_2", lastName: "last-name_2", login: "login_2", email: "mymail_2@testmail.com", …}
 const notifyParseMessage =(message)=> {
