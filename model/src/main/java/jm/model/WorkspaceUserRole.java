@@ -22,10 +22,12 @@ public class WorkspaceUserRole implements GrantedAuthority {
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "workspace_id", nullable = false)
+    @Transient //TODO: Проверить!
     private Workspace workspace;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id", nullable = false)
+    @Transient //TODO: Проверить!
     private User user;
 
     @ManyToOne

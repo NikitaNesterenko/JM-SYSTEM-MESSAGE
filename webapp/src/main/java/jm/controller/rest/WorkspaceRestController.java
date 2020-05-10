@@ -106,6 +106,7 @@ public class WorkspaceRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
+        // FIXME: Переименовать неочевидный WorkspaceId в что-нибудь вроде currentWorkspace
         request.getSession(false).setAttribute("WorkspaceID", workspace);
         return ResponseEntity.ok().build();
     }

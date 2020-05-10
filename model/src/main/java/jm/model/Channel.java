@@ -108,7 +108,7 @@ public class Channel {
         this.isPrivate = channelDTO.getIsPrivate();
         this.archived = false;
         this.createdDate = channelDTO.getCreatedDate();
-        Optional.ofNullable(channelDTO.getTopic()).ifPresent(topic -> this.topic = topic);
+        Optional.ofNullable(channelDTO.getTopic()).ifPresent(topic -> this.topic = topic); // TODO: Зачем?
         this.isApp = channelDTO.getIsApp();
 
     }
