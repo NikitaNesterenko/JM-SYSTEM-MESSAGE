@@ -39,7 +39,7 @@ public class NotificationRestController {
                     )
             })
     public ResponseEntity<Notifications> getNotifications(@PathVariable Long workspaceId, @PathVariable Long userId) {
-        return new ResponseEntity<>(service.getNotification(userId, workspaceId), HttpStatus.OK);
+        return  ResponseEntity.ok(service.getNotification(userId, workspaceId));
     }
 
     @PostMapping(value = "/create")
