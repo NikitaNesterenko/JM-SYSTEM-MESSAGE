@@ -325,7 +325,7 @@ public class ChannelRestController {
         channelService.updateChannel(channel);
         ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
         logger.info("Канал с id = {} архивирован", id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(channelDTO);
     }
 
 
