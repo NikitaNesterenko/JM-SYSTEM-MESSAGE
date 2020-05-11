@@ -148,7 +148,7 @@ function addNewLineIntoResultInvite(email) {
 //в будущем можно перекинуть куда нужно я просто в js не знаю куда и как
 export function createNotifications() {
     let notification = {
-        "chosen": true,
+        "selected": true,
         "workspaceId": chosenWorkspace,
         "userId": loggedUserId
     };
@@ -160,10 +160,10 @@ export function createNotifications() {
 $('#bellId').on('click', function () {
     notification_rest_service.getNotifications(chosenWorkspace,loggedUserId)
         .then(notification => {
-            if (notification['chosen'] === true) {
-                notification['chosen'] = false;
+            if (notification['selected'] === true) {
+                notification['selected'] = false;
             } else {
-                notification['chosen'] = true;
+                notification['selected'] = true;
             }
             notification_rest_service.updateNotifications(notification)
                 .then(r => console.log(r))

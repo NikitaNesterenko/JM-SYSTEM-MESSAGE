@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- *контролер для вкл/выкл уведомлений и их создание
+ * контролер для вкл/выкл уведомлений и их создание
  */
 @RestController
 @RequestMapping(value = "/rest/api/notifications")
@@ -55,9 +55,9 @@ public class NotificationRestController {
                             description = "OK: add notification"
                     )
             })
-    public ResponseEntity addNotifications(@RequestBody Notifications notifications) {
+    public ResponseEntity<Notifications> addNotifications(@RequestBody Notifications notifications) {
         service.addNotification(notifications);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PutMapping(value = "/update")
@@ -73,9 +73,8 @@ public class NotificationRestController {
                             description = "OK: update notification"
                     )
             })
-    public ResponseEntity updateNotifications(@RequestBody Notifications notifications) {
+    public ResponseEntity<Notifications> updateNotifications(@RequestBody Notifications notifications) {
         service.updateNotification(notifications);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
-
 }

@@ -17,12 +17,12 @@ public class Notifications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(name="chosen")
-    private Boolean chosen;
+    @Column(name="selected" ,nullable = false)
+    private Boolean selected;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "workspace_id")
+    @Column(name = "workspace_id", nullable = false)
     private Long workspaceId;
 }
