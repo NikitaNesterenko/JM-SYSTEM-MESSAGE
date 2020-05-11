@@ -52,11 +52,12 @@ public class MessageRestController {
                                     schema = @Schema(type = "array", implementation = MessageDTO.class)
                             ),
                             description = "OK: get messages"
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no messages")
             })
     public ResponseEntity<List<MessageDTO>> getMessages () {
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
-        return messageDTOList.isEmpty() ? ResponseEntity.noContent().build(): ResponseEntity.ok(messageDTOList);
+        return messageDTOList.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -71,11 +72,12 @@ public class MessageRestController {
                                     schema = @Schema(type = "array", implementation = MessageDTO.class)
                             ),
                             description = "OK: get messages"
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no message by channel with such id")
             })
     public ResponseEntity<List<MessageDTO>> getMessagesByChannelId (@PathVariable("id") Long id) {
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
-        return messageDTOList.isEmpty() ? ResponseEntity.badRequest().build(): ResponseEntity.ok(messageDTOList);
+        return messageDTOList.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -90,12 +92,13 @@ public class MessageRestController {
                                     schema = @Schema(implementation = MessageDTO.class)
                             ),
                             description = "OK: get message"
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no message with such id")
             })
     public ResponseEntity<MessageDTO> getMessageById (@PathVariable("id") Long id) {
         return messageService.getMessageDtoById(id)
                        .map(messageDTO -> new ResponseEntity<>(messageDTO, HttpStatus.OK))
-                       .orElse(ResponseEntity.badRequest()
+                       .orElse(ResponseEntity.notFound()
                                        .build());
     }
 
