@@ -59,9 +59,9 @@ public class ThreadChannelRestController {
             ThreadChannel threadChannel = new ThreadChannel(messageDTO.getId());
             threadChannelService.createThreadChannel(threadChannel);
             logger.info("Созданный тред : {}", threadChannel);
-            return new ResponseEntity<>(threadChannel, HttpStatus.OK);
+            return ResponseEntity.ok(threadChannel);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/messages/create")
@@ -75,11 +75,11 @@ public class ThreadChannelRestController {
                                     schema = @Schema(implementation = ThreadMessageDTO.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "201", description = "thread channel message created")
+                    @ApiResponse(responseCode = "200", description = "thread channel message created")
             })
     public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
 //        Сохранение сообщения выполняется в MessagesController сразу из websocket
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{message_id}")
@@ -99,14 +99,9 @@ public class ThreadChannelRestController {
     public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
         try {
-            return new ResponseEntity<>(
-                    new ThreadDTO(
-                            threadChannelService.findByChannelMessageId(id)
-                    ),
-                    HttpStatus.OK
-            );
+            return ResponseEntity.ok(new ThreadDTO(threadChannelService.findByChannelMessageId(id)));
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -127,7 +122,7 @@ public class ThreadChannelRestController {
     public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
         List<ThreadMessageDTO> threadMessageDTOList = threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id);
         return threadMessageDTOList != null && !threadMessageDTOList.isEmpty()
-                ? new ResponseEntity<>(threadMessageDTOList, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                ? ResponseEntity.ok(threadMessageDTOList)
+                : ResponseEntity.notFound().build();
     }
 }

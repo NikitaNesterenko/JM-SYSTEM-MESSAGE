@@ -53,7 +53,7 @@ public class UserRestController {
             })
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
-        return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // DTO compliant
@@ -76,9 +76,9 @@ public class UserRestController {
         if(user != null) {
             userService.createUser(user);
             logger.info("Созданный пользователь : {}", user);
-            return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+            return ResponseEntity.ok(new UserDTO(user));
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     // DTO compliant
@@ -99,7 +99,7 @@ public class UserRestController {
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Пользователь с id = {}", id);
         return userService.getUserDTOById(id).map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/username/{username}")
@@ -119,7 +119,7 @@ public class UserRestController {
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username) {
         logger.info("Пользователь с username = {}", username);
         return userService.getUserDTOByName(username).map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // DTO compliant
@@ -148,7 +148,7 @@ public class UserRestController {
         }
         userService.updateUser(user);
         logger.info("Обновленный пользователь: {}", user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -162,7 +162,7 @@ public class UserRestController {
     public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         logger.info("Удален польщователь с id = {}", id);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
     // DTO compliant
@@ -183,9 +183,7 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
         Optional<List<UserDTO>> list = userService.getAllUsersDTOInChannelByChannelId(id);
-        return list.isPresent()
-                ? new ResponseEntity<>(list.get(), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return list.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // DTO compliant
@@ -204,7 +202,7 @@ public class UserRestController {
             })
     public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
         Optional<UserDTO> userDTO = userService.getUserDTOByLogin(principal.getName());
-        return userDTO.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     // DTO compliant
@@ -226,8 +224,8 @@ public class UserRestController {
         logger.info("Список пользователей Workspace с id = {}", id);
         List<UserDTO> userDTOsList = userService.getAllUsersInWorkspaceByWorkspaceId(id);
         return userDTOsList != null && !userDTOsList.isEmpty()
-                ? new ResponseEntity<>(userDTOsList, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                ? ResponseEntity.ok(userDTOsList)
+                : ResponseEntity.notFound().build();
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
@@ -244,10 +242,10 @@ public class UserRestController {
         if (userByEmail != null) {
             logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
             mailService.sendRecoveryPasswordToken(userByEmail);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
         logger.warn("Запрос на восстановление пароля пользователя с несуществующего email = {}", email);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/password-recovery")
@@ -262,8 +260,8 @@ public class UserRestController {
                                            @RequestParam(name = "password") String password) {
 
         if (mailService.changePasswordUserByToken(token, password)) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().build();
     }
 }

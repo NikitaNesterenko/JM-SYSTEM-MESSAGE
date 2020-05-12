@@ -76,7 +76,7 @@ public class InviteTokenRestController {
                     , url + invite.getHash());
         }
 
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/{hash}")

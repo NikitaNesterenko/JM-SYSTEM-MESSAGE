@@ -63,8 +63,8 @@ public class WorkspaceRestController {
         final Workspace workspace = workspaceService.getWorkspaceById(id);
 //        return new ResponseEntity<>(workspaceService.getWorkspaceById(id), HttpStatus.OK);
         return workspace != null
-                ? new ResponseEntity<>(workspace, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/create")
@@ -84,9 +84,9 @@ public class WorkspaceRestController {
     public ResponseEntity<?> createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -108,10 +108,10 @@ public class WorkspaceRestController {
         try {
             workspaceService.updateWorkspace(workspace);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
         request.getSession(false).setAttribute("WorkspaceID", workspace);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -125,9 +125,9 @@ public class WorkspaceRestController {
     public ResponseEntity<?> deleteWorkspace(@PathVariable("id") Long id) {
         if(getWorkspaceById(id).getStatusCode().is2xxSuccessful()) {
             workspaceService.deleteWorkspace(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping
@@ -147,8 +147,8 @@ public class WorkspaceRestController {
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
         final List<Workspace> workspaces = workspaceService.getAllWorkspaces();
         return workspaces != null && !workspaces.isEmpty()
-                ? new ResponseEntity<>(workspaces, HttpStatus.OK)
-                : new ResponseEntity<>(workspaces, HttpStatus.NOT_FOUND);
+                ? ResponseEntity.ok(workspaces)
+                : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/chosen")
@@ -170,7 +170,7 @@ public class WorkspaceRestController {
         if(workspace==null) {
            return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
        }
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+        return ResponseEntity.ok(workspace);
     }
 
     @GetMapping("/chosen/{name}")
@@ -184,10 +184,10 @@ public class WorkspaceRestController {
     public ResponseEntity<Boolean> chosenWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
         Workspace workspace = workspaceService.getWorkspaceByName(name);
         if (workspace == null) {
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
         request.getSession(true).setAttribute("WorkspaceID", workspace);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/name/{name}")
@@ -206,9 +206,9 @@ public class WorkspaceRestController {
     public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
         if(chosenWorkspace(name, request).getStatusCode().is2xxSuccessful()) {
             chosenWorkspace(name, request);
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            return ResponseEntity.ok(true);
         }
-        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/byLoggedUser")
@@ -229,7 +229,7 @@ public class WorkspaceRestController {
         // TODO: ПЕРЕДЕЛАТЬ получать только UserID, остальная информация о юзере не используется
         final List<Workspace> list = workspaceService.getWorkspacesByUserId(userService.getUserByLogin(principal.getName()).getId());
         return list != null && !list.isEmpty()
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                ? ResponseEntity.ok(list)
+                : ResponseEntity.notFound().build();
     }
 }

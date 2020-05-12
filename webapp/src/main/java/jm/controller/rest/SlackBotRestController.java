@@ -29,8 +29,8 @@ public class SlackBotRestController {
     public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) {
         String currentCommand = command.getCommand();
         return currentCommand != null && !currentCommand.equals("")
-                ? new ResponseEntity<>(command, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                ? ResponseEntity.ok(command)
+                : ResponseEntity.notFound().build();
     }
 
     @MessageMapping("/bot/*") //обработка команд, реализованных на вебсокете

@@ -97,7 +97,7 @@ public class MessageRestController {
             })
     public ResponseEntity<MessageDTO> getMessageById (@PathVariable("id") Long id) {
         return messageService.getMessageDtoById(id)
-                       .map(messageDTO -> new ResponseEntity<>(messageDTO, HttpStatus.OK))
+                       .map(ResponseEntity :: ok)
                        .orElse(ResponseEntity.notFound()
                                        .build());
     }
@@ -136,7 +136,7 @@ public class MessageRestController {
                                     schema = @Schema(implementation = MessageDTO.class)
                             )
                     ),
-                    @ApiResponse(responseCode = "201", description = "CREATED: message created")
+                    @ApiResponse(responseCode = "200", description = "OK: message created")
             })
     public ResponseEntity<MessageDTO> createMessage (@RequestBody MessageDTO messageDto) {
         // TODO: ПРОВЕРИТЬ
@@ -147,7 +147,7 @@ public class MessageRestController {
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
         MessageDTO messageDTO = messageService.getMessageDtoByMessage(message);
-        return new ResponseEntity<>(messageDTO, HttpStatus.CREATED);
+        return ResponseEntity.ok().build();
     }
 
     // DTO compliant
@@ -175,7 +175,7 @@ public class MessageRestController {
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
         if (principal.getName()
                     .equals(existingMessage.getUser()
@@ -184,9 +184,9 @@ public class MessageRestController {
             message.setDateCreate(existingMessage.getDateCreate());
             messageService.updateMessage(message);
             logger.info("Обновленное сообщение: {}", message);
-            return new ResponseEntity(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -199,7 +199,7 @@ public class MessageRestController {
     public ResponseEntity deleteMessage (@PathVariable("id") Long id) {
         messageService.deleteMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     // DTO compliant
@@ -240,7 +240,7 @@ public class MessageRestController {
         for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false)) {
             logger.info(message.toString());
         }
-        return new ResponseEntity<>(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false), HttpStatus.OK);
+        return ResponseEntity.ok(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false));
     }
 
     @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
@@ -259,7 +259,7 @@ public class MessageRestController {
     public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long chnId, @PathVariable Long usrId) {
         userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
         return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
@@ -305,6 +305,6 @@ public class MessageRestController {
         User user = userService.getUserById(usrId);
         user.getUnreadMessages().add(messageService.getMessageById(msgId));
         userService.updateUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }
