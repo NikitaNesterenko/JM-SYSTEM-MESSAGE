@@ -27,9 +27,9 @@ public interface UserService {
 
     User createUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannelByChannelId(Long id); //+
+    List<User> getAllUsersInChannelByChannelId(Long id); //+
 
-    List<UserDTO> getAllUsersInWorkspace(Long id);
+    List<UserDTO> getAllUsersInWorkspaceByWorkspaceId(Long id);
 
     void removeChannelMessageFromUnreadForUser(Long channelId, Long userId);
 
@@ -47,7 +47,7 @@ public interface UserService {
 
     Optional<UserDTO> getUserDTOByEmail(String email);
 
-    Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
+    Optional<List<UserDTO>> getAllUsersDTOInChannelByChannelId(Long id);
 
     User getEntityFromDTO(UserDTO userDTO);
 
