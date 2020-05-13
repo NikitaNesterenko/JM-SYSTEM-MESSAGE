@@ -28,9 +28,9 @@ public class SlackBotRestController {
     // обработка команд для бота, которые реализованы не через вебсокет (их на данный момент нет).
     public ResponseEntity<?> getCommand(@RequestBody SlashCommandDto command) {
         String currentCommand = command.getCommand();
-        ResponseEntity<?> resp = null;
-
-        return resp == null ? new ResponseEntity<>(HttpStatus.OK) : resp;
+        return currentCommand != null && !currentCommand.equals("")
+                ? ResponseEntity.ok(command)
+                : ResponseEntity.notFound().build();
     }
 
     @MessageMapping("/bot/*") //обработка команд, реализованных на вебсокете
