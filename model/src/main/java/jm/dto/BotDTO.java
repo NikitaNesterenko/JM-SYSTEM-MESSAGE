@@ -36,7 +36,7 @@ public class BotDTO {
         this.name = bot.getName();
         this.nickName = bot.getNickName();
 
-        Optional.ofNullable(bot.getWorkspaces()).ifPresent( workspaces ->
+        Optional.ofNullable(bot.getWorkspaces()).ifPresent(workspaces ->
                 this.workspacesId = workspaces.stream().map(Workspace::getId).collect(Collectors.toSet()));
 
         Optional.ofNullable(bot.getChannels()).ifPresent(channels ->
@@ -52,7 +52,7 @@ public class BotDTO {
     private static class Builder {
         private BotDTO botDTO;
 
-        public Builder () {
+        public Builder() {
             botDTO = new BotDTO();
         }
 
@@ -101,30 +101,29 @@ public class BotDTO {
         }
     }
 
-    public void setId (Number id) {
+    public void setId(Number id) {
         this.id = id.longValue();
     }
 
-    public void setDateCreate (Timestamp dateCreate) {
+    public void setDateCreate(Timestamp dateCreate) {
         this.dateCreate = dateCreate.toLocalDateTime();
     }
 
-    public void setWorkspacesId (List<Number> workspacesId) {
+    public void setWorkspacesId(List<Number> workspacesId) {
         this.workspacesId = workspacesId.stream()
-                                    .map(Number::longValue)
-                                    .collect(Collectors.toSet());
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
     }
 
-    public void setChannelIds (List<Number> channelIds) {
+    public void setChannelIds(List<Number> channelIds) {
         this.channelIds = channelIds.stream()
-                                  .map(Number::longValue)
-                                  .collect(Collectors.toSet());
-        ;
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
     }
 
-    public void setSlashCommandsIds (List<Number> slashCommandsIds) {
+    public void setSlashCommandsIds(List<Number> slashCommandsIds) {
         this.slashCommandsIds = slashCommandsIds.stream()
-                                        .map(Number::longValue)
-                                        .collect(Collectors.toSet());
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
     }
 }

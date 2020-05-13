@@ -39,7 +39,7 @@ public class imageRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to find user image")
             })
-    public ResponseEntity<?> getUserImage(@PathVariable String userId, @PathVariable String imageName) throws IOException {
+    public ResponseEntity<> getUserImage(@PathVariable String userId, @PathVariable String imageName) throws IOException {
         try {
             InputStream in = getClass().getResourceAsStream("/static/image/" + userId + "/" + imageName);
             String[] nameAsArray = imageName.split("\\.");

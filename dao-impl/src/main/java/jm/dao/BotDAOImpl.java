@@ -26,50 +26,50 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public List<Bot> getBotsByWorkspaceId (Long id) {
+    public List<Bot> getBotsByWorkspaceId(Long workspaceID) {
         try {
-            return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
-                    .setParameter(1, id)
+            return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=:workspaceId", Bot.class)
+                    .setParameter("workspaceId", workspaceID)
                     .getResultList();
         } catch (NoResultException e) {
             return Collections.emptyList();
         }
     }
 
-    private List<Number> getAllBotIdByWorkspaceId (Long workspaceId) {
+    private List<Number> getAllBotIdByWorkspaceId(Long workspaceId) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
-                           .createNativeQuery("SELECT wb.bot_id FROM workspaces_bots wb WHERE wb.workspace_id=:workspaceId")
-                           .setParameter("workspaceId", workspaceId)
-                           .getResultList();
+                    .createNativeQuery("SELECT wb.bot_id FROM workspaces_bots wb WHERE wb.workspace_id=:workspaceId")
+                    .setParameter("workspaceId", workspaceId)
+                    .getResultList();
 
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return list;
     }
 
     @Override
-    public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
+    public List<BotDTO> getBotDtoListByWorkspaceId(Long id) {
         return getAllBotIdByWorkspaceId(id).stream()
-                       .map(Number::longValue)
-                       .map(this::getBotDTOById)
-                       .map(Optional::get)
-                       .collect(Collectors.toList());
+                .map(Number::longValue)
+                .map(this::getBotDTOById)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Set<Channel> getChannels (Bot bot) {
+    public Set<Channel> getChannels(Bot bot) {
         return bot.getChannels();
     }
 
     @Override
-    public Optional<Bot> getBotByCommandId (Long id) {
+    public Optional<Bot> getBotByCommandId(Long id) {
         try {
-            Bot bot = (Bot)entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
-                                 .setParameter(1, id)
-                                 .getSingleResult();
+            Bot bot = (Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
+                    .setParameter(1, id)
+                    .getSingleResult();
             return Optional.of(bot);
         } catch (NoResultException e) {
             return Optional.empty();
@@ -77,44 +77,44 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
 
-    private List<Number> getListWorkspacesIdByBotId (Long botId) {
+    private List<Number> getListWorkspacesIdByBotId(Long botId) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT wb.workspace_id FROM workspaces_bots wb WHERE wb.bot_id=:botId")
-                           .setParameter("botId", botId)
-                           .getResultList();
+                    .setParameter("botId", botId)
+                    .getResultList();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return list;
     }
 
-    private List<Number> getListChannelIdsIdByBotId (Long botId) {
+    private List<Number> getListChannelIdsIdByBotId(Long botId) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT cb.channel_id FROM channels_bots cb WHERE cb.bot_id=:botId")
-                           .setParameter("botId", botId)
-                           .getResultList();
+                    .setParameter("botId", botId)
+                    .getResultList();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return list;
     }
 
-    private List<Number> getListSlashCommandsIdsByBotId (Long botId) {
+    private List<Number> getListSlashCommandsIdsByBotId(Long botId) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager.createNativeQuery("SELECT bsc.slash_command_id FROM bots_slash_commands bsc WHERE bsc.bot_id=:botId")
-                           .setParameter("botId", botId)
-                           .getResultList();
+                    .setParameter("botId", botId)
+                    .getResultList();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return list;
     }
 
     @Override
-    public Optional<BotDTO> getBotDTOById (Long id) {
+    public Optional<BotDTO> getBotDTOById(Long id) {
         BotDTO botDTO = null;
 
         try {
@@ -132,7 +132,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
 
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
         }
         return Optional.ofNullable(botDTO);
     }
