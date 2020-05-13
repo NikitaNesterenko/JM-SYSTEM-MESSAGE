@@ -1,5 +1,6 @@
 package jm.controller.rest;
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,6 +13,7 @@ import jm.dto.MessageDTO;
 import jm.dto.UserDTO;
 import jm.model.Message;
 import jm.model.User;
+import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -303,5 +306,34 @@ public class MessageRestController {
         user.getUnreadMessages().add(messageService.getMessageById(msgId));
         userService.updateUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/link/{msgId}/{usrId}")
+    @Operation(
+            operationId = "linkToMessage",
+            summary = "Generated link to message",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Message.class)
+                            ),
+                            description = "OK: Got link to message"
+                    )
+            })
+    public ResponseEntity<String> generateLinkToMessage(@PathVariable Long msgId, @PathVariable Long usrId){
+        User user=userService.getUserById(usrId);
+        String encodingUser= Base64.getEncoder().encodeToString(String.valueOf(user.hashCode()).getBytes());
+        Message message=messageService.getMessageById(msgId);
+        String encodingMessage=Base64.getEncoder().encodeToString(String.valueOf(message.hashCode()).getBytes());
+        Workspace workspace=message.getWorkspace();
+        StringBuilder linkToMessage=new StringBuilder();
+        linkToMessage.append(workspace.getName())
+                .append(".jm-system-message.ru/archives/")
+                .append(encodingMessage)
+                .append("/")
+                .append(encodingUser);
+        logger.info(linkToMessage.toString());
+        return ResponseEntity.ok(linkToMessage.toString());
     }
 }
