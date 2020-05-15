@@ -221,7 +221,7 @@ export class StompClient {
                 }
             })
         });
-        createNotifications();//тут вызывается функция для создания уведомлений
+        createNotifications();
     }
 
     subscribeChannel() {

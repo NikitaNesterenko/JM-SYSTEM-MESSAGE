@@ -524,7 +524,7 @@ export class NotificationsRestService extends RestPaginationService {
             },
             body: JSON.stringify(notification)
         });
-        return response.json().catch(err => console.log(err));
+        return response.json();
     };
 
     updateNotifications = async (notification) => {
@@ -535,7 +535,7 @@ export class NotificationsRestService extends RestPaginationService {
             },
             body: JSON.stringify(notification)
         });
-        return response.json().catch(err => console.log(err));
+        return response.json();
     }
 
 }
