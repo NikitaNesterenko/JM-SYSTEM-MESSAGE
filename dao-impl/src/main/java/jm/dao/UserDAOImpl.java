@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -23,35 +22,35 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public Optional<User> getUserByLogin(String login) {
-        try {
+        String query = "select exists(select * from users where login = '" + login + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             User user = (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
                     .getSingleResult();
             return Optional.of(user);
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> getUserByName(String name) {
-        try {
+        String query = "select exists(select * from users where name = '" + name + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             User user = (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
             return Optional.of(user);
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        try {
+        String query = "select exists(select * from users where email = '" + email + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             User user = (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
                     .getSingleResult();
             return Optional.of(user);
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
@@ -70,9 +69,10 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
-    public List<UserDTO> getUsersInWorkspace(Long id) {
+    public List<UserDTO> getUsersInWorkspace(Long workspaceId) {
         List<UserDTO> usersDTO = null;
-        try {
+        String query = "select exists(select * from workspaces_users wu JOIN users u ON wu.user_id = u.id  WHERE wu.workspace_id = '" + workspaceId + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -91,13 +91,11 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                             "JOIN users u ON wu.user_id = u.id " +
                             "WHERE wu.workspace_id = :id " +
                             "GROUP BY u.id")
-                    .setParameter("id", id)
+                    .setParameter("id", workspaceId)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return usersDTO;
     }
@@ -115,22 +113,24 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public boolean isEmailInThisWorkspace(String email, Long workspaceId) {
-        try {
-            User user = getUserByEmail(email).get();
+        User user = getUserByEmail(email).get();
+        String query = "select exists(select * from workspaces_users where user_id = " + user.getId()
+                + " and workspace_id = '" + workspaceId + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             entityManager.createNativeQuery("select * from workspaces_users where user_id =? and workspace_id =?")
                     .setParameter(1, user.getId())
                     .setParameter(2, workspaceId)
                     .getSingleResult();
             return true;
-        } catch (NoResultException | NullPointerException ex) {
-            return false;
         }
+        return false;
     }
 
     @Override
     public Optional<List<UserDTO>> getAllUsersDTO() {
         List<UserDTO> usersDTO = null;
-        try {
+        String query = "select exists(select * from users)";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -150,8 +150,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
     }
@@ -159,7 +157,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOById(Long id) {
         UserDTO userDTO = null;
-        try {
+        String query = "select exists(select * from users where id = '" + id + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -180,8 +179,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -189,7 +186,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByLogin(String login) {
         UserDTO userDTO = null;
-        try {
+        String query = "select exists(select * from users where login = '" + login + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -210,8 +208,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -219,7 +215,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByEmail(String email) {
         UserDTO userDTO = null;
-        try {
+        String query = "select exists(select * from users where email = '" + email + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -240,8 +237,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -249,7 +244,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByName(String name) {
         UserDTO userDTO = null;
-        try {
+        String query = "select exists(select * from users where username = '" + name + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -270,17 +266,15 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
-    /* TODO доделать exception */
 
     @Override
-    public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id) {
+    public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long chanelId) {
         List<UserDTO> usersDTO = null;
-        try {
+        String query = "select exists(select * FROM channels_users cu JOIN users u ON u.id = cu.user_id WHERE cu.channel_id = '" + chanelId + "')";
+        if (getParametersToDeleteAllTryCatchInDao(query)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -298,13 +292,11 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                             "FROM channels_users cu " +
                             "JOIN users u ON u.id = cu.user_id " +
                             "WHERE cu.channel_id = :id")
-                    .setParameter("id", id)
+                    .setParameter("id", chanelId)
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
     }
