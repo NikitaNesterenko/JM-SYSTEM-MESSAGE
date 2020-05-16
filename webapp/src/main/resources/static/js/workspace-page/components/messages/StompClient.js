@@ -331,7 +331,7 @@ export class StompClient {
             'botNickName': message.botNickName,
             'filename': message.filename,
             'voiceMessage': message.voiceMessage,
-            'sharedMessageId': message.sharedMessageId,
+            'sharedMessageId': message.sharedMessage.id,
             'channelId': message.channelId,
             'channelName': message.channelName,
             'workspaceId': message.workspaceId

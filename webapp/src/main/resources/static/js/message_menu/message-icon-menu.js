@@ -1,3 +1,4 @@
+
 import {
     ChannelRestPaginationService,
     ConversationRestPaginationService,
@@ -228,3 +229,10 @@ const add_msg_starred_attr = (message) => {
         + `${star_button_filled}&nbsp;<button id="to-starred-messages-link" type="button" class="btn btn-link">Added to your starred items.</button>`
         + `</span>`);
 };
+
+$(document).on('click','#copy_link_message_button_id',function () {
+    const $shareMessageId=$('#share-message-modal-body').attr('data-share_msg_id');
+    const url='http://localhost:8080/archives/'+btoa($shareMessageId)+'/'+$shareMessageId;
+    navigator.clipboard.writeText(url).then(()=>{
+    });
+});
