@@ -23,19 +23,29 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public Optional<Channel> getChannelByName(String name) {
-        try {
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             return Optional.of((Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
                     .setParameter("name", name)
                     .getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
     public Optional<ChannelDTO> getChannelDTOByName(String name) {
         ChannelDTO channelDTO = null;
-        try {
+
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "c.id  AS \"id\", " +
@@ -55,32 +65,38 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
             channelDTO.setUserIds(getListUserIdsByName(name));
             channelDTO.setBotIds(getListBotIdsByName(name));
-
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(channelDTO);
     }
 
     @Override
-    public Optional<Long> getChannelIdByName(String chanelName) {
-
+    public Optional<Long> getChannelIdByName(String name) {
         Long channelId = null;
 
-        try {
-            channelId = (Long) entityManager.createNativeQuery("SELECT c.id FROM channels c WHERE c.name=:chanelName")
-                    .setParameter("chanelName", chanelName)
-                    .getSingleResult();
-        } catch (NoResultException ignored) {
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
 
+        if (isExist) {
+            channelId = (Long) entityManager.createNativeQuery("SELECT c.id FROM channels c WHERE c.name=:chanelName")
+                    .setParameter("chanelName", name)
+                    .getSingleResult();
         }
+
         return Optional.ofNullable(channelId);
     }
 
     @Override
     public Optional<ChannelDTO> getChannelDTOById(Long id) {
         ChannelDTO channelDTO = null;
-        try {
+
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE id=:id)")
+                .setParameter("id", id)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "c.id  AS \"id\", " +
@@ -99,22 +115,23 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                     .getSingleResult();
             channelDTO.setUserIds(getListUserIdsByName(channelDTO.getName()));
             channelDTO.setBotIds(getListBotIdsByName(channelDTO.getName()));
-
-        } catch (NoResultException e) {
-            logger.info("Error id: " + id);
-            e.printStackTrace();
         }
         return Optional.ofNullable(channelDTO);
     }
 
     private List<Number> getListUserIdsByName(String name) {
         List<Number> list = new ArrayList<>();
-        try {
+
+
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             list = entityManager.createNativeQuery("SELECT cu.user_id  FROM channels_users cu LEFT JOIN channels c on cu.channel_id = c.id WHERE name=:name")
                     .setParameter("name", name)
                     .getResultList();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
         return list;
     }
