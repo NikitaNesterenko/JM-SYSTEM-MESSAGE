@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -43,10 +42,15 @@ public abstract class AbstractDao<T> {
         entityManager.remove(getById(id));
     }
 
-    public Boolean methodToDeleteTryCatch(Long parameter) {
-         Long lon =(Long) entityManager.createQuery("select count(" + parameter + ")from "
-                + persistentClass.getName()).getSingleResult();
+//    public Boolean methodToDeleteTryCatch(Long parameter) {
+//        Long lon = (Long) entityManager.createQuery("select count(id) from "
+//                + persistentClass.getName() + " where id =" + parameter).getSingleResult();
+//        return lon > 0;
+//    }
+
+    public Boolean haveEntityWithThisId(Long entityId) {
+        Long lon = (Long) entityManager.createQuery("select count(id) from "
+                + persistentClass.getName() + " where id =" + entityId).getSingleResult();
         return lon > 0;
     }
-
 }

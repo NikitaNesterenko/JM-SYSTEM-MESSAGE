@@ -72,8 +72,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public List<UserDTO> getUsersInWorkspace(Long id) {
         List<UserDTO> usersDTO = null;
-//        try {
-        if (methodToDeleteTryCatch(id)) {
+        if (haveEntityWithThisId(id)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -98,9 +97,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .getResultList();
             usersDTO.forEach(this::setCollections);
         }
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
-//        }
         return usersDTO;
     }
 
@@ -131,38 +127,33 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public Optional<List<UserDTO>> getAllUsersDTO() {
-        List<UserDTO> usersDTO = null;
-//        try {
-            usersDTO = (List<UserDTO>) entityManager
-                    .createNativeQuery("SELECT " +
-                            "u.id AS \"id\", " +
-                            "u.username AS \"name\", " +
-                            "u.last_name AS \"lastName\", " +
-                            "u.login AS \"login\", " +
-                            "u.email AS \"email\", " +
-                            "u.avatar_url AS \"avatarURL\", " +
-                            "u.title AS \"title\", " +
-                            "u.display_name AS \"displayName\", " +
-                            "u.phone_number AS \"phoneNumber\", " +
-                            "u.timezone AS \"timeZone\", " +
-                            "u.is_online AS \"online\", " +
-                            "u.skype AS \"userSkype\" " +
-                            "FROM users u")
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
-                    .getResultList();
-            usersDTO.forEach(this::setCollections);
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
-//        }
+        List<UserDTO> usersDTO;
+        usersDTO = (List<UserDTO>) entityManager
+                .createNativeQuery("SELECT " +
+                        "u.id AS \"id\", " +
+                        "u.username AS \"name\", " +
+                        "u.last_name AS \"lastName\", " +
+                        "u.login AS \"login\", " +
+                        "u.email AS \"email\", " +
+                        "u.avatar_url AS \"avatarURL\", " +
+                        "u.title AS \"title\", " +
+                        "u.display_name AS \"displayName\", " +
+                        "u.phone_number AS \"phoneNumber\", " +
+                        "u.timezone AS \"timeZone\", " +
+                        "u.is_online AS \"online\", " +
+                        "u.skype AS \"userSkype\" " +
+                        "FROM users u")
+                .unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
+                .getResultList();
+        usersDTO.forEach(this::setCollections);
         return Optional.ofNullable(usersDTO);
     }
 
     @Override
     public Optional<UserDTO> getUserDTOById(Long id) {
         UserDTO userDTO = null;
-//        try {
-        if(methodToDeleteTryCatch(id)){
+        if (haveEntityWithThisId(id)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -183,8 +174,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -283,8 +272,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id) {
         List<UserDTO> usersDTO = null;
-//        try {
-        if(methodToDeleteTryCatch(id)){
+        if (haveEntityWithThisId(id)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -307,8 +295,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
     }
