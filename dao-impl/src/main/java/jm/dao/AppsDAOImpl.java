@@ -13,10 +13,10 @@ import java.util.Optional;
 public class AppsDAOImpl extends AbstractDao<App> implements AppsDAO {
 
     @Override
-    public Optional<App> getAppByWorkspaceIdAndAppName(Long id, String appName) {
+    public Optional<App> getAppByWorkspaceIdAndAppName(Long workspaceId, String appName) {
         try {
             return Optional.of((App) entityManager.createNativeQuery("select * from apps where workspace_id = :workspace_id and app_name = :app_name", App.class)
-                    .setParameter("workspace_id", id)
+                    .setParameter("workspace_id", workspaceId)
                     .setParameter("app_name", appName)
                     .getSingleResult());
         } catch (NoResultException | NullPointerException e) {

@@ -1,11 +1,11 @@
 package jm.dao;
 
-import jm.api.dao.ChannelDAO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -41,6 +41,12 @@ public abstract class AbstractDao<T> {
 
     public void deleteById(Long id) {
         entityManager.remove(getById(id));
+    }
+
+    public Boolean methodToDeleteTryCatch(Long parameter) {
+         Long lon =(Long) entityManager.createQuery("select count(" + parameter + ")from "
+                + persistentClass.getName()).getSingleResult();
+        return lon > 0;
     }
 
 }

@@ -22,7 +22,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
 
     @Override
-    public Optional<User> getUserByLogin(String login) {
+    public Optional<User> getUserByLogin(String login) {//его не трогаем
         try {
             User user = (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
                     .getSingleResult();
@@ -44,7 +44,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {//его тоже не трогаем
         try {
             User user = (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
                     .getSingleResult();
@@ -72,7 +72,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public List<UserDTO> getUsersInWorkspace(Long id) {
         List<UserDTO> usersDTO = null;
-        try {
+//        try {
+        if (methodToDeleteTryCatch(id)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -96,9 +97,10 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//        }
         return usersDTO;
     }
 
@@ -130,7 +132,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<List<UserDTO>> getAllUsersDTO() {
         List<UserDTO> usersDTO = null;
-        try {
+//        try {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -150,16 +152,17 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//        }
         return Optional.ofNullable(usersDTO);
     }
 
     @Override
     public Optional<UserDTO> getUserDTOById(Long id) {
         UserDTO userDTO = null;
-        try {
+//        try {
+        if(methodToDeleteTryCatch(id)){
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -180,8 +183,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -280,7 +283,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id) {
         List<UserDTO> usersDTO = null;
-        try {
+//        try {
+        if(methodToDeleteTryCatch(id)){
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -303,8 +307,8 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
     }

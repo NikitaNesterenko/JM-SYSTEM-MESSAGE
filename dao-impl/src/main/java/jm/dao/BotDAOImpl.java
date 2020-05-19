@@ -114,21 +114,21 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public Optional<BotDTO> getBotDTOById (Long id) {
+    public Optional<BotDTO> getBotDTOById (Long botId) {
         BotDTO botDTO = null;
 
         try {
             botDTO = (BotDTO) entityManager.createNativeQuery("SELECT b.id AS \"id\", b.name AS \"name\", b.nick_name AS \"nickName\", b.date_create AS \"dateCreate\" " +
                                                                       "FROM bots b WHERE id=:id")
-                                      .setParameter("id", id)
+                                      .setParameter("id", botId)
                                       .unwrap(NativeQuery.class)
                                       .setResultTransformer(Transformers.aliasToBean(BotDTO.class))
                                       .getResultList()
                                       .get(0);
 
-            botDTO.setWorkspacesId(getListWorkspacesIdByBotId(id));
-            botDTO.setChannelIds(getListChannelIdsIdByBotId(id));
-            botDTO.setSlashCommandsIds(getListSlashCommandsIdsByBotId(id));
+            botDTO.setWorkspacesId(getListWorkspacesIdByBotId(botId));
+            botDTO.setChannelIds(getListChannelIdsIdByBotId(botId));
+            botDTO.setSlashCommandsIds(getListSlashCommandsIdsByBotId(botId));
 
 
         } catch (IllegalArgumentException e) {
