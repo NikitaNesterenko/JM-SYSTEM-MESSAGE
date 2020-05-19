@@ -234,5 +234,9 @@ $(document).on('click','#copy_link_message_button_id',function () {
     const $shareMessageId=$('#share-message-modal-body').attr('data-share_msg_id');
     const url='http://localhost:8080/archives/'+btoa($shareMessageId)+'/'+$shareMessageId;
     navigator.clipboard.writeText(url).then(()=>{
+       var btn=$('#copy_link_message_button_id');
+       btn.removeClass('btn-light');
+       btn.addClass('btn-success');
+       btn.html('copied!');
     });
 });
