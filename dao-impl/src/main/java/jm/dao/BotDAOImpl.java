@@ -117,7 +117,7 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     public Optional<BotDTO> getBotDTOById (Long botId) {
         BotDTO botDTO = null;
 
-        try {
+        if (haveEntityWithThisId(botId)){
             botDTO = (BotDTO) entityManager.createNativeQuery("SELECT b.id AS \"id\", b.name AS \"name\", b.nick_name AS \"nickName\", b.date_create AS \"dateCreate\" " +
                                                                       "FROM bots b WHERE id=:id")
                                       .setParameter("id", botId)
@@ -130,9 +130,6 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
             botDTO.setChannelIds(getListChannelIdsIdByBotId(botId));
             botDTO.setSlashCommandsIds(getListSlashCommandsIdsByBotId(botId));
 
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(botDTO);
     }
