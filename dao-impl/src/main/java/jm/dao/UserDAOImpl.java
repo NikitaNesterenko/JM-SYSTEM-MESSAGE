@@ -22,36 +22,30 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
 
     @Override
-    public Optional<User> getUserByLogin(String login) {//его не трогаем
-        try {
+    public Optional<User> getUserByLogin(String login) {
+        if(twoParametersMethodToSearchEntity("login",login)){
             User user = (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
                     .getSingleResult();
             return Optional.of(user);
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        }return Optional.empty();
     }
 
     @Override
     public Optional<User> getUserByName(String name) {
-        try {
+        if(twoParametersMethodToSearchEntity("name",name)){
             User user = (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
             return Optional.of(user);
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        }return Optional.empty();
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {//его тоже не трогаем
-        try {
+    public Optional<User> getUserByEmail(String email) {
+        if(twoParametersMethodToSearchEntity("email",email)) {
             User user = (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
                     .getSingleResult();
             return Optional.of(user);
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        }return Optional.empty();
     }
 
     @Override

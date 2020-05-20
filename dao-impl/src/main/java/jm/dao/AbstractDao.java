@@ -42,11 +42,11 @@ public abstract class AbstractDao<T> {
         entityManager.remove(getById(id));
     }
 
-//    public Boolean methodToDeleteTryCatch(Long parameter) {
-//        Long lon = (Long) entityManager.createQuery("select count(id) from "
-//                + persistentClass.getName() + " where id =" + parameter).getSingleResult();
-//        return lon > 0;
-//    }
+    public Boolean twoParametersMethodToSearchEntity(String parameterType, String parameterName) {
+        Long lon = (Long) entityManager.createQuery("select count(id) from "
+                + persistentClass.getName() + " where " + parameterType + " ='" + parameterName + "'").getSingleResult();
+        return lon > 0;
+    }
 
     public Boolean haveEntityWithThisId(Long entityId) {
         Long lon = (Long) entityManager.createQuery("select count(id) from "
