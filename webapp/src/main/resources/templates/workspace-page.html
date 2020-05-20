@@ -113,8 +113,8 @@
     <!--  Icon Library by DV  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--  Voice messaging feature by DV  -->
-    <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>
-    <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>
+<!--    <script src="../js/vavilov/innerJs/WebAudioRecorder.min.js"></script>-->
+<!--    <script src="../js/vavilov/innerJs/voiceRecorder.js"></script>-->
 
     <!-- channel info -->
     <script defer th:src="@{/js/channel_details/view_channel_info.js}" type="module"></script>
@@ -627,15 +627,15 @@
                                 <div class="p-classic_nav__team_header__team__name">
                                     Some Team<!--                                                           Team Name-->
                                 </div>
-                                <button class="p-classic_nav__team_header__team__icon_button">
-                                    <i class="p-classic_nav__team_header__team__icon">
-                                        <i class="fas fa-angle-down"></i>
-                                    </i>
-                                </button>
+<!--                                <button class="p-classic_nav__team_header__team__icon_button">-->
+<!--                                    <i class="p-classic_nav__team_header__team__icon">-->
+<!--                                        <i class="fas fa-angle-down"></i>-->
+<!--                                    </i>-->
+<!--                                </button>-->
                                 <div class="p-classic_nav__team_header__team__dnd_container">
-                                    <button class="p-classic_nav__team_header__team__dnd">
+                                    <button id="bellId" class="p-classic_nav__team_header__team__dnd">
                                         <i class="p-classic_nav__team_header__team__dnd__bell_icon">
-                                            🔔
+                                            🔔 bell
                                         </i>
                                     </button>
                                 </div>
@@ -1037,6 +1037,7 @@
                                 <input class="ql-editor__input-field" id="form_message_input"
                                        placeholder="Динам конт" minlength="1" maxlength="1200"
                                        type="text" autocomplete="off"/>
+                                <div id="audio" ></div>
                             </form>
                         </div>
                         <div name="attachedFiles">
@@ -1058,7 +1059,7 @@
                                 <i class="material-icons buttons-MessageBox">share</i>
                             </button>
                             <button id="voiceMessageBtn" class="iconsVD-messageBox VoiceMessageButton"
-                                    onclick="recording()"
+                                    data-toggle="modal" data-target=".bd-example-modalVoice-sm"
                                     style="align-items: center">
                                 <i class="material-icons buttons-MessageBox">mic_none</i>
                             </button>
@@ -1136,6 +1137,17 @@
 <!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
 <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
 <!--            </div>-->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modalVoice-sm" id="mySmallModalLabelVoice" tabindex="-1" role="dialog"
+     aria-labelledby="mySmallModalLabelVoice" aria-hidden="true" style="background-color:transparent">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <b align="center">Начать запись</b>
+            <button id="recordVoiceButton"  >Start</button>
+            <button id="stopRecordVoiceButton"  >Stop</button>
         </div>
     </div>
 </div>

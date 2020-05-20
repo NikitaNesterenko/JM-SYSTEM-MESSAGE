@@ -1,6 +1,9 @@
-import {InviteRestPaginationService} from "./rest/entities-rest-pagination.js"
+import {InviteRestPaginationService, NotificationsRestService} from "./rest/entities-rest-pagination.js"
+
 
 const invite_service = new InviteRestPaginationService();
+const notification_rest_service = new NotificationsRestService();
+
 
 class Invite {
     constructor(email, firstName) {
@@ -18,16 +21,17 @@ jQuery(document).on('click', '.delete', function () {
     jQuery(this).closest('tr').remove();
 });
 //Переключение между инввайтом в модальном окне
-$('.many_at_once').click(function() {
+$('.many_at_once').click(function () {
     $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
 });
-$('.back_modal_button').click(function() {
+$('.back_modal_button').click(function () {
     $('.nav-tabs .active').parent().prev('li').find('a').trigger('click');
 });
 
+
 window.addEventListener('load', function () {
 
-    const menu_header = document.getElementsByClassName("p-classic_nav__team_header__content")[0];
+    const menu_header = document.getElementsByClassName("p-classic_nav__team_header__team__name")[0];
     const menu_modal = document.getElementsByClassName("menu-user-workspace")[0];
 
     const invite_from_menu_user_workspace = document.getElementById("invite-from-menu-user-workspace");
@@ -35,6 +39,7 @@ window.addEventListener('load', function () {
     menu_header.onclick = function () {
         menu_modal.style.display = "inline-table";
     };
+
 
     $('#invite-button').on('click', function () {
         showInviteModalOnWorkspace();
@@ -62,19 +67,21 @@ window.addEventListener('load', function () {
 
         let content_invites = $('[class ^= "content-form-"]');
         let emails = $('[id ^= "inviteEmail_"]');
-        let emailArrays = document.getElementById('inviteEmails_').value.replace('(',' ').replace(')',' ').replace(',','').split(' ').filter(str=>str.length>1);
+        let emailArrays = document.getElementById('inviteEmails_').value.replace('(', ' ').replace(')', ' ').replace(',', '').split(' ').filter(str => str.length > 1);
         let names = $('[id ^= "inviteName_"]');
         let invites = [];
 
         $.each(emailArrays, (i = emailArrays.length) => {
             let pattern = new RegExp('[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+');
-            if(pattern.test((emailArrays[i]))){
+            if (pattern.test((emailArrays[i]))) {
                 invites.push(new Invite(emailArrays[i]));
             }
         });
 
         $.each(content_invites, (i, item) => {
-            if (emails[i].value !== '') { invites.push(new Invite(emails[i].value, names[i].value));}
+            if (emails[i].value !== '') {
+                invites.push(new Invite(emails[i].value, names[i].value));
+            }
         });
 
         invite_service.create(invites).then(answer => {
@@ -90,8 +97,6 @@ window.addEventListener('load', function () {
             menu_modal.style.display = "none";
         }
     });
-
-
 });
 //отображение модального окна invite в отдельную функцию
 export const showInviteModalOnWorkspace = () => {
@@ -127,7 +132,6 @@ function openInviteAnswerModal(answer) {
                 $('#invitesAnswerTable > tr').remove();
             }
         });
-
     });
 }
 
@@ -138,3 +142,20 @@ function addNewLineIntoResultInvite(email) {
                 </tr>`;
     $('#invitesAnswerTable').append(line)
 }
+
+export function createNotifications() {
+    let notification = {
+        "selected": true,
+        "workspaceId": chosenWorkspace,
+        "userId": loggedUserId
+    };
+    notification_rest_service.createNotifications(notification);
+}
+
+$('#bellId').on('click', function () {
+    notification_rest_service.getNotifications(chosenWorkspace,loggedUserId)
+        .then(notification => {
+            notification['selected'] = notification['selected'] !== true;
+            notification_rest_service.updateNotifications(notification);
+        })
+});

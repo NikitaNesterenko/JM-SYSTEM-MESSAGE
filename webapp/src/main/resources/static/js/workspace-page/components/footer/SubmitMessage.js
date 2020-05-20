@@ -42,7 +42,7 @@ export class SubmitMessage {
             window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
 
-                const content = $("#form_message_input").val();
+                const content =  $("#form_message_input").val();
                 if (content.startsWith('/leave ')) {
                     let channelName = content.substring(7);
                     this.leaveChannel(channelName);
@@ -55,7 +55,7 @@ export class SubmitMessage {
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_id !== '0') {
-                    await this.sendChannelMessage(channel_id);
+                    this.sendChannelMessage(channel_id);
                 }
 
                 if (conversation_id !== '0') {
@@ -76,7 +76,7 @@ export class SubmitMessage {
         let isCommand = false;
         if (message.startsWith('/')) {
             window.allActions.forEach(action => {
-                if (message.substr(1, message.indexOf(" ") < 0 ? message.length : message.indexOf(" ") - 1) === action) {
+                if (message.substr(1, message.indexOf(" ") < 0 ? message.length :  message.indexOf(" ") - 1) === action) {
                     isCommand = true;
                 }
             })
@@ -124,20 +124,20 @@ export class SubmitMessage {
     async sendChannelMessage(channel_id) {
         await this.setChannel(channel_id);
         await this.setUser();
-        const text_message = this.getMessageInput();
+
         let entity = {
             id: null,
             channelId: channel_id,
             userId: this.user.id,
             userName: this.user.name,
-            content: text_message,
+            content: this.getMessageInput(),
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
             voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
-            workspaceId: this.channel.workspaceId,
-            sharedMessageId: await this.getSharedMessageId(text_message)
-        };
+            workspaceId: this.channel.workspaceId
+    };
+
         if (window.hasSlashCommand) {
             await this.sendSlashCommand(entity);
         } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
@@ -148,7 +148,7 @@ export class SubmitMessage {
 
     async sendSlashCommand(entity) {
         if (entity.content.startsWith("/")) {
-            const inputCommand = entity.content.slice(1, entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
+            const inputCommand = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
             window.currentCommands.forEach(command => {
                 if (command.name === inputCommand) {
                     const sendCommand = {
@@ -177,8 +177,7 @@ export class SubmitMessage {
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
             conversationId: conversation_id,
-            workspaceId: workspaceId,
-            sharedMessageId: await this.getSharedMessageId()
+            workspaceId: workspaceId
         };
 
         sendDM(entity);
@@ -227,16 +226,16 @@ export class SubmitMessage {
 
         await this.channel_service.update(entity).then(() => {
             $(".p-channel_sidebar__channels__list").html('');
-            this.renewChannels(this.workspace.id, this.user.id)
+            this.renewChannels(this.workspace.id,this.user.id)
         })
     }
 
-    async renewChannels(workspace_id, user_id) {
-        await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, user_id).then(
+    async renewChannels(workspace_id,user_id) {
+        await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id,user_id).then(
             channels => {
                 let firstChannelId = 0;
                 channels.forEach(function (channel, i) {
-                    if (i === 0) {
+                    if (i===0) {
                         firstChannelId = channel.id
                     }
                     $('#id-channel_sidebar__channels__list')
@@ -255,9 +254,5 @@ export class SubmitMessage {
                 sessionStorage.setItem('conversation_id', '0');
             }
         )
-    }
-
-    getSharedMessageId(url) {
-        return fetch(url).then(resp => resp.json());
     }
 }

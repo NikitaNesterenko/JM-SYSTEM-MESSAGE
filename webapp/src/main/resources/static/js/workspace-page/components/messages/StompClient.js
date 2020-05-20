@@ -3,15 +3,18 @@ import {is_open, populateRightPaneActivity} from "/js/activities/view_activities
 
 import {SubmitMessage} from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
-import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace} from "/js/invite.js";
+import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace,createNotifications} from "/js/invite.js";
 import {deleteChannelFromList} from "/js/workspace-page/components/sidebar/ChannelView.js";
 import {
     ChannelRestPaginationService,
     ConversationRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    NotificationsRestService
 } from "/js/rest/entities-rest-pagination.js";
+
+
 
 export class StompClient {
 
@@ -28,7 +31,7 @@ export class StompClient {
         this.conversation_service = new ConversationRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.workspace_service = new WorkspaceRestPaginationService();
-
+        this.notification_service = new NotificationsRestService();
         this.commands = new Command();
 
         window.sendName = (message) => this.sendName(message);
@@ -217,7 +220,8 @@ export class StompClient {
                     item.textContent = user.online == 1 ? "●" : "○";
                 }
             })
-        })
+        });
+        createNotifications();
     }
 
     subscribeChannel() {

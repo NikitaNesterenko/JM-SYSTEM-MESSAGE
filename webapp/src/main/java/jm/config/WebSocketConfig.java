@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 /* @EnableWebSocketMessageBroker включает обработку сообщений по WebSocket, возвращаемую брокером сообщений.
  * Метод configureMessageBroker() переопределяет поведение по умолчанию в WebSocketMessageBrokerConfigurer для настройки брокера сообщений.
@@ -27,4 +28,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/websocket").withSockJS();
     }
 
+
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(1024000 * 1024);
+        registration.setSendBufferSizeLimit(2048000 * 1024);
+        registration.setSendTimeLimit(20000);
+    }
 }

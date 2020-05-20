@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +60,7 @@ public class ChannelRestController {
                             description = "Sorry: no chosen workspace. Try again!"
                     )
             })
-    public ResponseEntity<Workspace> getChosenChannel(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Workspace> getChosenChannel(HttpServletRequest request) {
         Workspace workspace = (Workspace) request.getSession()
                 .getAttribute("ChannelId");
         if (workspace == null) {
@@ -70,7 +68,7 @@ public class ChannelRestController {
                     .header(HttpHeaders.LOCATION, "/chooseChannel")
                     .build();
         }
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+        return ResponseEntity.ok(workspace);
     }
 
     @GetMapping("/chosen/{id}")
@@ -96,11 +94,11 @@ public class ChannelRestController {
     public ResponseEntity<Boolean> chosenChannel(@PathVariable("id") long id, HttpServletRequest request) {
         Channel channel = channelService.getChannelById(id);
         if (channel == null) {
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
         }
         request.getSession()
                 .setAttribute("ChannelId", channel);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping(value = "/{id}")
@@ -163,35 +161,30 @@ public class ChannelRestController {
             })
 
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-
-        Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
-        List<Channel> channels = Collections.unmodifiableList(channelService.getChannelsByWorkspaceId(workspace.getId()));
-
+        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        List<Channel> channels = channelService.getChannelsByWorkspaceId(workspace.getId());
         Channel channel = channelService.getChannelByName(channelDTO.getName());
 
-        if (channels.contains(channel)) {
-            logger.warn("Channel: {} уже существует в Workspace с ID: {}", channel.getName(), workspace.getId());
-            return ResponseEntity.unprocessableEntity().build();
-        } else {
-            // В любом другом случае (null, канал есть в длругом воркспейсе) создаем новый канал
+        if (!channels.contains(channel)) {
             channel = channelService.getChannelByChannelDto(channelDTO);
             User owner = userService.getUserByLogin(principal.getName());
-
             channel.setUser(owner);
             channel.setIsApp(false);
             channel.setWorkspace(workspace);
             channel.setUsers(Sets.newSet(owner));
-
             try {
                 channelService.createChannel(channel);
-                logger.info("Channel: [ID: {}, Name: {}] создан.", channel.getId(), channel.getName());
+                logger.info("Channel: {} - создан!", channel);
             } catch (IllegalArgumentException | EntityNotFoundException e) {
                 logger.error("Не удалось создать channel [Name: {}]", channel.getName());
                 return ResponseEntity.badRequest()
                         .build();
             }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return new ResponseEntity<>(channelService.getChannelDtoByChannel(channel), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
     @PutMapping(value = "/update")
@@ -208,7 +201,7 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: failed to update channel")
             })
-    public ResponseEntity updateChannel(@RequestBody ChannelDTO channelDTO) {
+    public ResponseEntity<ChannelDTO> updateChannel(@RequestBody ChannelDTO channelDTO) {
         Channel existingChannel = channelService.getChannelById(channelDTO.getId());
         try {
             if (existingChannel == null) {
@@ -234,7 +227,7 @@ public class ChannelRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: channel deleted")
             })
-    public ResponseEntity deleteChannel(@PathVariable("id") Long id) {
+    public ResponseEntity<ChannelDTO> deleteChannel(@PathVariable("id") Long id) {
         channelService.deleteChannel(id);
         logger.info("Удален channel c id = {}", id);
         return ResponseEntity.ok()
@@ -291,8 +284,7 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceId(@PathVariable("id") Long id) {
-        List<ChannelDTO> channelDTOSList = channelService.getChannelDtoListByWorkspaceId(id);
-        return channelDTOSList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(channelDTOSList);
+        return  ResponseEntity.ok(channelService.getChannelDtoListByWorkspaceId(id));
     }
 
     @GetMapping("/name/{name}")
@@ -314,14 +306,6 @@ public class ChannelRestController {
                 .orElse(ResponseEntity.badRequest().build());
     }
 
-    @GetMapping("/name/{workspace}/{name}")
-    public ResponseEntity<ChannelDTO> getChannelByNameAndWorkspaceName(@PathVariable("workspaceId") Long workspaceId, @PathVariable("name") String name) {
-        // TODO: Добавить в DTO метод поиска по id workspace и имени каналла
-        return channelService.getChannelDTOByName(name)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PostMapping(value = "/archiving/{id}")
     @Operation(
             operationId = "archivingChannel",
@@ -336,16 +320,12 @@ public class ChannelRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel archived")
             })
     public ResponseEntity<ChannelDTO> archivingChannel(@PathVariable("id") Long id) {
-        try {
-            Channel channel = channelService.getChannelById(id);
-            channel.setArchived(true);
-            channelService.updateChannel(channel);
-            ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
-            logger.info("Канал с id = {} архивирован", id);
-            return ResponseEntity.ok(channelDTO);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Channel channel = channelService.getChannelById(id);
+        channel.setArchived(true);
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
+        logger.info("Канал с id = {} архивирован", id);
+        return ResponseEntity.ok(channelDTO);
     }
 
 
@@ -405,6 +385,6 @@ public class ChannelRestController {
         channelService.updateChannel(channel);
         ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
         logger.info("Канал с id = {} архивирован", id);
-        return new ResponseEntity<>(channelDTO, HttpStatus.OK);
+        return  ResponseEntity.ok(channelDTO);
     }
 }
