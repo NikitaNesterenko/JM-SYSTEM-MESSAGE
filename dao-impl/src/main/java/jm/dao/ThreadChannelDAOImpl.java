@@ -4,7 +4,6 @@ import jm.api.dao.ThreadChannelDAO;
 import jm.model.ThreadChannel;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -14,12 +13,11 @@ public class ThreadChannelDAOImpl extends AbstractDao<ThreadChannel> implements 
 
     @Override
     public Optional<ThreadChannel> getByChannelMessageId(Long id) {
-        try {
+        if (haveEntityWithThisId(id)) {
             return Optional.of(entityManager.createQuery("select m from ThreadChannel m where m.message.id =:id", ThreadChannel.class)
                     .setParameter("id", id)
                     .getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 }

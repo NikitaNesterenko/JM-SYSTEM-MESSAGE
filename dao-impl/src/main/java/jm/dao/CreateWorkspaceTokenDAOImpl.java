@@ -4,7 +4,6 @@ import jm.api.dao.CreateWorkspaceTokenDAO;
 import jm.model.CreateWorkspaceToken;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 @Repository
@@ -13,23 +12,21 @@ public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToke
 
     @Override
     public CreateWorkspaceToken getCreateWorkspaceTokenByOwnerEmail(String email) {
-        try {
+        if (twoParametersMethodToSearchEntity("user_email", email)) {
             return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from create_workspace_token where user_email= :email", CreateWorkspaceToken.class)
                     .setParameter("email", email)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
         }
+        return null;
     }
 
     @Override
-    public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
-        try {
+    public CreateWorkspaceToken getCreateWorkspaceTokenByCode(Integer code) {
+        if (twoParametersMethodToSearchEntity("code", code.toString())) {
             return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from create_workspace_token where code= :code", CreateWorkspaceToken.class)
                     .setParameter("code", code)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
         }
+        return null;
     }
 }

@@ -17,6 +17,6 @@ public interface CreateWorkspaceTokenDAO {
 
     CreateWorkspaceToken getCreateWorkspaceTokenByOwnerEmail(String email);
 
-    CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code);
+    CreateWorkspaceToken getCreateWorkspaceTokenByCode(Integer code);
 
 }
