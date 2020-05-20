@@ -72,7 +72,7 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     public Optional<MessageDTO> getMessageDtoById (Long id) {
         MessageDTO messageDTO = null;
 
-        if(haveEntityWithThisId(id)){
+        try {
             messageDTO = (MessageDTO) entityManager.createNativeQuery("SELECT " +
                                                                               "m.id AS \"id\", " +
                                                                               "m.channel_id AS \"channelId\", " +
@@ -115,6 +115,10 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
                 messageDTO.setBotNickName((String) botData.get()
                                                            .get("botNickName"));
             }
+
+
+        } catch (NoResultException e) {
+            e.printStackTrace();
         }
         return Optional.ofNullable(messageDTO);
     }
