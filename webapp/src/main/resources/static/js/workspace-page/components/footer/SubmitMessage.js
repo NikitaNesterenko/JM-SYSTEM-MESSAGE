@@ -124,7 +124,7 @@ export class SubmitMessage {
     async sendChannelMessage(channel_id) {
         await this.setChannel(channel_id);
         await this.setUser();
-        const text_message=this.getMessageInput();
+        const text_message = this.getMessageInput();
         let entity = {
             id: null,
             channelId: channel_id,
@@ -136,7 +136,7 @@ export class SubmitMessage {
             voiceMessage: await this.getVoiceMessage(),
             recipientUserIds: users,
             workspaceId: this.channel.workspaceId,
-            sharedMessage: await this.getSharedMessage(text_message)
+            sharedMessageId: await this.getSharedMessageId(text_message)
         };
         if (window.hasSlashCommand) {
             await this.sendSlashCommand(entity);
@@ -178,7 +178,7 @@ export class SubmitMessage {
             filename: await this.getFiles(),
             conversationId: conversation_id,
             workspaceId: workspaceId,
-            sharedMessageId: await this.getSharedMessage()
+            sharedMessageId: await this.getSharedMessageId()
         };
 
         sendDM(entity);
@@ -257,8 +257,7 @@ export class SubmitMessage {
         )
     }
 
-    async getSharedMessage(url) {
-        const response = await fetch(url);
-        return response.json();
+    getSharedMessageId(url) {
+        return fetch(url).then(resp => resp.json());
     }
 }
