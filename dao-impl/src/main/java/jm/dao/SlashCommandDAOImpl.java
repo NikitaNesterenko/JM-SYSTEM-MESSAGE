@@ -82,7 +82,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public Optional<SlashCommandDto> getSlashCommandDTOById(Long id) {
         SlashCommandDto slashCommandDTO = null;
-        try {
+        if (haveEntityWithThisId(id)){
             slashCommandDTO = (SlashCommandDto) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
@@ -97,8 +97,6 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList().get(0);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(slashCommandDTO);
     }
