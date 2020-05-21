@@ -2,8 +2,6 @@ package jm.dao;
 
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
-import jm.model.User;
-import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -18,28 +16,19 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public void persist(Conversation conversation) {
-        //FIXME  странно что тут проверка на существование Conversation при создании
-        if (
-                getConversationByUsersId(conversation.getOpeningUser().getId(), conversation.getAssociatedUser().getId()) == null
-                        || getConversationByUsersId(conversation.getAssociatedUser().getId(), conversation.getOpeningUser().getId()) == null
-        ) {
-            entityManager.merge(conversation);
-        } else {
-            //добавлено так как условие выше никогда не проходило проверку, из-за этого не подгружались личные сообщения
             entityManager.persist(conversation);
-        }
     }
 
     @Override
     public Optional<Conversation> getConversationByUsersId(Long firstUserId, Long secondUserId) {
         try {
-            return Optional.of((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
+            return Optional.ofNullable((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
                     .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult());
         } catch (NoResultException e1) {
             try {
-                return Optional.of((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
+                return Optional.ofNullable((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
                         .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult());
-            } catch (NoResultException e2) {
+            } catch (NoResultException ignored) {
                 return Optional.empty();
             }
         }
