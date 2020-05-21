@@ -100,7 +100,8 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel getChannelByName (String name) {
-        return channelDAO.getChannelByName(name).get();
+        return channelDAO.getChannelByName(name).get();//в этом месте произходит ошибка несмотря на то
+        //что в методе дао мы эту ошибку отлавливаем.надо посмотреть на создание каналов где то баг
     }
 
     @Override

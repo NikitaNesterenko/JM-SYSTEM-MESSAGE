@@ -23,17 +23,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     @Override
     public Optional<Channel> getChannelByName(String name) {
-        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
-                .setParameter("name", name)
-                .getSingleResult();
-        boolean isExist = result.signum() > 0;
-
-        if (isExist) {
+        try {
             return Optional.of((Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
                     .setParameter("name", name)
                     .getSingleResult());
+        } catch (NoSuchElementException | NoResultException e) {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     @Override
@@ -91,12 +87,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     public Optional<ChannelDTO> getChannelDTOById(Long id) {
         ChannelDTO channelDTO = null;
 
-        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE id=:id)")
-                .setParameter("id", id)
-                .getSingleResult();
-        boolean isExist = result.signum() > 0;
-
-        if (isExist) {
+        if (haveEntityWithThisId(id)) {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "c.id  AS \"id\", " +
@@ -205,14 +196,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     private List<Number> getAllChannelId() {
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager.createNativeQuery("SELECT c.id FROM channels c ")
-                    .getResultList();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+        return entityManager.createNativeQuery("SELECT c.id FROM channels c ")
+                .getResultList();
     }
 
     @Override
@@ -232,12 +217,12 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                 .getResultList();
     }
 
-    private List<Number> getAllChannelIdByWorkspaceId(Long id) {
+    private List<Number> getAllChannelIdByWorkspaceId(Long workspaceId) {
         List<Number> list = new ArrayList<>();
         try {
             list = entityManager
                     .createNativeQuery("SELECT id FROM channels where workspace_id = :id")
-                    .setParameter("id", id)
+                    .setParameter("id", workspaceId)
                     .getResultList();
 
         } catch (IllegalArgumentException e) {
