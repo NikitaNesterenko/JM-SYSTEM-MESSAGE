@@ -20,9 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -163,7 +165,13 @@ public class ChannelRestController {
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
         List<Channel> channels = channelService.getChannelsByWorkspaceId(workspace.getId());
-        Channel channel = channelService.getChannelByName(channelDTO.getName());
+        Channel channel; //если канала нет то в ДАО выпадает NoSuchElementException, а здесь вы с ним никак не работаетете! из-за этого на JS уходит ошибка. вот и весь секрет
+
+        try{
+            channel = channelService.getChannelByName(channelDTO.getName());
+        }catch (NoSuchElementException | NoResultException e){
+            channel = null;
+        }
 
         if (!channels.contains(channel)) {
             channel = channelService.getChannelByChannelDto(channelDTO);
