@@ -17,7 +17,7 @@ public interface ConversationDAO {
 
     Conversation getById(Long id);
 
-    Optional <Conversation> getConversationByUsersId(Long firstUserId, Long secondUserId);
+    Optional<Conversation> getConversationByUsersId(Long firstUserId, Long secondUserId);
 
     List<Conversation> getConversationsByUserId(Long userId);
 }
