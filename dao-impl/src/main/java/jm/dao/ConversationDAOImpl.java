@@ -16,7 +16,7 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public void persist(Conversation conversation) {
-            entityManager.persist(conversation);
+        entityManager.persist(conversation);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
         try {
             return (List<Conversation>) entityManager.createNativeQuery(
                     "select * from conversations " +
-                    "where opener_id=? and show_for_opener=true " +
-                    "   or associated_id=? and show_for_associated=true", Conversation.class)
+                            "where opener_id=? and show_for_opener=true " +
+                            "   or associated_id=? and show_for_associated=true", Conversation.class)
                     .setParameter(1, userId).setParameter(2, userId).getResultList();
         } catch (NoResultException e1) {
             return Collections.emptyList();
@@ -51,10 +51,10 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
     public void deleteById(Long conversationID, Long userID) {
         entityManager.createNativeQuery(
                 "UPDATE conversations " +
-                "SET " +
-                "    show_for_opener = IF(opener_id = ? ^ show_for_opener = false , false, true), " +
-                "    show_for_associated = IF(associated_id = ? ^ show_for_associated = false, false, true) " +
-                "WHERE id = ?")
-                .setParameter(1, userID).setParameter(2, userID).setParameter(3,conversationID).executeUpdate();
+                        "SET " +
+                        "    show_for_opener = IF(opener_id = ? ^ show_for_opener = false , false, true), " +
+                        "    show_for_associated = IF(associated_id = ? ^ show_for_associated = false, false, true) " +
+                        "WHERE id = ?")
+                .setParameter(1, userID).setParameter(2, userID).setParameter(3, conversationID).executeUpdate();
     }
 }
