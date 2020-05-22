@@ -172,7 +172,6 @@ public class Response<T> {
 
         <T> Response<T> ok(T body);
 
-
     }
 
     private static class DefaultBuilder implements BodyBuilder {
