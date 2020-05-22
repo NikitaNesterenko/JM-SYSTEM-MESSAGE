@@ -29,7 +29,9 @@ export class ChannelMessageView extends MessageView {
         const content = $(event.currentTarget);
         const msg = $(event.target).find('input').val();
         const filename = $(event.target).attr("data-attachment");
-        content.find(".c-message__inline_editor").replaceWith(`<span class="c-message__body">${msg}</span>`);
+
+       content.find(".c-message__inline_editor").parent().parent().parent().remove();
+
         const message = {
             "id": message_id,
             "userId": this.logged_user.id,
