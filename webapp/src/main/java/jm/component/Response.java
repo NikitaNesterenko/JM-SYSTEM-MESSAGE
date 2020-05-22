@@ -14,6 +14,7 @@ import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 
 import java.net.URI;
 import java.time.Instant;
@@ -21,43 +22,48 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-public class ResponseJmMessage<T> extends HttpEntity<T> {
+public class Response<T> {
 
     private static boolean success;
 
-    private static Object status;
+    private final Object status;
 
-    private ResponseJmMessage(HttpStatus status) {
-        this(null, null, status);
-    }
+    private final HttpHeaders headers;
 
-    //
-    private ResponseJmMessage(@Nullable T body, HttpStatus status) {
-        this(body, null, status);
-    }
+    @Nullable
+    private final T body;
 
-    //
-    private ResponseJmMessage(MultiValueMap<String, String> headers, HttpStatus status) {
-        this(null, headers, status);
-    }
-
-    private ResponseJmMessage(@Nullable T body, @Nullable MultiValueMap<String, String> headers, HttpStatus status) {
-        super(body, headers);
+    private Response(@Nullable T body, @Nullable MultiValueMap<String, String> headers, Object status) {
+        this.body = body;
+        HttpHeaders tempHeaders = new HttpHeaders();
+        if (headers != null) {
+            tempHeaders.putAll(headers);
+        }
+        this.headers = HttpHeaders.readOnlyHttpHeaders(tempHeaders);
         Assert.notNull(status, "HttpStatus must not be null");
         this.status = status;
     }
+
 
     public static BodyBuilder ok() {
         success = true;
         return httpStatus(HttpStatus.OK);
     }
 
-
-    public static <T> ResponseJmMessage<T> ok(@Nullable T body) {
-        BodyBuilder builder = ok();
-        return builder.body(body);
+    public static BodyBuilder ok(HttpStatus status) {
+        success = true;
+        return httpStatus(status);
     }
 
+    public static <T> Response<T> ok(T body) {
+        BodyBuilder builder = ok();
+        return builder.ok(body);
+    }
+
+    public static <T> Response<T> ok(HttpStatus status, T body) {
+        BodyBuilder builder = new DefaultBuilder(status);
+        return builder.ok(body);
+    }
 
     public static BodyBuilder error(HttpStatus status) {
         success = false;
@@ -65,19 +71,67 @@ public class ResponseJmMessage<T> extends HttpEntity<T> {
         return httpStatus(status);
     }
 
-//    public static BodyBuilder error(int status) {
-//        success = false;
-//        return new DefaultBuilder(status);
-//    }
+    public static Response<String> error(HttpStatus status, String text) {
+        success = false;
+        Assert.notNull(status, "HttpStatus must not be null");
+        BodyBuilder builder = httpStatus(status);
+        return builder.message(text);
+    }
 
-//    public static BodyBuilder error() {
-//        success = false;
-//        return new DefaultBuilder();
-//    }
+    public static BodyBuilder error(int status) {
+        success = false;
+        return new DefaultBuilder(status);
+    }
 
     private static BodyBuilder httpStatus(HttpStatus status) {
         Assert.notNull(status, "HttpStatus must not be null");
         return new DefaultBuilder(status);
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("<");
+        builder.append(this.status.toString());
+        if (this.status instanceof HttpStatus) {
+            builder.append(' ');
+            builder.append(((HttpStatus) this.status).getReasonPhrase());
+        }
+        builder.append(',');
+        if (this.body != null) {
+            builder.append(this.body);
+            builder.append(',');
+        }
+        builder.append(this.headers);
+        builder.append('>');
+        return builder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return (29 * (ObjectUtils.nullSafeHashCode(this.headers) * 29 + ObjectUtils.nullSafeHashCode(this.body)) + ObjectUtils.nullSafeHashCode(this.status));
+    }
+
+    public HttpHeaders getHeaders() {
+        return this.headers;
+    }
+
+    @Nullable
+    public T getBody() {
+        return this.body;
+    }
+
+    public boolean hasBody() {
+        return (this.body != null);
+    }
+
+    public HttpStatus getStatusCode() {
+        if (this.status instanceof HttpStatus) {
+            return (HttpStatus) this.status;
+        } else {
+            return HttpStatus.valueOf((Integer) this.status);
+        }
+
     }
 
 
@@ -103,47 +157,34 @@ public class ResponseJmMessage<T> extends HttpEntity<T> {
 
         B varyBy(String... requestHeaders);
 
-        <T> ResponseJmMessage<T> build();
+        <T> Response<T> build();
 
         B status(HttpStatus httpStatus);
-
-//        B message(String message);
 
     }
 
     //
     public interface BodyBuilder extends HeadersBuilder<BodyBuilder> {
 
-        BodyBuilder contentLength(long var1);
-
         BodyBuilder contentType(MediaType var1);
 
-        <T> ResponseJmMessage<T> body(@Nullable T var1);
+        Response<String> message(String message);
+
+        <T> Response<T> ok(T body);
+
+
     }
 
-    //
     private static class DefaultBuilder implements BodyBuilder {
 
-        private final HttpStatus httpStatus;
+        private final Object statusCode;
 
         private final HttpHeaders headers = new HttpHeaders();
 
-//        public DefaultBuilder() {
-//
-//        }
-//
-//        public DefaultBuilder(String string) {
-//            this.string = string;
-//        }
 
-        public DefaultBuilder(HttpStatus httpStatus) {
-
-            this.httpStatus = httpStatus;
+        public DefaultBuilder(Object statusCode) {
+            this.statusCode = statusCode;
         }
-
-//        public DefaultBuilder(int statusCode) {
-//            this.httpStatus = HttpStatus.valueOf(statusCode);
-//        }
 
 
         @Override
@@ -165,12 +206,6 @@ public class ResponseJmMessage<T> extends HttpEntity<T> {
         @Override
         public BodyBuilder allow(HttpMethod... allowedMethods) {
             this.headers.setAllow(new LinkedHashSet<>(Arrays.asList(allowedMethods)));
-            return this;
-        }
-
-        @Override
-        public BodyBuilder contentLength(long contentLength) {
-            this.headers.setContentLength(contentLength);
             return this;
         }
 
@@ -229,26 +264,27 @@ public class ResponseJmMessage<T> extends HttpEntity<T> {
         }
 
         @Override
-        public <T> ResponseJmMessage<T> build() {
-            return body(null);
+        public <T> Response<T> build() {
+            return new Response<>(null, this.headers, this.statusCode);
         }
 
         @Override
-        public <T> ResponseJmMessage<T> body(@Nullable T body) {
-            return (success) ? new ResponseJmMessage<>(body, this.headers, this.httpStatus)
-                    : new ResponseJmMessage<>(null, this.headers, this.httpStatus);
+        public <T> Response<T> ok(T body) {
+            String text = "On error, only text";
+            return (success) ? new Response<>(body, this.headers, this.statusCode)
+                    : new Response<T>((T) text, this.headers, this.statusCode);
         }
-
 
         @Override
         public BodyBuilder status(HttpStatus httpStatus) {
             return error(httpStatus);
         }
 
-//        @Override
-//        public BodyBuilder message(String message) {
-//            return new DefaultBuilder(message);
-//        }
+        @Override
+        public Response<String> message(String message) {
+            return new Response<>(message, this.headers, this.statusCode);
+        }
+
     }
 }
 
