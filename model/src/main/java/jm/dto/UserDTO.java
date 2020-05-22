@@ -24,6 +24,7 @@ public class UserDTO {
     private String displayName;
     private String phoneNumber;
     //    private Set<Long> roleIds;
+    private Boolean notifications;
     private String timeZone;
     private Set<Long> starredMessageIds;
     private Set<Long> directMessagesToUserIds;
@@ -86,6 +87,10 @@ public class UserDTO {
 
         public Builder setTimeZone(String timeZone) {
             userDTO.timeZone = timeZone;
+            return this;
+        }
+        public Builder setNotifications(Boolean notifications) {
+            userDTO.notifications = notifications;
             return this;
         }
 
