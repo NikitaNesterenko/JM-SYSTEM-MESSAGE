@@ -49,7 +49,6 @@ export class SubmitMessage {
                     $("#form_message_input").val("");
                     return
                 }
-
                 const channel_id = sessionStorage.getItem("channelId");
                 const channel_name2 = sessionStorage.getItem("channelname");
                 const conversation_id = sessionStorage.getItem('conversation_id');

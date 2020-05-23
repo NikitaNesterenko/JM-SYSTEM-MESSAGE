@@ -12,7 +12,6 @@ import jm.model.InviteToken;
 import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,7 +52,6 @@ public class InviteTokenRestController {
                     @ApiResponse(responseCode = "200", description = "OK: invites were send")
             })
     public ResponseEntity<List<String>> invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
-        int charactersInHash = 10;
         String url = "http://localhost:8080/rest/api/invites/";
         List<String> responseList = new ArrayList<>();
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
@@ -64,7 +62,7 @@ public class InviteTokenRestController {
         });
 
         for (InviteToken invite : invites) {
-            if (userService.isEmailInThisWorkspace(invite.getEmail(),workspace.getId())) {
+            if (userService.isEmailInThisWorkspace(invite.getEmail(), workspace.getId())) {
                 responseList.add(invite.getEmail());
                 continue;
             }
@@ -127,7 +125,7 @@ public class InviteTokenRestController {
             return ResponseEntity.ok(true);
         } else {
             logger.warn("Не удалось удалить получить пользователя");
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 }
