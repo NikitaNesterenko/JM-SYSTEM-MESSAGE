@@ -35,13 +35,12 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     @Override
     public Channel getChannelByName(String name) {
         Channel channel = null;
-        try{
+        if (twoParametersMethodToSearchEntity("name", name)){
             channel = ((Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
                     .setParameter("name", name)
                     .getSingleResult());
-        }finally {
-            return channel;
         }
+        return channel;
     }
 
     @Override
