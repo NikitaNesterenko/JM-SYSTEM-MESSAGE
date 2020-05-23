@@ -61,7 +61,7 @@ public class MessageRestController {
     }
 
     // DTO compliant
-    @GetMapping(value = "/channel/{id}")
+    @GetMapping(value = "/channel/{id}") //если в канале сообщений нет то идет ошибка 400 и отображается с ошибкой. если есть сообщение в базе то ошибок нет
     @Operation(
             operationId = "getMessagesByChannelId",
             summary = "Get messages by channel id",
