@@ -5,7 +5,6 @@ import jm.api.dao.UserDAO;
 import jm.api.dao.WorkspaceDAO;
 import jm.dto.ConversationDTO;
 import jm.model.Conversation;
-import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -31,17 +30,27 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public List<Conversation> getAllConversations() {
-       try{
-           return conversationDAO.getAll();
-       } catch (Exception e){
-           return Collections.emptyList();
-       }
+        try {
+            return conversationDAO.getAll();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public void createConversation(Conversation conversation) {
-        conversationDAO.persist(conversation);
+        Long firstUserId = conversation.getOpeningUser().getId();
+        Long secondUserId = conversation.getAssociatedUser().getId();
+        Conversation conversationFromBase = getConversationByUsersId(firstUserId, secondUserId);
+        Long setSecondId = getConversationByUsersId(secondUserId, firstUserId).getId();
+        if (conversationFromBase.getId() == null || setSecondId == null) {
+            conversationDAO.persist(conversation);
+        } else {
+            conversation.setId(conversationFromBase.getId());
+            updateConversation(conversation);
+        }
     }
+
 
     @Async("threadPoolTaskExecutor")
     @Override
@@ -61,7 +70,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation getConversationByUsersId(Long firstUserId, Long secondUserId) {
-        return conversationDAO.getConversationByUsersId(firstUserId, secondUserId).get();
+        return conversationDAO.getConversationByUsersId(firstUserId, secondUserId).orElse(new Conversation());
     }
 
     @Override
