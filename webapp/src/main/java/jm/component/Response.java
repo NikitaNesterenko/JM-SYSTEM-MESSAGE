@@ -1,26 +1,10 @@
 package jm.component;
 
-/**
- * нужно написать аналог Response
- * с полем Boolean success
- * Сущность можно сконструировать по аналогии с ResponseEntity<>
- * Она параметризована
- * + если есть ошибка, то нельзя положить в тело какую либо сущность, можно лишь сообщение
- * Response.ok(T body).build();
- * Response.error().status(либо статический статус, либо сам код).message( текст).build();
- */
-
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 
-import java.net.URI;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 
 public class Response<T> {
 
@@ -40,7 +24,6 @@ public class Response<T> {
             tempHeaders.putAll(headers);
         }
         this.headers = HttpHeaders.readOnlyHttpHeaders(tempHeaders);
-        Assert.notNull(status, "HttpStatus must not be null");
         this.status = status;
     }
 
@@ -66,28 +49,19 @@ public class Response<T> {
     }
 
     public static BodyBuilder error(HttpStatus status) {
-        success = false;
-        Assert.notNull(status, "HttpStatus must not be null");
+        success=false;
         return httpStatus(status);
     }
 
     public static Response<String> error(HttpStatus status, String text) {
         success = false;
-        Assert.notNull(status, "HttpStatus must not be null");
         BodyBuilder builder = httpStatus(status);
         return builder.message(text);
     }
 
-    public static BodyBuilder error(int status) {
-        success = false;
-        return new DefaultBuilder(status);
-    }
-
     private static BodyBuilder httpStatus(HttpStatus status) {
-        Assert.notNull(status, "HttpStatus must not be null");
         return new DefaultBuilder(status);
     }
-
 
     @Override
     public String toString() {
@@ -131,46 +105,23 @@ public class Response<T> {
         } else {
             return HttpStatus.valueOf((Integer) this.status);
         }
-
     }
 
-
-    public interface HeadersBuilder<B extends HeadersBuilder<B>> {
-
-        B header(String headerName, String... headerValues);
-
-        B headers(@Nullable HttpHeaders headers);
-
-        B allow(HttpMethod... allowedMethods);
-
-        B eTag(String etag);
-
-        B lastModified(ZonedDateTime lastModified);
-
-        B lastModified(Instant lastModified);
-
-        B lastModified(long lastModified);
-
-        B location(URI location);
-
-        B cacheControl(CacheControl cacheControl);
-
-        B varyBy(String... requestHeaders);
-
-        <T> Response<T> build();
-
-        B status(HttpStatus httpStatus);
-
-    }
-
-    //
-    public interface BodyBuilder extends HeadersBuilder<BodyBuilder> {
+    public interface BodyBuilder {
 
         BodyBuilder contentType(MediaType var1);
 
         Response<String> message(String message);
 
         <T> Response<T> ok(T body);
+
+        <T> Response<T> build();
+
+        BodyBuilder status(HttpStatus httpStatus);
+
+        BodyBuilder headers(@Nullable HttpHeaders headers);
+
+        BodyBuilder header(String headerName, String... headerValues);
 
     }
 
@@ -180,11 +131,9 @@ public class Response<T> {
 
         private final HttpHeaders headers = new HttpHeaders();
 
-
-        public DefaultBuilder(Object statusCode) {
+        private DefaultBuilder(Object statusCode) {
             this.statusCode = statusCode;
         }
-
 
         @Override
         public BodyBuilder header(String headerName, String... headerValues) {
@@ -202,11 +151,6 @@ public class Response<T> {
             return this;
         }
 
-        @Override
-        public BodyBuilder allow(HttpMethod... allowedMethods) {
-            this.headers.setAllow(new LinkedHashSet<>(Arrays.asList(allowedMethods)));
-            return this;
-        }
 
         @Override
         public BodyBuilder contentType(MediaType contentType) {
@@ -214,73 +158,30 @@ public class Response<T> {
             return this;
         }
 
-        @Override
-        public BodyBuilder eTag(String etag) {
-            if (!etag.startsWith("\"") && !etag.startsWith("W/\"")) {
-                etag = "\"" + etag;
-            }
-            if (!etag.endsWith("\"")) {
-                etag = etag + "\"";
-            }
-            this.headers.setETag(etag);
-            return this;
-        }
-
-        @Override
-        public BodyBuilder lastModified(ZonedDateTime date) {
-            this.headers.setLastModified(date);
-            return this;
-        }
-
-        @Override
-        public BodyBuilder lastModified(Instant date) {
-            this.headers.setLastModified(date);
-            return this;
-        }
-
-        @Override
-        public BodyBuilder lastModified(long date) {
-            this.headers.setLastModified(date);
-            return this;
-        }
-
-        @Override
-        public BodyBuilder location(URI location) {
-            this.headers.setLocation(location);
-            return this;
-        }
-
-        @Override
-        public BodyBuilder cacheControl(CacheControl cacheControl) {
-            this.headers.setCacheControl(cacheControl);
-            return this;
-        }
-
-        @Override
-        public BodyBuilder varyBy(String... requestHeaders) {
-            this.headers.setVary(Arrays.asList(requestHeaders));
-            return this;
-        }
 
         @Override
         public <T> Response<T> build() {
+
             return new Response<>(null, this.headers, this.statusCode);
         }
 
         @Override
         public <T> Response<T> ok(T body) {
             String text = "On error, only text";
+
             return (success) ? new Response<>(body, this.headers, this.statusCode)
                     : new Response<T>((T) text, this.headers, this.statusCode);
         }
 
         @Override
         public BodyBuilder status(HttpStatus httpStatus) {
+
             return error(httpStatus);
         }
 
         @Override
         public Response<String> message(String message) {
+
             return new Response<>(message, this.headers, this.statusCode);
         }
 
