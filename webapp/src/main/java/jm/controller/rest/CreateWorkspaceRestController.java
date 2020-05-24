@@ -142,7 +142,7 @@ public class CreateWorkspaceRestController {
             })
     public ResponseEntity channelName(@RequestBody String channelName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
-        token.setChannelname(channelName);
+        token.setChannelName(channelName);
         channelService.createChannelByTokenAndUsers(token,users);
         request.getSession(false).setAttribute("token", token);
         return new ResponseEntity(HttpStatus.OK);
@@ -186,7 +186,7 @@ public class CreateWorkspaceRestController {
         UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         sToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(sToken);
-        return new ResponseEntity<>(token.getChannelname(), HttpStatus.OK);
+        return new ResponseEntity<>(token.getChannelName(), HttpStatus.OK);
     }
 
 }

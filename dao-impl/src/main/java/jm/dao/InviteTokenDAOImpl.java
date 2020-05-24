@@ -4,7 +4,6 @@ import jm.api.dao.InviteTokenDAO;
 import jm.model.InviteToken;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 @Repository
@@ -13,11 +12,11 @@ public class InviteTokenDAOImpl extends AbstractDao<InviteToken> implements Invi
 
     @Override
     public InviteToken getByHash(String hash) {
-        try {
-            return (InviteToken) entityManager.createQuery("from InviteToken where hash  = :hash").setParameter("hash", hash)
+        if (twoParametersMethodToSearchEntity("hash", hash)) {
+            return (InviteToken) entityManager.createQuery("from InviteToken where hash  = :hash")
+                    .setParameter("hash", hash)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
         }
+        return null;
     }
 }
