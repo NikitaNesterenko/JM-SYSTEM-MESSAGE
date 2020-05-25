@@ -59,7 +59,7 @@ public class MessageRestController {
     }
 
     // DTO compliant
-    @GetMapping(value = "/channel/{id}")
+    @GetMapping(value = "/channel/{id}") //если в канале сообщений нет то идет ошибка 400 и отображается с ошибкой. если есть сообщение в базе то ошибок нет
     @Operation(
             operationId = "getMessagesByChannelId",
             summary = "Get messages by channel id",
@@ -116,9 +116,11 @@ public class MessageRestController {
                                                                             @PathVariable("startDate") String startDate,
                                                                             @PathVariable("endDate") String endDate) {
         List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
-                .minusMonths(3), LocalDateTime.now(), false);
-        return !messageDTOList.isEmpty() ?
-                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();
+
+                                                                                                        .minusMonths(3), LocalDateTime.now(), false);
+
+        return ResponseEntity.ok(messageDTOList);
+
     }
 
     @PostMapping(value = "/create")
