@@ -121,8 +121,7 @@ public class MessageRestController {
                                                                              @PathVariable("endDate") String endDate) {
         List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
                                                                                                         .minusMonths(3), LocalDateTime.now(), false);
-        /*return !messageDTOList.isEmpty()?
-                ResponseEntity.ok(messageDTOList) : ResponseEntity.badRequest().build();*/
+
         return ResponseEntity.ok(messageDTOList);
     }
 
