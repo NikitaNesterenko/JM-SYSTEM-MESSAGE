@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jm.NotificationService;
 import jm.model.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +56,7 @@ public class NotificationRestController {
             })
     public ResponseEntity<Notifications> addNotifications(@RequestBody Notifications notifications) {
         service.addNotification(notifications);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/update")
@@ -75,6 +74,6 @@ public class NotificationRestController {
             })
     public ResponseEntity<Notifications> updateNotifications(@RequestBody Notifications notifications) {
         service.updateNotification(notifications);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
     }
 }
