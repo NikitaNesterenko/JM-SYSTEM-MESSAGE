@@ -272,7 +272,7 @@ export class StompClient {
         });
     }
 
-    subscribeNewDirectMessage(conversationId){
+    subscribeNewDirectMessage(conversationId) {
         this.stompClient.subscribe('/queue/dm/' + conversationId, (message) => this.newConversationMessageHandler(message))
     }
 
@@ -284,7 +284,7 @@ export class StompClient {
     }
 
     sendThread(message) {
-        if (message.content.length > 0){
+        if (message.content.length > 0) {
             this.stompClient.send('/app/thread', {}, JSON.stringify({
                 'id': message.id,
                 'userId': message.userId,
@@ -300,7 +300,7 @@ export class StompClient {
     }
 
     sendDM(message) {
-        if (message.content.length > 0){
+        if (message.content.length > 0) {
             const entity = {
                 'id': message.id,
                 'content': message.content,

@@ -94,7 +94,7 @@ public class ChannelRestController {
     public ResponseEntity<Boolean> chosenChannel(@PathVariable("id") long id, HttpServletRequest request) {
         Channel channel = channelService.getChannelById(id);
         if (channel == null) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+            return ResponseEntity.badRequest().body(false);
         }
         request.getSession()
                 .setAttribute("ChannelId", channel);
@@ -181,9 +181,9 @@ public class ChannelRestController {
                         .build();
             }
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok().build();
 
     }
 
@@ -284,7 +284,7 @@ public class ChannelRestController {
                     )
             })
     public ResponseEntity<List<ChannelDTO>> getChannelsByWorkspaceId(@PathVariable("id") Long id) {
-        return  ResponseEntity.ok(channelService.getChannelDtoListByWorkspaceId(id));
+        return ResponseEntity.ok(channelService.getChannelDtoListByWorkspaceId(id));
     }
 
     @GetMapping("/name/{name}")
@@ -385,6 +385,6 @@ public class ChannelRestController {
         channelService.updateChannel(channel);
         ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
         logger.info("Канал с id = {} архивирован", id);
-        return  ResponseEntity.ok(channelDTO);
+        return ResponseEntity.ok(channelDTO);
     }
 }
