@@ -39,7 +39,7 @@ public class ChannelTopicRestController {
             })
     public ResponseEntity<String> getChannelTopic(@PathVariable Long id) {
         String topic = channelService.getTopicChannelByChannelId(id);
-        return topic.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(topic);
+        return topic.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(topic);
     }
 
     @PutMapping("/{id}/topic/update")
@@ -63,8 +63,8 @@ public class ChannelTopicRestController {
             Channel channel = channelService.getChannelById(id);
             channel.setTopic(topic);
             return ResponseEntity.ok(channelService.getChannelById(id).getTopic());
-        } catch (Exception e){
-            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 

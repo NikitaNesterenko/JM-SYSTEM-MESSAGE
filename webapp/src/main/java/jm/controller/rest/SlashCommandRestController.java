@@ -8,14 +8,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.BotService;
 import jm.SlashCommandService;
 import jm.WorkspaceService;
-import jm.dto.BotDTO;
 import jm.dto.SlashCommandDto;
 import jm.model.Bot;
 import jm.model.SlashCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +42,7 @@ public class SlashCommandRestController {
     public ResponseEntity<?> getSlashCommandById(@PathVariable Long id) {
         logger.info("Slash command with id = {}", id);
         return ResponseEntity.ok(slashCommandService.getSlashCommandDTOById(id).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build()));
+                .orElseGet(() -> ResponseEntity.badRequest().build()));
     }
 
     @PostMapping("/create")
@@ -68,7 +66,7 @@ public class SlashCommandRestController {
             logger.info("Created SlashCommand: {}", sc);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
 
@@ -84,7 +82,7 @@ public class SlashCommandRestController {
         // TODO: ПЕРЕДЕЛАТЬ SlashCommand existCommand из базы плучает всю информацию о сущности, а используется только для проверки на существование
         SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
         if (!slashCommandService.updateSlashCommand(sc)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().build();
         }
         logger.info("Updated command: {}", sc);
         return ResponseEntity.ok().build();
@@ -105,7 +103,7 @@ public class SlashCommandRestController {
             slashCommandService.deleteSlashCommand(id);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/bot/{id}")
@@ -127,7 +125,7 @@ public class SlashCommandRestController {
         logger.info("Slash command for Bot with id = {}", id);
         return !slashCommandDtoList.isEmpty()
                 ? ResponseEntity.ok(slashCommandDtoList)
-                : ResponseEntity.notFound().build();
+                : ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/bot/{id}")
@@ -149,14 +147,14 @@ public class SlashCommandRestController {
         Bot bot = botService.getBotById(id);
         if (bot == null) {
             logger.warn("Bot with id = {} not found", id);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().build();
         }
         SlashCommand sc = slashCommandService.getEntityFromDTO(slashCommandDto);
         sc.setBot(bot);
         List<SlashCommand> slashCommands = slashCommandService.getSlashCommandsByBotId(id);
         if (slashCommands.stream().anyMatch(command -> command.getName().equals(sc.getName()))) {
             logger.warn("Slash command with name = {} already exist", sc.getName());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.badRequest().build();
         } else {
             slashCommandService.createSlashCommand(sc);
             bot.getCommands().add(sc);
@@ -184,7 +182,7 @@ public class SlashCommandRestController {
     public ResponseEntity<?> getSlashCommandByName(@PathVariable String name) {
         logger.info("Slash command with name = {}", name);
         return slashCommandService.getSlashCommandDTOByName(name).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/all")
@@ -207,7 +205,7 @@ public class SlashCommandRestController {
             logger.info("Getting all SlashCommands");
             return ResponseEntity.ok(slashCommandDtoList);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/workspace/id/{id}")
@@ -230,7 +228,7 @@ public class SlashCommandRestController {
             logger.info("Getting all SlashCommands for workspace with id = {}", id);
             return ResponseEntity.ok(slashCommandDtoList);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/bot/id/{id}/")
@@ -253,6 +251,6 @@ public class SlashCommandRestController {
             logger.info("Getting all SlashCommands for bot with id = {}", id);
             return ResponseEntity.ok(slashCommandDtoList);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 }

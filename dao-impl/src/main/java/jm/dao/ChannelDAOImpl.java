@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.*;
@@ -21,20 +22,26 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     private static final Logger logger = LoggerFactory.getLogger(ChannelDAOImpl.class);
 
     @Override
-    public Optional<Channel> getChannelByName(String name) {
-        if (twoParametersMethodToSearchEntity("name", name)) {
-            return Optional.of((Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
+    public Channel getChannelByName(String name) {
+        Channel channel = null;
+        if (twoParametersMethodToSearchEntity("name", name)){
+            channel = ((Channel) entityManager.createNativeQuery("SELECT * FROM channels c WHERE c.name = :name", Channel.class)
                     .setParameter("name", name)
                     .getSingleResult());
         }
-        return Optional.empty();
+        return channel;
     }
 
     @Override
     public Optional<ChannelDTO> getChannelDTOByName(String name) {
         ChannelDTO channelDTO = null;
 
-        if (twoParametersMethodToSearchEntity("name", name)) {
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "c.id  AS \"id\", " +
@@ -61,7 +68,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     @Override
     public Optional<Long> getChannelIdByName(String name) {
         Long channelId = null;
-        if (twoParametersMethodToSearchEntity("name", name)) {
+
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             channelId = (Long) entityManager.createNativeQuery("SELECT c.id FROM channels c WHERE c.name=:chanelName")
                     .setParameter("chanelName", name)
                     .getSingleResult();
@@ -100,7 +113,13 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     private List<Number> getListUserIdsByName(String name) {
         List<Number> list = new ArrayList<>();
 
-        if (twoParametersMethodToSearchEntity("name", name)) {
+
+        BigInteger result = (BigInteger) entityManager.createNativeQuery("select exists (SELECT * FROM channels с WHERE name=:name)")
+                .setParameter("name", name)
+                .getSingleResult();
+        boolean isExist = result.signum() > 0;
+
+        if (isExist) {
             list = entityManager.createNativeQuery("SELECT cu.user_id  FROM channels_users cu LEFT JOIN channels c on cu.channel_id = c.id WHERE name=:name")
                     .setParameter("name", name)
                     .getResultList();
@@ -123,7 +142,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     @Override
     public Optional<ChannelDTO> getIdByName(String name) {
         ChannelDTO channelDTO = null;
-        if (twoParametersMethodToSearchEntity("name", name)) {
+        try {
             channelDTO = (ChannelDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "c.id  AS \"id\" " +
@@ -133,18 +152,21 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                     .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
                     .getSingleResult();
 
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
         return Optional.ofNullable(channelDTO);
     }
 
     @Override
     public List<Channel> getChannelsByOwnerId(Long ownerId) {
-        if (twoParametersMethodToSearchEntity("owner_id", ownerId.toString())) {
+        try {
             return (List<Channel>) entityManager.createNativeQuery("SELECT * FROM channels WHERE owner_id = ?", Channel.class)
                     .setParameter(1, ownerId)
                     .getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
     }
 
     @Override
@@ -197,11 +219,14 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     private List<Number> getAllChannelIdByWorkspaceId(Long workspaceId) {
         List<Number> list = new ArrayList<>();
-        if (twoParametersMethodToSearchEntity("workspace_id", workspaceId.toString())) {
+        try {
             list = entityManager
                     .createNativeQuery("SELECT id FROM channels where workspace_id = :id")
                     .setParameter("id", workspaceId)
                     .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
         return list;
     }
@@ -232,11 +257,14 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
 
     private List<Number> getAllChannelIdByUserId(Long id) {
         List<Number> list = new ArrayList<>();
-        if (twoParametersMethodToSearchEntity("user_id", id.toString())) {
+        try {
             list = entityManager
                     .createNativeQuery("SELECT cu.channel_id FROM channels_users cu WHERE cu.user_id=:id ")
                     .setParameter("id", id)
                     .getResultList();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
         return list;
     }
