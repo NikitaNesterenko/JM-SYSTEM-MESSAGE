@@ -23,29 +23,32 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public Optional<User> getUserByLogin(String login) {
-        if(twoParametersMethodToSearchEntity("login",login)){
+        if (twoParametersMethodToSearchEntity("login", login)) {
             User user = (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
                     .getSingleResult();
             return Optional.of(user);
-        }return Optional.empty();
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> getUserByName(String name) {
-        if(twoParametersMethodToSearchEntity("name",name)){
+        if (twoParametersMethodToSearchEntity("name", name)) {
             User user = (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
             return Optional.of(user);
-        }return Optional.empty();
+        }
+        return Optional.empty();
     }
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        if(twoParametersMethodToSearchEntity("email",email)) {
+        if (twoParametersMethodToSearchEntity("email", email)) {
             User user = (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
                     .getSingleResult();
             return Optional.of(user);
-        }return Optional.empty();
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -175,7 +178,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByLogin(String login) {
         UserDTO userDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("login", login)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -196,8 +199,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -205,7 +206,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByEmail(String email) {
         UserDTO userDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("email", email)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -226,8 +227,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -235,7 +234,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByName(String name) {
         UserDTO userDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("username", name)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -256,8 +255,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }

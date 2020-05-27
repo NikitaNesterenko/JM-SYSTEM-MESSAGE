@@ -23,13 +23,12 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
 
     @Override
     public Optional<SlashCommand> getByName(String commandName) {
-        try {
+        if (twoParametersMethodToSearchEntity("name", commandName)) {
             return Optional.of((SlashCommand) entityManager.createNativeQuery("select * from slash_commands where name=?", SlashCommand.class)
                     .setParameter(1, commandName)
                     .getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
@@ -60,29 +59,29 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public Optional<List<SlashCommandDto>> getAllSlashCommandDTO() {
         List<SlashCommandDto> slashCommandsDTO = null;
-        try {
-            slashCommandsDTO = (List<SlashCommandDto>) entityManager.createNativeQuery("SELECT " +
-                    "sc.id AS \"id\", " +
-                    "sc.name AS \"name\", " +
-                    "sc.url AS \"url\", " +
-                    "sc.description AS \"description\", " +
-                    "sc.hints AS \"hints\", " +
-                    "sc.bot_id AS \"botId\", " +
-                    "sc.type_id AS \"typeId\" " +
-                    "FROM slash_commands sc")
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
-                    .getResultList();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+//        try {
+        slashCommandsDTO = (List<SlashCommandDto>) entityManager.createNativeQuery("SELECT " +
+                "sc.id AS \"id\", " +
+                "sc.name AS \"name\", " +
+                "sc.url AS \"url\", " +
+                "sc.description AS \"description\", " +
+                "sc.hints AS \"hints\", " +
+                "sc.bot_id AS \"botId\", " +
+                "sc.type_id AS \"typeId\" " +
+                "FROM slash_commands sc")
+                .unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
+                .getResultList();
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//        }
         return Optional.of(slashCommandsDTO);
     }
 
     @Override
     public Optional<SlashCommandDto> getSlashCommandDTOById(Long id) {
         SlashCommandDto slashCommandDTO = null;
-        if (haveEntityWithThisId(id)){
+        if (haveEntityWithThisId(id)) {
             slashCommandDTO = (SlashCommandDto) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
@@ -104,7 +103,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public Optional<SlashCommandDto> getSlashCommandDTOByName(String name) {
         SlashCommandDto slashCommandDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("name", name)) {
             slashCommandDTO = (SlashCommandDto) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
@@ -119,8 +118,6 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList().get(0);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(slashCommandDTO);
     }
@@ -128,7 +125,7 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
     @Override
     public Optional<List<SlashCommandDto>> getSlashCommandDTOByBotId(Long id) {
         List<SlashCommandDto> slashCommandsDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("bot_id", id.toString())) {
             slashCommandsDTO = (List<SlashCommandDto>) entityManager.createNativeQuery("SELECT " +
                     "sc.id AS \"id\", " +
                     "sc.name AS \"name\", " +
@@ -143,8 +140,6 @@ public class SlashCommandDAOImpl extends AbstractDao<SlashCommand> implements Sl
                     .unwrap(NativeQuery.class)
                     .setResultTransformer(Transformers.aliasToBean(SlashCommandDto.class))
                     .getResultList();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.of(slashCommandsDTO);
     }

@@ -21,13 +21,11 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public Optional<Workspace> getWorkspaceByName(String name) {
-        try {
+        if(twoParametersMethodToSearchEntity("name",name)) {
             return Optional.of((Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
                     .getSingleResult());
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+        }return Optional.empty();
     }
 
     @Override
@@ -46,7 +44,6 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
         List<WorkspaceDTO> workspaceDTOList = null;
-//        try {
             workspaceDTOList = (List<WorkspaceDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "ws.id AS \"id\", " +
@@ -59,9 +56,6 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList();
             workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
-//        }
         return Optional.ofNullable(workspaceDTOList);
     }
 

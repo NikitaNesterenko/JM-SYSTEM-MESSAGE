@@ -2,11 +2,11 @@ package jm.dao;
 
 import jm.api.dao.ConversationDAO;
 import jm.model.Conversation;
-import jm.model.User;
-import lombok.NonNull;
+
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
         try {
             return Optional.of((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
                     .setParameter(1, firstUserId).setParameter(2, secondUserId).getSingleResult());
-        } catch (NoResultException e1) {
+        } catch (NoResultException| NonUniqueResultException e1) {
             try {
                 return Optional.of((Conversation) entityManager.createNativeQuery("select * from conversations where (opener_id=? and associated_id=?)", Conversation.class)
                         .setParameter(1, secondUserId).setParameter(2, firstUserId).getSingleResult());
@@ -47,15 +47,12 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public List<Conversation> getConversationsByUserId(Long userId) {
-        try {
-            return (List<Conversation>) entityManager.createNativeQuery(
+          List<Conversation> list = entityManager.createNativeQuery(
                     "select * from conversations " +
                     "where opener_id=? and show_for_opener=true " +
                     "   or associated_id=? and show_for_associated=true", Conversation.class)
                     .setParameter(1, userId).setParameter(2, userId).getResultList();
-        } catch (NoResultException e1) {
-            return Collections.emptyList();
-        }
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
     @Override
