@@ -43,15 +43,13 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     private Optional<Tuple> getPluginNameAndBotNickNameByBotId(Long botId) {
         Tuple tuple = null;
-        try {
+        if (haveEntityWithThisId(botId)) {
             tuple = (Tuple) entityManager.createNativeQuery("SELECT " +
                     "b.name AS \"pluginName\", " +
                     "b.nick_name AS \"botNickName\" " +
                     "FROM bots b WHERE b.id=:botId", Tuple.class)
                     .setParameter("botId", botId)
                     .getSingleResult();
-        } catch (NoResultException ignored) {
-
         }
         return Optional.ofNullable(tuple);
     }
