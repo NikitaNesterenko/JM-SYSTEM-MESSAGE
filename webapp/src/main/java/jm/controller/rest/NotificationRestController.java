@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jm.NotificationService;
+import jm.component.Response;
 import jm.model.Notifications;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationRestController {
 
     private NotificationService service;
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(NotificationRestController.class);
 
     @Autowired
     public void setService(NotificationService service) {
@@ -37,8 +42,10 @@ public class NotificationRestController {
                             description = "OK: get notification"
                     )
             })
-    public ResponseEntity<Notifications> getNotifications(@PathVariable Long workspaceId, @PathVariable Long userId) {
-        return  ResponseEntity.ok(service.getNotification(userId, workspaceId));
+    public Response<Notifications> getNotifications(@PathVariable Long workspaceId, @PathVariable Long userId) {
+        logger.info("test 6");
+        return Response.ok(service.getNotification(userId, workspaceId));
+
     }
 
     @PostMapping(value = "/create")
@@ -54,9 +61,10 @@ public class NotificationRestController {
                             description = "OK: add notification"
                     )
             })
-    public ResponseEntity<Notifications> addNotifications(@RequestBody Notifications notifications) {
+    public Response<Notifications> addNotifications(@RequestBody Notifications notifications) {
         service.addNotification(notifications);
-        return ResponseEntity.ok().build();
+        logger.info("test 7");
+        return Response.ok().build();
     }
 
     @PutMapping(value = "/update")
@@ -72,8 +80,9 @@ public class NotificationRestController {
                             description = "OK: update notification"
                     )
             })
-    public ResponseEntity<Notifications> updateNotifications(@RequestBody Notifications notifications) {
+    public Response<Notifications> updateNotifications(@RequestBody Notifications notifications) {
         service.updateNotification(notifications);
-        return ResponseEntity.ok().build();
+        logger.info("test 8");
+        return Response.ok().build();
     }
 }
