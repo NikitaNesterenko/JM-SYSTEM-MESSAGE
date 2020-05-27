@@ -31,7 +31,7 @@ public class MessageServiceImpl implements MessageService {
     private final BotDAO botDAO;
     private final WorkspaceDAO workspaceDAO;
 
-    public MessageServiceImpl (MessageDAO messageDAO, ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO) {
+    public MessageServiceImpl(MessageDAO messageDAO, ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO) {
         this.messageDAO = messageDAO;
         this.channelDAO = channelDAO;
         this.userDAO = userDAO;
@@ -41,79 +41,79 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
-    public List<Message> getAllMessages (Boolean isDeleted) {
+    public List<Message> getAllMessages(Boolean isDeleted) {
         return messageDAO.getAll(isDeleted);
     }
 
     @Override
-    public List<MessageDTO> getAllMessageDtoByIsDeleted (Boolean isDeleted) {
+    public List<MessageDTO> getAllMessageDtoByIsDeleted(Boolean isDeleted) {
         return messageDAO.getAllMessageDtoByIsDeleted(isDeleted);
     }
 
     @Override
-    public List<Message> getMessagesByChannelId (Long id, Boolean isDeleted) {
+    public List<Message> getMessagesByChannelId(Long id, Boolean isDeleted) {
         return messageDAO.getMessagesByChannelId(id, isDeleted);
     }
 
     @Override
-    public List<MessageDTO> getMessageDtoListByChannelId (Long id, Boolean isDeleted) {
+    public List<MessageDTO> getMessageDtoListByChannelId(Long id, Boolean isDeleted) {
         return messageDAO.getMessageDtoListByChannelId(id, isDeleted);
     }
 
     @Override
-    public List<Message> getMessagesByContent (String word, Boolean isDeleted) {
+    public List<Message> getMessagesByContent(String word, Boolean isDeleted) {
         return messageDAO.getMessageByContent(word, isDeleted);
     }
 
     @Override
-    public Message getMessageById (Long id) {
+    public Message getMessageById(Long id) {
         return messageDAO.getById(id);
     }
 
     @Override
-    public Optional<MessageDTO> getMessageDtoById (Long id) {
+    public Optional<MessageDTO> getMessageDtoById(Long id) {
         return messageDAO.getMessageDtoById(id);
     }
 
     @Override
-    public void createMessage (Message message) {
+    public void createMessage(Message message) {
 
         messageDAO.persist(message);
     }
 
     @Async("threadPoolTaskExecutor")
     @Override
-    public void deleteMessage (Long id) {
+    public void deleteMessage(Long id) {
         messageDAO.deleteById(id);
     }
 
     @Override
-    public void updateMessage (Message message) {
+    public void updateMessage(Message message) {
         messageDAO.merge(message);
     }
 
     @Override
-    public List<Message> getMessagesByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+    public List<Message> getMessagesByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return messageDAO.getMessagesByChannelIdForPeriod(id, startDate, endDate, isDeleted);
     }
 
     @Override
-    public List<MessageDTO> getMessagesDtoByChannelIdForPeriod (Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+    public List<MessageDTO> getMessagesDtoByChannelIdForPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return messageDAO.getMessagesDtoByChannelIdForPeriod(id, startDate, endDate, isDeleted);
     }
 
     @Override
-    public List<Message> getMessagesByBotIdByChannelIdForPeriod (Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
+    public List<Message> getMessagesByBotIdByChannelIdForPeriod(Long botId, Long channelId, LocalDateTime startDate, LocalDateTime endDate, Boolean isDeleted) {
         return messageDAO.getMessagesByBotIdByChannelIdForPeriod(botId, channelId, startDate, endDate, isDeleted);
     }
 
     @Override
-    public List<Message> getStarredMessagesForUser (Long id, Boolean isDeleted) {
+    public List<Message> getStarredMessagesForUser(Long id, Boolean isDeleted) {
         return messageDAO.getStarredMessagesForUser(id, isDeleted);
     }
 
     @Override
-    public List<Message> getStarredMessagesForUserByWorkspaceId (Long userId, Long workspaceId, Boolean isDeleted) {
+    public List<Message> getStarredMessagesForUserByWorkspaceId(Long userId, Long workspaceId, Boolean isDeleted) {
         return messageDAO.getStarredMessagesForUserByWorkspaceId(userId, workspaceId, isDeleted);
     }
 
@@ -123,12 +123,17 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getAllMessagesReceivedFromChannelsByUserId (Long userId, Boolean isDeleted) {
+    public List<Message> getAllMessagesReceivedFromChannelsByUserId(Long userId, Boolean isDeleted) {
         return messageDAO.getAllMessagesReceivedFromChannelsByUserId(userId, isDeleted);
     }
 
     @Override
-    public MessageDTO getMessageDtoByMessage (@NonNull Message message) {
+    public List<Message> getAllMessagesAssociatedWithUser(Long userId, Boolean isDeleted) {
+        return messageDAO.getAllMessagesAssociatedWithUser(userId, isDeleted);
+    }
+
+    @Override
+    public MessageDTO getMessageDtoByMessage(@NonNull Message message) {
         MessageDTO messageDTO = new MessageDTO(message);
         Optional.ofNullable(message.getChannelId())
                 .map(channelId -> {
@@ -145,7 +150,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message getMessageByMessageDTO (@NonNull MessageDTO messageDTO) {
+    public Message getMessageByMessageDTO(@NonNull MessageDTO messageDTO) {
         Message message = new Message(messageDTO);
 
         Optional.ofNullable(messageDTO.getUserId())
@@ -161,12 +166,17 @@ public class MessageServiceImpl implements MessageService {
                 .ifPresent(parentMessageId -> message.setParentMessage(messageDAO.getById(parentMessageId)));
 
         Optional.ofNullable(messageDTO.getWorkspaceId())
-                .ifPresent(workspaceId ->message.setWorkspace(workspaceDAO.getById(workspaceId)));
+                .ifPresent(workspaceId -> message.setWorkspace(workspaceDAO.getById(workspaceId)));
+
+        message.setAssociatedUsers(Optional.ofNullable(messageDTO.getAssociatedUserIds())
+                .map(userDAO::getUsersByIds)
+                .map(HashSet::new)
+                .orElse(new HashSet<>()));
 
         message.setRecipientUsers(Optional.ofNullable(messageDTO.getRecipientUserIds())
-                                          .map(userDAO::getUsersByIds)
-                                          .map(HashSet::new)
-                                          .orElse(new HashSet<>()));
+                .map(userDAO::getUsersByIds)
+                .map(HashSet::new)
+                .orElse(new HashSet<>()));
         return message;
     }
 
@@ -176,18 +186,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Optional<Long> getMessageIdByContent (@NonNull String content) {
+    public Optional<Long> getMessageIdByContent(@NonNull String content) {
         return messageDAO.getMessageIdByContent(content);
     }
 
     @Override
-    public Optional<String> getMessageContentById (@NonNull Long id) {
+    public Optional<String> getMessageContentById(@NonNull Long id) {
         return messageDAO.getMessageContentById(id);
     }
 
     @Override
     public LocalDateTime getDateCreateById(Long id) {
         return messageDAO.getDateCreateById(id);
-    };
+    }
+
+    ;
 
 }

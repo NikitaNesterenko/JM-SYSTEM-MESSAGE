@@ -10,6 +10,7 @@ import {
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
 import {users} from "/js/searchUsersOnInputMessages.js";
+import {clearUsers} from "../../../searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -134,9 +135,9 @@ export class SubmitMessage {
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
             voiceMessage: await this.getVoiceMessage(),
-            recipientUserIds: users,
             workspaceId: this.channel.workspaceId,
-            sharedMessageId: await this.getSharedMessageId(text_message)
+            sharedMessageId: await this.getSharedMessageId(text_message),
+            associatedUserIds: users
         };
 
         if (window.hasSlashCommand) {
@@ -144,7 +145,7 @@ export class SubmitMessage {
         } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
             sendName(entity);
         }
-        // clearUsers();
+         clearUsers();
     }
 
     async sendSlashCommand(entity) {

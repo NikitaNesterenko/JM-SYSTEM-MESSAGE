@@ -1,5 +1,6 @@
 package jm;
 
+import jm.dto.AssociatedUserDTO;
 import jm.dto.UserDTO;
 import jm.model.User;
 
@@ -51,4 +52,5 @@ public interface UserService {
 
     User getEntityFromDTO(UserDTO userDTO);
 
+    Optional<List<AssociatedUserDTO>> getAllAssociatedUserDTOinWorkspaceByWorkspaceId(Long id);
 }

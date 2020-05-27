@@ -10,7 +10,7 @@ export let populateRightPaneActivity = (user) => {
     target_element.empty();
     user_service.getLoggedUser()
         .then((user) => {
-            message_service.getMessagesFromChannelsForUser(user.id)
+            message_service.getAllMessagesAssociatedWithUser(user.id)
                 .then((messages) => {
                     if (messages.length !== 0) {
                         messages.forEach((message, i) => {
