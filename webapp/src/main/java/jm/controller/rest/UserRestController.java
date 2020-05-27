@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MailService;
 import jm.UserService;
+import jm.dto.AssociatedUserDTO;
 import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -182,6 +183,26 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
         Optional<List<UserDTO>> list = userService.getAllUsersDTOInChannelByChannelId(id);
+        return list.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @GetMapping(value = "/forAssociated/{id}")
+    @Operation(
+            operationId = "getAllUsersForMarked",
+            summary = "Get all users for marked of workspace by id",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(type = "array", implementation = UserDTO.class)
+                            ),
+                            description = "OK: get all users for associated of workspace"
+                    ),
+                    @ApiResponse(responseCode = "404", description = "NOT_FOUND: no users in workspace with such id")
+            })
+    public ResponseEntity<List<AssociatedUserDTO>> getAllUsersForMarked(@PathVariable("id") Long id) {
+        /* TODO доделать логгирование*/
+        Optional<List<AssociatedUserDTO>> list = userService.getAllAssociatedUserDTOinWorkspaceByWorkspaceId(id);
         return list.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 

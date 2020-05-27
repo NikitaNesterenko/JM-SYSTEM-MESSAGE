@@ -93,6 +93,13 @@ public class Message {
     @ToString.Exclude
     private Set<User> recipientUsers;
 
+    @ManyToMany
+    @JoinTable(name = "messages_associated_users",
+            joinColumns = @JoinColumn(name = "message_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "associated_user_id", referencedColumnName = "id"))
+    @ToString.Exclude
+    private Set<User> associatedUsers;
+
     // from ThreadChannelMessage and ThreadDirectMessage
     @ManyToOne
     private Message parentMessage;
@@ -142,7 +149,7 @@ public class Message {
 
     // Constructor for simplify MessageDTO->Message conversion.
     // copying simple fields
-    public Message (@NonNull MessageDTO messageDto) {
+    public Message(@NonNull MessageDTO messageDto) {
         this.id = messageDto.getId();
         this.content = messageDto.getContent();
         this.dateCreate = messageDto.getDateCreate();
@@ -152,7 +159,7 @@ public class Message {
         this.channelId = messageDto.getChannelId();
     }
 
-    public Message ( Message message) {
+    public Message(Message message) {
         this.id = message.id;
         this.user = message.user;
         this.bot = message.bot;

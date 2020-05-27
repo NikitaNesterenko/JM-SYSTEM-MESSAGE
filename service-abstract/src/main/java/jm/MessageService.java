@@ -58,4 +58,6 @@ public interface MessageService {
 
     LocalDateTime getDateCreateById(Long id);
 
+    List<Message> getAllMessagesAssociatedWithUser(Long userId, Boolean isDeleted);
+
 }
