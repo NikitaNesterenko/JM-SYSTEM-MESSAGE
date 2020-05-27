@@ -6,28 +6,16 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 
 
-public class Response<T> {
-
+public class Response<T> extends HttpEntity<T> {
     private static boolean success;
 
     private final Object status;
 
-    private final HttpHeaders headers;
-
-    @Nullable
-    private final T body;
 
     private Response(@Nullable T body, @Nullable MultiValueMap<String, String> headers, Object status) {
-        this.body = body;
-        HttpHeaders tempHeaders = new HttpHeaders();
-        if (headers != null) {
-            tempHeaders.putAll(headers);
-        }
-        this.headers = HttpHeaders.readOnlyHttpHeaders(tempHeaders);
+        super(body, headers);
         this.status = status;
     }
-
-
     public static BodyBuilder ok() {
         success = true;
         return httpStatus(HttpStatus.OK);
@@ -49,7 +37,7 @@ public class Response<T> {
     }
 
     public static BodyBuilder error(HttpStatus status) {
-        success=false;
+        success = false;
         return httpStatus(status);
     }
 
@@ -72,32 +60,23 @@ public class Response<T> {
             builder.append(((HttpStatus) this.status).getReasonPhrase());
         }
         builder.append(',');
-        if (this.body != null) {
-            builder.append(this.body);
+        T body = getBody();
+        HttpHeaders headers = getHeaders();
+        if (body != null) {
+            builder.append(body);
             builder.append(',');
         }
-        builder.append(this.headers);
+        builder.append(headers);
         builder.append('>');
         return builder.toString();
     }
 
+
     @Override
     public int hashCode() {
-        return (29 * (ObjectUtils.nullSafeHashCode(this.headers) * 29 + ObjectUtils.nullSafeHashCode(this.body)) + ObjectUtils.nullSafeHashCode(this.status));
+        return (29 * super.hashCode() + ObjectUtils.nullSafeHashCode(this.status));
     }
 
-    public HttpHeaders getHeaders() {
-        return this.headers;
-    }
-
-    @Nullable
-    public T getBody() {
-        return this.body;
-    }
-
-    public boolean hasBody() {
-        return (this.body != null);
-    }
 
     public HttpStatus getStatusCode() {
         if (this.status instanceof HttpStatus) {
