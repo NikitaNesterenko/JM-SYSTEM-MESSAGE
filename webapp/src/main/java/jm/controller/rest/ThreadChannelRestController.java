@@ -8,13 +8,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MessageService;
 import jm.ThreadChannelMessageService;
 import jm.ThreadChannelService;
+import jm.component.Response;
 import jm.dto.MessageDTO;
 import jm.dto.ThreadDTO;
 import jm.dto.ThreadMessageDTO;
 import jm.model.ThreadChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -51,16 +52,16 @@ public class ThreadChannelRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "thread channel created")
             })
-    public ResponseEntity<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
+    public Response<ThreadChannel> createThreadChannel(@RequestBody MessageDTO messageDTO) {
         // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadChannel threadChannel
         if (messageDTO.getId() != null) {
             messageDTO.setDateCreateLocalDateTime(LocalDateTime.now());
             ThreadChannel threadChannel = new ThreadChannel(messageDTO.getId());
             threadChannelService.createThreadChannel(threadChannel);
             logger.info("Созданный тред : {}", threadChannel);
-            return ResponseEntity.ok(threadChannel);
+            return Response.ok(threadChannel);
         }
-        return ResponseEntity.badRequest().build();
+        return Response.error(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping("/messages/create")
@@ -76,9 +77,9 @@ public class ThreadChannelRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "thread channel message created")
             })
-    public ResponseEntity<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
+    public Response<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
 //        Сохранение сообщения выполняется в MessagesController сразу из websocket
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @GetMapping("/{message_id}")
@@ -95,12 +96,12 @@ public class ThreadChannelRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no thread with this message id")
             })
-    public ResponseEntity<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
+    public Response<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
         try {
-            return ResponseEntity.ok(new ThreadDTO(threadChannelService.findByChannelMessageId(id)));
+            return Response.ok(new ThreadDTO(threadChannelService.findByChannelMessageId(id)));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -118,10 +119,10 @@ public class ThreadChannelRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no ThreadMessageDTO")
             })
-    public ResponseEntity<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
+    public Response<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
         List<ThreadMessageDTO> threadMessageDTOList = threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id);
         return threadMessageDTOList != null && !threadMessageDTOList.isEmpty()
-                ? ResponseEntity.ok(threadMessageDTOList)
-                : ResponseEntity.badRequest().build();
+                ? Response.ok(threadMessageDTOList)
+                : Response.error(HttpStatus.BAD_REQUEST).build();
     }
 }

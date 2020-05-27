@@ -7,11 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.MailService;
 import jm.UserService;
+import jm.component.Response;
 import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,9 +51,9 @@ public class UserRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no users")
             })
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    public Response<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
-        return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        return userService.getAllUsersDTO().map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
     }
 
     // DTO compliant
@@ -70,14 +71,14 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200", description = "OK: user created"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: user no created")
             })
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
+    public Response<UserDTO> createUser(@RequestBody UserDTO userDto) {
         User user = userService.getEntityFromDTO(userDto);
         if (user != null) {
             userService.createUser(user);
             logger.info("Созданный пользователь : {}", user);
-            return ResponseEntity.ok(new UserDTO(user));
+            return Response.ok(new UserDTO(user));
         }
-        return ResponseEntity.badRequest().build();
+        return Response.error(HttpStatus.BAD_REQUEST).build();
     }
 
     // DTO compliant
@@ -95,10 +96,11 @@ public class UserRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: user no created")
             })
-    public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
+    public Response<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Пользователь с id = {}", id);
-        return userService.getUserDTOById(id).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        return userService.getUserDTOById(id).map(Response::ok)
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST
+                ).build());
     }
 
     @GetMapping("/username/{username}")
@@ -115,10 +117,10 @@ public class UserRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: user no created")
             })
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username) {
+    public Response<UserDTO> getUserByUsername(@PathVariable("username") String username) {
         logger.info("Пользователь с username = {}", username);
-        return userService.getUserDTOByName(username).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        return userService.getUserDTOByName(username).map(Response::ok)
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
     }
 
     // DTO compliant
@@ -137,17 +139,17 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to update user")
             })
     @PreAuthorize("#userDTO.login == authentication.principal.username or hasRole('ROLE_OWNER')")
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
+    public Response<?> updateUser(@RequestBody UserDTO userDTO) {
         // TODO: ПЕРЕДЕЛАТЬ existingUser нет необзодимости в получение всей сущности для проверки на существование
         User user = userService.getEntityFromDTO(userDTO);
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST).build();
         }
         userService.updateUser(user);
         logger.info("Обновленный пользователь: {}", user);
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -158,10 +160,10 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200", description = "OK: user deleted"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no user with such id")
             })
-    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long id) {
+    public Response<Boolean> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         logger.info("Удален польщователь с id = {}", id);
-        return ResponseEntity.ok(true);
+        return Response.ok(true);
     }
 
     // DTO compliant
@@ -179,10 +181,10 @@ public class UserRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no users in channel with such id")
             })
-    public ResponseEntity<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
+    public Response<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
         Optional<List<UserDTO>> list = userService.getAllUsersDTOInChannelByChannelId(id);
-        return list.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        return list.map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
     }
 
     // DTO compliant
@@ -199,9 +201,9 @@ public class UserRestController {
                             description = "OK: get logged user"
                     )
             })
-    public ResponseEntity<UserDTO> getLoggedUserId(Principal principal) {
+    public Response<UserDTO> getLoggedUserId(Principal principal) {
         Optional<UserDTO> userDTO = userService.getUserDTOByLogin(principal.getName());
-        return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        return userDTO.map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
     }
 
     // DTO compliant
@@ -219,12 +221,12 @@ public class UserRestController {
                     ),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no users in channel with such id")
             })
-    public ResponseEntity<List<UserDTO>> getAllUsersInWorkspaceByWorkspaceId(@PathVariable("id") Long id) {
+    public Response<List<UserDTO>> getAllUsersInWorkspaceByWorkspaceId(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);
         List<UserDTO> userDTOsList = userService.getAllUsersInWorkspaceByWorkspaceId(id);
         return userDTOsList != null && !userDTOsList.isEmpty()
-                ? ResponseEntity.ok(userDTOsList)
-                : ResponseEntity.badRequest().build();
+                ? Response.ok(userDTOsList)
+                : Response.error(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
@@ -235,16 +237,16 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200", description = "OK: recovery password token was send"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to send password recovery token")
             })
-    public ResponseEntity<?> isExistUserWithEmail(@PathVariable("email") String email) {
+    public Response<?> isExistUserWithEmail(@PathVariable("email") String email) {
         User userByEmail = userService.getUserByEmail(email);
 
         if (userByEmail != null) {
             logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
             mailService.sendRecoveryPasswordToken(userByEmail);
-            return ResponseEntity.ok().build();
+            return Response.ok().build();
         }
         logger.warn("Запрос на восстановление пароля пользователя с несуществующего email = {}", email);
-        return ResponseEntity.badRequest().build();
+        return Response.error(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping(value = "/password-recovery")
@@ -255,12 +257,12 @@ public class UserRestController {
                     @ApiResponse(responseCode = "200", description = "OK: password recovered"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to recover password")
             })
-    public ResponseEntity<?> passwordRecovery(@RequestParam(name = "token") String token,
-                                              @RequestParam(name = "password") String password) {
+    public Response<?> passwordRecovery(@RequestParam(name = "token") String token,
+                                        @RequestParam(name = "password") String password) {
 
         if (mailService.changePasswordUserByToken(token, password)) {
-            return ResponseEntity.ok().build();
+            return Response.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return Response.error(HttpStatus.BAD_REQUEST).build();
     }
 }
