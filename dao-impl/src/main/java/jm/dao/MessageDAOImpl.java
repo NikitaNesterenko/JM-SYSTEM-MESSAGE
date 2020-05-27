@@ -153,17 +153,11 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     private List<Number> getAllMessageId(Boolean isDeleted) {
-        List list = new ArrayList<>();
-        try {
-            list = entityManager
+        List list = entityManager
                     .createNativeQuery("SELECT m.id FROM messages m WHERE m.is_deleted= :isDeleted")
                     .setParameter("isDeleted", isDeleted)
                     .getResultList();
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
     @Override
