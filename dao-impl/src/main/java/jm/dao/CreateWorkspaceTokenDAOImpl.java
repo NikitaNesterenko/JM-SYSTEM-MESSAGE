@@ -21,8 +21,8 @@ public class CreateWorkspaceTokenDAOImpl extends AbstractDao<CreateWorkspaceToke
     }
 
     @Override
-    public CreateWorkspaceToken getCreateWorkspaceTokenByCode(Integer code) {
-        if (twoParametersMethodToSearchEntity("code", code.toString())) {
+    public CreateWorkspaceToken getCreateWorkspaceTokenByCode(int code) {
+        if (twoParametersMethodToSearchEntity("code", String.valueOf(code))) {
             return (CreateWorkspaceToken) entityManager.createNativeQuery("select * from create_workspace_token where code= :code", CreateWorkspaceToken.class)
                     .setParameter("code", code)
                     .getSingleResult();
