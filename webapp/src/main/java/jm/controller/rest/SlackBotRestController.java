@@ -3,10 +3,7 @@ package jm.controller.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jm.CommandsBotService;
 import jm.dto.SlashCommandDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -16,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SlackBotRestController {
-    private Logger logger = LoggerFactory.getLogger(SlackBotRestController.class);
+
     private CommandsBotService commandsBotService;
 
     @Autowired
@@ -30,7 +27,7 @@ public class SlackBotRestController {
         String currentCommand = command.getCommand();
         return currentCommand != null && !currentCommand.equals("")
                 ? ResponseEntity.ok(command)
-                : ResponseEntity.notFound().build();
+                : ResponseEntity.badRequest().build();
     }
 
     @MessageMapping("/bot/*") //обработка команд, реализованных на вебсокете

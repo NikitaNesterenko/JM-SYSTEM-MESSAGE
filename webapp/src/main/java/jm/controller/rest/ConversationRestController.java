@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ConversationService;
 import jm.dto.ConversationDTO;
 import jm.model.Conversation;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +41,8 @@ public class ConversationRestController {
     public ResponseEntity<Conversation> getConversationById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(conversationService.getConversationById(id));
-        } catch (Exception e){
-            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -68,7 +67,7 @@ public class ConversationRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity<>(conversation, HttpStatus.OK);
+        return ResponseEntity.ok(conversation);
     }
 
     @PutMapping(value = "/update")
@@ -88,7 +87,7 @@ public class ConversationRestController {
     public ResponseEntity<Conversation> updateConversation(@RequestBody Conversation conversation) {
         try {
             Conversation updated = conversationService.updateConversation(conversation);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            return ResponseEntity.ok(updated);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -121,7 +120,7 @@ public class ConversationRestController {
             })
     public ResponseEntity<List<Conversation>> getAllConversations() {
         List<Conversation> conversationsList = conversationService.getAllConversations();
-        return conversationsList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(conversationsList);
+        return conversationsList.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(conversationsList);
     }
 
     @GetMapping(value = "/user/{id}")
@@ -139,7 +138,7 @@ public class ConversationRestController {
             })
     public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
         List<Conversation> conversationList = conversationService.getConversationsByUserId(id);
-        return conversationList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(conversationList);
+        return conversationList.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(conversationList);
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
@@ -158,12 +157,11 @@ public class ConversationRestController {
     public ResponseEntity<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
         try {
-            return new ResponseEntity<>(
-                    conversationService.getConversationByUsersId(firstId, secondId),
-                    HttpStatus.OK
+            return ResponseEntity.ok(
+                    conversationService.getConversationByUsersId(firstId, secondId)
             );
-        } catch (Exception e){
-            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

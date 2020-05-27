@@ -14,7 +14,6 @@ import jm.dto.ThreadMessageDTO;
 import jm.model.ThreadChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +60,7 @@ public class ThreadChannelRestController {
             logger.info("Созданный тред : {}", threadChannel);
             return ResponseEntity.ok(threadChannel);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/messages/create")
@@ -101,7 +100,7 @@ public class ThreadChannelRestController {
         try {
             return ResponseEntity.ok(new ThreadDTO(threadChannelService.findByChannelMessageId(id)));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -123,6 +122,6 @@ public class ThreadChannelRestController {
         List<ThreadMessageDTO> threadMessageDTOList = threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id);
         return threadMessageDTOList != null && !threadMessageDTOList.isEmpty()
                 ? ResponseEntity.ok(threadMessageDTOList)
-                : ResponseEntity.notFound().build();
+                : ResponseEntity.badRequest().build();
     }
 }

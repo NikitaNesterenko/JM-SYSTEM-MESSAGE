@@ -11,7 +11,6 @@ import jm.dto.UserDTO;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +52,7 @@ public class UserRestController {
             })
     public ResponseEntity<List<UserDTO>> getUsers() {
         logger.info("Список пользователей : ");
-        return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return userService.getAllUsersDTO().map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     // DTO compliant
@@ -73,12 +72,12 @@ public class UserRestController {
             })
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
         User user = userService.getEntityFromDTO(userDto);
-        if(user != null) {
+        if (user != null) {
             userService.createUser(user);
             logger.info("Созданный пользователь : {}", user);
             return ResponseEntity.ok(new UserDTO(user));
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     // DTO compliant
@@ -99,7 +98,7 @@ public class UserRestController {
     public ResponseEntity<UserDTO> getUser(@PathVariable("id") Long id) {
         logger.info("Пользователь с id = {}", id);
         return userService.getUserDTOById(id).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/username/{username}")
@@ -119,7 +118,7 @@ public class UserRestController {
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username) {
         logger.info("Пользователь с username = {}", username);
         return userService.getUserDTOByName(username).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     // DTO compliant
@@ -144,7 +143,7 @@ public class UserRestController {
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().build();
         }
         userService.updateUser(user);
         logger.info("Обновленный пользователь: {}", user);
@@ -183,7 +182,7 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
         Optional<List<UserDTO>> list = userService.getAllUsersDTOInChannelByChannelId(id);
-        return list.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return list.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     // DTO compliant
@@ -225,7 +224,7 @@ public class UserRestController {
         List<UserDTO> userDTOsList = userService.getAllUsersInWorkspaceByWorkspaceId(id);
         return userDTOsList != null && !userDTOsList.isEmpty()
                 ? ResponseEntity.ok(userDTOsList)
-                : ResponseEntity.notFound().build();
+                : ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
@@ -245,7 +244,7 @@ public class UserRestController {
             return ResponseEntity.ok().build();
         }
         logger.warn("Запрос на восстановление пароля пользователя с несуществующего email = {}", email);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping(value = "/password-recovery")
@@ -257,7 +256,7 @@ public class UserRestController {
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to recover password")
             })
     public ResponseEntity<?> passwordRecovery(@RequestParam(name = "token") String token,
-                                           @RequestParam(name = "password") String password) {
+                                              @RequestParam(name = "password") String password) {
 
         if (mailService.changePasswordUserByToken(token, password)) {
             return ResponseEntity.ok().build();

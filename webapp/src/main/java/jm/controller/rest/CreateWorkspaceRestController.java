@@ -10,7 +10,6 @@ import jm.*;
 import jm.api.dao.CreateWorkspaceTokenDAO;
 import jm.model.CreateWorkspaceToken;
 import jm.model.User;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,12 +73,12 @@ public class CreateWorkspaceRestController {
             request.getSession(false).setAttribute("token", token);
             createWorkspaceTokenService.createCreateWorkspaceToken(token);
             User user = userService.getUserByEmail(emailTo);
-            if(user == null) {
+            if (user == null) {
                 userService.createUserByEmail(emailTo);
             }
-            return new ResponseEntity(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().build();
     }
 
 
@@ -100,10 +99,10 @@ public class CreateWorkspaceRestController {
     public ResponseEntity confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
-        if(token.getCode() != code  || token == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        if (token.getCode() != code || token == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/workspaceName")
@@ -124,7 +123,7 @@ public class CreateWorkspaceRestController {
         token.setWorkspaceName(workspaceName);
         workspaceService.createWorkspaceByToken(token);                  //создаем неприватный WS с владельцем из токена
         request.getSession(false).setAttribute("token", token);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/channelName")
@@ -142,10 +141,10 @@ public class CreateWorkspaceRestController {
             })
     public ResponseEntity channelName(@RequestBody String channelName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
-        token.setChannelName(channelName);
-        channelService.createChannelByTokenAndUsers(token,users);
+        token.setChannelname(channelName);
+        channelService.createChannelByTokenAndUsers(token, users);
         request.getSession(false).setAttribute("token", token);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/invites")
@@ -163,8 +162,8 @@ public class CreateWorkspaceRestController {
             })
     public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
-        mailService.sendInviteMessagesByTokenAndInvites(token,invites);
-        return new ResponseEntity(HttpStatus.OK);
+        mailService.sendInviteMessagesByTokenAndInvites(token, invites);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/tada")
@@ -186,7 +185,7 @@ public class CreateWorkspaceRestController {
         UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         sToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(sToken);
-        return new ResponseEntity<>(token.getChannelName(), HttpStatus.OK);
+        return ResponseEntity.ok(token.getChannelname());
     }
 
 }
