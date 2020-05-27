@@ -37,6 +37,7 @@ public class CreateWorkspaceRestController {
 
     private static final Logger logger =
             LoggerFactory.getLogger(CreateWorkspaceRestController.class);
+
     private final UserService userService;
     private final CreateWorkspaceTokenService createWorkspaceTokenService;
     private final MailService mailService;
@@ -81,6 +82,7 @@ public class CreateWorkspaceRestController {
             if (user == null) {
                 userService.createUserByEmail(emailTo);
             }
+            logger.info("test 1");
             return Response.ok().build();
         }
         return Response.error(HttpStatus.BAD_REQUEST).build();
@@ -106,6 +108,7 @@ public class CreateWorkspaceRestController {
         if (token.getCode() != code || token == null) {
             return Response.error(HttpStatus.BAD_REQUEST).build();
         }
+        logger.info("test 2");
         return Response.ok().build();
     }
 
@@ -127,6 +130,7 @@ public class CreateWorkspaceRestController {
         token.setWorkspaceName(workspaceName);
         workspaceService.createWorkspaceByToken(token);                  //создаем неприватный WS с владельцем из токена
         request.getSession(false).setAttribute("token", token);
+        logger.info("test 3");
         return Response.ok().build();
     }
 
@@ -148,6 +152,7 @@ public class CreateWorkspaceRestController {
         token.setChannelname(channelName);
         channelService.createChannelByTokenAndUsers(token, users);
         request.getSession(false).setAttribute("token", token);
+        logger.info("test 3");
         return Response.ok().build();
     }
 
@@ -167,6 +172,7 @@ public class CreateWorkspaceRestController {
     public Response invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         mailService.sendInviteMessagesByTokenAndInvites(token, invites);
+        logger.info("test 4");
         return Response.ok().build();
     }
 
@@ -189,6 +195,7 @@ public class CreateWorkspaceRestController {
         UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         sToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(sToken);
+        logger.info("test 5");
         return Response.ok(token.getChannelname());
     }
 

@@ -26,8 +26,8 @@ import java.util.List;
 @Tag(name = "thread", description = "Thread Channel API")
 public class ThreadChannelRestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(
-            ThreadChannelRestController.class);
+    private static final Logger logger =
+            LoggerFactory.getLogger(ThreadChannelRestController.class);
 
     private final ThreadChannelService threadChannelService;
     private final ThreadChannelMessageService threadChannelMessageService;
@@ -59,6 +59,7 @@ public class ThreadChannelRestController {
             ThreadChannel threadChannel = new ThreadChannel(messageDTO.getId());
             threadChannelService.createThreadChannel(threadChannel);
             logger.info("Созданный тред : {}", threadChannel);
+            logger.info("test 9");
             return Response.ok(threadChannel);
         }
         return Response.error(HttpStatus.BAD_REQUEST).build();
@@ -79,6 +80,7 @@ public class ThreadChannelRestController {
             })
     public Response<ThreadMessageDTO> createThreadChannelMessage(@RequestBody ThreadMessageDTO threadMessageDTO) {
 //        Сохранение сообщения выполняется в MessagesController сразу из websocket
+        logger.info("test 10");
         return Response.ok().build();
     }
 
@@ -99,6 +101,7 @@ public class ThreadChannelRestController {
     public Response<ThreadDTO> findThreadChannelByChannelMessageId(@PathVariable("message_id") Long id) {
         // TODO: ПЕРЕДЕЛАТЬ сразу получать из базы ThreadDTO
         try {
+            logger.info("test 11");
             return Response.ok(new ThreadDTO(threadChannelService.findByChannelMessageId(id)));
         } catch (Exception e) {
             return Response.error(HttpStatus.BAD_REQUEST).build();
@@ -121,6 +124,7 @@ public class ThreadChannelRestController {
             })
     public Response<List<ThreadMessageDTO>> findAllThreadChannelMessagesByThreadChannelId(@PathVariable Long id) {
         List<ThreadMessageDTO> threadMessageDTOList = threadChannelMessageService.getAllThreadMessageDTOByThreadChannelId(id);
+        logger.info("test 12");
         return threadMessageDTOList != null && !threadMessageDTOList.isEmpty()
                 ? Response.ok(threadMessageDTOList)
                 : Response.error(HttpStatus.BAD_REQUEST).build();

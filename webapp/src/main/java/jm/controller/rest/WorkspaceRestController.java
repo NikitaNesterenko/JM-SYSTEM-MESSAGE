@@ -10,6 +10,8 @@ import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
 import jm.component.Response;
 import jm.model.Workspace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,9 @@ public class WorkspaceRestController {
     private WorkspaceService workspaceService;
     private WorkspaceUserRoleService workspaceUserRoleService;
     private UserService userService;
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(WorkspaceRestController.class);
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -62,6 +67,7 @@ public class WorkspaceRestController {
             })
     public Response<Workspace> getWorkspaceById(@PathVariable("id") Long id) {
         final Workspace workspace = workspaceService.getWorkspaceById(id);
+        logger.info("test 24");
         return workspace != null
                 ? Response.ok().build()
                 : Response.error(HttpStatus.BAD_REQUEST).build();
@@ -84,6 +90,7 @@ public class WorkspaceRestController {
     public Response<?> createWorkspace(@RequestBody Workspace workspace) {
         try {
             workspaceService.createWorkspace(workspace);
+            logger.info("test 24");
             return Response.ok().build();
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             return Response.error(HttpStatus.BAD_REQUEST).build();
@@ -111,6 +118,7 @@ public class WorkspaceRestController {
             return Response.error(HttpStatus.BAD_REQUEST).build();
         }
         request.getSession(false).setAttribute("WorkspaceID", workspace);
+        logger.info("test 25");
         return Response.ok().build();
     }
 
@@ -125,6 +133,7 @@ public class WorkspaceRestController {
     public Response<?> deleteWorkspace(@PathVariable("id") Long id) {
         if (getWorkspaceById(id).getStatusCode().is2xxSuccessful()) {
             workspaceService.deleteWorkspace(id);
+            logger.info("test 26");
             return Response.ok().build();
         }
         return Response.error(HttpStatus.BAD_REQUEST).build();
@@ -146,6 +155,7 @@ public class WorkspaceRestController {
             })
     public Response<List<Workspace>> getAllWorkspaces() {
         final List<Workspace> workspaces = workspaceService.getAllWorkspaces();
+        logger.info("test 27");
         return workspaces != null && !workspaces.isEmpty()
                 ? Response.ok(workspaces)
                 : Response.error(HttpStatus.BAD_REQUEST).build();
@@ -170,6 +180,7 @@ public class WorkspaceRestController {
         if (workspace == null) {
             return Response.ok(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
         }
+        logger.info("test 28");
         return Response.ok(workspace);
     }
 
@@ -187,6 +198,7 @@ public class WorkspaceRestController {
             return Response.error(HttpStatus.BAD_REQUEST).build();
         }
         request.getSession(true).setAttribute("WorkspaceID", workspace);
+        logger.info("test 29");
         return Response.ok(true);
     }
 
@@ -206,6 +218,7 @@ public class WorkspaceRestController {
     public Response<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
         if (chosenWorkspace(name, request).getStatusCode().is2xxSuccessful()) {
             chosenWorkspace(name, request);
+            logger.info("test 30");
             return Response.ok(true);
         }
         return Response.error(HttpStatus.BAD_REQUEST).build();
@@ -228,6 +241,7 @@ public class WorkspaceRestController {
     public Response<List<Workspace>> getAllWorkspacesByUser(Principal principal) {
         // TODO: ПЕРЕДЕЛАТЬ получать только UserID, остальная информация о юзере не используется
         final List<Workspace> list = workspaceService.getWorkspacesByUserId(userService.getUserByLogin(principal.getName()).getId());
+        logger.info("test 31");
         return list != null && !list.isEmpty()
                 ? Response.ok(list)
                 : Response.error(HttpStatus.BAD_REQUEST).build();
