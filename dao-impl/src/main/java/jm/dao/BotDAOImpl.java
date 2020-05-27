@@ -26,105 +26,79 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
-    public List<Bot> getBotsByWorkspaceId (Long id) {
-        try {
-            return (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
+    public List<Bot> getBotsByWorkspaceId(Long id) {
+            List<Bot> botList = (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
                     .setParameter(1, id)
                     .getResultList();
-        } catch (NoResultException e) {
-            return Collections.emptyList();
-        }
+        return botList.size()>0 ? botList : Collections.emptyList();
     }
 
-    private List<Number> getAllBotIdByWorkspaceId (Long workspaceId) {
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager
-                           .createNativeQuery("SELECT wb.bot_id FROM workspaces_bots wb WHERE wb.workspace_id=:workspaceId")
-                           .setParameter("workspaceId", workspaceId)
-                           .getResultList();
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+    private List<Number> getAllBotIdByWorkspaceId(Long workspaceId) {
+            List<Number> list = entityManager
+                    .createNativeQuery("SELECT wb.bot_id FROM workspaces_bots wb WHERE wb.workspace_id=:workspaceId")
+                    .setParameter("workspaceId", workspaceId)
+                    .getResultList();
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
     @Override
-    public List<BotDTO> getBotDtoListByWorkspaceId (Long id) {
+    public List<BotDTO> getBotDtoListByWorkspaceId(Long id) {
         return getAllBotIdByWorkspaceId(id).stream()
-                       .map(Number::longValue)
-                       .map(this::getBotDTOById)
-                       .map(Optional::get)
-                       .collect(Collectors.toList());
+                .map(Number::longValue)
+                .map(this::getBotDTOById)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Set<Channel> getChannels (Bot bot) {
+    public Set<Channel> getChannels(Bot bot) {
         return bot.getChannels();
     }
 
     @Override
-    public Optional<Bot> getBotByCommandId (Long id) {
-        try {
-            Bot bot = (Bot)entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
-                                 .setParameter(1, id)
-                                 .getSingleResult();
-            return Optional.of(bot);
-        } catch (NoResultException e) {
-            return Optional.empty();
-        }
+    public Optional<Bot> getBotByCommandId(Long id) {
+            return Optional.ofNullable((Bot) entityManager.createNativeQuery("SELECT b.* FROM bots_slash_commands bc JOIN bots b ON b.id = bc.bot_id WHERE bc.slash_command_id=?", Bot.class)
+                    .setParameter(1, id)
+                    .getSingleResult());
     }
 
 
-    private List<Number> getListWorkspacesIdByBotId (Long botId) {
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager.createNativeQuery("SELECT wb.workspace_id FROM workspaces_bots wb WHERE wb.bot_id=:botId")
-                           .setParameter("botId", botId)
-                           .getResultList();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+    private List<Number> getListWorkspacesIdByBotId(Long botId) {
+        String hql = "SELECT wb.workspace_id FROM workspaces_bots wb WHERE wb.bot_id=:botId";
+        List<Number> list = entityManager.createNativeQuery(hql)
+                    .setParameter("botId", botId)
+                    .getResultList();
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
-    private List<Number> getListChannelIdsIdByBotId (Long botId) {
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager.createNativeQuery("SELECT cb.channel_id FROM channels_bots cb WHERE cb.bot_id=:botId")
-                           .setParameter("botId", botId)
-                           .getResultList();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+    private List<Number> getListChannelIdsIdByBotId(Long botId) {
+        String hql = "SELECT cb.channel_id FROM channels_bots cb WHERE cb.bot_id=:botId";
+        List<Number> list = entityManager.createNativeQuery(hql)
+                    .setParameter("botId", botId)
+                    .getResultList();
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
-    private List<Number> getListSlashCommandsIdsByBotId (Long botId) {
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager.createNativeQuery("SELECT bsc.slash_command_id FROM bots_slash_commands bsc WHERE bsc.bot_id=:botId")
-                           .setParameter("botId", botId)
-                           .getResultList();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+    private List<Number> getListSlashCommandsIdsByBotId(Long botId) {
+        String hql = "SELECT bsc.slash_command_id FROM bots_slash_commands bsc WHERE bsc.bot_id=:botId";
+        List<Number> list = entityManager.createNativeQuery(hql)
+                    .setParameter("botId", botId)
+                    .getResultList();
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
     @Override
-    public Optional<BotDTO> getBotDTOById (Long botId) {
+    public Optional<BotDTO> getBotDTOById(Long botId) {
         BotDTO botDTO = null;
 
-        if (haveEntityWithThisId(botId)){
+        if (haveEntityWithThisId(botId)) {
             botDTO = (BotDTO) entityManager.createNativeQuery("SELECT b.id AS \"id\", b.name AS \"name\", b.nick_name AS \"nickName\", b.date_create AS \"dateCreate\" " +
-                                                                      "FROM bots b WHERE id=:id")
-                                      .setParameter("id", botId)
-                                      .unwrap(NativeQuery.class)
-                                      .setResultTransformer(Transformers.aliasToBean(BotDTO.class))
-                                      .getResultList()
-                                      .get(0);
+                    "FROM bots b WHERE id=:id")
+                    .setParameter("id", botId)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(BotDTO.class))
+                    .getResultList()
+                    .get(0);
 
             botDTO.setWorkspacesId(getListWorkspacesIdByBotId(botId));
             botDTO.setChannelIds(getListChannelIdsIdByBotId(botId));
@@ -136,13 +110,12 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
 
     @Override
     public Optional<Bot> findByToken(String token) {
-        try {
+        if (twoParametersMethodToSearchEntity("token", token)) {
             Bot bot = entityManager.createQuery("SELECT b FROM Bot b WHERE b.token = :token", Bot.class)
                     .setParameter("token", token)
                     .getSingleResult();
             return Optional.of(bot);
-        } catch (NoResultException e) {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 }

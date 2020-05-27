@@ -53,4 +53,11 @@ public abstract class AbstractDao<T> {
                 + persistentClass.getName() + " where id =" + entityId).getSingleResult();
         return lon > 0;
     }
+
+    public Boolean haveEntityWithEntityNameAndId(Long entityId, String parameterType, String entityName) {
+        Long lon = (Long) entityManager.createQuery("select count(id) from " + persistentClass.getName() +
+                " where " + parameterType + " ='" + entityName + "' and id = " + entityId).getSingleResult();
+        return lon > 0;
+    }
+
 }

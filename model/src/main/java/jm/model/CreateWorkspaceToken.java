@@ -27,11 +27,11 @@ public class CreateWorkspaceToken {
     private String userEmail;
 
     @Column(name = "channel_name")
-    private String channelname;
+    private String channelName;
 
     @Column(name = "code", nullable = false)
     @EqualsAndHashCode.Include
-    private int code;
+    private Integer code;
 
     public CreateWorkspaceToken(int code) {
         this.code = code;
