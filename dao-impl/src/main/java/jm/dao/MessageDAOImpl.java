@@ -338,6 +338,14 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
     }
 
     @Override
+    public List<Message> getAllMessagesAssociatedWithUser(Long userId, Boolean isDeleted) {
+        return entityManager.createQuery("select m from Message m join  m.associatedUsers u where u.id =:userId and m.isDeleted = :is_deleted", Message.class)
+                .setParameter("userId", userId)
+                .setParameter("is_deleted", isDeleted)
+                .getResultList();
+    }
+
+    @Override
     public byte[] getVoiceMessageSoundById(long id) {
         return (byte[]) entityManager.createQuery("SELECT voiceMessageSound FROM Message where id =: id")
                 .setParameter("id", id)
