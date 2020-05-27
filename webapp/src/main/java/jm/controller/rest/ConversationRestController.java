@@ -6,8 +6,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ConversationService;
+import jm.component.Response;
 import jm.dto.ConversationDTO;
 import jm.model.Conversation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +22,8 @@ import java.util.List;
 @RequestMapping("/rest/api/conversations")
 @Tag(name = "conversation", description = "Conversation API")
 public class ConversationRestController {
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(ConversationRestController.class);
     private ConversationService conversationService;
 
     public ConversationRestController(ConversationService conversationService) {
@@ -38,11 +43,12 @@ public class ConversationRestController {
                             description = "OK: get conversation"
                     )
             })
-    public ResponseEntity<Conversation> getConversationById(@PathVariable Long id) {
+    public Response<Conversation> getConversationById(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(conversationService.getConversationById(id));
+            logger.info("успех 015");
+            return Response.ok(conversationService.getConversationById(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -60,14 +66,15 @@ public class ConversationRestController {
                     @ApiResponse(responseCode = "200", description = "OK: conversation created"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to create conversation")
             })
-    public ResponseEntity<Conversation> createConversation(@RequestBody ConversationDTO conversationDTO) {
+    public Response<Conversation> createConversation(@RequestBody ConversationDTO conversationDTO) {
         Conversation conversation = conversationService.getEntityFromDTO(conversationDTO);
         try {
             conversationService.createConversation(conversation);
+            logger.info("успех 016");
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            ResponseEntity.badRequest().build();
+            Response.error(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(conversation);
+        return Response.ok(conversation);
     }
 
     @PutMapping(value = "/update")
@@ -84,12 +91,13 @@ public class ConversationRestController {
                     @ApiResponse(responseCode = "200", description = "OK: conversation updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to update conversation")
             })
-    public ResponseEntity<Conversation> updateConversation(@RequestBody Conversation conversation) {
+    public Response<Conversation> updateConversation(@RequestBody Conversation conversation) {
         try {
             Conversation updated = conversationService.updateConversation(conversation);
-            return ResponseEntity.ok(updated);
+            logger.info("успех 017");
+            return Response.ok(updated);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -100,9 +108,10 @@ public class ConversationRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: conversation deleted")
             })
-    public ResponseEntity<Conversation> deleteConversation(@PathVariable Long conversationID, @PathVariable Long userID) {
+    public Response<Conversation> deleteConversation(@PathVariable Long conversationID, @PathVariable Long userID) {
         conversationService.deleteConversation(conversationID, userID);
-        return ResponseEntity.ok().build();
+        logger.info("успех 018");
+        return Response.ok().build();
     }
 
     @GetMapping
@@ -118,9 +127,10 @@ public class ConversationRestController {
                             description = "OK: get all conversations"
                     )
             })
-    public ResponseEntity<List<Conversation>> getAllConversations() {
+    public Response<List<Conversation>> getAllConversations() {
         List<Conversation> conversationsList = conversationService.getAllConversations();
-        return conversationsList.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(conversationsList);
+        logger.info("успех 019");
+        return conversationsList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST).build() : Response.ok(conversationsList);
     }
 
     @GetMapping(value = "/user/{id}")
@@ -136,9 +146,10 @@ public class ConversationRestController {
                             description = "OK: get conversations"
                     )
             })
-    public ResponseEntity<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
+    public Response<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
         List<Conversation> conversationList = conversationService.getConversationsByUserId(id);
-        return conversationList.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(conversationList);
+        logger.info("успех 020");
+        return conversationList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST).build() : Response.ok(conversationList);
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
@@ -154,14 +165,15 @@ public class ConversationRestController {
                             description = "OK: get conversation"
                     )
             })
-    public ResponseEntity<Conversation> getConversationByRespondents(
+    public Response<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
         try {
-            return ResponseEntity.ok(
+            logger.info("успех 021");
+            return Response.ok(
                     conversationService.getConversationByUsersId(firstId, secondId)
             );
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
