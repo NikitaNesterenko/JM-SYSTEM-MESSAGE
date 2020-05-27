@@ -24,26 +24,20 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
 
     private List<Number> getListRecipientUserIds(Long messageId) {
 
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager.createNativeQuery("SELECT recipient_user_id FROM messages_recipient_users mru WHERE direct_message_id=:messageId")
+        List<Number> list = entityManager.createNativeQuery("SELECT recipient_user_id FROM messages_recipient_users mru WHERE direct_message_id=:messageId")
                     .setParameter("messageId", messageId)
                     .getResultList();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-        return list;
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
     private Optional<Tuple> getUserNameAndAvatarUrlByUserId(Long userId) {
         Tuple tuple = null;
-        try {
+            if(haveEntityWithThisId(userId)){
             tuple = (Tuple) entityManager.createNativeQuery("SELECT u.username AS \"userName\", u.avatar_url AS \"userAvatarUrl\" " +
                     "FROM users u WHERE u.id=:userId", Tuple.class)
                     .setParameter("userId", userId)
                     .getSingleResult();
-        } catch (NoResultException ignored) {
-        }
+            }
         return Optional.ofNullable(tuple);
     }
 

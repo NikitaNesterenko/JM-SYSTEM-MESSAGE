@@ -47,15 +47,12 @@ public class ConversationDAOImpl extends AbstractDao<Conversation> implements Co
 
     @Override
     public List<Conversation> getConversationsByUserId(Long userId) {
-        try {
-            return (List<Conversation>) entityManager.createNativeQuery(
+          List<Conversation> list = entityManager.createNativeQuery(
                     "select * from conversations " +
                     "where opener_id=? and show_for_opener=true " +
                     "   or associated_id=? and show_for_associated=true", Conversation.class)
                     .setParameter(1, userId).setParameter(2, userId).getResultList();
-        } catch (NoResultException e1) {
-            return Collections.emptyList();
-        }
+        return list.size()>0 ? list : Collections.emptyList();
     }
 
     @Override
