@@ -128,15 +128,11 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     private List<Number> getListBotIdsByName(String name) {
-        List<Number> list = new ArrayList<>();
-        try {
-            list = entityManager.createNativeQuery("SELECT cb.bot_id  FROM channels_bots cb LEFT JOIN channels c on cb.channel_id = c.id WHERE name=:name")
+        String hql = "SELECT cb.bot_id  FROM channels_bots cb LEFT JOIN channels c on cb.channel_id = c.id WHERE name=:name";
+        List<Number> list = entityManager.createNativeQuery(hql)
                     .setParameter("name", name)
                     .getResultList();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return list;
+        return list.size()>0? list : Collections.emptyList();
     }
 
     @Override

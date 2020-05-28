@@ -18,8 +18,6 @@ public class Response<T> extends HttpEntity<T> {
         super(body, headers);
         this.status = status;
     }
-
-
     public static BodyBuilder ok() {
         success = true;
         return httpStatus(HttpStatus.OK);
@@ -41,7 +39,7 @@ public class Response<T> extends HttpEntity<T> {
     }
 
     public static BodyBuilder error(HttpStatus status) {
-        success=false;
+        success = false;
         return httpStatus(status);
     }
 /*
@@ -82,10 +80,12 @@ public class Response<T> extends HttpEntity<T> {
         return builder.toString();
     }
 
+
     @Override
     public int hashCode() {
         return (29 * super.hashCode() + ObjectUtils.nullSafeHashCode(this.status));
     }
+
 
     public HttpStatus getStatusCode() {
         if (this.status instanceof HttpStatus) {

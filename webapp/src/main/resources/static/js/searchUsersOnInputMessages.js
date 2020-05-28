@@ -73,7 +73,7 @@ function strReplace(str, sub, rep, index) {
 }
 
 const showAllUsers = (text) => {
-    const allUsers = userService.getAll();
+    const allUsers = userService.getAllAssociatedUsersByWorkspace(sessionStorage.getItem('workspaceId'));
     $('#associatedUserListSelect')
         .find('option')
         .remove()
@@ -105,9 +105,9 @@ const showAllUsers = (text) => {
     }
 };
 
-$('#associatedUserListSelect').on('change', function () {
-    let result;
-    $("#associatedUserListForm select option:selected").each(function () {
+$('#associatedUserListSelect').change(function () {
+    let result = '';
+    $(".atUserSelectOption:selected").each(function () {
         users.push($(this).val());
         let text = $(this).text();
         if (text !== ' --') {
@@ -138,6 +138,7 @@ function cancelSearchAt() {
     isSearchUser = false;
     isAtButtonClick = false;
 }
+
 export function clearUsers() {
-    users=[];
+    users = [];
 }

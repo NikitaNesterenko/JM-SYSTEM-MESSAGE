@@ -338,7 +338,8 @@ export class StompClient {
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
             'channelName': message.channelName,
-            'workspaceId': message.workspaceId
+            'workspaceId': message.workspaceId,
+            'associatedUserIds':message.associatedUserIds
         };
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));

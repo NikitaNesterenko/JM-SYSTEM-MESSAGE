@@ -42,7 +42,7 @@ public class MessageDTO {
     private String channelName;
     private String userAvatarUrl;
     private String pluginName;
-
+    private Set<Long> associatedUserIds;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime dateCreate;
@@ -157,7 +157,7 @@ public class MessageDTO {
 
     // Constructor for simplify Message->MessageDTO conversion.
     // copying simple fields
-    public MessageDTO (@NonNull Message message) {
+    public MessageDTO(@NonNull Message message) {
         this.id = message.getId();
         this.content = message.getContent();
         this.dateCreate = message.getDateCreate();
@@ -176,9 +176,9 @@ public class MessageDTO {
                 .map(sharedMessage -> this.sharedMessageId = sharedMessage.getId());
 
         this.recipientUserIds = message.getRecipientUsers()
-                                        .stream()
-                                        .map(User::getId)
-                                        .collect(Collectors.toSet());
+                .stream()
+                .map(User::getId)
+                .collect(Collectors.toSet());
         Optional.ofNullable(message.getParentMessage())
                 .map(parentMessage -> this.parentMessageId = parentMessage.getId());
 
@@ -199,7 +199,7 @@ public class MessageDTO {
                 });
     }
 
-    public MessageDTO (@NonNull MessageDTO messageDTO) {
+    public MessageDTO(@NonNull MessageDTO messageDTO) {
         this.id = messageDTO.getId();
         this.userId = messageDTO.getUserId();
         this.botId = messageDTO.getBotId();
@@ -225,7 +225,7 @@ public class MessageDTO {
     }
 
     // For test only
-    public MessageDTO (Long id, Long channelId, Long workspaceId, Long userId, String content, LocalDateTime dateCreate) {
+    public MessageDTO(Long id, Long channelId, Long workspaceId, Long userId, String content, LocalDateTime dateCreate) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -235,68 +235,68 @@ public class MessageDTO {
     }
 
 
-    public void setId (Number id) {
+    public void setId(Number id) {
         this.id = Optional.ofNullable(id)
-                          .map(Number::longValue)
-                          .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setUserId (Number userId) {
+    public void setUserId(Number userId) {
         this.userId = Optional.ofNullable(userId)
-                              .map(Number::longValue)
-                              .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setBotId (Number botId) {
+    public void setBotId(Number botId) {
         this.botId = Optional.ofNullable(botId)
-                             .map(Number::longValue)
-                             .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setDateCreate (Timestamp dateCreate) {
+    public void setDateCreate(Timestamp dateCreate) {
         this.dateCreate = dateCreate.toLocalDateTime();
     }
 
-    public void setDateCreateLocalDateTime (LocalDateTime dateCreate) {
+    public void setDateCreateLocalDateTime(LocalDateTime dateCreate) {
         this.dateCreate = dateCreate;
     }
 
 
-    public void setChannelId (Number channelId) {
+    public void setChannelId(Number channelId) {
         this.channelId = Optional.ofNullable(channelId)
-                                 .map(Number::longValue)
-                                 .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setWorkspaceId (Number workspaceId) {
+    public void setWorkspaceId(Number workspaceId) {
         this.workspaceId = Optional.ofNullable(workspaceId)
-                                   .map(Number::longValue)
-                                   .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setSharedMessageId (Number sharedMessageId) {
+    public void setSharedMessageId(Number sharedMessageId) {
         this.sharedMessageId = Optional.ofNullable(sharedMessageId)
-                                       .map(Number::longValue)
-                                       .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setParentMessageId (Number parentMessageId) {
+    public void setParentMessageId(Number parentMessageId) {
         this.parentMessageId = Optional.ofNullable(parentMessageId)
-                                       .map(Number::longValue)
-                                       .orElse(null);
+                .map(Number::longValue)
+                .orElse(null);
     }
 
-    public void setRecipientUserIds (List<Number> recipientUserIds) {
+    public void setRecipientUserIds(List<Number> recipientUserIds) {
         this.recipientUserIds = recipientUserIds.stream()
-                                        .map(Number::longValue)
-                                        .collect(Collectors.toSet());
+                .map(Number::longValue)
+                .collect(Collectors.toSet());
     }
 
-    public void setUserName (String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void setUserAvatarUrl (String userAvatarUrl) {
+    public void setUserAvatarUrl(String userAvatarUrl) {
         this.userAvatarUrl = userAvatarUrl;
     }
 }

@@ -2,6 +2,7 @@ import {RestPaginationService} from "./rest-pagination-service.js";
 
 
 export class UserRestPaginationService extends RestPaginationService {
+
     constructor() {
         super('/rest/api/users');
     }
@@ -15,6 +16,11 @@ export class UserRestPaginationService extends RestPaginationService {
 
     getUsersByWorkspace = async (id) => {
         const response = await fetch(`/rest/api/users/workspace/${id}`);
+        return response.json();
+    };
+
+    getAllAssociatedUsersByWorkspace = async (id) => {
+        const response = await fetch(`/rest/api/users/forAssociated/${id}`);
         return response.json();
     };
 
@@ -53,6 +59,11 @@ export class MessageRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/api/messages');
     }
+
+    getAllMessagesAssociatedWithUser = async (id) => {
+        const response = await fetch(`/rest/api/messages/associated/${id}`);
+        return response.json();
+    };
 
     getAllMessagesByChannelId = async (id) => {
         const response = await fetch(`/rest/api/messages/channel/${id}`);
@@ -510,7 +521,7 @@ export class NotificationsRestService extends RestPaginationService {
         super("/rest/api/notifications");
     }
 
-    getNotifications = async (workspaceId,userId) => {
+    getNotifications = async (workspaceId, userId) => {
         const response = await fetch(`${this.url}/${workspaceId}/${userId}`);
         return response.json();
     };

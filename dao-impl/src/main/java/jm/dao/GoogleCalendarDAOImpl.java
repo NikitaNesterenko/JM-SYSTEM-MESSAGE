@@ -27,11 +27,11 @@ public class GoogleCalendarDAOImpl extends AbstractDao<GoogleCalendarToken> impl
                 .setParameter("login", userName)
                 .getSingleResult();
 
-        try {
+        if (haveEntityWithThisId(user.getId())) {
             googleCalendarToken = (GoogleCalendarToken) entityManager.createNativeQuery("select * from google_calendar_token where user_id = :user_id", GoogleCalendarToken.class)
-                    .setParameter("user_id", user)
+                    .setParameter("user_id", user.getId())
                     .getSingleResult();
-        } catch (NoResultException e) {
+        }else {
             googleCalendarToken = new GoogleCalendarToken();
             googleCalendarToken.setUser(user);
         }

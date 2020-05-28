@@ -61,7 +61,8 @@ public class MessageRestController {
     }
 
     // DTO compliant
-    @GetMapping(value = "/channel/{id}") //если в канале сообщений нет то идет ошибка 400 и отображается с ошибкой. если есть сообщение в базе то ошибок нет
+    @GetMapping(value = "/channel/{id}")
+    //если в канале сообщений нет то идет ошибка 400 и отображается с ошибкой. если есть сообщение в базе то ошибок нет
     @Operation(
             operationId = "getMessagesByChannelId",
             summary = "Get messages by channel id",
@@ -118,7 +119,7 @@ public class MessageRestController {
                                                                             @PathVariable("endDate") String endDate) {
         List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
 
-                                                                                                        .minusMonths(3), LocalDateTime.now(), false);
+                .minusMonths(3), LocalDateTime.now(), false);
 
         return Response.ok(messageDTOList);
 
@@ -305,5 +306,25 @@ public class MessageRestController {
         user.getUnreadMessages().add(messageService.getMessageById(msgId));
         userService.updateUser(user);
         return Response.ok().build();
+    }
+
+    @GetMapping(value = "/associated/{id}")
+    @Operation(
+            operationId = "getMessagesFromAssociatedWithUser",
+            summary = "Get list of messages by userId",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(type = "array", implementation = UserDTO.class)
+                            ),
+                            description = "OK: Got all message from all channels"
+                    )
+            })
+    public ResponseEntity<List<Message>> getMessagesFromAssociatedWithUser(@PathVariable("id") Long userId) {
+        logger.info("Список сообщений для юзера где его упомянули: ");
+        messageService.getAllMessagesAssociatedWithUser(userId, false)
+                .forEach(message -> logger.info(message.toString()));
+        return ResponseEntity.ok(messageService.getAllMessagesAssociatedWithUser(userId, false));
     }
 }

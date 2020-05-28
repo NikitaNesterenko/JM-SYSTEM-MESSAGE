@@ -3,6 +3,7 @@ package jm;
 import jm.api.dao.DirectMessageDAO;
 import jm.api.dao.MessageDAO;
 import jm.api.dao.UserDAO;
+import jm.dto.AssociatedUserDTO;
 import jm.dto.UserDTO;
 import jm.model.Message;
 import jm.model.User;
@@ -14,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -186,5 +188,25 @@ public class UserServiceImpl implements UserService {
         user.setUnreadDirectMessages(new HashSet<>(unreadDirectMessageList));
 
         return user;
+    }
+
+    public Optional<List<AssociatedUserDTO>> getAllAssociatedUserDTOinWorkspaceByWorkspaceId(Long id) {
+
+        List<AssociatedUserDTO> associatedUserDTOS = new ArrayList<>();
+        List<UserDTO> userDTOS = userDAO.getUsersInWorkspace(id);
+
+        if (userDTOS != null) {
+            userDTOS.forEach(userDTO -> {
+                associatedUserDTOS.add(AssociatedUserDTO.builder()
+                        .id(userDTO.getId())
+                        .name(userDTO.getName())
+                        .lastName(userDTO.getLastName())
+                        .displayName(userDTO.getDisplayName())
+                        .avatarURL(userDTO.getAvatarURL())
+                        .online(userDTO.getOnline())
+                        .build());
+            });
+        }
+        return Optional.ofNullable(associatedUserDTOS);
     }
 }
