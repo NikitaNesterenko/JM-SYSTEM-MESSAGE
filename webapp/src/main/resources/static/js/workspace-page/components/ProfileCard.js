@@ -10,9 +10,9 @@ export class ProfileCard {
         this.user_service = new UserRestPaginationService();
         this.bot_service = new BotRestPaginationService();
         this.storage_service = new StorageService();
-        this.profileCardModal = $('#modal_1');
-        this.profileEditModal = $('#modal_2');
-        this.edit_btn = $('#modal_1_edit_profile_btn, #modal_1_set_title_btn');
+        this.profileCardModal = $('#modal_1');//окно редактирования при нажатии на иконку
+        this.profileEditModal = $('#modal_2');//окно с данными пользователя для редактирования
+        this.edit_btn = $('#modal_1_edit_profile_btn, #modal_1_set_title_btn');//кнопка редактирования
         this.onFileUpload();
     }
 
@@ -39,7 +39,7 @@ export class ProfileCard {
 
             $('#modal_1_user_profile_button').text(this.user.name);
 
-            this.setTitle();
+           // this.setTitle();
             this.setUserImg('#modal_1_user_img');
         });
     }
@@ -82,14 +82,14 @@ export class ProfileCard {
         )
     }
 
-    setTitle() {
-        if (this.user.title == null || this.user.title === "") {
-            $('#modal_1_set_title_btn').show();
-        } else {
-            $('#modal_1_set_title_btn').hide();
-            $('#modal_1_user_title').val(this.user.title);
-        }
-    }
+    // setTitle() {
+    //     if (this.user.title == null || this.user.title === "") {
+    //         $('#modal_1_set_title_btn').show();
+    //     } else {
+    //         $('#modal_1_set_title_btn').hide();
+    //         $('#modal_1_user_title').val(this.user.title);
+    //     }
+    // }
 
     setUserImg(selector) {
         $(selector).attr("src", "/avatar/" + this.user.id);

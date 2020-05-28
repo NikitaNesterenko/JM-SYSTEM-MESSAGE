@@ -10,6 +10,7 @@ import {
 import {FileUploader} from "../FileUploader.js";
 import {Command} from "./Command.js";
 import {users} from "/js/searchUsersOnInputMessages.js";
+import {clearUsers} from "../../../searchUsersOnInputMessages.js";
 
 export class SubmitMessage {
     user;
@@ -42,14 +43,13 @@ export class SubmitMessage {
             window.hasSlashCommand = await this.checkSlashCommand();
             if (!hasCommand) {
 
-                const content =  $("#form_message_input").val();
+                const content = $("#form_message_input").val();
                 if (content.startsWith('/leave ')) {
                     let channelName = content.substring(7);
                     this.leaveChannel(channelName);
                     $("#form_message_input").val("");
                     return
                 }
-
                 const channel_id = sessionStorage.getItem("channelId");
                 const channel_name2 = sessionStorage.getItem("channelname");
                 const conversation_id = sessionStorage.getItem('conversation_id');
@@ -76,7 +76,7 @@ export class SubmitMessage {
         let isCommand = false;
         if (message.startsWith('/')) {
             window.allActions.forEach(action => {
-                if (message.substr(1, message.indexOf(" ") < 0 ? message.length :  message.indexOf(" ") - 1) === action) {
+                if (message.substr(1, message.indexOf(" ") < 0 ? message.length : message.indexOf(" ") - 1) === action) {
                     isCommand = true;
                 }
             })
@@ -124,31 +124,33 @@ export class SubmitMessage {
     async sendChannelMessage(channel_id) {
         await this.setChannel(channel_id);
         await this.setUser();
+        const text_message = this.getMessageInput();
 
         let entity = {
             id: null,
             channelId: channel_id,
             userId: this.user.id,
             userName: this.user.name,
-            content: this.getMessageInput(),
+            content: text_message,
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
             voiceMessage: await this.getVoiceMessage(),
-            recipientUserIds: users,
-            workspaceId: this.channel.workspaceId
-    };
+            workspaceId: this.channel.workspaceId,
+            sharedMessageId: await this.getSharedMessageId(text_message),
+            associatedUserIds: users
+        };
 
         if (window.hasSlashCommand) {
             await this.sendSlashCommand(entity);
         } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
             sendName(entity);
         }
-        // clearUsers();
+         clearUsers();
     }
 
     async sendSlashCommand(entity) {
         if (entity.content.startsWith("/")) {
-            const inputCommand = entity.content.slice(1,  entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
+            const inputCommand = entity.content.slice(1, entity.content.indexOf(" ") < 0 ? entity.content.length : entity.content.indexOf(" "));
             window.currentCommands.forEach(command => {
                 if (command.name === inputCommand) {
                     const sendCommand = {
@@ -168,16 +170,18 @@ export class SubmitMessage {
     async sendDirectMessage(conversation_id) {
         await this.setUser();
         const workspaceId = await this.workspace_service.getChosenWorkspace().then(workspace => workspace.id);
+        const text_message = this.getMessageInput();
 
         const entity = {
             id: null,
             userId: this.user.id,
             userName: this.user.name,
-            content: this.getMessageInput(),
+            content: text_message,
             dateCreate: convert_date_to_format_Json(new Date()),
             filename: await this.getFiles(),
             conversationId: conversation_id,
-            workspaceId: workspaceId
+            workspaceId: workspaceId,
+            sharedMessageId: await this.getSharedMessageId(text_message)
         };
 
         sendDM(entity);
@@ -226,16 +230,16 @@ export class SubmitMessage {
 
         await this.channel_service.update(entity).then(() => {
             $(".p-channel_sidebar__channels__list").html('');
-            this.renewChannels(this.workspace.id,this.user.id)
+            this.renewChannels(this.workspace.id, this.user.id)
         })
     }
 
-    async renewChannels(workspace_id,user_id) {
-        await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id,user_id).then(
+    async renewChannels(workspace_id, user_id) {
+        await this.channel_service.getChannelsByWorkspaceAndUser(workspace_id, user_id).then(
             channels => {
                 let firstChannelId = 0;
                 channels.forEach(function (channel, i) {
-                    if (i===0) {
+                    if (i === 0) {
                         firstChannelId = channel.id
                     }
                     $('#id-channel_sidebar__channels__list')
@@ -254,5 +258,14 @@ export class SubmitMessage {
                 sessionStorage.setItem('conversation_id', '0');
             }
         )
+    }
+
+    getSharedMessageId(url) {
+        return fetch(url).then(resp => {
+            if (resp.ok) {
+                return resp.json()
+            }
+            return null
+        })
     }
 }

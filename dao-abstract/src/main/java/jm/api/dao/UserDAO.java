@@ -19,17 +19,17 @@ public interface UserDAO {
 
     User getById(Long id);
 
-    User getUserByLogin(String login);
+    Optional<User> getUserByLogin(String login);
 
-    User getUserByName(String name);
+    Optional<User> getUserByName(String name);
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     void addRoleForUser(User user, String role);
 
     void updateUserRole(User user, String role);
 
-    List<User> getAllUsersInThisChannel(Long id);
+    List<User> getAllUsersInThisChannelByChannelId(Long id);
 
     List<UserDTO> getUsersInWorkspace(Long id);
 

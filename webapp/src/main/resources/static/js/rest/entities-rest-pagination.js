@@ -2,6 +2,7 @@ import {RestPaginationService} from "./rest-pagination-service.js";
 
 
 export class UserRestPaginationService extends RestPaginationService {
+
     constructor() {
         super('/rest/api/users');
     }
@@ -14,7 +15,12 @@ export class UserRestPaginationService extends RestPaginationService {
     };
 
     getUsersByWorkspace = async (id) => {
-        const response = await fetch('/rest/api/users/workspace/' + id);
+        const response = await fetch(`/rest/api/users/workspace/${id}`);
+        return response.json();
+    };
+
+    getAllAssociatedUsersByWorkspace = async (id) => {
+        const response = await fetch(`/rest/api/users/forAssociated/${id}`);
         return response.json();
     };
 
@@ -26,13 +32,27 @@ export class UserRestPaginationService extends RestPaginationService {
     getUserById = async (id) => {
         const user = await fetch(`/rest/api/users/${id}`);
         return await user.json();
-    }
+    };
 
     getUserByName = async (username) => {
         const user = await fetch(`/rest/api/users/username/${username}`);
         return await user.json()
             .catch(err => console.log(err.status));
-    }
+    };
+
+    updateUser = async (userEntity) => {
+        const response = await fetch('/rest/api/users/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(userEntity)
+        });
+        console.log(userEntity);
+        return await response.json()
+            .catch(err => console.log(err.status));
+
+    };
 }
 
 export class MessageRestPaginationService extends RestPaginationService {
@@ -40,13 +60,20 @@ export class MessageRestPaginationService extends RestPaginationService {
         super('/rest/api/messages');
     }
 
-    getAllMessagesByChannelId = async (id) => {
-        const response = await fetch('/rest/api/messages/channel/' + id);
+    getAllMessagesAssociatedWithUser = async (id) => {
+        const response = await fetch(`/rest/api/messages/associated/${id}`);
         return response.json();
     };
 
+    getAllMessagesByChannelId = async (id) => {
+        const response = await fetch(`/rest/api/messages/channel/${id}`);
+        return response.json();
+    };
+
+    // FIXME: формат startDate, endDate
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
-        const response = await fetch('/rest/api/messages/channel/' + id + '/' + startDate + '/' + endDate);
+        const response = await fetch(`/rest/api/messages/channel/${id}/${startDate}/${endDate}`);
+        console.log(startDate, "\n", endDate);
         return response.json();
     };
 
@@ -56,7 +83,7 @@ export class MessageRestPaginationService extends RestPaginationService {
     };
 
     getMessageById = async (id) => {
-        const response = await fetch('/rest/api/messages/' + id);
+        const response = await fetch(`/rest/api/messages/${id}`);
         return response.json();
     };
 
@@ -216,7 +243,8 @@ export class ChannelRestPaginationService extends RestPaginationService {
     };
 
     getChannelByName = async (name) => {
-        const response = await fetch('/rest/api/channels/name/' + name);
+        const response = await fetch(`/rest/api/channels/name/${name}`);
+        alert(response.status)
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -476,6 +504,7 @@ export class AppService extends RestPaginationService {
     }
 }
 
+//класс для создания и вкл/выкл уведомлений
 export class PluginRestPaginationService extends RestPaginationService {
     constructor() {
         super('/rest/plugin');
@@ -485,5 +514,40 @@ export class PluginRestPaginationService extends RestPaginationService {
         const plugin = await fetch('/rest/plugin/zoom');
         return plugin.json();
     }
+}
+
+export class NotificationsRestService extends RestPaginationService {
+    constructor() {
+        super("/rest/api/notifications");
+    }
+
+    getNotifications = async (workspaceId, userId) => {
+        const response = await fetch(`${this.url}/${workspaceId}/${userId}`);
+        return response.json();
+    };
+
+    createNotifications = async (notification) => {
+        //
+        const response = await fetch(`${this.url}/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;'
+            },
+            body: JSON.stringify(notification)
+        });
+        return response.json();
+    };
+
+    updateNotifications = async (notification) => {
+        const response = await fetch(`${this.url}/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;'
+            },
+            body: JSON.stringify(notification)
+        });
+        return response.json();
+    }
+
 }
 

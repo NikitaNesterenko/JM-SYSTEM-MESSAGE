@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,15 +29,12 @@ public class DirectMessageDAOImpl extends AbstractDao<DirectMessage> implements 
     @Override
     public Optional<Long> getConversationIdByMessageId(Long messageId) {
         Long conversationId = null;
-        try {
+        if (haveEntityWithThisId(messageId)) {
             Number resultId = (Number) entityManager.createNativeQuery("SELECT dm.conversation_id FROM direct_messages dm WHERE dm.id=:messageId ")
                     .setParameter("messageId", messageId)
                     .getSingleResult();
             conversationId = resultId.longValue();
-        } catch (NoResultException e) {
-            e.printStackTrace();
         }
-
         return Optional.ofNullable(conversationId);
     }
 

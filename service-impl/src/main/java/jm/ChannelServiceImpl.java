@@ -80,7 +80,7 @@ public class ChannelServiceImpl implements ChannelService {
         createWorkspaceTokenService.updateCreateWorkspaceToken(createWorkspaceToken);
         Workspace workspace = workspaceService.getWorkspaceByName(createWorkspaceToken.getWorkspaceName());
         Channel channel = new Channel(
-                createWorkspaceToken.getChannelname(),
+                createWorkspaceToken.getChannelName(),
                 users,
                 userService.getUserByEmail(createWorkspaceToken.getUserEmail()),
                 false,

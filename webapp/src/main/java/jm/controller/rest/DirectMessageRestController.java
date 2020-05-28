@@ -6,22 +6,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.DirectMessageService;
+import jm.MessageService;
 import jm.UserService;
 import jm.dto.BotDTO;
 import jm.dto.DirectMessageDTO;
-import jm.dto.*;
+import jm.dto.UserDTO;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -31,10 +29,12 @@ public class DirectMessageRestController {
     private static final Logger logger =
             LoggerFactory.getLogger(DirectMessageRestController.class);
 
+    private final MessageService messageService;
     private final DirectMessageService directMessageService;
     private final UserService userService;
 
-    public DirectMessageRestController(DirectMessageService directMessageService, UserService userService) {
+    public DirectMessageRestController(MessageService messageService, DirectMessageService directMessageService, UserService userService) {
+        this.messageService = messageService;
         this.directMessageService = directMessageService;
         this.userService = userService;
     }
@@ -54,7 +54,7 @@ public class DirectMessageRestController {
             })
     public ResponseEntity<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
         return directMessageService.getDirectMessageDtoByMessageId(id)
-                .map(directMessageDTO -> new ResponseEntity<>(directMessageDTO, HttpStatus.OK))
+                .map(directMessageDTO -> ResponseEntity.ok(directMessageDTO))
                 .orElse(ResponseEntity.badRequest().build());
     }
 
@@ -80,7 +80,7 @@ public class DirectMessageRestController {
 
         directMessageService.saveDirectMessage(directMessage);
         logger.info("Созданное сообщение : {}", directMessage);
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.CREATED);
+        return ResponseEntity.ok(directMessageService.getDirectMessageDtoByDirectMessage(directMessage));
     }
 
     @PutMapping(value = "/update")
@@ -102,14 +102,14 @@ public class DirectMessageRestController {
         // Обновление личного сообщения выполняется в MessagesController сразу из websocket
 
         DirectMessage message = directMessageService.getDirectMessageByDirectMessageDto(messageDTO);
-        DirectMessage isCreated = directMessageService.getDirectMessageById(messageDTO.getId());
-        if (isCreated == null) {
+        final LocalDateTime dateCreate = messageService.getDateCreateById(messageDTO.getId());
+        if (dateCreate == null) {
             logger.warn("Сообщение не найдено");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().build();
         }
-        message.setDateCreate(isCreated.getDateCreate());
+        message.setDateCreate(dateCreate);
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoByDirectMessage(directMessage), HttpStatus.OK);
+        return ResponseEntity.ok(directMessageService.getDirectMessageDtoByDirectMessage(directMessage));
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -140,9 +140,10 @@ public class DirectMessageRestController {
             })
     public ResponseEntity<List<DirectMessageDTO>> getMessagesByConversationId(@PathVariable Long id) {
         // TODO: ПЕРЕДЕЛАТЬ получать сразу List DirectMessageDto по ConversationId
-        List<DirectMessage> messages = directMessageService.getMessagesByConversationId(id, false);
-        messages.sort(Comparator.comparing(DirectMessage::getDateCreate));
-        return new ResponseEntity<>(directMessageService.getDirectMessageDtoListByDirectMessageList(messages), HttpStatus.OK);
+        return ResponseEntity.ok(
+                directMessageService.getDirectMessageDtoListByDirectMessageList(
+                        directMessageService.getMessagesByConversationId(id, false)
+                ));
     }
 
     @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
@@ -158,10 +159,10 @@ public class DirectMessageRestController {
                             description = "OK: removed direct message by conversation id"
                     )
             })
-    public ResponseEntity<?> removeChannelMessageFromUnreadForUser (@PathVariable Long convId, @PathVariable Long usrId) {
+    public ResponseEntity<?> removeChannelMessageFromUnreadForUser(@PathVariable Long convId, @PathVariable Long usrId) {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
         return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
@@ -205,8 +206,12 @@ public class DirectMessageRestController {
             })
     public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
         User user = userService.getUserById(usrId);
-        user.getUnreadDirectMessages().add(directMessageService.getDirectMessageById(msgId));
+        DirectMessage directMessage = directMessageService.getDirectMessageById(msgId);
+        if (user == null || directMessage == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        user.getUnreadDirectMessages().add(directMessage);
         userService.updateUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

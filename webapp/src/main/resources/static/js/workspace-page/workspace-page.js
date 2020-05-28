@@ -21,7 +21,6 @@ let current_wks = workspace_service.getChosenWorkspace();
 
 
 window.addEventListener('load', async () => {
-    const workspace_event = new WorkspacePageEventHandler(await logged_user);
     const channel_message_view = new ChannelMessageView(await logged_user);
     const direct_message_view = new DirectMessageView(await logged_user);
     const thread_view = new ThreadMessageView();
@@ -38,6 +37,9 @@ window.addEventListener('load', async () => {
 
     const stomp_client = new StompClient(channel_message_view, thread_view, direct_message_view, channel_view);
     stomp_client.connect();
+
+    const workspace_event = new WorkspacePageEventHandler(await logged_user, stomp_client);
+
 
     chat.setLoggedUser(await logged_user);
     chat.onClickDirectMessageChat();

@@ -22,33 +22,33 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
 
     @Override
-    public User getUserByLogin(String login) {
-        try {
-            return (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
+    public Optional<User> getUserByLogin(String login) {
+        if (twoParametersMethodToSearchEntity("login", login)) {
+            User user = (User) entityManager.createQuery("from User where login  = :login").setParameter("login", login)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            return Optional.of(user);
         }
+        return Optional.empty();
     }
 
     @Override
-    public User getUserByName(String name) {
-        try {
-            return (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
+    public Optional<User> getUserByName(String name) {
+        if (twoParametersMethodToSearchEntity("name", name)) {
+            User user = (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            return Optional.of(user);
         }
+        return Optional.empty();
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        try {
-            return (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
+    public Optional<User> getUserByEmail(String email) {
+        if (twoParametersMethodToSearchEntity("email", email)) {
+            User user = (User) entityManager.createQuery("from User where email  = :email").setParameter("email", email)
                     .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
+            return Optional.of(user);
         }
+        return Optional.empty();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsersInThisChannel(Long id) {
+    public List<User> getAllUsersInThisChannelByChannelId(Long id) {
         TypedQuery<User> query = (TypedQuery<User>) entityManager.createNativeQuery("SELECT u.* FROM (users u JOIN channels_users cu  ON u.id = cu.user_id) JOIN channels c ON c.id = cu.channel_id WHERE c.id = ?", User.class)
                 .setParameter(1, id);
         return query.getResultList();
@@ -69,7 +69,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public List<UserDTO> getUsersInWorkspace(Long id) {
         List<UserDTO> usersDTO = null;
-        try {
+        if (haveEntityWithThisId(id)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -93,8 +93,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return usersDTO;
     }
@@ -113,7 +111,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public boolean isEmailInThisWorkspace(String email, Long workspaceId) {
         try {
-            User user = getUserByEmail(email);
+            User user = getUserByEmail(email).get();
             entityManager.createNativeQuery("select * from workspaces_users where user_id =? and workspace_id =?")
                     .setParameter(1, user.getId())
                     .setParameter(2, workspaceId)
@@ -126,37 +124,33 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public Optional<List<UserDTO>> getAllUsersDTO() {
-        List<UserDTO> usersDTO = null;
-        try {
-            usersDTO = (List<UserDTO>) entityManager
-                    .createNativeQuery("SELECT " +
-                            "u.id AS \"id\", " +
-                            "u.username AS \"name\", " +
-                            "u.last_name AS \"lastName\", " +
-                            "u.login AS \"login\", " +
-                            "u.email AS \"email\", " +
-                            "u.avatar_url AS \"avatarURL\", " +
-                            "u.title AS \"title\", " +
-                            "u.display_name AS \"displayName\", " +
-                            "u.phone_number AS \"phoneNumber\", " +
-                            "u.timezone AS \"timeZone\", " +
-                            "u.is_online AS \"online\", " +
-                            "u.skype AS \"userSkype\" " +
-                            "FROM users u")
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
-                    .getResultList();
-            usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
+        List<UserDTO> usersDTO;
+        usersDTO = (List<UserDTO>) entityManager
+                .createNativeQuery("SELECT " +
+                        "u.id AS \"id\", " +
+                        "u.username AS \"name\", " +
+                        "u.last_name AS \"lastName\", " +
+                        "u.login AS \"login\", " +
+                        "u.email AS \"email\", " +
+                        "u.avatar_url AS \"avatarURL\", " +
+                        "u.title AS \"title\", " +
+                        "u.display_name AS \"displayName\", " +
+                        "u.phone_number AS \"phoneNumber\", " +
+                        "u.timezone AS \"timeZone\", " +
+                        "u.is_online AS \"online\", " +
+                        "u.skype AS \"userSkype\" " +
+                        "FROM users u")
+                .unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
+                .getResultList();
+        usersDTO.forEach(this::setCollections);
         return Optional.ofNullable(usersDTO);
     }
 
     @Override
     public Optional<UserDTO> getUserDTOById(Long id) {
         UserDTO userDTO = null;
-        try {
+        if (haveEntityWithThisId(id)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -177,8 +171,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -186,7 +178,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByLogin(String login) {
         UserDTO userDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("login", login)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -207,8 +199,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -216,7 +206,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByEmail(String email) {
         UserDTO userDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("email", email)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -237,8 +227,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -246,7 +234,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<UserDTO> getUserDTOByName(String name) {
         UserDTO userDTO = null;
-        try {
+        if (twoParametersMethodToSearchEntity("username", name)) {
             userDTO = (UserDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -267,8 +255,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList().get(0);
             setCollections(userDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(userDTO);
     }
@@ -277,7 +263,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     @Override
     public Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id) {
         List<UserDTO> usersDTO = null;
-        try {
+        if (haveEntityWithThisId(id)) {
             usersDTO = (List<UserDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "u.id AS \"id\", " +
@@ -300,8 +286,6 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
                     .setResultTransformer(Transformers.aliasToBean(UserDTO.class))
                     .getResultList();
             usersDTO.forEach(this::setCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
         }
         return Optional.ofNullable(usersDTO);
     }

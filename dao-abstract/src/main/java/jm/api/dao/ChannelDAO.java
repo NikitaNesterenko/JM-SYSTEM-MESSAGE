@@ -24,6 +24,7 @@ public interface ChannelDAO {
 
     Channel getById (Long id);
 
+
     Channel getChannelByName (String name);
 
     Optional<Long> getChannelIdByName (String chanelName);

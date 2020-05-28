@@ -28,18 +28,18 @@ public class AppsServiceImpl implements AppsService {
 
     @Override
     public void saveAppToken(Long workspaceId, String appName, String token) {
-        App app = appsDAO.getAppByWorkspaceIdAndAppName(workspaceId, appName);
+        App app = appsDAO.getAppByWorkspaceIdAndAppName(workspaceId, appName).get();
         app.setToken(token);
     }
 
     @Override
     public String loadAppToken(Long workspaceId, String appName) {
-        App app = appsDAO.getAppByWorkspaceIdAndAppName(workspaceId, appName);
+        App app = appsDAO.getAppByWorkspaceIdAndAppName(workspaceId, appName).get();
         return app.getToken();
     }
 
     @Override
     public App getAppByWorkspaceIdAndAppName(Long id, String appName) {
-        return appsDAO.getAppByWorkspaceIdAndAppName(id, appName);
+        return appsDAO.getAppByWorkspaceIdAndAppName(id, appName).get();
     }
 }

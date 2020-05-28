@@ -142,6 +142,7 @@ public class User {
     @Column(name = "zoom_refresh_token", length = 2000)
     private String refreshZoomToken;
 
+
     @Column(name = "zoom_expire_date")
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime expireDateZoomToken;

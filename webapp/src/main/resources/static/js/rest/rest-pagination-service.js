@@ -19,6 +19,11 @@ export class RestPaginationService {
         return response.json();
     };
 
+    getByName = async (chanelName) => {
+        const response = await fetch(`${this.url}/name/${chanelName}`);
+        return response.json();
+    }
+
     create = async (entity) => {
 
         const response = await fetch(`${this.url}/create`, {

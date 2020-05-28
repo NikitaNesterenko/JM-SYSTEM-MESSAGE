@@ -1,4 +1,8 @@
-import {UserRestPaginationService, WorkspaceRestPaginationService, ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {
+    UserRestPaginationService,
+    WorkspaceRestPaginationService,
+    ChannelRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 
 export class MenuSettingsModal {
     isAdditionalOptionsActive = false;
@@ -88,7 +92,7 @@ export class MenuSettingsModal {
                     this.users_service.getUsersByWorkspace(workspace.id).then(
                         usersByWorkspace => {
                             usersByWorkspace.forEach((userByWorkspace) => {
-                                if(userByWorkspace.name === name) {
+                                if (userByWorkspace.name === name) {
                                     let id = userByWorkspace.id;
                                     this.users_service.getUserById(id).then(
                                         user => {
@@ -124,10 +128,10 @@ export class MenuSettingsModal {
                                     let difference = usersByWorkspaceArr.filter(x => !usersByChannelArr.includes(x));
                                     let name = $("#tags").autocomplete({
                                         source: difference,
-                                        appendTo : '.ui-widget',
+                                        appendTo: '.ui-widget',
                                         minLength: 1
                                     });
-                                    if(name.length != 0) {
+                                    if (name.length != 0) {
                                         $('#addBtn').removeAttr('disabled');
                                     } else {
                                         $('#addBtn').attr('disabled', 'disabled');
@@ -158,13 +162,15 @@ export class MenuSettingsModal {
     }
 
     addChannelTitle(elementHeader) {
-        const title = $("<span></span>");
-        this.channel_service.getById(this.channel_id).then(
+        const titleContent = $('#chanelName').html();
+        const title = $(`<span>${titleContent}</span>`);
+        this.setAdditionalOptionHeaderTitle(title, elementHeader);
+        this.channel_service.getByName(titleContent).then(
             channel => {
-                title.text(channel.name);
-                this.setAdditionalOptionHeaderTitle(title, elementHeader);
+                this.channel_id = channel.id;
             }
         );
+
     }
 
     setAdditionalOptionHeaderTitle(title, element) {
@@ -214,7 +220,30 @@ export class MenuSettingsModal {
         this.onCopyChannelNameBtnClick();
         this.onAddPeopleToChannelBtnClick();
         this.onMuteChannel();
+        this.viewChannelMemberList();
     }
 
+    viewChannelMemberList() {
+        $(document).on('click', '#memberList',() => {
+            this.channel_id = sessionStorage.getItem("channelId");
+            this.users_service.getUsersByChannelId(this.channel_id).then(
+                userList => {
+                    $('.channel-member-info').find('.ul-channel-member-info')
+                        .empty();
+                    userList.forEach(function (item) {
+                        $('.channel-member-info').find('.ul-channel-member-info')
+                            .append(
+                            `<li>${item.name}</li>`
+                            );
+                    })
+                }
+            );
+            if($('.channel-member-info').css("display") == "none") {
+                $('.channel-member-info').css("display", "block");
+            } else {
+                $('.channel-member-info').css("display", "none");
+            }
+        })
+    }
 
 }

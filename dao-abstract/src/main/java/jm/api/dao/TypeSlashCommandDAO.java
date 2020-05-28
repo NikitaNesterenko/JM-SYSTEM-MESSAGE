@@ -3,6 +3,7 @@ package jm.api.dao;
 import jm.model.TypeSlashCommand;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TypeSlashCommandDAO {
 
@@ -16,5 +17,5 @@ public interface TypeSlashCommandDAO {
 
     TypeSlashCommand getById(Long id);
 
-    TypeSlashCommand getByName(String name);
+    Optional<TypeSlashCommand> getByName(String name);
 }

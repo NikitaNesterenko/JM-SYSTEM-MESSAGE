@@ -1,5 +1,6 @@
 package jm;
 
+import jm.dto.AssociatedUserDTO;
 import jm.dto.UserDTO;
 import jm.model.User;
 
@@ -27,9 +28,9 @@ public interface UserService {
 
     User createUserByEmail(String email);
 
-    List<User> getAllUsersInThisChannel(Long id); //+
+    List<User> getAllUsersInChannelByChannelId(Long id); //+
 
-    List<UserDTO> getAllUsersInWorkspace(Long id);
+    List<UserDTO> getAllUsersInWorkspaceByWorkspaceId(Long id);
 
     void removeChannelMessageFromUnreadForUser(Long channelId, Long userId);
 
@@ -47,8 +48,9 @@ public interface UserService {
 
     Optional<UserDTO> getUserDTOByEmail(String email);
 
-    Optional<List<UserDTO>> getAllUsersDTOInThisChannel(Long id);
+    Optional<List<UserDTO>> getAllUsersDTOInChannelByChannelId(Long id);
 
     User getEntityFromDTO(UserDTO userDTO);
 
+    Optional<List<AssociatedUserDTO>> getAllAssociatedUserDTOinWorkspaceByWorkspaceId(Long id);
 }

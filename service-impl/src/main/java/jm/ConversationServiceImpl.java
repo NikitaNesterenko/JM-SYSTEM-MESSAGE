@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,7 +31,11 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public List<Conversation> getAllConversations() {
-        return conversationDAO.getAll();
+       try{
+           return conversationDAO.getAll();
+       } catch (Exception e){
+           return Collections.emptyList();
+       }
     }
 
     @Override
@@ -56,7 +61,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation getConversationByUsersId(Long firstUserId, Long secondUserId) {
-        return conversationDAO.getConversationByUsersId(firstUserId, secondUserId);
+        return conversationDAO.getConversationByUsersId(firstUserId, secondUserId).get();
     }
 
     @Override

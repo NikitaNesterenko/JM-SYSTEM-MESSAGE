@@ -3,15 +3,18 @@ import {is_open, populateRightPaneActivity} from "/js/activities/view_activities
 
 import {SubmitMessage} from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
-import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace} from "/js/invite.js";
+import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace,createNotifications} from "/js/invite.js";
 import {deleteChannelFromList} from "/js/workspace-page/components/sidebar/ChannelView.js";
 import {
     ChannelRestPaginationService,
     ConversationRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
-    WorkspaceRestPaginationService
+    WorkspaceRestPaginationService,
+    NotificationsRestService
 } from "/js/rest/entities-rest-pagination.js";
+
+
 
 export class StompClient {
 
@@ -28,7 +31,7 @@ export class StompClient {
         this.conversation_service = new ConversationRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();
         this.workspace_service = new WorkspaceRestPaginationService();
-
+        this.notification_service = new NotificationsRestService();
         this.commands = new Command();
 
         window.sendName = (message) => this.sendName(message);
@@ -217,7 +220,8 @@ export class StompClient {
                     item.textContent = user.online == 1 ? "●" : "○";
                 }
             })
-        })
+        });
+        createNotifications();
     }
 
     subscribeChannel() {
@@ -268,6 +272,10 @@ export class StompClient {
         });
     }
 
+    subscribeNewDirectMessage(conversationId) {
+        this.stompClient.subscribe('/queue/dm/' + conversationId, (message) => this.newConversationMessageHandler(message))
+    }
+
     sendChannel(channel) {
         this.stompClient.send('/app/channel', {}, JSON.stringify({
             'name': channel.name,
@@ -276,37 +284,41 @@ export class StompClient {
     }
 
     sendThread(message) {
-        this.stompClient.send('/app/thread', {}, JSON.stringify({
-            'id': message.id,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'content': message.content,
-            'isDeleted': message.isDeleted,
-            'dateCreate': message.dateCreate,
-            'parentMessageId': message.parentMessageId,
-            'workspaceId': message.workspaceId
-        }))
+        if (message.content.length > 0) {
+            this.stompClient.send('/app/thread', {}, JSON.stringify({
+                'id': message.id,
+                'userId': message.userId,
+                'userName': message.userName,
+                'userAvatarUrl': message.userAvatarUrl,
+                'content': message.content,
+                'isDeleted': message.isDeleted,
+                'dateCreate': message.dateCreate,
+                'parentMessageId': message.parentMessageId,
+                'workspaceId': message.workspaceId
+            }))
+        }
     }
 
     sendDM(message) {
-        const entity = {
-            'id': message.id,
-            'content': message.content,
-            'isDeleted': message.isDeleted,
-            'isUpdated': message.isUpdated,
-            'dateCreate': message.dateCreate,
-            'userId': message.userId,
-            'userName': message.userName,
-            'userAvatarUrl': message.userAvatarUrl,
-            'filename': message.filename,
-            'sharedMessageId': message.sharedMessageId,
-            'conversationId': message.conversationId,
-            'parentMessageId': message.parentMessageId,
-            'workspaceId': message.workspaceId
-        };
+        if (message.content.length > 0) {
+            const entity = {
+                'id': message.id,
+                'content': message.content,
+                'isDeleted': message.isDeleted,
+                'isUpdated': message.isUpdated,
+                'dateCreate': message.dateCreate,
+                'userId': message.userId,
+                'userName': message.userName,
+                'userAvatarUrl': message.userAvatarUrl,
+                'filename': message.filename,
+                'sharedMessageId': message.sharedMessageId,
+                'conversationId': message.conversationId,
+                'parentMessageId': message.parentMessageId,
+                'workspaceId': message.workspaceId
+            };
 
-        this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
+            this.stompClient.send("/app/direct_message", {}, JSON.stringify(entity));
+        }
     }
 
     sendName(message) {
@@ -326,7 +338,8 @@ export class StompClient {
             'sharedMessageId': message.sharedMessageId,
             'channelId': message.channelId,
             'channelName': message.channelName,
-            'workspaceId': message.workspaceId
+            'workspaceId': message.workspaceId,
+            'associatedUserIds':message.associatedUserIds
         };
 
         this.stompClient.send("/app/message", {}, JSON.stringify(entity));

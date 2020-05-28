@@ -20,14 +20,12 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceDAOImpl.class);
 
     @Override
-    public Workspace getWorkspaceByName(String name) {
-        try {
-            return (Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
+    public Optional<Workspace> getWorkspaceByName(String name) {
+        if(twoParametersMethodToSearchEntity("name",name)) {
+            return Optional.of((Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+                    .getSingleResult());
+        }return Optional.empty();
     }
 
     @Override
@@ -46,7 +44,6 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
         List<WorkspaceDTO> workspaceDTOList = null;
-        try {
             workspaceDTOList = (List<WorkspaceDTO>) entityManager
                     .createNativeQuery("SELECT " +
                             "ws.id AS \"id\", " +
@@ -59,16 +56,13 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList();
             workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
         return Optional.ofNullable(workspaceDTOList);
     }
 
     @Override
     public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
         WorkspaceDTO workspaceDTO = null;
-        try {
+        if(haveEntityWithThisId(id)){
             workspaceDTO = (WorkspaceDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "ws.id as \"id\", " +
@@ -82,8 +76,8 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList().get(0);
             setWorkspaceDTOCollections(workspaceDTO);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
         }
         return Optional.ofNullable(workspaceDTO);
     }

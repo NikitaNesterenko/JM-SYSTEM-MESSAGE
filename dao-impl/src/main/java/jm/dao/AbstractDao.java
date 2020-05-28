@@ -1,6 +1,5 @@
 package jm.dao;
 
-import jm.api.dao.ChannelDAO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +40,24 @@ public abstract class AbstractDao<T> {
 
     public void deleteById(Long id) {
         entityManager.remove(getById(id));
+    }
+
+    public Boolean twoParametersMethodToSearchEntity(String parameterType, String parameterName) {
+        Long lon = (Long) entityManager.createQuery("select count(id) from "
+                + persistentClass.getName() + " where " + parameterType + " ='" + parameterName + "'").getSingleResult();
+        return lon > 0;
+    }
+
+    public Boolean haveEntityWithThisId(Long entityId) {
+        Long lon = (Long) entityManager.createQuery("select count(id) from "
+                + persistentClass.getName() + " where id =" + entityId).getSingleResult();
+        return lon > 0;
+    }
+
+    public Boolean haveEntityWithEntityNameAndId(Long entityId, String parameterType, String entityName) {
+        Long lon = (Long) entityManager.createQuery("select count(id) from " + persistentClass.getName() +
+                " where " + parameterType + " ='" + entityName + "' and id = " + entityId).getSingleResult();
+        return lon > 0;
     }
 
 }

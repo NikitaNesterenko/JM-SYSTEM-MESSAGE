@@ -2,17 +2,20 @@ import {refreshMemberList} from "/js/member-list/member-list.js";
 import {
     ChannelRestPaginationService,
     ChannelTopicRestPaginationService,
+    ConversationRestPaginationService,
     UserRestPaginationService,
-    WorkspaceRestPaginationService,
-    ConversationRestPaginationService
+    WorkspaceRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
 import {ActiveChatMembers} from "./sidebar/ActiveChatMembers.js";
 import {NavHeader} from "./navbar/NavHeader.js";
 
 export class WorkspacePageEventHandler {
 
-    constructor(logged_user) {
+    channel_id;
+  
+    constructor(logged_user, stompClient) {
         this.logged_user = logged_user;
+        this.stomp_client = stompClient;
         this.addChannelModal = $("#addChannelModal");
         this.addDirectMessageModal = $("#addDirectMessageModal");
         this.addChannelBtn = $("#addChannelButton");
@@ -73,7 +76,7 @@ export class WorkspacePageEventHandler {
 
             this.channel_topic_service.getChannelTopic(channelId).then(topic => {
                 this.user_service.getUsersByChannelId(channelId).then(users => {
-                    this.wks_header.setInfo(users.length, 666, this.checkTopic(topic));
+                    this.wks_header.setInfo(channelId, users.length, 666, this.checkTopic(topic));
                 });
             });
             refreshMemberList();
@@ -86,7 +89,7 @@ export class WorkspacePageEventHandler {
             let workspace;
 
             (async () => {
-               workspace = await this.workspace_service.getChosenWorkspace();
+                workspace = await this.workspace_service.getChosenWorkspace();
             })();
             this.user_service.getUserByName(name).then(userTo => {
                 if (userTo && userTo.message) {
@@ -101,6 +104,7 @@ export class WorkspacePageEventHandler {
                     };
                     this.conversation_serivce.create(entity).then(conv => {
                         this.chat_members.populateDirectMessages();
+                        this.stomp_client.subscribeNewDirectMessage(conv.id)
                     });
 
                 }
@@ -121,15 +125,13 @@ export class WorkspacePageEventHandler {
                 ownerId: this.logged_user.id
             };
 
-            this.channel_service.getChannelByName(entity.name).then(chn => {
-                if (typeof (chn) === 'undefined') {
-                    this.channel_service.create(entity).then(chn => {
-                        sendChannel(chn);
-                    })
+            this.channel_service.create(entity).then(chn => {
+                if (chn.id !== undefined) {
+                    sendChannel(chn);
                 } else {
-                    alert('That name is already taken by a channel, username, or user group.');
+                    alert("A channel with the same name already exists.")
                 }
-            });
+            })
         });
     }
 

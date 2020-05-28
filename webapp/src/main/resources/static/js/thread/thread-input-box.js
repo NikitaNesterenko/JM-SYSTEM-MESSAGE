@@ -35,6 +35,9 @@ $(document).on('submit', '#form_thread-message', function (e) {
 
         const message_input_element = document.getElementById("form_thread-message_input");
         const text_message = message_input_element.value;
+        if (text_message.length < 1) {
+            return false;
+        }
         message_input_element.value = null;
         const currentDate = convert_date_to_format_Json(new Date());
 
