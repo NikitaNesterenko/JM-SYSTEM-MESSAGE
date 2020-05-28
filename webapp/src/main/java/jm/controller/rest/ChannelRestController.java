@@ -96,7 +96,7 @@ public class ChannelRestController {
     public Response<Boolean> chosenChannel(@PathVariable("id") long id, HttpServletRequest request) {
         Channel channel = channelService.getChannelById(id);
         if (channel == null) {
-        return Response.error(HttpStatus.BAD_REQUEST).build();
+        return Response.error(HttpStatus.BAD_REQUEST,"error chosenChannel");
         }
         request.getSession()
                 .setAttribute("ChannelId", channel);
@@ -121,7 +121,7 @@ public class ChannelRestController {
         Optional<ChannelDTO> channelDTOOptional = channelService.getChannelDTOById(id);
         return channelDTOOptional
                 .map(Response::ok)
-                .orElse(Response.error(HttpStatus.BAD_REQUEST).build());
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"error getChannelById"));
     }
 
     @GetMapping(value = "/user/{id}")
@@ -142,7 +142,7 @@ public class ChannelRestController {
         if (!channelDTOList.isEmpty()) {
             return Response.ok(channelDTOList);
         } else {
-            return Response.error(HttpStatus.BAD_REQUEST).build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error getChannelsByUserId");
         }
 
     }
@@ -179,12 +179,10 @@ public class ChannelRestController {
                 logger.info("Channel: {} - создан!", channel);
             } catch (IllegalArgumentException | EntityNotFoundException e) {
                 logger.error("Не удалось создать channel [Name: {}]", channel.getName());
-                return Response.error(HttpStatus.BAD_REQUEST)
-                        .build();
+                return Response.error(HttpStatus.BAD_REQUEST,"error to create channel");
             }
         } else {
-            return Response.error(HttpStatus.BAD_REQUEST)
-                   .build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error to create channel");
         }
 
         return Response.ok().build();
@@ -216,8 +214,7 @@ public class ChannelRestController {
                 logger.info("Обновлённый channel: {}", channel);
             }
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            Response.error(HttpStatus.BAD_REQUEST)
-                    .build();
+            Response.error(HttpStatus.BAD_REQUEST,"error updateChannel");
         }
 
         return Response.ok()
@@ -308,7 +305,7 @@ public class ChannelRestController {
     public Response<ChannelDTO> getChannelByName(@PathVariable("name") String name) {
         return channelService.getChannelDTOByName(name)
                 .map(Response::ok)
-                .orElse(Response.error(HttpStatus.BAD_REQUEST).build());
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"error getChannelByName"));
     }
 
     @PostMapping(value = "/archiving/{id}")

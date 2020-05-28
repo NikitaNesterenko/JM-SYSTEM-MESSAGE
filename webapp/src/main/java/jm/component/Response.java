@@ -44,11 +44,17 @@ public class Response<T> extends HttpEntity<T> {
         success=false;
         return httpStatus(status);
     }
-
+/*
     public static Response<String> error(HttpStatus status, String text) {
         success = false;
         BodyBuilder builder = httpStatus(status);
         return builder.message(text);
+    }*/
+
+    public static <T> Response<T> error(HttpStatus status, String text) {
+        success = false;
+        BodyBuilder builder = httpStatus(status);
+        return (Response<T>) builder.message(text);
     }
 
     private static BodyBuilder httpStatus(HttpStatus status) {

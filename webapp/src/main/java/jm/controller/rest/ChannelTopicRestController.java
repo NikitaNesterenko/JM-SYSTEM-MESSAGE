@@ -44,9 +44,8 @@ public class ChannelTopicRestController {
                     )
             })
     public Response<String> getChannelTopic(@PathVariable Long id) {
-        logger.info("успех 001");
         String topic = channelService.getTopicChannelByChannelId(id);
-        return topic.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST).build() : Response.ok(topic);
+        return topic.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST, "topic is empty") : Response.ok(topic);
     }
 
     @PutMapping("/{id}/topic/update")
@@ -69,10 +68,9 @@ public class ChannelTopicRestController {
         try {
             Channel channel = channelService.getChannelById(id);
             channel.setTopic(topic);
-            logger.info("успех 002");
             return Response.ok(channelService.getChannelById(id).getTopic());
         } catch (Exception e) {
-            return Response.error(HttpStatus.BAD_REQUEST).build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error to set channel topic");
         }
     }
 

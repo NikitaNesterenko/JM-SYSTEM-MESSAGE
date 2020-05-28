@@ -45,10 +45,9 @@ public class ConversationRestController {
             })
     public Response<Conversation> getConversationById(@PathVariable Long id) {
         try {
-            logger.info("успех 015");
             return Response.ok(conversationService.getConversationById(id));
         } catch (Exception e) {
-            return Response.error(HttpStatus.BAD_REQUEST).build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error get conversation");
         }
     }
 
@@ -70,9 +69,8 @@ public class ConversationRestController {
         Conversation conversation = conversationService.getEntityFromDTO(conversationDTO);
         try {
             conversationService.createConversation(conversation);
-            logger.info("успех 016");
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            Response.error(HttpStatus.BAD_REQUEST).build();
+            Response.error(HttpStatus.BAD_REQUEST,"error to create conversation");
         }
         return Response.ok(conversation);
     }
@@ -94,10 +92,9 @@ public class ConversationRestController {
     public Response<Conversation> updateConversation(@RequestBody Conversation conversation) {
         try {
             Conversation updated = conversationService.updateConversation(conversation);
-            logger.info("успех 017");
             return Response.ok(updated);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            return Response.error(HttpStatus.BAD_REQUEST).build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error to uprdate conversation");
         }
     }
 
@@ -110,7 +107,6 @@ public class ConversationRestController {
             })
     public Response<Conversation> deleteConversation(@PathVariable Long conversationID, @PathVariable Long userID) {
         conversationService.deleteConversation(conversationID, userID);
-        logger.info("успех 018");
         return Response.ok().build();
     }
 
@@ -129,8 +125,7 @@ public class ConversationRestController {
             })
     public Response<List<Conversation>> getAllConversations() {
         List<Conversation> conversationsList = conversationService.getAllConversations();
-        logger.info("успех 019");
-        return conversationsList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST).build() : Response.ok(conversationsList);
+        return conversationsList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"error to get conversation list") : Response.ok(conversationsList);
     }
 
     @GetMapping(value = "/user/{id}")
@@ -148,8 +143,7 @@ public class ConversationRestController {
             })
     public Response<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
         List<Conversation> conversationList = conversationService.getConversationsByUserId(id);
-        logger.info("успех 020");
-        return conversationList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST).build() : Response.ok(conversationList);
+        return conversationList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"error to get conversation by user id") : Response.ok(conversationList);
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
@@ -168,12 +162,11 @@ public class ConversationRestController {
     public Response<Conversation> getConversationByRespondents(
             @PathVariable Long firstId, @PathVariable Long secondId) {
         try {
-            logger.info("успех 021");
             return Response.ok(
                     conversationService.getConversationByUsersId(firstId, secondId)
             );
         } catch (Exception e) {
-            return Response.error(HttpStatus.BAD_REQUEST).build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error to get conversation by respondents");
         }
     }
 }
