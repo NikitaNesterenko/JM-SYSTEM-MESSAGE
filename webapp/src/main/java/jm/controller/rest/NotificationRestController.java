@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jm.NotificationService;
 import jm.component.Response;
 import jm.model.Notifications;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationRestController {
 
     private NotificationService service;
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(NotificationRestController.class);
 
     @Autowired
     public void setService(NotificationService service) {
@@ -43,7 +38,6 @@ public class NotificationRestController {
                     )
             })
     public Response<Notifications> getNotifications(@PathVariable Long workspaceId, @PathVariable Long userId) {
-        logger.info("test 6");
         return Response.ok(service.getNotification(userId, workspaceId));
 
     }
@@ -63,7 +57,6 @@ public class NotificationRestController {
             })
     public Response<Notifications> addNotifications(@RequestBody Notifications notifications) {
         service.addNotification(notifications);
-        logger.info("test 7");
         return Response.ok().build();
     }
 
@@ -82,7 +75,6 @@ public class NotificationRestController {
             })
     public Response<Notifications> updateNotifications(@RequestBody Notifications notifications) {
         service.updateNotification(notifications);
-        logger.info("test 8");
         return Response.ok().build();
     }
 }

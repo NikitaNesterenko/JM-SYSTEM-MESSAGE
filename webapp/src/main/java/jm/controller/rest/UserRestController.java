@@ -52,9 +52,8 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: no users")
             })
     public Response<List<UserDTO>> getUsers() {
-        logger.info("test 13");
         logger.info("Список пользователей : ");
-        return userService.getAllUsersDTO().map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
+        return userService.getAllUsersDTO().map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST, "Error list users"));
     }
 
     // DTO compliant
@@ -76,11 +75,10 @@ public class UserRestController {
         User user = userService.getEntityFromDTO(userDto);
         if (user != null) {
             userService.createUser(user);
-            logger.info("test 14");
             logger.info("Созданный пользователь : {}", user);
             return Response.ok(new UserDTO(user));
         }
-        return Response.error(HttpStatus.BAD_REQUEST).build();
+        return Response.error(HttpStatus.BAD_REQUEST, "Error create users");
     }
 
     // DTO compliant
@@ -99,11 +97,9 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: user no created")
             })
     public Response<UserDTO> getUser(@PathVariable("id") Long id) {
-        logger.info("test 15");
         logger.info("Пользователь с id = {}", id);
         return userService.getUserDTOById(id).map(Response::ok)
-                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST
-                ).build());
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST, "Error user id"));
     }
 
     @GetMapping("/username/{username}")
@@ -121,10 +117,9 @@ public class UserRestController {
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: user no created")
             })
     public Response<UserDTO> getUserByUsername(@PathVariable("username") String username) {
-        logger.info("test 16");
         logger.info("Пользователь с username = {}", username);
         return userService.getUserDTOByName(username).map(Response::ok)
-                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST, "User no created"));
     }
 
     // DTO compliant
@@ -149,10 +144,9 @@ public class UserRestController {
         User existingUser = userService.getUserById(user.getId());
         if (existingUser == null) {
             logger.warn("Пользователь не найден");
-            return Response.error(HttpStatus.BAD_REQUEST).build();
+            return Response.error(HttpStatus.BAD_REQUEST, "No such user found");
         }
         userService.updateUser(user);
-        logger.info("test 17");
         logger.info("Обновленный пользователь: {}", user);
         return Response.ok().build();
     }
@@ -167,7 +161,6 @@ public class UserRestController {
             })
     public Response<Boolean> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        logger.info("test 18");
         logger.info("Удален польщователь с id = {}", id);
         return Response.ok(true);
     }
@@ -190,8 +183,7 @@ public class UserRestController {
     public Response<List<UserDTO>> getAllUsersInChannelByChannelId(@PathVariable("id") Long id) {
         /* TODO доделать логгирование*/
         Optional<List<UserDTO>> list = userService.getAllUsersDTOInChannelByChannelId(id);
-        logger.info("test 19");
-        return list.map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
+        return list.map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST, "No users in channel with such id"));
     }
 
     // DTO compliant
@@ -210,8 +202,7 @@ public class UserRestController {
             })
     public Response<UserDTO> getLoggedUserId(Principal principal) {
         Optional<UserDTO> userDTO = userService.getUserDTOByLogin(principal.getName());
-        logger.info("test 20");
-        return userDTO.map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST).build());
+        return userDTO.map(Response::ok).orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST, "Error login"));
     }
 
     // DTO compliant
@@ -232,10 +223,9 @@ public class UserRestController {
     public Response<List<UserDTO>> getAllUsersInWorkspaceByWorkspaceId(@PathVariable("id") Long id) {
         logger.info("Список пользователей Workspace с id = {}", id);
         List<UserDTO> userDTOsList = userService.getAllUsersInWorkspaceByWorkspaceId(id);
-        logger.info("test 21");
         return userDTOsList != null && !userDTOsList.isEmpty()
                 ? Response.ok(userDTOsList)
-                : Response.error(HttpStatus.BAD_REQUEST).build();
+                : Response.error(HttpStatus.BAD_REQUEST, "Workspace user list error");
     }
 
     @GetMapping(value = "/is-exist-email/{email}")
@@ -252,11 +242,10 @@ public class UserRestController {
         if (userByEmail != null) {
             logger.info("Запрос на восстановление пароля пользователя с email = {}", email);
             mailService.sendRecoveryPasswordToken(userByEmail);
-            logger.info("test 22");
             return Response.ok().build();
         }
         logger.warn("Запрос на восстановление пароля пользователя с несуществующего email = {}", email);
-        return Response.error(HttpStatus.BAD_REQUEST).build();
+        return Response.error(HttpStatus.BAD_REQUEST, "User with such mail does not exist");
     }
 
     @PostMapping(value = "/password-recovery")
@@ -271,9 +260,8 @@ public class UserRestController {
                                         @RequestParam(name = "password") String password) {
 
         if (mailService.changePasswordUserByToken(token, password)) {
-            logger.info("test 23");
             return Response.ok().build();
         }
-        return Response.error(HttpStatus.BAD_REQUEST).build();
+        return Response.error(HttpStatus.BAD_REQUEST, "Error recovery password");
     }
 }
