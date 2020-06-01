@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jm.UserRolesUpdater;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
@@ -30,6 +31,12 @@ public class WorkspaceRestController {
     private WorkspaceService workspaceService;
     private WorkspaceUserRoleService workspaceUserRoleService;
     private UserService userService;
+    private UserRolesUpdater userRolesUpdater;
+
+    @Autowired
+    public void setUserRolesUpdater(UserRolesUpdater userRolesUpdater) {
+        this.userRolesUpdater = userRolesUpdater;
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -166,10 +173,12 @@ public class WorkspaceRestController {
                     @ApiResponse(responseCode = "308", description = "PERMANENT_REDIRECT: unable to find workspace")
             })
     public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
         if (workspace == null) {
             return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
         }
+
         return ResponseEntity.ok(workspace);
     }
 
@@ -187,6 +196,7 @@ public class WorkspaceRestController {
             return ResponseEntity.badRequest().build();
         }
         request.getSession(true).setAttribute("WorkspaceID", workspace);
+        userRolesUpdater.update(workspace.getId());
         return ResponseEntity.ok(true);
     }
 

@@ -18,7 +18,7 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-    private final String WITHOUT_WORKSPACE = "REGISTERED";
+    private final String WITHOUT_WORKSPACE = "ROLE_REGISTERED";
 
     private HttpServletRequest httpServletRequest;
     private UserService userServiceImpl;
