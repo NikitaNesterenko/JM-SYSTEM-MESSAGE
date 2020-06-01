@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,15 +21,18 @@ import java.util.logging.Logger;
 
 @Service
 public class TrelloServiceImpl implements TrelloService {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private UserService userService;
     @Value("${trello.api-key}")
     private String API_KEY;
+    /* Тестовый токен: 247b4449072f5204331931ced057e48d3188e589956accec21e28054904a7543
+    /  Тестовый API-Key: f1184d87df3d841e491cecffeb568165
+    /  Информация по интеграции Trello: https://developer.atlassian.com/cloud/trello/     */
 
-    @Autowired
-    public void setUserService (UserService userService) {
+    public TrelloServiceImpl(RestTemplateBuilder builder, UserService userService) {
         this.userService = userService;
+        restTemplate = builder.build();
     }
 
     @Override
@@ -117,6 +121,24 @@ public class TrelloServiceImpl implements TrelloService {
         }
 
         return userID;
+    }
+
+    @Override
+    public void deleteBoard(String boardID, String userToken) {
+        restTemplate.delete("https://api.trello.com/1/boards/" + boardID + "?key="
+                + API_KEY + "&token=" + userToken, new HttpHeaders(), String.class);
+    }
+
+    @Override
+    public void deleteCard(String cardID, String userToken) {
+        restTemplate.delete("https://api.trello.com/1/boards/" + cardID + "?key="
+                + API_KEY + "&token=" + userToken, new HttpHeaders(), String.class);
+    }
+
+    @Override
+    public void addBoard(String boardName, String token) {
+        restTemplate.postForEntity("https://api.trello.com/1/boards/" + boardName + "?key="
+                + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
     }
 
     @Override

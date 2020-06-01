@@ -9,6 +9,9 @@ public interface TrelloService {   String getTokenByUserLogin ();
     String getBoardByBoardID (String boardID, String token);
     String getUserIDByUserToken (String token);
 
+    void deleteBoard(String boardID, String userToken);
+    void deleteCard(String boardID, String token);
+    void addBoard(String boardName, String token);
     void setToken (String token);
     void setCardDueDate (String RFC822date, String cardID, String cardJSON, String token);
     void addNewCard (String cardName, String listID, String token);

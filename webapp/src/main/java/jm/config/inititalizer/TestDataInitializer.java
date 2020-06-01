@@ -303,6 +303,7 @@ public class TestDataInitializer {
         userJohn.setLogin(UserData.JOHN.login);
         userJohn.setEmail(UserData.JOHN.email);
         userJohn.setPassword(UserData.JOHN.password);
+        userJohn.setTrelloToken("247b4449072f5204331931ced057e48d3188e589956accec21e28054904a7543");
         userJohn.setDisplayName(UserData.JOHN.name + " " + UserData.JOHN.lastName);
         userJohn.setRoles(ownerRoleSet);
         userJohn.setOnline(0);
