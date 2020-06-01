@@ -63,6 +63,7 @@ export class MessageView {
             }
             this.dialog.messageBoxWrapper();
         }
+        this.setArchivalMessage();
     }
 
     createMessage(message) {
@@ -104,4 +105,18 @@ export class MessageView {
             .find(".c-message__body")
             .text(message.content);
     }
+
+    setArchivalMessage() {
+        $(function () {
+            $("#all-message-wrapper").ready(function () {
+                const archiveLine = `<strong>You are viewing , an archived channel
+            <button id="restoreArchiveChannel" type="button" class="btn btn-success" "> Restore channel</button>    
+            <button id="closeArchiveChannel" type="button" class="btn btn-dark" >Close channel</button>
+            </strong>`;
+                if ($("#showAssociatedUsers").prop('disabled') || $("#inputEmojiButton").prop('disabled') || $("#attach_file").prop('disabled') || $("#form_message_input").prop('disabled')) {
+                    $("#all-messages").append(archiveLine);
+                }
+            });
+        });
+    };
 }

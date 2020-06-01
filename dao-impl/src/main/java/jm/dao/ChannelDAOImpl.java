@@ -52,6 +52,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                             "c.created_date \"createdDate\", " +
                             "c.topic AS \"topic\", " +
                             "c.archived AS \"isArchived\", " +
+                            "c.block AS \"isBlock\", " +
                             "c.is_app AS \"isApp\" " +
                             "FROM channels c WHERE name=:name")
                     .setParameter("name", name)
@@ -98,6 +99,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                             "c.created_date \"createdDate\", " +
                             "c.topic AS \"topic\", " +
                             "c.archived AS \"isArchived\", " +
+                            "c.block AS \"isBlock\","+
                             "c.is_app AS \"isApp\" " +
                             "FROM channels c WHERE id=:id")
                     .setParameter("id", id)
@@ -177,6 +179,7 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
                         "ch.created_date \"createdDate\", " +
                         "ch.topic AS \"topic\", " +
                         "ch.archived AS \"isArchived\", " +
+                        "ch.block AS \"isBlock\", " +
                         "ch.is_app AS \"isApp\" " +
                         "FROM channels ch " +
                         "LEFT JOIN channels_users chu ON chu.channel_id = ch.id " +
@@ -303,11 +306,8 @@ public class ChannelDAOImpl extends AbstractDao<Channel> implements ChannelDAO {
     }
 
     @Override
-    public List<ChannelDTO> getArchivedChannels() {
-        return entityManager.createQuery("SELECT c.id as id, c.name as name, c.createdDate as createdDate, u.username as username FROM Channel c LEFT JOIN c.user u  WHERE c.archived = TRUE ORDER BY u.id")
-                .unwrap(org.hibernate.query.Query.class)
-                .setResultTransformer(Transformers.aliasToBean(ChannelDTO.class))
-                .getResultList();
+    public List<Channel> getArchivedChannels() {
+        return entityManager.createQuery("SELECT c FROM Channel c WHERE c.archived = True ",Channel.class).getResultList();
     }
 
     @Override

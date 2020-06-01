@@ -192,7 +192,9 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelDTO> getAllArchiveChannels() {
-        return channelDAO.getArchivedChannels();
+        List<Channel> list =  channelDAO.getArchivedChannels();
+        List<ChannelDTO> daoList = getChannelDtoListByChannelList(list);
+        return daoList;
     }
 
     @Override
