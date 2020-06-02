@@ -1572,7 +1572,7 @@
                                                                         </div>
                                                                     </th>
                                                                     <th>
-                                                                        <button class="btn btn-outline-dark">View
+                                                                        <button class="btn btn-outline-dark" id="trelloBtn">View
                                                                         </button>
                                                                     </th>
                                                                 </div>
@@ -1715,6 +1715,44 @@
             <div class="modal-footer">
                 <button type="submit" data-dismiss="modal" id="addGoogleCalendarIdSecretSubmit" class="btn btn-success">
                     Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Модальное окно для ввода Trello tokens-->
+<div class="modal fade" id="addTrelloTokenSecretModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Для подключения сервиса Trello нужно авторизоваться и ввести токен,
+                полученный на официальном сайте Trello. Наш сервис гарантирует сохранность ваших данных.
+                Наверное. Может быть. Но пальцы я скрестил, так ччто не обессудьте ;)
+
+                Ваш браузер скорее всего заблокирует всплывающее окно, дайте разрешение на открытие.
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="InputGoogleCalendarClientId">Trello token:</label>
+                        <input type="email" class="form-control" id="InputTrelloToken"
+                               value="247b4449072f5204331931ced057e48d3188e589956accec21e28054904a7543">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-dismiss="modal" id="addTrelloToken" class="btn btn-success">
+                    Submit
+                </button>
+                <button type="button" data-dismiss="modal" id="takeTrelloAuthorization" class="btn btn-success">
+                    Получить Trello Token
                 </button>
             </div>
         </div>
