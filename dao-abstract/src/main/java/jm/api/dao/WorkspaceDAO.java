@@ -28,5 +28,7 @@ public interface WorkspaceDAO {
 
     Optional<WorkspaceDTO> getWorkspaceDTOById(Long id);
 
+    Optional<WorkspaceDTO> getWorkspaceDTOByName(String name);
+
     Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId);
 }

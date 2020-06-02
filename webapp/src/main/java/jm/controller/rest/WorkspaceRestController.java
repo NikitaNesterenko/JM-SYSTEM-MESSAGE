@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.UserService;
 import jm.WorkspaceService;
 import jm.WorkspaceUserRoleService;
+import jm.dto.WorkspaceDTO;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -104,9 +105,9 @@ public class WorkspaceRestController {
                     @ApiResponse(responseCode = "200", description = "OK: channel updated"),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to update channel")
             })
-    public ResponseEntity<?> updateChannel(@RequestBody Workspace workspace, HttpServletRequest request) {
+    public ResponseEntity<?> updateChannel(@RequestBody WorkspaceDTO workspace, HttpServletRequest request) {
         try {
-            workspaceService.updateWorkspace(workspace);
+            workspaceService.updateWorkspace(workspaceService.getWorkspaceById(workspace.getId()));
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -165,8 +166,8 @@ public class WorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "308", description = "PERMANENT_REDIRECT: unable to find workspace")
             })
-    public ResponseEntity<Workspace> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+    public ResponseEntity<WorkspaceDTO> getChosenWorkspace(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        WorkspaceDTO workspace = (WorkspaceDTO) request.getSession(false).getAttribute("WorkspaceID");
         if (workspace == null) {
             return ResponseEntity.status(HttpStatus.PERMANENT_REDIRECT).header(HttpHeaders.LOCATION, "/chooseWorkspace").build();
         }
@@ -182,12 +183,11 @@ public class WorkspaceRestController {
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to find workspace")
             })
     public ResponseEntity<Boolean> chosenWorkspace(@PathVariable("name") String name, HttpServletRequest request) {
-        Workspace workspace = workspaceService.getWorkspaceByName(name);
-        if (workspace == null) {
-            return ResponseEntity.badRequest().build();
+        if (getWorkspaceByName(name, request).getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.ok(true);
         }
-        request.getSession(true).setAttribute("WorkspaceID", workspace);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.badRequest().build();
+
     }
 
     @GetMapping("/name/{name}")
@@ -204,8 +204,9 @@ public class WorkspaceRestController {
                     )
             })
     public ResponseEntity<Boolean> getWorkspaceByName(@PathVariable("name") String name, HttpServletRequest request) {
-        if (chosenWorkspace(name, request).getStatusCode().is2xxSuccessful()) {
-            chosenWorkspace(name, request);
+        WorkspaceDTO workspace = workspaceService.getWorkspaceDTOByName(name).get();
+        if (workspace != null) {
+            request.getSession(true).setAttribute("WorkspaceID", workspace);
             return ResponseEntity.ok(true);
         }
         return ResponseEntity.badRequest().build();

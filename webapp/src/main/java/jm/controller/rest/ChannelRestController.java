@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ChannelService;
 import jm.UserService;
+import jm.WorkspaceService;
 import jm.dto.ChannelDTO;
+import jm.dto.WorkspaceDTO;
 import jm.model.Channel;
 import jm.model.User;
 import jm.model.Workspace;
@@ -34,10 +36,12 @@ public class ChannelRestController {
             ChannelRestController.class);
     private final ChannelService channelService;
     private final UserService userService;
+    private final WorkspaceService workspaceService;
 
-    public ChannelRestController(ChannelService channelService, UserService userService) {
+    public ChannelRestController(ChannelService channelService, UserService userService, WorkspaceService workspaceService) {
         this.channelService = channelService;
         this.userService = userService;
+        this.workspaceService = workspaceService;
     }
 
     @GetMapping("/chosen")
@@ -161,7 +165,7 @@ public class ChannelRestController {
             })
 
     public ResponseEntity<ChannelDTO> createChannel(Principal principal, @RequestBody ChannelDTO channelDTO, HttpServletRequest request) {
-        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        WorkspaceDTO workspace = (WorkspaceDTO) request.getSession(false).getAttribute("WorkspaceID");
         List<Channel> channels = channelService.getChannelsByWorkspaceId(workspace.getId());
         Channel channel = channelService.getChannelByName(channelDTO.getName());
 
@@ -170,7 +174,7 @@ public class ChannelRestController {
             User owner = userService.getUserByLogin(principal.getName());
             channel.setUser(owner);
             channel.setIsApp(false);
-            channel.setWorkspace(workspace);
+            channel.setWorkspace(workspaceService.getWorkspaceById(workspace.getId()));
             channel.setUsers(Sets.newSet(owner));
             try {
                 channelService.createChannel(channel);
