@@ -47,7 +47,7 @@ public class ConversationRestController {
         try {
             return Response.ok(conversationService.getConversationById(id));
         } catch (Exception e) {
-            return Response.error(HttpStatus.BAD_REQUEST,"error get conversation");
+            return Response.error(HttpStatus.BAD_REQUEST,"entity Conversation не обнаружен");
         }
     }
 
@@ -70,7 +70,7 @@ public class ConversationRestController {
         try {
             conversationService.createConversation(conversation);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            Response.error(HttpStatus.BAD_REQUEST,"error to create conversation");
+            Response.error(HttpStatus.BAD_REQUEST,"error to create Conversation");
         }
         return Response.ok(conversation);
     }
@@ -94,7 +94,7 @@ public class ConversationRestController {
             Conversation updated = conversationService.updateConversation(conversation);
             return Response.ok(updated);
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            return Response.error(HttpStatus.BAD_REQUEST,"error to uprdate conversation");
+            return Response.error(HttpStatus.BAD_REQUEST,"error to update Conversation");
         }
     }
 
@@ -125,7 +125,7 @@ public class ConversationRestController {
             })
     public Response<List<Conversation>> getAllConversations() {
         List<Conversation> conversationsList = conversationService.getAllConversations();
-        return conversationsList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"error to get conversation list") : Response.ok(conversationsList);
+        return conversationsList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"entity Conversation не обнаружен") : Response.ok(conversationsList);
     }
 
     @GetMapping(value = "/user/{id}")
@@ -143,7 +143,7 @@ public class ConversationRestController {
             })
     public Response<List<Conversation>> getConversationsByUserId(@PathVariable Long id) {
         List<Conversation> conversationList = conversationService.getConversationsByUserId(id);
-        return conversationList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"error to get conversation by user id") : Response.ok(conversationList);
+        return conversationList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"entity Conversation не обнаружен") : Response.ok(conversationList);
     }
 
     @GetMapping(value = "/users/{firstId}/{secondId}")
@@ -166,7 +166,7 @@ public class ConversationRestController {
                     conversationService.getConversationByUsersId(firstId, secondId)
             );
         } catch (Exception e) {
-            return Response.error(HttpStatus.BAD_REQUEST,"error to get conversation by respondents");
+            return Response.error(HttpStatus.BAD_REQUEST,"entity Conversation не обнаружен");
         }
     }
 }

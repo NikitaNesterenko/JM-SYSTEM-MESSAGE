@@ -14,7 +14,6 @@ public class Response<T> extends HttpEntity<T> {
 
 
     private Response(@Nullable T body, @Nullable MultiValueMap<String, String> headers, Object status) {
-
         super(body, headers);
         this.status = status;
     }

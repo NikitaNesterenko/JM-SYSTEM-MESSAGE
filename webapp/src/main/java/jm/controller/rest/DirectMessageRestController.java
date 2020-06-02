@@ -57,7 +57,7 @@ public class DirectMessageRestController {
     public Response<DirectMessageDTO> getDirectMessageById(@PathVariable Long id) {
         return directMessageService.getDirectMessageDtoByMessageId(id)
                 .map(directMessageDTO -> Response.ok(directMessageDTO))
-                .orElse(Response.error(HttpStatus.BAD_REQUEST,"error to get direct message by id"));
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"entity DirectMessage не обнаружен"));
     }
 
     @PostMapping(value = "/create")
@@ -107,7 +107,7 @@ public class DirectMessageRestController {
         final LocalDateTime dateCreate = messageService.getDateCreateById(messageDTO.getId());
         if (dateCreate == null) {
             logger.warn("Сообщение не найдено");
-            return Response.error(HttpStatus.BAD_REQUEST,"error to uprdate message");
+            return Response.error(HttpStatus.BAD_REQUEST,"error to update message");
         }
         message.setDateCreate(dateCreate);
         DirectMessage directMessage = directMessageService.updateDirectMessage(message);
@@ -164,7 +164,7 @@ public class DirectMessageRestController {
     public Response<?> removeChannelMessageFromUnreadForUser(@PathVariable Long convId, @PathVariable Long usrId) {
         userService.removeDirectMessagesForConversationFromUnreadForUser(convId, usrId);
         return userService.getUserDTOById(usrId).map(Response::ok)
-                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST,"error removeChannelMessageFromUnreadForUser"));
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST,"entity DirectMessage не обнаружен"));
     }
 
     @GetMapping(value = "/unread/conversation/{convId}/user/{usrId}")
@@ -210,7 +210,7 @@ public class DirectMessageRestController {
         User user = userService.getUserById(usrId);
         DirectMessage directMessage = directMessageService.getDirectMessageById(msgId);
         if (user == null || directMessage == null) {
-            return Response.error(HttpStatus.BAD_REQUEST,"error addMessageToUnreadForUser");
+            return Response.error(HttpStatus.BAD_REQUEST,"entity User or DirectMessage не обнаружен");
         }
         user.getUnreadDirectMessages().add(directMessage);
         userService.updateUser(user);

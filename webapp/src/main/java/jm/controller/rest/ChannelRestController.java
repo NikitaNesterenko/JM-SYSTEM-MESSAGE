@@ -96,7 +96,7 @@ public class ChannelRestController {
     public Response<Boolean> chosenChannel(@PathVariable("id") long id, HttpServletRequest request) {
         Channel channel = channelService.getChannelById(id);
         if (channel == null) {
-        return Response.error(HttpStatus.BAD_REQUEST,"error chosenChannel");
+        return Response.error(HttpStatus.BAD_REQUEST,"entity Channel не обнаружен");
         }
         request.getSession()
                 .setAttribute("ChannelId", channel);
@@ -121,7 +121,7 @@ public class ChannelRestController {
         Optional<ChannelDTO> channelDTOOptional = channelService.getChannelDTOById(id);
         return channelDTOOptional
                 .map(Response::ok)
-                .orElse(Response.error(HttpStatus.BAD_REQUEST,"error getChannelById"));
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"entity Channel не обнаружен"));
     }
 
     @GetMapping(value = "/user/{id}")
@@ -142,7 +142,7 @@ public class ChannelRestController {
         if (!channelDTOList.isEmpty()) {
             return Response.ok(channelDTOList);
         } else {
-            return Response.error(HttpStatus.BAD_REQUEST,"error getChannelsByUserId");
+            return Response.error(HttpStatus.BAD_REQUEST,"entity Channel не обнаружен");
         }
 
     }
@@ -214,7 +214,7 @@ public class ChannelRestController {
                 logger.info("Обновлённый channel: {}", channel);
             }
         } catch (IllegalArgumentException | EntityNotFoundException e) {
-            Response.error(HttpStatus.BAD_REQUEST,"error updateChannel");
+            Response.error(HttpStatus.BAD_REQUEST,"error to update channel");
         }
 
         return Response.ok()
@@ -305,7 +305,7 @@ public class ChannelRestController {
     public Response<ChannelDTO> getChannelByName(@PathVariable("name") String name) {
         return channelService.getChannelDTOByName(name)
                 .map(Response::ok)
-                .orElse(Response.error(HttpStatus.BAD_REQUEST,"error getChannelByName"));
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"entity Channel не обнаружен"));
     }
 
     @PostMapping(value = "/archiving/{id}")

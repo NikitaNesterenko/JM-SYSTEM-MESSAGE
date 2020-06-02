@@ -57,7 +57,7 @@ public class MessageRestController {
             })
     public Response<List<MessageDTO>> getMessages() {
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
-        return messageDTOList.isEmpty() ? Response.error(HttpStatus.NO_CONTENT,"error getMessages") : Response.ok(messageDTOList);
+        return messageDTOList.isEmpty() ? Response.error(HttpStatus.NO_CONTENT,"entity Message не обнаружен") : Response.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -77,7 +77,7 @@ public class MessageRestController {
             })
     public Response<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
-        return messageDTOList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"error getMessagesByChannelId") : Response.ok(messageDTOList);
+        return messageDTOList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен") : Response.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -97,7 +97,7 @@ public class MessageRestController {
     public Response<MessageDTO> getMessageById(@PathVariable("id") Long id) {
         return messageService.getMessageDtoById(id)
                 .map(messageDTO -> Response.ok(messageDTO))
-                .orElse(Response.error(HttpStatus.BAD_REQUEST,"error getMessageById"));
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен"));
     }
 
     // DTO compliant
@@ -175,7 +175,7 @@ public class MessageRestController {
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
-            return Response.error(HttpStatus.BAD_REQUEST,"error updateMessage");
+            return Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен");
         }
         if (principal.getName()
                 .equals(existingMessage.getUser()
@@ -186,7 +186,7 @@ public class MessageRestController {
             logger.info("Обновленное сообщение: {}", message);
             return Response.ok().build();
         }
-        return Response.error(HttpStatus.BAD_REQUEST,"error updateMessage");
+        return Response.error(HttpStatus.BAD_REQUEST,"error to update Message");
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -219,7 +219,7 @@ public class MessageRestController {
     public Response<List<MessageDTO>> getStarredMessages(@PathVariable Long userId, @PathVariable Long workspaceId) {
         List<MessageDTO> messageDTOS = messageService.getStarredMessagesDTOForUserByWorkspaceId(userId, workspaceId, false);
         return !messageDTOS.isEmpty() ?
-                Response.ok(messageDTOS) : Response.error(HttpStatus.BAD_REQUEST,"getStarredMessages");
+                Response.ok(messageDTOS) : Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен");
     }
 
     @GetMapping(value = "/user/{id}")
@@ -259,7 +259,7 @@ public class MessageRestController {
     public Response<?> removeChannelMessageFromUnreadForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
         userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
         return userService.getUserDTOById(usrId).map(Response::ok)
-                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST,"error removeChannelMessageFromUnreadForUser"));
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST,"error to remove message from unread"));
     }
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
