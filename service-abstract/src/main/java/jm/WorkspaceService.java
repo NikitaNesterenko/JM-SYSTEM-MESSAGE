@@ -30,6 +30,8 @@ public interface WorkspaceService {
 
     Optional<WorkspaceDTO> getWorkspaceDTOById(Long id);
 
+    Optional<WorkspaceDTO> getWorkspaceDTOByName(String name);
+
     Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId);
 
     Workspace getEntityFromDTO(WorkspaceDTO workspaceDto);

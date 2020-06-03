@@ -1,5 +1,6 @@
 package jm;
 
+import jm.dto.WorkspaceDTO;
 import jm.model.Role;
 import jm.model.User;
 import jm.model.Workspace;
@@ -34,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String workspaceLogin) throws UsernameNotFoundException {
         HttpSession httpSession = httpServletRequest.getSession(true);
-        Workspace workspace = (Workspace) httpSession.getAttribute("WorkspaceID");
+        WorkspaceDTO workspace = (WorkspaceDTO) httpSession.getAttribute("WorkspaceID");
 
         User user = userServiceImpl.getUserByLogin(workspaceLogin);
         org.springframework.security.core.userdetails.User.UserBuilder builder;

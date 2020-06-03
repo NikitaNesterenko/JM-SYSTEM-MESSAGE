@@ -21,11 +21,12 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
     @Override
     public Optional<Workspace> getWorkspaceByName(String name) {
-        if(twoParametersMethodToSearchEntity("name",name)) {
+        if (twoParametersMethodToSearchEntity("name", name)) {
             return Optional.of((Workspace) entityManager.createNativeQuery("select * from workspaces where name=?", Workspace.class)
                     .setParameter(1, name)
                     .getSingleResult());
-        }return Optional.empty();
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -44,25 +45,25 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     @Override
     public Optional<List<WorkspaceDTO>> getAllWorkspacesDTO() {
         List<WorkspaceDTO> workspaceDTOList = null;
-            workspaceDTOList = (List<WorkspaceDTO>) entityManager
-                    .createNativeQuery("SELECT " +
-                            "ws.id AS \"id\", " +
-                            "ws.name AS \"name\", " +
-                            "ws.created_date AS \"createdDate\", " +
-                            "ws.is_private AS \"isPrivate\", " +
-                            "owner_id AS \"ownerId\" " +
-                            "FROM workspaces ws")
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
-                    .getResultList();
-            workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
+        workspaceDTOList = (List<WorkspaceDTO>) entityManager
+                .createNativeQuery("SELECT " +
+                        "ws.id AS \"id\", " +
+                        "ws.name AS \"name\", " +
+                        "ws.created_date AS \"createdDate\", " +
+                        "ws.is_private AS \"isPrivate\", " +
+                        "owner_id AS \"ownerId\" " +
+                        "FROM workspaces ws")
+                .unwrap(NativeQuery.class)
+                .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
+                .getResultList();
+        workspaceDTOList.forEach(this::setWorkspaceDTOCollections);
         return Optional.ofNullable(workspaceDTOList);
     }
 
     @Override
     public Optional<WorkspaceDTO> getWorkspaceDTOById(Long id) {
         WorkspaceDTO workspaceDTO = null;
-        if(haveEntityWithThisId(id)){
+        if (haveEntityWithThisId(id)) {
             workspaceDTO = (WorkspaceDTO) entityManager
                     .createNativeQuery("SELECT " +
                             "ws.id as \"id\", " +
@@ -78,6 +79,27 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
             setWorkspaceDTOCollections(workspaceDTO);
 //        } catch (IllegalStateException e) {
 //            e.printStackTrace();
+        }
+        return Optional.ofNullable(workspaceDTO);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public Optional<WorkspaceDTO> getWorkspaceDTOByName(String name) {
+        WorkspaceDTO workspaceDTO = null;
+        if (twoParametersMethodToSearchEntity("name", name)) {
+            workspaceDTO = (WorkspaceDTO) entityManager.createNativeQuery("SELECT " +
+                    "ws.id as \"id\", " +
+                    "ws.name as \"name\", " +
+                    "ws.created_date as \"createdDate\", " +
+                    "ws.is_private as \"isPrivate\", " +
+                    "owner_id as \"ownerId\" " +
+                    "from workspaces ws where ws.name=:name")
+                    .setParameter("name", name)
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
+                    .getResultList().get(0);
+            setWorkspaceDTOCollections(workspaceDTO);
         }
         return Optional.ofNullable(workspaceDTO);
     }

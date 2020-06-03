@@ -8,8 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.InviteTokenService;
 import jm.MailService;
 import jm.UserService;
+import jm.WorkspaceService;
+import jm.dto.WorkspaceDTO;
 import jm.model.InviteToken;
-import jm.model.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +32,13 @@ public class InviteTokenRestController {
     private UserService userService;
     private InviteTokenService inviteTokenService;
     private MailService mailService;
+    private WorkspaceService workspaceService;
 
-    InviteTokenRestController(UserService userService, InviteTokenService inviteTokenService, MailService mailService) {
+    InviteTokenRestController(UserService userService, InviteTokenService inviteTokenService, MailService mailService, WorkspaceService workspaceService) {
         this.inviteTokenService = inviteTokenService;
         this.userService = userService;
         this.mailService = mailService;
+        this.workspaceService = workspaceService;
     }
 
     @PostMapping("/create")
@@ -54,11 +57,11 @@ public class InviteTokenRestController {
     public ResponseEntity<List<String>> invites(@RequestBody List<InviteToken> invites, HttpServletRequest request) {
         String url = "http://localhost:8080/rest/api/invites/";
         List<String> responseList = new ArrayList<>();
-        Workspace workspace = (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+        WorkspaceDTO workspace = (WorkspaceDTO) request.getSession(false).getAttribute("WorkspaceID");
 
         invites.forEach(x -> {
             x.setHash(UUID.randomUUID().toString());
-            x.setWorkspace(workspace);
+            x.setWorkspace(workspaceService.getWorkspaceById(workspace.getId()));
         });
 
         for (InviteToken invite : invites) {
