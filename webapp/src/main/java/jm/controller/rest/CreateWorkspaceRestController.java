@@ -8,9 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.*;
 import jm.api.dao.CreateWorkspaceTokenDAO;
+import jm.component.Response;
 import jm.model.CreateWorkspaceToken;
 import jm.model.User;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -65,7 +66,7 @@ public class CreateWorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: email code was send")
             })
-    public ResponseEntity sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) {
+    public Response sendEmailCode(@RequestBody String emailTo, HttpServletRequest request) {
         Optional<CreateWorkspaceToken> createWorkspaceToken = mailService.sendConfirmationCode(emailTo);
         if (createWorkspaceToken.isPresent()) {
             CreateWorkspaceToken token = createWorkspaceToken.get();
@@ -76,9 +77,9 @@ public class CreateWorkspaceRestController {
             if (user == null) {
                 userService.createUserByEmail(emailTo);
             }
-            return ResponseEntity.ok().build();
+            return Response.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return Response.error(HttpStatus.BAD_REQUEST, "Error create email");
     }
 
 
@@ -96,13 +97,13 @@ public class CreateWorkspaceRestController {
                     @ApiResponse(responseCode = "200", description = "OK: email confirmed"),
                     @ApiResponse(responseCode = "400", description = "NOT_FOUND: unable to find token code")
             })
-    public ResponseEntity confirmEmail(@RequestBody String json, HttpServletRequest request) {
+    public Response confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         if (token.getCode() != code || token == null) {
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST, "Error confirm email");
         }
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @PostMapping("/workspaceName")
@@ -118,12 +119,12 @@ public class CreateWorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: workspace name was set")
             })
-    public ResponseEntity workspaceName(@RequestBody String workspaceName, HttpServletRequest request) {
+    public Response workspaceName(@RequestBody String workspaceName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         token.setWorkspaceName(workspaceName);
         workspaceService.createWorkspaceByToken(token);                  //создаем неприватный WS с владельцем из токена
         request.getSession(false).setAttribute("token", token);
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @PostMapping("/channelName")
@@ -139,12 +140,12 @@ public class CreateWorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: channel name was set")
             })
-    public ResponseEntity channelName(@RequestBody String channelName, HttpServletRequest request) {
+    public Response channelName(@RequestBody String channelName, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         token.setChannelName(channelName);
         channelService.createChannelByTokenAndUsers(token, users);
         request.getSession(false).setAttribute("token", token);
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @PostMapping("/invites")
@@ -160,10 +161,10 @@ public class CreateWorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: invitation pages were send")
             })
-    public ResponseEntity invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
+    public Response invitesPage(@RequestBody String[] invites, HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         mailService.sendInviteMessagesByTokenAndInvites(token, invites);
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @PostMapping("/tada")
@@ -179,13 +180,13 @@ public class CreateWorkspaceRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: starting page")
             })
-    public ResponseEntity<String> tadaPage(HttpServletRequest request) {
+    public Response<String> tadaPage(HttpServletRequest request) {
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
         UserDetails userDetails = userDetailsService.loadUserByUsername(token.getUserEmail());
         UsernamePasswordAuthenticationToken sToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         sToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(sToken);
-        return ResponseEntity.ok(token.getChannelName());
+        return Response.ok(token.getChannelName());
     }
 
 }
