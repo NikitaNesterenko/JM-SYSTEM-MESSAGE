@@ -7,6 +7,7 @@ import org.springframework.util.ObjectUtils;
 
 
 public class Response<T> extends HttpEntity<T> {
+
     private static boolean success;
 
     private final Object status;
@@ -22,7 +23,7 @@ public class Response<T> extends HttpEntity<T> {
     }
 
     public static BodyBuilder ok(HttpStatus status) {
-        success = true;
+        success = false;
         return httpStatus(status);
     }
 
@@ -40,11 +41,17 @@ public class Response<T> extends HttpEntity<T> {
         success = false;
         return httpStatus(status);
     }
-
+/*
     public static Response<String> error(HttpStatus status, String text) {
         success = false;
         BodyBuilder builder = httpStatus(status);
         return builder.message(text);
+    }*/
+
+    public static <T> Response<T> error(HttpStatus status, String text) {
+        success = false;
+        BodyBuilder builder = httpStatus(status);
+        return (Response<T>) builder.message(text);
     }
 
     private static BodyBuilder httpStatus(HttpStatus status) {
@@ -60,6 +67,7 @@ public class Response<T> extends HttpEntity<T> {
             builder.append(((HttpStatus) this.status).getReasonPhrase());
         }
         builder.append(',');
+
         T body = getBody();
         HttpHeaders headers = getHeaders();
         if (body != null) {
