@@ -16,15 +16,16 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.Calendar.Events;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
-import jm.api.dao.GoogleCalendarDAO;
-import jm.model.*;
+import jm.dto.WorkspaceDTO;
+import jm.model.App;
+import jm.model.Channel;
+import jm.model.Message;
+import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -70,7 +71,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public void firstStartClientAuthorization(String code, Workspace workspace, String principalName) {
+    public void firstStartClientAuthorization(String code, WorkspaceDTO workspace, String principalName) {
 
         createGoogleBot();
         createGoogleCalendarChannel(workspace,principalName);
@@ -90,7 +91,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public String authorize(Workspace workspace,String principalName) throws GeneralSecurityException, IOException {
+    public String authorize(WorkspaceDTO workspace,String principalName) throws GeneralSecurityException, IOException {
 
         AuthorizationCodeRequestUrl authorizationUrl;
         setGoogleClientIdAndSecret(workspace);
@@ -111,7 +112,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
 
     @Override
-    public void createGoogleCalendarChannel(Workspace workspace,String principalName) {
+    public void createGoogleCalendarChannel(WorkspaceDTO workspace,String principalName) {
 
         User user = userService.getUserByLogin(principalName);
         String nameChannel = nameChannelStartWth + user.getId();
@@ -126,7 +127,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
             channel.setArchived(false);
             channel.setIsPrivate(true);
             channel.setCreatedDate(createDate);
-            channel.setWorkspace(workspace);
+            channel.setWorkspace(workspaceService.getWorkspaceById(workspace.getId()));
             channel.setIsApp(true);
 
             channelService.createChannel(channel);
@@ -238,7 +239,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
                 .setApplicationName(applicationName).build();
     }
 
-    public void setGoogleClientIdAndSecret(Workspace workspace) {
+    public void setGoogleClientIdAndSecret(WorkspaceDTO workspace) {
         App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), applicationName);
         clientId = app.getClientId();
         clientSecret = app.getClientSecret();
