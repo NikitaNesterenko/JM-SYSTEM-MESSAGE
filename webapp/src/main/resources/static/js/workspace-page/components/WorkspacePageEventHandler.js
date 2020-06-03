@@ -74,6 +74,27 @@ export class WorkspacePageEventHandler {
             sessionStorage.setItem("channelId", channelId);
             sessionStorage.setItem('conversation_id', '0');
 
+            let channel;
+            this.channel_service.getChannelById(channelId)
+                .then(res => {channel = res})
+                .then(() => archiveChannelBlock(channel.isBlock,channel.isArchived))
+                .catch(console.log);
+            function archiveChannelBlock(block, archive){
+                if (block&&archive) {
+                    $( "#form_message_input" ).prop( "disabled", true );
+                    $( "#attach_file" ).prop( "disabled", true );
+                    $( "#inputEmojiButton" ).prop( "disabled", true );
+                    $( "#showAssociatedUsers" ).prop( "disabled", true );
+                    $( "#voiceMessageBtn" ).prop( "disabled", true );
+                }else {
+                    $( "#form_message_input" ).prop( "disabled", false );
+                    $( "#attach_file" ).prop( "disabled", false );
+                    $( "#inputEmojiButton" ).prop( "disabled", false );
+                    $( "#showAssociatedUsers" ).prop( "disabled", false );
+                    $( "#voiceMessageBtn" ).prop( "disabled", false );
+                }
+            }
+
             this.channel_topic_service.getChannelTopic(channelId).then(topic => {
                 this.user_service.getUsersByChannelId(channelId).then(users => {
                     this.wks_header.setInfo(channelId, users.length, 666, this.checkTopic(topic));

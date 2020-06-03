@@ -97,7 +97,9 @@ export class ChannelView {
     addChannels(channels) {
         $('#id-channel_sidebar__channels__list').empty(); //обнулдяем список каналов перед заполнением
         $.each(channels, (idx, chn) => {
-            if (!chn.isArchived && this.checkPrivacy(chn)) {
+            let archiveChannelShow = (!chn.isArchived || chn.isBlock === true);
+            if ( this.checkPrivacy(chn)&& archiveChannelShow) {
+            // if (!chn.isArchived && this.checkPrivacy(chn)) {
                 this.addChannelIntoSidebarChannelList(chn);
                 if (this.default_channel === null) {
                     this.default_channel = chn;
@@ -121,8 +123,7 @@ export class ChannelView {
     }
 
     addChannelIntoSidebarChannelList(channel) {
-        const chn_symbol = channel.isPrivate ? "🔒" : "#";
-
+        const chn_symbol = channel.isPrivate ? "🔒" :channel.isArchived ?"X": "#";
         if (!channel.isApp) {
             $('#id-channel_sidebar__channels__list').append(`
             <div class="p-channel_sidebar__channel">

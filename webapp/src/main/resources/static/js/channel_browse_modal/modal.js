@@ -55,7 +55,7 @@ function htmlChannelList (data) {
                        <p>Created  by <strong>${data[key].username}</strong> on <strong>${data[key].createdDate}</strong></p>
                        </div>
                        <div class="col-lg-2">
-                       <button id="button-channel" type="button" class="btn btn-primary" onclick="clickButton(this)">Click</button>
+                       <button id="button-channel-archive" type="button" class="btn btn-primary" data-row-id="${data[key].id}" >Click</button>
                        </div>
                        </div>`;
     });
@@ -114,3 +114,33 @@ $( function () {
     };
 });
 
+
+$(function () {
+    $(document).on('click touchstart', '#button-channel-archive', function () {
+        let id = $(this).attr("data-row-id")
+        $('#channelModal').modal('toggle');
+        fetch(`/rest/api/channels/block/${id}`, {
+            method: 'GET'
+        });
+        location.reload();
+    });
+});
+$(function () {
+    $(document).on('click touchstart', '#restoreArchiveChannel', function () {
+        let id = channel_id;
+        fetch(`/rest/api/channels/unzip/${id}`, {
+            method: 'GET'
+        });
+        location.reload();
+    });
+});
+
+$(function () {
+    $(document).on('click touchstart', '#closeArchiveChannel', function () {
+        let id = channel_id;
+        fetch(`/rest/api/channels/block/${id}`, {
+            method: 'GET'
+        });
+        location.reload();
+    });
+})

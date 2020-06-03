@@ -35,6 +35,7 @@ public class ChannelDTO {
     private Boolean isPrivate;
     private String topic;
     private Boolean isArchived;
+    private Boolean isBlock;
     private Boolean isApp;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -47,9 +48,11 @@ public class ChannelDTO {
         this.isPrivate = isPrivate;
     }
 
-    public ChannelDTO (Long id, String name, Boolean isPrivate, Boolean archived) {
+    public ChannelDTO(Long id, String name, Boolean isPrivate, Boolean archived,Boolean
+            block) {
         this(id, name, isPrivate);
         this.isArchived = archived;
+        this.isBlock = block;
     }
 
     public ChannelDTO (Channel channel) {
@@ -73,10 +76,11 @@ public class ChannelDTO {
         this.createdDate = channel.getCreatedDate();
         this.topic = channel.getTopic();
         this.isArchived = channel.getArchived();
+        this.isBlock = channel.getBlock();
         this.isApp = channel.getIsApp();
     }
 
-    public ChannelDTO (Long id, String name, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate, String topic, Boolean isApp) {
+    public ChannelDTO(Long id, String name, Long workspaceId, Long ownerId, Boolean isPrivate, Boolean isArchived, Boolean isBlock, LocalDateTime createdDate, String topic, Boolean isApp) {
         this.id = id;
         this.name = name;
         this.workspaceId = workspaceId;
@@ -85,22 +89,25 @@ public class ChannelDTO {
         this.createdDate = createdDate;
         this.topic = topic;
         this.isArchived = isArchived;
+        this.isBlock = isBlock;
         this.isApp = isApp;
     }
 
-    public ChannelDTO(Long id, String name, Boolean isArchived, LocalDateTime createdDate) {
+    public ChannelDTO(Long id, String name, Boolean isArchived,Boolean isBlock, LocalDateTime createdDate) {
         this.id = id;
         this.name = name;
         this.isArchived = isArchived;
+        this.isBlock = isBlock;
         this.createdDate = createdDate;
     }
 
-    public ChannelDTO(Long id, String name, String username, Boolean isPrivate, Boolean isArchived, LocalDateTime createdDate) {
+    public ChannelDTO(Long id, String name, String username, Boolean isPrivate, Boolean isArchived,Boolean isBlock, LocalDateTime createdDate) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.isPrivate = isPrivate;
         this.isArchived = isArchived;
+        this.isBlock = isBlock;
         this.createdDate = createdDate;
     }
 
@@ -194,6 +201,11 @@ public class ChannelDTO {
 
         public Builder setIsArchived(Boolean isArchived) {
             channelDTO.isArchived = isArchived;
+            return this;
+        }
+
+        public Builder setIsBlock(Boolean isBlock){
+            channelDTO.isBlock = isBlock;
             return this;
         }
 
