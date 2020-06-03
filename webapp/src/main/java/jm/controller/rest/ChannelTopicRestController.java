@@ -7,8 +7,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ChannelService;
+import jm.component.Response;
 import jm.model.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/rest/api/channels/")
 @Tag(name = "channel topic", description = "Channel Topic API")
 public class ChannelTopicRestController {
+    private static final Logger logger =
+            LoggerFactory.getLogger(ChannelTopicRestController.class);
 
     private ChannelService channelService;
 
@@ -37,9 +43,9 @@ public class ChannelTopicRestController {
                             description = "OK: get channel topic"
                     )
             })
-    public ResponseEntity<String> getChannelTopic(@PathVariable Long id) {
+    public Response<String> getChannelTopic(@PathVariable Long id) {
         String topic = channelService.getTopicChannelByChannelId(id);
-        return topic.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(topic);
+        return topic.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST, "topic is empty") : Response.ok(topic);
     }
 
     @PutMapping("/{id}/topic/update")
@@ -55,16 +61,16 @@ public class ChannelTopicRestController {
                     ),
                     @ApiResponse(responseCode = "200", description = "OK: channel topic was set")
             })
-    public ResponseEntity<String> setChannelTopic(@PathVariable Long id, @RequestBody String topic) {
+    public Response<String> setChannelTopic(@PathVariable Long id, @RequestBody String topic) {
         // TODO: Зачем получат Channel - getChannelById,
         //  заносить туда topic - setTopic
         //  чтобы потом возвращать getChannelById?
         try {
             Channel channel = channelService.getChannelById(id);
             channel.setTopic(topic);
-            return ResponseEntity.ok(channelService.getChannelById(id).getTopic());
+            return Response.ok(channelService.getChannelById(id).getTopic());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST,"error to set channel topic");
         }
     }
 

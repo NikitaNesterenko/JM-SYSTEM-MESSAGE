@@ -8,12 +8,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.ChannelService;
 import jm.MessageService;
 import jm.UserService;
+import jm.component.Response;
 import jm.dto.MessageDTO;
 import jm.dto.UserDTO;
 import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +55,9 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessages() {
+    public Response<List<MessageDTO>> getMessages() {
         List<MessageDTO> messageDTOList = messageService.getAllMessageDtoByIsDeleted(false);
-        return messageDTOList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(messageDTOList);
+        return messageDTOList.isEmpty() ? Response.error(HttpStatus.NO_CONTENT,"entity Message не обнаружен") : Response.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -73,9 +75,9 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
+    public Response<List<MessageDTO>> getMessagesByChannelId(@PathVariable("id") Long id) {
         List<MessageDTO> messageDTOList = messageService.getMessageDtoListByChannelId(id, false);
-        return messageDTOList.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(messageDTOList);
+        return messageDTOList.isEmpty() ? Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен") : Response.ok(messageDTOList);
     }
 
     // DTO compliant
@@ -92,11 +94,10 @@ public class MessageRestController {
                             description = "OK: get message"
                     )
             })
-    public ResponseEntity<MessageDTO> getMessageById(@PathVariable("id") Long id) {
+    public Response<MessageDTO> getMessageById(@PathVariable("id") Long id) {
         return messageService.getMessageDtoById(id)
-                .map(messageDTO -> ResponseEntity.ok(messageDTO))
-                .orElse(ResponseEntity.badRequest()
-                        .build());
+                .map(messageDTO -> Response.ok(messageDTO))
+                .orElse(Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен"));
     }
 
     // DTO compliant
@@ -113,14 +114,14 @@ public class MessageRestController {
                             description = "OK: get messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id,
+    public Response<List<MessageDTO>> getMessagesByChannelIdForPeriod(@PathVariable("id") Long id,
                                                                             @PathVariable("startDate") String startDate,
                                                                             @PathVariable("endDate") String endDate) {
         List<MessageDTO> messageDTOList = messageService.getMessagesDtoByChannelIdForPeriod(id, LocalDateTime.now()
 
                 .minusMonths(3), LocalDateTime.now(), false);
 
-        return ResponseEntity.ok(messageDTOList);
+        return Response.ok(messageDTOList);
 
     }
 
@@ -137,7 +138,7 @@ public class MessageRestController {
                     ),
                     @ApiResponse(responseCode = "201", description = "CREATED: message created")
             })
-    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
+    public Response<MessageDTO> createMessage(@RequestBody MessageDTO messageDto) {
         // TODO: ПРОВЕРИТЬ
         // Сохранение сообщения выполняется в MessagesController сразу из websocket
 
@@ -146,7 +147,7 @@ public class MessageRestController {
         messageService.createMessage(message);
         logger.info("Созданное сообщение : {}", message);
         MessageDTO messageDTO = messageService.getMessageDtoByMessage(message);
-        return ResponseEntity.ok(messageDTO);
+        return Response.ok(messageDTO);
     }
 
     // DTO compliant
@@ -165,7 +166,7 @@ public class MessageRestController {
                     @ApiResponse(responseCode = "403", description = "FORBIDDEN: unable to update message"),
                     @ApiResponse(responseCode = "404", description = "NOT_FOUND: unable to find message")
             })
-    public ResponseEntity updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
+    public Response updateMessage(@RequestBody MessageDTO messageDto, Principal principal) {
         // TODO: проверить
         // Обновление сообщения выполняется в MessagesController сразу из websocket
 
@@ -174,7 +175,7 @@ public class MessageRestController {
         Message existingMessage = messageService.getMessageById(message.getId());
         if (existingMessage == null) {
             logger.warn("Сообщение не найдено");
-            return ResponseEntity.badRequest().build();
+            return Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен");
         }
         if (principal.getName()
                 .equals(existingMessage.getUser()
@@ -183,9 +184,9 @@ public class MessageRestController {
             message.setDateCreate(existingMessage.getDateCreate());
             messageService.updateMessage(message);
             logger.info("Обновленное сообщение: {}", message);
-            return ResponseEntity.ok().build();
+            return Response.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return Response.error(HttpStatus.BAD_REQUEST,"error to update Message");
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -195,10 +196,10 @@ public class MessageRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK: message deleted")
             })
-    public ResponseEntity deleteMessage(@PathVariable("id") Long id) {
+    public Response deleteMessage(@PathVariable("id") Long id) {
         messageService.deleteMessage(id);
         logger.info("Удалено сообщение с id = {}", id);
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     // DTO compliant
@@ -215,10 +216,10 @@ public class MessageRestController {
                             description = "OK: get stared messages"
                     )
             })
-    public ResponseEntity<List<MessageDTO>> getStarredMessages(@PathVariable Long userId, @PathVariable Long workspaceId) {
+    public Response<List<MessageDTO>> getStarredMessages(@PathVariable Long userId, @PathVariable Long workspaceId) {
         List<MessageDTO> messageDTOS = messageService.getStarredMessagesDTOForUserByWorkspaceId(userId, workspaceId, false);
         return !messageDTOS.isEmpty() ?
-                ResponseEntity.ok(messageDTOS) : ResponseEntity.badRequest().build();
+                Response.ok(messageDTOS) : Response.error(HttpStatus.BAD_REQUEST,"entity Message не обнаружен");
     }
 
     @GetMapping(value = "/user/{id}")
@@ -234,12 +235,12 @@ public class MessageRestController {
                             description = "OK: Got all message from all channels"
                     )
             })
-    public ResponseEntity<List<Message>> getMessagesFromChannelsForUser(@PathVariable("id") Long userId) {
+    public Response<List<Message>> getMessagesFromChannelsForUser(@PathVariable("id") Long userId) {
         logger.info("Список сообщений для юзера от всех @channel: ");
         for (Message message : messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false)) {
             logger.info(message.toString());
         }
-        return ResponseEntity.ok(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false));
+        return Response.ok(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false));
     }
 
     @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
@@ -255,10 +256,10 @@ public class MessageRestController {
                             description = "OK: Removed message from unread"
                     )
             })
-    public ResponseEntity<?> removeChannelMessageFromUnreadForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
+    public Response<?> removeChannelMessageFromUnreadForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
         userService.removeChannelMessageFromUnreadForUser(chnId, usrId);
-        return userService.getUserDTOById(usrId).map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        return userService.getUserDTOById(usrId).map(Response::ok)
+                .orElseGet(() -> Response.error(HttpStatus.BAD_REQUEST,"error to remove message from unread"));
     }
 
     @GetMapping(value = "/unread/channel/{chnId}/user/{usrId}")
@@ -274,7 +275,7 @@ public class MessageRestController {
                             description = "OK: Got all unread messages"
                     )
             })
-    public ResponseEntity<?> getUnreadMessageInChannelForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
+    public Response<?> getUnreadMessageInChannelForUser(@PathVariable Long chnId, @PathVariable Long usrId) {
         // TODO: ПЕРЕДЕЛАТЬ получать в дао MessageDtoLis где UserId = usrId и ChannelId = chnId
 
         User user = userService.getUserById(usrId);
@@ -284,7 +285,7 @@ public class MessageRestController {
                 unreadMessages.add(msg);
             }
         });
-        return ResponseEntity.ok(messageService.getMessageDtoListByMessageList(unreadMessages));
+        return Response.ok(messageService.getMessageDtoListByMessageList(unreadMessages));
     }
 
     @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
@@ -300,11 +301,11 @@ public class MessageRestController {
                             description = "OK: Got message to unread"
                     )
             })
-    public ResponseEntity<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
+    public Response<?> addMessageToUnreadForUser(@PathVariable Long msgId, @PathVariable Long usrId) {
         User user = userService.getUserById(usrId);
         user.getUnreadMessages().add(messageService.getMessageById(msgId));
         userService.updateUser(user);
-        return ResponseEntity.ok().build();
+        return Response.ok().build();
     }
 
     @GetMapping(value = "/associated/{id}")
