@@ -100,7 +100,7 @@ public class CreateWorkspaceRestController {
     public Response confirmEmail(@RequestBody String json, HttpServletRequest request) {
         int code = Integer.parseInt(json);
         CreateWorkspaceToken token = (CreateWorkspaceToken) request.getSession(false).getAttribute("token");
-        if (token.getCode() != code || token == null) {
+        if (token.getCode() != code || token == null) { //Nullcheck of value previously dereferenced
             return Response.error(HttpStatus.BAD_REQUEST, "Error confirm email");
         }
         return Response.ok().build();

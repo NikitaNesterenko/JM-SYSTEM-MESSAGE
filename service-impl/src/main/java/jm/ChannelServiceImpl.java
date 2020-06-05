@@ -34,8 +34,8 @@ public class ChannelServiceImpl implements ChannelService {
     private final WorkspaceService workspaceService;
     private final UserService userService;
     private  CreateWorkspaceTokenService createWorkspaceTokenService;
-    private  ChannelDTO channelDTO;
-    private ChannelDAOImpl channelDaoImpl;
+    //private  ChannelDTO channelDTO; поле не используется
+    //private ChannelDAOImpl channelDaoImpl; поле не используется
 
     public ChannelServiceImpl(ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO, WorkspaceService workspaceService, UserService userService, CreateWorkspaceTokenService createWorkspaceTokenService) {
         this.channelDAO = channelDAO;

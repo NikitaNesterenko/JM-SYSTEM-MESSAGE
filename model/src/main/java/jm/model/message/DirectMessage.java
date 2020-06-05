@@ -25,7 +25,7 @@ public class DirectMessage extends Message {
     private Conversation conversation;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.REFRESH) // TODO: поменять на ManyToOne
+    @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(
             name = "users_unread_direct_messages",
             joinColumns = @JoinColumn(name = "unread_direct_message_id", referencedColumnName = "id"),

@@ -108,7 +108,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
 
         // creating new Workspace with simple fields copied from WorkspaceDTO
-        Workspace workspace = new Workspace(workspaceDto);
+        Workspace workspace = new Workspace(workspaceDto); //Useless object created - нужно ли решать?
 
         // setting up 'users'
         Set<Long> userIds = workspaceDto.getUserIds();
@@ -136,7 +136,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Set<User> users = null;
         createWorkspaceTokenService.updateCreateWorkspaceToken(createWorkspaceToken);
         User emailUser = userService.getUserByLogin(createWorkspaceToken.getUserEmail());
-        users.add(emailUser);
+        try{
+            users.add(emailUser);
+        }catch (NullPointerException e){
+            users = null;
+        }
         Workspace workspace1 = new Workspace(createWorkspaceToken.getWorkspaceName(),users, emailUser,false, LocalDateTime.now());
         createWorkspace(workspace1);
         workspace1 = getWorkspaceByName(createWorkspaceToken.getWorkspaceName());

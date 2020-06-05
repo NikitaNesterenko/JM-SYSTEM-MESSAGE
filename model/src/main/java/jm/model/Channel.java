@@ -113,7 +113,7 @@ public class Channel {
         this.archived = false;
         this.block = false;
         this.createdDate = channelDTO.getCreatedDate();
-        Optional.ofNullable(channelDTO.getTopic()).ifPresent(topic -> this.topic = topic);
+        Optional.ofNullable(channelDTO.getTopic()).ifPresent(t -> this.topic = t);
         this.isApp = channelDTO.getIsApp();
 
     }

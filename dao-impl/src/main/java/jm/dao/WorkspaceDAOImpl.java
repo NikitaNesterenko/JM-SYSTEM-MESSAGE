@@ -77,8 +77,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
                     .setResultTransformer(Transformers.aliasToBean(WorkspaceDTO.class))
                     .getResultList().get(0);
             setWorkspaceDTOCollections(workspaceDTO);
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
+
         }
         return Optional.ofNullable(workspaceDTO);
     }
@@ -131,7 +130,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
 
 
     private Set<Long> getBotIds(Long workspaceId) {
-        List<Number> list = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT wb.bot_id " +
                 "FROM workspaces_bots wb WHERE wb.workspace_id =:id")
                 .setParameter("id", workspaceId)
@@ -140,7 +139,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     }
 
     private Set<Long> getChannelIds(Long workspaceId) {
-        List<Number> list = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT c.id " +
                 "FROM channels c WHERE c.workspace_id =:id")
                 .setParameter("id", workspaceId)
@@ -149,7 +148,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     }
 
     private Set<Long> getUserIds(Long workspaceId) {
-        List<Number> list = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT wu.user_id " +
                 "FROM workspaces_users wu WHERE wu.workspace_id =:id")
                 .setParameter("id", workspaceId)
@@ -158,7 +157,7 @@ public class WorkspaceDAOImpl extends AbstractDao<Workspace> implements Workspac
     }
 
     private Set<Long> getAppIds(Long workspaceId) {
-        List<Number> list = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT a.id " +
                 "FROM apps a WHERE a.workspace_id =:id")
                 .setParameter("id", workspaceId)
