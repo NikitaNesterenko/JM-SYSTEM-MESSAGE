@@ -291,7 +291,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     private Set<Long> getStarredMessageIds(Long userId) {
-        List<Number> list;// = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "sm.starred_messages_id FROM users_starred_messages sm WHERE sm.user_id = :id")
                 .setParameter("id", userId)
@@ -300,7 +300,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     private Set<Long> getDirectMessagesToUserIds(Long userId) {
-        List<Number> list;// = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "msg.direct_messages_to_users_id " +
                 "FROM users_direct_messages_to_users msg " +
@@ -311,7 +311,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     private Set<Long> getUnreadMessageIds(Long userId) {
-        List<Number> list;// = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "um.unread_message_id " +
                 "FROM users_unread_messages um " +
@@ -322,7 +322,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
     }
 
     private Set<Long> getUnreadDirectMessageIds(Long userId) {
-        List<Number> list;// = new ArrayList<>();
+        List<Number> list;
         list = (List<Number>) entityManager.createNativeQuery("SELECT " +
                 "udm.unread_direct_message_id " +
                 "FROM users_unread_direct_messages udm " +

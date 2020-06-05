@@ -108,7 +108,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
 
         // creating new Workspace with simple fields copied from WorkspaceDTO
-        Workspace workspace = new Workspace(workspaceDto); //Useless object created - нужно ли решать?
+        Workspace workspace = new Workspace(workspaceDto);
 
         // setting up 'users'
         Set<Long> userIds = workspaceDto.getUserIds();
@@ -127,7 +127,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         // setting up 'user'
         User owner = userDAO.getById(workspaceDto.getOwnerId());
         workspace.setUser(owner);
-        return null;
+        return workspace;
     }
 
 
