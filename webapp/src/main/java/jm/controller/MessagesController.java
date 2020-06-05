@@ -105,7 +105,11 @@ public class MessagesController {
             if (isCreated == null) {
                 logger.warn("Сообщение не найдено");
             }
-            directMessage.setDateCreate(isCreated.getDateCreate());
+            try{
+                directMessage.setDateCreate(isCreated.getDateCreate());
+            }catch (NullPointerException e){
+                logger.warn("error to set Date Create");
+            }
             directMessageService.updateDirectMessage(directMessage);
             logger.info("Обновленное личное сообщение: {}", directMessage);
         }

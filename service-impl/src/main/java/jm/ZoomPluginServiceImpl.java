@@ -10,6 +10,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
@@ -55,7 +56,7 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
   }
 
   public void setToken(String code, String login) {
-    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
+    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes(Charset.forName("UTF-8")));
     User user = userService.getUserByLogin(login);
     String url =
         "https://zoom.us/oauth/token?grant_type=authorization_code&code="
@@ -84,7 +85,7 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
   }
 
   private void refreshToken(User user) {
-    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
+    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes(Charset.forName("UTF-8")));
     String url = "https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=";
 
     Token response =
