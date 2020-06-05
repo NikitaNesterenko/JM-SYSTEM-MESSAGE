@@ -1,7 +1,7 @@
 package jm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jm.model.User;
+import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -13,9 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,23 +23,38 @@ public class TrelloServiceImpl implements TrelloService {
     private final RestTemplate restTemplate;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private UserService userService;
+    private BotService botService;
+    private WorkspaceService workspaceService;
     @Value("${trello.api-key}")
     private String API_KEY;
     /* Тестовый токен: 247b4449072f5204331931ced057e48d3188e589956accec21e28054904a7543
     /  Тестовый API-Key: f1184d87df3d841e491cecffeb568165
     /  Информация по интеграции Trello: https://developer.atlassian.com/cloud/trello/     */
 
-    public TrelloServiceImpl(RestTemplateBuilder builder, UserService userService) {
+    public TrelloServiceImpl(RestTemplateBuilder builder, UserService userService,
+                             BotService botService,WorkspaceService workspaceService) {
         this.userService = userService;
         restTemplate = builder.build();
+        this.botService = botService;
+        this.workspaceService = workspaceService;
     }
 
     @Override
     public void setToken (String token) {
+        //todo Проверка на наличие токена
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUserByLogin(userDetails.getUsername());
         user.setTrelloToken(token);
         userService.updateUser(user);
+        setNewTrelloApp(token, user.getId());
+    }
+
+    public void setNewTrelloApp(String token, long id) {
+        App trello = new App();
+        trello.setName("Trello");
+        trello.setToken(token);
+        trello.setClientId(String.valueOf(id));
+        trello.setWorkspace(workspaceService.getWorkspaceById(1L));  //todo Тестовый вариант, исправить
     }
 
     @Override
