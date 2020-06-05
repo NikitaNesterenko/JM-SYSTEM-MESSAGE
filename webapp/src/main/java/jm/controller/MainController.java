@@ -1,6 +1,7 @@
 package jm.controller;
 
 import jm.WorkspaceService;
+import jm.dto.WorkspaceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class MainController {
 
     @GetMapping(value = "/workspace")
     public ModelAndView workspacePage(HttpServletRequest request) {
-        if(request.getSession(false).getAttribute("WorkspaceID") != null) {
+        if (request.getSession(false).getAttribute("WorkspaceID") != null) {
             return new ModelAndView("workspace-page");
         } else {
             // при разрыве коннекта с сервером редиректик на выбор Воркспейса
@@ -47,12 +48,6 @@ public class MainController {
         }
     }
 
-    /*
-     @GetMapping(value = "/workspace_temp")
-     public ModelAndView workspaceTempPage() {
-         return new ModelAndView("temp/workspace-page-temp.html");
-     }
-    */
     @GetMapping(value = "/signin")
     public ModelAndView signInPage() {
         return new ModelAndView("signin-page");
@@ -74,7 +69,13 @@ public class MainController {
     }
 
     @GetMapping("/chooseWorkspace")
-    public String chooseWorkspace() {return "choose-workspace-page";}
+    public String chooseWorkspace() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return "redirect:/signin";
+        }
+        return "choose-workspace-page";
+    }
 
     @GetMapping("/password-recovery/**")
     public String passwordRecovery() {
@@ -82,10 +83,10 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String login() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/chooseWorkspace";
+    public String login(HttpServletRequest request) {
+       WorkspaceDTO workspace=(WorkspaceDTO) request.getSession(true).getAttribute("WorkspaceID");
+        if (workspace == null) {
+            return "redirect:/signin";
         }
         return "login-page";
     }

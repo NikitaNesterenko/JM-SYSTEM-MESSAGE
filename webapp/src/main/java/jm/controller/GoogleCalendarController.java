@@ -3,9 +3,7 @@ package jm.controller;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import jm.GoogleCalendarService;
-import jm.model.Workspace;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import jm.dto.WorkspaceDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +31,7 @@ public class GoogleCalendarController {
 
     @GetMapping
     public RedirectView googleConnection(HttpServletRequest request, Principal principal) throws Exception {
-        Workspace workspace = getWorkspaceFromSession(request);
+        WorkspaceDTO workspace = getWorkspaceFromSession(request);
         if (workspace == null) {
             return  new RedirectView("/chooseWorkspace");
         }
@@ -76,8 +74,8 @@ public class GoogleCalendarController {
         return "redirect:/workspace";
     }
 
-    private Workspace getWorkspaceFromSession (HttpServletRequest request) {
-        return (Workspace) request.getSession(false).getAttribute("WorkspaceID");
+    private WorkspaceDTO getWorkspaceFromSession (HttpServletRequest request) {
+        return (WorkspaceDTO) request.getSession(false).getAttribute("WorkspaceID");
     }
 }
 

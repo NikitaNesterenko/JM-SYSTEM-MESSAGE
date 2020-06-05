@@ -1,6 +1,8 @@
 package jm.controller.rest;
 
 import jm.AppsService;
+import jm.WorkspaceService;
+import jm.dto.WorkspaceDTO;
 import jm.model.App;
 import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +16,20 @@ import javax.servlet.http.HttpServletRequest;
 public class AppRestController {
 
     private AppsService appsService;
-
+    private WorkspaceService workspaceService;
     @Autowired
-    public AppRestController(AppsService appsService) {
+    public AppRestController(AppsService appsService,WorkspaceService workspaceService) {
+        this.workspaceService = workspaceService;
         this.appsService = appsService;
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<App> getApp(@PathVariable("name") String appName, HttpServletRequest request) {
-        Workspace workspace = (Workspace) request.getSession().getAttribute("WorkspaceID");
+        WorkspaceDTO workspace = (WorkspaceDTO) request.getSession().getAttribute("WorkspaceID");
         App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), appName);
         if (app == null) {
             app = new App();
-            app.setWorkspace(workspace);
+            app.setWorkspace(workspaceService.getWorkspaceById(workspace.getId()));
             app.setName(appName);
             appsService.createApp(app);
         }

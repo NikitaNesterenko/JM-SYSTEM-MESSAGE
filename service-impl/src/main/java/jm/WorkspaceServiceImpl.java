@@ -92,6 +92,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
+    public Optional<WorkspaceDTO> getWorkspaceDTOByName(String name) {
+        return workspaceDAO.getWorkspaceDTOByName(name);
+    }
+
+    @Override
     public Optional<List<WorkspaceDTO>> getWorkspacesDTOByUserId(Long userId) {
         return workspaceDAO.getWorkspacesDTOByUserId(userId);
     }

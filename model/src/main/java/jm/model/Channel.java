@@ -31,7 +31,8 @@ import java.util.Set;
                         @ColumnResult(name = "id", type = Long.class),
                         @ColumnResult(name = "name"),
                         @ColumnResult(name = "is_private"),
-                        @ColumnResult(name = "archived")
+                        @ColumnResult(name = "archived"),
+                        @ColumnResult(name = "block")
                 }
         )
 )
@@ -80,6 +81,9 @@ public class Channel {
     @Column(name = "archived")
     private Boolean archived;
 
+    @Column(name = "block")
+    private Boolean block =false;
+
     @Column(name = "created_date", nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Type(type = "org.hibernate.type.LocalDateTimeType")
@@ -92,7 +96,7 @@ public class Channel {
     @Column(name = "is_app")
     private Boolean isApp;
 
-    public Channel (String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
+    public Channel(String name, Set<User> users, User user, Boolean isPrivate, LocalDateTime createdDate, Workspace workspace) {
         this.name = name;
         this.users = users;
         this.user = user;
@@ -107,18 +111,21 @@ public class Channel {
         this.name = channelDTO.getName();
         this.isPrivate = channelDTO.getIsPrivate();
         this.archived = false;
+        this.block = false;
         this.createdDate = channelDTO.getCreatedDate();
         Optional.ofNullable(channelDTO.getTopic()).ifPresent(topic -> this.topic = topic);
         this.isApp = channelDTO.getIsApp();
 
     }
-    public Channel(Long id, String name, Set<User> users, User user, Boolean isPrivate, Boolean archived, LocalDateTime createdDate, Workspace workspace) {
+
+    public Channel(Long id, String name, Set<User> users, User user, Boolean isPrivate, Boolean archived, Boolean block, LocalDateTime createdDate, Workspace workspace) {
         this.id = id;
         this.name = name;
         this.users = users;
         this.user = user;
         this.isPrivate = isPrivate;
         this.archived = archived;
+        this.block = block;
         this.createdDate = createdDate;
         this.workspace = workspace;
     }
