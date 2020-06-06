@@ -1,3 +1,4 @@
+import { ownFetch } from './fetch-service.js';
 import {RestPaginationService} from "./rest-pagination-service.js";
 
 
@@ -41,8 +42,7 @@ export class UserRestPaginationService extends RestPaginationService {
     };
 
     updateUser = async (userEntity) => {
-        const response = await fetch('/rest/api/users/update', {
-            method: 'PUT',
+        const response = await ownFetch.put('/rest/api/users/update', {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -119,8 +119,7 @@ export class BotRestPaginationService extends RestPaginationService {
     };
 
     createBot = async (bot) => {
-        const response = await fetch('/rest/api/bot/create', {
-            method: 'POST',
+        const response = await ownFetch.post('/rest/api/bot/create', {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -141,8 +140,7 @@ export class BotRestPaginationService extends RestPaginationService {
     };
 
     updateBot = async (bot) => {
-        const response = await fetch('/rest/api/bot/update', {
-            method: 'PUT',
+        const response = await ownFetch.put('/rest/api/bot/update', {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -154,8 +152,7 @@ export class BotRestPaginationService extends RestPaginationService {
 
     // TODO тестовая отправка сообщения
     sendTestMessage = async () => {
-        await fetch('/rest/api/bot/test.send', {
-            method: 'POST',
+        await ownFetch.post('/rest/api/bot/test.send', {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             }
@@ -199,8 +196,7 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
     };
 
     sendSlashCommand = async (url, command) => {
-        const response = await fetch(url, {
-            method: 'POST',
+        const response = await ownFetch.post(url, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
@@ -222,8 +218,7 @@ export class ChannelTopicRestPaginationService extends RestPaginationService {
     }
 
     async updateChannelTopic(channel_id, topic) {
-        const chn_topic = await fetch(`/rest/api/channels/${channel_id}/topic/update`, {
-            method: 'PUT',
+        const chn_topic = await ownFetch.put(`/rest/api/channels/${channel_id}/topic/update`, {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(topic)
         });
@@ -267,15 +262,13 @@ export class ChannelRestPaginationService extends RestPaginationService {
     };
 
     archivingChannel = async (id) => {
-        const response = await fetch(`/rest/api/channels/archiving/${id}`, {
-            method: 'POST'
+        const response = await ownFetch.post(`/rest/api/channels/archiving/${id}`, {
         });
         return response.json();
     };
 
     updateChannel = async (channel) => {
-        const response = await fetch(`/rest/api/channels/update`, {
-            method: 'PUT',
+        const response = await ownFetch.put(`/rest/api/channels/update`, {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(channel)
         });
@@ -343,8 +336,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     sendCode = async (code) => {
-        const response = await fetch('/api/create/confirmEmail', {
-            method: 'POST',
+        const response = await ownFetch.post('/api/create/confirmEmail', {
             headers: {'Content-Type': 'application/json'},
             body: code
         });
@@ -352,8 +344,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     sendEmail = (email) => {
-        const response = fetch('/api/create/sendEmail', {
-            method: 'POST',
+        const response = ownFetch.post('/api/create/sendEmail', {
             headers: {'Content-Type': 'application/json'},
             body: email
         });
@@ -361,8 +352,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     takeWorkspaceName = (wks_name) => {
-        const response = fetch('/api/create/workspaceName', {
-            method: 'POST',
+        const response = ownFetch.post('/api/create/workspaceName', {
             headers: {'Content-Type': 'application/json'},
             body: wks_name
         });
@@ -370,8 +360,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     tada = async () => {
-        const response = await fetch('/api/create/tada', {
-            method: 'POST',
+        const response = await ownFetch.post('/api/create/tada', {
             headers: {'Content-Type': 'application/json'}
         });
         return response;
@@ -381,8 +370,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
 export class StorageService {
 
     uploadFile = async (file) => {
-        return await fetch(`/uploadFile`, {
-            method: 'POST',
+        return await ownFetch.post(`/uploadFile`, {
             body: file
         }).then(response => {
             return response.text()
@@ -390,8 +378,7 @@ export class StorageService {
     };
 
     uploadAvatar = async (file) => {
-        return await fetch(`/avatar`, {
-            method: 'POST',
+        return await ownFetch.post(`/avatar`, {
             body: file
         }).then(response => {
             return response.text()
@@ -405,8 +392,7 @@ export class InviteRestPaginationService extends RestPaginationService {
     }
 
     async sendInvites(emails) {
-        return await fetch('/api/create/invites', {
-            method: 'POST',
+        return await ownFetch.post('/api/create/invites', {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(emails)
         });
@@ -424,8 +410,7 @@ export class ThreadChannelRestPaginationService extends RestPaginationService {
     };
     createThreadChanel = async (entity) => {
         alert(this.url + '/create');
-        const response = await fetch(`/rest/api/threads/create`, {
-            method: 'POST',
+        const response = await ownFetch.post(`/rest/api/threads/create`, {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(entity)
         });
@@ -448,8 +433,7 @@ export class ThreadChannelMessageRestPaginationService extends RestPaginationSer
     };
 
     createThreadMsg = async (msg, user) => {
-        const response = await fetch(`/rest/api/threads/messages/create`, {
-            method: 'POST',
+        const response = await ownFetch.post(`/rest/api/threads/messages/create`, {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(msg, user)
         });
@@ -534,8 +518,7 @@ export class NotificationsRestService extends RestPaginationService {
 
     createNotifications = async (notification) => {
         //
-        const response = await fetch(`${this.url}/create`, {
-            method: 'POST',
+        const response = await ownFetch.post(`${this.url}/create`, {
             headers: {
                 'Content-Type': 'application/json;'
             },
@@ -545,8 +528,7 @@ export class NotificationsRestService extends RestPaginationService {
     };
 
     updateNotifications = async (notification) => {
-        const response = await fetch(`${this.url}/update`, {
-            method: 'PUT',
+        const response = await ownFetch.put(`${this.url}/update`, {
             headers: {
                 'Content-Type': 'application/json;'
             },

@@ -1,3 +1,4 @@
+import { ownFetch } from '/static/js/rest/fetch-service.js';
 $(document).ready(function () {
     let user;
     $('#getUser').on('click', function () {
@@ -21,8 +22,7 @@ $(document).ready(function () {
     $('#setUser').on('click', function () {
         alert("POST");
 
-        fetch('/rest/api/users/create', {
-            method: 'post',
+        ownFetch.post('/rest/api/users/create', {
             headers: headers,
             body: JSON.stringify(user)
         })
