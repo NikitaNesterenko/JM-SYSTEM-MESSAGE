@@ -3,7 +3,6 @@ package jm.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jm.dto.WorkspaceDTO;
 import lombok.*;
 import org.hibernate.annotations.Type;
 

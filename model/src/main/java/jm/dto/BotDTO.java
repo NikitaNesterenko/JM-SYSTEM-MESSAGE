@@ -119,7 +119,7 @@ public class BotDTO {
         this.channelIds = channelIds.stream()
                                   .map(Number::longValue)
                                   .collect(Collectors.toSet());
-        ;
+
     }
 
     public void setSlashCommandsIds (List<Number> slashCommandsIds) {

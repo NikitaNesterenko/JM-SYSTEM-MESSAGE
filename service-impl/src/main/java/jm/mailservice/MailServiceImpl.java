@@ -19,10 +19,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -97,7 +94,8 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public Optional<CreateWorkspaceToken> sendConfirmationCode (String emailTo) {
-        int code = (int) (Math.random() * 900000) + 100000;
+        Random r = new Random();
+        int code = r.nextInt(900000) + 100000;
         String content = mailContentService.buildConfirmationCode(code);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -111,11 +109,12 @@ public class MailServiceImpl implements MailService {
             emailSender.send(messagePreparator);
             logger.info("Sending confirmation code to " + emailTo + " was successful");
             createWorkspaceToken = new CreateWorkspaceToken(code);
-        } catch (MailException e) {
+            createWorkspaceToken.setUserEmail(emailTo);
+        } catch (MailException|NullPointerException e) {
             logger.error("Sending confirmation code to " + emailTo + " failed");
             e.printStackTrace();
         }
-        createWorkspaceToken.setUserEmail(emailTo);
+
         return Optional.ofNullable(createWorkspaceToken);
     }
 

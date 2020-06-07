@@ -81,6 +81,8 @@ public class CommandsBotServiceImpl implements CommandsBotService {
         SlashCommand slashCommand = slashCommandService.getSlashCommandByName(commandName);
 
         switch (slashCommand.getType().getName()) {
+            default:
+                break;
             case "all":
                 break;
             case "get":
@@ -101,6 +103,8 @@ public class CommandsBotServiceImpl implements CommandsBotService {
                                                          ObjectMapper mapper) throws JsonProcessingException {
 
         switch (commandName) {
+            default:
+                break;
             case "topic":
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");

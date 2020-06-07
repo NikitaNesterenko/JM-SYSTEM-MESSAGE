@@ -20,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class WorkspaceRestController {
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             return Response.error(HttpStatus.BAD_REQUEST, "Unable to update channel");
         }
-        request.getSession(false).setAttribute("WorkspaceID", workspace);
+        request.getSession(false).setAttribute("WorkspaceID",  workspace); //Store of non serializable object into HttpSession не придумал решение
         return Response.ok().build();
     }
 
