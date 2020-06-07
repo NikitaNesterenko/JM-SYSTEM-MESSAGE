@@ -40,6 +40,19 @@ public class TrelloController {
     }
 
     @Operation(
+            description = "Метод позволяет достать токен из бд",
+            operationId = "hasTrelloToken",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Trello token is not null!"),
+                    @ApiResponse(responseCode = "400", description = "Trello token in null!")
+            })
+    @GetMapping(value = "/hasTrelloToken")
+    public ResponseEntity<String> hasTrelloToken() {
+        String token = trelloService.getTokenByUserLogin();
+        return token == null ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
+
+    @Operation(
             description = "Метод позволяет получить информацию (JSON объект) о текущей доске.",
             operationId = "getBoardInfo",
             summary = "get Board Info",

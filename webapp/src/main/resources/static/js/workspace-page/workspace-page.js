@@ -219,7 +219,7 @@ $("#trelloBtn").click(
 
 //Переход на сайт Trello для получения токена
 $("#takeTrelloAuthorization").click(function() {
-    window.open("https://trello.com/1/authorize?expiration=1day&name=MyPersonalToken&scope=read&response_type=token&key=f1184d87df3d841e491cecffeb568165")
+    window.open("https://trello.com/1/authorize?expiration=30days&name=MyPersonalToken&scope=read,write&response_type=token&key=f1184d87df3d841e491cecffeb568165")
 });
 
 //Отправка токена на сервер
@@ -230,6 +230,5 @@ $("#addTrelloToken").click(
             return;
         }
         let status = trello_service.addPersonToken(token);
-        alert(status);
     }
 );

@@ -571,7 +571,26 @@ export class TrelloRestService extends RestPaginationService {
             }
         });
         return response.status;
+    };
+
+    hasTrelloToken = async () => {
+        const response = await fetch(`${this.url}/hasTrelloToken`, {
+            method: 'Get',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
     }
 
+    createBoard = async (board) => {
+        const response = await fetch(`${this.url}/addBoard?name=${board}`, {
+            method: 'Post',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
+    }
 }
 
