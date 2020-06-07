@@ -4,7 +4,6 @@ import jm.AppsService;
 import jm.WorkspaceService;
 import jm.dto.WorkspaceDTO;
 import jm.model.App;
-import jm.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

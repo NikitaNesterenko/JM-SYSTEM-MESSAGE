@@ -18,7 +18,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/rest/plugin")
 @Tag(name = "plugin", description = "Plugin API")
-public class PluginRestController {
+public class ZoomPluginRestController {
 
     private PluginService<ZoomDTO> zoomPlugin;
 
@@ -41,10 +41,28 @@ public class PluginRestController {
                     ),
                     @ApiResponse(responseCode = "400", description = "BAD_REQUEST: unable to authorize in zoom")
             })
-    public ResponseEntity<ZoomDTO> zoomOAuth(Principal principal) {
-        if (principal != null) {
-            return ResponseEntity.ok(zoomPlugin.create(principal.getName()));
-        }
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<String> zoomOAuth() {
+        return ResponseEntity.ok(zoomPlugin.buildUrl());
     }
+
+    @GetMapping("/zoom/meetings/create")
+    @Operation(
+            operationId = "create zoom Meetings",
+            summary = "Create meetings",
+            responses = {
+                    @ApiResponse(responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ZoomDTO.class)
+                            ),
+                            description = "OK: was created"
+                    ),
+                    @ApiResponse(responseCode = "400", description = "BAD_REQUEST: not created")
+            })
+    public ResponseEntity<ZoomDTO> createMeetings(Principal principal) {
+        return ResponseEntity.ok(zoomPlugin.create(principal.getName()));
+    }
+
+
+
 }

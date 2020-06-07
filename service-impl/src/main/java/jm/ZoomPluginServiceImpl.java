@@ -16,117 +16,123 @@ import java.util.Base64;
 @Service
 public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
 
-  private final UserService userService;
-  private final RestTemplate restTemplate;
+    private final UserService userService;
+    private final RestTemplate restTemplate;
 
-  @Value("${spring.security.oauth2.client.registration.zoom.client-id}")
-  private String clientId;
+    @Value("${spring.security.oauth2.client.registration.zoom.client-id}")
+    private String clientId;
 
-  @Value("${spring.security.oauth2.client.registration.zoom.redirect-uri}")
-  private String redirectUri;
+    @Value("${spring.security.oauth2.client.registration.zoom.redirect-uri}")
+    private String redirectUri;
 
-  @Value("${spring.security.oauth2.client.registration.zoom.client-secret}")
-  private String secret;
+    @Value("${spring.security.oauth2.client.registration.zoom.client-secret}")
+    private String secret;
 
-  public ZoomPluginServiceImpl(RestTemplateBuilder builder, UserService userService) {
-    restTemplate = builder.build();
-    this.userService = userService;
-  }
-
-  public ZoomDTO create(String login) {
-    String url = "https://api.zoom.us/v2/users/me/meetings";
-    ZoomDTO zoom = new ZoomDTO();
-    User user = userService.getUserByLogin(login);
-
-    if (user.getZoomToken() == null) {
-      zoom.setRedirectUri(buildUrl());
-      return zoom;
+    public ZoomPluginServiceImpl(RestTemplateBuilder builder, UserService userService) {
+        restTemplate = builder.build();
+        this.userService = userService;
     }
 
-    String token = getToken(user);
-    zoom.setTopic("JM-System");
-    zoom.setType("1");
+    @Override
+    public ZoomDTO create(String login) {
 
-    HttpHeaders headers = getHeaders("Bearer " + token);
 
-    return restTemplate
-        .exchange(url, HttpMethod.POST, new HttpEntity<>(zoom, headers), ZoomDTO.class)
-        .getBody();
-  }
+        String url = "https://api.zoom.us/v2/users/me/meetings";
+        ZoomDTO zoom = new ZoomDTO();
+        User user = userService.getUserByLogin(login);
 
-  public void setToken(String code, String login) {
-    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
-    User user = userService.getUserByLogin(login);
-    String url =
-        "https://zoom.us/oauth/token?grant_type=authorization_code&code="
-            + code
-            + "&redirect_uri="
-            + redirectUri;
+        if (user.getZoomToken() == null) {
+            zoom.setRedirectUri(buildUrl());
+            return zoom;
+        }
 
-    Token response =
-        restTemplate
-            .exchange(
-                url,
-                HttpMethod.POST,
-                new HttpEntity<>(null, getHeaders("Basic " + auth)),
-                Token.class)
-            .getBody();
-    updateToken(response, user);
-  }
+        String token = getToken(user);
+        zoom.setTopic("JM-SM");
+        zoom.setType("1");
 
-  private String getToken(User user) {
-    if (LocalDateTime.now().isBefore(user.getExpireDateZoomToken())) {
-      return user.getZoomToken();
-    } else {
-      refreshToken(user);
-      return user.getZoomToken();
+        HttpHeaders headers = getHeaders("Bearer " + token);
+
+        return restTemplate
+                .exchange(url, HttpMethod.POST, new HttpEntity<>(zoom, headers), ZoomDTO.class)
+                .getBody();
     }
-  }
 
-  private void refreshToken(User user) {
-    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
-    String url = "https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=";
+    @Override
+    public void setToken(String code, String login) {
+        String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
+        User user = userService.getUserByLogin(login);
+        String url =
+                "https://zoom.us/oauth/token?grant_type=authorization_code&code="
+                        + code
+                        + "&redirect_uri="
+                        + redirectUri;
 
-    Token response =
-        restTemplate
-            .exchange(
-                url + user.getRefreshZoomToken(),
-                HttpMethod.POST,
-                new HttpEntity<>(null, getHeaders("Basic " + auth)),
-                Token.class)
-            .getBody();
-
-    updateToken(response, user);
-  }
-
-  private void updateToken(@Nullable Token response, User user) {
-    if (response != null) {
-      user.setZoomToken(response.access_token);
-      user.setRefreshZoomToken(response.refresh_token);
-      user.setExpireDateZoomToken(LocalDateTime.now().plusMinutes(55));
-      userService.updateUser(user);
+        Token response =
+                restTemplate
+                        .exchange(
+                                url,
+                                HttpMethod.POST,
+                                new HttpEntity<>(null, getHeaders("Basic " + auth)),
+                                Token.class)
+                        .getBody();
+        updateToken(response, user);
     }
-  }
 
-  @JsonIgnoreProperties(ignoreUnknown = true)
-  private static class Token {
-    public String access_token;
-    public String refresh_token;
-  }
+    @Override
+    public String getToken(User user) {
+        if (!LocalDateTime.now().isBefore(user.getExpireDateZoomToken())) {
+            return refreshToken(user);
+        }
+        return user.getZoomToken();
+    }
 
-  private String buildUrl() {
-    return "https://zoom.us/oauth/authorize"
-        + "?response_type=code"
-        + "&client_id="
-        + clientId
-        + "&redirect_uri="
-        + redirectUri;
-  }
+    @Override
+    public String refreshToken(User user) {
+        String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
+        String url = "https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=";
 
-  private HttpHeaders getHeaders(String auth) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", auth);
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    return headers;
-  }
+        Token response =
+                restTemplate
+                        .exchange(
+                                url + user.getRefreshZoomToken(),
+                                HttpMethod.POST,
+                                new HttpEntity<>(null, getHeaders("Basic " + auth)),
+                                Token.class)
+                        .getBody();
+
+        updateToken(response, user);
+        return response.access_token;
+    }
+
+    private void updateToken(@Nullable Token response, User user) {
+        if (response != null) {
+            user.setZoomToken(response.access_token);
+            user.setRefreshZoomToken(response.refresh_token);
+            user.setExpireDateZoomToken(LocalDateTime.now().plusMinutes(55));
+            userService.updateUser(user);
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private static class Token {
+        public String access_token;
+        public String refresh_token;
+    }
+
+    @Override
+    public String buildUrl() {
+        return "https://zoom.us/oauth/authorize"
+                + "?response_type=code"
+                + "&client_id="
+                + clientId
+                + "&redirect_uri="
+                + redirectUri;
+    }
+
+    private HttpHeaders getHeaders(String auth) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", auth);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
+    }
 }

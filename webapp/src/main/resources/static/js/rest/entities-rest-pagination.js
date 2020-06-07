@@ -511,9 +511,18 @@ export class PluginRestPaginationService extends RestPaginationService {
     }
 
     async getZoomToken() {
-        const plugin = await fetch('/rest/plugin/zoom');
-        return plugin.json();
+        const auth = await fetch('/rest/plugin/zoom');
+        return auth;
     }
+
+    async createMeetings(){
+        const meeting = await fetch('rest/plugin/zoom/meetings/create');
+        return meeting.json();
+    }
+
+    
+
+
 }
 
 export class NotificationsRestService extends RestPaginationService {
