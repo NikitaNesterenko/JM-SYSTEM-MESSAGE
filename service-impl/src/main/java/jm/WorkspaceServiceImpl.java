@@ -127,7 +127,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         // setting up 'user'
         User owner = userDAO.getById(workspaceDto.getOwnerId());
         workspace.setUser(owner);
-        return null;
+        return workspace;
     }
 
 
@@ -136,7 +136,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Set<User> users = null;
         createWorkspaceTokenService.updateCreateWorkspaceToken(createWorkspaceToken);
         User emailUser = userService.getUserByLogin(createWorkspaceToken.getUserEmail());
-        users.add(emailUser);
+        try{
+            users.add(emailUser);
+        }catch (NullPointerException e){
+            users = null;
+        }
         Workspace workspace1 = new Workspace(createWorkspaceToken.getWorkspaceName(),users, emailUser,false, LocalDateTime.now());
         createWorkspace(workspace1);
         workspace1 = getWorkspaceByName(createWorkspaceToken.getWorkspaceName());

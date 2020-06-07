@@ -1,6 +1,7 @@
 import {MessageDialogView} from "./MessageDialogView.js";
 import {MessageRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 import {getMessageStatus} from "/js/message_menu/message-icon-menu.js";
+import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 
 export class MessageView {
 
@@ -9,21 +10,36 @@ export class MessageView {
         this.dialog = new MessageDialogView();
         this.commands = commands;
         this.message_service = new MessageRestPaginationService();
+        this.channel_service = new ChannelRestPaginationService();
     }
 
     onClickEditMessage(edit_button_class) {
         $(document).on('click', edit_button_class, (event) => {
-            event.preventDefault();
-            const msg_id = $(event.target).attr("data-msg-id");
-            this.showEditInput(msg_id);
+            const sessionIdChannel = sessionStorage.getItem("channelId");
+            this.channel_service.getChannelById(sessionIdChannel).then(chn => {
+                if (chn.isArchived) {
+                    alert("To change the message, you must unarchive the channel.")
+                } else {
+                    event.preventDefault();
+                    const msg_id = $(event.target).attr("data-msg-id");
+                    this.showEditInput(msg_id);
+                }
+            })
         });
     }
 
     onClickDeleteMessage(delete_button_class) {
         $(document).on('click', delete_button_class, (event) => {
-            event.preventDefault();
-            const msg_id = $(event.target).attr("data-msg-id");
-            this.modify(msg_id);
+            const sessionIdChannel = sessionStorage.getItem("channelId");
+            this.channel_service.getChannelById(sessionIdChannel).then(chn => {
+                if (chn.isArchived) {
+                    alert("To delete the message, you must unarchive the channel.")
+                } else {
+                    event.preventDefault();
+                    const msg_id = $(event.target).attr("data-msg-id");
+                    this.modify(msg_id);
+                }
+            })
         });
     }
 
@@ -63,6 +79,7 @@ export class MessageView {
             }
             this.dialog.messageBoxWrapper();
         }
+        this.setArchivalMessage();
     }
 
     createMessage(message) {
@@ -104,4 +121,18 @@ export class MessageView {
             .find(".c-message__body")
             .text(message.content);
     }
+
+    setArchivalMessage() {
+        $(function () {
+            $("#all-message-wrapper").ready(function () {
+                const archiveLine = `<strong>You are viewing , an archived channel
+            <button id="restoreArchiveChannel" type="button" class="btn btn-success" "> Restore channel</button>    
+            <button id="closeArchiveChannel" type="button" class="btn btn-dark" >Close channel</button>
+            </strong>`;
+                if ($("#showAssociatedUsers").prop('disabled') || $("#inputEmojiButton").prop('disabled') || $("#attach_file").prop('disabled') || $("#form_message_input").prop('disabled')) {
+                    $("#all-messages").append(archiveLine);
+                }
+            });
+        });
+    };
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +102,7 @@ public class ChannelRestController {
             return ResponseEntity.badRequest().body(false);
         }
         request.getSession()
-                .setAttribute("ChannelId", channel);
+                .setAttribute("ChannelId", (Serializable)channel);
         return ResponseEntity.ok(true);
     }
 
@@ -332,6 +333,32 @@ public class ChannelRestController {
         return ResponseEntity.ok(channelDTO);
     }
 
+    @GetMapping(value = "/block/{id}")
+    @Operation(
+            operationId = "blockChannel",
+            summary = "Block channel",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ChannelDTO.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: channel block")
+            })
+    public ResponseEntity<ChannelDTO> setBlockChannel(@PathVariable("id") Long id) {
+        Channel channel = channelService.getChannelById(id);
+        channel.setBlock(!channel.getBlock());
+        channelService.updateChannel(channel);
+        ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
+        if (channelDTO.getIsBlock()){
+            logger.info("Канал с id = {} заблочен", id);
+        }else if (!channelDTO.getIsBlock()){
+            logger.info("Канал с id = {} разблочен", id);
+        }
+
+        return ResponseEntity.ok(channelDTO);
+    }
 
     @GetMapping(value = "/private")
     @Operation(
@@ -370,7 +397,7 @@ public class ChannelRestController {
         return ResponseEntity.ok(channelsDTO);
     }
 
-    @PutMapping(value = "/unzip/{id}")
+    @GetMapping(value = "/unzip/{id}")
     @Operation(
             operationId = "unzipChannel",
             summary = "Archive channel",
@@ -386,9 +413,10 @@ public class ChannelRestController {
     public ResponseEntity<ChannelDTO> unzipChannel(@PathVariable("id") Long id) {
         Channel channel = channelService.getChannelById(id);
         channel.setArchived(false);
+        channel.setBlock(false);
         channelService.updateChannel(channel);
         ChannelDTO channelDTO = channelService.getChannelDtoByChannel(channel);
-        logger.info("Канал с id = {} архивирован", id);
+        logger.info("Канал с id = {} разархивирован", id);
         return ResponseEntity.ok(channelDTO);
     }
 }

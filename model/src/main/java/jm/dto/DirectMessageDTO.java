@@ -1,4 +1,5 @@
 package jm.dto;
+import com.google.common.base.Objects;
 import jm.model.User;
 import jm.model.message.DirectMessage;
 import lombok.AllArgsConstructor;
@@ -21,5 +22,20 @@ public class DirectMessageDTO extends MessageDTO {
     }
     public DirectMessageDTO(MessageDTO messageDTO) {
         super(messageDTO);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        DirectMessageDTO that = (DirectMessageDTO) o;
+        return Objects.equal(conversationId, that.conversationId) &&
+                Objects.equal(starredByWhom, that.starredByWhom);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(super.hashCode(), conversationId, starredByWhom);
     }
 }

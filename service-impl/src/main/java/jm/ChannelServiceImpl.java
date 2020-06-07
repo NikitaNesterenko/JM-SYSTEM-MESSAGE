@@ -34,8 +34,7 @@ public class ChannelServiceImpl implements ChannelService {
     private final WorkspaceService workspaceService;
     private final UserService userService;
     private  CreateWorkspaceTokenService createWorkspaceTokenService;
-    private  ChannelDTO channelDTO;
-    private ChannelDAOImpl channelDaoImpl;
+
 
     public ChannelServiceImpl(ChannelDAO channelDAO, UserDAO userDAO, BotDAO botDAO, WorkspaceDAO workspaceDAO, WorkspaceService workspaceService, UserService userService, CreateWorkspaceTokenService createWorkspaceTokenService) {
         this.channelDAO = channelDAO;
@@ -192,7 +191,9 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<ChannelDTO> getAllArchiveChannels() {
-        return channelDAO.getArchivedChannels();
+        List<Channel> list =  channelDAO.getArchivedChannels();
+        List<ChannelDTO> daoList = getChannelDtoListByChannelList(list);
+        return daoList;
     }
 
     @Override
