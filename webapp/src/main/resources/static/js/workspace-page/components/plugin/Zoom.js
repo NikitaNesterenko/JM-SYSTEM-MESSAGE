@@ -13,9 +13,9 @@ export class Zoom extends MessageView {
     }
 
     sendMessage() {
-        this.plugin_service.getZoomToken().then(
+        this.plugin_service.createMeetings().then(
             response => {
-                if (response.redirectUri == null) {
+                if (response.redirect_uri == null) {
                     const content = response.id + "|" + response.join_url + "|" + this.logged_user.displayName;
                     const entity = {
                         id: null,
@@ -30,10 +30,11 @@ export class Zoom extends MessageView {
                         msg => {
                             msg['inputMassage'] = msg.content;
                             this.stompClient.send("/app/message", {}, JSON.stringify(msg));
+                            this.createMessage(this.zoomMeeting(msg));
                         }
                     );
                 } else {
-                    this.authorizeZoom(response.redirectUri)
+                    this.authorizeZoom(response.redirect_uri);
 
                 }
             }
@@ -42,23 +43,23 @@ export class Zoom extends MessageView {
 
     createMessage(message) {
         const msg = {
-            id: 0,
+            id: message.id,
             userId: null,
-            botId: 0,
+            botId: message.botId,
             dateCreate: convert_date_to_format_Json(new Date()),
             userAvatarUrl: "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-21/245295805989_06e77af1bfb8e3c81d4d_72.png",
-            content: message
+            content: message.content
         };
         this.dialog.setUser(0, "Zoom")
             .container(msg)
             .setAvatar()
             .setMessageContentHeader()
             .setPluginContent();
-        this.addAppBadge();
+        this.addAppBadge(msg);
     }
 
-    addAppBadge() {
-        $('#message_0_user_0_content_header .c-message__sender')
+    addAppBadge(msg) {
+        $(`#message_${msg.id}_user_${msg.botId}_content_header`)
             .append(`
                 <span class="badge badge-secondary" 
                         style="background-color: rgba(var(--sk_foreground_low,29,28,29),.13); color: rgba(var(--sk_foreground_max,29,28,29),.7);">
@@ -67,7 +68,15 @@ export class Zoom extends MessageView {
     }
 
     authorizeZoom(link) {
-        this.createMessage(`
+        this.createMessage(
+        {
+            id: 0,
+            userId: null,
+            botId: 0,
+            dateCreate: convert_date_to_format_Json(new Date()),
+            userAvatarUrl: "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-21/245295805989_06e77af1bfb8e3c81d4d_72.png",
+            content:
+            `
             <div class="c-message__content_body">
                     <div class="my-2 pt-2">Please authorize JM-System to access your Zoom information by clicking the link below:</div>
                     <span>
@@ -76,7 +85,7 @@ export class Zoom extends MessageView {
                     <b><a target="_blank" class="" href="${link}" rel="noopener noreferrer">Authorize Zoom</a></b>
                     <div class="mt-2">This link is valid for 30 minutes and can only be accessed once.</div>
             </div>
-        `);
+        `});
         $('#message_0_user_0_content').prepend(`
                         <div class="c-message__content_header mb-3 pb-1">
                             <span class="c-message__gutter--feature_sonic_inputs">
@@ -92,7 +101,14 @@ export class Zoom extends MessageView {
 
     zoomMeeting(message) {
         const [id, url, displayName] = message.content.split('|');
-        return `
+        return {
+                id: 0,
+                userId: null,
+                botId: 0,
+                dateCreate: convert_date_to_format_Json(new Date()),
+                userAvatarUrl: "https://slack-files2.s3-us-west-2.amazonaws.com/avatars/2017-09-21/245295805989_06e77af1bfb8e3c81d4d_72.png",
+                content:
+        `
             <div class="c-message__body" style="color: rgba(var(--sk_foreground_max_solid,97,96,97),1)">
                 Call
               <button type="button" class="dropdown-toggle dropdown-toggle-split bg-transparent border-0 p-0 m-0" href="#"  id="dropdownMenuLink" >
@@ -126,6 +142,6 @@ export class Zoom extends MessageView {
                     </div>
                 </div>
             </div>
-        `;
+        `};
     }
 }

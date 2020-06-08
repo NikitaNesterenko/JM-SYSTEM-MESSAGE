@@ -1,6 +1,10 @@
 package jm.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ZoomDTO {
-    private Integer id;
+    private Long id;
     private String topic;
     private String type;
     private String createdAt;
     private String joinUrl;
-    private String token;
     private String redirectUri;
 
     private static class Builder {
@@ -25,7 +29,7 @@ public class ZoomDTO {
             zoomDTO = new ZoomDTO();
         }
 
-        public Builder setId(Integer id) {
+        public Builder setId(Long id) {
             zoomDTO.id = id;
             return this;
         }
@@ -47,11 +51,6 @@ public class ZoomDTO {
 
         public Builder setJoinUrl(String joinUrl) {
             zoomDTO.joinUrl = joinUrl;
-            return this;
-        }
-
-        public Builder setToken(String token) {
-            zoomDTO.token = token;
             return this;
         }
 
