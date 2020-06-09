@@ -1,6 +1,10 @@
 import {ActiveChatMembers} from "./components/sidebar/ActiveChatMembers.js";
 import {WorkspacePageEventHandler} from "./components/WorkspacePageEventHandler.js";
-import {UserRestPaginationService, WorkspaceRestPaginationService, AppRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {
+    AppRestPaginationService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "./components/messages/ChannelMessageView.js";
 import {ThreadMessageView} from "./components/messages/ThreadMessageView.js";
 import {DirectMessageView} from "./components/messages/DirectMessageView.js";
@@ -193,9 +197,44 @@ $("#addGoogleCalendarIdSecretSubmit").click(
             clientSecret: googleCalendarClientSecret
         };
         await app_service.update(entity).then(()=>{
-            $("#addGoogleCalendarIdSecretModal").modal('toggle');
+            $("#addGoogleDriveIdSecretModal").modal('toggle');
             $('#appsModal').modal('toggle');
             location.href = "/application/google/calendar";
+            return false;
+        });
+    }
+);
+
+$("#google-drive-button").click(
+    async function () {
+        const app_name = "Google drive";
+        let google_drive_app = await app_service.getAppByName(app_name);
+        if (google_drive_app.clientId == null || google_drive_app.clientSecret == null) {
+            $("#addGoogleDriveIdSecretModal").modal('toggle')
+        } else {
+            location.href = "/application/google/calendar";
+            return false;
+        }
+    }
+);
+
+$("#addGoogleDriveIdSecretSubmit").click(
+    async function () {
+        const app_name = "Google drive";
+        let google_drive_app = await app_service.getAppByName(app_name);
+        let googleDriveClientId = $("#InputGoogleDriveClientId").val();
+        let googleDriveClientSecret = $("#InputGoogleDriveClientSecret").val();
+        const entity = {
+            id: (google_drive_app).id,
+            name: (google_drive_app).name,
+            workspace: (google_drive_app).workspace,
+            clientId: googleDriveClientId,
+            clientSecret: googleDriveClientSecret
+        };
+        await app_service.update(entity).then(()=>{
+            $("#addGoogleDriveIdSecretModal").modal('toggle');
+            $('#appsModal').modal('toggle');
+            location.href = "/application/google/drive";
             return false;
         });
     }

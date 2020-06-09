@@ -1366,7 +1366,8 @@
                                                                         </div>
                                                                     </th>
                                                                     <th>
-                                                                        <button class="btn btn-outline-dark">View
+                                                                        <button class="btn btn-outline-dark"
+                                                                                id="google-drive-button">View
                                                                         </button>
                                                                     </th>
                                                                 </div>
@@ -1696,6 +1697,40 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" data-dismiss="modal" id="addGoogleCalendarIdSecretSubmit" class="btn btn-success">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Модальное окно для ввода GoogleDrive ID Secret-->
+<div class="modal fade" id="addGoogleDriveIdSecretModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Введите GoogleDrive ID & Secret</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="InputGoogleDriveClientId">Client Id</label>
+                        <input type="email" class="form-control" id="InputGoogleDriveClientId" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGoogleDriveClientSecret">Client Secret</label>
+                        <input type="email" class="form-control" id="InputGoogleDriveClientSecret" value="">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-dismiss="modal" id="addGoogleDriveIdSecretSubmit" class="btn btn-success">
                     Submit
                 </button>
             </div>
