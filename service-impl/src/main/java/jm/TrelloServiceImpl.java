@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,8 +47,7 @@ public class TrelloServiceImpl implements TrelloService {
     }
 
     @Override
-    public void setToken (String token) {
-        //todo Проверка на наличие токена
+    public void setToken(String token) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.getUserByLogin(userDetails.getUsername());
         user.setTrelloToken(token);
@@ -56,10 +56,13 @@ public class TrelloServiceImpl implements TrelloService {
     }
 
     public void setNewTrelloBot(String token, long id) {
+        if (botService.haveBotWithName("Trello")) {
+            return;
+        }
+
         Bot trelloBot = new Bot();
         TypeSlashCommand tsc = new TypeSlashCommand();
 
-        //todo проверка на наличие бота и слеш команд
         trelloBot.setName("Trello");
         trelloBot.setNickName("Trello");
         trelloBot.setCommands(trelloSlashCommand());
@@ -81,41 +84,41 @@ public class TrelloServiceImpl implements TrelloService {
 
     public Set<SlashCommand> trelloSlashCommand() {
         Set<SlashCommand> slashCommands = new HashSet<>();
-        slashCommands.add(new SlashCommand("trello_create_new_board","/app/bot/trello",
-                                        "createNewBoard","createNewBoard"));
-        slashCommands.add(new SlashCommand("trello_delete_board","/app/bot/trello",
-                "delete board by id","delete board by id"));
-        slashCommands.add(new SlashCommand("trello_get_action","/app/bot/trello",
-                "get action","get action"));  //Don't work. I don't know, what is action
-        slashCommands.add(new SlashCommand("trello_get_board","/app/bot/trello",
-                "get board","get board"));
-        slashCommands.add(new SlashCommand("trello_update_board_name","/app/bot/trello",
-                "Update name of board","Update board name"));
-        slashCommands.add(new SlashCommand("trello_create_new_list","/app/bot/trello",
-                "Create new List","Create new List"));
-        slashCommands.add(new SlashCommand("trello_update_list_name","/app/bot/trello",
-                "trello_update_list_name","trello_update_list_name"));
-        slashCommands.add(new SlashCommand("trello_get_list_byBoardId","/app/bot/trello",
-                "trello_get_list","trello_get_list"));
-        slashCommands.add(new SlashCommand("trello_create_new_card","/app/bot/trello",
-                "create new card","need id List"));
-        slashCommands.add(new SlashCommand("trello_get_card","/app/bot/trello",
-                "get card by Id","need id Card"));
-        slashCommands.add(new SlashCommand("trello_delete_card","/app/bot/trello",
-                "delete card by Id","need id Card"));
-        slashCommands.add(new SlashCommand("trello_add_comment_to_a_card","/app/bot/trello",
-                "add comment to Card","need id Card and field text"));
+        slashCommands.add(new SlashCommand("trello_create_new_board", "/app/bot/trello",
+                "createNewBoard", "createNewBoard"));
+        slashCommands.add(new SlashCommand("trello_delete_board", "/app/bot/trello",
+                "delete board by id", "delete board by id"));
+        slashCommands.add(new SlashCommand("trello_get_action", "/app/bot/trello",
+                "get action", "get action"));  //Don't work. I don't know, what is action
+        slashCommands.add(new SlashCommand("trello_get_board", "/app/bot/trello",
+                "get board", "get board"));
+        slashCommands.add(new SlashCommand("trello_update_board_name", "/app/bot/trello",
+                "Update name of board", "Update board name"));
+        slashCommands.add(new SlashCommand("trello_create_new_list", "/app/bot/trello",
+                "Create new List", "Create new List"));
+        slashCommands.add(new SlashCommand("trello_update_list_name", "/app/bot/trello",
+                "trello_update_list_name", "trello_update_list_name"));
+        slashCommands.add(new SlashCommand("trello_get_list_byBoardId", "/app/bot/trello",
+                "trello_get_list", "trello_get_list"));
+        slashCommands.add(new SlashCommand("trello_create_new_card", "/app/bot/trello",
+                "create new card", "need id List"));
+        slashCommands.add(new SlashCommand("trello_get_card", "/app/bot/trello",
+                "get card by Id", "need id Card"));
+        slashCommands.add(new SlashCommand("trello_delete_card", "/app/bot/trello",
+                "delete card by Id", "need id Card"));
+        slashCommands.add(new SlashCommand("trello_add_comment_to_a_card", "/app/bot/trello",
+                "add comment to Card", "need id Card and field text"));
         return slashCommands;
     }
 
     @Override
-    public String getTokenByUserLogin () {
+    public String getTokenByUserLogin() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userService.getUserByLogin(userDetails.getUsername()).getTrelloToken();
     }
 
     @Override
-    public String getTokenByUserName (String userName) {
+    public String getTokenByUserName(String userName) {
         return userService.getUserByName(userName).getTrelloToken();
     }
 
@@ -125,40 +128,40 @@ public class TrelloServiceImpl implements TrelloService {
     }
 
     @Override
-    public String getBoardOrCardByName (String pointer, String token) {
+    public String getBoardOrCardByName(String pointer, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/search?query=" + pointer + "&key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
     }
 
     @Override
-    public String getListsByBoardID (String boardID, String token) {
-        try{
+    public String getListsByBoardID(String boardID, String token) {
+        try {
             String cardString = restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID
                     + "/lists?key=" + API_KEY + "&token=" + token, String.class).getBody();
             JSONArray jsonBoard = new JSONArray(cardString);
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i<jsonBoard.length(); i++){
+            for (int i = 0; i < jsonBoard.length(); i++) {
                 JSONObject o = jsonBoard.getJSONObject(i);
                 sb.append("List name: ")
                         .append(o.get("name"))
                         .append("List id: ")
                         .append(o.get("id"))
-                        .append("  |||   ");
+                        .append("  ***  ");
             }
-             return sb.toString();
+            return sb.toString();
         } catch (HttpClientErrorException e) {
             return e.getMessage();
         }
     }
 
     @Override
-    public String getCardsByListID (String listID, String token) {
+    public String getCardsByListID(String listID, String token) {
         return restTemplate.getForEntity("https://api.trello.com/1/lists/" + listID +
                 "/cards" + "?key=" + API_KEY + "&token=" + token, String.class).getBody();
     }
 
     @Override
-    public String getCardByCardID (String cardID, String token) {
+    public String getCardByCardID(String cardID, String token) {
         String cardString = restTemplate.getForEntity("https://api.trello.com/1/cards/" + cardID + "?key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
         JSONObject jsonBoard = new JSONObject(cardString);
@@ -166,41 +169,23 @@ public class TrelloServiceImpl implements TrelloService {
     }
 
     @Override
-    public String getBoardByBoardID (String boardID, String token) {
-        String boardString = restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID + "?key="
-                + API_KEY + "&token=" + token, String.class).getBody();
-        JSONObject jsonBoard = new JSONObject(boardString);
-        return "Board id: " + jsonBoard.get("id") + "\n     Board name: " + jsonBoard.get("name") +
-                "\n     Board url:" + jsonBoard.get("url");
+    public String getBoardByBoardID(String boardID, String token) {
+        try {
+            String boardString = restTemplate.getForEntity("https://api.trello.com/1/boards/" + boardID + "?key="
+                    + API_KEY + "&token=" + token, String.class).getBody();
+            JSONObject jsonBoard = new JSONObject(boardString);
+            return "Board id: " + jsonBoard.get("id") + "\n     Board name: " + jsonBoard.get("name") +
+                    "\n     Board url:" + jsonBoard.get("url");
+        } catch (HttpClientErrorException e) {
+            return e.getMessage();
+        }
     }
 
     @Override
-    public String addNewCard (String cardName, String listID, String token) {
-       try{
-           restTemplate.postForEntity("https://api.trello.com/1/cards?idList=" + listID
-                   + "&name=" + cardName + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
-        return "OK";
-       } catch (HttpClientErrorException e) {
-           return e.getMessage();
-       }
-    }
-
-    @Override
-    public String createList (String BoardID, String listName, String token) {
-      try{
-          restTemplate.postForEntity("https://api.trello.com/1/lists?name=" + listName
-                  + "&idBoard=" + BoardID + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
-      return "OK";
-      } catch (HttpClientErrorException e) {
-          return e.getMessage();
-      }
-    }
-
-    @Override
-    public String addCommentToCard (String comment, String cardID, String token) {
-        try{
-        restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/actions/comments?text=" + comment
-                + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
+    public String addNewCard(String cardName, String listID, String token) {
+        try {
+            restTemplate.postForEntity("https://api.trello.com/1/cards?idList=" + listID
+                    + "&name=" + cardName + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
             return "OK";
         } catch (HttpClientErrorException e) {
             return e.getMessage();
@@ -208,13 +193,35 @@ public class TrelloServiceImpl implements TrelloService {
     }
 
     @Override
-    public void setCardDueDate (String RFC822date, String cardID, String cardJSON, String token) {
+    public String createList(String BoardID, String listName, String token) {
+        try {
+            restTemplate.postForEntity("https://api.trello.com/1/lists?name=" + listName
+                    + "&idBoard=" + BoardID + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
+            return "OK";
+        } catch (HttpClientErrorException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String addCommentToCard(String comment, String cardID, String token) {
+        try {
+            restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/actions/comments?text=" + comment
+                    + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
+            return "OK";
+        } catch (HttpClientErrorException e) {
+            return e.getMessage();
+        }
+    }
+
+    @Override
+    public void setCardDueDate(String RFC822date, String cardID, String cardJSON, String token) {
         restTemplate.put("https://api.trello.com/1/cards/" + cardID
                 + "?due=" + RFC822date + "&key=" + API_KEY + "&token=" + token, cardJSON);
     }
 
     @Override
-    public String getUserIDByUserToken (String token) {
+    public String getUserIDByUserToken(String token) {
         String userJSON = restTemplate.getForEntity("https://api.trello.com/1/tokens/" + token + "/member?key=" + API_KEY
                 + "&token=" + token, String.class).getBody();
         String userID = null;
@@ -232,8 +239,8 @@ public class TrelloServiceImpl implements TrelloService {
     @Override
     public String deleteBoard(String boardID, String userToken) {
         try {
-         restTemplate.delete("https://api.trello.com/1/boards/" + boardID + "?key="
-                + API_KEY + "&token=" + userToken, new HttpHeaders(), String.class);
+            restTemplate.delete("https://api.trello.com/1/boards/" + boardID + "?key="
+                    + API_KEY + "&token=" + userToken, new HttpHeaders(), String.class);
             return "OK";
         } catch (HttpClientErrorException e) {
             return e.getMessage();
@@ -251,16 +258,16 @@ public class TrelloServiceImpl implements TrelloService {
         }
     }
 
-        @Override
-        public String updateListName(String listID, String newName, String userToken) {
-            try {
-                restTemplate.put("https://api.trello.com/1/lists/" + listID + "?name=" + newName + "&key="
-                        + API_KEY + "&token=" + userToken, new HttpHeaders(), String.class);
-                return "OK";
-            }catch (HttpClientErrorException e) {
-                return e.getMessage();
-            }
+    @Override
+    public String updateListName(String listID, String newName, String userToken) {
+        try {
+            restTemplate.put("https://api.trello.com/1/lists/" + listID + "?name=" + newName + "&key="
+                    + API_KEY + "&token=" + userToken, new HttpHeaders(), String.class);
+            return "OK";
+        } catch (HttpClientErrorException e) {
+            return e.getMessage();
         }
+    }
 
     @Override
     public String deleteCard(String cardID, String userToken) {
@@ -275,7 +282,7 @@ public class TrelloServiceImpl implements TrelloService {
 
     @Override
     public String addBoard(String boardName, String token) {
-        try{
+        try {
             restTemplate.postForEntity("https://api.trello.com/1/boards/?name=" + boardName + "&key="
                     + API_KEY + "&token=" + token, new HttpHeaders(), String.class).getStatusCodeValue();
             return "OK";
@@ -286,7 +293,7 @@ public class TrelloServiceImpl implements TrelloService {
 
     @Override
     public String getAction(String id, String token) {
-        try{
+        try {
             restTemplate.getForEntity("https://api.trello.com/1/actions/" + id + "?key="
                     + API_KEY + "&token=" + token, String.class);
             return "OK";
@@ -296,7 +303,7 @@ public class TrelloServiceImpl implements TrelloService {
     }
 
     @Override
-    public void assignUserToCardByUserID (String userID, String cardID, String token) {
+    public void assignUserToCardByUserID(String userID, String cardID, String token) {
         restTemplate.postForEntity("https://api.trello.com/1/cards/" + cardID + "/idMembers?value=" + userID
                 + "&key=" + API_KEY + "&token=" + token, new HttpHeaders(), String.class);
     }

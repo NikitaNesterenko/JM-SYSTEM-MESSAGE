@@ -7,6 +7,8 @@ import jm.model.Bot;
 import jm.model.Channel;
 import jm.model.Message;
 import jm.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ import java.util.Map;
 
 @Service
 public class TrelloSlashCommandImpl implements TrelloSlashCommand {
+
+    private static final Logger logger = LoggerFactory.getLogger(
+            TrelloSlashCommandImpl.class);
 
     private UserService userService;
     private ChannelService channelService;
@@ -70,16 +75,19 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    status = trelloService.addBoard(commandBody,token);
-                    if (status.equals("OK")){
+                    status = trelloService.addBoard(commandBody, token);
+                    if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "new Board is created"));
+                        logger.info("Создана доска с именем: {}",commandBody);
                     } else {
-                        response.put("status",status);
+                        response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Создание доски не получилось. Ошибка: {}",status);
                     }
                 }
                 break;
@@ -87,16 +95,19 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                   status = trelloService.deleteBoard(commandBody, token);
+                    status = trelloService.deleteBoard(commandBody, token);
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "Board was success delete"));
+                        logger.info("Доска с id = {} успешно удалена",commandBody);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Удаление доски не получилось, ошибка: {}",status);
                     }
                 }
                 break;
@@ -104,8 +115,9 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    status = trelloService.getAction(commandBody,token);
+                    status = trelloService.getAction(commandBody, token);
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
@@ -121,16 +133,19 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String board = trelloService.getBoardByBoardID(commandBody,token);
+                    String board = trelloService.getBoardByBoardID(commandBody, token);
                     if (!board.isEmpty()) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 board));
+                        logger.info("Получена доска с id: {}",commandBody);
                     } else {
                         response.put("status", "ERROR");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "Error"));
+                        logger.warn("Не получилос достать доску");
                     }
                 }
                 break;
@@ -138,19 +153,22 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
                     String[] str = commandBody.split(" ");
                     String id = str[0];
                     String name = str[1];
-                    status = trelloService.updateBoardName(id,name,token);
+                    status = trelloService.updateBoardName(id, name, token);
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "Board success updete, new name: " + name));
+                        logger.info("Обнавлено имя доски с id: {}, новое имя: {}",id,name);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Не удачное обновление доски, ошибка: {}",status);
                     }
                 }
                 break;
@@ -158,19 +176,22 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String[] str = commandBody.split(" ");
+                    String[] str = commandBody.split("[^A-Za-zА-Яа-я]+");
                     String name = str[0];
                     String id = str[1];
-                    status = trelloService.createList(name,id,token);
-                    if (status.equals("OK")){
+                    status = trelloService.createList(name, id, token);
+                    if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                                "new List "+id+" is created"));
+                                "new List " + id + " is created"));
+                        logger.info("Удачное создание листа с имененем: {} в доске с id: {}",name,id);
                     } else {
-                        response.put("status",status);
+                        response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Ошибка в создании листа: {}",status);
                     }
                 }
                 break;
@@ -178,19 +199,22 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String[] str = commandBody.split(" ");
+                    String[] str = commandBody.split("[^A-Za-zА-Яа-я]+");
                     String id = str[0];
                     String name = str[1];
-                    status = trelloService.updateListName(id,name,token);
+                    status = trelloService.updateListName(id, name, token);
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "Lists success update, new name: " + name));
+                        logger.info("Обновлено имя листа с id: {}, новое имя: {}",id,name);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Ошибка в изменения имени листа: {}",status);
                     }
                 }
                 break;
@@ -198,8 +222,9 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String board = trelloService.getListsByBoardID(commandBody,token);
+                    String board = trelloService.getListsByBoardID(commandBody, token);
                     if (!board.isEmpty()) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
@@ -215,19 +240,22 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String[] str = commandBody.split(" ");
+                    String[] str = commandBody.split("[^A-Za-zА-Яа-я]+");
                     String name = str[0];
                     String id = str[1];
-                    status = trelloService.addNewCard(name,id,token);
-                    if (status.equals("OK")){
+                    status = trelloService.addNewCard(name, id, token);
+                    if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                                "new Card "+name+" is created"));
+                                "new Card " + name + " is created"));
+                        logger.info("Создана карточка с именем: {} в листе с id: {}",name,id);
                     } else {
-                        response.put("status",status);
+                        response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Ошибка создания карточки: ",status);
                     }
                 }
                 break;
@@ -235,8 +263,9 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String card = trelloService.getCardByCardID(commandBody,token);
+                    String card = trelloService.getCardByCardID(commandBody, token);
                     if (!card.isEmpty()) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
@@ -252,16 +281,19 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                   status = trelloService.deleteCard(commandBody, token);
+                    status = trelloService.deleteCard(commandBody, token);
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "Card war success delete"));
+                        logger.info("Успешное удаления карточки с id: {}",commandBody);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Ошибка в удалении карточки: {}",status);
                     }
                 }
                 break;
@@ -269,8 +301,9 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    logger.info("Тело slash команды пустое");
                 } else {
-                    String[] str = commandBody.split(" ");
+                    String[] str = commandBody.split("[^A-Za-zА-Яа-я]+");
                     String id = str[0];
                     String comment = str[1];
                     status = trelloService.addCommentToCard(comment, id, token);
@@ -278,15 +311,16 @@ public class TrelloSlashCommandImpl implements TrelloSlashCommand {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "Comment success add"));
+                        logger.info("Добавлен комментарий: {} в карточку с id: {}", comment, id);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
+                        logger.warn("Не удачное добавление комментария к карточке, ошибка: {}",status);
                     }
                 }
                 break;
         }
-
 
 
         return response;

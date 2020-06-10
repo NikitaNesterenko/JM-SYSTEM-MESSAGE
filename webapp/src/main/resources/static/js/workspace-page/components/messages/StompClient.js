@@ -220,42 +220,24 @@ export class StompClient {
             const isAuthor = userId == window.loggedUserId;
             const isOk = status === "OK";
             const report = JSON.parse(trelloBot.report);
+            let commandList = new Set();
+            commandList.add("trello_create_new_board");
+            commandList.add("trello_delete_board");
+            commandList.add("trello_get_action");
+            commandList.add("trello_get_board");
+            commandList.add("trello_update_board_name");
+            commandList.add("trello_create_new_list");
+            commandList.add("trello_update_list_name");
+            commandList.add("trello_get_list_byBoardId");
+            commandList.add("trello_create_new_card");
+            commandList.add("trello_get_card");
+            commandList.add("trello_delete_card");
+            commandList.add("trello_add_comment_to_a_card");
 
-            if (command === "trello_create_new_board") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_delete_board") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_get_action") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_get_board") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_update_board_name") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_create_new_list") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_update_list_name") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_get_list_byBoardId") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_create_new_card") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_get_card") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_delete_card") {
-                this.showMessageInCurrentChannel(report);
-            }
-            if (command === "trello_add_comment_to_a_card") {
-                this.showMessageInCurrentChannel(report);
+            for (let item of commandList) {
+                if (command === item) {
+                    this.showMessageInCurrentChannel(report);
+                }
             }
         })
     }
