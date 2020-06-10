@@ -75,30 +75,31 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
     updateToken(response, user);
   }
 
-  private String getToken(User user) {
-    if (LocalDateTime.now().isBefore(user.getExpireDateZoomToken())) {
-      return user.getZoomToken();
-    } else {
-      refreshToken(user);
-      return user.getZoomToken();
+    @Override
+    public String getToken(User user) {
+        if (!LocalDateTime.now().isBefore(user.getExpireDateZoomToken())) {
+            return refreshToken(user);
+        }
+        return user.getZoomToken();
+  }
+
+    @Override
+    public String refreshToken(User user) {
+        String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes());
+        String url = "https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=";
+
+        Token response =
+                restTemplate
+                        .exchange(
+                                url + user.getRefreshZoomToken(),
+                                HttpMethod.POST,
+                                new HttpEntity<>(null, getHeaders("Basic " + auth)),
+                                Token.class)
+                        .getBody();
+
+        updateToken(response, user);
+        return response.access_token;
     }
-  }
-
-  private void refreshToken(User user) {
-    String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes(Charset.forName("UTF-8")));
-    String url = "https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=";
-
-    Token response =
-        restTemplate
-            .exchange(
-                url + user.getRefreshZoomToken(),
-                HttpMethod.POST,
-                new HttpEntity<>(null, getHeaders("Basic " + auth)),
-                Token.class)
-            .getBody();
-
-    updateToken(response, user);
-  }
 
   private void updateToken(@Nullable Token response, User user) {
     if (response != null) {
@@ -115,19 +116,20 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
     public String refresh_token;
   }
 
-  private String buildUrl() {
-    return "https://zoom.us/oauth/authorize"
-        + "?response_type=code"
-        + "&client_id="
-        + clientId
-        + "&redirect_uri="
-        + redirectUri;
-  }
+    @Override
+    public String buildUrl() {
+        return "https://zoom.us/oauth/authorize"
+                + "?response_type=code"
+                + "&client_id="
+                + clientId
+                + "&redirect_uri="
+                + redirectUri;
+    }
 
-  private HttpHeaders getHeaders(String auth) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", auth);
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    return headers;
+    private HttpHeaders getHeaders(String auth) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", auth);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
   }
 }

@@ -38,7 +38,7 @@ export class MenuChatBox {
     }
 
     createActionElement(action_name) {
-        return $('<div>')
+        return $('<option>')
             .attr('id', `${action_name}Action`)
             .hover(() => {
                 $(`#${action_name}Action`).css('background', 'darkcyan')
@@ -54,22 +54,24 @@ export class MenuChatBox {
     }
 
     closeMenu() {
-        $('#menu').css("display", "none");
+        $('#slashCommandSelect').css("display", "none");
+        $('#slashCommandList').css("display","none");
     }
 
     openMenu() {
-        const menu = $('#menu');
-        const messageBox = $('#message-box');
-        menu.html(this.actionsArray);
+        const menuList = $('#slashCommandList')
+        const menuSelect = $('#slashCommandSelect');
+        menuSelect.html(this.actionsArray);
 
-        if (menu.height() > messageBox.height()) {
-            menu.height(messageBox.height());
-            menu.css("overflow", "hidden");
+        if (menuSelect.height() > menuList.height()) {
+            menuSelect.height(menuList.height());
+            menuSelect.css("overflow", "hidden");
         }
-        if (menu.width() > messageBox.width())
-            menu.width(messageBox.width());
-        menu.css("top", $('.chat-box').height() - menu.outerHeight() - $('.input-box').outerHeight() + parseInt(messageBox.css("padding"), 10) + "px");
-        menu.css("display", "block");
+        if (menuSelect.width() > menuList.width())
+            menuSelect.width(menuList.width());
+        menuSelect.css("top", $('.chat-box').height() - menuSelect.outerHeight() - $('.input-box').outerHeight() + parseInt(menuList.css("padding"), 10) + "px");
+        menuSelect.css("display", "block");
+        menuList.css("display","block");
     }
 
     findActions() {

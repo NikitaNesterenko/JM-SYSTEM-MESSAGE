@@ -46,7 +46,7 @@ export class SubmitMessage {
                 const content = $("#form_message_input").val();
                 if (content.startsWith('/leave ')) {
                     let channelName = content.substring(7);
-                    this.leaveChannel(channelName);
+                    await this.leaveChannel(channelName);
                     $("#form_message_input").val("");
                     return
                 }
@@ -55,7 +55,7 @@ export class SubmitMessage {
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_id !== '0') {
-                    this.sendChannelMessage(channel_id);
+                    await this.sendChannelMessage(channel_id);
                 }
 
                 if (conversation_id !== '0') {

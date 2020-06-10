@@ -54,7 +54,7 @@ $('#form_message').submit(function (e) {
         }
 
         Promise.all([filename]).then(files => {
-            workspace_service.getChoosedWorkspace().then(workspace => {
+            workspace_service.getChosenWorkspace().then(workspace => {
                 const workspaceId = workspace.id;
                 const message = new Message(null, channel, user, text_message, currentDate, files[0], workspaceId);
                 message_service.create(message).then(messageWithId => {

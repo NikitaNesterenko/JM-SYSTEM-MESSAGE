@@ -1,7 +1,6 @@
 import { ownFetch } from './fetch-service.js';
 import {RestPaginationService} from "./rest-pagination-service.js";
 
-
 export class UserRestPaginationService extends RestPaginationService {
 
     constructor() {
@@ -501,8 +500,13 @@ export class PluginRestPaginationService extends RestPaginationService {
     }
 
     async getZoomToken() {
-        const plugin = await fetch('/rest/plugin/zoom');
-        return plugin.json();
+        const auth = await fetch('/rest/plugin/zoom');
+        return auth;
+    }
+    async createMeetings(){
+        const meeting = await ownFetch.get('rest/plugin/zoom/meetings/create',
+            {channelId: channel_id});
+        return meeting.json();
     }
 }
 
