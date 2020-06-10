@@ -26,6 +26,8 @@ public interface BotDAO {
 
     List<Bot> getBotsByWorkspaceId (Long id);
 
+    boolean haveBotWithName (String name);
+
     List<BotDTO> getBotDtoListByWorkspaceId (Long workspaceId);
 
     Set<Channel> getChannels (Bot bot);

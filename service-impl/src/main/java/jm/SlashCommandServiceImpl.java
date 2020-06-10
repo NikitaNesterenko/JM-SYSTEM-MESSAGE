@@ -39,6 +39,16 @@ public class SlashCommandServiceImpl implements SlashCommandService {
     }
 
     @Override
+    public void simplePersist(SlashCommand slashCommand) {
+        slashCommandDao.persist(slashCommand);
+    }
+
+    @Override
+    public void simpleMerge(SlashCommand slashCommand) {
+        slashCommandDao.merge(slashCommand);
+    }
+
+    @Override
     public void createSlashCommand(SlashCommand slashCommand) {
         Bot bot = botDAO.getById(slashCommand.getBot().getId());
 

@@ -539,3 +539,40 @@ export class NotificationsRestService extends RestPaginationService {
 
 }
 
+
+export class TrelloRestService extends RestPaginationService {
+    constructor() {
+        super("/api/trello");
+    }
+
+    addPersonToken = async (token) => {
+        const response = await fetch(`${this.url}/token?value=${token}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
+    };
+
+    hasTrelloToken = async () => {
+        const response = await fetch(`${this.url}/hasTrelloToken`, {
+            method: 'Get',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
+    }
+
+    createBoard = async (board) => {
+        const response = await fetch(`${this.url}/addBoard?name=${board}`, {
+            method: 'Post',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
+    }
+}
+

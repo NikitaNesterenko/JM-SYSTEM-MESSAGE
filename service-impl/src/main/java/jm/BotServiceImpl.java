@@ -99,6 +99,11 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
+    public boolean haveBotWithName(String name) {
+        return botDAO.haveBotWithName(name);
+    }
+
+    @Override
     public Bot getBotByBotDto(@NonNull BotDTO botDTO) {
         Bot bot = new Bot(botDTO);
 

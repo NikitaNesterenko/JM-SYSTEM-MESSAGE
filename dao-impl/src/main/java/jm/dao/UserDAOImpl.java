@@ -33,7 +33,7 @@ public class UserDAOImpl extends AbstractDao<User> implements UserDAO {
 
     @Override
     public Optional<User> getUserByName(String name) {
-        if (twoParametersMethodToSearchEntity("name", name)) {
+        if (twoParametersMethodToSearchEntity("username", name)) {
             User user = (User) entityManager.createQuery("from User where username  = :name").setParameter("name", name)
                     .getSingleResult();
             return Optional.of(user);
