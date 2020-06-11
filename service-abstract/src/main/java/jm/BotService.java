@@ -36,4 +36,6 @@ public interface BotService {
     BotDTO getBotDtoByBot(@NonNull Bot bot);
 
     Optional<Bot> findByToken(String token);
+
+    public void updateWorkspace(Integer ID, Integer botId);
 }

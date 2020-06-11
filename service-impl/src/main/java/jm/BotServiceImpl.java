@@ -30,6 +30,11 @@ import java.util.stream.Collectors;
 public class BotServiceImpl implements BotService {
     private static final Logger logger = LoggerFactory.getLogger(BotServiceImpl.class);
 
+    @Override
+    public void updateWorkspace(Integer ID, Integer botId) {
+        botDAO.updateWorkspace(ID,botId);
+    }
+
     private final BotDAO botDAO;
     private final WorkspaceDAO workspaceDAO;
     private final ChannelDAO channelDAO;

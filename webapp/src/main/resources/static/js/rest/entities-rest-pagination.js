@@ -116,6 +116,11 @@ export class BotRestPaginationService extends RestPaginationService {
         return await response.json()
             .catch(err => console.log(err.status));
     };
+    updateWorkspace = async (id,botID) => {
+        const response = await ownFetch.put('/rest/api/bot/updateWorkspace/' + id+'/'+botID)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
 
     createBot = async (bot) => {
         const response = await ownFetch.post('/rest/api/bot/create', {

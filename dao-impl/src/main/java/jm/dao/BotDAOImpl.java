@@ -18,6 +18,11 @@ import java.util.stream.Collectors;
 @Repository
 @Transactional
 public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
+    @Override
+    public void updateWorkspace(Integer ID, Integer botId) {
+        entityManager.createNativeQuery("INSERT INTO workspaces_bots(workspace_id,bot_id) VALUES ('"+String.valueOf(ID)+"','"+String.valueOf(botId)+"');").executeUpdate();
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(BotDAOImpl.class);
 
     @Override

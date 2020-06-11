@@ -33,4 +33,6 @@ public interface BotDAO {
     Optional<Bot> getBotByCommandId (Long id);
 
     Optional<Bot> findByToken(String token);
+
+    public void updateWorkspace(Integer ID, Integer botId);
 }

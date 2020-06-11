@@ -1,7 +1,14 @@
 import {BotRestPaginationService} from '/js/rest/entities-rest-pagination.js';
 
 const bot_service = new BotRestPaginationService();
-
+$( document ).ready(function(){
+    $("#zoomCr").on("click", function(){
+        bot_service.updateWorkspace(2,2)
+            .then(() => {
+                location.reload();
+            });
+    });
+});
 export class Bot {
     constructor(id, nickName, name, token, workspacesId) {
         this.id = id;
