@@ -1,9 +1,13 @@
 import {BotRestPaginationService} from '/js/rest/entities-rest-pagination.js';
-
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
 const bot_service = new BotRestPaginationService();
+const workspaceService= new WorkspaceRestPaginationService();
 $( document ).ready(function(){
     $("#zoomCr").on("click", function(){
-        bot_service.updateWorkspace(2,2)
+        workspaceService.getChosenWorkspace().then(workspace => {
+            window.chosenWorkspace = workspace.id
+        });
+        bot_service.updateWorkspace(chosenWorkspace,2)
             .then(() => {
                 location.reload();
             });
