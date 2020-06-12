@@ -107,7 +107,8 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
         authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectURI);
 
-        return authorizationUrl.build();
+        String build = authorizationUrl.build();
+        return build;
     }
 
 
