@@ -1,3 +1,4 @@
+import { ownFetch } from '/static/js/rest/fetch-service.js';
 $(document).ready( function () {
     content();
 });
@@ -83,8 +84,7 @@ window.addEventListener("load", function () {
 
             console.log(currentHref);
 
-            fetch('/rest/api/users/password-recovery', {
-                method: 'POST',
+            ownFetch.post('/rest/api/users/password-recovery', {
                 headers: {
                     "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
                 },

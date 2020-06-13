@@ -1,3 +1,4 @@
+import { ownFetch } from '/static/js/rest/fetch-service.js';
 $(function () {
     getAllChannels();
     selectChannelList();
@@ -107,8 +108,7 @@ function selectCh (data) {
 $( function () {
     let button = document.getElementById( "button-channel1" );
     button.onclick = function unzipChannel()  {
-        const response = fetch(`/rest/api/channels/archiving/${id}`, {
-            method: 'POST'
+        const response = ownFetch.post(`/rest/api/channels/archiving/${id}`, {
         });
         return response.json();
     };
@@ -119,8 +119,7 @@ $(function () {
     $(document).on('click touchstart', '#button-channel-archive', function () {
         let id = $(this).attr("data-row-id")
         $('#channelModal').modal('toggle');
-        fetch(`/rest/api/channels/block/${id}`, {
-            method: 'GET'
+        ownFetch.get(`/rest/api/channels/block/${id}`, {
         });
         location.reload();
     });
@@ -128,8 +127,7 @@ $(function () {
 $(function () {
     $(document).on('click touchstart', '#restoreArchiveChannel', function () {
         let id = channel_id;
-        fetch(`/rest/api/channels/unzip/${id}`, {
-            method: 'GET'
+        ownFetch.get(`/rest/api/channels/unzip/${id}`, {
         });
         location.reload();
     });
@@ -138,8 +136,7 @@ $(function () {
 $(function () {
     $(document).on('click touchstart', '#closeArchiveChannel', function () {
         let id = channel_id;
-        fetch(`/rest/api/channels/block/${id}`, {
-            method: 'GET'
+        ownFetch.get(`/rest/api/channels/block/${id}`, {
         });
         location.reload();
     });

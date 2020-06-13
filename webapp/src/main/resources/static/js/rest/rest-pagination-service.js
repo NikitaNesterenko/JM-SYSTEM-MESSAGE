@@ -1,3 +1,4 @@
+import { ownFetch } from './fetch-service.js';
 export class RestPaginationService {
     constructor(url) {
         this.url
@@ -26,8 +27,7 @@ export class RestPaginationService {
 
     create = async (entity) => {
 
-        const response = await fetch(`${this.url}/create`, {
-            method: 'POST',
+        const response = await ownFetch.post(`${this.url}/create`,{
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(entity)
         });
@@ -35,16 +35,15 @@ export class RestPaginationService {
     };
 
     update = async (entity) => {
-        await fetch(`${this.url}/update`, {
-            method: 'PUT',
+        await ownFetch.put(`${this.url}/update`, {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(entity)
         });
     };
 
     deleteById = async (id) => {
-        await fetch(`${this.url}/delete/${id}`, {
-            method: 'DELETE'
+        await ownFetch.delete(`${this.url}/delete/${id}`, {
+
         });
     };
 }

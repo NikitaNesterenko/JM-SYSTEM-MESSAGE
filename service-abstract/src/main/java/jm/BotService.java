@@ -25,6 +25,8 @@ public interface BotService {
 
     List<Bot> getBotsByWorkspaceId (Long workspaceId);
 
+    boolean haveBotWithName(String name);
+
     List<BotDTO> getBotDtoListByWorkspaceId (Long id);
 
     Set<Channel> getChannels (Bot bot);
