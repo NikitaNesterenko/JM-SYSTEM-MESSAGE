@@ -11,6 +11,8 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.DriveScopes;
 import jm.dto.WorkspaceDTO;
 import jm.model.App;
+import jm.model.Channel;
+import jm.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,8 +34,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private WorkspaceService workspaceService;
     private MessageService messageService;
     private String pathApplicationFiles;
-    private String nameChannelStartWth = "Google Calendar ";
-    private String nameGoogleBot = "G-bot";
+    private String nameChannelStartWth = "Google Drive ";
+    private String nameGoogleBot = "GoogleDrive-bot";
     private String redirectURI;
     private String applicationName;
     private int updatePeriod;
@@ -51,13 +54,14 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private GoogleAuthorizationCodeFlow flow;
     private HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private JsonFactory JSON_FACTORY = new JacksonFactory();
+    private BotService botService;
 
-    @Value("${google.oauth.callback.uri}")
-    private String CALLBACK_URI;
+//    @Value("${google.oauth.callback.uri}")
+//    private String CALLBACK_URI;
 
 
     @Autowired
-    public GoogleDriveServiceImpl(AppsService appsService, ChannelService channelService, UserService userService, MessageService messageService,
+    public GoogleDriveServiceImpl(AppsService appsService, ChannelService channelService, UserService userService, MessageService messageService, BotService botService,
                                   @Value("${file.upload-dir.application}") String pathApplicationFiles,
                                   @Value("${google.drive.client.redirectUri}") String redirectURI,
                                   @Value("${google.drive}") String applicationName,
@@ -67,6 +71,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         this.channelService = channelService;
         this.userService = userService;
         this.messageService = messageService;
+        this.botService = botService;
         this.pathApplicationFiles = pathApplicationFiles;
         this.redirectURI = redirectURI;
         this.applicationName = applicationName;
@@ -109,6 +114,70 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         GoogleAuthorizationCodeRequestUrl offline = flow.newAuthorizationUrl().setRedirectUri(redirectURI).setAccessType("offline");
         return offline.build();
     }
+
+    @Override
+    public void firstStartClientAuthorization(String token, WorkspaceDTO workspace, String principalName) {
+
+        User user = userService.getUserByLogin(principalName);
+        user.setGoogleDriveToken(token);
+        userService.updateUser(user);
+        setNewGoogleDriveBot(token, user.getId());
+
+
+//        createGoogleBot();
+//        createGoogleCalendarChannel(workspace,principalName);
+
+//        Calendar calendarByCallbackCode = getCalendarByCallbackCode(workspace.getId(), code, principalName);
+//        getGoogleCalendarEvent(calendarByCallbackCode, dateStart, dateEnd, principalName);
+    }
+
+    private void setNewGoogleDriveBot(String token, Long id) {
+//        if (botService.haveBotWithName("Trello")) {
+//            return;
+//        }
+    }
+
+    @Override
+    public void createGoogleBot() {
+        User googleUser = userService.getUserByLogin(nameGoogleBot);
+        if (googleUser==null) {
+            googleUser = new User("Google drive",
+                    "calendar",
+                    nameGoogleBot,
+                    "gd",
+                    "gd");
+            userService.createUser(googleUser);
+        }
+    }
+
+    @Override
+    public void createGoogleCalendarChannel(WorkspaceDTO workspace,String principalName) {
+
+        User user = userService.getUserByLogin(principalName);
+        String nameChannel = nameChannelStartWth + user.getId();
+        Channel channelByName = channelService.getChannelByName(nameChannel);
+
+        if (channelByName==null) {
+            LocalDateTime createDate = LocalDateTime.now();
+
+            Channel channel = new Channel();
+            channel.setName(nameChannel);
+            channel.setUser(user);
+            channel.setArchived(false);
+            channel.setIsPrivate(true);
+            channel.setCreatedDate(createDate);
+            channel.setWorkspace(workspaceService.getWorkspaceById(workspace.getId()));
+            channel.setIsApp(true);
+
+            channelService.createChannel(channel);
+        }
+    }
+
+//    public void saveToken(String code) throws Exception {
+//        GoogleTokenResponse response = flow.newTokenRequest(code).setRedirectUri(CALLBACK_URI).execute();
+//        flow.createAndStoreCredential(response, USER_IDENTIFIER_KEY);
+//
+//    }
 
     /** Метод для того чтобы присвоить Cliend ID и CleintSecret**/
     public void setGoogleClientIdAndSecret(WorkspaceDTO workspace) {

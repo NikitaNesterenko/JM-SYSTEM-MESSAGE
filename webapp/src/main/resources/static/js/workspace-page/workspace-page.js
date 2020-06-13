@@ -234,7 +234,7 @@ $("#addGoogleDriveIdSecretSubmit").click(
         await app_service.update(entity).then(()=>{
             $("#addGoogleDriveIdSecretModal").modal('toggle');
             $('#appsModal').modal('toggle');
-            location.href = "/application/google/drive";
+            location.href = "/api/google-drive";
             return false;
         });
     }

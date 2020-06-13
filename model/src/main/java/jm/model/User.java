@@ -215,6 +215,10 @@ public class User {
     @Column(name = "skype")
     private String userSkype;
 
+    @Column (name = "google_drive_token")
+    private String googleDriveToken;
+
+
 
     public User(String username, String lastName, String login, String email, String password) {
         this.username = username;
