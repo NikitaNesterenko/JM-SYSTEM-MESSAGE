@@ -40,6 +40,6 @@ public class AppsServiceImpl implements AppsService {
 
     @Override
     public App getAppByWorkspaceIdAndAppName(Long id, String appName) {
-        return appsDAO.getAppByWorkspaceIdAndAppName(id, appName).get();
+        return appsDAO.getAppByWorkspaceIdAndAppName(id, appName).orElse(null);
     }
 }
