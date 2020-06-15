@@ -20,6 +20,6 @@ public class AppsDAOImpl extends AbstractDao<App> implements AppsDAO {
                     .setParameter("app_name", appName)
                     .getSingleResult());
         }
-        return Optional.of(new App());
+        return Optional.empty();
     }
 }

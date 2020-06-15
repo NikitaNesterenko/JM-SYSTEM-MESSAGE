@@ -30,6 +30,7 @@ import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GoogleCalendarServiceImpl implements GoogleCalendarService {
@@ -53,7 +54,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     private JsonFactory jsonFactory = new JacksonFactory();
 
     @Autowired
-    public GoogleCalendarServiceImpl(AppsService appsService, ChannelService channelService, UserService userService, MessageService messageService,
+    public GoogleCalendarServiceImpl(AppsService appsService, ChannelService channelService, UserService userService, MessageService messageService, WorkspaceService workspaceService,
                                      @Value("${file.upload-dir.application}") String pathApplicationFiles,
                                      @Value("${google.client.redirectUri}") String redirectURI,
                                      @Value("${google.calendar}") String applicationName,
@@ -68,6 +69,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         this.applicationName = applicationName;
         this.updatePeriod = updatePeriod;
         this.warningBeforeEvent = warningBeforeEvent;
+        this.workspaceService = workspaceService;
     }
 
     @Override
@@ -132,6 +134,12 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
             channel.setIsApp(true);
 
             channelService.createChannel(channel);
+
+            //Создаю связь user - channel
+            Set<Channel> userChannels = user.getChannels();
+            userChannels.add(channel);
+            user.setChannels(userChannels);
+            userService.updateUser(user);
         }
     }
 
