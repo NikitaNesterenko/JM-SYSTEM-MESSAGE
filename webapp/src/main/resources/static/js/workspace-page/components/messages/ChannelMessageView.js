@@ -41,9 +41,7 @@ export class ChannelMessageView extends MessageView {
             "isUpdated": true,
             "workspaceId": parseInt(sessionStorage.getItem("workspaceId"))
         };
-        this.message_service.update(message).then(
-            () => sendName(message)
-        )
+        this.message_service.update(message).then(r => console.log("Сообщение изменено"));
     }
 
     modify(message_id) {
