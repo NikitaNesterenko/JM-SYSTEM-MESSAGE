@@ -40,26 +40,6 @@ public class GoogleDriveController {
         return "redirect:/workspace";
     }
 
-//    @GetMapping(params = "code")
-//    public String oauth2Callback(@RequestParam(value = "code") String code, HttpServletRequest request, Principal principal) {
-//
-//        googleDriveService.firstStartClientAuthorization(code, getWorkspaceFromSession(request), principal.getName());
-//
-//        return "redirect:/workspace";
-//    }
-
-//    @GetMapping(value = { "/oauth" })
-//    public String saveAuthorizationCode(HttpServletRequest request) throws Exception {
-//        String code = request.getParameter("code");
-//        if (code != null) {
-//            googleDriveService.saveToken(code);
-//
-//            return "dashboard.html";
-//        }
-//
-//        return "index.html";
-//    }
-
     private WorkspaceDTO getWorkspaceFromSession (HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Object workspaceID = session.getAttribute("WorkspaceID");
