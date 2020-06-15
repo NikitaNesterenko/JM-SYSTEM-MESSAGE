@@ -13,8 +13,12 @@ import jm.dto.WorkspaceDTO;
 import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,6 +47,10 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private String clientId;
     private String clientSecret;
 
+    private String API_KEY;
+
+    private final RestTemplate restTemplate;
+
 //    new
 
     @Value("${google.secret.key.path}")
@@ -63,7 +71,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
 
     @Autowired
-    public GoogleDriveServiceImpl(AppsService appsService,
+    public GoogleDriveServiceImpl(RestTemplateBuilder builder,
+                                  AppsService appsService,
                                   ChannelService channelService,
                                   UserService userService,
                                   WorkspaceService workspaceService,
@@ -76,6 +85,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
                                   @Value("${google.drive}") String applicationName,
                                   @Value("${google.calendar.event.warningBeforeEvent.hour}") int warningBeforeEvent,
                                   @Value("${google.calendar.event.update.day.period}") int updatePeriod) {
+        restTemplate = builder.build();
         this.appsService = appsService;
         this.channelService = channelService;
         this.userService = userService;
@@ -166,7 +176,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     public Set<SlashCommand> firstInitializationGoogleDriveSlashCommand() {
         Set<SlashCommand> slashCommands = new HashSet<>();
-        slashCommands.add(new SlashCommand("g_drive_create_folder", "/app/bot/google_drive",
+        slashCommands.add(new SlashCommand("google_drive_create_folder", "/app/bot/google_drive",
                 "create new folder", "create folder"));
         return slashCommands;
     }
@@ -176,5 +186,16 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), applicationName);
         clientId = app.getClientId();
         clientSecret = app.getClientSecret();
+    }
+
+    @Override
+    public String addFolder(String boardName, String token) {
+        try {
+            restTemplate.postForEntity("https://api.trello.com/1/boards/?name=" + boardName + "&key="
+                    + API_KEY + "&token=" + token, new HttpHeaders(), String.class).getStatusCodeValue();
+            return "OK";
+        } catch (HttpClientErrorException e) {
+            return e.getMessage();
+        }
     }
 }

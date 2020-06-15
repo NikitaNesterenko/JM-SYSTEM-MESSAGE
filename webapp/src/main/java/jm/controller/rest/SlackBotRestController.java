@@ -2,6 +2,7 @@ package jm.controller.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jm.CommandsBotService;
+import jm.GoogleDriveSlashCommand;
 import jm.TrelloSlashCommand;
 import jm.dto.SlashCommandDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,15 @@ public class SlackBotRestController {
 
     private CommandsBotService commandsBotService;
     private TrelloSlashCommand trelloSlashCommand;
+    private GoogleDriveSlashCommand googleDriveSlashCommand;
 
     @Autowired
-    public SlackBotRestController(CommandsBotService commandsBotService, TrelloSlashCommand trelloSlashCommand) {
+    public SlackBotRestController(CommandsBotService commandsBotService,
+                                  TrelloSlashCommand trelloSlashCommand,
+                                  GoogleDriveSlashCommand googleDriveSlashCommand) {
         this.commandsBotService = commandsBotService;
         this.trelloSlashCommand = trelloSlashCommand;
+        this.googleDriveSlashCommand = googleDriveSlashCommand;
     }
 
     @PostMapping("/app/bot/slackbot")
@@ -44,6 +49,14 @@ public class SlackBotRestController {
     public String test(@RequestBody SlashCommandDto command) throws JsonProcessingException {
         System.out.println(command);
         return trelloSlashCommand.getCommand(command);
+    }
+
+    //соотносит команду передаваемую в форме отправки сообщений с командой в БД в таблице slash_commands
+    @MessageMapping("/bot/google_drive")
+    @SendTo("/topic/trello")
+    public String test2(@RequestBody SlashCommandDto command) throws JsonProcessingException {
+        System.out.println(command);
+        return googleDriveSlashCommand.getCommand(command);
     }
 
 }

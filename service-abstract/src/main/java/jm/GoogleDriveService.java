@@ -10,4 +10,6 @@ public interface GoogleDriveService {
     String authorize(WorkspaceDTO workspace, String principalName) throws GeneralSecurityException, IOException;
 
     void firstStartClientAuthorization(String token, WorkspaceDTO workspace, String principalName);
+
+    String addFolder(String commandBody, String token);
 }
