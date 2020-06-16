@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SlackBotRestController {
 
-    private CommandsBotService commandsBotService;
-    private TrelloSlashCommand trelloSlashCommand;
-    private GoogleDriveSlashCommand googleDriveSlashCommand;
+    private final CommandsBotService commandsBotService;
+    private final TrelloSlashCommand trelloSlashCommand;
+    private final GoogleDriveSlashCommand googleDriveSlashCommand;
 
     @Autowired
     public SlackBotRestController(CommandsBotService commandsBotService,
@@ -53,7 +53,7 @@ public class SlackBotRestController {
 
     @MessageMapping("/bot/google_drive")
     @SendTo("/topic/google_drive")
-    public String test2(@RequestBody SlashCommandDto command) throws JsonProcessingException {
+    public String commandHandlerGoogleDrive(@RequestBody SlashCommandDto command) throws JsonProcessingException {
         return googleDriveSlashCommand.getCommand(command);
     }
 

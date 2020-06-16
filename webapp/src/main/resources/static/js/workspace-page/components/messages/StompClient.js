@@ -215,7 +215,6 @@ export class StompClient {
 
     subscribeTrelloBot() {
         this.stompClient.subscribe("/topic/trello", (data) => {
-            alert("i am Here!");
             const trelloBot = JSON.parse(data.body);
             const {userId, channelId, status, command} = trelloBot;
             const isAuthor = userId == window.loggedUserId;
@@ -245,7 +244,6 @@ export class StompClient {
 
     subscribeGoogleDriveBot() {
         this.stompClient.subscribe("/topic/google_drive", (data) => {
-            alert("i am Here!");
             const googleDriveBot = JSON.parse(data.body);
             const {userId, channelId, status, command} = googleDriveBot;
             const isAuthor = userId == window.loggedUserId;

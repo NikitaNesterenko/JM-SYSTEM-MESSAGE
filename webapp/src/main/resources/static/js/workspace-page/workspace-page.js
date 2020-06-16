@@ -2,6 +2,8 @@ import {ActiveChatMembers} from "./components/sidebar/ActiveChatMembers.js";
 import {WorkspacePageEventHandler} from "./components/WorkspacePageEventHandler.js";
 import {
     AppRestPaginationService,
+    ChannelRestPaginationService,
+    TrelloRestService,
     UserRestPaginationService,
     WorkspaceRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
@@ -12,8 +14,6 @@ import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
 import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {TrelloRestService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -154,7 +154,7 @@ window.getCalendarEvents = function getCalendarEvents(date) {
 
 window.showEvents = function showEvents(response) {
     console.log(response);
-    if (response.length > 0) {
+    if (response.length > 0) {``
         $('#id-events_div').html('');
         $.each(response, (i, item) => {
             let date = new Date(item.start.dateTime.value)
@@ -244,7 +244,7 @@ $("#google-drive-button").click(
         if (google_drive_app.clientId == null || google_drive_app.clientSecret == null) {
             $("#addGoogleDriveIdSecretModal").modal('toggle')
         } else {
-            location.href = "/application/google/calendar";
+            location.href = "/api/google-drive";
             return false;
         }
     }

@@ -1,5 +1,7 @@
 package jm.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jm.GoogleDriveService;
 import jm.dto.WorkspaceDTO;
 import org.springframework.stereotype.Controller;
@@ -16,22 +18,36 @@ import java.security.Principal;
 @RequestMapping("/api/google-drive")
 public class GoogleDriveController {
 
-    private GoogleDriveService googleDriveService;
+    private final GoogleDriveService googleDriveService;
 
     public GoogleDriveController(GoogleDriveService googleDriveService) {
-        this.googleDriveService=googleDriveService;
+        this.googleDriveService = googleDriveService;
     }
 
+    @Operation(
+            description = "Метод отправляет на страничку авторизации Google Drive",
+            operationId = "authorize",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success authorize!"
+                    )
+            })
     @GetMapping
     public RedirectView googleConnection(HttpServletRequest request, Principal principal) throws Exception {
         WorkspaceDTO workspace = getWorkspaceFromSession(request);
         if (workspace == null) {
-            return  new RedirectView("/chooseWorkspace");
+            return new RedirectView("/chooseWorkspace");
         }
         String authorize = googleDriveService.authorize(workspace, principal.getName());
         return new RedirectView(authorize);
     }
 
+    @Operation(
+            description = "Метод устанавливает токен Google Drive для текущего авторизованного пользователя.",
+            operationId = "setUserGoogleDriveToken",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Google Drive token was set!"
+                    )
+            })
     @GetMapping(params = "code")
     public String oauth2Callback(@RequestParam(value = "code") String code, HttpServletRequest request, Principal principal) {
 
@@ -40,7 +56,7 @@ public class GoogleDriveController {
         return "redirect:/workspace";
     }
 
-    private WorkspaceDTO getWorkspaceFromSession (HttpServletRequest request) {
+    private WorkspaceDTO getWorkspaceFromSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Object workspaceID = session.getAttribute("WorkspaceID");
         return (WorkspaceDTO) workspaceID;

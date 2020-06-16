@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jm.dto.SlashCommandDto;
 import jm.model.Bot;
-import jm.model.Channel;
 import jm.model.Message;
 import jm.model.User;
 import org.slf4j.Logger;
@@ -21,15 +20,13 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(
             GoogleDriveSlashCommandImpl.class);
-
-    private UserService userService;
-    private ChannelService channelService;
-    private Bot bot;
-    private BotService botService;
-    private MessageService messageService;
-    private GoogleDriveService googleDriveService;
-
     private final String INCORRECT_COMMAND = "Command is incorrect";
+    private final UserService userService;
+    private final ChannelService channelService;
+    private final BotService botService;
+    private final MessageService messageService;
+    private final GoogleDriveService googleDriveService;
+    private Bot bot;
     private String status;
 
     public GoogleDriveSlashCommandImpl(UserService userService,
@@ -47,7 +44,6 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
     public String getCommand(SlashCommandDto command) throws JsonProcessingException {
         User currentUser = userService.getUserById(command.getUserId());
         String tokenCurrentUser = currentUser.getGoogleDriveToken();
-        Channel currentChannel = channelService.getChannelById(command.getChannelId());
         String commandName = command.getName();
 
         String commandBody = command.getCommand().substring(command.getCommand().indexOf(commandName) + commandName.length()).trim();
@@ -60,33 +56,31 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        response = createReport(command, currentUser, currentChannel, commandName, commandBody, response, mapper, tokenCurrentUser);
+        response = createReport(command, commandName, commandBody, response, tokenCurrentUser);
 
         return mapper.writeValueAsString(response);
     }
 
-    private Map<String, String> createReport(SlashCommandDto command, User currentUser, Channel currentChannel,
-                                             String commandName, String commandBody, Map<String, String> response,
-                                             ObjectMapper mapper, String token) throws JsonProcessingException {
+    private Map<String, String> createReport(SlashCommandDto command, String commandName, String commandBody, Map<String, String> response,
+                                             String token) throws JsonProcessingException {
         switch (commandName) {
             case "google_drive_create_folder":
                 if (commandBody.trim().isEmpty()) {
                     response.put("status", "ERROR");
                     response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
                     logger.info("Тело slash команды пустое");
-                }
-                else {
+                } else {
                     status = googleDriveService.addFolder(commandBody, token);
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 "new Folder is created"));
-                        logger.info("Создана папка с именем: {}",commandBody);
+                        logger.info("Создана папка с именем: {}", commandBody);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
-                        logger.warn("Создание папки не получилось. Ошибка: {}",status);
+                        logger.warn("Создание папки не получилось. Ошибка: {}", status);
                     }
                 }
                 break;
