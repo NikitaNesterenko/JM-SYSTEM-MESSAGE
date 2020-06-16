@@ -1,21 +1,27 @@
 package jm;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
 import jm.dto.WorkspaceDTO;
 import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -31,43 +37,38 @@ import java.util.Set;
 
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
-    private AppsService appsService;
-
-    private ChannelService channelService;
-    private UserService userService;
-    private WorkspaceService workspaceService;
-    private MessageService messageService;
-    private String pathApplicationFiles;
-    private String nameChannelStartWth = "Google Drive ";
-    private String nameGoogleBot = "GoogleDrive-bot";
-    private String redirectURI;
-    private String applicationName;
-    private int updatePeriod;
-    private int warningBeforeEvent;
-    private String clientId;
-    private String clientSecret;
-
-    private String API_KEY;
-
-    private final RestTemplate restTemplate;
-
-//    new
-
-    @Value("${google.secret.key.path}")
-    private Resource gdSecretKeys;
-
     private static final List<String> SCOPES_DRIVE = Arrays.asList(DriveScopes.DRIVE,
             "https://www.googleapis.com/auth/drive.install");
-
+    private final RestTemplate restTemplate;
+    private final AppsService appsService;
+    private final ChannelService channelService;
+    private final UserService userService;
+    private final WorkspaceService workspaceService;
+    private final MessageService messageService;
+    private final String pathApplicationFiles;
+    private final String nameChannelStartWth = "Google Drive ";
+    private final String nameGoogleBot = "GoogleDrive-bot";
+    private final String redirectURI;
+    private final String applicationName;
+    private final int updatePeriod;
+    private final int warningBeforeEvent;
+    private final JsonFactory JSON_FACTORY = new JacksonFactory();
+    private final BotService botService;
+    private final SlashCommandService slashCommandService;
+    private final TypeSlashCommandService typeSlashCommandService;
+    private String clientId;
+    private String clientSecret;
+    //    new
+    private String API_KEY;
+    @Value("${google.secret.key.path}")
+    private Resource gdSecretKeys;
     private GoogleAuthorizationCodeFlow flow;
     private HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private JsonFactory JSON_FACTORY = new JacksonFactory();
-    private BotService botService;
-    private SlashCommandService slashCommandService;
-    private TypeSlashCommandService typeSlashCommandService;
 
 //    @Value("${google.oauth.callback.uri}")
 //    private String CALLBACK_URI;
+
+    private Credential credential;
 
 
     @Autowired
@@ -181,7 +182,9 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         return slashCommands;
     }
 
-    /** Метод для того чтобы присвоить Cliend ID и CleintSecret со страницы**/
+    /**
+     * Метод для того чтобы присвоить Cliend ID и CleintSecret со страницы
+     **/
     public void setGoogleClientIdAndSecret(WorkspaceDTO workspace) {
         App app = appsService.getAppByWorkspaceIdAndAppName(workspace.getId(), applicationName);
         clientId = app.getClientId();
@@ -189,12 +192,28 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     }
 
     @Override
-    public String addFolder(String boardName, String token) {
+    public String addFolder(String folderName, String token){
         try {
-            restTemplate.postForEntity("https://api.trello.com/1/boards/?name=" + boardName + "&key="
-                    + API_KEY + "&token=" + token, new HttpHeaders(), String.class).getStatusCodeValue();
+            if (credential == null){
+                GoogleAuthorizationCodeTokenRequest googleAuthorizationCodeTokenRequest = flow.newTokenRequest(token);
+                GoogleAuthorizationCodeTokenRequest googleAuthorizationCodeTokenRequest1 = googleAuthorizationCodeTokenRequest.setRedirectUri(redirectURI);
+                TokenResponse response = googleAuthorizationCodeTokenRequest1.execute();
+                credential = flow.createAndStoreCredential(response, "userID");
+            }
+            Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(applicationName).build();
+
+            File file = new File();
+            file.setName(folderName);
+            file.setMimeType("application/vnd.google-apps.folder");
+
+            drive.files().create(file).execute();
+
             return "OK";
-        } catch (HttpClientErrorException e) {
+        } catch (GoogleJsonResponseException e) {
+            GoogleJsonError error = e.getDetails();
+            System.out.println(error);
+            return e.getMessage();
+        } catch (HttpClientErrorException | IOException e) {
             return e.getMessage();
         }
     }

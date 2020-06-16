@@ -46,7 +46,7 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
     @Override
     public String getCommand(SlashCommandDto command) throws JsonProcessingException {
         User currentUser = userService.getUserById(command.getUserId());//пользователь, отправивший команду
-        String token = currentUser.getTrelloToken();//получение токена
+        String token = currentUser.getGoogleDriveToken();//получение токена
         Channel currentChannel = channelService.getChannelById(command.getChannelId());  //канал, куда отправлена команда
         String commandName = command.getName();  //название пришедшей команды
 
@@ -81,13 +81,13 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
                     if (status.equals("OK")) {
                         response.put("status", "OK");
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                                "new Board is created"));
-                        logger.info("Создана доска с именем: {}",commandBody);
+                                "new Folder is created"));
+                        logger.info("Создана папка с именем: {}",commandBody);
                     } else {
                         response.put("status", status);
                         response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
                                 status));
-                        logger.warn("Создание доски не получилось. Ошибка: {}",status);
+                        logger.warn("Создание папки не получилось. Ошибка: {}",status);
                     }
                 }
                 break;

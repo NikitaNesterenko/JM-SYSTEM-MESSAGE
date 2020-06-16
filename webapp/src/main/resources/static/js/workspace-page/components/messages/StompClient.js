@@ -3,17 +3,16 @@ import {is_open, populateRightPaneActivity} from "/js/activities/view_activities
 
 import {SubmitMessage} from "/js/workspace-page/components/footer/SubmitMessage.js"
 import {ActiveChatMembers} from "/js/workspace-page/components/sidebar/ActiveChatMembers.js";
-import {addNewEmailLineIntoInviteModal, showInviteModalOnWorkspace,createNotifications} from "/js/invite.js";
+import {addNewEmailLineIntoInviteModal, createNotifications, showInviteModalOnWorkspace} from "/js/invite.js";
 import {deleteChannelFromList} from "/js/workspace-page/components/sidebar/ChannelView.js";
 import {
     ChannelRestPaginationService,
     ConversationRestPaginationService,
     DirectMessagesRestController,
     MessageRestPaginationService,
-    WorkspaceRestPaginationService,
-    NotificationsRestService
+    NotificationsRestService,
+    WorkspaceRestPaginationService
 } from "/js/rest/entities-rest-pagination.js";
-
 
 
 export class StompClient {
@@ -233,6 +232,24 @@ export class StompClient {
             commandList.add("trello_get_card");
             commandList.add("trello_delete_card");
             commandList.add("trello_add_comment_to_a_card");
+
+            for (let item of commandList) {
+                if (command === item) {
+                    this.showMessageInCurrentChannel(report);
+                }
+            }
+        })
+    }
+
+    subscribeGoogleDriveBot() {
+        this.stompClient.subscribe("/topic/google_drive", (data) => {
+            const googleDriveBot = JSON.parse(data.body);
+            const {userId, channelId, status, command} = googleDriveBot;
+            const isAuthor = userId == window.loggedUserId;
+            const isOk = status === "OK";
+            const report = JSON.parse(googleDriveBot.report);
+            let commandList = new Set();
+            commandList.add("google_drive_create_folder");
 
             for (let item of commandList) {
                 if (command === item) {
