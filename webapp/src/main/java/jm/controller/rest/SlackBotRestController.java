@@ -51,11 +51,9 @@ public class SlackBotRestController {
         return trelloSlashCommand.getCommand(command);
     }
 
-    //соотносит команду передаваемую в форме отправки сообщений с командой в БД в таблице slash_commands
     @MessageMapping("/bot/google_drive")
     @SendTo("/topic/google_drive")
     public String test2(@RequestBody SlashCommandDto command) throws JsonProcessingException {
-        System.out.println(command);
         return googleDriveSlashCommand.getCommand(command);
     }
 

@@ -45,23 +45,22 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
 
     @Override
     public String getCommand(SlashCommandDto command) throws JsonProcessingException {
-        User currentUser = userService.getUserById(command.getUserId());//пользователь, отправивший команду
-        String token = currentUser.getGoogleDriveToken();//получение токена
-        Channel currentChannel = channelService.getChannelById(command.getChannelId());  //канал, куда отправлена команда
-        String commandName = command.getName();  //название пришедшей команды
+        User currentUser = userService.getUserById(command.getUserId());
+        String tokenCurrentUser = currentUser.getGoogleDriveToken();
+        Channel currentChannel = channelService.getChannelById(command.getChannelId());
+        String commandName = command.getName();
 
-        //тело команды (все что после commandName)
         String commandBody = command.getCommand().substring(command.getCommand().indexOf(commandName) + commandName.length()).trim();
+
         Map<String, String> response = new HashMap<>();
-        response.put("userId", command.getUserId().toString()); //Id пользователя, отправившего запрос
-        response.put("command", commandName); //добавляем название команды в ответ
-        response.put("channelId", command.getChannelId().toString()); //добавляем Id канала, в котором отправлена команда
+        response.put("userId", command.getUserId().toString());
+        response.put("command", commandName);
+        response.put("channelId", command.getChannelId().toString());
         response.put("report", "{}");
 
         ObjectMapper mapper = new ObjectMapper();
 
-//        составление отчета для вывода на фронт а так же выполнение команды
-        response = createReport(command, currentUser, currentChannel, commandName, commandBody, response, mapper, token);
+        response = createReport(command, currentUser, currentChannel, commandName, commandBody, response, mapper, tokenCurrentUser);
 
         return mapper.writeValueAsString(response);
     }
