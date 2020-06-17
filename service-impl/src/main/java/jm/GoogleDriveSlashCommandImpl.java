@@ -84,8 +84,21 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
                     }
                 }
                 break;
+            case "google_drive_upload_file":
+                status = googleDriveService.uploadFile(token);
+                if (status.equals("OK")) {
+                    response.put("status", "OK");
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
+                            "new file upload"));
+                    logger.info("Файл загружен");
+                } else {
+                    response.put("status", status);
+                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
+                            status));
+                    logger.warn("Создание папки не получилось. Ошибка: {}", status);
+                }
+                break;
         }
-
         return response;
     }
 

@@ -5,6 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -170,6 +172,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         Set<SlashCommand> slashCommands = new HashSet<>();
         slashCommands.add(new SlashCommand("google_drive_create_folder", "/app/bot/google_drive",
                 "create new folder", "create folder"));
+        slashCommands.add(new SlashCommand("google_drive_upload_file", "/app/bot/google_drive",
+                "download test file", "download test file"));
         return slashCommands;
     }
 
@@ -201,16 +205,38 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
      **/
     @Override
     public String addFolder(String folderName, String token) {
+        try {
         Drive drive = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(applicationName).build();
         File file = new File();
         file.setName(folderName);
         file.setMimeType("application/vnd.google-apps.folder");
-        try {
-            drive.files().create(file).execute();
+        drive.files().create(file).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "OK";
     }
 
+    /**
+     * Загрузка тестового файла
+     **/
+    @Override
+    public String uploadFile(String token) {
+        try {
+            Drive drive = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(applicationName).build();
+
+            File file = new File();
+            file.setName("test.jpg");
+
+            URL url = getClass().getResource("/test-files-google-drive/keys/sample.jpeg");
+            FileContent content = new FileContent("image/jpeg", new java.io.File(url.getPath()));
+            drive.files().create(file, content).execute();
+
+            return "OK";
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ERROR";
+        }
+    }
 }
