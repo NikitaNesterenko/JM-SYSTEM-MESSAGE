@@ -12,4 +12,6 @@ public interface GoogleDriveService {
     void firstStartClientAuthorization(String token, WorkspaceDTO workspace, String principalName);
 
     String addFolder(String commandBody, String token);
+
+    String uploadFile(String token);
 }
