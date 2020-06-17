@@ -38,6 +38,11 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
         return botList.size()>0 ? botList : Collections.emptyList();
     }
 
+    @Override
+    public boolean haveBotWithName(String name) {
+        return twoParametersMethodToSearchEntity("name", name);
+    }
+
     private List<Number> getAllBotIdByWorkspaceId(Long workspaceId) {
             List<Number> list = entityManager
                     .createNativeQuery("SELECT wb.bot_id FROM workspaces_bots wb WHERE wb.workspace_id=:workspaceId")

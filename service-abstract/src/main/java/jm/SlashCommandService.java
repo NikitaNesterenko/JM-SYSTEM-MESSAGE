@@ -12,6 +12,10 @@ public interface SlashCommandService {
 
     void createSlashCommand(SlashCommand slashCommand);
 
+    void simplePersist(SlashCommand slashCommand);
+
+    void simpleMerge(SlashCommand slashCommand);
+
     void deleteSlashCommand(Long id);
 
     boolean updateSlashCommand(SlashCommand slashCommand);

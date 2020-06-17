@@ -8,12 +8,14 @@ import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
 import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
-// import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {TrelloRestService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
 const app_service = new AppRestPaginationService();
-// const channel_service = new ChannelRestPaginationService();
+const trello_service = new TrelloRestService();
+const channel_service = new ChannelRestPaginationService();
 const logged_user = user_service.getLoggedUser();
 const switch_workspace_window = new SwitchWorkspaceWindow();
 let current_wks = workspace_service.getChosenWorkspace();
@@ -198,5 +200,35 @@ $("#addGoogleCalendarIdSecretSubmit").click(
             location.href = "/application/google/calendar";
             return false;
         });
+    }
+);
+
+//Открытие App -> Trello
+$("#trelloBtn").click(
+    async function () {
+        const app_name = "Trello";
+        let trelloApp = await app_service.getAppByName(app_name);
+        if (trelloApp.token == null) {
+            $("#addTrelloTokenSecretModal").modal('toggle') //Открытие модального окна. Если токена нет в бд
+        } else {
+            // ??????   Если есть, то просто добавить диалог? Trello
+            return false;
+        }
+    }
+);
+
+//Переход на сайт Trello для получения токена
+$("#takeTrelloAuthorization").click(function() {
+    window.open("https://trello.com/1/authorize?expiration=30days&name=MyPersonalToken&scope=read,write&response_type=token&key=f1184d87df3d841e491cecffeb568165")
+});
+
+//Отправка токена на сервер
+$("#addTrelloToken").click(
+    async function () {
+        let token = $("#InputTrelloToken").val();
+        if (token == null) {
+            return;
+        }
+        let status = trello_service.addPersonToken(token);
     }
 );
