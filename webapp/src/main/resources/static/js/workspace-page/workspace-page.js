@@ -73,7 +73,7 @@ $(document).ready(async () => {
 
 $("#id-app_sidebar__apps__list").on("click", function () {
     $("#calendarMenu").remove();
-    showMenuForGoogleDriveChannel();
+    showMenuForGoogleCalendarChannel();
 });
 
 function showMenuForGoogleCalendarChannel() {
@@ -154,8 +154,7 @@ window.getCalendarEvents = function getCalendarEvents(date) {
 
 window.showEvents = function showEvents(response) {
     console.log(response);
-    if (response.length > 0) {
-        ``
+    if (response.length > 0) {``
         $('#id-events_div').html('');
         $.each(response, (i, item) => {
             let date = new Date(item.start.dateTime.value)
