@@ -1,18 +1,28 @@
 import {BotRestPaginationService} from '/js/rest/entities-rest-pagination.js';
 import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {Zoom} from "/js/workspace-page/components/plugin/Zoom.js";
+
+
 const bot_service = new BotRestPaginationService();
 const workspaceService= new WorkspaceRestPaginationService();
-$( document ).ready(function(){
-    $("#zoomCr").on("click", function(){
-        workspaceService.getChosenWorkspace().then(workspace => {
-            window.chosenWorkspace = workspace.id
+// const pluginRestPaginationService = new PluginRestPaginationService();
+const zoom = new Zoom();
+
+$(document).ready(function () {
+    $("#zoomCr").click(
+        async function () {
+            zoom.sendMessage();
+
+            // workspaceService.getChosenWorkspace().then(workspace => {
+            //     window.chosenWorkspace = workspace.id
+            // });
+            // bot_service.updateWorkspace(chosenWorkspace, 2)
+            //     .then(() => {
+            //         location.reload();
+            //     });
         });
-        bot_service.updateWorkspace(chosenWorkspace,2)
-            .then(() => {
-                location.reload();
-            });
-    });
 });
+
 export class Bot {
     constructor(id, nickName, name, token, workspacesId) {
         this.id = id;

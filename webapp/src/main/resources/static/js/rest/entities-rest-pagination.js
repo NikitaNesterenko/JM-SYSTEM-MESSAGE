@@ -548,6 +548,22 @@ export class NotificationsRestService extends RestPaginationService {
 
 }
 
+export class ZoomRestService extends RestPaginationService{
+    constructor() {
+        super("/api/trello");
+    }
+
+    addPersonToken = async (token) => {
+        const response = await fetch(`${this.url}/token?value=${token}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
+    };
+
+}
 
 export class TrelloRestService extends RestPaginationService {
     constructor() {

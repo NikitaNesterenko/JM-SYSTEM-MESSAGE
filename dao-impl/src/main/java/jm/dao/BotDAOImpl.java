@@ -31,6 +31,16 @@ public class BotDAOImpl extends AbstractDao<Bot> implements BotDAO {
     }
 
     @Override
+    public Bot getByName(String name) {
+        if (twoParametersMethodToSearchEntity("name",name)) {
+            return ((Bot) entityManager.createQuery("FROM Bot where name=:name",Bot.class)
+                    .setParameter("name",name)
+                    .getSingleResult());
+        }
+        return null;
+    }
+
+    @Override
     public List<Bot> getBotsByWorkspaceId(Long id) {
             List<Bot> botList = (List<Bot>) entityManager.createNativeQuery("SELECT b.* FROM workspaces_bots wb JOIN bots b ON b.id = wb.bot_id WHERE wb.workspace_id=?", Bot.class)
                     .setParameter(1, id)

@@ -2,6 +2,9 @@ package jm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jm.dto.ZoomDTO;
+import jm.model.Bot;
+import jm.model.SlashCommand;
+import jm.model.TypeSlashCommand;
 import jm.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -13,12 +16,18 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
 
   private final UserService userService;
   private final RestTemplate restTemplate;
+  private final BotService botService;
+  private final SlashCommandService slashCommandService;
+  private final WorkspaceService workspaceService;
+  private final TypeSlashCommandService typeSlashCommandService;
 
   @Value("${spring.security.oauth2.client.registration.zoom.client-id}")
   private String clientId;
@@ -29,9 +38,14 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
   @Value("${spring.security.oauth2.client.registration.zoom.client-secret}")
   private String secret;
 
-  public ZoomPluginServiceImpl(RestTemplateBuilder builder, UserService userService) {
+  public ZoomPluginServiceImpl(RestTemplateBuilder builder, UserService userService,BotService bs, SlashCommandService sc,
+                               WorkspaceService ws, TypeSlashCommandService tscs) {
     restTemplate = builder.build();
     this.userService = userService;
+    this.botService = bs;
+    this.slashCommandService = sc;
+    this.workspaceService = ws;
+    this.typeSlashCommandService = tscs;
   }
 
   public ZoomDTO create(String login) {
@@ -131,5 +145,40 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
         headers.add("Authorization", auth);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+  }
+
+  private void setSlashCommand() {
+    if (botService.haveBotWithName("zoom")) {
+      return;
+    }
+
+    Bot zoom_Bot = new Bot();
+    TypeSlashCommand tsc = new TypeSlashCommand();
+    zoom_Bot.setName("zoom");
+    zoom_Bot.setNickName("Zoom");
+
+    Set<SlashCommand> zoom_command = new HashSet<>();
+    zoom_command.add(new SlashCommand("zoom_star_meeting", "/zoom",
+            "start or join to meeting", "start or join to meeting"));
+    zoom_command.add(new SlashCommand("zoom_star_meeting", "/zoom [@Name]",
+            "start or join to meeting", "start or join to meeting"));
+    zoom_command.add(new SlashCommand("zoom_star_meeting", "/zoom config",
+            "start or join to meeting", "start or join to meeting"));
+
+    zoom_Bot.setCommands(zoom_command);
+    zoom_Bot.setDateCreate(LocalDateTime.now());
+    zoom_Bot.setIsDefault(false);
+    zoom_Bot.setWorkspaces(new HashSet<>(workspaceService.getAllWorkspaces()));
+    zoom_Bot.getCommands().forEach(slashCommand -> slashCommandService.simplePersist(slashCommand));
+    botService.createBot(zoom_Bot);
+
+    tsc.setName("Zoom");
+    typeSlashCommandService.createTypeSlashCommand(tsc);
+    zoom_Bot.getCommands().forEach(slashCommand -> {
+      slashCommand.setBot(botService.getBotBySlashCommandId(slashCommand.getId()));
+      slashCommand.setType(tsc);
+      slashCommandService.simpleMerge(slashCommand);
+    });
+
   }
 }

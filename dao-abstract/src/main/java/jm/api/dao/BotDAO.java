@@ -22,6 +22,8 @@ public interface BotDAO {
 
     Bot getById (Long id);
 
+    Bot getByName (String name);
+
     Optional<BotDTO> getBotDTOById (Long id);
 
     List<Bot> getBotsByWorkspaceId (Long id);
@@ -36,5 +38,5 @@ public interface BotDAO {
 
     Optional<Bot> findByToken(String token);
 
-    public void updateWorkspace(Integer ID, Integer botId);
+    void updateWorkspace(Integer ID, Integer botId);
 }

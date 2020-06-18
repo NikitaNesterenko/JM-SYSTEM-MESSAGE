@@ -21,6 +21,8 @@ public interface BotService {
 
     Bot getBotById (Long id);
 
+    Bot getBotByName (String name);
+
     Optional<BotDTO> getBotDTOById (Long id);
 
     List<Bot> getBotsByWorkspaceId (Long workspaceId);

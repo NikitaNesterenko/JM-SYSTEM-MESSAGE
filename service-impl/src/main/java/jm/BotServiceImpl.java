@@ -70,12 +70,20 @@ public class BotServiceImpl implements BotService {
         existingBot.setName(bot.getName());
         existingBot.setNickName(bot.getNickName());
         existingBot.setToken(bot.getToken());
-        botDAO.merge(existingBot);
+        if (!bot.getCommands().isEmpty()){
+            existingBot.setCommands(bot.getCommands());
+        }
+        botDAO.persist(existingBot);
     }
 
     @Override
     public Bot getBotById (Long id) {
         return botDAO.getById(id);
+    }
+
+    @Override
+    public Bot getBotByName(String name) {
+        return botDAO.getByName(name);
     }
 
     @Override
