@@ -22,12 +22,12 @@ import java.util.Set;
 @Service
 public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
 
-  private final UserService userService;
-  private final RestTemplate restTemplate;
-  private final BotService botService;
-  private final SlashCommandService slashCommandService;
-  private final WorkspaceService workspaceService;
-  private final TypeSlashCommandService typeSlashCommandService;
+  private UserService userService;
+  private RestTemplate restTemplate;
+  private BotService botService;
+  private SlashCommandService slashCommandService;
+  private WorkspaceService workspaceService;
+  private TypeSlashCommandService typeSlashCommandService;
 
   @Value("${spring.security.oauth2.client.registration.zoom.client-id}")
   private String clientId;
@@ -69,6 +69,7 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
         .getBody();
   }
 
+  @Override
   public void setToken(String code, String login) {
     String auth = Base64.getEncoder().encodeToString((clientId + ":" + secret).getBytes(Charset.forName("UTF-8")));
     User user = userService.getUserByLogin(login);
@@ -87,6 +88,7 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
                 Token.class)
             .getBody();
     updateToken(response, user);
+    setSlashCommand();
   }
 
     @Override
@@ -158,11 +160,11 @@ public class ZoomPluginServiceImpl implements PluginService<ZoomDTO> {
     zoom_Bot.setNickName("Zoom");
 
     Set<SlashCommand> zoom_command = new HashSet<>();
-    zoom_command.add(new SlashCommand("zoom_star_meeting", "/zoom",
+    zoom_command.add(new SlashCommand("zoom", "/zoom_start_meeting",
             "start or join to meeting", "start or join to meeting"));
-    zoom_command.add(new SlashCommand("zoom_star_meeting", "/zoom [@Name]",
+    zoom_command.add(new SlashCommand("zoom [@Name]", "/zoom [@Name]",
             "start or join to meeting", "start or join to meeting"));
-    zoom_command.add(new SlashCommand("zoom_star_meeting", "/zoom config",
+    zoom_command.add(new SlashCommand("zoom config", "/zoom config",
             "start or join to meeting", "start or join to meeting"));
 
     zoom_Bot.setCommands(zoom_command);

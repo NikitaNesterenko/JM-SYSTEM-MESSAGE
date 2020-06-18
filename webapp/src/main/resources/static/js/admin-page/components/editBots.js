@@ -13,13 +13,6 @@ $(document).ready(function () {
         async function () {
             zoom.sendMessage();
 
-            // workspaceService.getChosenWorkspace().then(workspace => {
-            //     window.chosenWorkspace = workspace.id
-            // });
-            // bot_service.updateWorkspace(chosenWorkspace, 2)
-            //     .then(() => {
-            //         location.reload();
-            //     });
         });
 });
 
