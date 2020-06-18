@@ -1,9 +1,11 @@
 package jm;
 
+import jm.dto.FileItemGoogleDriveDTO;
 import jm.dto.WorkspaceDTO;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 public interface GoogleDriveService {
 
@@ -14,4 +16,10 @@ public interface GoogleDriveService {
     String addFolder(String commandBody, String token);
 
     String uploadFile(String token);
+
+    List<FileItemGoogleDriveDTO> getFileItemGoogleDriveDTOS();
+
+    String makePublic(String fileId);
+
+    String deleteFile(String fileId);
 }

@@ -13,22 +13,23 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
+import jm.dto.FileItemGoogleDriveDTO;
 import jm.dto.WorkspaceDTO;
 import jm.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
@@ -47,7 +48,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private String clientSecret;
     private GoogleAuthorizationCodeFlow flow;
     private HttpTransport httpTransport;
-    private Credential credential;
+    private Drive drive;
 
     @Autowired
     public GoogleDriveServiceImpl(AppsService appsService,
@@ -192,7 +193,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private void getCredential(String token) {
         try {
             GoogleTokenResponse response = flow.newTokenRequest(token).setRedirectUri(redirectURI).execute();
-            credential = flow.createAndStoreCredential(response, "userID");
+            Credential credential = flow.createAndStoreCredential(response, "userID");
+            drive = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(applicationName).build();
         } catch (IOException e) {
             e.getMessage();
         }
@@ -206,11 +208,10 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Override
     public String addFolder(String folderName, String token) {
         try {
-        Drive drive = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(applicationName).build();
-        File file = new File();
-        file.setName(folderName);
-        file.setMimeType("application/vnd.google-apps.folder");
-        drive.files().create(file).execute();
+            File file = new File();
+            file.setName(folderName);
+            file.setMimeType("application/vnd.google-apps.folder");
+            drive.files().create(file).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -223,8 +224,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Override
     public String uploadFile(String token) {
         try {
-            Drive drive = new Drive.Builder(httpTransport, jsonFactory, credential).setApplicationName(applicationName).build();
-
             File file = new File();
             file.setName("test.jpg");
 
@@ -239,4 +238,61 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
             return "ERROR";
         }
     }
+
+    /**
+     * Получения 100 последних файлов/папок из аккаунта гугл диска
+     **/
+    public List<FileItemGoogleDriveDTO> getFileItemGoogleDriveDTOS() {
+
+        List<FileItemGoogleDriveDTO> responseList = new ArrayList<>();
+
+        try {
+            FileList fileList = drive.files().list().setFields("files(id,name,thumbnailLink)").execute();
+
+            for (File file : fileList.getFiles()) {
+                FileItemGoogleDriveDTO item = new FileItemGoogleDriveDTO();
+                item.setId(file.getId());
+                item.setName(file.getName());
+                item.setThumbnailLink(file.getThumbnailLink());
+                responseList.add(item);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return responseList;
+    }
+
+    /**
+     * Сделать файл/папку публичной
+     **/
+    public String makePublic(@PathVariable(name = "fileId") String fileId) {
+        try {
+            Permission permission = new Permission();
+            permission.setType("anyone");
+            permission.setRole("reader");
+
+            drive.permissions().create(fileId, permission).execute();
+            return "OK";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "File Not Found";
+        }
+
+    }
+
+    /**
+     * Удалить файл/папку
+     **/
+    public String deleteFile(@PathVariable(name = "fileId") String fileId) {
+        try {
+            drive.files().delete(fileId).execute();
+            return "OK";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "File Not Found";
+        }
+    }
+
 }
