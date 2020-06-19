@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureTestEntityManager
 @Transactional
 @AutoConfigureMockMvc
-public class PluginRestControllerIntegrationTest {
+public class ZoomPluginRestControllerIntegrationTest {
   private Authentication auth = new UsernamePasswordAuthenticationToken("login_1", "pass_1");
 
   @Autowired private MockMvc mockMvc;

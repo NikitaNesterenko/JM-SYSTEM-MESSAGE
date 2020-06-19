@@ -34,6 +34,11 @@
     <script defer th:src="@{/js/workspace-page/components/footer/input-box.js}" type="module"></script>
     <script defer th:src="@{/js/workspace-page/settingsMenu.js}" type="module"></script>
     <script defer type="module" th:src="@{/js/searchUsersOnInputMessages.js}"></script>
+    <script type="text/javascript" th:src="@{/js/workspace-page/components/sidebar/ChannelView.js}"></script>
+    <script th:src="@{/js/admin-page/components/editBots.js}" type="module"></script>
+
+
+
     <!--    <script defer th:src="@{/js/message-box.js}" type="module"></script>-->
 
     <script defer th:src="@{/js/workspace-page/components/navbar/channel_topic.js}" type="module"></script>
@@ -1037,7 +1042,7 @@
 
             <div class="p-workspace__footer">
                 <footer class="p-workspace__primary_view_footer">
-                    <div class="menu" id="menu"></div>
+
                     <div style="margin: 5px 10px 5px 10px; height: 90%; border: 1px solid gray; border-radius: 8px;
                         position: relative;">
                         <div class="p-message_pane_input p-message_input_field" style="padding-top: 10px; bottom: 0;
@@ -1050,6 +1055,12 @@
                                     <select class="associatedUserListSelect"
                                             id="associatedUserListSelect" multiple
                                             name="usersList">
+                                    </select>
+                                </div>
+                                <div class="slashCommandList" id="slashCommandList">
+                                    <select class="slashCommandSelect"
+                                            id="slashCommandSelect"
+                                            name="slashCommand" size="10">
                                     </select>
                                 </div>
                                 <input class="ql-editor__input-field" id="form_message_input"
@@ -1466,7 +1477,7 @@
                                                                         </div>
                                                                     </th>
                                                                     <th>
-                                                                        <button class="btn btn-outline-dark">View
+                                                                        <button class="btn btn-outline-dark" id="zoomCr">View
                                                                         </button>
                                                                     </th>
                                                                 </div>

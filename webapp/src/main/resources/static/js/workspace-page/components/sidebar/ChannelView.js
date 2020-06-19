@@ -9,6 +9,7 @@ import {UserRestPaginationService} from "../../../rest/entities-rest-pagination.
 export class ChannelView {
     default_channel = null;
 
+
     constructor() {
         this.user_service = new UserRestPaginationService();
         this.channel_service = new ChannelRestPaginationService();

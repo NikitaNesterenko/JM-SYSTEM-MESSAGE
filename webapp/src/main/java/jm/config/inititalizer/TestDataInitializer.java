@@ -530,8 +530,8 @@ public class TestDataInitializer {
         Set<Workspace> workspaces = Collections.singleton(workspaceDAO.getById(1L));
         Set<Channel> channels = Collections.singleton(channelDAO.getById(1L));
 
-        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
-        zoom.setWorkspaces(workspaces);
+//        Bot zoom = new Bot("zoom", "Zoom", LocalDateTime.now(), false);
+//        zoom.setWorkspaces(workspaces);
 
         Bot slackBot = new Bot("bot_2", "SlackBot", LocalDateTime.now(), true);
         slackBot.setWorkspaces(workspaces);
@@ -549,11 +549,11 @@ public class TestDataInitializer {
         customBot.getCommands().add(sendMsgCommand);
 
         this.bots.add(slackBot);
-        this.bots.add(zoom);
+//        this.bots.add(zoom);
         this.bots.add(customBot);
 
         botDAO.persist(slackBot);
-        botDAO.persist(zoom);
+//        botDAO.persist(zoom);
         botDAO.persist(customBot);
 
         sc.forEach(command -> {

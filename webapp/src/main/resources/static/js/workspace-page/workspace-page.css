@@ -2979,7 +2979,16 @@ button:focus {
     left: 0;
     z-index: 1050;
 }
-
+#slashCommandList {
+    position: absolute;
+    display: none;
+    /*background: #a71d2a;*/
+    font-style: italic;
+    border-radius: 5px;
+    font-size: 0.8em;
+    left: 0;
+    z-index: 1050;
+}
 .message-input-field {
     height: 40px;
     /*width:100%;*/
@@ -3005,7 +3014,19 @@ button:focus {
     text-align: center;
     padding: 2px;
 }
-
+.slashCommandList {
+    background-color: #fefefe;
+    /*left: 50%;*/
+    /*margin-left: 0px;*/
+    bottom: 20%;
+    margin-bottom: 80px;
+    padding: 0;
+    border-style: solid;
+    border-width: thin;
+    border-color: black;
+    height: 400px;
+    width: 500px;
+}
 .associatedUserList {
     background-color: #fefefe;
     /*left: 50%;*/
@@ -3019,7 +3040,35 @@ button:focus {
     height: 200px;
     width: 300px;
 }
+#slashCommandSelect {
+    position: relative;
+    /*border-radius: 13px;*/
+    background-color: #fefefe;
+    margin: 5px;
+    padding: 0;
+    width: 97%;
+    height: 95%;
+    border: none;
+    z-index: 1050;
+}
+#slashCommandSelect::-webkit-scrollbar-track {
+    border-radius: 13px;
+    background-color: #cccccc;
+}
 
+#slashCommandSelect::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-color: #A9A9A9;
+}
+
+#slashCommandSelect::-webkit-scrollbar {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    width: 8px;
+    /*height: 100px;*/
+    margin-top: 50px;
+}
 #associatedUserListSelect {
     position: relative;
     /*border-radius: 13px;*/
@@ -3064,7 +3113,15 @@ button:focus {
     cursor: pointer;
     background-color: #1d9bd1;
 }
+#slashCommandSelect option {
+    height: 30px;
+    padding-top: 10px;
+}
 
+#slashCommandSelect option:hover {
+    cursor: pointer;
+    background-color: #1d9bd1;
+}
 #switchWorkspacesWindow {
     display: none;
     font-style: italic;

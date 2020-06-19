@@ -21,6 +21,8 @@ public interface BotService {
 
     Bot getBotById (Long id);
 
+    Bot getBotByName (String name);
+
     Optional<BotDTO> getBotDTOById (Long id);
 
     List<Bot> getBotsByWorkspaceId (Long workspaceId);
@@ -38,4 +40,6 @@ public interface BotService {
     BotDTO getBotDtoByBot(@NonNull Bot bot);
 
     Optional<Bot> findByToken(String token);
+
+    public void updateWorkspace(Integer ID, Integer botId);
 }

@@ -1,7 +1,6 @@
 import { ownFetch } from './fetch-service.js';
 import {RestPaginationService} from "./rest-pagination-service.js";
 
-
 export class UserRestPaginationService extends RestPaginationService {
 
     constructor() {
@@ -114,6 +113,11 @@ export class BotRestPaginationService extends RestPaginationService {
 
     getBotByWorkspaceId = async (id) => {
         const response = await fetch('/rest/api/bot/workspace/' + id)
+        return await response.json()
+            .catch(err => console.log(err.status));
+    };
+    updateWorkspace = async (id,botID) => {
+        const response = await ownFetch.put('/rest/api/bot/updateWorkspace/' + id+'/'+botID)
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -501,8 +505,13 @@ export class PluginRestPaginationService extends RestPaginationService {
     }
 
     async getZoomToken() {
-        const plugin = await fetch('/rest/plugin/zoom');
-        return plugin.json();
+        const auth = await fetch('/rest/plugin/zoom');
+        return auth;
+    }
+    async createMeetings(){
+        const meeting = await ownFetch.get('rest/plugin/zoom/meetings/create',
+            {channelId: channel_id});
+        return meeting.json();
     }
 }
 
@@ -539,6 +548,22 @@ export class NotificationsRestService extends RestPaginationService {
 
 }
 
+export class ZoomRestService extends RestPaginationService{
+    constructor() {
+        super("/api/trello");
+    }
+
+    addPersonToken = async (token) => {
+        const response = await fetch(`${this.url}/token?value=${token}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;'
+            }
+        });
+        return response.status;
+    };
+
+}
 
 export class TrelloRestService extends RestPaginationService {
     constructor() {
