@@ -66,20 +66,15 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
         switch (commandName) {
             case "google_drive_create_folder":
                 if (commandBody.trim().isEmpty()) {
-                    response.put("status", "ERROR");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()), INCORRECT_COMMAND));
+                    createResponce(command, response, "ERROR", INCORRECT_COMMAND);
                     logger.info("Тело slash команды пустое");
                 } else {
                     status = googleDriveService.addFolder(commandBody, token);
                     if (status.equals("OK")) {
-                        response.put("status", "OK");
-                        response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                                "new Folder is created"));
+                        createResponce(command, response, "OK", "new Folder is created");
                         logger.info("Создана папка с именем: {}", commandBody);
                     } else {
-                        response.put("status", status);
-                        response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                                status));
+                        createResponce(command, response, status, status);
                         logger.warn("Создание папки не получилось. Ошибка: {}", status);
                     }
                 }
@@ -87,19 +82,21 @@ public class GoogleDriveSlashCommandImpl implements GoogleDriveSlashCommand {
             case "google_drive_upload_file":
                 status = googleDriveService.uploadFile(token);
                 if (status.equals("OK")) {
-                    response.put("status", "OK");
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                            "new file upload"));
+                    createResponce(command, response, "OK", "new file upload");
                     logger.info("Файл загружен");
                 } else {
-                    response.put("status", status);
-                    response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
-                            status));
+                    createResponce(command, response, status, status);
                     logger.warn("Создание папки не получилось. Ошибка: {}", status);
                 }
                 break;
         }
         return response;
+    }
+
+    private void createResponce(SlashCommandDto command, Map<String, String> response, String status, String status2) throws JsonProcessingException {
+        response.put("status", status);
+        response.put("report", sendTempRequestMessage(command.getChannelId(), getBot(command.getBotId()),
+                status2));
     }
 
     private String sendTempRequestMessage(Long channelId, Object author, String reportMsg) throws JsonProcessingException {
