@@ -1,6 +1,20 @@
 import {BotRestPaginationService} from '/js/rest/entities-rest-pagination.js';
+import {WorkspaceRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {Zoom} from "/js/workspace-page/components/plugin/Zoom.js";
+
 
 const bot_service = new BotRestPaginationService();
+const workspaceService= new WorkspaceRestPaginationService();
+// const pluginRestPaginationService = new PluginRestPaginationService();
+const zoom = new Zoom();
+
+$(document).ready(function () {
+    $("#zoomCr").click(
+        async function () {
+            zoom.sendMessage();
+
+        });
+});
 
 export class Bot {
     constructor(id, nickName, name, token, workspacesId) {

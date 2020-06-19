@@ -196,6 +196,26 @@ public class BotRestController {
         }
     }
 
+    @PutMapping(value = "/updateWorkspace/{id}/{botID}")
+    @Operation(
+            operationId = "updateWorkspace",
+            summary = "Update workspace",
+            responses = {
+                    @ApiResponse(
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = BotDTO.class)
+                            )
+                    ),
+                    @ApiResponse(responseCode = "200", description = "OK: bot updated"),
+                    @ApiResponse(responseCode = "400", description = "BAD_REQUEST: bot not found")
+            })
+    public ResponseEntity<Object> updateWorkspace(@PathVariable("id") Integer id,@PathVariable("botID") Integer botID) {
+            botService.updateWorkspace(id,botID);
+            return ResponseEntity.ok().build();
+
+    }
+
     @DeleteMapping("/delete/{id}")
     @Operation(
             operationId = "deleteBot",

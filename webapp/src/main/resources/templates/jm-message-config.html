@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn btn-primary btn-sm ml-3">
+                    <button id="btn_save_config" type="button" class="btn btn-primary btn-sm ml-3">
                         <span class="">Save</span>
                     </button>
                 </div>
@@ -71,6 +71,9 @@
                 const wks = await response.json();
                $('#workspace_name').text(wks.name);
             }
+            $('#btn_save_config').click(()=>{
+                location.href = '/workspace';
+            })
         })
     </script>
 </body>

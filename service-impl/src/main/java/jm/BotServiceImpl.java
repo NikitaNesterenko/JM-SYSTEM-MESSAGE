@@ -30,6 +30,11 @@ import java.util.stream.Collectors;
 public class BotServiceImpl implements BotService {
     private static final Logger logger = LoggerFactory.getLogger(BotServiceImpl.class);
 
+    @Override
+    public void updateWorkspace(Integer ID, Integer botId) {
+        botDAO.updateWorkspace(ID,botId);
+    }
+
     private final BotDAO botDAO;
     private final WorkspaceDAO workspaceDAO;
     private final ChannelDAO channelDAO;
@@ -65,12 +70,20 @@ public class BotServiceImpl implements BotService {
         existingBot.setName(bot.getName());
         existingBot.setNickName(bot.getNickName());
         existingBot.setToken(bot.getToken());
-        botDAO.merge(existingBot);
+        if (!bot.getCommands().isEmpty()){
+            existingBot.setCommands(bot.getCommands());
+        }
+        botDAO.persist(existingBot);
     }
 
     @Override
     public Bot getBotById (Long id) {
         return botDAO.getById(id);
+    }
+
+    @Override
+    public Bot getBotByName(String name) {
+        return botDAO.getByName(name);
     }
 
     @Override
