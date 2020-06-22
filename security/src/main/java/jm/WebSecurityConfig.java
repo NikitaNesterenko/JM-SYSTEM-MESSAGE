@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public FilterRegistrationBean<CustomAuthFilter> authFilter() {
         FilterRegistrationBean<CustomAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(customAuthFilter);
-        registrationBean.addUrlPatterns("/jmsm/api/*");
+        registrationBean.addUrlPatterns("/rest/api/jmsm/api/*");
         return registrationBean;
     }
 
@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .permitAll()
 //                .and()
 //                .authorizeRequests()
-                .antMatchers("/", "/rest/api/**", "/email/**", "/js/**", "/image/**", "/jmsm/api/**", "/api/trello/**").permitAll()
+                .antMatchers("/", "/rest/api/**", "/email/**", "/js/**", "/image/**").permitAll()
                 .antMatchers("/admin/**").hasRole("OWNER")
                 .antMatchers("/user/**", "/rest/**", "/upload").hasAnyRole("OWNER", "USER")
                 .antMatchers("/chooseWorkspace", "/workspace/**", "/avatar", "/avatar/**").authenticated()

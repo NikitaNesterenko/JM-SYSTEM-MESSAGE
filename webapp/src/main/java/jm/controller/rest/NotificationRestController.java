@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.NotificationService;
 import jm.component.Response;
 import jm.model.Notifications;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/rest/api/notifications")
+@Tag(name = "notifications", description = "Notification API")
 public class NotificationRestController {
 
     private NotificationService service;
@@ -38,7 +40,7 @@ public class NotificationRestController {
                     )
             })
     public Response<Notifications> getNotifications(@PathVariable Long workspaceId, @PathVariable Long userId) {
-        return  Response.ok(service.getNotification(userId, workspaceId));
+        return Response.ok(service.getNotification(userId, workspaceId));
     }
 
     @PostMapping(value = "/create")
