@@ -29,7 +29,7 @@ import java.util.Set;
 
 
 @RestController
-@RequestMapping(value = "/api/create")
+@RequestMapping(value = "/rest/api/createWorkSpace")
 @Tag(name = "create workspace", description = "Create workspace API")
 public class CreateWorkspaceRestController {
 

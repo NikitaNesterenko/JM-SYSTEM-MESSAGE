@@ -340,7 +340,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     sendCode = async (code) => {
-        const response = await ownFetch.post('/api/create/confirmEmail', {
+        const response = await ownFetch.post('/rest/api/createWorkSpace/confirmEmail', {
             headers: {'Content-Type': 'application/json'},
             body: code
         });
@@ -348,7 +348,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     sendEmail = (email) => {
-        const response = ownFetch.post('/api/create/sendEmail', {
+        const response = ownFetch.post('/rest/api/createWorkSpace/sendEmail', {
             headers: {'Content-Type': 'application/json'},
             body: email
         });
@@ -356,7 +356,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     takeWorkspaceName = (wks_name) => {
-        const response = ownFetch.post('/api/create/workspaceName', {
+        const response = ownFetch.post('/rest/api/createWorkSpace/workspaceName', {
             headers: {'Content-Type': 'application/json'},
             body: wks_name
         });
@@ -364,7 +364,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     tada = async () => {
-        const response = await ownFetch.post('/api/create/tada', {
+        const response = await ownFetch.post('/rest/api/createWorkSpace/tada', {
             headers: {'Content-Type': 'application/json'}
         });
         return response;
@@ -396,7 +396,7 @@ export class InviteRestPaginationService extends RestPaginationService {
     }
 
     async sendInvites(emails) {
-        return await ownFetch.post('/api/create/invites', {
+        return await ownFetch.post('/rest/api/createWorkSpace/invites', {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(emails)
         });
