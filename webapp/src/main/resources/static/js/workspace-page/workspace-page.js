@@ -1,6 +1,12 @@
 import {ActiveChatMembers} from "./components/sidebar/ActiveChatMembers.js";
 import {WorkspacePageEventHandler} from "./components/WorkspacePageEventHandler.js";
-import {UserRestPaginationService, WorkspaceRestPaginationService, AppRestPaginationService} from "/js/rest/entities-rest-pagination.js";
+import {
+    AppRestPaginationService,
+    ChannelRestPaginationService,
+    TrelloRestService,
+    UserRestPaginationService,
+    WorkspaceRestPaginationService
+} from "/js/rest/entities-rest-pagination.js";
 import {ChannelMessageView} from "./components/messages/ChannelMessageView.js";
 import {ThreadMessageView} from "./components/messages/ThreadMessageView.js";
 import {DirectMessageView} from "./components/messages/DirectMessageView.js";
@@ -8,8 +14,6 @@ import {DMView} from "./components/sidebar/DMView.js";
 import {StompClient} from "./components/messages/StompClient.js";
 import {ChannelView} from "./components/sidebar/ChannelView.js";
 import {SwitchWorkspaceWindow} from "./components/SwitchWorkspaceWindow.js";
-import {ChannelRestPaginationService} from "/js/rest/entities-rest-pagination.js";
-import {TrelloRestService} from "/js/rest/entities-rest-pagination.js";
 
 const user_service = new UserRestPaginationService();
 const workspace_service = new WorkspaceRestPaginationService();
@@ -150,7 +154,7 @@ window.getCalendarEvents = function getCalendarEvents(date) {
 
 window.showEvents = function showEvents(response) {
     console.log(response);
-    if (response.length > 0) {
+    if (response.length > 0) {``
         $('#id-events_div').html('');
         $.each(response, (i, item) => {
             let date = new Date(item.start.dateTime.value)
@@ -194,7 +198,7 @@ $("#addGoogleCalendarIdSecretSubmit").click(
             clientId: googleCalendarClientId,
             clientSecret: googleCalendarClientSecret
         };
-        await app_service.update(entity).then(()=>{
+        await app_service.update(entity).then(() => {
             $("#addGoogleCalendarIdSecretModal").modal('toggle');
             $('#appsModal').modal('toggle');
             location.href = "/application/google/calendar";
@@ -218,7 +222,7 @@ $("#trelloBtn").click(
 );
 
 //Переход на сайт Trello для получения токена
-$("#takeTrelloAuthorization").click(function() {
+$("#takeTrelloAuthorization").click(function () {
     window.open("https://trello.com/1/authorize?expiration=30days&name=MyPersonalToken&scope=read,write&response_type=token&key=f1184d87df3d841e491cecffeb568165")
 });
 
@@ -232,3 +236,122 @@ $("#addTrelloToken").click(
         let status = trello_service.addPersonToken(token);
     }
 );
+
+//************************Google Drive************************
+
+/**
+ * Модальное окно Google Drive
+ * **/
+$("#google-drive-button").click(
+    async function () {
+        const app_name = "Google drive";
+        let google_drive_app = await app_service.getAppByName(app_name);
+        if (google_drive_app.clientId == null || google_drive_app.clientSecret == null) {
+            $("#addGoogleDriveIdSecretModal").modal('toggle')
+        } else {
+            location.href = "/api/google-drive";
+            return false;
+        }
+    }
+);
+
+/**
+ * Отправка clientId и clientSecret на маппинг контроллера /api/google-drive
+ * **/
+$("#addGoogleDriveIdSecretSubmit").click(
+    async function () {
+        const app_name = "Google drive";
+        let google_drive_app = await app_service.getAppByName(app_name);
+        let googleDriveClientId = $("#InputGoogleDriveClientId").val();
+        let googleDriveClientSecret = $("#InputGoogleDriveClientSecret").val();
+        const entity = {
+            id: (google_drive_app).id,
+            name: (google_drive_app).name,
+            workspace: (google_drive_app).workspace,
+            clientId: googleDriveClientId,
+            clientSecret: googleDriveClientSecret
+        };
+        await app_service.update(entity).then(() => {
+            $("#addGoogleDriveIdSecretModal").modal('toggle');
+            $('#appsModal').modal('toggle');
+            location.href = "/api/google-drive";
+            return false;
+        });
+    }
+);
+
+/**
+ * По нажатию на бота GoogleDriveBot перенапавляется на метод showMenuForGoogleDriveChannel()
+ * для отображения кнопки Resresh
+ * **/
+$("#id-google-bot").on("click", function () {
+    showMenuForGoogleDriveChannel();
+});
+
+/**
+ * Показать кнопку Refresh для гугл диска [Beta]. TODO
+ * Требует доработки, для отображения данной кнопки ТОЛЬКО в окне бота Google Drive
+ * **/
+function showMenuForGoogleDriveChannel() {
+    $(".p-workspace__primary_view_contents").html(`
+    <div class="nav_workspace_messages" id="fileList">
+    To list files press refresh button.
+        <div class="c-tabs__tab_menu">
+            <button class="c-button-unstyled c-tabs__tab col-1" type="button" id="refreshButton" onclick="refreshAction();" tabindex="-1">
+                <span>Refresh</span>
+            </button>
+             <ul class="list-group" id="fileListContainer"></ul>
+        </div>
+    </div>
+` + $(".p-workspace__primary_view_contents").html());
+}
+
+/**
+ * При нажатии на кнопку Refresh происходит отправка запроса на маппинг /api/google-drive/listfiles , который запрашивает
+ * лист файлов и отображает 100 последних файлов/папок на страничке
+ * **/
+window.refreshAction = function refreshAction() {
+    $.ajax({
+        url: '/api/google-drive/listfiles',
+    }).done(function (data) {
+        console.dir(data);
+        var fileHTML = "";
+        let file;
+        for (file of data) {
+            fileHTML += '' +
+                '<li class="list-group-item">' +
+                '<img style="overflow: auto; width: 100px; height: 100px;" src="' + file.thumbnailLink + '">'
+                + file.name + ' (FileID : ' + file.id + ')'
+                + '<button onclick="makePublic(\'' + file.id + '\')">Make Public</button>'
+                + '<button onclick="deleteFile(\'' + file.id + '\')">Delete</button></li>';
+        }
+
+        $("#fileListContainer").html(fileHTML);
+    });
+}
+
+/**
+ * При нажатии на кнопку Delete по id удаляется файл из ГуглДрайв
+ * **/
+window.deleteFile = function deleteFile(id) {
+    $.ajax({
+        url: '/api/google-drive/deletefile/' + id,
+        method: 'DELETE'
+    }).done(function () {
+        alert('File has been deleted. Please refresh the list.');
+    });
+
+}
+
+/**
+ * При нажатии на кнопку Make Public по id файл становится публичный
+ * **/
+window.makePublic = function makePublic(id) {
+    $.ajax({
+        url: '/api/google-drive/makepublic/' + id,
+        method: 'POST'
+    }).done(function () {
+        alert('File can be viewed by anyone on internet.');
+    });
+}
+//***********************************************

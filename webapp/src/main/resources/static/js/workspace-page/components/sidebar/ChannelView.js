@@ -78,8 +78,18 @@ export class ChannelView {
     }
 
     addBot(bot) {
-        $('#bot_representation').append(
-            `<div class="p-channel_sidebar__direct-messages__container">
+        if (bot.name === "google_drive_bot") {
+            $('#id-google-bot')
+                .append(`<div class="p-channel_sidebar__channel">
+                                    <button class="p-channel_sidebar__name_button" id="bot_button_${bot.id}" value="${bot.id}">
+                                        <i class="p-channel_sidebar__channel_icon_circle">●</i>
+                                        <span class="p-channel_sidebar__name-3" id="channel_name_${bot.id}">${bot.nickName}</span>
+                                    </button>
+                                  </div>`
+                );
+        } else {
+            $('#bot_representation').append(
+                `<div class="p-channel_sidebar__direct-messages__container">
                 <div class="p-channel_sidebar__channel">
                     <button class="p-channel_sidebar__name_button">
                         <i class="p-channel_sidebar__channel_icon_circle">●</i>
@@ -92,15 +102,16 @@ export class ChannelView {
                     </button>
                 </div>
             </div>`
-        );
+            );
+        }
     }
 
     addChannels(channels) {
         $('#id-channel_sidebar__channels__list').empty(); //обнулдяем список каналов перед заполнением
         $.each(channels, (idx, chn) => {
             let archiveChannelShow = (!chn.isArchived || chn.isBlock === true);
-            if ( this.checkPrivacy(chn)&& archiveChannelShow) {
-            // if (!chn.isArchived && this.checkPrivacy(chn)) {
+            if (this.checkPrivacy(chn) && archiveChannelShow) {
+                // if (!chn.isArchived && this.checkPrivacy(chn)) {
                 this.addChannelIntoSidebarChannelList(chn);
                 if (this.default_channel === null) {
                     this.default_channel = chn;
@@ -124,7 +135,7 @@ export class ChannelView {
     }
 
     addChannelIntoSidebarChannelList(channel) {
-        const chn_symbol = channel.isPrivate ? "🔒" :channel.isArchived ?"X": "#";
+        const chn_symbol = channel.isPrivate ? "🔒" : channel.isArchived ? "X" : "#";
         if (!channel.isApp) {
             $('#id-channel_sidebar__channels__list').append(`
             <div class="p-channel_sidebar__channel">
@@ -191,11 +202,11 @@ export class ChannelView {
 //удаление канала из списка каналов
 export const deleteChannelFromList = (targetChannelId) => {
     document.querySelectorAll("[id^=channel_button_]").forEach(id => { //проверка, есть ли данный канал в существующем списке
-        if (id.value == targetChannelId) {
+        if (id.value === targetChannelId) {
             //удаляем канал из списка
             id.parentElement.remove();
             //если удаляемый канал был активен, то выбираем первый канал в списке
-            if (window.channel_id == targetChannelId) {
+            if (window.channel_id === targetChannelId) {
                 window.pressChannelButton(document.querySelectorAll("[id^=channel_button_]").item(0).value)
             }
         }

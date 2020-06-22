@@ -860,6 +860,8 @@
                                             </div>
                                             <div class="p-channel_sidebar__channels__list"
                                                  id="id-app_sidebar__apps__list"></div>
+                                            <div class="p-channel_sidebar__channels__list"
+                                                 id="id-google-bot"></div>
                                             <div class="bot-representation" id="bot_representation"></div>
                                             <div class="p-channel_sidebar__list__presentation-4"></div>
                                         </div>
@@ -1377,7 +1379,8 @@
                                                                         </div>
                                                                     </th>
                                                                     <th>
-                                                                        <button class="btn btn-outline-dark">View
+                                                                        <button class="btn btn-outline-dark"
+                                                                                id="google-drive-button">View
                                                                         </button>
                                                                     </th>
                                                                 </div>
@@ -1763,6 +1766,42 @@
                 </button>
                 <button type="button" data-dismiss="modal" id="takeTrelloAuthorization" class="btn btn-success">
                     Получить Trello Token
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Модальное окно для ввода GoogleDrive ID Secret-->
+<div class="modal fade" id="addGoogleDriveIdSecretModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Введите GoogleDrive ID & Secret</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="InputGoogleDriveClientId">Client Id</label>
+                        <input type="email" class="form-control" id="InputGoogleDriveClientId"
+                               value="1013415667426-937qe60hi3rcdeos6cghnkmd1aun6m66.apps.googleusercontent.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGoogleDriveClientSecret">Client Secret</label>
+                        <input type="email" class="form-control" id="InputGoogleDriveClientSecret"
+                               value="7Md1nOtQwPwIBHYBGqiPwIeY">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" data-dismiss="modal" id="addGoogleDriveIdSecretSubmit" class="btn btn-success">
+                    Submit
                 </button>
             </div>
         </div>

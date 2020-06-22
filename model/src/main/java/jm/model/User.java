@@ -5,6 +5,7 @@ import jm.dto.UserDTO;
 import jm.model.message.DirectMessage;
 import lombok.*;
 import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -217,6 +218,11 @@ public class User {
     @Column (name = "trello_token")
     private String trelloToken;
 
+    @Column (name = "google_drive_token")
+    private String googleDriveToken;
+
+
+
     public User(String username, String lastName, String login, String email, String password) {
         this.username = username;
         this.lastName = lastName;
@@ -225,7 +231,6 @@ public class User {
         this.password = password;
 
     }
-
     public User(String username, String lastName, String login, String email, String password, Set<Role> roles) {
         this.username = username;
         this.lastName = lastName;
