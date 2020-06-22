@@ -18,9 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @RestController
-@RequestMapping("/images")
-@Tag(name = "image", description = "Image API")
-public class imageRestController {
+@RequestMapping("/rest/api/images")
+@Tag(name = "Image", description = "Image API")
+public class ImageRestController {
 
     //TODO: change mediaType
     @GetMapping(value = "/{userId}/{imageName}")

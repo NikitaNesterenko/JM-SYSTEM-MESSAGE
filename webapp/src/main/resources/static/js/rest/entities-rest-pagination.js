@@ -1,4 +1,4 @@
-import { ownFetch } from './fetch-service.js';
+import {ownFetch} from './fetch-service.js';
 import {RestPaginationService} from "./rest-pagination-service.js";
 
 export class UserRestPaginationService extends RestPaginationService {
@@ -501,15 +501,15 @@ export class AppService extends RestPaginationService {
 //класс для создания и вкл/выкл уведомлений
 export class PluginRestPaginationService extends RestPaginationService {
     constructor() {
-        super('/rest/plugin');
+        super('/rest/api/plugin');
     }
 
     async getZoomToken() {
-        const auth = await fetch('/rest/plugin/zoom');
+        const auth = await fetch('/rest/api/plugin/zoom');
         return auth;
     }
     async createMeetings(){
-        const meeting = await ownFetch.get('rest/plugin/zoom/meetings/create',
+        const meeting = await ownFetch.get('/rest/api/plugin/zoom/meetings/create',
             {channelId: channel_id});
         return meeting.json();
     }
@@ -550,7 +550,7 @@ export class NotificationsRestService extends RestPaginationService {
 
 export class ZoomRestService extends RestPaginationService{
     constructor() {
-        super("/api/trello");
+        super("/rest/api/trello");
     }
 
     addPersonToken = async (token) => {
@@ -567,7 +567,7 @@ export class ZoomRestService extends RestPaginationService{
 
 export class TrelloRestService extends RestPaginationService {
     constructor() {
-        super("/api/trello");
+        super("/rest/api/trello");
     }
 
     addPersonToken = async (token) => {

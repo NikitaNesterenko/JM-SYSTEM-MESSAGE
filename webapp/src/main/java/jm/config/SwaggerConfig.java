@@ -45,7 +45,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi imageOpenApi() {
-        String[] path = {"/images/**"};
+        String[] path = {"/rest/api/images/**"};
         return getGroupedOpenApi(path, "image");
     }
 
@@ -63,7 +63,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi pluginOpenApi() {
-        String[] path = {"/rest/plugin/**"};
+        String[] path = {"/rest/api/plugin/**"};
         return getGroupedOpenApi(path, "plugin");
     }
 

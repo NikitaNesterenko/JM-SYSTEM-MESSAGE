@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/rest/plugin")
+@RequestMapping("/rest/api/plugin")
 @Tag(name = "plugin", description = "Plugin API")
 public class ZoomPluginRestController {
 
@@ -62,8 +62,4 @@ public class ZoomPluginRestController {
     public ResponseEntity<ZoomDTO> createMeetings(Principal principal) {
         return ResponseEntity.ok(zoomPlugin.create(principal.getName()));
     }
-
-
-
-
 }

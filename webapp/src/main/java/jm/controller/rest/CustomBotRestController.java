@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/jmsm/api")
+@RequestMapping("/rest/api/jmsm/api")
 public class CustomBotRestController {
-
 
     private final CommandsBotService commandsBotService;
 

@@ -6,18 +6,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jm.TrelloService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.URL;
 
 @RestController
-@RequestMapping("/api/trello")
+@RequestMapping("/rest/api/trello")
+@Tag(name = "trello", description = "Trello API")
 public class TrelloController {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private TrelloService trelloService;
+    private final TrelloService trelloService;
     private String boardID;
     private String listID;
     private String cardID;
