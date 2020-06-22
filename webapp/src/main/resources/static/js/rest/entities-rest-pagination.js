@@ -8,34 +8,34 @@ export class UserRestPaginationService extends RestPaginationService {
     }
 
     getLoggedUser = async () => {
-        const response = await fetch('/rest/api/users/loggedUser');
+        const response = await ownFetch.get('/rest/api/users/loggedUser');
         if (response.ok) {
             return await response.json();
         }
     };
 
     getUsersByWorkspace = async (id) => {
-        const response = await fetch(`/rest/api/users/workspace/${id}`);
+        const response = await ownFetch.get(`/rest/api/users/workspace/${id}`);
         return response.json();
     };
 
     getAllAssociatedUsersByWorkspace = async (id) => {
-        const response = await fetch(`/rest/api/users/forAssociated/${id}`);
+        const response = await ownFetch.get(`/rest/api/users/forAssociated/${id}`);
         return response.json();
     };
 
     getUsersByChannelId = async (channel_id) => {
-        const users = await fetch(`/rest/api/users/channel/${channel_id}`);
+        const users = await ownFetch.get(`/rest/api/users/channel/${channel_id}`);
         return await users.json();
     };
 
     getUserById = async (id) => {
-        const user = await fetch(`/rest/api/users/${id}`);
+        const user = await ownFetch.get(`/rest/api/users/${id}`);
         return await user.json();
     };
 
     getUserByName = async (username) => {
-        const user = await fetch(`/rest/api/users/username/${username}`);
+        const user = await ownFetch.get(`/rest/api/users/username/${username}`);
         return await user.json()
             .catch(err => console.log(err.status));
     };
@@ -60,48 +60,52 @@ export class MessageRestPaginationService extends RestPaginationService {
     }
 
     getAllMessagesAssociatedWithUser = async (id) => {
-        const response = await fetch(`/rest/api/messages/associated/${id}`);
+        const response = await ownFetch.get(`/rest/api/messages/associated/${id}`);
         return response.json();
     };
 
     getAllMessagesByChannelId = async (id) => {
-        const response = await fetch(`/rest/api/messages/channel/${id}`);
+        const response = await ownFetch.get(`/rest/api/messages/channel/${id}`);
         return response.json();
     };
 
     // FIXME: формат startDate, endDate
     getMessagesByChannelIdForPeriod = async (id, startDate, endDate) => {
-        const response = await fetch(`/rest/api/messages/channel/${id}/${startDate}/${endDate}`);
+        const response = await ownFetch.get(`/rest/api/messages/channel/${id}/${startDate}/${endDate}`);
         console.log(startDate, "\n", endDate);
         return response.json();
     };
 
     getStarredMessagesForUser = async (id, workspaceId) => {
-        const response = await fetch(`/rest/api/messages/${id}/${workspaceId}/starred`);
+        const response = await ownFetch.get(`/rest/api/messages/${id}/${workspaceId}/starred`);
         return response.json();
     };
 
     getMessageById = async (id) => {
-        const response = await fetch(`/rest/api/messages/${id}`);
+        const response = await ownFetch.get(`/rest/api/messages/${id}`);
         return response.json();
     };
 
     getMessagesFromChannelsForUser = async (id) => {
-        const response = await fetch(`/rest/api/messages/user/${id}`);
+        const response = await ownFetch.get(`/rest/api/messages/user/${id}`);
         return response.json();
     };
 
     addUnreadMessageForUser = async (msgId, usrId) => {
-        await fetch(`/rest/api/messages/unread/add/message/${msgId}/user/${usrId}`);
+        await ownFetch.post(`/rest/api/messages/unread/add/message/${msgId}/user/${usrId}`, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
     };
 
     getUnreadMessageInChannelForUser = async (chnId, usrId) => {
-        const response = await fetch(`/rest/api/messages/unread/channel/${chnId}/user/${usrId}`);
+        const response = await ownFetch.get(`/rest/api/messages/unread/channel/${chnId}/user/${usrId}`);
         return response.json();
     };
 
     deleteAllChannelMessageForUserFromUnread = async (chnId, usrId) => {
-        const response = await fetch(`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
+        const response = await ownFetch.delete(`/rest/api/messages/unread/delete/channel/${chnId}/user/${usrId}`);
         return response.status;
     }
 }
@@ -112,7 +116,7 @@ export class BotRestPaginationService extends RestPaginationService {
     }
 
     getBotByWorkspaceId = async (id) => {
-        const response = await fetch('/rest/api/bot/workspace/' + id)
+        const response = await ownFetch.get('/rest/api/bot/workspace/' + id)
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -134,7 +138,7 @@ export class BotRestPaginationService extends RestPaginationService {
     };
 
     generateToken = async () => {
-        const response = await fetch('/rest/api/bot/generate.token', {
+        const response = await ownFetch.get('/rest/api/bot/generate.token', {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             }
@@ -170,31 +174,31 @@ export class SlashCommandRestPaginationService extends RestPaginationService {
     }
 
     getSlashCommandsByBotId = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/bot/' + id);
+        const response = await ownFetch.get('/rest/api/slashcommand/bot/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getAllSlashCommands = async () => {
-        const response = await fetch('/rest/api/slashcommand/all');
+        const response = await ownFetch.get('/rest/api/slashcommand/all');
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandsByWorkspace = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/workspace/id/' + id);
+        const response = await ownFetch.get('/rest/api/slashcommand/workspace/id/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandByName = async (name) => {
-        const response = await fetch('/rest/api/slashcommand/name/' + name);
+        const response = await ownFetch.get('/rest/api/slashcommand/name/' + name);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getSlashCommandById = async (id) => {
-        const response = await fetch('/rest/api/slashcommand/' + id);
+        const response = await ownFetch.get('/rest/api/slashcommand/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -217,7 +221,7 @@ export class ChannelTopicRestPaginationService extends RestPaginationService {
     }
 
     async getChannelTopic(channel_id) {
-        const chn_topic = await fetch(`/rest/api/channels/${channel_id}/topic`);
+        const chn_topic = await ownFetch.get(`/rest/api/channels/${channel_id}/topic`);
         return await chn_topic.json().catch(err => console.log(err.status));
     }
 
@@ -236,31 +240,31 @@ export class ChannelRestPaginationService extends RestPaginationService {
     }
 
     getChannelById = async (id) => {
-        const response = await fetch('/rest/api/channels/' + id);
+        const response = await ownFetch.get('/rest/api/channels/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     }
 
     getChannelsByWorkspaceId = async (id) => {
-        const response = await fetch('/rest/api/channels/workspace/' + id);
+        const response = await ownFetch.get('/rest/api/channels/workspace/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getChannelByName = async (name) => {
-        const response = await fetch(`/rest/api/channels/name/${name}`);
+        const response = await ownFetch.get(`/rest/api/channels/name/${name}`);
         alert(response.status)
         return await response.json()
             .catch(err => console.log(err.status));
     };
 
     getChannelsByWorkspaceAndUser = async (workspace_id, user_id) => {
-        const response = await fetch('/rest/api/channels/workspace/' + workspace_id + '/user/' + user_id);
+        const response = await ownFetch.get('/rest/api/channels/workspace/' + workspace_id + '/user/' + user_id);
         return response.json();
     };
 
     getChannelsByUserId = async (id) => {
-        const response = await fetch('/rest/api/channels/user/' + id);
+        const response = await ownFetch.get('/rest/api/channels/user/' + id);
         return await response.json()
             .catch(err => console.log(err.status));
     };
@@ -286,7 +290,7 @@ export class AppRestPaginationService extends RestPaginationService {
     }
 
     getAppByName = async (name) => {
-        const response = await fetch('/rest/api/apps/' + name);
+        const response = await ownFetch.get('/rest/api/apps/' + name);
         return response.json()
     };
 }
@@ -297,7 +301,7 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     }
 
     getWorkspaceByName = async (name) => {
-        const response = await fetch('/rest/api/workspaces/name/' + name);
+        const response = await ownFetch.get('/rest/api/workspaces/name/' + name);
         if (!response.ok) {
             return 'not exist';
         }
@@ -305,17 +309,17 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
     };
 
     getWorkspacesByLogged = async () => {
-        const response = await fetch('/rest/api/workspaces/byLoggedUser');
+        const response = await ownFetch.get('/rest/api/workspaces/byLoggedUser');
         return response.json()
     };
 
     setChosenWorkspace = async (name) => {
-        const response = await fetch('/rest/api/workspaces/chosen/' + name);
+        const response = await ownFetch.get('/rest/api/workspaces/chosen/' + name);
         return await response.json()
     };
 
     getChosenWorkspace = async () => {
-        const response = await fetch('/rest/api/workspaces/chosen');
+        const response = await ownFetch.get('/rest/api/workspaces/chosen');
         if (response.redirected) {
             window.location.href = response.url;
         }
@@ -324,13 +328,14 @@ export class WorkspaceRestPaginationService extends RestPaginationService {
         }
     };
 
+    // todo нет такого маппинга в контроллере
     setChosenChannel = async (id) => {
-        const response = await fetch('/rest/api/workspaces/chosen/' + id);
+        const response = await ownFetch.get('/rest/api/workspaces/chosen/' + id);
         return await response.json()
     };
 
     getChosenChannel = async () => {
-        const response = await fetch('/rest/api/workspaces/chosen');
+        const response = await ownFetch.get('/rest/api/workspaces/chosen');
         if (response.redirected) {
             window.location.href = response.url;
         }
@@ -409,7 +414,7 @@ export class ThreadChannelRestPaginationService extends RestPaginationService {
     }
 
     getThreadChannelByChannelMessageId = async (id) => {
-        const response = await fetch('/rest/api/threads/' + id);
+        const response = await ownFetch.get('/rest/api/threads/' + id);
         return response.json();
     };
     createThreadChanel = async (entity) => {
@@ -420,8 +425,10 @@ export class ThreadChannelRestPaginationService extends RestPaginationService {
         });
         return response.json();
     };
+
+    // todo по-моему дубль, см. ниже 1-й метод
     getThreadChannelMessagesByThreadChannelId = async (id) => {
-        const response = await fetch('/rest/api/threads/messages/' + id);
+        const response = await ownFetch.get('/rest/api/threads/messages/' + id);
         return response.json();
     };
 }
@@ -432,7 +439,7 @@ export class ThreadChannelMessageRestPaginationService extends RestPaginationSer
     }
 
     getThreadChannelMessagesByThreadChannelId = async (id) => {
-        const response = await fetch('/rest/api/threads/messages/' + id);
+        const response = await ownFetch.get('/rest/api/threads/messages/' + id);
         return response.json();
     };
 
@@ -451,17 +458,17 @@ export class ConversationRestPaginationService extends RestPaginationService {
     }
 
     getAllConversationsByUserId = async (id) => {
-        const response = await fetch(`/rest/api/conversations/user/${id}`);
+        const response = await ownFetch.get(`/rest/api/conversations/user/${id}`);
         return response.json();
     };
 
     getConversationForUsers = async (firstId, secondId) => {
-        const response = await fetch(`/rest/api/conversations/users/${firstId}/${secondId}`);
+        const response = await ownFetch.get(`/rest/api/conversations/users/${firstId}/${secondId}`);
         return response.json();
     };
 
     deleteConversation = async (conversationId, userId) => {
-        const response = await fetch(`/rest/api/conversations/delete/${conversationId}/${userId}`);
+        const response = await ownFetch.delete(`/rest/api/conversations/delete/${conversationId}/${userId}`);
         return response.status;
     };
 }
@@ -472,21 +479,23 @@ export class DirectMessagesRestController extends RestPaginationService {
     }
 
     getAllMessagesByConversationId = async (id) => {
-        const response = await fetch(`/rest/api/direct_messages/conversation/${id}`);
+        const response = await ownFetch.get(`/rest/api/direct_messages/conversation/${id}`);
         return response.json();
     };
 
     addUnreadMessageForUser = async (msgId, usrId) => {
-        await fetch(`/rest/api/direct_messages/unread/add/message/${msgId}/user/${usrId}`);
+        await ownFetch.post(`/rest/api/direct_messages/unread/add/message/${msgId}/user/${usrId}`, {
+            headers: {'Content-Type': 'application/json'}
+        });
     };
 
     getUnreadDMessagesInConversationForUser = async (convId, usrId) => {
-        const response = await fetch(`/rest/api/direct_messages/unread/conversation/${convId}/user/${usrId}`);
+        const response = await ownFetch.get(`/rest/api/direct_messages/unread/conversation/${convId}/user/${usrId}`);
         return response.json();
     };
 
     deleteAllConversationDMForUserFromUnread = async (convId, usrId) => {
-        const response = await fetch(`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
+        const response = await ownFetch.delete(`/rest/api/direct_messages/unread/delete/conversation/${convId}/user/${usrId}`);
         return response.status;
     }
 
@@ -505,7 +514,7 @@ export class PluginRestPaginationService extends RestPaginationService {
     }
 
     async getZoomToken() {
-        const auth = await fetch('/rest/plugin/zoom');
+        const auth = await ownFetch.get('/rest/plugin/zoom');
         return auth;
     }
     async createMeetings(){
@@ -521,7 +530,7 @@ export class NotificationsRestService extends RestPaginationService {
     }
 
     getNotifications = async (workspaceId, userId) => {
-        const response = await fetch(`${this.url}/${workspaceId}/${userId}`);
+        const response = await ownFetch.get(`${this.url}/${workspaceId}/${userId}`);
         return response.json();
     };
 
@@ -550,12 +559,12 @@ export class NotificationsRestService extends RestPaginationService {
 
 export class ZoomRestService extends RestPaginationService{
     constructor() {
+        // todo вроде ZoomRestService, а запросы идут на /trello ...
         super("/api/trello");
     }
 
     addPersonToken = async (token) => {
-        const response = await fetch(`${this.url}/token?value=${token}`, {
-            method: 'POST',
+        const response = await ownFetch.post(`${this.url}/token?value=${token}`, {
             headers: {
                 'Content-Type': 'application/json;'
             }
@@ -571,8 +580,7 @@ export class TrelloRestService extends RestPaginationService {
     }
 
     addPersonToken = async (token) => {
-        const response = await fetch(`${this.url}/token?value=${token}`, {
-            method: 'POST',
+        const response = await ownFetch.post(`${this.url}/token?value=${token}`, {
             headers: {
                 'Content-Type': 'application/json;'
             }
@@ -581,18 +589,12 @@ export class TrelloRestService extends RestPaginationService {
     };
 
     hasTrelloToken = async () => {
-        const response = await fetch(`${this.url}/hasTrelloToken`, {
-            method: 'Get',
-            headers: {
-                'Content-Type': 'application/json;'
-            }
-        });
+        const response = await ownFetch.get(`${this.url}/hasTrelloToken`);
         return response.status;
     }
 
     createBoard = async (board) => {
-        const response = await fetch(`${this.url}/addBoard?name=${board}`, {
-            method: 'Post',
+        const response = await ownFetch.post(`${this.url}/addBoard?name=${board}`, {
             headers: {
                 'Content-Type': 'application/json;'
             }

@@ -98,7 +98,7 @@ public class ConversationRestController {
         }
     }
 
-    @GetMapping(value = "/delete/{conversationID}/{userID}")
+    @DeleteMapping(value = "/delete/{conversationID}/{userID}")
     @Operation(
             operationId = "deleteConversation",
             summary = "Delete conversation",

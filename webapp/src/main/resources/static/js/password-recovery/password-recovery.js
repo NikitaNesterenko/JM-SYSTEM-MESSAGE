@@ -58,7 +58,7 @@ window.addEventListener("load", function () {
     if (submitButtonResetPassword!==null) {
         submitButtonResetPassword.onclick = function () {
             const input_field = document.getElementById("recovery-password");
-            fetch('/rest/api/users/is-exist-email/' + input_field.value)
+            ownFetch.get('/rest/api/users/is-exist-email/' + input_field.value)
                 .then(response => {
                     if (!response.ok) {
                         return alert(input_field.value + " данный email не существует");

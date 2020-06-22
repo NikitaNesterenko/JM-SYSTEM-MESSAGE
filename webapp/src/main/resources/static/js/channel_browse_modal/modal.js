@@ -11,20 +11,21 @@ $( function () {
     };
 });
 
+// todo дубль?
 async function getAllChannels () {
-    const response = await fetch( "/rest/api/channels/all" );
+    const response = await ownFetch.get( "/rest/api/channels/all" );
     const data = await response.json();
     htmlChannelList( data );
 }
 
 async function getPrivate () {
-    const response = await fetch("rest/api/channels/private");
+    const response = await ownFetch.get("rest/api/channels/private");
     const data = await response.json();
     htmlChannelList(data);
 }
 
 async function getArchive () {
-    const response = await fetch("/rest/api/channels/all_archive");
+    const response = await ownFetch.get("/rest/api/channels/all_archive");
     const data = await response.json();
     htmlChannelList(data);
 }
@@ -71,8 +72,9 @@ $(function () {
     getAll();
 });
 
+// todo дубль?
 async function getAll () {
-    const response = await fetch( "/rest/api/channels/all" );
+    const response = await ownFetch.get( "/rest/api/channels/all" );
     const data = await response.json();
     selectCh (data);
 }
