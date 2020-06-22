@@ -181,7 +181,9 @@ public class MessageDAOImpl extends AbstractDao<Message> implements MessageDAO {
         List list = new ArrayList<>();
         if (twoParametersMethodToSearchEntity("channel_id", channelId.toString())) {
             list = entityManager
-                    .createNativeQuery("SELECT m.id FROM messages m where m.channel_id =: channelId AND m.is_deleted=:isDeleted")
+                    .createNativeQuery("SELECT m.id FROM messages m where m.channel_id = :channelId AND m.is_deleted= :isDeleted")
+                    .setParameter("channelId", channelId)
+                    .setParameter("isDeleted", isDeleted)
                     .getResultList();
         }
         return list;
