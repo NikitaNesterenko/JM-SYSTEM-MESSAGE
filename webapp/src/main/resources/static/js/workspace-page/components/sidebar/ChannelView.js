@@ -105,7 +105,11 @@ export class ChannelView {
                     this.default_channel = chn;
                 } else {
                     this.message_service.getUnreadMessageInChannelForUser(chn.id, this.loggedUser.id).then(messages => {
+                        console.log("messages!!!");
+                        console.log(messages);
                         if (messages.length > 0) {
+                            //TODO: не отрабатывает условие
+                            console.log("Unread messages.length > 0 in function addChannels");
                             this.enableChannelHasUnreadMessage(chn.id);
                         }
                     });
@@ -168,7 +172,12 @@ export class ChannelView {
             }
 
             $(btn).css(bg_color);
-            this.disableChannelHasUnreadMessage(id);
+
+            //TODO: пометить канал как прочитанный при фокусировке
+            $(btn).filter(`[id=channel_button_${id}]`).focusin(() => {
+                this.disableChannelHasUnreadMessage(id);
+            });
+
         });
     }
 
