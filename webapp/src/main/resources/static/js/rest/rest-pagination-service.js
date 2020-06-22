@@ -6,22 +6,22 @@ export class RestPaginationService {
     }
 
     getPage = async (numberPage, size, sort) => {
-        const response = await fetch(`${this.url}?page=${numberPage}&size=${size}&sort=${sort}`);
+        const response = await ownFetch.get(`${this.url}?page=${numberPage}&size=${size}&sort=${sort}`);
         return response.json();
     };
 
     getAll = async () => {
-        const response = await fetch(`${this.url}`);
+        const response = await ownFetch.get(`${this.url}`);
         return response.json();
     };
 
     getById = async (id) => {
-        const response = await fetch(`${this.url}/${id}`);
+        const response = await ownFetch.get(`${this.url}/${id}`);
         return response.json();
     };
 
     getByName = async (chanelName) => {
-        const response = await fetch(`${this.url}/name/${chanelName}`);
+        const response = await ownFetch.get(`${this.url}/name/${chanelName}`);
         return response.json();
     }
 

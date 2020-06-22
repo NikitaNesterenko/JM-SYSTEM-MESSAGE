@@ -243,7 +243,7 @@ public class MessageRestController {
         return Response.ok(messageService.getAllMessagesReceivedFromChannelsByUserId(userId, false));
     }
 
-    @GetMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
+    @DeleteMapping(value = "/unread/delete/channel/{chnId}/user/{usrId}")
     @Operation(
             operationId = "removeChannelMessageFromUnreadForUser",
             summary = "Remove message from unread",
@@ -288,7 +288,7 @@ public class MessageRestController {
         return Response.ok(messageService.getMessageDtoListByMessageList(unreadMessages));
     }
 
-    @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
+    @PostMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
     @Operation(
             operationId = "addMessageToUnreadForUser",
             summary = "Add unread message",

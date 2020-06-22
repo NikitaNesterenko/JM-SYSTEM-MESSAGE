@@ -148,7 +148,7 @@ public class DirectMessageRestController {
                 ));
     }
 
-    @GetMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
+    @DeleteMapping(value = "/unread/delete/conversation/{convId}/user/{usrId}")
     @Operation(
             operationId = "removeChannelMessageFromUnreadForUser",
             summary = "Remove direct messages by conversation id from unread",
@@ -193,7 +193,7 @@ public class DirectMessageRestController {
         return Response.ok(directMessageService.getDirectMessageDtoListByDirectMessageList(unreadMessages));
     }
 
-    @GetMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
+    @PostMapping(value = "/unread/add/message/{msgId}/user/{usrId}")
     @Operation(
             operationId = "addMessageToUnreadForUser",
             summary = "Add direct message to unread",
