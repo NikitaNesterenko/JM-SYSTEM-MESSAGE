@@ -33,7 +33,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi createWorkspaceOpenApi() {
-        String[] path = {"/api/create/**"};
+        String[] path = {"/rest/api/createWorkSpace/**"};
         return getGroupedOpenApi(path, "create workspace");
     }
 
