@@ -55,7 +55,7 @@ export class SubmitMessage {
                 const conversation_id = sessionStorage.getItem('conversation_id');
 
                 if (channel_id !== '0') {
-                    await this.sendChannelMessage(channel_id);
+                    this.sendChannelMessage(channel_id);
                 }
 
                 if (conversation_id !== '0') {
@@ -145,7 +145,7 @@ export class SubmitMessage {
         } else if (entity.content !== "" || entity.filename !== null || entity.voiceMessage !== null) {
             sendName(entity);
         }
-         clearUsers();
+        clearUsers();
     }
 
     async sendSlashCommand(entity) {
